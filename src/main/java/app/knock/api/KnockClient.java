@@ -4,6 +4,8 @@ import app.knock.api.exception.KnockClientApiKeyException;
 import app.knock.api.http.TokenInterceptor;
 import app.knock.api.resources.UsersResource;
 import app.knock.api.util.Environment;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import okhttp3.OkHttpClient;
 
 public class KnockClient {
@@ -17,7 +19,7 @@ public class KnockClient {
 
     final UsersResource usersResource;
 
-    private KnockClient(String baseUrl, String apiKey) {
+    private KnockClient(String baseUrl, String apiKey, ObjectMapper objectMapper) {
         this.apiKey = apiKey;
         this.baseUrl= baseUrl;
         this.client = new OkHttpClient.Builder()
@@ -62,7 +64,9 @@ public class KnockClient {
             if (this.apiKey == null) {
                 throw new KnockClientApiKeyException("API Key was not provided");
             }
-            return new KnockClient(this.baseUrl, this.apiKey);
+            ObjectMapper objectMapper = new ObjectMapper()
+                    .setPropertyNamingStrategy(PropertyNamingStrategies.SNAKE_CASE);
+            return new KnockClient(this.baseUrl, this.apiKey, objectMapper);
         }
     }
 
