@@ -29,7 +29,7 @@ public class PathParamInterceptor implements Interceptor {
         Request originalRequest = chain.request();
 
         HttpUrl.Builder urlBuilder = originalRequest.url().newBuilder();
-        List<String> segments =  originalRequest.url().pathSegments();
+        List<String> segments = originalRequest.url().pathSegments();
 
         for (int i = 0; i < segments.size(); i++) {
             if (pathKey.equalsIgnoreCase(segments.get(i))) {

@@ -21,7 +21,7 @@ public class KnockClient {
 
     private KnockClient(String baseUrl, String apiKey, ObjectMapper objectMapper) {
         this.apiKey = apiKey;
-        this.baseUrl= baseUrl;
+        this.baseUrl = baseUrl;
         this.client = new OkHttpClient.Builder()
                 .addInterceptor(new TokenInterceptor(this.apiKey))
                 .build();

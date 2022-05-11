@@ -1,6 +1,5 @@
 package app.knock.api.resources;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.BeforeEach;
