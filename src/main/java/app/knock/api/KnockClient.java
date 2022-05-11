@@ -2,19 +2,20 @@ package app.knock.api;
 
 import app.knock.api.exception.KnockClientApiKeyException;
 import app.knock.api.http.TokenInterceptor;
+import app.knock.api.resources.UsersResource;
 import app.knock.api.util.Environment;
 import okhttp3.OkHttpClient;
 
 public class KnockClient {
 
-    private final static String DEFAULT_BASE_URL = "https://api.knock.app";
+    final static String DEFAULT_BASE_URL = "https://api.knock.app";
     final static String API_KEY_ENV_VAR = "KNOCK_API_KEY";
 
     final String baseUrl;
     final String apiKey;
     final OkHttpClient client;
 
-    UsersApi usersApi;
+    final UsersResource usersResource;
 
     private KnockClient(String baseUrl, String apiKey) {
         this.apiKey = apiKey;
@@ -23,11 +24,11 @@ public class KnockClient {
                 .addInterceptor(new TokenInterceptor(this.apiKey))
                 .build();
 
-        this.usersApi = new UsersApi(this.baseUrl, this.client);
+        this.usersResource = new UsersResource(this.baseUrl, this.client);
     }
 
-    public UsersApi users() {
-        return this.usersApi;
+    public UsersResource users() {
+        return this.usersResource;
     }
 
     public static KnockClientBuilder builder() {
