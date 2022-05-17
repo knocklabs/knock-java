@@ -23,22 +23,18 @@ public class UsersResource {
         byte[] bodyBytes = Json.writeBytes(identity);
         Request request = new Request.Builder()
                 .url(buildBaseResource(userId))
-                .addHeader("Content-Type", "application/json")
-                .put(RequestBody.create(bodyBytes))
+                .put(RequestBody.create(bodyBytes, MediaType.get("application/json; charset=utf-8")))
+                .build();
+        return this.executeRequestForResponse(request);
+    }
+
+    public UserIdentity get(String userId) {
+        Request request = new Request.Builder()
+                .url(buildBaseResource(userId))
+                .get()
                 .build();
 
-        try (Response response = httpClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                throw new KnockClientResourceException("bad API response");
-            } else {
-                if (response.body() != null) {
-                    return Json.readBytes(response.body().bytes(), UserIdentity.class);
-                }
-                throw new KnockClientResourceException("empty response");
-            }
-        } catch (IOException e) {
-            throw new KnockClientResourceException("an error occurred while calling the user.identify endpoint", e);
-        }
+        return this.executeRequestForResponse(request);
     }
 
     public void delete(String userId) {
@@ -47,13 +43,7 @@ public class UsersResource {
                 .delete()
                 .build();
 
-        try (Response response = httpClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                throw new KnockClientResourceException("bad API response");
-            }
-        } catch (IOException e) {
-            throw new KnockClientResourceException("an error occurred while calling the user.identify endpoint", e);
-        }
+        this.executeRequest(request, false);
     }
 
     HttpUrl buildBaseResource(String userId) {
@@ -62,6 +52,29 @@ public class UsersResource {
                 .addPathSegments(BASE_RESOURCE_PATH)
                 .addEncodedPathSegment(userId)
                 .build();
+    }
+
+    private UserIdentity executeRequest(Request request, boolean hasResponseBody) {
+        try (Response response = httpClient.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new KnockClientResourceException("bad API response");
+            } else {
+                if (hasResponseBody) {
+                    if (response.body() != null) {
+                        return Json.readBytes(response.body().bytes(), UserIdentity.class);
+                    }
+                    throw new KnockClientResourceException("empty response");
+                } else {
+                    return null;
+                }
+            }
+        } catch (IOException e) {
+            throw new KnockClientResourceException("an error occurred while calling the user.identify endpoint", e);
+        }
+    }
+
+    private UserIdentity executeRequestForResponse(Request request) {
+        return this.executeRequest(request, true);
     }
 
 }

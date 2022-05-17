@@ -37,6 +37,26 @@ public class UsersResourceTestsIT {
     }
 
     @Test
+    void shouldGetUserIdentity() {
+        client.users().identify("get_user_1", UserIdentity.builder()
+                    .name("User name")
+                    .email("user@gmail.com")
+                    .property("foo", "bar")
+                    .property("baz", true)
+                .build());
+
+        UserIdentity userIdentity = client.users().get("get_user_1");
+
+        assertEquals("get_user_1", userIdentity.getId());
+        assertEquals("User name", userIdentity.getName());
+        assertEquals("user@gmail.com", userIdentity.getEmail());
+        assertEquals("bar", userIdentity.property("foo", String.class));
+        assertEquals(true, userIdentity.property("baz", Boolean.class));
+
+        client.users().delete("get_user_1");
+    }
+
+    @Test
     void shouldDeleteUserIdentity() {
         client.users().delete("user_1");
     }
