@@ -1,13 +1,12 @@
 package app.knock.api.resources;
 
-import app.knock.api.exception.KnockClientResourceException;
+import app.knock.api.http.RequestExecutorService;
 import app.knock.api.model.UserIdentity;
 import app.knock.api.serialize.Json;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import okhttp3.*;
 
-import java.io.IOException;
 import java.util.Objects;
 
 @Value
@@ -25,7 +24,7 @@ public class UsersResource {
                 .url(buildBaseResource(userId))
                 .put(RequestBody.create(bodyBytes, MediaType.get("application/json; charset=utf-8")))
                 .build();
-        return this.executeRequestForResponse(request);
+        return RequestExecutorService.executeRequestForResponse(httpClient, request, UserIdentity.class);
     }
 
     public UserIdentity get(String userId) {
@@ -34,7 +33,7 @@ public class UsersResource {
                 .get()
                 .build();
 
-        return this.executeRequestForResponse(request);
+        return RequestExecutorService.executeRequestForResponse(httpClient, request, UserIdentity.class);
     }
 
     public void delete(String userId) {
@@ -43,7 +42,7 @@ public class UsersResource {
                 .delete()
                 .build();
 
-        this.executeRequest(request, false);
+        RequestExecutorService.executeRequest(httpClient, request, UserIdentity.class, false);
     }
 
     HttpUrl buildBaseResource(String userId) {
@@ -52,29 +51,6 @@ public class UsersResource {
                 .addPathSegments(BASE_RESOURCE_PATH)
                 .addEncodedPathSegment(userId)
                 .build();
-    }
-
-    private UserIdentity executeRequest(Request request, boolean hasResponseBody) {
-        try (Response response = httpClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                throw new KnockClientResourceException("bad API response");
-            } else {
-                if (hasResponseBody) {
-                    if (response.body() != null) {
-                        return Json.readBytes(response.body().bytes(), UserIdentity.class);
-                    }
-                    throw new KnockClientResourceException("empty response");
-                } else {
-                    return null;
-                }
-            }
-        } catch (IOException e) {
-            throw new KnockClientResourceException("an error occurred while calling the user.identify endpoint", e);
-        }
-    }
-
-    private UserIdentity executeRequestForResponse(Request request) {
-        return this.executeRequest(request, true);
     }
 
 }
