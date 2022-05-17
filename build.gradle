@@ -19,6 +19,12 @@ dependencies {
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 }
 
+task integrationTest(type: Test) {
+    include '**/*IT.class'
+    useJUnitPlatform()
+}
+
 test {
+    exclude '**/*IT.class'
     useJUnitPlatform()
 }

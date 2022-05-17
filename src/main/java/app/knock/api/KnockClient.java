@@ -19,7 +19,7 @@ public class KnockClient {
 
     final UsersResource usersResource;
 
-    private KnockClient(String baseUrl, String apiKey, ObjectMapper objectMapper) {
+    KnockClient(String baseUrl, String apiKey, ObjectMapper objectMapper) {
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
         this.client = new OkHttpClient.Builder()

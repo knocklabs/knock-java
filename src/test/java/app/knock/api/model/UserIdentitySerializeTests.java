@@ -12,7 +12,8 @@ public class UserIdentitySerializeTests {
     @Test
     void mappedPropertiesShouldUnwrap() {
         UserIdentity userIdentity = new UserIdentity.UserIdentityBuilder()
-                .customProperties(Map.of("customProperty", "123", "custom_property", "hello!"))
+                .property("customProperty","123")
+                .property("custom_property", "hello!")
                 .build();
 
         String json = Json.writeString(userIdentity);

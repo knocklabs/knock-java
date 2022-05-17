@@ -23,6 +23,7 @@ public class UsersResource {
         byte[] bodyBytes = Json.writeBytes(identity);
         Request request = new Request.Builder()
                 .url(buildBaseResource(userId))
+                .addHeader("Content-Type", "application/json")
                 .put(RequestBody.create(bodyBytes))
                 .build();
 
@@ -34,6 +35,21 @@ public class UsersResource {
                     return Json.readBytes(response.body().bytes(), UserIdentity.class);
                 }
                 throw new KnockClientResourceException("empty response");
+            }
+        } catch (IOException e) {
+            throw new KnockClientResourceException("an error occurred while calling the user.identify endpoint", e);
+        }
+    }
+
+    public void delete(String userId) {
+        Request request = new Request.Builder()
+                .url(buildBaseResource(userId))
+                .delete()
+                .build();
+
+        try (Response response = httpClient.newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new KnockClientResourceException("bad API response");
             }
         } catch (IOException e) {
             throw new KnockClientResourceException("an error occurred while calling the user.identify endpoint", e);
