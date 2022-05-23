@@ -3,6 +3,7 @@ package app.knock.api;
 import app.knock.api.exception.KnockClientApiKeyException;
 import app.knock.api.http.TokenInterceptor;
 import app.knock.api.resources.UsersResource;
+import app.knock.api.resources.WorkflowsResource;
 import app.knock.api.util.Environment;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -18,6 +19,7 @@ public class KnockClient {
     final OkHttpClient client;
 
     final UsersResource usersResource;
+    final WorkflowsResource workflowsResource;
 
     KnockClient(String baseUrl, String apiKey, ObjectMapper objectMapper) {
         this.apiKey = apiKey;
@@ -27,10 +29,15 @@ public class KnockClient {
                 .build();
 
         this.usersResource = new UsersResource(this.baseUrl, this.client);
+        this.workflowsResource = new WorkflowsResource(this.baseUrl, this.client);
     }
 
     public UsersResource users() {
         return this.usersResource;
+    }
+
+    public WorkflowsResource workflows() {
+        return this.workflowsResource;
     }
 
     public static KnockClientBuilder builder() {
