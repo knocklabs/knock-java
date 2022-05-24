@@ -20,7 +20,7 @@ public class WorkflowsResourceTest {
 
     @Test
     void buildBaseResource() {
-        HttpUrl url = this.workflowsResource.buildBaseResource("test-key");
+        HttpUrl url = this.workflowsResource.buildBaseResource("test-key", "trigger");
         assertEquals("https://notreal.app/v1/workflows/test-key/trigger", url.toString());
     }
 

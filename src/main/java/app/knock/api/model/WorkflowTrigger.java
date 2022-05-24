@@ -1,6 +1,7 @@
 package app.knock.api.model;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Builder;
 import lombok.Singular;
 import lombok.Value;
@@ -12,6 +13,7 @@ import java.util.Map;
 @Value
 @Jacksonized
 @Builder
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkflowTrigger {
 
 

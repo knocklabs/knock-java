@@ -5,10 +5,16 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import java.util.List;
+
 @Value
 @Jacksonized
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class WorkflowTriggerResult {
-    String workflowRunId;
+public class KnockErrorResponse {
+    String code;
+    String message;
+    Integer status;
+    String type;
+    List<KnockError> errors;
 }
