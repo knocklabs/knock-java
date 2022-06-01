@@ -7,10 +7,8 @@ import app.knock.api.model.UserIdentity;
 import app.knock.api.model.WorkflowTrigger;
 import app.knock.api.model.WorkflowTriggerResult;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -46,7 +44,6 @@ public class WorkflowResourceTestsIT {
                 .email(recipientId1 + "@example.com")
                 .build());
     }
-
 
 
     @Test

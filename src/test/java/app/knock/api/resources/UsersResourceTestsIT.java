@@ -23,10 +23,10 @@ public class UsersResourceTestsIT {
     @Test
     void shouldCreateUserIdentity() {
         UserIdentity userIdentity = client.users().identify("user_1", UserIdentity.builder()
-                    .name("User name")
-                    .email("user@gmail.com")
-                    .property("foo", "bar")
-                    .property("baz", true)
+                .name("User name")
+                .email("user@gmail.com")
+                .property("foo", "bar")
+                .property("baz", true)
                 .build());
 
         assertEquals("user_1", userIdentity.getId());

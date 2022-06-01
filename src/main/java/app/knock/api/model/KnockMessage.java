@@ -8,23 +8,32 @@ import lombok.Singular;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-import java.util.List;
 import java.util.Map;
 
 @Value
 @Jacksonized
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class WorkflowTrigger {
+public class KnockMessage {
 
     @JsonProperty("__typename")
     String typeName;
 
-    String key;
+    @JsonProperty("__cursor")
+    String cursor;
 
-    String actor;
-    List<String> recipients;
-    String cancellation_key;
+    String id;
+    String channelId;
+    Object recipient;
+    String workflow;
+    String tenant;
+    String status;
+    String readAt;
+    String seenAt;
+    String archivedAt;
+    String insertedAt;
+    String updatedAt;
+    WorkflowSource source;
 
     @Singular("data")
     @JsonAnySetter

@@ -2,7 +2,6 @@ package app.knock.api.resources;
 
 import app.knock.api.exception.KnockClientResourceException;
 import app.knock.api.model.KnockErrorResponse;
-import app.knock.api.model.UserIdentity;
 import app.knock.api.model.WorkflowTrigger;
 import app.knock.api.model.WorkflowTriggerResult;
 import app.knock.api.serialize.Json;
@@ -11,8 +10,6 @@ import lombok.Value;
 import okhttp3.*;
 
 import java.io.IOException;
-import java.util.List;
-import java.util.Map;
 import java.util.Objects;
 
 @Value

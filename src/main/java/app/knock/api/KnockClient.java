@@ -32,6 +32,10 @@ public class KnockClient {
         this.workflowsResource = new WorkflowsResource(this.baseUrl, this.client);
     }
 
+    public static KnockClientBuilder builder() {
+        return new KnockClientBuilder();
+    }
+
     public UsersResource users() {
         return this.usersResource;
     }
@@ -40,22 +44,17 @@ public class KnockClient {
         return this.workflowsResource;
     }
 
-    public static KnockClientBuilder builder() {
-        return new KnockClientBuilder();
-    }
-
     public static class KnockClientBuilder {
+
+        private String baseUrl = DEFAULT_BASE_URL;
+        private String apiKey;
 
         KnockClientBuilder(Environment environment) {
             this.apiKey = environment.getEnvVar(API_KEY_ENV_VAR);
         }
-
         public KnockClientBuilder() {
             this(new Environment());
         }
-
-        private String baseUrl = DEFAULT_BASE_URL;
-        private String apiKey;
 
         public KnockClientBuilder baseUrl(String baseUrl) {
             this.baseUrl = baseUrl;
