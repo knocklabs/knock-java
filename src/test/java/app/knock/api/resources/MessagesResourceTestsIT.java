@@ -89,7 +89,7 @@ public class MessagesResourceTestsIT {
         KnockMessage knockMessage = result.getItems().stream().findFirst().orElseGet(() -> null);
         assertNotNull(knockMessage, "Need a message to retrieve events");
 
-        KnockMessage singleKnockMessage = client.messages().getById(knockMessage.getId());
+        KnockMessage singleKnockMessage = client.messages().get(knockMessage.getId());
         assertNotNull(singleKnockMessage);
         assertEquals(knockMessage.getId(), singleKnockMessage.getId());
     }
@@ -97,7 +97,7 @@ public class MessagesResourceTestsIT {
     @Test
     void testGetOneMessageById_missing() {
         try {
-            KnockMessage knockMessage = client.messages().getById("lkj32lkjsdf3");
+            KnockMessage knockMessage = client.messages().get("lkj32lkjsdf3");
             fail("expected resource_missing error");
         } catch (KnockClientResourceException e) {
             assertEquals("resource_missing", e.knockErrorResponse.getCode());

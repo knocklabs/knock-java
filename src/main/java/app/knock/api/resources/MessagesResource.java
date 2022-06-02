@@ -1,16 +1,13 @@
 package app.knock.api.resources;
 
-import app.knock.api.KnockClient;
 import app.knock.api.exception.KnockClientResourceException;
 import app.knock.api.http.KnockHttp;
 import app.knock.api.model.*;
-import app.knock.api.serialize.Json;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
 import okhttp3.*;
 
-import java.io.IOException;
 import java.util.*;
 
 @Value
@@ -85,10 +82,10 @@ public class MessagesResource {
      * Retrieve a single message
      *
      * @param messageId
-     * @return a cursor result of message events
+     * @return a single message
      * @throws KnockClientResourceException
      */
-    public KnockMessage getById(String messageId) {
+    public KnockMessage get(String messageId) {
         Request request = new Request.Builder()
                 .url(buildChildResource(messageId, "", new QueryParams()))
                 .addHeader("Content-Type", "application/json")
@@ -96,6 +93,20 @@ public class MessagesResource {
                 .build();
 
         return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
+    }
+
+    /**
+     * Retrieve an optional single message
+     *
+     * @param messageId
+     * @return an optional single message
+     */
+    public Optional<KnockMessage> oGet(String messageId) {
+        try {
+            return Optional.of(get(messageId));
+        } catch (KnockClientResourceException e) {
+            return Optional.empty();
+        }
     }
 
     /**

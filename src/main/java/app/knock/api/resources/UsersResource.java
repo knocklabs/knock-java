@@ -13,6 +13,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 
 import java.util.Objects;
+import java.util.Optional;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
@@ -28,6 +29,7 @@ public class UsersResource {
     }
 
     /**
+     * Identify a user to Knock
      *
      * @param userId
      * @param identity
@@ -43,6 +45,31 @@ public class UsersResource {
                 .build();
 
         return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
+    }
+
+    /**
+     * Retrieve a user from knock
+     *
+     * @param userId
+     * @return userIdentity
+     * @throws KnockClientResourceException
+     */
+    public UserIdentity get(String userId) {
+        Request request = new Request.Builder()
+                .url(buildBaseResource(userId))
+                .addHeader("Content-Type", "application/json")
+                .get()
+                .build();
+
+        return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
+    }
+
+    public Optional<UserIdentity> oGet(String userId) {
+        try {
+            return Optional.of(get(userId));
+        } catch (KnockClientResourceException e) {
+            return Optional.empty();
+        }
     }
 
     public void delete(String userId) {
