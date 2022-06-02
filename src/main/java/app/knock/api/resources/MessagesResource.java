@@ -151,6 +151,42 @@ public class MessagesResource {
         return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
     }
 
+    /**
+     * Set Message status
+     * Supports "seen", "read", and "archived"
+     *
+     * @param messageId
+     * @return the updated message
+     * @throws KnockClientResourceException
+     */
+    public KnockMessage setStatus(String messageId, String status) {
+        Request request = new Request.Builder()
+                .url(buildChildResource(messageId, status, new QueryParams()))
+                .addHeader("Content-Type", "application/json")
+                .put(RequestBody.create("true", MediaType.get("application/json")))
+                .build();
+
+        return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
+    }
+
+    /**
+     * Delete a Message status
+     * Supports "seen", "read", and "archived"
+     *
+     * @param messageId
+     * @return the updated message
+     * @throws KnockClientResourceException
+     */
+    public KnockMessage deleteStatus(String messageId, String status) {
+        Request request = new Request.Builder()
+                .url(buildChildResource(messageId, status, new QueryParams()))
+                .addHeader("Content-Type", "application/json")
+                .delete()
+                .build();
+
+        return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
+    }
+
     HttpUrl buildListResource(QueryParams queryParams) {
         HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl))
                 .newBuilder()

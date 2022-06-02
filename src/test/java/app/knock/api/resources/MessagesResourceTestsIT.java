@@ -20,6 +20,17 @@ public class MessagesResourceTestsIT {
         client = KnockClient.builder().build();
     }
 
+    KnockMessage getOneMessage() {
+        MessagesResource.QueryParams queryParams = new MessagesResource.QueryParams();
+        queryParams.pageSize(10);
+
+        CursorResult<KnockMessage> result = client.messages().list(queryParams);
+
+        KnockMessage knockMessage = result.getItems().stream().findFirst().orElseGet(() -> null);
+        assertNotNull(knockMessage, "Need a message to retrieve events");
+        return knockMessage;
+    }
+
     @Test
     void testGetAllMessages() {
         CursorResult<KnockMessage> result = client.messages().list(new MessagesResource.QueryParams());
@@ -101,10 +112,7 @@ public class MessagesResourceTestsIT {
         MessagesResource.QueryParams queryParams = new MessagesResource.QueryParams();
         queryParams.pageSize(10);
 
-        CursorResult<KnockMessage> result = client.messages().list(queryParams);
-
-        KnockMessage knockMessage = result.getItems().stream().findFirst().orElseGet(() -> null);
-        assertNotNull(knockMessage, "Need a message to retrieve events");
+        KnockMessage knockMessage = getOneMessage();
 
         CursorResult<KnockMessageEvent> eventResult = client.messages().events(knockMessage.getId(), queryParams);
         assertNotNull(eventResult);
@@ -116,10 +124,7 @@ public class MessagesResourceTestsIT {
         MessagesResource.QueryParams queryParams = new MessagesResource.QueryParams();
         queryParams.pageSize(10);
 
-        CursorResult<KnockMessage> result = client.messages().list(queryParams);
-
-        KnockMessage knockMessage = result.getItems().stream().findFirst().orElseGet(() -> null);
-        assertNotNull(knockMessage, "Need a message to retrieve events");
+        KnockMessage knockMessage = getOneMessage();
 
         CursorResult<KnockMessageActivity> activitiesResult = client.messages().activities(knockMessage.getId(), queryParams);
         assertNotNull(activitiesResult);
@@ -128,18 +133,50 @@ public class MessagesResourceTestsIT {
 
     @Test
     void testGetContent() {
-        MessagesResource.QueryParams queryParams = new MessagesResource.QueryParams();
-        queryParams.pageSize(10);
-
-        CursorResult<KnockMessage> result = client.messages().list(queryParams);
-
-        KnockMessage knockMessage = result.getItems().stream().skip(1).findFirst().orElseGet(() -> null);
-        assertNotNull(knockMessage, "Need a message to retrieve events");
+        KnockMessage knockMessage = getOneMessage();
 
         KnockMessageContent messageContent = client.messages().content(knockMessage.getId());
         assertNotNull(messageContent);
         assertNotNull(messageContent.getData());
         assertTrue(messageContent.getData().size() > 0);
+    }
+
+    @Test
+    void testSetAndDeleteStatus() {
+        KnockMessage knockMessage = getOneMessage();
+
+        if (knockMessage.getSeenAt() == null) {
+            KnockMessage updatedMessage = client.messages().setStatus(knockMessage.getId(), "seen");
+            assertNotNull(updatedMessage.getSeenAt());
+            assertNotEquals(knockMessage.getSeenAt(), updatedMessage.getSeenAt());
+        } else {
+            KnockMessage updatedMessage = client.messages().deleteStatus(knockMessage.getId(), "seen");
+            assertNull(updatedMessage.getSeenAt());
+            assertNotEquals(knockMessage.getSeenAt(), updatedMessage.getSeenAt());
+        }
+
+        knockMessage = getOneMessage();
+        if (knockMessage.getReadAt() == null) {
+            KnockMessage updatedMessage = client.messages().setStatus(knockMessage.getId(), "read");
+            assertNotNull(updatedMessage.getReadAt());
+            assertNotEquals(knockMessage.getReadAt(), updatedMessage.getReadAt());
+        } else {
+            KnockMessage updatedMessage = client.messages().deleteStatus(knockMessage.getId(), "read");
+            assertNull(updatedMessage.getReadAt());
+            assertNotEquals(knockMessage.getReadAt(), updatedMessage.getReadAt());
+        }
+
+        knockMessage = getOneMessage();
+        if (knockMessage.getArchivedAt() == null) {
+            KnockMessage updatedMessage = client.messages().setStatus(knockMessage.getId(), "archived");
+            assertNotNull(updatedMessage.getArchivedAt());
+            assertNotEquals(knockMessage.getArchivedAt(), updatedMessage.getArchivedAt());
+        } else {
+            KnockMessage updatedMessage = client.messages().deleteStatus(knockMessage.getId(), "archived");
+            assertNull(updatedMessage.getArchivedAt());
+            assertNotEquals(knockMessage.getArchivedAt(), updatedMessage.getArchivedAt());
+        }
+
     }
 
 }
