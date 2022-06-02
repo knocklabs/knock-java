@@ -1,13 +1,17 @@
 package app.knock.api.resources;
 
 import app.knock.api.exception.KnockClientResourceException;
+import app.knock.api.http.KnockHttp;
 import app.knock.api.model.UserIdentity;
 import app.knock.api.serialize.Json;
+import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
-import okhttp3.*;
+import okhttp3.HttpUrl;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
-import java.io.IOException;
 import java.util.Objects;
 
 @Value
@@ -23,6 +27,13 @@ public class UsersResource {
         return identify(identity.getId(), identity);
     }
 
+    /**
+     *
+     * @param userId
+     * @param identity
+     * @return userIdentity
+     * @throws KnockClientResourceException
+     */
     public UserIdentity identify(String userId, UserIdentity identity) {
         byte[] bodyBytes = Json.writeBytes(identity);
         Request request = new Request.Builder()
@@ -31,18 +42,7 @@ public class UsersResource {
                 .put(RequestBody.create(bodyBytes))
                 .build();
 
-        try (Response response = httpClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                throw new KnockClientResourceException("bad API response");
-            } else {
-                if (response.body() != null) {
-                    return Json.readBytes(response.body().bytes(), UserIdentity.class);
-                }
-                throw new KnockClientResourceException("empty response");
-            }
-        } catch (IOException e) {
-            throw new KnockClientResourceException("an error occurred while calling the user.identify endpoint", e);
-        }
+        return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
     }
 
     public void delete(String userId) {
@@ -51,13 +51,7 @@ public class UsersResource {
                 .delete()
                 .build();
 
-        try (Response response = httpClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                throw new KnockClientResourceException("bad API response");
-            }
-        } catch (IOException e) {
-            throw new KnockClientResourceException("an error occurred while calling the user.identify endpoint", e);
-        }
+        KnockHttp.execute(httpClient, request);
     }
 
     HttpUrl buildBaseResource(String userId) {

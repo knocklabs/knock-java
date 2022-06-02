@@ -13,4 +13,5 @@ public class KnockError {
     String field;
     String message;
     String type;
+    String detail;
 }

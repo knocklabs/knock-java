@@ -1,6 +1,7 @@
 package app.knock.api.resources;
 
 import app.knock.api.exception.KnockClientResourceException;
+import app.knock.api.http.KnockHttp;
 import app.knock.api.model.KnockErrorResponse;
 import app.knock.api.model.WorkflowTrigger;
 import app.knock.api.model.WorkflowTriggerResult;
@@ -26,6 +27,7 @@ public class WorkflowsResource {
      *
      * @param workflowTrigger
      * @return the result of the workflow trigger
+     * @throws KnockClientResourceException
      */
     public WorkflowTriggerResult trigger(WorkflowTrigger workflowTrigger) {
         byte[] bodyBytes = Json.writeBytes(workflowTrigger);
@@ -67,14 +69,7 @@ public class WorkflowsResource {
                 .post(RequestBody.create(bodyBytes))
                 .build();
 
-        try (Response response = httpClient.newCall(request).execute()) {
-            if (!response.isSuccessful()) {
-                KnockErrorResponse errorResponse = Json.readBytes(response.body().bytes(), KnockErrorResponse.class);
-                throw new KnockClientResourceException(errorResponse);
-            }
-        } catch (IOException e) {
-            throw new KnockClientResourceException("an error occurred while calling the user.identify endpoint", e);
-        }
+        KnockHttp.execute(httpClient, request);
     }
 
     HttpUrl buildBaseResource(String key, String action) {

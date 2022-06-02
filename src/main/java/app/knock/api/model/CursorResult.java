@@ -13,7 +13,7 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CursorResult<T> {
 
-    List<T> entries;
+    List<T> items;
     PageInfo pageInfo;
 
 }

@@ -2,6 +2,7 @@ package app.knock.api;
 
 import app.knock.api.exception.KnockClientApiKeyException;
 import app.knock.api.http.TokenInterceptor;
+import app.knock.api.resources.MessagesResource;
 import app.knock.api.resources.UsersResource;
 import app.knock.api.resources.WorkflowsResource;
 import app.knock.api.util.Environment;
@@ -20,6 +21,7 @@ public class KnockClient {
 
     final UsersResource usersResource;
     final WorkflowsResource workflowsResource;
+    final MessagesResource messagesResource;
 
     KnockClient(String baseUrl, String apiKey, ObjectMapper objectMapper) {
         this.apiKey = apiKey;
@@ -30,6 +32,7 @@ public class KnockClient {
 
         this.usersResource = new UsersResource(this.baseUrl, this.client);
         this.workflowsResource = new WorkflowsResource(this.baseUrl, this.client);
+        this.messagesResource = new MessagesResource(this.baseUrl, this.client);
     }
 
     public static KnockClientBuilder builder() {
@@ -42,6 +45,10 @@ public class KnockClient {
 
     public WorkflowsResource workflows() {
         return this.workflowsResource;
+    }
+
+    public MessagesResource messages() {
+        return this.messagesResource;
     }
 
     public static class KnockClientBuilder {

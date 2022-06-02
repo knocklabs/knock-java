@@ -2,6 +2,7 @@ package app.knock.api.serialize;
 
 import app.knock.api.exception.KnockClientJsonException;
 import com.fasterxml.jackson.core.JacksonException;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 
@@ -31,6 +32,14 @@ public class Json {
     public static <T> T readBytes(byte[] bytes, Class<T> clazz) {
         try {
             return objectMapper.readValue(bytes, clazz);
+        } catch (IOException e) {
+            throw new KnockClientJsonException("Unable to convert JSON to object", e);
+        }
+    }
+
+    public static <T> T readBytes(byte[] bytes, TypeReference<T> typeReference) {
+        try {
+            return objectMapper.readValue(bytes, typeReference);
         } catch (IOException e) {
             throw new KnockClientJsonException("Unable to convert JSON to object", e);
         }

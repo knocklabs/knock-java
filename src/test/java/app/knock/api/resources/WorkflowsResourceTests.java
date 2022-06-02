@@ -8,20 +8,20 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.mock;
 
-public class UsersResourceTest {
+public class WorkflowsResourceTests {
 
-    UsersResource usersResource;
+    WorkflowsResource workflowsResource;
 
     @BeforeEach
     void setup() {
         OkHttpClient httpClient = mock(OkHttpClient.class);
-        this.usersResource = new UsersResource("https://notreal.app", httpClient);
+        this.workflowsResource = new WorkflowsResource("https://notreal.app", httpClient);
     }
 
     @Test
     void buildBaseResource() {
-        HttpUrl url = this.usersResource.buildBaseResource("123");
-        assertEquals("https://notreal.app/v1/users/123", url.toString());
+        HttpUrl url = this.workflowsResource.buildBaseResource("test-key", "trigger");
+        assertEquals("https://notreal.app/v1/workflows/test-key/trigger", url.toString());
     }
 
 }

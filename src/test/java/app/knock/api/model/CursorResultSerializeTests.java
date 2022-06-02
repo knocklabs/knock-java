@@ -32,7 +32,7 @@ public class CursorResultSerializeTests {
         );
 
         CursorResult<KnockMessage> cursorResult = CursorResult.<KnockMessage>builder()
-                .entries(entries)
+                .items(entries)
                 .pageInfo(PageInfo.builder()
                         .before("aaa")
                         .after("ccc")
