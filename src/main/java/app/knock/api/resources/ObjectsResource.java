@@ -34,6 +34,25 @@ public class ObjectsResource {
         return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
     }
 
+    public KnockObject set(String collection, String objectId, Map<String, Object> properties) {
+        Request request = new Request.Builder()
+                .url(buildBaseResource(collection, objectId))
+                .addHeader("Content-Type", "application/json")
+                .put(RequestBody.create(Json.writeBytes(properties)))
+                .build();
+
+        return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
+    }
+
+    public void delete(String collection, String objectId) {
+        Request request = new Request.Builder()
+                .url(buildBaseResource(collection, objectId))
+                .delete()
+                .build();
+
+        KnockHttp.execute(httpClient, request);
+    }
+
     public ChannelData getChannelData(String collection, String objectId, String channelId) {
         Request request = new Request.Builder()
                 .url(buildChannelBaseResource(collection, objectId, channelId))
