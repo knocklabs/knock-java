@@ -102,13 +102,12 @@ public class UsersResource {
         KnockHttp.execute(httpClient, request);
     }
 
-    public ChannelData putUserChannelData(String userId, String channelId, Map<String, Object> data) {
+    public ChannelData setChannelData(String userId, String channelId, Map<String, Object> data) {
         Request request = new Request.Builder()
                 .url(buildChannelBaseResource(userId, channelId))
                 .addHeader("Content-Type", "application/json")
                 .put(RequestBody.create(Json.writeBytes(data)))
                 .build();
-
         return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
     }
 
