@@ -93,6 +93,8 @@ public class UsersResourceTestsIT {
         ChannelData newData = client.users().getUserChannelData(userId, channelId);
 
         assertEquals(data, newData);
+        assertEquals("some-token", ((List<String>)data.getData().get("tokens")).get(0));
+        assertEquals("some-token", ((List<String>)newData.getData().get("tokens")).get(0));
 
         client.users().unsetUserChannelData(userId, channelId);
         client.users().delete(userId);
