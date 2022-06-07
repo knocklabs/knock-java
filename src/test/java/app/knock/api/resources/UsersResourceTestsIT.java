@@ -87,16 +87,18 @@ public class UsersResourceTestsIT {
                 .build());
 
         String userId = userIdentity.getId();
-        String channelId = "46952393-13fd-40c7-a453-5195a4261a54";
+        String channelId = "7341aee6-3956-4977-b0f4-032ac1e74336";
 
         client.users().unsetUserChannelData(userId, channelId);
 
         Assertions.assertThrows(KnockClientJsonException.class, () -> client.users().getUserChannelData(userId, channelId));
 
-        ChannelData data = client.users().setChannelData(userId, channelId, Map.of("token", List.of("some-token")));
+        ChannelData data = client.users().setChannelData(userId, channelId, Map.of("tokens", List.of("some-token")));
         ChannelData newData = client.users().getUserChannelData(userId, channelId);
 
         assertEquals(data, newData);
+        assertEquals("some-token", ((List<String>)data.getData().get("tokens")).get(0));
+        assertEquals("some-token", ((List<String>)newData.getData().get("tokens")).get(0));
 
         client.users().unsetUserChannelData(userId, channelId);
         client.users().delete(userId);
