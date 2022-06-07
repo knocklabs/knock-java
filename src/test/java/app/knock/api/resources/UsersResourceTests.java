@@ -24,4 +24,10 @@ public class UsersResourceTests {
         assertEquals("https://notreal.app/v1/users/123", url.toString());
     }
 
+    @Test
+    void buildChannelBaseResource() {
+        HttpUrl url = this.usersResource.buildChannelBaseResource("123", "abc");
+        assertEquals("https://notreal.app/v1/users/123/channel_data/abc", url.toString());
+    }
+
 }

@@ -2,9 +2,14 @@ package app.knock.api.resources;
 
 import app.knock.api.KnockClient;
 import app.knock.api.exception.KnockClientResourceException;
+import app.knock.api.model.ChannelData;
 import app.knock.api.model.UserIdentity;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -64,5 +69,32 @@ public class UsersResourceTestsIT {
             assertEquals(404, e.knockErrorResponse.getStatus());
             assertEquals("api_error", e.knockErrorResponse.getType());
         }
+    }
+
+    @Test
+    void userChannelDataManipulation() {
+        UserIdentity userIdentity = client.users().identify("test_get_user", UserIdentity.builder()
+                .name("User name")
+                .email("test_get_user@gmail.com")
+                .property("foo", "bar")
+                .property("baz", true)
+                .build());
+
+        String userId = userIdentity.getId();
+        String channelId = "46952393-13fd-40c7-a453-5195a4261a54";
+
+        client.users().unsetUserChannelData(userId, channelId);
+
+        Assertions.assertThrows(KnockClientResourceException.class, () -> {
+            client.users().getUserChannelData(userId, channelId);
+        });
+
+        ChannelData data = client.users().setChannelData(userId, channelId, Map.of("token", List.of("some-token")));
+        ChannelData newData = client.users().getUserChannelData(userId, channelId);
+
+        assertEquals(data, newData);
+
+        client.users().unsetUserChannelData(userId, channelId);
+        client.users().delete(userId);
     }
 }
