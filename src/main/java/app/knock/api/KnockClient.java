@@ -1,6 +1,8 @@
 package app.knock.api;
 
 import app.knock.api.exception.KnockClientApiKeyException;
+import app.knock.api.http.BaseUrlInterceptor;
+import app.knock.api.http.KnockHttp;
 import app.knock.api.http.TokenInterceptor;
 import app.knock.api.resources.MessagesResource;
 import app.knock.api.resources.UsersResource;
@@ -19,6 +21,8 @@ public class KnockClient {
     final String apiKey;
     final OkHttpClient client;
 
+    final KnockHttp knockHttp;
+
     final UsersResource usersResource;
     final WorkflowsResource workflowsResource;
     final MessagesResource messagesResource;
@@ -27,10 +31,13 @@ public class KnockClient {
         this.apiKey = apiKey;
         this.baseUrl = baseUrl;
         this.client = new OkHttpClient.Builder()
+                .addInterceptor(new BaseUrlInterceptor(this.baseUrl))
                 .addInterceptor(new TokenInterceptor(this.apiKey))
                 .build();
 
-        this.usersResource = new UsersResource(this.baseUrl, this.client);
+        this.knockHttp = new KnockHttp(this.client, this.baseUrl);
+
+        this.usersResource = new UsersResource(this.baseUrl, this.knockHttp);
         this.workflowsResource = new WorkflowsResource(this.baseUrl, this.client);
         this.messagesResource = new MessagesResource(this.baseUrl, this.client);
     }

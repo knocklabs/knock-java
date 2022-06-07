@@ -10,6 +10,8 @@ import lombok.extern.jackson.Jacksonized;
 
 import java.util.Map;
 
+import static app.knock.api.model.util.PropertyBuilderHelper.setProperty;
+
 @Value
 @Jacksonized
 @Builder
@@ -34,10 +36,6 @@ public class UserIdentity {
     Map<String, Object> properties;
 
     public <T> T property(String key, Class<T> clazz) {
-        if (this.properties != null && this.properties.containsKey(key)) {
-            Object o = this.properties.get(key);
-            return clazz.isInstance(o) ? clazz.cast(o) : null;
-        }
-        return null;
+        return setProperty(this.properties, key, clazz);
     }
 }

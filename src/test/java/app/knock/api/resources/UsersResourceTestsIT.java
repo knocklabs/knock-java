@@ -1,6 +1,7 @@
 package app.knock.api.resources;
 
 import app.knock.api.KnockClient;
+import app.knock.api.exception.KnockClientJsonException;
 import app.knock.api.exception.KnockClientResourceException;
 import app.knock.api.model.ChannelData;
 import app.knock.api.model.UserIdentity;
@@ -48,6 +49,11 @@ public class UsersResourceTestsIT {
     }
 
     @Test
+    void shouldGetPreferences() {
+        client.users().getPreferences("user_1");
+    }
+
+    @Test
     void getUser() {
         UserIdentity userIdentity = client.users().identify("test_get_user", UserIdentity.builder()
                 .name("User name")
@@ -85,9 +91,7 @@ public class UsersResourceTestsIT {
 
         client.users().unsetUserChannelData(userId, channelId);
 
-        Assertions.assertThrows(KnockClientResourceException.class, () -> {
-            client.users().getUserChannelData(userId, channelId);
-        });
+        Assertions.assertThrows(KnockClientJsonException.class, () -> client.users().getUserChannelData(userId, channelId));
 
         ChannelData data = client.users().setChannelData(userId, channelId, Map.of("token", List.of("some-token")));
         ChannelData newData = client.users().getUserChannelData(userId, channelId);
