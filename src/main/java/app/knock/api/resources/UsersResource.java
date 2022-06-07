@@ -106,7 +106,7 @@ public class UsersResource {
         Request request = new Request.Builder()
                 .url(buildChannelBaseResource(userId, channelId))
                 .addHeader("Content-Type", "application/json")
-                .put(RequestBody.create(Json.writeBytes(data)))
+                .put(RequestBody.create(Json.writeBytes(Map.of("data", data))))
                 .build();
         return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
     }
