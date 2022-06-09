@@ -19,8 +19,8 @@ public class WorkflowsResource {
 
     KnockHttp knockHttp;
 
-    private HttpUrl.Builder baseUrlBuilder(String ... pathSegments) {
-        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, pathSegments);
+    HttpUrl workflowUrl(String key, String action) {
+        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, key, action).build();
     }
 
     /**
@@ -31,7 +31,7 @@ public class WorkflowsResource {
      * @throws KnockClientResourceException
      */
     public WorkflowTriggerResult trigger(WorkflowTrigger workflowTrigger) {
-        HttpUrl url = baseUrlBuilder(workflowTrigger.getKey(), "trigger").build();
+        HttpUrl url = workflowUrl(workflowTrigger.getKey(), "trigger");
         RequestBody body = knockHttp.objectToJsonRequestBody(workflowTrigger);
         Request request = knockHttp.baseJsonRequest(url)
                 .post(body)
@@ -47,7 +47,7 @@ public class WorkflowsResource {
      * @throws KnockClientResourceException
      */
     public void cancel(WorkflowTrigger workflowTrigger) {
-        HttpUrl url = baseUrlBuilder(workflowTrigger.getKey(), "cancel").build();
+        HttpUrl url = workflowUrl(workflowTrigger.getKey(), "cancel");
         RequestBody body = knockHttp.objectToJsonRequestBody(workflowTrigger);
         Request request = knockHttp.baseJsonRequest(url)
                 .post(body)

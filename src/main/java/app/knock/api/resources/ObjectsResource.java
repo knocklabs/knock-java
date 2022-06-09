@@ -20,12 +20,16 @@ public class ObjectsResource {
 
     KnockHttp knockHttp;
 
-    private HttpUrl.Builder baseUrlBuilder(String ... pathSegments) {
-        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, pathSegments);
+    HttpUrl objectUrl(String collection, String objectId) {
+        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, collection, objectId).build();
+    }
+
+    HttpUrl objectChannelDataUrl(String collection, String objectId, String channelId) {
+        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, collection, objectId, "channel_data", channelId).build();
     }
 
     public KnockObject get(String collection, String objectId) {
-        HttpUrl url = baseUrlBuilder(collection, objectId).build();
+        HttpUrl url = objectUrl(collection, objectId);
         Request request = knockHttp.baseJsonRequest(url)
                         .get()
                         .build();
@@ -33,7 +37,7 @@ public class ObjectsResource {
     }
 
     public KnockObject set(String collection, String objectId, Map<String, Object> properties) {
-        HttpUrl url = baseUrlBuilder(collection, objectId).build();
+        HttpUrl url = objectUrl(collection, objectId);
         RequestBody body = knockHttp.objectToJsonRequestBody(properties);
         Request request = knockHttp.baseJsonRequest(url)
                 .put(body)
@@ -42,7 +46,7 @@ public class ObjectsResource {
     }
 
     public void delete(String collection, String objectId) {
-        HttpUrl url = baseUrlBuilder(collection, objectId).build();
+        HttpUrl url = objectUrl(collection, objectId);
         Request request = knockHttp.baseJsonRequest(url)
                 .delete()
                 .build();
@@ -50,7 +54,7 @@ public class ObjectsResource {
     }
 
     public ChannelData getChannelData(String collection, String objectId, String channelId) {
-        HttpUrl url = baseUrlBuilder(collection, objectId, "channel_data", channelId).build();
+        HttpUrl url = objectChannelDataUrl(collection, objectId, channelId);
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
@@ -58,7 +62,7 @@ public class ObjectsResource {
     }
 
     public ChannelData setChannelData(String collection, String objectId, String channelId, Map<String, Object> data) {
-        HttpUrl url = baseUrlBuilder(collection, objectId, "channel_data", channelId).build();
+        HttpUrl url = objectChannelDataUrl(collection, objectId, channelId);
         RequestBody body = knockHttp.objectToJsonRequestBody(data);
         Request request = knockHttp.baseJsonRequest(url)
                 .put(body)
@@ -67,7 +71,7 @@ public class ObjectsResource {
     }
 
     public void unsetChannelData(String collection, String objectId, String channelId) {
-        HttpUrl url = baseUrlBuilder(collection, objectId, "channel_data", channelId).build();
+        HttpUrl url = objectChannelDataUrl(collection, objectId, channelId);
         Request request = knockHttp.baseJsonRequest(url)
                 .delete()
                 .build();
