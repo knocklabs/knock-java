@@ -24,6 +24,7 @@ public class BaseUrlInterceptor implements Interceptor {
                 .host(this.baseUrl.host())
                 .port(this.baseUrl.port())
                 .build();
+
         request = request.newBuilder()
                 .url(newUrl)
                 .build();

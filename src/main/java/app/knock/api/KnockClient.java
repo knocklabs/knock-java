@@ -5,6 +5,7 @@ import app.knock.api.http.BaseUrlInterceptor;
 import app.knock.api.http.KnockHttp;
 import app.knock.api.http.TokenInterceptor;
 import app.knock.api.resources.MessagesResource;
+import app.knock.api.resources.ObjectsResource;
 import app.knock.api.resources.UsersResource;
 import app.knock.api.resources.WorkflowsResource;
 import app.knock.api.util.Environment;
@@ -26,6 +27,7 @@ public class KnockClient {
     final UsersResource usersResource;
     final WorkflowsResource workflowsResource;
     final MessagesResource messagesResource;
+    final ObjectsResource objectsResource;
 
     KnockClient(String baseUrl, String apiKey, ObjectMapper objectMapper) {
         this.apiKey = apiKey;
@@ -37,9 +39,10 @@ public class KnockClient {
 
         this.knockHttp = new KnockHttp(this.client, this.baseUrl);
 
-        this.usersResource = new UsersResource(this.baseUrl, this.knockHttp);
-        this.workflowsResource = new WorkflowsResource(this.baseUrl, this.client);
-        this.messagesResource = new MessagesResource(this.baseUrl, this.client);
+        this.usersResource = new UsersResource(this.knockHttp);
+        this.workflowsResource = new WorkflowsResource(this.knockHttp);
+        this.messagesResource = new MessagesResource(this.knockHttp);
+        this.objectsResource = new ObjectsResource(this.knockHttp);
     }
 
     public static KnockClientBuilder builder() {

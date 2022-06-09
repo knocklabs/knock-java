@@ -1,5 +1,6 @@
 package app.knock.api.resources;
 
+import app.knock.api.http.KnockHttp;
 import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,7 +16,8 @@ public class MessagesResourceTests {
     @BeforeEach
     void setup() {
         OkHttpClient httpClient = mock(OkHttpClient.class);
-        this.messagesResource = new MessagesResource("https://notreal.app", httpClient);
+        KnockHttp knockHttp = new KnockHttp(httpClient, "https://notreal.app");
+        this.messagesResource = new MessagesResource(knockHttp);
     }
 
     @Test

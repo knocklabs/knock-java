@@ -4,6 +4,7 @@ import app.knock.api.KnockClient;
 import app.knock.api.exception.KnockClientJsonException;
 import app.knock.api.exception.KnockClientResourceException;
 import app.knock.api.model.ChannelData;
+import app.knock.api.model.PreferenceSet;
 import app.knock.api.model.UserIdentity;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -45,19 +46,35 @@ public class UsersResourceTestsIT {
 
     @Test
     void shouldDeleteUserIdentity() {
-        client.users().delete("user_1");
+        UserIdentity userIdentity = client.users().identify("test_delete_me", UserIdentity.builder()
+                .name("User name")
+                .email("user@gmail.com")
+                .property("foo", "bar")
+                .property("baz", true)
+                .build());
+
+        assertTrue(client.users().oGet("test_delete_me").isPresent());
+        client.users().delete("test_delete_me");
+        assertTrue(client.users().oGet("test_delete_me").isEmpty());
     }
 
     @Test
     void shouldGetPreferences() {
-        client.users().getPreferences("user_1");
+        UserIdentity userIdentity = client.users().identify("test_user_preferences", UserIdentity.builder()
+                .name("User Pref Test")
+                .email("user_pref@example.com")
+                .build());
+
+        List<PreferenceSet> preferenceSets = client.users().getPreferences("user_1");
+        assertEquals(1, preferenceSets.size());
+        assertEquals("default", preferenceSets.get(0).getId());
     }
 
     @Test
     void getUser() {
         UserIdentity userIdentity = client.users().identify("test_get_user", UserIdentity.builder()
                 .name("User name")
-                .email("test_get_user@gmail.com")
+                .email("test_get_user@example.com")
                 .property("foo", "bar")
                 .property("baz", true)
                 .build());
@@ -91,7 +108,9 @@ public class UsersResourceTestsIT {
 
         client.users().unsetUserChannelData(userId, channelId);
 
-        Assertions.assertThrows(KnockClientJsonException.class, () -> client.users().getUserChannelData(userId, channelId));
+        Assertions.assertThrows(KnockClientResourceException.class, () -> {
+            client.users().getUserChannelData(userId, channelId);
+        });
 
         ChannelData data = client.users().setChannelData(userId, channelId, Map.of("tokens", List.of("some-token")));
         ChannelData newData = client.users().getUserChannelData(userId, channelId);

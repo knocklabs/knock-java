@@ -6,9 +6,14 @@ import app.knock.api.model.*;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
-import okhttp3.*;
+import okhttp3.HttpUrl;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
@@ -16,8 +21,7 @@ public class MessagesResource {
 
     private static final String BASE_RESOURCE_PATH = "v1/messages";
 
-    String baseUrl;
-    OkHttpClient httpClient;
+    KnockHttp knockHttp;
 
     @Value
     @EqualsAndHashCode(callSuper = false)
@@ -61,6 +65,18 @@ public class MessagesResource {
         }
     }
 
+    HttpUrl buildListResource(QueryParams queryParams) {
+        HttpUrl.Builder urlBuilder = knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH);
+        queryParams.addQueryParams(urlBuilder);
+        return urlBuilder.build();
+    }
+
+    HttpUrl buildChildResource(String id, String resource, QueryParams queryParams) {
+        HttpUrl.Builder urlBuilder = knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, id, resource);
+        queryParams.addQueryParams(urlBuilder);
+        return urlBuilder.build();
+    }
+
     /**
      * Retrieve Messages
      *
@@ -75,7 +91,7 @@ public class MessagesResource {
                 .get()
                 .build();
 
-        return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
     }
 
     /**
@@ -86,13 +102,11 @@ public class MessagesResource {
      * @throws KnockClientResourceException
      */
     public KnockMessage get(String messageId) {
-        Request request = new Request.Builder()
-                .url(buildChildResource(messageId, "", new QueryParams()))
-                .addHeader("Content-Type", "application/json")
+        HttpUrl url = buildChildResource(messageId, "", new QueryParams());
+        Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-
-        return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
     }
 
     /**
@@ -118,13 +132,11 @@ public class MessagesResource {
      * @throws KnockClientResourceException
      */
     public CursorResult<KnockMessageEvent> events(String messageId, QueryParams queryParams) {
-        Request request = new Request.Builder()
-                .url(buildChildResource(messageId, "events", queryParams))
-                .addHeader("Content-Type", "application/json")
+        HttpUrl url = buildChildResource(messageId, "events", queryParams);
+        Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-
-        return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
     }
 
     /**
@@ -136,13 +148,11 @@ public class MessagesResource {
      * @throws KnockClientResourceException
      */
     public CursorResult<KnockMessageActivity> activities(String messageId, QueryParams queryParams) {
-        Request request = new Request.Builder()
-                .url(buildChildResource(messageId, "activities", queryParams))
-                .addHeader("Content-Type", "application/json")
+        HttpUrl url = buildChildResource(messageId, "activities", queryParams);
+        Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-
-        return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
     }
 
     /**
@@ -153,13 +163,11 @@ public class MessagesResource {
      * @throws KnockClientResourceException
      */
     public KnockMessageContent content(String messageId) {
-        Request request = new Request.Builder()
-                .url(buildChildResource(messageId, "content", new QueryParams()))
-                .addHeader("Content-Type", "application/json")
+        HttpUrl url = buildChildResource(messageId, "content", new QueryParams());
+        Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-
-        return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
     }
 
     /**
@@ -171,13 +179,13 @@ public class MessagesResource {
      * @throws KnockClientResourceException
      */
     public KnockMessage setStatus(String messageId, String status) {
-        Request request = new Request.Builder()
-                .url(buildChildResource(messageId, status, new QueryParams()))
-                .addHeader("Content-Type", "application/json")
-                .put(RequestBody.create("true", MediaType.get("application/json")))
+        HttpUrl url = buildChildResource(messageId, status, new QueryParams());
+        RequestBody body = knockHttp.objectToJsonRequestBody(true);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .put(body)
                 .build();
-
-        return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
     }
 
     /**
@@ -189,31 +197,10 @@ public class MessagesResource {
      * @throws KnockClientResourceException
      */
     public KnockMessage deleteStatus(String messageId, String status) {
-        Request request = new Request.Builder()
-                .url(buildChildResource(messageId, status, new QueryParams()))
-                .addHeader("Content-Type", "application/json")
+        HttpUrl url = buildChildResource(messageId, status, new QueryParams());
+        Request request = knockHttp.baseJsonRequest(url)
                 .delete()
                 .build();
-
-        return KnockHttp.execute(httpClient, request, new TypeReference<>() {});
-    }
-
-    HttpUrl buildListResource(QueryParams queryParams) {
-        HttpUrl.Builder urlBuilder = Objects.requireNonNull(HttpUrl.parse(baseUrl))
-                .newBuilder()
-                .addPathSegments(BASE_RESOURCE_PATH);
-
-        queryParams.addQueryParams(urlBuilder);
-
-        return urlBuilder.build();
-    }
-
-    HttpUrl buildChildResource(String id, String resource, QueryParams queryParams) {
-        return Objects.requireNonNull(HttpUrl.parse(baseUrl))
-                .newBuilder()
-                .addPathSegments(BASE_RESOURCE_PATH)
-                .addEncodedPathSegment(id)
-                .addPathSegments(resource)
-                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
     }
 }

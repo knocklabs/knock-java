@@ -7,6 +7,9 @@ import app.knock.api.serialize.Json;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
+import okhttp3.HttpUrl;
+import okhttp3.Request;
+import okhttp3.RequestBody;
 
 import java.util.List;
 import java.util.Map;
@@ -18,8 +21,24 @@ public class UsersResource {
 
     private static final String BASE_RESOURCE_PATH = "v1/users";
 
-    String baseUrl;
     KnockHttp knockHttp;
+
+    HttpUrl userUrl(String userId) {
+        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId).build();
+    }
+
+    HttpUrl userChannelUrl(String userId, String channelId) {
+        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId, "channel_data", channelId).build();
+    }
+
+    HttpUrl userPreferencesUrl(String userId) {
+        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId, "preferences").build();
+    }
+
+    HttpUrl userPreferencesUrl(String userId, String preferenceId) {
+        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId, "preferences", preferenceId).build();
+    }
+
 
     public UserIdentity identify(UserIdentity identity) {
         return identify(identity.getId(), identity);
@@ -34,8 +53,12 @@ public class UsersResource {
      * @throws KnockClientResourceException
      */
     public UserIdentity identify(String userId, UserIdentity identity) {
-        byte[] bodyBytes = Json.writeBytes(identity);
-        return this.knockHttp.put(BASE_RESOURCE_PATH, userId, bodyBytes, new TypeReference<>() {});
+        HttpUrl url = userUrl(userId);
+        RequestBody body = knockHttp.objectToJsonRequestBody(identity);
+        Request request = knockHttp.baseJsonRequest(url)
+                .put(body)
+                .build();
+        return knockHttp.<UserIdentity>executeWithResponseType(request, new TypeReference<>() {});
     }
 
     /**
@@ -46,7 +69,11 @@ public class UsersResource {
      * @throws KnockClientResourceException
      */
     public UserIdentity get(String userId) {
-        return this.knockHttp.get(BASE_RESOURCE_PATH, userId, new TypeReference<>(){});
+        HttpUrl url = userUrl(userId);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
     }
 
     public Optional<UserIdentity> oGet(String userId) {
@@ -58,33 +85,61 @@ public class UsersResource {
     }
 
     public void delete(String userId) {
-        this.knockHttp.delete(BASE_RESOURCE_PATH, List.of(userId));
+        HttpUrl url = userUrl(userId);
+        Request request = knockHttp.baseJsonRequest(url)
+                .delete()
+                .build();
+        knockHttp.execute(request);
     }
 
     public ChannelData getUserChannelData(String userId, String channelId) {
-        return this.knockHttp.get(BASE_RESOURCE_PATH, List.of(userId, "channel_id", channelId), new TypeReference<>() {});
+        HttpUrl url = userChannelUrl(userId, channelId);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
     }
 
     public void unsetUserChannelData(String userId, String channelId) {
-        this.knockHttp.delete(BASE_RESOURCE_PATH, List.of(userId, "channel_id", channelId));
+        HttpUrl url = userChannelUrl(userId, channelId);
+        Request request = knockHttp.baseJsonRequest(url)
+                .delete()
+                .build();
+        knockHttp.execute(request);
     }
 
     public ChannelData setChannelData(String userId, String channelId, Map<String, Object> data) {
-        byte[] body = Json.writeBytes(data);
-        return this.knockHttp.put(BASE_RESOURCE_PATH, List.of(userId, "channel_id", channelId), body, new TypeReference<>() {});
+        HttpUrl url = userChannelUrl(userId, channelId);
+        RequestBody body = knockHttp.objectToJsonRequestBody(Map.of("data", data));
+        Request request = knockHttp.baseJsonRequest(url)
+                .put(body)
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
     }
 
-    public PreferenceSet getPreferences(String userId) {
-        return this.knockHttp.get(BASE_RESOURCE_PATH, List.of(userId, "preferences"), new TypeReference<>(){});
+    public List<PreferenceSet> getPreferences(String userId) {
+        HttpUrl url = userPreferencesUrl(userId);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
     }
 
     public PreferenceSet getPreferencesById(String userId, String preferenceId) {
-        return this.knockHttp.get(BASE_RESOURCE_PATH, List.of(userId, "preferences", preferenceId), new TypeReference<>(){});
+        HttpUrl url = userPreferencesUrl(userId, preferenceId);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
     }
 
-    public PreferenceSet setPreferences(String userId, String preferenceId, SetPreferenceRequest request) {
-        byte[] body = Json.writeBytes(request);
-        return this.knockHttp.put(BASE_RESOURCE_PATH, List.of(userId, "preferences", preferenceId), body, new TypeReference<>(){});
+    public PreferenceSet setPreferences(String userId, String preferenceId, SetPreferenceRequest setPreferenceRequest) {
+        HttpUrl url = userChannelUrl(userId, preferenceId);
+        RequestBody body = knockHttp.objectToJsonRequestBody(setPreferenceRequest);
+        Request request = knockHttp.baseJsonRequest(url)
+                .put(body)
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
     }
 
 }
