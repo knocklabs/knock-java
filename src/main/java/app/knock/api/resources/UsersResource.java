@@ -11,9 +11,7 @@ import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
@@ -22,6 +20,31 @@ public class UsersResource {
     private static final String BASE_RESOURCE_PATH = "v1/users";
 
     KnockHttp knockHttp;
+
+    @Value
+    @EqualsAndHashCode(callSuper = false)
+    public static class FeedQueryParams {
+        private final Map<String, Object> params = new HashMap<>();
+
+        public void pageSize(Integer pageSize) {
+            params.put("page_size", pageSize);
+        }
+
+        public void after(String after) {
+            params.put("after", after);
+        }
+
+        public void before(String before) {
+            params.put("before", before);
+        }
+
+        public void addQueryParams(HttpUrl.Builder uriBuilder) {
+            params.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .forEach(entry -> uriBuilder.addQueryParameter(entry.getKey(), entry.getValue().toString()));
+        }
+    }
 
     HttpUrl userUrl(String userId) {
         return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId).build();
@@ -37,6 +60,12 @@ public class UsersResource {
 
     HttpUrl userPreferencesUrl(String userId, String preferenceId) {
         return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId, "preferences", preferenceId).build();
+    }
+
+    HttpUrl userFeedUrl(String userId, String feedId, FeedQueryParams feedQueryParams) {
+        HttpUrl.Builder urlBuilder = knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId, "feeds", feedId);
+        feedQueryParams.addQueryParams(urlBuilder);
+        return urlBuilder.build();
     }
 
 
@@ -138,6 +167,14 @@ public class UsersResource {
         RequestBody body = knockHttp.objectToJsonRequestBody(setPreferenceRequest);
         Request request = knockHttp.baseJsonRequest(url)
                 .put(body)
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
+    }
+
+    public FeedCursorResult feedItems(String userId, String feedId, FeedQueryParams feedQueryParams) {
+        HttpUrl url = userFeedUrl(userId, feedId, feedQueryParams);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
                 .build();
         return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
     }

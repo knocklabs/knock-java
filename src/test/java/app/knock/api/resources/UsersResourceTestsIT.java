@@ -4,6 +4,7 @@ import app.knock.api.KnockClient;
 import app.knock.api.exception.KnockClientJsonException;
 import app.knock.api.exception.KnockClientResourceException;
 import app.knock.api.model.ChannelData;
+import app.knock.api.model.FeedCursorResult;
 import app.knock.api.model.PreferenceSet;
 import app.knock.api.model.UserIdentity;
 import org.junit.jupiter.api.Assertions;
@@ -121,5 +122,16 @@ public class UsersResourceTestsIT {
 
         client.users().unsetUserChannelData(userId, channelId);
         client.users().delete(userId);
+    }
+
+    @Test
+    void userFeed() {
+        UsersResource.FeedQueryParams query = new UsersResource.FeedQueryParams();
+        query.pageSize(5);
+        FeedCursorResult feedCursorResult = client.users().feedItems("workflow_test_recipient_id_1", "46952393-13fd-40c7-a453-5195a4261a54", query);
+        assertNotNull(feedCursorResult);
+        assertEquals(5, feedCursorResult.getEntries().size());
+        assertNull(feedCursorResult.getPageInfo().getBefore());
+        assertNotNull(feedCursorResult.getPageInfo().getAfter());
     }
 }
