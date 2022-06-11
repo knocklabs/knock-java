@@ -4,6 +4,7 @@ import app.knock.api.exception.KnockClientApiKeyException;
 import app.knock.api.http.BaseUrlInterceptor;
 import app.knock.api.http.KnockHttp;
 import app.knock.api.http.TokenInterceptor;
+import app.knock.api.model.BulkOperation;
 import app.knock.api.resources.*;
 import app.knock.api.util.Environment;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -58,6 +59,10 @@ public class KnockClient {
 
     public MessagesResource messages() {
         return this.messagesResource;
+    }
+
+    public BulkOperationsResource bulkOperations() {
+        return this.bulkOperationsResource;
     }
 
     public static class KnockClientBuilder {
