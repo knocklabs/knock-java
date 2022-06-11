@@ -10,60 +10,16 @@ import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
 public class MessagesResource {
 
     private static final String BASE_RESOURCE_PATH = "v1/messages";
+    private static final String BASE_CHANNELS_RESOURCE_PATH = "v1/channels";
 
     KnockHttp knockHttp;
-
-    @Value
-    @EqualsAndHashCode(callSuper = false)
-    public static class QueryParams {
-        private final Map<String, Object> params = new HashMap<>();
-
-
-        public void pageSize(Integer pageSize) {
-            params.put("page_size", pageSize);
-        }
-
-        public void after(String after) {
-            params.put("after", after);
-        }
-
-        public void before(String before) {
-            params.put("before", before);
-        }
-
-        public void tenant(String tenant) {
-            params.put("tenant", tenant);
-        }
-
-        public void source(String source) {
-            params.put("source", source);
-        }
-
-        public void status(String[] status) {
-            params.put("status", Arrays.toString(status));
-        }
-
-        public void channel_id(String channel_id) {
-            params.put("channel_id", channel_id);
-        }
-
-        public void addQueryParams(HttpUrl.Builder uriBuilder) {
-            params.entrySet()
-                    .stream()
-                    .sorted(Map.Entry.comparingByKey())
-                    .forEach(entry -> uriBuilder.addQueryParameter(entry.getKey(), entry.getValue().toString()));
-        }
-    }
 
     HttpUrl buildListResource(QueryParams queryParams) {
         HttpUrl.Builder urlBuilder = knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH);
@@ -77,6 +33,16 @@ public class MessagesResource {
         return urlBuilder.build();
     }
 
+    HttpUrl buildBatchResource(String status) {
+        HttpUrl.Builder urlBuilder = knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, "batch", status);
+        return urlBuilder.build();
+    }
+
+    HttpUrl buildChannelBatchResource(String channelId, String status) {
+        HttpUrl.Builder urlBuilder = knockHttp.baseUrlBuilder(BASE_CHANNELS_RESOURCE_PATH, channelId, "messages", "bulk", status);
+        return urlBuilder.build();
+    }
+
     /**
      * Retrieve Messages
      *
@@ -85,13 +51,13 @@ public class MessagesResource {
      * @throws KnockClientResourceException
      */
     public CursorResult<KnockMessage> list(QueryParams queryParams) {
-        Request request = new Request.Builder()
-                .url(buildListResource(queryParams))
-                .addHeader("Content-Type", "application/json")
+        HttpUrl url = buildListResource(queryParams);
+        Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
 
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
     }
 
     /**
@@ -106,7 +72,8 @@ public class MessagesResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
     }
 
     /**
@@ -136,7 +103,8 @@ public class MessagesResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
     }
 
     /**
@@ -152,7 +120,8 @@ public class MessagesResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
     }
 
     /**
@@ -167,7 +136,8 @@ public class MessagesResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
     }
 
     /**
@@ -185,7 +155,8 @@ public class MessagesResource {
                 .get()
                 .put(body)
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
     }
 
     /**
@@ -201,6 +172,86 @@ public class MessagesResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .delete()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
+    }
+
+    /**
+     * Set the status of multiple messages as a batch.
+     *
+     * @param status
+     * @param bulkSetMessageStatusRequest
+     * @return A list of messages that were mutated during the call.
+     * @throws KnockClientResourceException
+     */
+    public List<KnockMessage> batchSetStatus(String status, BatchSetMessageStatusRequest bulkSetMessageStatusRequest) {
+        HttpUrl url = buildBatchResource(status);
+        RequestBody body = knockHttp.objectToJsonRequestBody(bulkSetMessageStatusRequest);
+        Request request = knockHttp.baseJsonRequest(url)
+                .post(body)
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
+    }
+
+    /**
+     * Set message status in a particular channel in bulk.
+     *
+     * @param channelId
+     * @param status
+     * @param bulkChannelMessageStatusRequest
+     * @return a BulkOperation
+     * @throws KnockClientResourceException
+     */
+    public BulkOperation bulk(String channelId, String status, BulkChannelMessageStatusRequest bulkChannelMessageStatusRequest) {
+        HttpUrl url = buildChannelBatchResource(channelId, status);
+        RequestBody body = knockHttp.objectToJsonRequestBody(bulkChannelMessageStatusRequest);
+        Request request = knockHttp.baseJsonRequest(url)
+                .post(body)
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
+    }
+
+    @Value
+    @EqualsAndHashCode(callSuper = false)
+    public static class QueryParams {
+        private final Map<String, Object> params = new HashMap<>();
+
+
+        public void pageSize(Integer pageSize) {
+            params.put("page_size", pageSize);
+        }
+
+        public void after(String after) {
+            params.put("after", after);
+        }
+
+        public void before(String before) {
+            params.put("before", before);
+        }
+
+        public void tenant(String tenant) {
+            params.put("tenant", tenant);
+        }
+
+        public void source(String source) {
+            params.put("source", source);
+        }
+
+        public void status(String... status) {
+            params.put("status", Arrays.toString(status));
+        }
+
+        public void channel_id(String channel_id) {
+            params.put("channel_id", channel_id);
+        }
+
+        public void addQueryParams(HttpUrl.Builder uriBuilder) {
+            params.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .forEach(entry -> uriBuilder.addQueryParameter(entry.getKey(), entry.getValue().toString()));
+        }
     }
 }

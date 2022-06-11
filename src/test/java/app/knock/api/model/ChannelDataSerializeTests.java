@@ -5,7 +5,6 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 
 import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -17,12 +16,13 @@ public class ChannelDataSerializeTests {
     @Test
     void jsonShouldDeserialize() {
 
-        ChannelData data = Json.readBytes(json.getBytes(StandardCharsets.UTF_8), new TypeReference<>() {});
+        ChannelData data = Json.readBytes(json.getBytes(StandardCharsets.UTF_8), new TypeReference<>() {
+        });
 
         assertEquals("ChannelData", data.getTypeName());
         assertEquals("c2189f43-c732-488a-bfa0-fdf16e145cdf", data.getChannelId());
 
-        List<String> tokens = (List<String>)data.getData().get("tokens");
+        List<String> tokens = (List<String>) data.getData().get("tokens");
         assertEquals(List.of("some-fcm-token"), tokens);
     }
 

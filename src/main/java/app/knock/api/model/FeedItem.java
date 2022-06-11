@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Map;
 
@@ -25,15 +26,15 @@ public class FeedItem {
     String tenant;
     String totalActivities;
     String totalActors;
-    String readAt;
-    String seenAt;
-    String insertedAt;
-    String updatedAt;
-    String archivedAt;
+    ZonedDateTime readAt;
+    ZonedDateTime seenAt;
+    ZonedDateTime insertedAt;
+    ZonedDateTime updatedAt;
+    ZonedDateTime archivedAt;
 
     WorkflowSource workflowSource;
     List<KnockMessageActivity> activities;
-    List<Map<String,Object>> actors;
+    List<Map<String, Object>> actors;
     Map<String, Object> data;
     List<Map<String, Object>> blocks;
 

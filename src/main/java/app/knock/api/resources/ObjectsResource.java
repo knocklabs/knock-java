@@ -31,9 +31,10 @@ public class ObjectsResource {
     public KnockObject get(String collection, String objectId) {
         HttpUrl url = objectUrl(collection, objectId);
         Request request = knockHttp.baseJsonRequest(url)
-                        .get()
-                        .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
     }
 
     public KnockObject set(String collection, String objectId, Map<String, Object> properties) {
@@ -42,7 +43,8 @@ public class ObjectsResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .put(body)
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
     }
 
     public void delete(String collection, String objectId) {
@@ -58,7 +60,8 @@ public class ObjectsResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
     }
 
     public ChannelData setChannelData(String collection, String objectId, String channelId, Map<String, Object> data) {
@@ -67,7 +70,8 @@ public class ObjectsResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .put(body)
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
     }
 
     public void unsetChannelData(String collection, String objectId, String channelId) {

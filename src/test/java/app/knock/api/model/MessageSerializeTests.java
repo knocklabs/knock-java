@@ -3,6 +3,9 @@ package app.knock.api.model;
 import app.knock.api.serialize.Json;
 import org.junit.jupiter.api.Test;
 
+import java.time.ZonedDateTime;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class MessageSerializeTests {
@@ -18,11 +21,11 @@ public class MessageSerializeTests {
                 .workflow("test-workflow")
                 .tenant("tenant-4444")
                 .status("delivered")
-                .readAt("2021-03-05T12:00:00Z")
-                .seenAt("2021-04-05T12:00:00Z")
-                .archivedAt("2021-05-05T12:00:00Z")
-                .insertedAt("2021-06-05T12:00:00Z")
-                .updatedAt("2021-07-05T12:00:00Z")
+                .readAt(ZonedDateTime.parse("2021-03-05T12:00:00Z"))
+                .seenAt(ZonedDateTime.parse("2021-04-05T12:00:00Z"))
+                .archivedAt(ZonedDateTime.parse("2021-05-05T12:00:00Z"))
+                .insertedAt(ZonedDateTime.parse("2021-06-05T12:00:00Z"))
+                .updatedAt(ZonedDateTime.parse("2021-07-05T12:00:00Z"))
                 .source(
                         WorkflowSource.builder()
                                 .typeName("WorkflowSource")

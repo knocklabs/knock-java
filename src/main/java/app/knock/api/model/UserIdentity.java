@@ -8,6 +8,7 @@ import lombok.Singular;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 import static app.knock.api.model.util.PropertyBuilderHelper.setProperty;
@@ -25,8 +26,8 @@ public class UserIdentity {
     String name;
     String email;
 
-    String createdAt;
-    String updatedAt;
+    ZonedDateTime createdAt;
+    ZonedDateTime updatedAt;
 
     String avatar;
     String phoneNumber;

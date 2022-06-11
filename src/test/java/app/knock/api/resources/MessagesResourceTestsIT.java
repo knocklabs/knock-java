@@ -6,6 +6,7 @@ import app.knock.api.model.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -63,8 +64,8 @@ public class MessagesResourceTestsIT {
         CursorResult<KnockMessage> result = client.messages().list(queryParams);
 
         Set<String> ids_1 = result.getItems().stream()
-                        .map(KnockMessage::getId)
-                        .collect(Collectors.toSet());
+                .map(KnockMessage::getId)
+                .collect(Collectors.toSet());
 
         queryParams.after(result.getPageInfo().getAfter());
         CursorResult<KnockMessage> result2 = client.messages().list(queryParams);
@@ -177,6 +178,45 @@ public class MessagesResourceTestsIT {
             assertNotEquals(knockMessage.getArchivedAt(), updatedMessage.getArchivedAt());
         }
 
+    }
+
+    @Test
+    public void testBatchSetStatus() {
+        MessagesResource.QueryParams queryParams = new MessagesResource.QueryParams();
+        queryParams.pageSize(10);
+
+        // Retrieve 10 unseen messages
+        CursorResult<KnockMessage> result = client.messages().list(queryParams);
+        List<String> unseenMessageIds = result.getItems().stream()
+                .filter(msg -> msg.getSeenAt() == null)
+                .map(KnockMessage::getId)
+                .collect(Collectors.toList());
+
+        Integer unseenCount = unseenMessageIds.size();
+
+        // set to seen.
+        BatchSetMessageStatusRequest request = BatchSetMessageStatusRequest.builder().messageIds(unseenMessageIds).build();
+        List<KnockMessage> seenMessages = client.messages().batchSetStatus("seen", request);
+        List<String> seenMessageIds = seenMessages.stream()
+                .filter(msg -> msg.getSeenAt() != null)
+                .map(KnockMessage::getId)
+                .collect(Collectors.toList());
+
+        assertEquals(unseenCount, seenMessageIds.size());
+
+        // revert to unseen
+        BatchSetMessageStatusRequest revertRequest = BatchSetMessageStatusRequest.builder().messageIds(seenMessageIds).build();
+        List<KnockMessage> revertedMessages = client.messages().batchSetStatus("unseen", revertRequest);
+        assertEquals(unseenCount, revertedMessages.size());
+    }
+
+    @Test
+    public void testBulkOperation() {
+        BulkChannelMessageStatusRequest request = BulkChannelMessageStatusRequest.builder()
+                .deliveryStatus("sent")
+                .build();
+
+        BulkOperation bulkOperation = client.messages().bulk("46952393-13fd-40c7-a453-5195a4261a54", "seen", request);
     }
 
 }

@@ -21,19 +21,19 @@ public class KnockHttp {
         this.httpUrl = HttpUrl.parse(baseUrl);
     }
 
-    public HttpUrl.Builder baseUrlBuilder(String baseUrl, String ... pathSegments) {
+    public HttpUrl.Builder baseUrlBuilder(String baseUrl, String... pathSegments) {
         HttpUrl.Builder urlBuilder = httpUrl.newBuilder();
 
         urlBuilder.addPathSegments(baseUrl);
 
-        for (String pathSegment: pathSegments) {
+        for (String pathSegment : pathSegments) {
             urlBuilder.addEncodedPathSegment(pathSegment);
         }
         return urlBuilder;
     }
 
     public Request.Builder baseJsonRequest(HttpUrl httpUrl) {
-       return new Request.Builder()
+        return new Request.Builder()
                 .url(httpUrl)
                 .addHeader("Content-Type", "application/json");
     }

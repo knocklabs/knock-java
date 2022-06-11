@@ -4,10 +4,7 @@ import app.knock.api.exception.KnockClientApiKeyException;
 import app.knock.api.http.BaseUrlInterceptor;
 import app.knock.api.http.KnockHttp;
 import app.knock.api.http.TokenInterceptor;
-import app.knock.api.resources.MessagesResource;
-import app.knock.api.resources.ObjectsResource;
-import app.knock.api.resources.UsersResource;
-import app.knock.api.resources.WorkflowsResource;
+import app.knock.api.resources.*;
 import app.knock.api.util.Environment;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -28,6 +25,7 @@ public class KnockClient {
     final WorkflowsResource workflowsResource;
     final MessagesResource messagesResource;
     final ObjectsResource objectsResource;
+    final BulkOperationsResource bulkOperationsResource;
 
     KnockClient(String baseUrl, String apiKey, ObjectMapper objectMapper) {
         this.apiKey = apiKey;
@@ -43,6 +41,7 @@ public class KnockClient {
         this.workflowsResource = new WorkflowsResource(this.knockHttp);
         this.messagesResource = new MessagesResource(this.knockHttp);
         this.objectsResource = new ObjectsResource(this.knockHttp);
+        this.bulkOperationsResource = new BulkOperationsResource(this.knockHttp);
     }
 
     public static KnockClientBuilder builder() {
@@ -69,6 +68,7 @@ public class KnockClient {
         KnockClientBuilder(Environment environment) {
             this.apiKey = environment.getEnvVar(API_KEY_ENV_VAR);
         }
+
         public KnockClientBuilder() {
             this(new Environment());
         }

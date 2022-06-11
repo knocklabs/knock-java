@@ -1,13 +1,12 @@
 package app.knock.api.model;
 
-import com.fasterxml.jackson.annotation.JsonAnySetter;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.*;
 import lombok.Builder;
 import lombok.Singular;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 @Value
@@ -28,15 +27,16 @@ public class KnockMessage {
     String workflow;
     String tenant;
     String status;
-    String readAt;
-    String seenAt;
-    String archivedAt;
-    String insertedAt;
-    String updatedAt;
+    ZonedDateTime readAt;
+    ZonedDateTime seenAt;
+    ZonedDateTime archivedAt;
+    ZonedDateTime insertedAt;
+    ZonedDateTime updatedAt;
     WorkflowSource source;
 
     @Singular("data")
     @JsonAnySetter
+    @JsonSetter(nulls = Nulls.SKIP)
     Map<String, Object> data;
 
     public <T> T data(String key, Class<T> clazz) {

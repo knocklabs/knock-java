@@ -1,7 +1,6 @@
 package app.knock.api.resources;
 
 import app.knock.api.KnockClient;
-import app.knock.api.exception.KnockClientJsonException;
 import app.knock.api.exception.KnockClientResourceException;
 import app.knock.api.model.ChannelData;
 import app.knock.api.model.FeedCursorResult;
@@ -117,8 +116,8 @@ public class UsersResourceTestsIT {
         ChannelData newData = client.users().getUserChannelData(userId, channelId);
 
         assertEquals(data, newData);
-        assertEquals("some-token", ((List<String>)data.getData().get("tokens")).get(0));
-        assertEquals("some-token", ((List<String>)newData.getData().get("tokens")).get(0));
+        assertEquals("some-token", ((List<String>) data.getData().get("tokens")).get(0));
+        assertEquals("some-token", ((List<String>) newData.getData().get("tokens")).get(0));
 
         client.users().unsetUserChannelData(userId, channelId);
         client.users().delete(userId);

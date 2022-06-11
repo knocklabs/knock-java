@@ -6,16 +6,23 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import java.time.ZonedDateTime;
+
 @Value
 @Jacksonized
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class FeedMetadata {
-
+public class BulkOperation {
     @JsonProperty("__typename")
     String typeName;
-
-    Integer unreadCount;
-    Integer unseenCount;
-
+    String id;
+    String name;
+    ZonedDateTime completedAt;
+    ZonedDateTime insertedAt;
+    ZonedDateTime updatedAt;
+    ZonedDateTime failedAt;
+    Integer estimatedTotalRows;
+    Integer processedRows;
+    String progressPath;
+    String status;
 }

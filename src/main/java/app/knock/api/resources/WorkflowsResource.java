@@ -36,7 +36,8 @@ public class WorkflowsResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .post(body)
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {});
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
     }
 
     /**

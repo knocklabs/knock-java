@@ -8,6 +8,7 @@ import lombok.Singular;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import java.time.ZonedDateTime;
 import java.util.Map;
 
 @Value
@@ -25,8 +26,8 @@ public class KnockMessageActivity {
     String id;
     UserIdentity actor;
     Object recipient;
-    String insertedAt;
-    String updatedAt;
+    ZonedDateTime insertedAt;
+    ZonedDateTime updatedAt;
 
     @Singular("data")
     @JsonAnySetter

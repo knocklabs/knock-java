@@ -10,6 +10,7 @@ import java.io.IOException;
 
 public class BaseUrlInterceptor implements Interceptor {
     private final HttpUrl baseUrl;
+
     public BaseUrlInterceptor(String baseUrl) {
         this.baseUrl = HttpUrl.parse(baseUrl);
     }
