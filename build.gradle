@@ -32,6 +32,16 @@ test {
 }
 
 publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            licenses {
+                license {
+                    name = 'MIT License'
+                    url = 'https://opensource.org/licenses/MIT'
+                }
+            }
+        }
+    }
     repositories {
         maven {
             url = project.hasProperty('release') ? project.property("repo.releases.url") : project.property("repo.snapshots.url")
