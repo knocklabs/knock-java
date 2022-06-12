@@ -1,14 +1,19 @@
 plugins {
-    id 'java'
+    id 'java-library'
     id 'io.freefair.lombok' version '6.4.3'
     id 'maven-publish'
 }
 
-group 'org.example'
-version '1.0-SNAPSHOT'
+group 'app.knock.api'
+version "${version}"
 
 repositories {
     mavenCentral()
+}
+
+java {
+    withJavadocJar()
+    withSourcesJar()
 }
 
 dependencies {
@@ -34,10 +39,12 @@ test {
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            licenses {
-                license {
-                    name = 'MIT License'
-                    url = 'https://opensource.org/licenses/MIT'
+            pom {
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://opensource.org/licenses/MIT'
+                    }
                 }
             }
         }
