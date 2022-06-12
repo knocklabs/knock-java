@@ -1,6 +1,7 @@
 plugins {
     id 'java'
-    id "io.freefair.lombok" version "6.4.3"
+    id 'io.freefair.lombok' version '6.4.3'
+    id 'maven-publish'
 }
 
 group 'org.example'
@@ -28,4 +29,12 @@ task integrationTest(type: Test) {
 test {
     exclude '**/*IT.class'
     useJUnitPlatform()
+}
+
+publishing {
+    repositories {
+        maven {
+            url = project.hasProperty('release') ? project.property("repo.releases.url") : project.property("repo.snapshots.url")
+        }
+    }
 }
