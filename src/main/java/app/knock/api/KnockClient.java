@@ -53,6 +53,10 @@ public class KnockClient {
         return this.usersResource;
     }
 
+    public ObjectsResource objects() {
+        return this.objectsResource;
+    }
+
     public WorkflowsResource workflows() {
         return this.workflowsResource;
     }

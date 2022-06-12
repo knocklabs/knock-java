@@ -144,9 +144,9 @@ public class UsersResource {
         });
     }
 
-    public PreferenceSet setPreferences(String userId, String preferenceId, SetPreferenceRequest setPreferenceRequest) {
+    public PreferenceSet setPreferences(String userId, String preferenceId, PreferenceSetRequest preferenceSetRequest) {
         HttpUrl url = userChannelUrl(userId, preferenceId);
-        RequestBody body = knockHttp.objectToJsonRequestBody(setPreferenceRequest);
+        RequestBody body = knockHttp.objectToJsonRequestBody(preferenceSetRequest);
         Request request = knockHttp.baseJsonRequest(url)
                 .put(body)
                 .build();

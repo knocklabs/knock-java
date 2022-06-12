@@ -1,6 +1,7 @@
 package app.knock.api.model;
 
 import com.fasterxml.jackson.annotation.JsonAnySetter;
+import lombok.Builder;
 import lombok.Singular;
 import lombok.Value;
 
@@ -9,11 +10,12 @@ import java.util.Map;
 import static app.knock.api.model.util.PropertyBuilderHelper.setProperty;
 
 @Value
-public class SetPreferenceRequest {
+@Builder
+public class PreferenceSetRequest {
 
     String id;
 
-    @Singular("channel_type")
+    @Singular("channelType")
     @JsonAnySetter
     Map<String, Object> channelTypes;
     @Singular("workflow")
