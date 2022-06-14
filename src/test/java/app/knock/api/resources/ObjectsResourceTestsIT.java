@@ -40,7 +40,6 @@ public class ObjectsResourceTestsIT {
     void setPreferences() {
         var preferenceSetRequest = PreferenceSetRequest.builder()
                 .category("park-wide", Map.of("sms", false))
-                .channelType("in_app_feed", true)
                 .workflow("dinosaurs-loose", Map.of("channel_types", Map.of("email", true, "sms", true)))
                 .build();
         var preferenceSet = this.client.objects().setPreferences(collectionId, objectId, preferenceId, preferenceSetRequest);

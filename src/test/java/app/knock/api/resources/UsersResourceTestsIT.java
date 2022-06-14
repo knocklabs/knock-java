@@ -2,10 +2,8 @@ package app.knock.api.resources;
 
 import app.knock.api.KnockClient;
 import app.knock.api.exception.KnockClientResourceException;
-import app.knock.api.model.ChannelData;
-import app.knock.api.model.FeedCursorResult;
-import app.knock.api.model.PreferenceSet;
-import app.knock.api.model.UserIdentity;
+import app.knock.api.model.*;
+import app.knock.api.serialize.Json;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -127,10 +125,50 @@ public class UsersResourceTestsIT {
     void userFeed() {
         UsersResource.FeedQueryParams query = new UsersResource.FeedQueryParams();
         query.pageSize(5);
+
         FeedCursorResult feedCursorResult = client.users().feedItems("workflow_test_recipient_id_1", "46952393-13fd-40c7-a453-5195a4261a54", query);
+
         assertNotNull(feedCursorResult);
         assertEquals(5, feedCursorResult.getEntries().size());
         assertNull(feedCursorResult.getPageInfo().getBefore());
         assertNotNull(feedCursorResult.getPageInfo().getAfter());
+    }
+
+    @Test
+    void testSetPreferences() {
+        UserIdentity userIdentity = client.users().identify("test_user_preferences", UserIdentity.builder()
+                .name("Test User Preferences")
+                .email("test_user_preferences@gmail.com")
+                .build());
+
+        Map<String, Object> workflowPreferences = new UserPreferenceBuilder()
+                .email(false)
+                .sms(true)
+                .condition("recipient.other_ids", "not_contains", "data.other_id")
+                .build();
+
+        Map<String, Object> otherCategoryPreferences = new UserPreferenceBuilder()
+                .condition("recipient.muted_alert_ids", "not_contains", "data.alert_id")
+                .condition("recipient.other_ids", "not_contains", "data.other_id")
+                .build();
+
+        PreferenceSetRequest request = PreferenceSetRequest.builder()
+                .channelTypes(new UserPreferenceBuilder()
+                        .email(true)
+                        .buildChannelTypes())
+                .workflow("new-feature", workflowPreferences)
+                .category("other", otherCategoryPreferences)
+                .build();
+
+        String json = Json.writeString(request);
+
+        client.users().setPreferences("test_user_preferences", request);
+
+        PreferenceSet defaultPreferences = client.users().getDefaultPreferences("test_user_preferences");
+
+        assertEquals(true, defaultPreferences.getChannelTypes().get("email"));
+        assertEquals(workflowPreferences, defaultPreferences.getWorkflows().get("new-feature"));
+
+
     }
 }

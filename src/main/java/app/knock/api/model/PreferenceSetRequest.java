@@ -18,6 +18,7 @@ public class PreferenceSetRequest {
     @Singular("channelType")
     @JsonAnySetter
     Map<String, Object> channelTypes;
+
     @Singular("workflow")
     @JsonAnySetter
     Map<String, Object> workflows;
@@ -36,5 +37,6 @@ public class PreferenceSetRequest {
     public <T> T category(String key, Class<T> clazz) {
         return setProperty(this.categories, key, clazz);
     }
+
 
 }

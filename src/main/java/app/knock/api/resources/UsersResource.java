@@ -45,7 +45,18 @@ public class UsersResource {
         return urlBuilder.build();
     }
 
+    /**
+     * Identify a user to Knock, using the identity provided by the UserIdentity object.
+     *
+     * @param identity
+     * @return user identity
+     * @throws KnockClientResourceException
+     */
     public UserIdentity identify(UserIdentity identity) {
+        if (identity.getId() == null) {
+            throw new IllegalArgumentException("identity.id must not be null");
+        }
+
         return identify(identity.getId(), identity);
     }
 
@@ -54,7 +65,7 @@ public class UsersResource {
      *
      * @param userId
      * @param identity
-     * @return userIdentity
+     * @return user identity
      * @throws KnockClientResourceException
      */
     public UserIdentity identify(String userId, UserIdentity identity) {
@@ -71,7 +82,7 @@ public class UsersResource {
      * Retrieve a user from knock
      *
      * @param userId
-     * @return userIdentity
+     * @return user identity
      * @throws KnockClientResourceException
      */
     public UserIdentity get(String userId) {
@@ -83,6 +94,13 @@ public class UsersResource {
         });
     }
 
+    /**
+     * Retrieve an optional UserIdentity from Knock. Catches
+     * KnockClientResourceExceptions and will return an empty Optional.
+     * @param userId
+     * @return an Optional of user identity
+     * @throws KnockClientResourceException
+     */
     public Optional<UserIdentity> oGet(String userId) {
         try {
             return Optional.of(get(userId));
@@ -91,6 +109,11 @@ public class UsersResource {
         }
     }
 
+    /**
+     * Delete a UserIdentity from Knock
+     * @param userId
+     * @throws KnockClientResourceException
+     */
     public void delete(String userId) {
         HttpUrl url = userUrl(userId);
         Request request = knockHttp.baseJsonRequest(url)
@@ -99,6 +122,14 @@ public class UsersResource {
         knockHttp.execute(request);
     }
 
+    /**
+     * Retrieve a user's ChannelData for a particular channelId.
+     *
+     * @param userId
+     * @param channelId
+     * @return channel data
+     * @throws KnockClientResourceException
+     */
     public ChannelData getUserChannelData(String userId, String channelId) {
         HttpUrl url = userChannelUrl(userId, channelId);
         Request request = knockHttp.baseJsonRequest(url)
@@ -108,6 +139,12 @@ public class UsersResource {
         });
     }
 
+    /**
+     * Remove all channel data for the specified userId, and channelId
+     * @param userId
+     * @param channelId
+     * @throws KnockClientResourceException
+     */
     public void unsetUserChannelData(String userId, String channelId) {
         HttpUrl url = userChannelUrl(userId, channelId);
         Request request = knockHttp.baseJsonRequest(url)
@@ -116,6 +153,14 @@ public class UsersResource {
         knockHttp.execute(request);
     }
 
+    /**
+     * Set ChannelData for a specific userId, and channelId.
+     * @param userId
+     * @param channelId
+     * @param data
+     * @return channel data
+     * @throws KnockClientResourceException
+     */
     public ChannelData setChannelData(String userId, String channelId, Map<String, Object> data) {
         HttpUrl url = userChannelUrl(userId, channelId);
         RequestBody body = knockHttp.objectToJsonRequestBody(Map.of("data", data));
@@ -126,6 +171,12 @@ public class UsersResource {
         });
     }
 
+    /**
+     * Retrieve a user's PreferenceSet
+     * @param userId
+     * @return a list of preference sets.
+     * @throws KnockClientResourceException
+     */
     public List<PreferenceSet> getPreferences(String userId) {
         HttpUrl url = userPreferencesUrl(userId);
         Request request = knockHttp.baseJsonRequest(url)
@@ -135,6 +186,23 @@ public class UsersResource {
         });
     }
 
+    /**
+     * Retrieve a user's default preferences.
+     * @param userId
+     * @return a preference set
+     * @throws KnockClientResourceException
+     */
+    public PreferenceSet getDefaultPreferences(String userId) {
+        return getPreferencesById(userId, "default");
+    }
+
+    /**
+     * Retrieve a user's specific preference set by ID.
+     * @param userId
+     * @param preferenceId
+     * @return a preference set
+     * @throws KnockClientResourceException
+     */
     public PreferenceSet getPreferencesById(String userId, String preferenceId) {
         HttpUrl url = userPreferencesUrl(userId, preferenceId);
         Request request = knockHttp.baseJsonRequest(url)
@@ -144,8 +212,22 @@ public class UsersResource {
         });
     }
 
-    public PreferenceSet setPreferences(String userId, String preferenceId, PreferenceSetRequest preferenceSetRequest) {
-        HttpUrl url = userChannelUrl(userId, preferenceId);
+
+
+    /**
+     * Set a user's specific preference set. If preferenceSetRequest.id is not specified, it will
+     * be set to "default
+     * @param userId
+     * @param preferenceSetRequest
+     * @return the updated preference set
+     * @throws KnockClientResourceException
+     */
+    public PreferenceSet setPreferences(String userId, PreferenceSetRequest preferenceSetRequest) {
+        String preferenceSetId = "default";
+        if (preferenceSetRequest.getId() != null) {
+            preferenceSetId = preferenceSetRequest.getId();
+        }
+        HttpUrl url = userPreferencesUrl(userId, preferenceSetId);
         RequestBody body = knockHttp.objectToJsonRequestBody(preferenceSetRequest);
         Request request = knockHttp.baseJsonRequest(url)
                 .put(body)
@@ -154,6 +236,14 @@ public class UsersResource {
         });
     }
 
+    /**
+     * Returns a cursor result of the users feed items for a specific feed.
+     * @param userId
+     * @param feedId
+     * @param feedQueryParams
+     * @return a feed item cursor
+     * @throws KnockClientResourceException
+     */
     public FeedCursorResult feedItems(String userId, String feedId, FeedQueryParams feedQueryParams) {
         HttpUrl url = userFeedUrl(userId, feedId, feedQueryParams);
         Request request = knockHttp.baseJsonRequest(url)

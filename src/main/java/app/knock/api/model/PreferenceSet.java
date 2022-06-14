@@ -7,6 +7,7 @@ import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
 import java.util.Map;
+import java.util.Optional;
 
 @Value
 @Jacksonized
