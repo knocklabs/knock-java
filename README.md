@@ -147,9 +147,9 @@ WorkflowTrigger workflowTrigger = WorkflowTrigger.builder()
     .recipients(List.of(recipientId1, recipientId2))
     .build();
 
-    client.workflows().trigger(workflowTrigger);
+client.workflows().trigger(workflowTrigger);
 
-    client.workflows().cancel(workflowTrigger);
+client.workflows().cancel(workflowTrigger);
 ```
 
 ### Handling Exceptions
