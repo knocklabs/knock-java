@@ -203,7 +203,7 @@ public class MessagesResource {
      * @return a BulkOperation
      * @throws KnockClientResourceException
      */
-    public BulkOperation bulk(String channelId, String status, BulkChannelMessageStatusRequest bulkChannelMessageStatusRequest) {
+    public BulkOperation bulkSetStatusInChannel(String channelId, String status, BulkChannelMessageStatusRequest bulkChannelMessageStatusRequest) {
         HttpUrl url = buildChannelBatchResource(channelId, status);
         RequestBody body = knockHttp.objectToJsonRequestBody(bulkChannelMessageStatusRequest);
         Request request = knockHttp.baseJsonRequest(url)
@@ -217,7 +217,6 @@ public class MessagesResource {
     @EqualsAndHashCode(callSuper = false)
     public static class QueryParams {
         private final Map<String, Object> params = new HashMap<>();
-
 
         public void pageSize(Integer pageSize) {
             params.put("page_size", pageSize);
@@ -240,7 +239,7 @@ public class MessagesResource {
         }
 
         public void status(String... status) {
-            params.put("status", Arrays.toString(status));
+            params.put("status[]", Arrays.toString(status));
         }
 
         public void channel_id(String channel_id) {

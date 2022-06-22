@@ -2,10 +2,7 @@ package app.knock.api.resources;
 
 import app.knock.api.KnockClient;
 import app.knock.api.exception.KnockClientResourceException;
-import app.knock.api.model.KnockError;
-import app.knock.api.model.UserIdentity;
-import app.knock.api.model.WorkflowTrigger;
-import app.knock.api.model.WorkflowTriggerResult;
+import app.knock.api.model.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
@@ -48,7 +45,7 @@ public class WorkflowResourceTestsIT {
 
     @Test
     void testSuccessfulWorkflowTrigger() {
-        WorkflowTrigger workflowTrigger = WorkflowTrigger.builder()
+        WorkflowTriggerRequest workflowTrigger = WorkflowTriggerRequest.builder()
                 .key("new-feature")
                 .actor(actorId)
                 .recipients(List.of(recipientId1, recipientId2))
@@ -57,14 +54,14 @@ public class WorkflowResourceTestsIT {
                 .data("nested_thing", Map.of("nested_thing_1", 123.44, "nested_thing_2", 123))
                 .build();
 
-        WorkflowTriggerResult result = client.workflows().trigger(workflowTrigger);
+        WorkflowTriggerResponse result = client.workflows().trigger(workflowTrigger);
 
         assertNotNull(UUID.fromString(result.getWorkflowRunId()));
     }
 
     @Test
     public void testInactiveWorkflowTrigger() {
-        WorkflowTrigger workflowTrigger = WorkflowTrigger.builder()
+        WorkflowTriggerRequest workflowTrigger = WorkflowTriggerRequest.builder()
                 .key("inactive-workflow")
                 .actor(actorId)
                 .recipients(List.of(recipientId1, recipientId2))
@@ -83,7 +80,7 @@ public class WorkflowResourceTestsIT {
 
     @Test
     public void testMissingActor() {
-        WorkflowTrigger workflowTrigger = WorkflowTrigger.builder()
+        WorkflowTriggerRequest workflowTrigger = WorkflowTriggerRequest.builder()
                 .key("new-feature")
                 .actor(UUID.randomUUID().toString())
                 .recipients(List.of(recipientId1, recipientId2))
@@ -101,7 +98,7 @@ public class WorkflowResourceTestsIT {
     public void testCancelWorkflow() {
         String cancellationKey = UUID.randomUUID().toString();
 
-        WorkflowTrigger workflowTrigger = WorkflowTrigger.builder()
+        WorkflowTriggerRequest workflowTrigger = WorkflowTriggerRequest.builder()
                 .key("delayed-workflow")
                 .actor(actorId)
                 .cancellation_key(cancellationKey)
@@ -110,12 +107,12 @@ public class WorkflowResourceTestsIT {
 
         client.workflows().trigger(workflowTrigger);
 
-        client.workflows().cancel(workflowTrigger);
+        client.workflows().cancel(WorkflowCancelRequest.from(workflowTrigger));
     }
 
     @Test
     public void testCancelWorkflowWithoutCancellationId() {
-        WorkflowTrigger workflowTrigger = WorkflowTrigger.builder()
+        WorkflowTriggerRequest workflowTrigger = WorkflowTriggerRequest.builder()
                 .key("delayed-workflow")
                 .actor(actorId)
                 .recipients(List.of(recipientId1, recipientId2))
@@ -124,7 +121,7 @@ public class WorkflowResourceTestsIT {
         client.workflows().trigger(workflowTrigger);
 
         try {
-            client.workflows().cancel(workflowTrigger);
+            client.workflows().cancel(WorkflowCancelRequest.from(workflowTrigger));
             fail("expected invalid_params");
         } catch (KnockClientResourceException e) {
             assertEquals("invalid_params", e.knockErrorResponse.getCode());

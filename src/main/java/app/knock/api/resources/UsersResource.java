@@ -31,6 +31,11 @@ public class UsersResource {
         return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId, "channel_data", channelId).build();
     }
 
+    HttpUrl userMergeUrl(String userId) {
+        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId, "merge").build();
+    }
+
+
     HttpUrl userPreferencesUrl(String userId) {
         return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId, "preferences").build();
     }
@@ -39,10 +44,22 @@ public class UsersResource {
         return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId, "preferences", preferenceId).build();
     }
 
+    HttpUrl userMessagesUrl(String userId, MessagesResource.QueryParams queryParams) {
+        HttpUrl.Builder urlBuilder = userUrl(userId)
+                .newBuilder()
+                .addEncodedPathSegment("messages");
+        queryParams.addQueryParams(urlBuilder);
+        return urlBuilder.build();
+    }
+
     HttpUrl userFeedUrl(String userId, String feedId, FeedQueryParams feedQueryParams) {
         HttpUrl.Builder urlBuilder = knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId, "feeds", feedId);
         feedQueryParams.addQueryParams(urlBuilder);
         return urlBuilder.build();
+    }
+
+    HttpUrl userBulkActionUrl(String action) {
+        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, "bulk", action).build();
     }
 
     /**
@@ -79,6 +96,23 @@ public class UsersResource {
     }
 
     /**
+     * Identifies up to 100 users at a time. Returns a BulkOperation that executes the job asynchronously.
+     * Progress can be tracked via the BulkOperation API.
+     *
+     * @param userIdentities
+     * @return a bulk operation
+     */
+    public BulkOperation bulkIdentify(List<UserIdentity> userIdentities) {
+        HttpUrl url = userBulkActionUrl("identify");
+        RequestBody body = knockHttp.objectToJsonRequestBody(userIdentities);
+        Request request = knockHttp.baseJsonRequest(url)
+                .post(body)
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
+    }
+
+    /**
      * Retrieve a user from knock
      *
      * @param userId
@@ -97,6 +131,7 @@ public class UsersResource {
     /**
      * Retrieve an optional UserIdentity from Knock. Catches
      * KnockClientResourceExceptions and will return an empty Optional.
+     *
      * @param userId
      * @return an Optional of user identity
      * @throws KnockClientResourceException
@@ -110,7 +145,23 @@ public class UsersResource {
     }
 
     /**
+     * Merges the two users together, merging the user specified in the from_user_id into the userId
+     *
+     * @param userId
+     * @throws KnockClientResourceException
+     */
+    public UserIdentity merge(String userId, String fromUserId) {
+        HttpUrl url = userUrl(userId);
+        Request request = knockHttp.baseJsonRequest(url)
+                .post(knockHttp.objectToJsonRequestBody(Map.of("from_user_id", fromUserId)))
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
+    }
+
+    /**
      * Delete a UserIdentity from Knock
+     *
      * @param userId
      * @throws KnockClientResourceException
      */
@@ -121,6 +172,39 @@ public class UsersResource {
                 .build();
         knockHttp.execute(request);
     }
+
+    /**
+     * Identifies up to 100 users at a time. Returns a BulkOperation that executes the job asynchronously.
+     * Progress can be tracked via the BulkOperation API.
+     *
+     * @param userIds
+     * @return a bulk operation
+     * @throws KnockClientResourceException
+     */
+    public BulkOperation bulkDelete(List<String> userIds) {
+        HttpUrl url = userBulkActionUrl("delete");
+        RequestBody body = knockHttp.objectToJsonRequestBody(Map.of("user_ids", userIds));
+        Request request = knockHttp.baseJsonRequest(url)
+                .post(body)
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
+    }
+
+    /**
+     * @param userId
+     * @param queryParams
+     * @return
+     */
+    public CursorResult<KnockMessage> getMessages(String userId, MessagesResource.QueryParams queryParams) {
+        HttpUrl url = userMessagesUrl(userId, queryParams);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        });
+    }
+
 
     /**
      * Retrieve a user's ChannelData for a particular channelId.
@@ -141,6 +225,7 @@ public class UsersResource {
 
     /**
      * Remove all channel data for the specified userId, and channelId
+     *
      * @param userId
      * @param channelId
      * @throws KnockClientResourceException
@@ -155,6 +240,7 @@ public class UsersResource {
 
     /**
      * Set ChannelData for a specific userId, and channelId.
+     *
      * @param userId
      * @param channelId
      * @param data
@@ -173,6 +259,7 @@ public class UsersResource {
 
     /**
      * Retrieve a user's PreferenceSet
+     *
      * @param userId
      * @return a list of preference sets.
      * @throws KnockClientResourceException
@@ -188,6 +275,7 @@ public class UsersResource {
 
     /**
      * Retrieve a user's default preferences.
+     *
      * @param userId
      * @return a preference set
      * @throws KnockClientResourceException
@@ -198,6 +286,7 @@ public class UsersResource {
 
     /**
      * Retrieve a user's specific preference set by ID.
+     *
      * @param userId
      * @param preferenceId
      * @return a preference set
@@ -213,10 +302,10 @@ public class UsersResource {
     }
 
 
-
     /**
      * Set a user's specific preference set. If preferenceSetRequest.id is not specified, it will
      * be set to "default
+     *
      * @param userId
      * @param preferenceSetRequest
      * @return the updated preference set
@@ -238,13 +327,14 @@ public class UsersResource {
 
     /**
      * Returns a cursor result of the users feed items for a specific feed.
+     *
      * @param userId
      * @param feedId
      * @param feedQueryParams
      * @return a feed item cursor
      * @throws KnockClientResourceException
      */
-    public FeedCursorResult feedItems(String userId, String feedId, FeedQueryParams feedQueryParams) {
+    public FeedCursorResult getFeed(String userId, String feedId, FeedQueryParams feedQueryParams) {
         HttpUrl url = userFeedUrl(userId, feedId, feedQueryParams);
         Request request = knockHttp.baseJsonRequest(url)
                 .get()

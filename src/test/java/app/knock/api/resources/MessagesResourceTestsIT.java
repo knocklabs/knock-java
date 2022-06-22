@@ -216,7 +216,7 @@ public class MessagesResourceTestsIT {
                 .deliveryStatus("sent")
                 .build();
 
-        BulkOperation bulkOperation = client.messages().bulk("46952393-13fd-40c7-a453-5195a4261a54", "seen", request);
+        BulkOperation bulkOperation = client.messages().bulkSetStatusInChannel("46952393-13fd-40c7-a453-5195a4261a54", "seen", request);
 
         assertTrue(client.bulkOperations().oGet(bulkOperation.getId()).isPresent());
     }

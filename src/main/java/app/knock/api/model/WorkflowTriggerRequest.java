@@ -15,7 +15,7 @@ import java.util.Map;
 @Jacksonized
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class WorkflowTrigger {
+public class WorkflowTriggerRequest {
 
     @JsonProperty("__typename")
     String typeName;

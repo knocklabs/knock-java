@@ -9,6 +9,6 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class WorkflowTriggerResult {
+public class WorkflowTriggerResponse {
     String workflowRunId;
 }

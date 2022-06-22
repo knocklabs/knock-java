@@ -126,7 +126,7 @@ public class UsersResourceTestsIT {
         UsersResource.FeedQueryParams query = new UsersResource.FeedQueryParams();
         query.pageSize(5);
 
-        FeedCursorResult feedCursorResult = client.users().feedItems("workflow_test_recipient_id_1", "46952393-13fd-40c7-a453-5195a4261a54", query);
+        FeedCursorResult feedCursorResult = client.users().getFeed("workflow_test_recipient_id_1", "46952393-13fd-40c7-a453-5195a4261a54", query);
 
         assertNotNull(feedCursorResult);
         assertEquals(5, feedCursorResult.getEntries().size());

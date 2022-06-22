@@ -12,7 +12,7 @@ public class WorkflowTriggerSerializeTests {
 
     @Test
     void mappedPropertiesShouldUnwrap() {
-        WorkflowTrigger workflowTrigger = WorkflowTrigger.builder()
+        WorkflowTriggerRequest workflowTrigger = WorkflowTriggerRequest.builder()
                 .key("new-feature")
                 .actor("actorId")
                 .recipients(List.of("recipientId1", "recipientId2"))
