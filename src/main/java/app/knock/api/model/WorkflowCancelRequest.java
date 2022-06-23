@@ -13,14 +13,14 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class WorkflowCancelRequest {
     String key;
-    List<String> recipients;
+    List<Object> recipients;
     String cancellation_key;
 
     public static WorkflowCancelRequest from(WorkflowTriggerRequest workflowTrigger) {
         return WorkflowCancelRequest.builder()
                 .key(workflowTrigger.getKey())
                 .recipients(workflowTrigger.getRecipients())
-                .cancellation_key(workflowTrigger.getCancellation_key())
+                .cancellation_key(workflowTrigger.getCancellationKey())
                 .build();
     }
 
