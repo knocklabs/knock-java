@@ -61,8 +61,8 @@ public class ObjectsResource {
     /**
      * @param collection
      * @param objectId
-     * @throws KnockClientResourceException
-     * @returs
+     * @throws KnockClientResourceException Unable able to retrieve KnockObject from the resource
+     * @return KnockObject
      */
     public KnockObject get(String collection, String objectId) {
         HttpUrl url = objectUrl(collection, objectId);
