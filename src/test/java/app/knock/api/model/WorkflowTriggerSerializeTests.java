@@ -1,17 +1,16 @@
 package app.knock.api.model;
 
 import app.knock.api.serialize.Json;
+import org.json.JSONException;
 import org.junit.jupiter.api.Test;
+import org.skyscreamer.jsonassert.JSONAssert;
 
-import java.util.List;
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class WorkflowTriggerSerializeTests {
 
     @Test
-    void mappedPropertiesShouldUnwrap() {
+    void mappedPropertiesShouldUnwrap() throws JSONException {
         WorkflowTriggerRequest workflowTrigger = WorkflowTriggerRequest.builder()
                 .key("new-feature")
                 .actor("actorId")
@@ -29,16 +28,31 @@ public class WorkflowTriggerSerializeTests {
 
         String json = Json.writeString(workflowTrigger);
 
-        assertTrue(json.contains("\"actor\":\"actorId\""));
-        assertTrue(json.contains("\"cancellation_key\":\"test\""));
-        assertTrue(json.contains("recipientId1"));
-        assertTrue(json.contains("recipientId2"));
-        assertTrue(json.contains("\"id\":\"identifier_id\",\"attributes\":{\"something\":\"cool\"}"));
-        assertTrue(json.contains("\"id\":\"user_3\""));
-        assertTrue(json.contains("\"actor\":\"actorId\""));
-        assertTrue(json.contains("\"thing one value\""));
-        assertTrue(json.contains("123"));
-        assertTrue(json.contains("123.44"));
+        JSONAssert.assertEquals("{actor:\"actorId\"}", json, false);
+        JSONAssert.assertEquals("{cancellation_key:\"test\"}", json, false);
+        JSONAssert.assertEquals("{" +
+                "recipients: [" +
+                    "\"recipientId1\", " +
+                    "\"recipientId2\", " +
+                "   {" +
+                "       id: \"identifier_id\", " +
+                "       attributes: {" +
+                "           something: \"cool\"" +
+                "       }" +
+                "   }," +
+                "   { id: \"user_3\"}" +
+                "]" +
+              "}", json, false);
+
+        JSONAssert.assertEquals("{" +
+                "data: {" +
+                    "thing_1: \"thing one value\"," +
+                    "thing_2: \"thing two value\"," +
+                    "nested_thing: {" +
+                        "nested_thing_1: 123.44," +
+                        "nested_thing_2: 123" +
+                    "}" +
+                "}}", json, false);
     }
 
 }
