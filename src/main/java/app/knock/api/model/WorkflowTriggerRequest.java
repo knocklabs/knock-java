@@ -26,7 +26,7 @@ public class WorkflowTriggerRequest {
 
     String key;
 
-    String actor;
+    Object actor;
     List<Object> recipients;
     String cancellationKey;
 
@@ -45,6 +45,16 @@ public class WorkflowTriggerRequest {
     public static class WorkflowTriggerRequestBuilder {
 
         List<Object> recipients;
+
+        public WorkflowTriggerRequestBuilder addActor(RecipientIdentifier identifier) {
+            this.actor = identifier;
+            return this;
+        }
+
+        public WorkflowTriggerRequestBuilder addActor(String actor) {
+            this.actor = actor;
+            return this;
+        }
 
         public WorkflowTriggerRequestBuilder addRecipient(String... userIds) {
             if (this.recipients == null) { this.recipients = new ArrayList<>(); }
@@ -71,18 +81,7 @@ public class WorkflowTriggerRequest {
     public static class RecipientIdentifier {
 
         String id;
-
-        @Singular("attribute")
-        @JsonAnySetter
-        Map<String, Object> attributes;
-
-        public <T> T attribute(String key, Class<T> clazz) {
-            if (this.attributes != null && this.attributes.containsKey(key)) {
-                Object o = this.attributes.get(key);
-                return clazz.isInstance(o) ? clazz.cast(o) : null;
-            }
-            return null;
-        }
+        String collection;
 
     }
 
