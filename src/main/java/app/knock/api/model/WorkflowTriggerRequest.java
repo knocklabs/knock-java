@@ -1,6 +1,5 @@
 package app.knock.api.model;
 
-import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -46,7 +45,7 @@ public class WorkflowTriggerRequest {
 
         List<Object> recipients;
 
-        public WorkflowTriggerRequestBuilder addActor(RecipientIdentifier identifier) {
+        public WorkflowTriggerRequestBuilder addActor(TriggerIdentifier identifier) {
             this.actor = identifier;
             return this;
         }
@@ -68,7 +67,7 @@ public class WorkflowTriggerRequest {
             return this;
         }
 
-        public WorkflowTriggerRequestBuilder addRecipient(RecipientIdentifier identifier) {
+        public WorkflowTriggerRequestBuilder addRecipient(TriggerIdentifier identifier) {
             if (this.recipients == null) { this.recipients = new ArrayList<>(); }
             Collections.addAll(this.recipients, identifier);
             return this;
@@ -78,7 +77,7 @@ public class WorkflowTriggerRequest {
 
     @Getter
     @Builder
-    public static class RecipientIdentifier {
+    public static class TriggerIdentifier {
 
         String id;
         String collection;
