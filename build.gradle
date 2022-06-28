@@ -1,7 +1,8 @@
 plugins {
     id 'java-library'
-    id 'io.freefair.lombok' version '6.4.3.1'
+    id 'io.freefair.lombok' version '6.5.0.2'
     id 'maven-publish'
+//    id 'signing'
 }
 
 group 'app.knock.api'
@@ -21,6 +22,7 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.2.2'
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
+    testImplementation 'org.skyscreamer:jsonassert:1.5.0'
     testImplementation 'org.mockito:mockito-core:4.5.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.2'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
@@ -39,7 +41,20 @@ test {
 publishing {
     publications {
         mavenJava(MavenPublication) {
+            from components.java
             pom {
+                scm {
+                    connection = 'scm:git:git://github.com/knocklabs/knock-java.git'
+                    developerConnection = 'scm:git:ssh://git@github.com:knocklabs/knock-java.git'
+                    url = 'https://knock.app/'
+                }
+                developers {
+                    developer {
+                        id = 'knock-support'
+                        name = 'Knock Support'
+                        email = 'support@knock.app'
+                    }
+                }
                 licenses {
                     license {
                         name = 'MIT License'
@@ -51,7 +66,19 @@ publishing {
     }
     repositories {
         maven {
-            url = project.hasProperty('release') ? project.property("repo.releases.url") : project.property("repo.snapshots.url")
+            url = project.hasProperty('snapshot') ? project.property("repo.snapshots.url") : project.property("repo.releases.url")
+            credentials {
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
         }
     }
 }
+
+//signing {
+//    def keyId = System.getenv("GPG_KEY_ID")
+//    def signingKey = project.property("gpg.signing.key")
+//    def signingPassword = System.getenv("GPG_SIGNING_PASSWORD")
+//    useInMemoryPgpKeys(signingKey, signingPassword)
+//    sign publishing.publications.mavenJava
+//}

@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.Singular;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -22,9 +25,9 @@ public class WorkflowTriggerRequest {
 
     String key;
 
-    String actor;
-    List<String> recipients;
-    String cancellation_key;
+    Object actor;
+    List<Object> recipients;
+    String cancellationKey;
 
     @Singular("data")
     @JsonAnySetter
@@ -37,4 +40,48 @@ public class WorkflowTriggerRequest {
         }
         return null;
     }
+
+    public static class WorkflowTriggerRequestBuilder {
+
+        List<Object> recipients;
+
+        public WorkflowTriggerRequestBuilder addActor(ObjectRecipientIdentifier identifier) {
+            this.actor = identifier;
+            return this;
+        }
+
+        public WorkflowTriggerRequestBuilder addActor(String actor) {
+            this.actor = actor;
+            return this;
+        }
+
+        public WorkflowTriggerRequestBuilder addRecipient(String... userIds) {
+            if (this.recipients == null) { this.recipients = new ArrayList<>(); }
+            Collections.addAll(this.recipients, userIds);
+            return this;
+        }
+
+        public WorkflowTriggerRequestBuilder addRecipient(Map<String, Object> recipient) {
+            if (this.recipients == null) { this.recipients = new ArrayList<>(); }
+            Collections.addAll(this.recipients, recipient);
+            return this;
+        }
+
+        public WorkflowTriggerRequestBuilder addRecipient(ObjectRecipientIdentifier identifier) {
+            if (this.recipients == null) { this.recipients = new ArrayList<>(); }
+            Collections.addAll(this.recipients, identifier);
+            return this;
+        }
+
+    }
+
+    @Getter
+    @Builder
+    public static class ObjectRecipientIdentifier {
+
+        String id;
+        String collection;
+
+    }
+
 }

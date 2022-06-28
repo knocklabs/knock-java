@@ -101,7 +101,7 @@ public class WorkflowResourceTestsIT {
         WorkflowTriggerRequest workflowTrigger = WorkflowTriggerRequest.builder()
                 .key("delayed-workflow")
                 .actor(actorId)
-                .cancellation_key(cancellationKey)
+                .cancellationKey(cancellationKey)
                 .recipients(List.of(recipientId1, recipientId2))
                 .build();
 

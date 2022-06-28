@@ -29,10 +29,10 @@ public class MessagesResourceTests {
         queryParams.channel_id("1234");
         queryParams.tenant("5678");
         queryParams.source("7890");
-        queryParams.status(new String[]{"queued", "sent"});
+        queryParams.status("queued", "sent");
 
         HttpUrl url = this.messagesResource.buildListResource(queryParams);
-        assertEquals("https://notreal.app/v1/messages?after=aaaa&before=cccc&channel_id=1234&page_size=34&source=7890&status=%5Bqueued%2C%20sent%5D&tenant=5678", url.toString());
+        assertEquals("https://notreal.app/v1/messages?after=aaaa&before=cccc&channel_id=1234&page_size=34&source=7890&status%5B%5D=%5Bqueued%2C%20sent%5D&tenant=5678", url.toString());
     }
 
 }
