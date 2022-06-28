@@ -45,7 +45,7 @@ public class WorkflowTriggerRequest {
 
         List<Object> recipients;
 
-        public WorkflowTriggerRequestBuilder addActor(TriggerIdentifier identifier) {
+        public WorkflowTriggerRequestBuilder addActor(ObjectRecipientIdentifier identifier) {
             this.actor = identifier;
             return this;
         }
@@ -67,7 +67,7 @@ public class WorkflowTriggerRequest {
             return this;
         }
 
-        public WorkflowTriggerRequestBuilder addRecipient(TriggerIdentifier identifier) {
+        public WorkflowTriggerRequestBuilder addRecipient(ObjectRecipientIdentifier identifier) {
             if (this.recipients == null) { this.recipients = new ArrayList<>(); }
             Collections.addAll(this.recipients, identifier);
             return this;
@@ -77,7 +77,7 @@ public class WorkflowTriggerRequest {
 
     @Getter
     @Builder
-    public static class TriggerIdentifier {
+    public static class ObjectRecipientIdentifier {
 
         String id;
         String collection;
