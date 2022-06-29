@@ -2,7 +2,7 @@ plugins {
     id 'java-library'
     id 'io.freefair.lombok' version '6.5.0.2'
     id 'maven-publish'
-//    id 'signing'
+    id 'signing'
 }
 
 group 'app.knock.api'
@@ -75,10 +75,10 @@ publishing {
     }
 }
 
-//signing {
-//    def keyId = System.getenv("GPG_KEY_ID")
-//    def signingKey = project.property("gpg.signing.key")
-//    def signingPassword = System.getenv("GPG_SIGNING_PASSWORD")
-//    useInMemoryPgpKeys(signingKey, signingPassword)
-//    sign publishing.publications.mavenJava
-//}
+signing {
+    def keyId = System.getenv("GPG_KEY_ID")
+    def signingKey = System.getenv("GPG_SIGNING_KEY")
+    def signingPassword = System.getenv("GPG_SIGNING_PASSWORD")
+    useInMemoryPgpKeys(keyId, signingKey, signingPassword)
+    sign publishing.publications.mavenJava
+}
