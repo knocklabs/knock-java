@@ -10,13 +10,45 @@ Knock API access for applications written in Java.
 Add the dependency to your `build.grandle` file as follows:
 
 ```groovy
+repositories {
+    maven {
+        url 'https://s01.oss.sonatype.org/content/repositories/snapshots/'
+        mavenContent {
+            snapshotsOnly()
+        }
+    }
+}
 
+dependencies {
+    implementation 'app.knock.api:knock-client:0.1.0-SNAPSHOT'
+}
 ```
 
 Or to your `maven.xml` file:
 
 ```xml
+<repositories>
+    <repository>
+        <id>oss.sonatype.org-snapshot</id>
+        <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+        <releases>
+            <enabled>false</enabled>
+        </releases>
+        <snapshots>
+            <enabled>true</enabled>
+        </snapshots>
+    </repository>
+</repositories>
 
+<dependencies>
+    <!-- more dependencies here -->
+    <dependency>
+        <groupId>app.knock.api</groupId>
+        <artifactId>knock-client</artifactId>
+        <version>0.1.0-SNAPSHOT</version>
+    </dependency>
+    <!-- more dependencies here -->
+</dependencies>
 ```
 
 ## Configuration
