@@ -10,10 +10,7 @@ import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
@@ -91,7 +88,7 @@ public class UsersResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .put(body)
                 .build();
-        return knockHttp.<UserIdentity>executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.<UserIdentity>executeWithResponseType(request, new TypeReference<UserIdentity>() {
         });
     }
 
@@ -108,7 +105,7 @@ public class UsersResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .post(body)
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<BulkOperation>() {
         });
     }
 
@@ -124,7 +121,7 @@ public class UsersResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<UserIdentity>() {
         });
     }
 
@@ -153,9 +150,9 @@ public class UsersResource {
     public UserIdentity merge(String userId, String fromUserId) {
         HttpUrl url = userUrl(userId);
         Request request = knockHttp.baseJsonRequest(url)
-                .post(knockHttp.objectToJsonRequestBody(Map.of("from_user_id", fromUserId)))
+                .post(knockHttp.objectToJsonRequestBody(Collections.singletonMap("from_user_id", fromUserId)))
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<UserIdentity>() {
         });
     }
 
@@ -183,11 +180,11 @@ public class UsersResource {
      */
     public BulkOperation bulkDelete(List<String> userIds) {
         HttpUrl url = userBulkActionUrl("delete");
-        RequestBody body = knockHttp.objectToJsonRequestBody(Map.of("user_ids", userIds));
+        RequestBody body = knockHttp.objectToJsonRequestBody(Collections.singletonMap("user_ids", userIds));
         Request request = knockHttp.baseJsonRequest(url)
                 .post(body)
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<BulkOperation>() {
         });
     }
 
@@ -201,7 +198,7 @@ public class UsersResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<KnockMessage>>() {
         });
     }
 
@@ -219,7 +216,7 @@ public class UsersResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<ChannelData>() {
         });
     }
 
@@ -249,11 +246,11 @@ public class UsersResource {
      */
     public ChannelData setChannelData(String userId, String channelId, Map<String, Object> data) {
         HttpUrl url = userChannelUrl(userId, channelId);
-        RequestBody body = knockHttp.objectToJsonRequestBody(Map.of("data", data));
+        RequestBody body = knockHttp.objectToJsonRequestBody(Collections.singletonMap("data", data));
         Request request = knockHttp.baseJsonRequest(url)
                 .put(body)
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<ChannelData>() {
         });
     }
 
@@ -269,7 +266,7 @@ public class UsersResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<List<PreferenceSet>>() {
         });
     }
 
@@ -297,7 +294,7 @@ public class UsersResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<PreferenceSet>() {
         });
     }
 
@@ -321,7 +318,7 @@ public class UsersResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .put(body)
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<PreferenceSet>() {
         });
     }
 
@@ -339,7 +336,7 @@ public class UsersResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<FeedCursorResult>() {
         });
     }
 

@@ -35,7 +35,7 @@ public class BulkOperationsResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<BulkOperation>() {
         });
     }
 

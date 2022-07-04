@@ -10,10 +10,7 @@ import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Value
 @EqualsAndHashCode(callSuper = false)
@@ -69,7 +66,7 @@ public class ObjectsResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<KnockObject>() {
         });
     }
 
@@ -85,7 +82,7 @@ public class ObjectsResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .put(body)
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<KnockObject>() {
         });
     }
 
@@ -112,7 +109,7 @@ public class ObjectsResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<ChannelData>() {
         });
     }
 
@@ -129,7 +126,7 @@ public class ObjectsResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .put(body)
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<ChannelData>() {
         });
     }
 
@@ -156,7 +153,7 @@ public class ObjectsResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<List<PreferenceSet>>() {
         });
     }
 
@@ -170,7 +167,7 @@ public class ObjectsResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<KnockMessage>>() {
         });
     }
 
@@ -185,7 +182,7 @@ public class ObjectsResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<PreferenceSet>() {
         });
     }
 
@@ -201,7 +198,7 @@ public class ObjectsResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .put(knockHttp.objectToJsonRequestBody(preferenceSetRequest))
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<PreferenceSet>() {
         });
     }
 
@@ -223,9 +220,9 @@ public class ObjectsResource {
 
         HttpUrl url = objectBulkSetUrl(collection, "set");
         Request request = knockHttp.baseJsonRequest(url)
-                .post(knockHttp.objectToJsonRequestBody(Map.of("objects", objects)))
+                .post(knockHttp.objectToJsonRequestBody(Collections.singletonMap("objects", objects)))
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<BulkOperation>() {
         });
     }
 
@@ -240,9 +237,9 @@ public class ObjectsResource {
     public BulkOperation bulkDeleteObjectsInCollection(String collection, List<String> object_ids) {
         HttpUrl url = objectBulkSetUrl(collection, "delete");
         Request request = knockHttp.baseJsonRequest(url)
-                .post(knockHttp.objectToJsonRequestBody(Map.of("object_ids", object_ids)))
+                .post(knockHttp.objectToJsonRequestBody(Collections.singletonMap("object_ids", object_ids)))
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<BulkOperation>() {
         });
     }
 

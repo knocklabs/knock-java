@@ -56,7 +56,7 @@ public class MessagesResource {
                 .get()
                 .build();
 
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<KnockMessage>>() {
         });
     }
 
@@ -72,7 +72,7 @@ public class MessagesResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<KnockMessage>() {
         });
     }
 
@@ -103,7 +103,7 @@ public class MessagesResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<KnockMessageEvent>>() {
         });
     }
 
@@ -120,7 +120,7 @@ public class MessagesResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<KnockMessageActivity>>() {
         });
     }
 
@@ -136,7 +136,7 @@ public class MessagesResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<KnockMessageContent>() {
         });
     }
 
@@ -155,7 +155,7 @@ public class MessagesResource {
                 .get()
                 .put(body)
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<KnockMessage>() {
         });
     }
 
@@ -172,7 +172,7 @@ public class MessagesResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .delete()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<KnockMessage>() {
         });
     }
 
@@ -190,7 +190,7 @@ public class MessagesResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .post(body)
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<List<KnockMessage>>() {
         });
     }
 
@@ -209,7 +209,7 @@ public class MessagesResource {
         Request request = knockHttp.baseJsonRequest(url)
                 .post(body)
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<BulkOperation>() {
         });
     }
 
