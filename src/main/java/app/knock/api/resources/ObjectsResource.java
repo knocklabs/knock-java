@@ -56,6 +56,8 @@ public class ObjectsResource {
     }
 
     /**
+     * Retrieve a KnockObject
+     *
      * @param collection
      * @param objectId
      * @throws KnockClientResourceException Unable able to retrieve KnockObject from the resource
@@ -71,6 +73,8 @@ public class ObjectsResource {
     }
 
     /**
+     * Set a map of properties for a specific Collection of a KnockObject.
+     *
      * @param collection
      * @param objectId
      * @param properties
@@ -87,6 +91,8 @@ public class ObjectsResource {
     }
 
     /**
+     * Delete properties for a specific collection of a KnockObject
+     *
      * @param collection
      * @param objectId
      */
@@ -99,6 +105,8 @@ public class ObjectsResource {
     }
 
     /**
+     * Retrieve the ChannelData for a specific KnockObject Collection, and Channel.
+     *
      * @param collection
      * @param objectId
      * @param channelId
@@ -114,6 +122,8 @@ public class ObjectsResource {
     }
 
     /**
+     * Set a map of data for a specific KnockObject Collection, and Channel.
+     *
      * @param collection
      * @param objectId
      * @param channelId
@@ -131,6 +141,8 @@ public class ObjectsResource {
     }
 
     /**
+     * Delete any data for a specific KnockObject Collection, and Channel.
+     *
      * @param collection
      * @param objectId
      * @param channelId
@@ -144,20 +156,8 @@ public class ObjectsResource {
     }
 
     /**
-     * @param collection
-     * @param objectId
-     * @return
-     */
-    public List<PreferenceSet> getPreferences(String collection, String objectId) {
-        HttpUrl url = objectPreferencesUrl(collection, objectId);
-        Request request = knockHttp.baseJsonRequest(url)
-                .get()
-                .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<List<PreferenceSet>>() {
-        });
-    }
-
-    /**
+     * Retrieve a CursorResult of KnockMessages for a specific KnockObject Collection.
+     *
      * @param collection
      * @param objectId
      * @return
@@ -172,6 +172,24 @@ public class ObjectsResource {
     }
 
     /**
+     * Retrieve a list of PreferenceSets for a specific KnockObject Collection.
+     *
+     * @param collection
+     * @param objectId
+     * @return
+     */
+    public List<PreferenceSet> getPreferences(String collection, String objectId) {
+        HttpUrl url = objectPreferencesUrl(collection, objectId);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<List<PreferenceSet>>() {
+        });
+    }
+
+    /**
+     * Retrieve a specific PreferenceSet for a KnockObject Collection
+     *
      * @param collection
      * @param objectId
      * @param preferenceId
@@ -187,6 +205,8 @@ public class ObjectsResource {
     }
 
     /**
+     * Set preferences for a specific PreferenceSet on a KnockObject Collection.
+     *
      * @param collection
      * @param objectId
      * @param preferenceId
