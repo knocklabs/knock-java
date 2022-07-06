@@ -21,10 +21,9 @@ jobs:
         uses: actions/github-script@v4
         with:
           script: |
-            const noRef = context.ref.replace('refs/tag/', '')
+            const noRef = context.ref.replace('refs/tags/', '')
             const noPrefix = noRef.replace('v', '')
             core.setOutput('version', noPrefix)
-            console.log(noPrefix)
       - name: Publish Release
         run: |
           export GPG_SIGNING_KEY=$(echo -n "$GPG_SIGNING_KEY_BASE64" | base64 -d)
