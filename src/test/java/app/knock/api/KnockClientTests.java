@@ -1,7 +1,7 @@
 package app.knock.api;
 
 import app.knock.api.KnockClient.KnockClientBuilder;
-import app.knock.api.exception.KnockClientApiKeyException;
+import app.knock.api.exception.KnockClientException;
 import app.knock.api.util.Environment;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +29,7 @@ public class KnockClientTests {
         Environment environment = mock(Environment.class);
         when(environment.getEnvVar(KnockClient.API_KEY_ENV_VAR)).thenReturn(null);
 
-        Throwable exception = assertThrows(KnockClientApiKeyException.class, () -> new KnockClientBuilder(environment).build());
+        Throwable exception = assertThrows(KnockClientException.class, () -> new KnockClientBuilder(environment).build());
 
         assertEquals("API Key was not provided", exception.getMessage());
     }

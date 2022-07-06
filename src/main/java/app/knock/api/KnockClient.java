@@ -1,6 +1,6 @@
 package app.knock.api;
 
-import app.knock.api.exception.KnockClientApiKeyException;
+import app.knock.api.exception.KnockClientException;
 import app.knock.api.http.BaseUrlInterceptor;
 import app.knock.api.http.KnockHttp;
 import app.knock.api.http.TokenInterceptor;
@@ -91,7 +91,7 @@ public class KnockClient {
 
         public KnockClient build() {
             if (this.apiKey == null) {
-                throw new KnockClientApiKeyException("API Key was not provided");
+                throw new KnockClientException("API Key was not provided");
             }
             return new KnockClient(this.baseUrl, this.apiKey);
         }

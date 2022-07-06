@@ -189,6 +189,8 @@ public class UsersResource {
     }
 
     /**
+     * Retrieve a CursorResult of messages for a specific User.
+     *
      * @param userId
      * @param queryParams
      * @return
