@@ -17,7 +17,7 @@ repositories {
 nexusPublishing {
     repositories {
         sonatype {
-            nexusUrl.set(uri("https://s01.oss.sonatype.org/service/local/"))
+            nexusUrl.set(uri(project.property("repo.releases.url")))
             snapshotRepositoryUrl.set(uri(project.property("repo.snapshots.url")))
             username = System.getenv("MAVEN_USERNAME")
             password = System.getenv("MAVEN_PASSWORD")
