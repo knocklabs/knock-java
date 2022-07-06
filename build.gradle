@@ -49,6 +49,9 @@ publishing {
         maven(MavenPublication) {
             from components.java
             pom {
+                name = 'knock-client'
+                url = 'https://knock.app'
+                description = 'Knock API Java Client'
                 scm {
                     connection = 'scm:git:git://github.com/knocklabs/knock-java.git'
                     developerConnection = 'scm:git:ssh://git@github.com:knocklabs/knock-java.git'
