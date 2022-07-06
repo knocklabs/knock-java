@@ -30,7 +30,7 @@ jobs:
       - name: Publish Snapshot
         run: |
           export GPG_SIGNING_KEY=$(echo -n "$GPG_SIGNING_KEY_BASE64" | base64 -d)
-          ./gradlew -Psnapshot publish
+          ./gradlew -Psnapshot publishToSonatype
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
