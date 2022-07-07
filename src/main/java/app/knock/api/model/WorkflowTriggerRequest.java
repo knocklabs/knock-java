@@ -28,6 +28,7 @@ public class WorkflowTriggerRequest {
     Object actor;
     List<Object> recipients;
     String cancellationKey;
+    String tenant;
 
     @Singular("data")
     @JsonAnySetter

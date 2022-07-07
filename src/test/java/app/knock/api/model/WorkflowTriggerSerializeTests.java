@@ -14,6 +14,7 @@ public class WorkflowTriggerSerializeTests {
         WorkflowTriggerRequest workflowTrigger = WorkflowTriggerRequest.builder()
                 .key("new-feature")
                 .actor("actorId")
+                .tenant("tenant-1")
                 .cancellationKey("test")
                 .addRecipient("recipientId1", "recipientId2")
                 .addRecipient(Map.of("id", "user_3"))
@@ -29,6 +30,7 @@ public class WorkflowTriggerSerializeTests {
         String json = Json.writeString(workflowTrigger);
 
         JSONAssert.assertEquals("{actor:\"actorId\"}", json, false);
+        JSONAssert.assertEquals("{tenant:\"tenant-1\"}", json, false);
         JSONAssert.assertEquals("{cancellation_key:\"test\"}", json, false);
         JSONAssert.assertEquals("{" +
                 "recipients: [" +
