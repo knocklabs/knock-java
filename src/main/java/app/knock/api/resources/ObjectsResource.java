@@ -232,7 +232,7 @@ public class ObjectsResource {
      * @param objects
      * @return a bulk operation
      */
-    public BulkOperation bulkSetObjectsInCollection(String collection, List<Map<String, Object>> objects) {
+    public BulkOperation bulkSetInCollection(String collection, List<Map<String, Object>> objects) {
         objects.stream()
                 .filter(object -> object.get("id") != null)
                 .findAny()
@@ -254,7 +254,7 @@ public class ObjectsResource {
      * @param object_ids
      * @return a bulk operation
      */
-    public BulkOperation bulkDeleteObjectsInCollection(String collection, List<String> object_ids) {
+    public BulkOperation bulkDeleteInCollection(String collection, List<String> object_ids) {
         HttpUrl url = objectBulkSetUrl(collection, "delete");
         Request request = knockHttp.baseJsonRequest(url)
                 .post(knockHttp.objectToJsonRequestBody(Collections.singletonMap("object_ids", object_ids)))
