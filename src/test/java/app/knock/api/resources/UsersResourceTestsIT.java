@@ -141,19 +141,19 @@ public class UsersResourceTestsIT {
                 .email("test_user_preferences@gmail.com")
                 .build());
 
-        Map<String, Object> workflowPreferences = new UserPreferenceBuilder()
+        Map<String, Object> workflowPreferences = new PreferenceSetBuilder()
                 .email(false)
                 .sms(true)
                 .condition("recipient.other_ids", "not_contains", "data.other_id")
                 .build();
 
-        Map<String, Object> otherCategoryPreferences = new UserPreferenceBuilder()
+        Map<String, Object> otherCategoryPreferences = new PreferenceSetBuilder()
                 .condition("recipient.muted_alert_ids", "not_contains", "data.alert_id")
                 .condition("recipient.other_ids", "not_contains", "data.other_id")
                 .build();
 
         PreferenceSetRequest request = PreferenceSetRequest.builder()
-                .channelTypes(new UserPreferenceBuilder()
+                .channelTypes(new PreferenceSetBuilder()
                         .email(true)
                         .buildChannelTypes())
                 .workflow("new-feature", workflowPreferences)
