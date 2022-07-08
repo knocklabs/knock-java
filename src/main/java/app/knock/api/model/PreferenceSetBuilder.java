@@ -8,38 +8,38 @@ import java.util.List;
 import java.util.Map;
 
 
-public class UserPreferenceBuilder {
+public class PreferenceSetBuilder {
 
 
     private Map<String, Object> channelTypes = new HashMap<>();
     private List<Map<String, String>> conditions = new LinkedList<>();
 
-    public UserPreferenceBuilder email(boolean enabled) {
+    public PreferenceSetBuilder email(boolean enabled) {
         return custom("email", enabled);
     }
 
-    public UserPreferenceBuilder sms(boolean enabled) {
+    public PreferenceSetBuilder sms(boolean enabled) {
         return custom("sms", enabled);
     }
 
-    public UserPreferenceBuilder inAppFeed(boolean enabled) {
+    public PreferenceSetBuilder inAppFeed(boolean enabled) {
         return custom("in_app_feed", enabled);
     }
 
-    public UserPreferenceBuilder chat(boolean enabled) {
+    public PreferenceSetBuilder chat(boolean enabled) {
         return custom("chat", enabled);
     }
 
-    public UserPreferenceBuilder push(boolean enabled) {
+    public PreferenceSetBuilder push(boolean enabled) {
         return custom("push", enabled);
     }
 
-    public UserPreferenceBuilder custom(String key, boolean enabled) {
+    public PreferenceSetBuilder custom(String key, boolean enabled) {
         channelTypes.put(key, enabled);
         return this;
     }
 
-    public UserPreferenceBuilder condition(String variable, String operator, String argument) {
+    public PreferenceSetBuilder condition(String variable, String operator, String argument) {
         conditions.add(Map.of("variable", variable, "operator", operator, "argument", argument));
         return this;
     }

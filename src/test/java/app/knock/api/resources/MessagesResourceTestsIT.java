@@ -127,7 +127,7 @@ public class MessagesResourceTestsIT {
 
         KnockMessage knockMessage = getOneMessage();
 
-        CursorResult<KnockMessageActivity> activitiesResult = client.messages().activities(knockMessage.getId(), queryParams);
+        CursorResult<Activity> activitiesResult = client.messages().activities(knockMessage.getId(), queryParams);
         assertNotNull(activitiesResult);
         assertTrue(activitiesResult.getItems().size() > 0);
     }

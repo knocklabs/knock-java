@@ -115,12 +115,12 @@ public class MessagesResource {
      * @return a cursor result of message events
      * @throws KnockClientResourceException
      */
-    public CursorResult<KnockMessageActivity> activities(String messageId, QueryParams queryParams) {
+    public CursorResult<Activity> activities(String messageId, QueryParams queryParams) {
         HttpUrl url = buildChildResource(messageId, "activities", queryParams);
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
-        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<KnockMessageActivity>>() {
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<Activity>>() {
         });
     }
 

@@ -93,7 +93,7 @@ public class UsersResourceTestsIT {
     }
 
     @Test
-    void userChannelDataManipulation() {
+    void channelDataManipulation() {
         UserIdentity userIdentity = client.users().identify("test_get_user", UserIdentity.builder()
                 .name("User name")
                 .email("test_get_user@gmail.com")
@@ -104,20 +104,20 @@ public class UsersResourceTestsIT {
         String userId = userIdentity.getId();
         String channelId = "7341aee6-3956-4977-b0f4-032ac1e74336";
 
-        client.users().unsetUserChannelData(userId, channelId);
+        client.users().unsetChannelData(userId, channelId);
 
         Assertions.assertThrows(KnockClientResourceException.class, () -> {
-            client.users().getUserChannelData(userId, channelId);
+            client.users().getChannelData(userId, channelId);
         });
 
         ChannelData data = client.users().setChannelData(userId, channelId, Map.of("tokens", List.of("some-token")));
-        ChannelData newData = client.users().getUserChannelData(userId, channelId);
+        ChannelData newData = client.users().getChannelData(userId, channelId);
 
         assertEquals(data, newData);
         assertEquals("some-token", ((List<String>) data.getData().get("tokens")).get(0));
         assertEquals("some-token", ((List<String>) newData.getData().get("tokens")).get(0));
 
-        client.users().unsetUserChannelData(userId, channelId);
+        client.users().unsetChannelData(userId, channelId);
         client.users().delete(userId);
     }
 
@@ -141,19 +141,19 @@ public class UsersResourceTestsIT {
                 .email("test_user_preferences@gmail.com")
                 .build());
 
-        Map<String, Object> workflowPreferences = new UserPreferenceBuilder()
+        Map<String, Object> workflowPreferences = new PreferenceSetBuilder()
                 .email(false)
                 .sms(true)
                 .condition("recipient.other_ids", "not_contains", "data.other_id")
                 .build();
 
-        Map<String, Object> otherCategoryPreferences = new UserPreferenceBuilder()
+        Map<String, Object> otherCategoryPreferences = new PreferenceSetBuilder()
                 .condition("recipient.muted_alert_ids", "not_contains", "data.alert_id")
                 .condition("recipient.other_ids", "not_contains", "data.other_id")
                 .build();
 
         PreferenceSetRequest request = PreferenceSetRequest.builder()
-                .channelTypes(new UserPreferenceBuilder()
+                .channelTypes(new PreferenceSetBuilder()
                         .email(true)
                         .buildChannelTypes())
                 .workflow("new-feature", workflowPreferences)

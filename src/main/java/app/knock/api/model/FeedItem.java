@@ -33,7 +33,7 @@ public class FeedItem {
     ZonedDateTime archivedAt;
 
     WorkflowSource workflowSource;
-    List<KnockMessageActivity> activities;
+    List<Activity> activities;
     List<Map<String, Object>> actors;
     Map<String, Object> data;
     List<Map<String, Object>> blocks;

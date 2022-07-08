@@ -4,7 +4,6 @@ Knock API access for applications written in Java.
 
 ## Documentation
 
-
 ## Installation
 
 Add the dependency to your `build.grandle` file as follows:
@@ -37,7 +36,6 @@ To use the library you must provide a secret API key, provided in the Knock dash
 You can use the KnockClientBuilder to create a KnockClient that will pull from
 environment variables.
 
-
 ```java
 KnockClient client = KnockClient.builder().build();
 ```
@@ -47,7 +45,6 @@ You can set it as an environment variable:
 ```bash
 KNOCK_API_KEY="sk_12345"
 ```
-
 
 You can also set the base API URL and API Key directly.
 
@@ -104,7 +101,7 @@ WorkflowTriggerResult result = client.workflows().trigger(workflowTrigger);
 # Set preference set for user
 PreferenceSetRequest request = PreferenceSetRequest.builder()
     .channelTypes(
-        new UserPreferenceBuilder()
+        new PreferenceSetBuilder()
             .email(true)
             .buildChannelTypes())
     .build();
@@ -115,7 +112,7 @@ client.users().setPreferences("jhammond", request);
 # Set granular workflow preferences
 PreferenceSetRequest request = PreferenceSetRequest.builder()
     .workflow("dinosaurs-loose",
-        new UserPreferenceBuilder()
+        new PreferenceSetBuilder()
             .email(false)
             .sms(true)
             .condition("recipient.handles_dino_types", "contains", "data.dino_type")
@@ -135,7 +132,7 @@ PreferenceSet defaultPreferences = client.users().getPreferencesById("jhammond",
 
 ```java
 # Set channel data for an APNS
-String channelId = "114a928a-5b35-4e1b-9069-ac873ee972d3";        
+String channelId = "114a928a-5b35-4e1b-9069-ac873ee972d3";
 ChannelData channelData = client.users().setChannelData("jhammond", channelId, Map.of("tokens", List.of("some-token")));
 
 # Get channel data for the APNS channel
@@ -163,8 +160,9 @@ client.workflows().cancel(workflowTrigger);
 ```
 
 ### Handling Exceptions
+
 Calls to resource methods will either succeed, or throw a KnockResourceException. A KnockResourceException
-is returned if a response was received with a payload from Knock that is well defined.  This is captured in the 
+is returned if a response was received with a payload from Knock that is well defined. This is captured in the
 exception, and can be used to determine the cause of the exception.
 
 See the following example code from UsersResourceTestsIT.getUser()
@@ -182,6 +180,3 @@ try {
 ```
 
 If the resource returns an Optional, KnockResourceExceptions are caught, and an empty Optional is returned.
-
-
-
