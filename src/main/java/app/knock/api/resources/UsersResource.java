@@ -213,7 +213,7 @@ public class UsersResource {
      * @return channel data
      * @throws KnockClientResourceException
      */
-    public ChannelData getUserChannelData(String userId, String channelId) {
+    public ChannelData getChannelData(String userId, String channelId) {
         HttpUrl url = userChannelUrl(userId, channelId);
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
@@ -229,7 +229,7 @@ public class UsersResource {
      * @param channelId
      * @throws KnockClientResourceException
      */
-    public void unsetUserChannelData(String userId, String channelId) {
+    public void unsetChannelData(String userId, String channelId) {
         HttpUrl url = userChannelUrl(userId, channelId);
         Request request = knockHttp.baseJsonRequest(url)
                 .delete()
