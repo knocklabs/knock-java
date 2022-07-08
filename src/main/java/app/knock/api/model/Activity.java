@@ -15,7 +15,7 @@ import java.util.Map;
 @Jacksonized
 @Builder
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class KnockMessageActivity {
+public class Activity {
 
     @JsonProperty("__typename")
     String typeName;
@@ -24,7 +24,7 @@ public class KnockMessageActivity {
     String cursor;
 
     String id;
-    UserIdentity actor;
+    Object actor;
     Object recipient;
     ZonedDateTime insertedAt;
     ZonedDateTime updatedAt;
