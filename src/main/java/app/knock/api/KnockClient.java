@@ -23,6 +23,7 @@ public class KnockClient {
     final WorkflowsResource workflowsResource;
     final MessagesResource messagesResource;
     final ObjectsResource objectsResource;
+    final TenantsResource tenantsResource;
     final BulkOperationsResource bulkOperationsResource;
 
     KnockClient(String baseUrl, String apiKey) {
@@ -39,6 +40,7 @@ public class KnockClient {
         this.workflowsResource = new WorkflowsResource(this.knockHttp);
         this.messagesResource = new MessagesResource(this.knockHttp);
         this.objectsResource = new ObjectsResource(this.knockHttp);
+        this.tenantsResource = new TenantsResource(this.knockHttp);
         this.bulkOperationsResource = new BulkOperationsResource(this.knockHttp);
     }
 
@@ -52,6 +54,10 @@ public class KnockClient {
 
     public ObjectsResource objects() {
         return this.objectsResource;
+    }
+  
+    public TenantsResource tenants() {
+        return this.tenantsResource;
     }
 
     public WorkflowsResource workflows() {
