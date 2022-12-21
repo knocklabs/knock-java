@@ -3,6 +3,7 @@ package app.knock.api.resources;
 import app.knock.api.exception.KnockClientResourceException;
 import app.knock.api.http.KnockHttp;
 import app.knock.api.model.*;
+import app.knock.api.serialize.Json;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
@@ -357,6 +358,26 @@ public class UsersResource {
 
         public void before(String before) {
             params.put("before", before);
+        }
+
+        public void tenant(String tenant) {
+            params.put("tenant", tenant);
+        }
+
+        public void has_tenant(boolean tenant) {
+            params.put("has_tenant", tenant);
+        }
+
+        public void source(String source) {
+            params.put("source", source);
+        }
+
+        public void status(String... status) {
+            params.put("status[]", Arrays.toString(status));
+        }
+
+        public void trigger_data(Map<String, Object> triggerData) {
+            params.put("trigger_data", Json.writeString(triggerData));
         }
 
         public void addQueryParams(HttpUrl.Builder uriBuilder) {

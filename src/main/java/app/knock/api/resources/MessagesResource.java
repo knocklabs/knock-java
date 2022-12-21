@@ -3,6 +3,7 @@ package app.knock.api.resources;
 import app.knock.api.exception.KnockClientResourceException;
 import app.knock.api.http.KnockHttp;
 import app.knock.api.model.*;
+import app.knock.api.serialize.Json;
 import com.fasterxml.jackson.core.type.TypeReference;
 import lombok.EqualsAndHashCode;
 import lombok.Value;
@@ -244,6 +245,10 @@ public class MessagesResource {
 
         public void channel_id(String channel_id) {
             params.put("channel_id", channel_id);
+        }
+
+        public void trigger_data(Map<String, Object> triggerData) {
+            params.put("trigger_data", Json.writeString(triggerData));
         }
 
         public void addQueryParams(HttpUrl.Builder uriBuilder) {
