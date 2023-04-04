@@ -2,6 +2,7 @@ package app.knock.api.resources;
 
 import app.knock.api.exception.KnockClientResourceException;
 import app.knock.api.http.KnockHttp;
+import app.knock.api.model.MethodOptions;
 import app.knock.api.model.WorkflowCancelRequest;
 import app.knock.api.model.WorkflowTriggerRequest;
 import app.knock.api.model.WorkflowTriggerResponse;
@@ -27,22 +28,40 @@ public class WorkflowsResource {
     /**
      * Trigger a Knock workflow.
      *
-     * @param workflowTrigger
+     * @param workflowTrigger  The workflow trigger request to send
      * @return the result of the workflow trigger
      * @throws KnockClientResourceException
      */
     public WorkflowTriggerResponse trigger(WorkflowTriggerRequest workflowTrigger) {
+        return trigger(workflowTrigger, null);
+    }
+
+    /**
+     * Trigger a Knock workflow.
+     *
+     * @param workflowTrigger  The workflow trigger request to send
+     * @param methodOptions  Optional HTTP method options, e.g. to set the idempotency key of the request
+     * @return the result of the workflow trigger
+     * @throws KnockClientResourceException
+     */
+    public WorkflowTriggerResponse trigger(WorkflowTriggerRequest workflowTrigger, MethodOptions methodOptions) {
         HttpUrl url = workflowUrl(workflowTrigger.getKey(), "trigger");
         RequestBody body = knockHttp.objectToJsonRequestBody(workflowTrigger);
-        Request request = knockHttp.baseJsonRequest(url)
-                .post(body)
-                .build();
+        Request.Builder requestBuilder = knockHttp.baseJsonRequest(url)
+                .post(body);
+
+        if (methodOptions != null && methodOptions.getIdempotencyKey() != null) {
+            requestBuilder.addHeader("Idempotency-Key", methodOptions.getIdempotencyKey());
+        }
+
+        Request request = requestBuilder.build();
         return knockHttp.executeWithResponseType(request, new TypeReference<WorkflowTriggerResponse>() {
         });
     }
 
     /**
-     * Uses the cancellationKey, and recipients attributes of the WorkflowCancelRequest to cancel
+     * Uses the cancellationKey, and recipients attributes of the
+     * WorkflowCancelRequest to cancel
      * the workflow for the specified recipients.
      *
      * @param workflowCancelRequest
