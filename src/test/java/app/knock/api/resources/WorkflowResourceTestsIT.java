@@ -60,6 +60,28 @@ public class WorkflowResourceTestsIT {
     }
 
     @Test
+    void testIdempotentWorkflowTrigger() {
+        WorkflowTriggerRequest workflowTrigger = WorkflowTriggerRequest.builder()
+                .key("idempotency-test")
+                .actor(actorId)
+                .recipients(List.of(recipientId1, recipientId2))
+                .data("thing_1", "thing one value")
+                .data("thing_2", "thing two value")
+                .data("nested_thing", Map.of("nested_thing_1", 123.44, "nested_thing_2", 123))
+                .build();
+
+        MethodOptions methodOptions = MethodOptions.builder()
+                .idempotencyKey(UUID.randomUUID().toString())
+                .build();
+
+        WorkflowTriggerResponse resultA = client.workflows().trigger(workflowTrigger, methodOptions);
+        WorkflowTriggerResponse resultB = client.workflows().trigger(workflowTrigger, methodOptions);
+
+        assertNotNull(UUID.fromString(resultA.getWorkflowRunId()));
+        assertEquals(resultA.getWorkflowRunId(), resultB.getWorkflowRunId());
+    }
+
+    @Test
     public void testInactiveWorkflowTrigger() {
         WorkflowTriggerRequest workflowTrigger = WorkflowTriggerRequest.builder()
                 .key("inactive-workflow")

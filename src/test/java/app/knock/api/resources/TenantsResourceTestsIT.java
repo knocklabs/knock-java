@@ -1,12 +1,10 @@
 package app.knock.api.resources;
 
 import app.knock.api.KnockClient;
-import app.knock.api.exception.KnockClientResourceException;
 import app.knock.api.model.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
