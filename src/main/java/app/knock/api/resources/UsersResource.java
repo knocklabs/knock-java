@@ -50,6 +50,14 @@ public class UsersResource {
         return urlBuilder.build();
     }
 
+    HttpUrl userSchedulesUrl(String userId, WorkflowsResource.SchedulesQueryParams queryParams) {
+        HttpUrl.Builder urlBuilder = userUrl(userId)
+                .newBuilder()
+                .addEncodedPathSegment("schedules");
+        queryParams.addQueryParams(urlBuilder);
+        return urlBuilder.build();
+    }
+
     HttpUrl userFeedUrl(String userId, String feedId, FeedQueryParams feedQueryParams) {
         HttpUrl.Builder urlBuilder = knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId, "feeds", feedId);
         feedQueryParams.addQueryParams(urlBuilder);
@@ -202,6 +210,22 @@ public class UsersResource {
                 .get()
                 .build();
         return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<KnockMessage>>() {
+        });
+    }
+
+    /**
+     * Retrieve a CursorResult of schedules for a specific User.
+     *
+     * @param userId
+     * @param queryParams
+     * @return
+     */
+    public CursorResult<Schedule> getSchedules(String userId, WorkflowsResource.SchedulesQueryParams queryParams) {
+        HttpUrl url = userSchedulesUrl(userId, queryParams);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<Schedule>>() {
         });
     }
 
