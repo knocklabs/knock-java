@@ -36,6 +36,14 @@ public class ObjectsResource {
         return urlBuilder.build();
     }
 
+    HttpUrl objectSchedulesUrl(String collection, String objectId, WorkflowsResource.SchedulesQueryParams queryParams) {
+        HttpUrl.Builder urlBuilder = objectUrl(collection, objectId)
+                .newBuilder()
+                .addEncodedPathSegment("schedules");
+        queryParams.addQueryParams(urlBuilder);
+        return urlBuilder.build();
+    }
+
     HttpUrl objectPreferencesUrl(String collection, String objectId) {
         return objectUrl(collection, objectId)
                 .newBuilder()
@@ -168,6 +176,22 @@ public class ObjectsResource {
                 .get()
                 .build();
         return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<KnockMessage>>() {
+        });
+    }
+
+    /**
+     * Retrieve a CursorResult of Schedules for a specific KnockObject Collection.
+     *
+     * @param collection
+     * @param objectId
+     * @return
+     */
+    public CursorResult<Schedule> getSchedules(String collection, String objectId, WorkflowsResource.SchedulesQueryParams queryParams) {
+        HttpUrl url = objectSchedulesUrl(collection, objectId, queryParams);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<Schedule>>() {
         });
     }
 
