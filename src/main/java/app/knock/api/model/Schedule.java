@@ -28,6 +28,7 @@ public class Schedule {
     List<ScheduleRepeat> repeats;
     Object actor;
     String tenant;
+    ZonedDateTime lastOccurrenceAt;
     ZonedDateTime nextOccurrenceAt;
     ZonedDateTime insertedAt;
     ZonedDateTime updatedAt;
