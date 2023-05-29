@@ -9,6 +9,7 @@ import lombok.Value;
 import okhttp3.HttpUrl;
 import okhttp3.Request;
 import okhttp3.RequestBody;
+import java.util.Map;
 
 import java.util.*;
 
@@ -140,7 +141,7 @@ public class ObjectsResource {
      */
     public ChannelData setChannelData(String collection, String objectId, String channelId, Map<String, Object> data) {
         HttpUrl url = objectChannelDataUrl(collection, objectId, channelId);
-        RequestBody body = knockHttp.objectToJsonRequestBody(data);
+        RequestBody body = knockHttp.objectToJsonRequestBody(Collections.singletonMap("data", data));
         Request request = knockHttp.baseJsonRequest(url)
                 .put(body)
                 .build();
