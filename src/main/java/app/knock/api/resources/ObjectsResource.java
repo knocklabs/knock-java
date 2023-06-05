@@ -21,7 +21,7 @@ public class ObjectsResource {
 
     KnockHttp knockHttp;
 
-    HttpUrl buildListResource(String objectId, ObjectsResource.ObjectsParams queryParams) {
+    HttpUrl buildListResource(String objectId, ObjectsResource.ListParams queryParams) {
         HttpUrl.Builder urlBuilder = knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, objectId);
         queryParams.addQueryParams(urlBuilder);
         return urlBuilder.build();
@@ -47,6 +47,22 @@ public class ObjectsResource {
         HttpUrl.Builder urlBuilder = objectUrl(collection, objectId)
                 .newBuilder()
                 .addEncodedPathSegment("schedules");
+        queryParams.addQueryParams(urlBuilder);
+        return urlBuilder.build();
+    }
+
+    HttpUrl objectSubscriptionsUrl(String collection, String objectId) {
+        HttpUrl.Builder urlBuilder = objectUrl(collection, objectId)
+                .newBuilder()
+                .addEncodedPathSegment("subscriptions");
+
+        return urlBuilder.build();
+    }
+
+    HttpUrl listObjectSubscriptionsUrl(String collection, String objectId, ListSubscriptionParams queryParams) {
+        HttpUrl.Builder urlBuilder = objectUrl(collection, objectId)
+                .newBuilder()
+                .addEncodedPathSegment("subscriptions");
         queryParams.addQueryParams(urlBuilder);
         return urlBuilder.build();
     }
@@ -95,7 +111,7 @@ public class ObjectsResource {
      * @throws KnockClientResourceException Unable able to retrieve KnockObject from the resource
      * @return KnockObject
      */
-    public CursorResult<KnockObject> list(String collection, ObjectsParams queryParams) {
+    public CursorResult<KnockObject> list(String collection, ListParams queryParams) {
         HttpUrl url = buildListResource(collection, queryParams);
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
@@ -220,6 +236,75 @@ public class ObjectsResource {
     }
 
     /**
+     * Retrieve a CursorResult of ObjectSubscriptions for a Knock Object.
+     *
+     * @param collection
+     * @param objectId
+     * @return cursor result of ObjectSubscription
+     */
+    public CursorResult<ObjectSubscription> listSubscriptions(String collection, String objectId, ListSubscriptionParams queryParams) {
+        HttpUrl url = listObjectSubscriptionsUrl(collection, objectId, queryParams);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<ObjectSubscription>>() {
+        });
+    }
+
+    /**
+     * Retrieve a CursorResult of Schedules for a specific KnockObject as recipient.
+     *
+     * @param collection
+     * @param objectId
+     * @return cursor result of ObjectSubscription
+     */
+    public CursorResult<ObjectSubscription> getSubscriptions(String collection, String objectId, ListSubscriptionParams queryParams) {
+        queryParams.mode("recipient");
+        HttpUrl url = listObjectSubscriptionsUrl(collection, objectId, queryParams);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<ObjectSubscription>>() {
+        });
+    }
+
+    /**
+     * Adds subscriptions to an object for recipients
+     *
+     * @param addSubscriptionsRequest  Attributes for schedules creation
+     * @return List of created object subscriptions
+     * @throws KnockClientResourceException
+     */
+    public List<ObjectSubscription> addSubscriptions(String collection, String objectId, AddSubscriptionsRequest addSubscriptionsRequest) {
+        HttpUrl url = objectSubscriptionsUrl(collection, objectId);
+        RequestBody body = knockHttp.objectToJsonRequestBody(addSubscriptionsRequest);
+        Request.Builder requestBuilder = knockHttp.baseJsonRequest(url)
+                .post(body);
+
+        Request request = requestBuilder.build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<List<ObjectSubscription>>() {
+        });
+    }
+
+    /**
+     * Adds subscriptions to an object for recipients
+     *
+     * @param deleteSubscriptionsRequest  Attributes for schedules deletion
+     * @return List of deleted object subscriptions
+     * @throws KnockClientResourceException
+     */
+    public List<ObjectSubscription> deleteSubscriptions(String collection, String objectId, DeleteSubscriptionsRequest deleteSubscriptionsRequest) {
+        HttpUrl url = objectSubscriptionsUrl(collection, objectId);
+        RequestBody body = knockHttp.objectToJsonRequestBody(deleteSubscriptionsRequest);
+        Request.Builder requestBuilder = knockHttp.baseJsonRequest(url)
+                .post(body);
+
+        Request request = requestBuilder.build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<List<ObjectSubscription>>() {
+        });
+    }
+
+    /**
      * Retrieve a list of PreferenceSets for a specific KnockObject Collection.
      *
      * @param collection
@@ -313,7 +398,7 @@ public class ObjectsResource {
 
     @Value
     @EqualsAndHashCode(callSuper = false)
-    public static class ObjectsParams {
+    public static class ListParams {
         private final Map<String, Object> params = new HashMap<>();
 
         public void pageSize(Integer pageSize) {
@@ -326,6 +411,35 @@ public class ObjectsResource {
 
         public void before(String before) {
             params.put("before", before);
+        }
+
+        public void addQueryParams(HttpUrl.Builder uriBuilder) {
+            params.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .forEach(entry -> uriBuilder.addQueryParameter(entry.getKey(), entry.getValue().toString()));
+        }
+    }
+
+    @Value
+    @EqualsAndHashCode(callSuper = false)
+    public static class ListSubscriptionParams {
+        private final Map<String, Object> params = new HashMap<>();
+
+        public void pageSize(Integer pageSize) {
+            params.put("page_size", pageSize);
+        }
+
+        public void after(String after) {
+            params.put("after", after);
+        }
+
+        public void before(String before) {
+            params.put("before", before);
+        }
+
+        public void mode(String mode) {
+            params.put("mode", mode);
         }
 
         public void addQueryParams(HttpUrl.Builder uriBuilder) {

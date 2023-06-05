@@ -63,6 +63,14 @@ public class UsersResource {
         return urlBuilder.build();
     }
 
+    HttpUrl userSubscriptionsUrl(String userId, ObjectsResource.ListParams queryParams) {
+        HttpUrl.Builder urlBuilder = userUrl(userId)
+                .newBuilder()
+                .addEncodedPathSegment("subscriptions");
+        queryParams.addQueryParams(urlBuilder);
+        return urlBuilder.build();
+    }
+
     HttpUrl userFeedUrl(String userId, String feedId, FeedQueryParams feedQueryParams) {
         HttpUrl.Builder urlBuilder = knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId, "feeds", feedId);
         feedQueryParams.addQueryParams(urlBuilder);
@@ -223,7 +231,7 @@ public class UsersResource {
      *
      * @param userId
      * @param queryParams
-     * @return
+     * @return a cursor result of messages
      */
     public CursorResult<KnockMessage> getMessages(String userId, MessagesResource.QueryParams queryParams) {
         HttpUrl url = userMessagesUrl(userId, queryParams);
@@ -239,7 +247,7 @@ public class UsersResource {
      *
      * @param userId
      * @param queryParams
-     * @return
+     * @return a cursor result of schedules
      */
     public CursorResult<Schedule> getSchedules(String userId, WorkflowsResource.SchedulesQueryParams queryParams) {
         HttpUrl url = userSchedulesUrl(userId, queryParams);
@@ -250,6 +258,21 @@ public class UsersResource {
         });
     }
 
+    /**
+     * Retrieve a CursorResult of object subscriptions for a specific User.
+     *
+     * @param userId
+     * @param queryParams
+     * @return a cursor result of object subscriptions
+     */
+    public CursorResult<ObjectSubscription> getSubscriptions(String userId, ObjectsResource.ListParams queryParams) {
+        HttpUrl url = userSubscriptionsUrl(userId, queryParams);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<ObjectSubscription>>() {
+        });
+    }
 
     /**
      * Retrieve a user's ChannelData for a particular channelId.
