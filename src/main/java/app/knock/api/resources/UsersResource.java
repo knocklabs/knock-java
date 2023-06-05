@@ -21,6 +21,11 @@ public class UsersResource {
 
     KnockHttp knockHttp;
 
+    HttpUrl buildListResource(UsersParams queryParams) {
+        HttpUrl.Builder urlBuilder = knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH);
+        queryParams.addQueryParams(urlBuilder);
+        return urlBuilder.build();
+    }
     HttpUrl userUrl(String userId) {
         return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId).build();
     }
@@ -131,6 +136,22 @@ public class UsersResource {
                 .get()
                 .build();
         return knockHttp.executeWithResponseType(request, new TypeReference<UserIdentity>() {
+        });
+    }
+
+    /**
+     * Retrieve users from knock
+     *
+     * @param queryParams
+     * @return a cursor result of users
+     * @throws KnockClientResourceException
+     */
+    public CursorResult<UserIdentity> list(UsersParams queryParams) {
+        HttpUrl url = buildListResource(queryParams);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<UserIdentity>>() {
         });
     }
 
@@ -411,5 +432,28 @@ public class UsersResource {
                     .forEach(entry -> uriBuilder.addQueryParameter(entry.getKey(), entry.getValue().toString()));
         }
     }
+    @Value
+    @EqualsAndHashCode(callSuper = false)
+    public static class UsersParams {
+        private final Map<String, Object> params = new HashMap<>();
 
+        public void pageSize(Integer pageSize) {
+            params.put("page_size", pageSize);
+        }
+
+        public void after(String after) {
+            params.put("after", after);
+        }
+
+        public void before(String before) {
+            params.put("before", before);
+        }
+
+        public void addQueryParams(HttpUrl.Builder uriBuilder) {
+            params.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .forEach(entry -> uriBuilder.addQueryParameter(entry.getKey(), entry.getValue().toString()));
+        }
+    }
 }

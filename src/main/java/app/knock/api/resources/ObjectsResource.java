@@ -21,6 +21,12 @@ public class ObjectsResource {
 
     KnockHttp knockHttp;
 
+    HttpUrl buildListResource(String objectId, ObjectsResource.ObjectsParams queryParams) {
+        HttpUrl.Builder urlBuilder = knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, objectId);
+        queryParams.addQueryParams(urlBuilder);
+        return urlBuilder.build();
+    }
+
     HttpUrl objectUrl(String collection, String objectId) {
         return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, collection, objectId).build();
     }
@@ -78,6 +84,23 @@ public class ObjectsResource {
                 .get()
                 .build();
         return knockHttp.executeWithResponseType(request, new TypeReference<KnockObject>() {
+        });
+    }
+
+    /**
+     * Retrieve paginated list of KnockObject
+     *
+     * @param collection
+     * @param queryParams
+     * @throws KnockClientResourceException Unable able to retrieve KnockObject from the resource
+     * @return KnockObject
+     */
+    public CursorResult<KnockObject> list(String collection, ObjectsParams queryParams) {
+        HttpUrl url = buildListResource(collection, queryParams);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<KnockObject>>() {
         });
     }
 
@@ -288,4 +311,28 @@ public class ObjectsResource {
         });
     }
 
+    @Value
+    @EqualsAndHashCode(callSuper = false)
+    public static class ObjectsParams {
+        private final Map<String, Object> params = new HashMap<>();
+
+        public void pageSize(Integer pageSize) {
+            params.put("page_size", pageSize);
+        }
+
+        public void after(String after) {
+            params.put("after", after);
+        }
+
+        public void before(String before) {
+            params.put("before", before);
+        }
+
+        public void addQueryParams(HttpUrl.Builder uriBuilder) {
+            params.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .forEach(entry -> uriBuilder.addQueryParameter(entry.getKey(), entry.getValue().toString()));
+        }
+    }
 }
