@@ -21,6 +21,11 @@ public class UsersResource {
 
     KnockHttp knockHttp;
 
+    HttpUrl buildListResource(UsersParams queryParams) {
+        HttpUrl.Builder urlBuilder = knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH);
+        queryParams.addQueryParams(urlBuilder);
+        return urlBuilder.build();
+    }
     HttpUrl userUrl(String userId) {
         return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, userId).build();
     }
@@ -54,6 +59,14 @@ public class UsersResource {
         HttpUrl.Builder urlBuilder = userUrl(userId)
                 .newBuilder()
                 .addEncodedPathSegment("schedules");
+        queryParams.addQueryParams(urlBuilder);
+        return urlBuilder.build();
+    }
+
+    HttpUrl userSubscriptionsUrl(String userId, ObjectsResource.ListParams queryParams) {
+        HttpUrl.Builder urlBuilder = userUrl(userId)
+                .newBuilder()
+                .addEncodedPathSegment("subscriptions");
         queryParams.addQueryParams(urlBuilder);
         return urlBuilder.build();
     }
@@ -135,6 +148,22 @@ public class UsersResource {
     }
 
     /**
+     * Retrieve users from knock
+     *
+     * @param queryParams
+     * @return a cursor result of users
+     * @throws KnockClientResourceException
+     */
+    public CursorResult<UserIdentity> list(UsersParams queryParams) {
+        HttpUrl url = buildListResource(queryParams);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<UserIdentity>>() {
+        });
+    }
+
+    /**
      * Retrieve an optional UserIdentity from Knock. Catches
      * KnockClientResourceExceptions and will return an empty Optional.
      *
@@ -202,7 +231,7 @@ public class UsersResource {
      *
      * @param userId
      * @param queryParams
-     * @return
+     * @return a cursor result of messages
      */
     public CursorResult<KnockMessage> getMessages(String userId, MessagesResource.QueryParams queryParams) {
         HttpUrl url = userMessagesUrl(userId, queryParams);
@@ -218,7 +247,7 @@ public class UsersResource {
      *
      * @param userId
      * @param queryParams
-     * @return
+     * @return a cursor result of schedules
      */
     public CursorResult<Schedule> getSchedules(String userId, WorkflowsResource.SchedulesQueryParams queryParams) {
         HttpUrl url = userSchedulesUrl(userId, queryParams);
@@ -229,6 +258,21 @@ public class UsersResource {
         });
     }
 
+    /**
+     * Retrieve a CursorResult of object subscriptions for a specific User.
+     *
+     * @param userId
+     * @param queryParams
+     * @return a cursor result of object subscriptions
+     */
+    public CursorResult<ObjectSubscription> getSubscriptions(String userId, ObjectsResource.ListParams queryParams) {
+        HttpUrl url = userSubscriptionsUrl(userId, queryParams);
+        Request request = knockHttp.baseJsonRequest(url)
+                .get()
+                .build();
+        return knockHttp.executeWithResponseType(request, new TypeReference<CursorResult<ObjectSubscription>>() {
+        });
+    }
 
     /**
      * Retrieve a user's ChannelData for a particular channelId.
@@ -411,5 +455,28 @@ public class UsersResource {
                     .forEach(entry -> uriBuilder.addQueryParameter(entry.getKey(), entry.getValue().toString()));
         }
     }
+    @Value
+    @EqualsAndHashCode(callSuper = false)
+    public static class UsersParams {
+        private final Map<String, Object> params = new HashMap<>();
 
+        public void pageSize(Integer pageSize) {
+            params.put("page_size", pageSize);
+        }
+
+        public void after(String after) {
+            params.put("after", after);
+        }
+
+        public void before(String before) {
+            params.put("before", before);
+        }
+
+        public void addQueryParams(HttpUrl.Builder uriBuilder) {
+            params.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .forEach(entry -> uriBuilder.addQueryParameter(entry.getKey(), entry.getValue().toString()));
+        }
+    }
 }
