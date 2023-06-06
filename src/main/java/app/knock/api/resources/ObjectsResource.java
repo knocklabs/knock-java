@@ -252,7 +252,7 @@ public class ObjectsResource {
     }
 
     /**
-     * Retrieve a CursorResult of Schedules for a specific KnockObject as recipient.
+     * Retrieve a CursorResult of ObjectSubscriptions for a specific KnockObject as recipient.
      *
      * @param collection
      * @param objectId
