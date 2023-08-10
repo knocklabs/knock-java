@@ -39,7 +39,9 @@ public class KnockHttp {
     }
 
     public RequestBody objectToJsonRequestBody(Object object) {
-        return RequestBody.create(Json.writeBytes(object));
+        MediaType json = MediaType.parse("application/json; charset=utf-8");
+
+        return RequestBody.create(Json.writeBytes(object), json);
     }
 
     public void execute(Request request) {
