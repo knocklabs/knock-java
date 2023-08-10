@@ -123,7 +123,7 @@ public class UsersResource {
      */
     public BulkOperation bulkIdentify(List<UserIdentity> userIdentities) {
         HttpUrl url = userBulkActionUrl("identify");
-        RequestBody body = knockHttp.objectToJsonRequestBody(userIdentities);
+        RequestBody body = knockHttp.objectToJsonRequestBody(Collections.singletonMap("users", userIdentities));
         Request request = knockHttp.baseJsonRequest(url)
                 .post(body)
                 .build();
