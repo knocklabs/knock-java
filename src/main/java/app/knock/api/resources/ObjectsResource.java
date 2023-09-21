@@ -82,8 +82,16 @@ public class ObjectsResource {
                 .build();
     }
 
-    HttpUrl objectBulkSetUrl(String collection, String action) {
-        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, collection, "bulk", action).build();
+    HttpUrl objectBulkSetUrl(String collection) {
+        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, collection, "bulk", "set").build();
+    }
+
+    HttpUrl objectBulkDeleteUrl(String collection) {
+        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, collection, "bulk", "delete").build();
+    }
+
+    HttpUrl objectBulkAddSubscriptionsUrl(String collection) {
+        return knockHttp.baseUrlBuilder(BASE_RESOURCE_PATH, collection, "bulk", "subscriptions", "add").build();
     }
 
     /**
@@ -287,6 +295,23 @@ public class ObjectsResource {
     }
 
     /**
+     * Creates and returns a BulkOperation to create subscriptions for a set of recipients to a set of objects
+     * within the given collection.
+     *
+     * @param collection
+     * @param subscriptions
+     * @return a bulk operation
+     */
+    public BulkOperation bulkAddSubscriptions(String collection, List<BulkAddObjectSubscriptionRequest> subscriptions) {
+        HttpUrl url = objectBulkAddSubscriptionsUrl(collection);
+        RequestBody body = knockHttp.objectToJsonRequestBody(Collections.singletonMap("subscriptions", subscriptions));
+        Request request = knockHttp.baseJsonRequest(url).post(body).build();
+
+        return knockHttp.executeWithResponseType(request, new TypeReference<BulkOperation>() {
+        });
+    }
+
+    /**
      * Adds subscriptions to an object for recipients
      *
      * @param deleteSubscriptionsRequest  Attributes for schedules deletion
@@ -371,7 +396,7 @@ public class ObjectsResource {
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("All object maps in the objects list must have a key of 'id' with a non-null string value."));
 
-        HttpUrl url = objectBulkSetUrl(collection, "set");
+        HttpUrl url = objectBulkSetUrl(collection);
         Request request = knockHttp.baseJsonRequest(url)
                 .post(knockHttp.objectToJsonRequestBody(Collections.singletonMap("objects", objects)))
                 .build();
@@ -388,7 +413,7 @@ public class ObjectsResource {
      * @return a bulk operation
      */
     public BulkOperation bulkDeleteInCollection(String collection, List<String> object_ids) {
-        HttpUrl url = objectBulkSetUrl(collection, "delete");
+        HttpUrl url = objectBulkDeleteUrl(collection);
         Request request = knockHttp.baseJsonRequest(url)
                 .post(knockHttp.objectToJsonRequestBody(Collections.singletonMap("object_ids", object_ids)))
                 .build();
