@@ -10,7 +10,7 @@ Add the dependency to your `build.grandle` file as follows:
 
 ```groovy
 dependencies {
-    implementation 'app.knock.api:knock-client:0.2.8'
+    implementation 'app.knock.api:knock-client:0.2.9'
 }
 ```
 
@@ -22,7 +22,7 @@ Or to your `maven.xml` file:
     <dependency>
         <groupId>app.knock.api</groupId>
         <artifactId>knock-client</artifactId>
-        <version>0.2.8</version>
+        <version>0.2.9</version>
     </dependency>
     <!-- more dependencies here -->
 </dependencies>
