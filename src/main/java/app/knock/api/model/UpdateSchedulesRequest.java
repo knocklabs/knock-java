@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.Singular;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
@@ -27,7 +26,7 @@ public class UpdateSchedulesRequest {
     List<String> scheduleIds;
     List<ScheduleRepeat> repeats;
     Object actor;
-    String tenant;
+    Object tenant;
     ZonedDateTime scheduledAt;
 
     @Singular("data")
@@ -53,6 +52,26 @@ public class UpdateSchedulesRequest {
 
         public UpdateSchedulesRequestBuilder addActor(String actor) {
             this.actor = actor;
+            return this;
+        }
+
+        public UpdateSchedulesRequestBuilder addActor(Map<String, Object> actor) {
+            this.actor = actor;
+            return this;
+        }
+
+        public UpdateSchedulesRequestBuilder addTenant(TenantRecipientIdentifier identifier) {
+            this.tenant = identifier;
+            return this;
+        }
+
+        public UpdateSchedulesRequestBuilder addTenant(String tenant) {
+            this.tenant = tenant;
+            return this;
+        }
+
+        public UpdateSchedulesRequestBuilder addTenant(Map<String, Object> tenant) {
+            this.tenant = tenant;
             return this;
         }
 
