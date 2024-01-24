@@ -61,11 +61,6 @@ public class WorkflowTriggerRequest {
             return this;
         }
 
-        public WorkflowTriggerRequestBuilder addTenant(TenantRecipientIdentifier identifier) {
-            this.tenant = identifier;
-            return this;
-        }
-
         public WorkflowTriggerRequestBuilder addTenant(String tenant) {
             this.tenant = tenant;
             return this;

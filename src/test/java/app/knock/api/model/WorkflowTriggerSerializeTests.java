@@ -64,9 +64,7 @@ public class WorkflowTriggerSerializeTests {
                         .id("object-id")
                         .collection("collection")
                         .build())
-                .tenant(TenantRecipientIdentifier.builder()
-                        .id("tenant-id")
-                        .build())
+                .tenant(Map.of("id", "tenant-id", "name", "my_tenant", "foo", "var"))
                 .cancellationKey("test")
                 .addRecipient("recipientId1", "recipientId2")
                 .addRecipient(Map.of("id", "user_3"))
@@ -82,7 +80,7 @@ public class WorkflowTriggerSerializeTests {
         String json = Json.writeString(workflowTrigger);
 
         JSONAssert.assertEquals("{actor:{id: \"object-id\", collection: \"collection\"}}", json, false);
-        JSONAssert.assertEquals("{tenant:{id: \"tenant-id\"}}", json, false);
+        JSONAssert.assertEquals("{\"tenant\":{\"id\":\"tenant-id\",\"name\":\"my_tenant\",\"foo\":\"var\"}}",json, false);
         JSONAssert.assertEquals("{cancellation_key:\"test\"}", json, false);
         JSONAssert.assertEquals("{" +
                 "recipients: [" +

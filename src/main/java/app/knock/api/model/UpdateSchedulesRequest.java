@@ -60,11 +60,6 @@ public class UpdateSchedulesRequest {
             return this;
         }
 
-        public UpdateSchedulesRequestBuilder addTenant(TenantRecipientIdentifier identifier) {
-            this.tenant = identifier;
-            return this;
-        }
-
         public UpdateSchedulesRequestBuilder addTenant(String tenant) {
             this.tenant = tenant;
             return this;
