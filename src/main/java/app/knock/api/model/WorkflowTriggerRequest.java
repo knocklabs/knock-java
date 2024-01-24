@@ -28,7 +28,7 @@ public class WorkflowTriggerRequest {
     Object actor;
     List<Object> recipients;
     String cancellationKey;
-    String tenant;
+    Object tenant;
 
     @Singular("data")
     @JsonAnySetter
@@ -53,6 +53,21 @@ public class WorkflowTriggerRequest {
 
         public WorkflowTriggerRequestBuilder addActor(String actor) {
             this.actor = actor;
+            return this;
+        }
+
+        public WorkflowTriggerRequestBuilder addActor(Map<String, Object> actor) {
+            this.actor = actor;
+            return this;
+        }
+
+        public WorkflowTriggerRequestBuilder addTenant(String tenant) {
+            this.tenant = tenant;
+            return this;
+        }
+
+        public WorkflowTriggerRequestBuilder addTenant(Map<String, Object> tenant) {
+            this.tenant = tenant;
             return this;
         }
 
