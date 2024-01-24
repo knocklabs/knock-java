@@ -57,14 +57,13 @@ public class WorkflowTriggerSerializeTests {
     }
 
     @Test
-    void mappedPropertiesShouldUnwrapActorAndTenantObject() throws JSONException {
+    void mappedPropertiesShouldUnwrapActorObject() throws JSONException {
         WorkflowTriggerRequest workflowTrigger = WorkflowTriggerRequest.builder()
                 .key("new-feature")
                 .actor(WorkflowTriggerRequest.ObjectRecipientIdentifier.builder()
                         .id("object-id")
                         .collection("collection")
                         .build())
-                .tenant(Map.of("id", "tenant-id", "name", "my_tenant", "foo", "var"))
                 .cancellationKey("test")
                 .addRecipient("recipientId1", "recipientId2")
                 .addRecipient(Map.of("id", "user_3"))
@@ -80,31 +79,30 @@ public class WorkflowTriggerSerializeTests {
         String json = Json.writeString(workflowTrigger);
 
         JSONAssert.assertEquals("{actor:{id: \"object-id\", collection: \"collection\"}}", json, false);
-        JSONAssert.assertEquals("{\"tenant\":{\"id\":\"tenant-id\",\"name\":\"my_tenant\",\"foo\":\"var\"}}",json, false);
         JSONAssert.assertEquals("{cancellation_key:\"test\"}", json, false);
         JSONAssert.assertEquals("{" +
                 "recipients: [" +
-                "\"recipientId1\", " +
-                "\"recipientId2\", " +
+                    "\"recipientId1\", " +
+                    "\"recipientId2\", " +
                 "   {" +
                 "       id: \"identifier_id\", " +
                 "       collection: \"collection\"" +
                 "   }," +
                 "   { id: \"user_3\"}" +
                 "]" +
-                "}", json, false);
+              "}", json, false);
 
         JSONAssert.assertEquals("{" +
                 "data: {" +
-                "thing_1: \"thing one value\"," +
-                "thing_2: \"thing two value\"," +
-                "nested_thing: {" +
-                "nested_thing_1: 123.44," +
-                "nested_thing_2: 123" +
-                "}" +
+                    "thing_1: \"thing one value\"," +
+                    "thing_2: \"thing two value\"," +
+                    "nested_thing: {" +
+                        "nested_thing_1: 123.44," +
+                        "nested_thing_2: 123" +
+                    "}" +
                 "}}", json, false);
     }
-
+    
     @Test
     void mappedPropertiesShouldUnwrapActorAndTenantWithProperties() throws JSONException {
         Map<String, Object> actorProperties = new HashMap<>();
