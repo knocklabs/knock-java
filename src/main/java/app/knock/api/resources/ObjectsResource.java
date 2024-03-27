@@ -467,6 +467,14 @@ public class ObjectsResource {
             params.put("mode", mode);
         }
 
+        public void recipients(String... userIds) {
+            params.put("recipients", userIds);
+        }
+
+        public void recipients(List<Map<String, Object>> recipients) {
+            params.put("recipients", recipients);
+        }
+
         public void addQueryParams(HttpUrl.Builder uriBuilder) {
             params.entrySet()
                     .stream()
