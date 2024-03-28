@@ -59,6 +59,14 @@ public class ObjectsResource {
         return urlBuilder.build();
     }
 
+    HttpUrl getObjectSubscriptionsUrl(String collection, String objectId, GetObjectSubscriptionParams queryParams) {
+        HttpUrl.Builder urlBuilder = objectUrl(collection, objectId)
+                .newBuilder()
+                .addEncodedPathSegment("subscriptions");
+        queryParams.addQueryParams(urlBuilder);
+        return urlBuilder.build();
+    }
+
     HttpUrl listObjectSubscriptionsUrl(String collection, String objectId, ListSubscriptionParams queryParams) {
         HttpUrl.Builder urlBuilder = objectUrl(collection, objectId)
                 .newBuilder()
@@ -266,9 +274,9 @@ public class ObjectsResource {
      * @param objectId
      * @return cursor result of ObjectSubscription
      */
-    public CursorResult<ObjectSubscription> getSubscriptions(String collection, String objectId, ListSubscriptionParams queryParams) {
+    public CursorResult<ObjectSubscription> getSubscriptions(String collection, String objectId, GetObjectSubscriptionParams queryParams) {
         queryParams.mode("recipient");
-        HttpUrl url = listObjectSubscriptionsUrl(collection, objectId, queryParams);
+        HttpUrl url = getObjectSubscriptionsUrl(collection, objectId, queryParams);
         Request request = knockHttp.baseJsonRequest(url)
                 .get()
                 .build();
@@ -436,6 +444,35 @@ public class ObjectsResource {
 
         public void before(String before) {
             params.put("before", before);
+        }
+
+        public void addQueryParams(HttpUrl.Builder uriBuilder) {
+            params.entrySet()
+                    .stream()
+                    .sorted(Map.Entry.comparingByKey())
+                    .forEach(entry -> uriBuilder.addQueryParameter(entry.getKey(), entry.getValue().toString()));
+        }
+    }
+
+    @Value
+    @EqualsAndHashCode(callSuper = false)
+    public static class GetObjectSubscriptionParams {
+        private final Map<String, Object> params = new HashMap<>();
+
+        public void pageSize(Integer pageSize) {
+            params.put("page_size", pageSize);
+        }
+
+        public void after(String after) {
+            params.put("after", after);
+        }
+
+        public void before(String before) {
+            params.put("before", before);
+        }
+
+        public void mode(String mode) {
+            params.put("mode", mode);
         }
 
         public void addQueryParams(HttpUrl.Builder uriBuilder) {
