@@ -9,8 +9,8 @@ import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
 import com.knock.api.models.ProviderSlackCheckAuthParams
 import com.knock.api.models.ProviderSlackCheckAuthResponse
-import com.knock.api.models.ProviderSlackListChannelsPage
 import com.knock.api.models.ProviderSlackListChannelsParams
+import com.knock.api.models.ProviderSlackListChannelsResponse
 import com.knock.api.models.ProviderSlackRevokeAccessParams
 
 interface SlackService {
@@ -32,7 +32,7 @@ interface SlackService {
     fun listChannels(
         params: ProviderSlackListChannelsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): ProviderSlackListChannelsPage
+    ): ProviderSlackListChannelsResponse
 
     /** Revoke access for a Slack channel */
     @JvmOverloads
@@ -64,7 +64,7 @@ interface SlackService {
         fun listChannels(
             params: ProviderSlackListChannelsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ProviderSlackListChannelsPage>
+        ): HttpResponseFor<ProviderSlackListChannelsResponse>
 
         /**
          * Returns a raw HTTP response for `put /v1/providers/slack/{channel_id}/revoke_access`, but

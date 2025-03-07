@@ -49,15 +49,24 @@ class SlackServiceTest {
                 .build()
         val slackService = client.providers().slack()
 
-        val page =
+        val response =
             slackService.listChannels(
                 ProviderSlackListChannelsParams.builder()
                     .channelId("channel_id")
                     .accessTokenObject("access_token_object")
+                    .queryOptions(
+                        ProviderSlackListChannelsParams.QueryOptions.builder()
+                            .cursor("cursor")
+                            .excludeArchived(true)
+                            .limit(0L)
+                            .teamId("team_id")
+                            .types("types")
+                            .build()
+                    )
                     .build()
             )
 
-        page.response().validate()
+        response.validate()
     }
 
     @Disabled(
