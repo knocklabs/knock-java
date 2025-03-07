@@ -53,12 +53,12 @@ class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val response =
+        val message =
             messageService.archive(
                 MessageArchiveParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
             )
 
-        response.validate()
+        message.validate()
     }
 
     @Disabled(
@@ -173,7 +173,7 @@ class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val response =
+        val message =
             messageService.markAsInteracted(
                 MessageMarkAsInteractedParams.builder()
                     .messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
@@ -185,7 +185,7 @@ class MessageServiceTest {
                     .build()
             )
 
-        response.validate()
+        message.validate()
     }
 
     @Disabled(
@@ -200,12 +200,12 @@ class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val response =
+        val message =
             messageService.markAsRead(
                 MessageMarkAsReadParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
             )
 
-        response.validate()
+        message.validate()
     }
 
     @Disabled(
@@ -220,12 +220,12 @@ class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val response =
+        val message =
             messageService.markAsSeen(
                 MessageMarkAsSeenParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
             )
 
-        response.validate()
+        message.validate()
     }
 
     @Disabled(
@@ -240,12 +240,12 @@ class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val response =
+        val message =
             messageService.markAsUnread(
                 MessageMarkAsUnreadParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
             )
 
-        response.validate()
+        message.validate()
     }
 
     @Disabled(
@@ -260,12 +260,12 @@ class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val response =
+        val message =
             messageService.markAsUnseen(
                 MessageMarkAsUnseenParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
             )
 
-        response.validate()
+        message.validate()
     }
 
     @Disabled(
@@ -280,11 +280,11 @@ class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val response =
+        val message =
             messageService.unarchive(
                 MessageUnarchiveParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
             )
 
-        response.validate()
+        message.validate()
     }
 }

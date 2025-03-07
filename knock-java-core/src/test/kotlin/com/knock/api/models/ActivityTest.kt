@@ -7,12 +7,12 @@ import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class MessageListActivitiesResponseTest {
+class ActivityTest {
 
     @Test
-    fun createMessageListActivitiesResponse() {
-        val messageListActivitiesResponse =
-            MessageListActivitiesResponse.builder()
+    fun createActivity() {
+        val activity =
+            Activity.builder()
                 .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                 ._typename("Activity")
                 .actor(
@@ -29,7 +29,7 @@ class MessageListActivitiesResponseTest {
                         .build()
                 )
                 .data(
-                    MessageListActivitiesResponse.Data.builder()
+                    Activity.Data.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))
                         .build()
                 )
@@ -49,10 +49,10 @@ class MessageListActivitiesResponseTest {
                 )
                 .updatedAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
                 .build()
-        assertThat(messageListActivitiesResponse).isNotNull
-        assertThat(messageListActivitiesResponse.id()).contains("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
-        assertThat(messageListActivitiesResponse._typename()).contains("Activity")
-        assertThat(messageListActivitiesResponse.actor())
+        assertThat(activity).isNotNull
+        assertThat(activity.id()).contains("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
+        assertThat(activity._typename()).contains("Activity")
+        assertThat(activity.actor())
             .contains(
                 Recipient.ofUser(
                     User.builder()
@@ -68,15 +68,12 @@ class MessageListActivitiesResponseTest {
                         .build()
                 )
             )
-        assertThat(messageListActivitiesResponse.data())
+        assertThat(activity.data())
             .contains(
-                MessageListActivitiesResponse.Data.builder()
-                    .putAdditionalProperty("foo", JsonValue.from("bar"))
-                    .build()
+                Activity.Data.builder().putAdditionalProperty("foo", JsonValue.from("bar")).build()
             )
-        assertThat(messageListActivitiesResponse.insertedAt())
-            .contains(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
-        assertThat(messageListActivitiesResponse.recipient())
+        assertThat(activity.insertedAt()).contains(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
+        assertThat(activity.recipient())
             .contains(
                 Recipient.ofUser(
                     User.builder()
@@ -92,7 +89,6 @@ class MessageListActivitiesResponseTest {
                         .build()
                 )
             )
-        assertThat(messageListActivitiesResponse.updatedAt())
-            .contains(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
+        assertThat(activity.updatedAt()).contains(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
     }
 }

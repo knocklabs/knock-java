@@ -23,7 +23,7 @@ import java.util.Optional
 
 /** A bulk operation entity */
 @NoAutoDetect
-class ObjectBulkDeleteResponse
+class BulkOperation
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
@@ -151,7 +151,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): ObjectBulkDeleteResponse = apply {
+    fun validate(): BulkOperation = apply {
         if (validated) {
             return@apply
         }
@@ -178,7 +178,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ObjectBulkDeleteResponse].
+         * Returns a mutable builder for constructing an instance of [BulkOperation].
          *
          * The following fields are required:
          * ```java
@@ -196,7 +196,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ObjectBulkDeleteResponse]. */
+    /** A builder for [BulkOperation]. */
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
@@ -216,22 +216,22 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(objectBulkDeleteResponse: ObjectBulkDeleteResponse) = apply {
-            id = objectBulkDeleteResponse.id
-            _typename = objectBulkDeleteResponse._typename
-            estimatedTotalRows = objectBulkDeleteResponse.estimatedTotalRows
-            insertedAt = objectBulkDeleteResponse.insertedAt
-            name = objectBulkDeleteResponse.name
-            processedRows = objectBulkDeleteResponse.processedRows
-            status = objectBulkDeleteResponse.status
-            successCount = objectBulkDeleteResponse.successCount
-            updatedAt = objectBulkDeleteResponse.updatedAt
-            completedAt = objectBulkDeleteResponse.completedAt
-            errorCount = objectBulkDeleteResponse.errorCount
-            errorItems = objectBulkDeleteResponse.errorItems.map { it.toMutableList() }
-            failedAt = objectBulkDeleteResponse.failedAt
-            startedAt = objectBulkDeleteResponse.startedAt
-            additionalProperties = objectBulkDeleteResponse.additionalProperties.toMutableMap()
+        internal fun from(bulkOperation: BulkOperation) = apply {
+            id = bulkOperation.id
+            _typename = bulkOperation._typename
+            estimatedTotalRows = bulkOperation.estimatedTotalRows
+            insertedAt = bulkOperation.insertedAt
+            name = bulkOperation.name
+            processedRows = bulkOperation.processedRows
+            status = bulkOperation.status
+            successCount = bulkOperation.successCount
+            updatedAt = bulkOperation.updatedAt
+            completedAt = bulkOperation.completedAt
+            errorCount = bulkOperation.errorCount
+            errorItems = bulkOperation.errorItems.map { it.toMutableList() }
+            failedAt = bulkOperation.failedAt
+            startedAt = bulkOperation.startedAt
+            additionalProperties = bulkOperation.additionalProperties.toMutableMap()
         }
 
         fun id(id: String) = id(JsonField.of(id))
@@ -338,8 +338,8 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
-        fun build(): ObjectBulkDeleteResponse =
-            ObjectBulkDeleteResponse(
+        fun build(): BulkOperation =
+            BulkOperation(
                 checkRequired("id", id),
                 checkRequired("_typename", _typename),
                 checkRequired("estimatedTotalRows", estimatedTotalRows),
@@ -591,7 +591,7 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectBulkDeleteResponse && id == other.id && _typename == other._typename && estimatedTotalRows == other.estimatedTotalRows && insertedAt == other.insertedAt && name == other.name && processedRows == other.processedRows && status == other.status && successCount == other.successCount && updatedAt == other.updatedAt && completedAt == other.completedAt && errorCount == other.errorCount && errorItems == other.errorItems && failedAt == other.failedAt && startedAt == other.startedAt && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is BulkOperation && id == other.id && _typename == other._typename && estimatedTotalRows == other.estimatedTotalRows && insertedAt == other.insertedAt && name == other.name && processedRows == other.processedRows && status == other.status && successCount == other.successCount && updatedAt == other.updatedAt && completedAt == other.completedAt && errorCount == other.errorCount && errorItems == other.errorItems && failedAt == other.failedAt && startedAt == other.startedAt && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -601,5 +601,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ObjectBulkDeleteResponse{id=$id, _typename=$_typename, estimatedTotalRows=$estimatedTotalRows, insertedAt=$insertedAt, name=$name, processedRows=$processedRows, status=$status, successCount=$successCount, updatedAt=$updatedAt, completedAt=$completedAt, errorCount=$errorCount, errorItems=$errorItems, failedAt=$failedAt, startedAt=$startedAt, additionalProperties=$additionalProperties}"
+        "BulkOperation{id=$id, _typename=$_typename, estimatedTotalRows=$estimatedTotalRows, insertedAt=$insertedAt, name=$name, processedRows=$processedRows, status=$status, successCount=$successCount, updatedAt=$updatedAt, completedAt=$completedAt, errorCount=$errorCount, errorItems=$errorItems, failedAt=$failedAt, startedAt=$startedAt, additionalProperties=$additionalProperties}"
 }

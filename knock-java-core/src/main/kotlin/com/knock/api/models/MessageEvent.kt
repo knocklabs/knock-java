@@ -32,7 +32,7 @@ import java.util.Optional
 
 /** A single event that occurred for a message */
 @NoAutoDetect
-class MessageListEventsResponse
+class MessageEvent
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
@@ -92,7 +92,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): MessageListEventsResponse = apply {
+    fun validate(): MessageEvent = apply {
         if (validated) {
             return@apply
         }
@@ -111,7 +111,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [MessageListEventsResponse].
+         * Returns a mutable builder for constructing an instance of [MessageEvent].
          *
          * The following fields are required:
          * ```java
@@ -125,7 +125,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [MessageListEventsResponse]. */
+    /** A builder for [MessageEvent]. */
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
@@ -137,14 +137,14 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(messageListEventsResponse: MessageListEventsResponse) = apply {
-            id = messageListEventsResponse.id
-            _typename = messageListEventsResponse._typename
-            insertedAt = messageListEventsResponse.insertedAt
-            recipient = messageListEventsResponse.recipient
-            type = messageListEventsResponse.type
-            data = messageListEventsResponse.data
-            additionalProperties = messageListEventsResponse.additionalProperties.toMutableMap()
+        internal fun from(messageEvent: MessageEvent) = apply {
+            id = messageEvent.id
+            _typename = messageEvent._typename
+            insertedAt = messageEvent.insertedAt
+            recipient = messageEvent.recipient
+            type = messageEvent.type
+            data = messageEvent.data
+            additionalProperties = messageEvent.additionalProperties.toMutableMap()
         }
 
         fun id(id: String) = id(JsonField.of(id))
@@ -212,8 +212,8 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
-        fun build(): MessageListEventsResponse =
-            MessageListEventsResponse(
+        fun build(): MessageEvent =
+            MessageEvent(
                 checkRequired("id", id),
                 checkRequired("_typename", _typename),
                 checkRequired("insertedAt", insertedAt),
@@ -756,7 +756,7 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is MessageListEventsResponse && id == other.id && _typename == other._typename && insertedAt == other.insertedAt && recipient == other.recipient && type == other.type && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is MessageEvent && id == other.id && _typename == other._typename && insertedAt == other.insertedAt && recipient == other.recipient && type == other.type && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -766,5 +766,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "MessageListEventsResponse{id=$id, _typename=$_typename, insertedAt=$insertedAt, recipient=$recipient, type=$type, data=$data, additionalProperties=$additionalProperties}"
+        "MessageEvent{id=$id, _typename=$_typename, insertedAt=$insertedAt, recipient=$recipient, type=$type, data=$data, additionalProperties=$additionalProperties}"
 }

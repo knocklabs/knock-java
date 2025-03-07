@@ -30,7 +30,7 @@ private constructor(
 
     fun response(): Response = response
 
-    fun items(): List<MessageListActivitiesResponse> = response().items()
+    fun items(): List<Activity> = response().items()
 
     fun pageInfo(): Optional<PageInfo> = response().pageInfo()
 
@@ -90,20 +90,18 @@ private constructor(
     class Response
     @JsonCreator
     constructor(
-        @JsonProperty("items")
-        private val items: JsonField<List<MessageListActivitiesResponse>> = JsonMissing.of(),
+        @JsonProperty("items") private val items: JsonField<List<Activity>> = JsonMissing.of(),
         @JsonProperty("page_info") private val pageInfo: JsonField<PageInfo> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        fun items(): List<MessageListActivitiesResponse> = items.getNullable("items") ?: listOf()
+        fun items(): List<Activity> = items.getNullable("items") ?: listOf()
 
         fun pageInfo(): Optional<PageInfo> = Optional.ofNullable(pageInfo.getNullable("page_info"))
 
         @JsonProperty("items")
-        fun _items(): Optional<JsonField<List<MessageListActivitiesResponse>>> =
-            Optional.ofNullable(items)
+        fun _items(): Optional<JsonField<List<Activity>>> = Optional.ofNullable(items)
 
         @JsonProperty("page_info")
         fun _pageInfo(): Optional<JsonField<PageInfo>> = Optional.ofNullable(pageInfo)
@@ -150,7 +148,7 @@ private constructor(
 
         class Builder {
 
-            private var items: JsonField<List<MessageListActivitiesResponse>> = JsonMissing.of()
+            private var items: JsonField<List<Activity>> = JsonMissing.of()
             private var pageInfo: JsonField<PageInfo> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -161,11 +159,9 @@ private constructor(
                 this.additionalProperties.putAll(page.additionalProperties)
             }
 
-            fun items(items: List<MessageListActivitiesResponse>) = items(JsonField.of(items))
+            fun items(items: List<Activity>) = items(JsonField.of(items))
 
-            fun items(items: JsonField<List<MessageListActivitiesResponse>>) = apply {
-                this.items = items
-            }
+            fun items(items: JsonField<List<Activity>>) = apply { this.items = items }
 
             fun pageInfo(pageInfo: PageInfo) = pageInfo(JsonField.of(pageInfo))
 
@@ -181,12 +177,9 @@ private constructor(
 
     class AutoPager(private val firstPage: MessageListActivitiesPageAsync) {
 
-        fun forEach(
-            action: Predicate<MessageListActivitiesResponse>,
-            executor: Executor,
-        ): CompletableFuture<Void> {
+        fun forEach(action: Predicate<Activity>, executor: Executor): CompletableFuture<Void> {
             fun CompletableFuture<Optional<MessageListActivitiesPageAsync>>.forEach(
-                action: (MessageListActivitiesResponse) -> Boolean,
+                action: (Activity) -> Boolean,
                 executor: Executor,
             ): CompletableFuture<Void> =
                 thenComposeAsync(
@@ -202,8 +195,8 @@ private constructor(
                 .forEach(action::test, executor)
         }
 
-        fun toList(executor: Executor): CompletableFuture<List<MessageListActivitiesResponse>> {
-            val values = mutableListOf<MessageListActivitiesResponse>()
+        fun toList(executor: Executor): CompletableFuture<List<Activity>> {
+            val values = mutableListOf<Activity>()
             return forEach(values::add, executor).thenApply { values }
         }
     }

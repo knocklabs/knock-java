@@ -7,10 +7,9 @@ package com.knock.api.services.async.tenants
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.TenantBulkDeleteParams
-import com.knock.api.models.TenantBulkDeleteResponse
 import com.knock.api.models.TenantBulkSetParams
-import com.knock.api.models.TenantBulkSetResponse
 import java.util.concurrent.CompletableFuture
 
 interface BulkServiceAsync {
@@ -25,14 +24,14 @@ interface BulkServiceAsync {
     fun delete(
         params: TenantBulkDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<TenantBulkDeleteResponse>
+    ): CompletableFuture<BulkOperation>
 
     /** Bulk set tenants */
     @JvmOverloads
     fun set(
         params: TenantBulkSetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<TenantBulkSetResponse>
+    ): CompletableFuture<BulkOperation>
 
     /** A view of [BulkServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -46,7 +45,7 @@ interface BulkServiceAsync {
         fun delete(
             params: TenantBulkDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<TenantBulkDeleteResponse>>
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
 
         /**
          * Returns a raw HTTP response for `post /v1/tenants/bulk/set`, but is otherwise the same as
@@ -57,6 +56,6 @@ interface BulkServiceAsync {
         fun set(
             params: TenantBulkSetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<TenantBulkSetResponse>>
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
     }
 }

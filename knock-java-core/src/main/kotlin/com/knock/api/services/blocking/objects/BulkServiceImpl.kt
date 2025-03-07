@@ -15,12 +15,10 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepare
 import com.knock.api.errors.KnockError
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.ObjectBulkAddSubscriptionsParams
-import com.knock.api.models.ObjectBulkAddSubscriptionsResponse
 import com.knock.api.models.ObjectBulkDeleteParams
-import com.knock.api.models.ObjectBulkDeleteResponse
 import com.knock.api.models.ObjectBulkSetParams
-import com.knock.api.models.ObjectBulkSetResponse
 
 class BulkServiceImpl internal constructor(private val clientOptions: ClientOptions) : BulkService {
 
@@ -33,21 +31,18 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun delete(
         params: ObjectBulkDeleteParams,
         requestOptions: RequestOptions,
-    ): ObjectBulkDeleteResponse =
+    ): BulkOperation =
         // post /v1/objects/{collection}/bulk/delete
         withRawResponse().delete(params, requestOptions).parse()
 
     override fun addSubscriptions(
         params: ObjectBulkAddSubscriptionsParams,
         requestOptions: RequestOptions,
-    ): ObjectBulkAddSubscriptionsResponse =
+    ): BulkOperation =
         // post /v1/objects/{collection}/bulk/subscriptions/add
         withRawResponse().addSubscriptions(params, requestOptions).parse()
 
-    override fun set(
-        params: ObjectBulkSetParams,
-        requestOptions: RequestOptions,
-    ): ObjectBulkSetResponse =
+    override fun set(params: ObjectBulkSetParams, requestOptions: RequestOptions): BulkOperation =
         // post /v1/objects/{collection}/bulk/set
         withRawResponse().set(params, requestOptions).parse()
 
@@ -56,14 +51,13 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val deleteHandler: Handler<ObjectBulkDeleteResponse> =
-            jsonHandler<ObjectBulkDeleteResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val deleteHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun delete(
             params: ObjectBulkDeleteParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<ObjectBulkDeleteResponse> {
+        ): HttpResponseFor<BulkOperation> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -84,14 +78,13 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val addSubscriptionsHandler: Handler<ObjectBulkAddSubscriptionsResponse> =
-            jsonHandler<ObjectBulkAddSubscriptionsResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val addSubscriptionsHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun addSubscriptions(
             params: ObjectBulkAddSubscriptionsParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<ObjectBulkAddSubscriptionsResponse> {
+        ): HttpResponseFor<BulkOperation> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -119,14 +112,13 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val setHandler: Handler<ObjectBulkSetResponse> =
-            jsonHandler<ObjectBulkSetResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val setHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun set(
             params: ObjectBulkSetParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<ObjectBulkSetResponse> {
+        ): HttpResponseFor<BulkOperation> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

@@ -13,7 +13,7 @@ class AudienceListMembersResponseTest {
         val audienceListMembersResponse =
             AudienceListMembersResponse.builder()
                 .addEntry(
-                    AudienceListMembersResponse.Entry.builder()
+                    AudienceMember.builder()
                         ._typename("AudienceMember")
                         .addedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                         .user(
@@ -45,7 +45,7 @@ class AudienceListMembersResponseTest {
         assertThat(audienceListMembersResponse).isNotNull
         assertThat(audienceListMembersResponse.entries())
             .containsExactly(
-                AudienceListMembersResponse.Entry.builder()
+                AudienceMember.builder()
                     ._typename("AudienceMember")
                     .addedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                     .user(

@@ -26,9 +26,9 @@ class BatchServiceTest {
                 .build()
         val batchService = client.messages().batch()
 
-        val response = batchService.archive()
+        val messages = batchService.archive()
 
-        response.forEach { it.validate() }
+        messages.forEach { it.validate() }
     }
 
     @Disabled(
@@ -63,7 +63,7 @@ class BatchServiceTest {
                 .build()
         val batchService = client.messages().batch()
 
-        val response =
+        val messages =
             batchService.markAsInteracted(
                 MessageBatchMarkAsInteractedParams.builder()
                     .addMessageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
@@ -75,7 +75,7 @@ class BatchServiceTest {
                     .build()
             )
 
-        response.forEach { it.validate() }
+        messages.forEach { it.validate() }
     }
 
     @Disabled(
@@ -90,9 +90,9 @@ class BatchServiceTest {
                 .build()
         val batchService = client.messages().batch()
 
-        val response = batchService.markAsRead()
+        val messages = batchService.markAsRead()
 
-        response.forEach { it.validate() }
+        messages.forEach { it.validate() }
     }
 
     @Disabled(
@@ -107,9 +107,9 @@ class BatchServiceTest {
                 .build()
         val batchService = client.messages().batch()
 
-        val response = batchService.markAsSeen()
+        val messages = batchService.markAsSeen()
 
-        response.forEach { it.validate() }
+        messages.forEach { it.validate() }
     }
 
     @Disabled(
@@ -124,9 +124,9 @@ class BatchServiceTest {
                 .build()
         val batchService = client.messages().batch()
 
-        val response = batchService.markAsUnread()
+        val messages = batchService.markAsUnread()
 
-        response.forEach { it.validate() }
+        messages.forEach { it.validate() }
     }
 
     @Disabled(
@@ -141,9 +141,9 @@ class BatchServiceTest {
                 .build()
         val batchService = client.messages().batch()
 
-        val response = batchService.markAsUnseen()
+        val messages = batchService.markAsUnseen()
 
-        response.forEach { it.validate() }
+        messages.forEach { it.validate() }
     }
 
     @Disabled(
@@ -158,8 +158,8 @@ class BatchServiceTest {
                 .build()
         val batchService = client.messages().batch()
 
-        val response = batchService.unarchive()
+        val messages = batchService.unarchive()
 
-        response.forEach { it.validate() }
+        messages.forEach { it.validate() }
     }
 }

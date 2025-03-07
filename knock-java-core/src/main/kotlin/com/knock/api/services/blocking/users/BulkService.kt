@@ -7,12 +7,10 @@ package com.knock.api.services.blocking.users
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.UserBulkDeleteParams
-import com.knock.api.models.UserBulkDeleteResponse
 import com.knock.api.models.UserBulkIdentifyParams
-import com.knock.api.models.UserBulkIdentifyResponse
 import com.knock.api.models.UserBulkSetPreferencesParams
-import com.knock.api.models.UserBulkSetPreferencesResponse
 
 interface BulkService {
 
@@ -26,21 +24,21 @@ interface BulkService {
     fun delete(
         params: UserBulkDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): UserBulkDeleteResponse
+    ): BulkOperation
 
     /** Bulk identifies users */
     @JvmOverloads
     fun identify(
         params: UserBulkIdentifyParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): UserBulkIdentifyResponse
+    ): BulkOperation
 
     /** Bulk set preferences */
     @JvmOverloads
     fun setPreferences(
         params: UserBulkSetPreferencesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): UserBulkSetPreferencesResponse
+    ): BulkOperation
 
     /** A view of [BulkService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -54,7 +52,7 @@ interface BulkService {
         fun delete(
             params: UserBulkDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<UserBulkDeleteResponse>
+        ): HttpResponseFor<BulkOperation>
 
         /**
          * Returns a raw HTTP response for `post /v1/users/bulk/identify`, but is otherwise the same
@@ -65,7 +63,7 @@ interface BulkService {
         fun identify(
             params: UserBulkIdentifyParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<UserBulkIdentifyResponse>
+        ): HttpResponseFor<BulkOperation>
 
         /**
          * Returns a raw HTTP response for `post /v1/users/bulk/preferences`, but is otherwise the
@@ -76,6 +74,6 @@ interface BulkService {
         fun setPreferences(
             params: UserBulkSetPreferencesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<UserBulkSetPreferencesResponse>
+        ): HttpResponseFor<BulkOperation>
     }
 }

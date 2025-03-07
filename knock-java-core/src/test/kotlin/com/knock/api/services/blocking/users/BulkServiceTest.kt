@@ -33,7 +33,7 @@ class BulkServiceTest {
                 .build()
         val bulkService = client.users().bulk()
 
-        val bulk =
+        val bulkOperation =
             bulkService.delete(
                 UserBulkDeleteParams.builder()
                     .addUserId("string")
@@ -42,7 +42,7 @@ class BulkServiceTest {
                     .build()
             )
 
-        bulk.validate()
+        bulkOperation.validate()
     }
 
     @Disabled(
@@ -57,7 +57,7 @@ class BulkServiceTest {
                 .build()
         val bulkService = client.users().bulk()
 
-        val response =
+        val bulkOperation =
             bulkService.identify(
                 UserBulkIdentifyParams.builder()
                     .addUser(
@@ -154,7 +154,7 @@ class BulkServiceTest {
                     .build()
             )
 
-        response.validate()
+        bulkOperation.validate()
     }
 
     @Disabled(
@@ -169,7 +169,7 @@ class BulkServiceTest {
                 .build()
         val bulkService = client.users().bulk()
 
-        val response =
+        val bulkOperation =
             bulkService.setPreferences(
                 UserBulkSetPreferencesParams.builder()
                     .preferences(
@@ -248,6 +248,6 @@ class BulkServiceTest {
                     .build()
             )
 
-        response.validate()
+        bulkOperation.validate()
     }
 }

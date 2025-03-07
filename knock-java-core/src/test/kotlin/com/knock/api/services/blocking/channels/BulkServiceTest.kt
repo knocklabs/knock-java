@@ -25,7 +25,7 @@ class BulkServiceTest {
                 .build()
         val bulkService = client.channels().bulk()
 
-        val response =
+        val bulkOperation =
             bulkService.updateMessageStatus(
                 ChannelBulkUpdateMessageStatusParams.builder()
                     .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -46,6 +46,6 @@ class BulkServiceTest {
                     .build()
             )
 
-        response.validate()
+        bulkOperation.validate()
     }
 }

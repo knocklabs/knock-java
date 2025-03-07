@@ -7,8 +7,8 @@ package com.knock.api.services.async
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.BulkOperationGetParams
-import com.knock.api.models.BulkOperationGetResponse
 import java.util.concurrent.CompletableFuture
 
 interface BulkOperationServiceAsync {
@@ -23,7 +23,7 @@ interface BulkOperationServiceAsync {
     fun get(
         params: BulkOperationGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<BulkOperationGetResponse>
+    ): CompletableFuture<BulkOperation>
 
     /**
      * A view of [BulkOperationServiceAsync] that provides access to raw HTTP responses for each
@@ -40,6 +40,6 @@ interface BulkOperationServiceAsync {
         fun get(
             params: BulkOperationGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<BulkOperationGetResponse>>
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
     }
 }

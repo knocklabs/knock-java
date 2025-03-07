@@ -26,10 +26,10 @@ class BatchServiceAsyncTest {
                 .build()
         val batchServiceAsync = client.messages().batch()
 
-        val responseFuture = batchServiceAsync.archive()
+        val messagesFuture = batchServiceAsync.archive()
 
-        val response = responseFuture.get()
-        response.forEach { it.validate() }
+        val messages = messagesFuture.get()
+        messages.forEach { it.validate() }
     }
 
     @Disabled(
@@ -65,7 +65,7 @@ class BatchServiceAsyncTest {
                 .build()
         val batchServiceAsync = client.messages().batch()
 
-        val responseFuture =
+        val messagesFuture =
             batchServiceAsync.markAsInteracted(
                 MessageBatchMarkAsInteractedParams.builder()
                     .addMessageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
@@ -77,8 +77,8 @@ class BatchServiceAsyncTest {
                     .build()
             )
 
-        val response = responseFuture.get()
-        response.forEach { it.validate() }
+        val messages = messagesFuture.get()
+        messages.forEach { it.validate() }
     }
 
     @Disabled(
@@ -93,10 +93,10 @@ class BatchServiceAsyncTest {
                 .build()
         val batchServiceAsync = client.messages().batch()
 
-        val responseFuture = batchServiceAsync.markAsRead()
+        val messagesFuture = batchServiceAsync.markAsRead()
 
-        val response = responseFuture.get()
-        response.forEach { it.validate() }
+        val messages = messagesFuture.get()
+        messages.forEach { it.validate() }
     }
 
     @Disabled(
@@ -111,10 +111,10 @@ class BatchServiceAsyncTest {
                 .build()
         val batchServiceAsync = client.messages().batch()
 
-        val responseFuture = batchServiceAsync.markAsSeen()
+        val messagesFuture = batchServiceAsync.markAsSeen()
 
-        val response = responseFuture.get()
-        response.forEach { it.validate() }
+        val messages = messagesFuture.get()
+        messages.forEach { it.validate() }
     }
 
     @Disabled(
@@ -129,10 +129,10 @@ class BatchServiceAsyncTest {
                 .build()
         val batchServiceAsync = client.messages().batch()
 
-        val responseFuture = batchServiceAsync.markAsUnread()
+        val messagesFuture = batchServiceAsync.markAsUnread()
 
-        val response = responseFuture.get()
-        response.forEach { it.validate() }
+        val messages = messagesFuture.get()
+        messages.forEach { it.validate() }
     }
 
     @Disabled(
@@ -147,10 +147,10 @@ class BatchServiceAsyncTest {
                 .build()
         val batchServiceAsync = client.messages().batch()
 
-        val responseFuture = batchServiceAsync.markAsUnseen()
+        val messagesFuture = batchServiceAsync.markAsUnseen()
 
-        val response = responseFuture.get()
-        response.forEach { it.validate() }
+        val messages = messagesFuture.get()
+        messages.forEach { it.validate() }
     }
 
     @Disabled(
@@ -165,9 +165,9 @@ class BatchServiceAsyncTest {
                 .build()
         val batchServiceAsync = client.messages().batch()
 
-        val responseFuture = batchServiceAsync.unarchive()
+        val messagesFuture = batchServiceAsync.unarchive()
 
-        val response = responseFuture.get()
-        response.forEach { it.validate() }
+        val messages = messagesFuture.get()
+        messages.forEach { it.validate() }
     }
 }

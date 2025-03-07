@@ -15,7 +15,6 @@ import com.knock.api.core.checkKnown
 import com.knock.api.core.checkRequired
 import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
-import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
 
@@ -26,19 +25,21 @@ class AudienceListMembersResponse
 private constructor(
     @JsonProperty("entries")
     @ExcludeMissing
-    private val entries: JsonField<List<Entry>> = JsonMissing.of(),
+    private val entries: JsonField<List<AudienceMember>> = JsonMissing.of(),
     @JsonProperty("page_info")
     @ExcludeMissing
     private val pageInfo: JsonField<PageInfo> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    fun entries(): List<Entry> = entries.getRequired("entries")
+    fun entries(): List<AudienceMember> = entries.getRequired("entries")
 
     /** The information about a paginated result */
     fun pageInfo(): PageInfo = pageInfo.getRequired("page_info")
 
-    @JsonProperty("entries") @ExcludeMissing fun _entries(): JsonField<List<Entry>> = entries
+    @JsonProperty("entries")
+    @ExcludeMissing
+    fun _entries(): JsonField<List<AudienceMember>> = entries
 
     /** The information about a paginated result */
     @JsonProperty("page_info") @ExcludeMissing fun _pageInfo(): JsonField<PageInfo> = pageInfo
@@ -78,7 +79,7 @@ private constructor(
     /** A builder for [AudienceListMembersResponse]. */
     class Builder internal constructor() {
 
-        private var entries: JsonField<MutableList<Entry>>? = null
+        private var entries: JsonField<MutableList<AudienceMember>>? = null
         private var pageInfo: JsonField<PageInfo>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -89,13 +90,13 @@ private constructor(
             additionalProperties = audienceListMembersResponse.additionalProperties.toMutableMap()
         }
 
-        fun entries(entries: List<Entry>) = entries(JsonField.of(entries))
+        fun entries(entries: List<AudienceMember>) = entries(JsonField.of(entries))
 
-        fun entries(entries: JsonField<List<Entry>>) = apply {
+        fun entries(entries: JsonField<List<AudienceMember>>) = apply {
             this.entries = entries.map { it.toMutableList() }
         }
 
-        fun addEntry(entry: Entry) = apply {
+        fun addEntry(entry: AudienceMember) = apply {
             entries =
                 (entries ?: JsonField.of(mutableListOf())).also {
                     checkKnown("entries", it).add(entry)
@@ -133,181 +134,6 @@ private constructor(
                 checkRequired("pageInfo", pageInfo),
                 additionalProperties.toImmutable(),
             )
-    }
-
-    /** A user belonging to an audience */
-    @NoAutoDetect
-    class Entry
-    @JsonCreator
-    private constructor(
-        @JsonProperty("__typename")
-        @ExcludeMissing
-        private val _typename: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("added_at")
-        @ExcludeMissing
-        private val addedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("user") @ExcludeMissing private val user: JsonField<User> = JsonMissing.of(),
-        @JsonProperty("user_id")
-        @ExcludeMissing
-        private val userId: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("tenant")
-        @ExcludeMissing
-        private val tenant: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        fun _typename(): String = _typename.getRequired("__typename")
-
-        fun addedAt(): OffsetDateTime = addedAt.getRequired("added_at")
-
-        /** A user object */
-        fun user(): User = user.getRequired("user")
-
-        fun userId(): String = userId.getRequired("user_id")
-
-        fun tenant(): Optional<String> = Optional.ofNullable(tenant.getNullable("tenant"))
-
-        @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
-
-        @JsonProperty("added_at")
-        @ExcludeMissing
-        fun _addedAt(): JsonField<OffsetDateTime> = addedAt
-
-        /** A user object */
-        @JsonProperty("user") @ExcludeMissing fun _user(): JsonField<User> = user
-
-        @JsonProperty("user_id") @ExcludeMissing fun _userId(): JsonField<String> = userId
-
-        @JsonProperty("tenant") @ExcludeMissing fun _tenant(): JsonField<String> = tenant
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Entry = apply {
-            if (validated) {
-                return@apply
-            }
-
-            _typename()
-            addedAt()
-            user().validate()
-            userId()
-            tenant()
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Entry].
-             *
-             * The following fields are required:
-             * ```java
-             * ._typename()
-             * .addedAt()
-             * .user()
-             * .userId()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Entry]. */
-        class Builder internal constructor() {
-
-            private var _typename: JsonField<String>? = null
-            private var addedAt: JsonField<OffsetDateTime>? = null
-            private var user: JsonField<User>? = null
-            private var userId: JsonField<String>? = null
-            private var tenant: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(entry: Entry) = apply {
-                _typename = entry._typename
-                addedAt = entry.addedAt
-                user = entry.user
-                userId = entry.userId
-                tenant = entry.tenant
-                additionalProperties = entry.additionalProperties.toMutableMap()
-            }
-
-            fun _typename(_typename: String) = _typename(JsonField.of(_typename))
-
-            fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
-
-            fun addedAt(addedAt: OffsetDateTime) = addedAt(JsonField.of(addedAt))
-
-            fun addedAt(addedAt: JsonField<OffsetDateTime>) = apply { this.addedAt = addedAt }
-
-            /** A user object */
-            fun user(user: User) = user(JsonField.of(user))
-
-            /** A user object */
-            fun user(user: JsonField<User>) = apply { this.user = user }
-
-            fun userId(userId: String) = userId(JsonField.of(userId))
-
-            fun userId(userId: JsonField<String>) = apply { this.userId = userId }
-
-            fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
-
-            fun tenant(tenant: Optional<String>) = tenant(tenant.orElse(null))
-
-            fun tenant(tenant: JsonField<String>) = apply { this.tenant = tenant }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            fun build(): Entry =
-                Entry(
-                    checkRequired("_typename", _typename),
-                    checkRequired("addedAt", addedAt),
-                    checkRequired("user", user),
-                    checkRequired("userId", userId),
-                    tenant,
-                    additionalProperties.toImmutable(),
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Entry && _typename == other._typename && addedAt == other.addedAt && user == other.user && userId == other.userId && tenant == other.tenant && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(_typename, addedAt, user, userId, tenant, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Entry{_typename=$_typename, addedAt=$addedAt, user=$user, userId=$userId, tenant=$tenant, additionalProperties=$additionalProperties}"
     }
 
     /** The information about a paginated result */

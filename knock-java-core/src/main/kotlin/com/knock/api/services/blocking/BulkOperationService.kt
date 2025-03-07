@@ -7,8 +7,8 @@ package com.knock.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.BulkOperationGetParams
-import com.knock.api.models.BulkOperationGetResponse
 
 interface BulkOperationService {
 
@@ -22,7 +22,7 @@ interface BulkOperationService {
     fun get(
         params: BulkOperationGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): BulkOperationGetResponse
+    ): BulkOperation
 
     /**
      * A view of [BulkOperationService] that provides access to raw HTTP responses for each method.
@@ -38,6 +38,6 @@ interface BulkOperationService {
         fun get(
             params: BulkOperationGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<BulkOperationGetResponse>
+        ): HttpResponseFor<BulkOperation>
     }
 }

@@ -11,8 +11,8 @@ import com.knock.api.core.JsonField
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
 import com.knock.api.errors.KnockInvalidDataException
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.ChannelBulkUpdateMessageStatusParams
-import com.knock.api.models.ChannelBulkUpdateMessageStatusResponse
 
 interface BulkService {
 
@@ -30,7 +30,7 @@ interface BulkService {
     fun updateMessageStatus(
         params: ChannelBulkUpdateMessageStatusParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): ChannelBulkUpdateMessageStatusResponse
+    ): BulkOperation
 
     class Action @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
@@ -189,6 +189,6 @@ interface BulkService {
         fun updateMessageStatus(
             params: ChannelBulkUpdateMessageStatusParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ChannelBulkUpdateMessageStatusResponse>
+        ): HttpResponseFor<BulkOperation>
     }
 }

@@ -7,12 +7,10 @@ package com.knock.api.services.async.objects
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.ObjectBulkAddSubscriptionsParams
-import com.knock.api.models.ObjectBulkAddSubscriptionsResponse
 import com.knock.api.models.ObjectBulkDeleteParams
-import com.knock.api.models.ObjectBulkDeleteResponse
 import com.knock.api.models.ObjectBulkSetParams
-import com.knock.api.models.ObjectBulkSetResponse
 import java.util.concurrent.CompletableFuture
 
 interface BulkServiceAsync {
@@ -27,7 +25,7 @@ interface BulkServiceAsync {
     fun delete(
         params: ObjectBulkDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<ObjectBulkDeleteResponse>
+    ): CompletableFuture<BulkOperation>
 
     /**
      * Add subscriptions for a set of objects in a single collection. If a subscription already
@@ -37,14 +35,14 @@ interface BulkServiceAsync {
     fun addSubscriptions(
         params: ObjectBulkAddSubscriptionsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<ObjectBulkAddSubscriptionsResponse>
+    ): CompletableFuture<BulkOperation>
 
     /** Bulk set objects */
     @JvmOverloads
     fun set(
         params: ObjectBulkSetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<ObjectBulkSetResponse>
+    ): CompletableFuture<BulkOperation>
 
     /** A view of [BulkServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -58,7 +56,7 @@ interface BulkServiceAsync {
         fun delete(
             params: ObjectBulkDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<ObjectBulkDeleteResponse>>
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
 
         /**
          * Returns a raw HTTP response for `post /v1/objects/{collection}/bulk/subscriptions/add`,
@@ -69,7 +67,7 @@ interface BulkServiceAsync {
         fun addSubscriptions(
             params: ObjectBulkAddSubscriptionsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<ObjectBulkAddSubscriptionsResponse>>
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
 
         /**
          * Returns a raw HTTP response for `post /v1/objects/{collection}/bulk/set`, but is
@@ -80,6 +78,6 @@ interface BulkServiceAsync {
         fun set(
             params: ObjectBulkSetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<ObjectBulkSetResponse>>
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
     }
 }

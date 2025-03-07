@@ -15,12 +15,11 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepareAsync
 import com.knock.api.errors.KnockError
+import com.knock.api.models.Message
 import com.knock.api.models.MessageArchiveParams
-import com.knock.api.models.MessageArchiveResponse
 import com.knock.api.models.MessageGetContentParams
 import com.knock.api.models.MessageGetContentResponse
 import com.knock.api.models.MessageGetParams
-import com.knock.api.models.MessageGetResponse
 import com.knock.api.models.MessageListActivitiesPageAsync
 import com.knock.api.models.MessageListActivitiesParams
 import com.knock.api.models.MessageListDeliveryLogsPageAsync
@@ -30,17 +29,11 @@ import com.knock.api.models.MessageListEventsParams
 import com.knock.api.models.MessageListPageAsync
 import com.knock.api.models.MessageListParams
 import com.knock.api.models.MessageMarkAsInteractedParams
-import com.knock.api.models.MessageMarkAsInteractedResponse
 import com.knock.api.models.MessageMarkAsReadParams
-import com.knock.api.models.MessageMarkAsReadResponse
 import com.knock.api.models.MessageMarkAsSeenParams
-import com.knock.api.models.MessageMarkAsSeenResponse
 import com.knock.api.models.MessageMarkAsUnreadParams
-import com.knock.api.models.MessageMarkAsUnreadResponse
 import com.knock.api.models.MessageMarkAsUnseenParams
-import com.knock.api.models.MessageMarkAsUnseenResponse
 import com.knock.api.models.MessageUnarchiveParams
-import com.knock.api.models.MessageUnarchiveResponse
 import com.knock.api.services.async.messages.BatchServiceAsync
 import com.knock.api.services.async.messages.BatchServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
@@ -68,14 +61,14 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override fun archive(
         params: MessageArchiveParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<MessageArchiveResponse> =
+    ): CompletableFuture<Message> =
         // put /v1/messages/{message_id}/archived
         withRawResponse().archive(params, requestOptions).thenApply { it.parse() }
 
     override fun get(
         params: MessageGetParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<MessageGetResponse> =
+    ): CompletableFuture<Message> =
         // get /v1/messages/{message_id}
         withRawResponse().get(params, requestOptions).thenApply { it.parse() }
 
@@ -110,42 +103,42 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override fun markAsInteracted(
         params: MessageMarkAsInteractedParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<MessageMarkAsInteractedResponse> =
+    ): CompletableFuture<Message> =
         // put /v1/messages/{message_id}/interacted
         withRawResponse().markAsInteracted(params, requestOptions).thenApply { it.parse() }
 
     override fun markAsRead(
         params: MessageMarkAsReadParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<MessageMarkAsReadResponse> =
+    ): CompletableFuture<Message> =
         // put /v1/messages/{message_id}/read
         withRawResponse().markAsRead(params, requestOptions).thenApply { it.parse() }
 
     override fun markAsSeen(
         params: MessageMarkAsSeenParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<MessageMarkAsSeenResponse> =
+    ): CompletableFuture<Message> =
         // put /v1/messages/{message_id}/seen
         withRawResponse().markAsSeen(params, requestOptions).thenApply { it.parse() }
 
     override fun markAsUnread(
         params: MessageMarkAsUnreadParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<MessageMarkAsUnreadResponse> =
+    ): CompletableFuture<Message> =
         // delete /v1/messages/{message_id}/unread
         withRawResponse().markAsUnread(params, requestOptions).thenApply { it.parse() }
 
     override fun markAsUnseen(
         params: MessageMarkAsUnseenParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<MessageMarkAsUnseenResponse> =
+    ): CompletableFuture<Message> =
         // delete /v1/messages/{message_id}/unseen
         withRawResponse().markAsUnseen(params, requestOptions).thenApply { it.parse() }
 
     override fun unarchive(
         params: MessageUnarchiveParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<MessageUnarchiveResponse> =
+    ): CompletableFuture<Message> =
         // delete /v1/messages/{message_id}/unarchived
         withRawResponse().unarchive(params, requestOptions).thenApply { it.parse() }
 
@@ -197,14 +190,13 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val archiveHandler: Handler<MessageArchiveResponse> =
-            jsonHandler<MessageArchiveResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val archiveHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun archive(
             params: MessageArchiveParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<MessageArchiveResponse>> {
+        ): CompletableFuture<HttpResponseFor<Message>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -228,13 +220,13 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val getHandler: Handler<MessageGetResponse> =
-            jsonHandler<MessageGetResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val getHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun get(
             params: MessageGetParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<MessageGetResponse>> {
+        ): CompletableFuture<HttpResponseFor<Message>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -398,14 +390,13 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val markAsInteractedHandler: Handler<MessageMarkAsInteractedResponse> =
-            jsonHandler<MessageMarkAsInteractedResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val markAsInteractedHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsInteracted(
             params: MessageMarkAsInteractedParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<MessageMarkAsInteractedResponse>> {
+        ): CompletableFuture<HttpResponseFor<Message>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -429,14 +420,13 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val markAsReadHandler: Handler<MessageMarkAsReadResponse> =
-            jsonHandler<MessageMarkAsReadResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val markAsReadHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsRead(
             params: MessageMarkAsReadParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<MessageMarkAsReadResponse>> {
+        ): CompletableFuture<HttpResponseFor<Message>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -460,14 +450,13 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val markAsSeenHandler: Handler<MessageMarkAsSeenResponse> =
-            jsonHandler<MessageMarkAsSeenResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val markAsSeenHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsSeen(
             params: MessageMarkAsSeenParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<MessageMarkAsSeenResponse>> {
+        ): CompletableFuture<HttpResponseFor<Message>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -491,14 +480,13 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val markAsUnreadHandler: Handler<MessageMarkAsUnreadResponse> =
-            jsonHandler<MessageMarkAsUnreadResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val markAsUnreadHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsUnread(
             params: MessageMarkAsUnreadParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<MessageMarkAsUnreadResponse>> {
+        ): CompletableFuture<HttpResponseFor<Message>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -522,14 +510,13 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val markAsUnseenHandler: Handler<MessageMarkAsUnseenResponse> =
-            jsonHandler<MessageMarkAsUnseenResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val markAsUnseenHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsUnseen(
             params: MessageMarkAsUnseenParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<MessageMarkAsUnseenResponse>> {
+        ): CompletableFuture<HttpResponseFor<Message>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -553,14 +540,13 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val unarchiveHandler: Handler<MessageUnarchiveResponse> =
-            jsonHandler<MessageUnarchiveResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val unarchiveHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun unarchive(
             params: MessageUnarchiveParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<MessageUnarchiveResponse>> {
+        ): CompletableFuture<HttpResponseFor<Message>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)

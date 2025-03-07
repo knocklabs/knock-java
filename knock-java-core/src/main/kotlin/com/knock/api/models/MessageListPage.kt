@@ -29,7 +29,7 @@ private constructor(
 
     fun response(): Response = response
 
-    fun entries(): List<MessageListResponse> = response().entries()
+    fun entries(): List<Message> = response().entries()
 
     fun pageInfo(): Optional<PageInfo> = response().pageInfo()
 
@@ -84,20 +84,18 @@ private constructor(
     class Response
     @JsonCreator
     constructor(
-        @JsonProperty("entries")
-        private val entries: JsonField<List<MessageListResponse>> = JsonMissing.of(),
+        @JsonProperty("entries") private val entries: JsonField<List<Message>> = JsonMissing.of(),
         @JsonProperty("page_info") private val pageInfo: JsonField<PageInfo> = JsonMissing.of(),
         @JsonAnySetter
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        fun entries(): List<MessageListResponse> = entries.getNullable("entries") ?: listOf()
+        fun entries(): List<Message> = entries.getNullable("entries") ?: listOf()
 
         fun pageInfo(): Optional<PageInfo> = Optional.ofNullable(pageInfo.getNullable("page_info"))
 
         @JsonProperty("entries")
-        fun _entries(): Optional<JsonField<List<MessageListResponse>>> =
-            Optional.ofNullable(entries)
+        fun _entries(): Optional<JsonField<List<Message>>> = Optional.ofNullable(entries)
 
         @JsonProperty("page_info")
         fun _pageInfo(): Optional<JsonField<PageInfo>> = Optional.ofNullable(pageInfo)
@@ -141,7 +139,7 @@ private constructor(
 
         class Builder {
 
-            private var entries: JsonField<List<MessageListResponse>> = JsonMissing.of()
+            private var entries: JsonField<List<Message>> = JsonMissing.of()
             private var pageInfo: JsonField<PageInfo> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -152,11 +150,9 @@ private constructor(
                 this.additionalProperties.putAll(page.additionalProperties)
             }
 
-            fun entries(entries: List<MessageListResponse>) = entries(JsonField.of(entries))
+            fun entries(entries: List<Message>) = entries(JsonField.of(entries))
 
-            fun entries(entries: JsonField<List<MessageListResponse>>) = apply {
-                this.entries = entries
-            }
+            fun entries(entries: JsonField<List<Message>>) = apply { this.entries = entries }
 
             fun pageInfo(pageInfo: PageInfo) = pageInfo(JsonField.of(pageInfo))
 
@@ -170,9 +166,9 @@ private constructor(
         }
     }
 
-    class AutoPager(private val firstPage: MessageListPage) : Iterable<MessageListResponse> {
+    class AutoPager(private val firstPage: MessageListPage) : Iterable<Message> {
 
-        override fun iterator(): Iterator<MessageListResponse> = iterator {
+        override fun iterator(): Iterator<Message> = iterator {
             var page = firstPage
             var index = 0
             while (true) {
@@ -184,7 +180,7 @@ private constructor(
             }
         }
 
-        fun stream(): Stream<MessageListResponse> {
+        fun stream(): Stream<Message> {
             return StreamSupport.stream(spliterator(), false)
         }
     }

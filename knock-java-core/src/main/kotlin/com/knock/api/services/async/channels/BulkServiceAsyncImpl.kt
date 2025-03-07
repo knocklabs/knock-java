@@ -15,8 +15,8 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepareAsync
 import com.knock.api.errors.KnockError
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.ChannelBulkUpdateMessageStatusParams
-import com.knock.api.models.ChannelBulkUpdateMessageStatusResponse
 import java.util.concurrent.CompletableFuture
 
 class BulkServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -31,7 +31,7 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun updateMessageStatus(
         params: ChannelBulkUpdateMessageStatusParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<ChannelBulkUpdateMessageStatusResponse> =
+    ): CompletableFuture<BulkOperation> =
         // post /v1/channels/{channel_id}/messages/bulk/{action}
         withRawResponse().updateMessageStatus(params, requestOptions).thenApply { it.parse() }
 
@@ -40,14 +40,13 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val updateMessageStatusHandler: Handler<ChannelBulkUpdateMessageStatusResponse> =
-            jsonHandler<ChannelBulkUpdateMessageStatusResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val updateMessageStatusHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun updateMessageStatus(
             params: ChannelBulkUpdateMessageStatusParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<ChannelBulkUpdateMessageStatusResponse>> {
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

@@ -33,7 +33,7 @@ class BulkServiceAsyncTest {
                 .build()
         val bulkServiceAsync = client.users().bulk()
 
-        val bulkFuture =
+        val bulkOperationFuture =
             bulkServiceAsync.delete(
                 UserBulkDeleteParams.builder()
                     .addUserId("string")
@@ -42,8 +42,8 @@ class BulkServiceAsyncTest {
                     .build()
             )
 
-        val bulk = bulkFuture.get()
-        bulk.validate()
+        val bulkOperation = bulkOperationFuture.get()
+        bulkOperation.validate()
     }
 
     @Disabled(
@@ -58,7 +58,7 @@ class BulkServiceAsyncTest {
                 .build()
         val bulkServiceAsync = client.users().bulk()
 
-        val responseFuture =
+        val bulkOperationFuture =
             bulkServiceAsync.identify(
                 UserBulkIdentifyParams.builder()
                     .addUser(
@@ -155,8 +155,8 @@ class BulkServiceAsyncTest {
                     .build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val bulkOperation = bulkOperationFuture.get()
+        bulkOperation.validate()
     }
 
     @Disabled(
@@ -171,7 +171,7 @@ class BulkServiceAsyncTest {
                 .build()
         val bulkServiceAsync = client.users().bulk()
 
-        val responseFuture =
+        val bulkOperationFuture =
             bulkServiceAsync.setPreferences(
                 UserBulkSetPreferencesParams.builder()
                     .preferences(
@@ -250,7 +250,7 @@ class BulkServiceAsyncTest {
                     .build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val bulkOperation = bulkOperationFuture.get()
+        bulkOperation.validate()
     }
 }

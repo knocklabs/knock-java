@@ -7,6 +7,7 @@ package com.knock.api.services.async.messages
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
+import com.knock.api.models.Message
 import com.knock.api.models.MessageBatchArchiveParams
 import com.knock.api.models.MessageBatchGetContentParams
 import com.knock.api.models.MessageBatchMarkAsInteractedParams

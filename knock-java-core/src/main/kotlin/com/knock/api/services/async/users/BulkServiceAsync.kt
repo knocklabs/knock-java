@@ -7,12 +7,10 @@ package com.knock.api.services.async.users
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.UserBulkDeleteParams
-import com.knock.api.models.UserBulkDeleteResponse
 import com.knock.api.models.UserBulkIdentifyParams
-import com.knock.api.models.UserBulkIdentifyResponse
 import com.knock.api.models.UserBulkSetPreferencesParams
-import com.knock.api.models.UserBulkSetPreferencesResponse
 import java.util.concurrent.CompletableFuture
 
 interface BulkServiceAsync {
@@ -27,21 +25,21 @@ interface BulkServiceAsync {
     fun delete(
         params: UserBulkDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<UserBulkDeleteResponse>
+    ): CompletableFuture<BulkOperation>
 
     /** Bulk identifies users */
     @JvmOverloads
     fun identify(
         params: UserBulkIdentifyParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<UserBulkIdentifyResponse>
+    ): CompletableFuture<BulkOperation>
 
     /** Bulk set preferences */
     @JvmOverloads
     fun setPreferences(
         params: UserBulkSetPreferencesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<UserBulkSetPreferencesResponse>
+    ): CompletableFuture<BulkOperation>
 
     /** A view of [BulkServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -55,7 +53,7 @@ interface BulkServiceAsync {
         fun delete(
             params: UserBulkDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<UserBulkDeleteResponse>>
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
 
         /**
          * Returns a raw HTTP response for `post /v1/users/bulk/identify`, but is otherwise the same
@@ -66,7 +64,7 @@ interface BulkServiceAsync {
         fun identify(
             params: UserBulkIdentifyParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<UserBulkIdentifyResponse>>
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
 
         /**
          * Returns a raw HTTP response for `post /v1/users/bulk/preferences`, but is otherwise the
@@ -77,6 +75,6 @@ interface BulkServiceAsync {
         fun setPreferences(
             params: UserBulkSetPreferencesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<UserBulkSetPreferencesResponse>>
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
     }
 }

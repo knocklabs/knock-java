@@ -11,8 +11,8 @@ import com.knock.api.core.JsonField
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
 import com.knock.api.errors.KnockInvalidDataException
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.ChannelBulkUpdateMessageStatusParams
-import com.knock.api.models.ChannelBulkUpdateMessageStatusResponse
 import java.util.concurrent.CompletableFuture
 
 interface BulkServiceAsync {
@@ -31,7 +31,7 @@ interface BulkServiceAsync {
     fun updateMessageStatus(
         params: ChannelBulkUpdateMessageStatusParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<ChannelBulkUpdateMessageStatusResponse>
+    ): CompletableFuture<BulkOperation>
 
     class Action @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
@@ -190,6 +190,6 @@ interface BulkServiceAsync {
         fun updateMessageStatus(
             params: ChannelBulkUpdateMessageStatusParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<ChannelBulkUpdateMessageStatusResponse>>
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
     }
 }

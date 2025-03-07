@@ -14,8 +14,8 @@ import com.knock.api.core.http.HttpResponseFor
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepareAsync
 import com.knock.api.errors.KnockError
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.BulkOperationGetParams
-import com.knock.api.models.BulkOperationGetResponse
 import java.util.concurrent.CompletableFuture
 
 class BulkOperationServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -30,7 +30,7 @@ class BulkOperationServiceAsyncImpl internal constructor(private val clientOptio
     override fun get(
         params: BulkOperationGetParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<BulkOperationGetResponse> =
+    ): CompletableFuture<BulkOperation> =
         // get /v1/bulk_operations/{id}
         withRawResponse().get(params, requestOptions).thenApply { it.parse() }
 
@@ -39,14 +39,13 @@ class BulkOperationServiceAsyncImpl internal constructor(private val clientOptio
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val getHandler: Handler<BulkOperationGetResponse> =
-            jsonHandler<BulkOperationGetResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val getHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun get(
             params: BulkOperationGetParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<BulkOperationGetResponse>> {
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

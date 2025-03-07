@@ -15,8 +15,8 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepare
 import com.knock.api.errors.KnockError
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.ChannelBulkUpdateMessageStatusParams
-import com.knock.api.models.ChannelBulkUpdateMessageStatusResponse
 
 class BulkServiceImpl internal constructor(private val clientOptions: ClientOptions) : BulkService {
 
@@ -29,7 +29,7 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun updateMessageStatus(
         params: ChannelBulkUpdateMessageStatusParams,
         requestOptions: RequestOptions,
-    ): ChannelBulkUpdateMessageStatusResponse =
+    ): BulkOperation =
         // post /v1/channels/{channel_id}/messages/bulk/{action}
         withRawResponse().updateMessageStatus(params, requestOptions).parse()
 
@@ -38,14 +38,13 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val updateMessageStatusHandler: Handler<ChannelBulkUpdateMessageStatusResponse> =
-            jsonHandler<ChannelBulkUpdateMessageStatusResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val updateMessageStatusHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun updateMessageStatus(
             params: ChannelBulkUpdateMessageStatusParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<ChannelBulkUpdateMessageStatusResponse> {
+        ): HttpResponseFor<BulkOperation> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

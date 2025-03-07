@@ -25,10 +25,10 @@ class BulkServiceTest {
                 .build()
         val bulkService = client.tenants().bulk()
 
-        val bulk =
+        val bulkOperation =
             bulkService.delete(TenantBulkDeleteParams.builder().addTenantId("string").build())
 
-        bulk.validate()
+        bulkOperation.validate()
     }
 
     @Disabled(
@@ -43,8 +43,9 @@ class BulkServiceTest {
                 .build()
         val bulkService = client.tenants().bulk()
 
-        val response = bulkService.set(TenantBulkSetParams.builder().addTenant("string").build())
+        val bulkOperation =
+            bulkService.set(TenantBulkSetParams.builder().addTenant("string").build())
 
-        response.validate()
+        bulkOperation.validate()
     }
 }

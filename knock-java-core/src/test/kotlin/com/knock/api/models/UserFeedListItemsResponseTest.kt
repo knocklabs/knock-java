@@ -16,7 +16,7 @@ class UserFeedListItemsResponseTest {
                 .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                 ._typename("FeedItem")
                 .addActivity(
-                    UserFeedListItemsResponse.Activity.builder()
+                    Activity.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                         ._typename("Activity")
                         .actor(
@@ -33,7 +33,7 @@ class UserFeedListItemsResponseTest {
                                 .build()
                         )
                         .data(
-                            UserFeedListItemsResponse.Activity.Data.builder()
+                            Activity.Data.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
@@ -108,7 +108,7 @@ class UserFeedListItemsResponseTest {
         assertThat(userFeedListItemsResponse._typename()).isEqualTo("FeedItem")
         assertThat(userFeedListItemsResponse.activities())
             .containsExactly(
-                UserFeedListItemsResponse.Activity.builder()
+                Activity.builder()
                     .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                     ._typename("Activity")
                     .actor(
@@ -125,7 +125,7 @@ class UserFeedListItemsResponseTest {
                             .build()
                     )
                     .data(
-                        UserFeedListItemsResponse.Activity.Data.builder()
+                        Activity.Data.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )

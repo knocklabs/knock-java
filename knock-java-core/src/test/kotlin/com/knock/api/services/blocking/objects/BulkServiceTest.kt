@@ -32,7 +32,7 @@ class BulkServiceTest {
                 .build()
         val bulkService = client.objects().bulk()
 
-        val bulk =
+        val bulkOperation =
             bulkService.delete(
                 ObjectBulkDeleteParams.builder()
                     .collection("collection")
@@ -40,7 +40,7 @@ class BulkServiceTest {
                     .build()
             )
 
-        bulk.validate()
+        bulkOperation.validate()
     }
 
     @Disabled(
@@ -55,7 +55,7 @@ class BulkServiceTest {
                 .build()
         val bulkService = client.objects().bulk()
 
-        val response =
+        val bulkOperation =
             bulkService.addSubscriptions(
                 ObjectBulkAddSubscriptionsParams.builder()
                     .collection("projects")
@@ -167,7 +167,7 @@ class BulkServiceTest {
                     .build()
             )
 
-        response.validate()
+        bulkOperation.validate()
     }
 
     @Disabled(
@@ -182,7 +182,7 @@ class BulkServiceTest {
                 .build()
         val bulkService = client.objects().bulk()
 
-        val response =
+        val bulkOperation =
             bulkService.set(
                 ObjectBulkSetParams.builder()
                     .collection("collection")
@@ -281,6 +281,6 @@ class BulkServiceTest {
                     .build()
             )
 
-        response.validate()
+        bulkOperation.validate()
     }
 }

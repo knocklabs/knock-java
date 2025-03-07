@@ -19,7 +19,7 @@ import java.util.Optional
 
 /** An activity associated with a workflow run */
 @NoAutoDetect
-class MessageListActivitiesResponse
+class Activity
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
@@ -88,7 +88,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): MessageListActivitiesResponse = apply {
+    fun validate(): Activity = apply {
         if (validated) {
             return@apply
         }
@@ -107,14 +107,11 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of
-         * [MessageListActivitiesResponse].
-         */
+        /** Returns a mutable builder for constructing an instance of [Activity]. */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [MessageListActivitiesResponse]. */
+    /** A builder for [Activity]. */
     class Builder internal constructor() {
 
         private var id: JsonField<String> = JsonMissing.of()
@@ -127,15 +124,15 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(messageListActivitiesResponse: MessageListActivitiesResponse) = apply {
-            id = messageListActivitiesResponse.id
-            _typename = messageListActivitiesResponse._typename
-            actor = messageListActivitiesResponse.actor
-            data = messageListActivitiesResponse.data
-            insertedAt = messageListActivitiesResponse.insertedAt
-            recipient = messageListActivitiesResponse.recipient
-            updatedAt = messageListActivitiesResponse.updatedAt
-            additionalProperties = messageListActivitiesResponse.additionalProperties.toMutableMap()
+        internal fun from(activity: Activity) = apply {
+            id = activity.id
+            _typename = activity._typename
+            actor = activity.actor
+            data = activity.data
+            insertedAt = activity.insertedAt
+            recipient = activity.recipient
+            updatedAt = activity.updatedAt
+            additionalProperties = activity.additionalProperties.toMutableMap()
         }
 
         fun id(id: String) = id(JsonField.of(id))
@@ -211,8 +208,8 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
-        fun build(): MessageListActivitiesResponse =
-            MessageListActivitiesResponse(
+        fun build(): Activity =
+            Activity(
                 id,
                 _typename,
                 actor,
@@ -309,7 +306,7 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is MessageListActivitiesResponse && id == other.id && _typename == other._typename && actor == other.actor && data == other.data && insertedAt == other.insertedAt && recipient == other.recipient && updatedAt == other.updatedAt && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Activity && id == other.id && _typename == other._typename && actor == other.actor && data == other.data && insertedAt == other.insertedAt && recipient == other.recipient && updatedAt == other.updatedAt && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -319,5 +316,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "MessageListActivitiesResponse{id=$id, _typename=$_typename, actor=$actor, data=$data, insertedAt=$insertedAt, recipient=$recipient, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
+        "Activity{id=$id, _typename=$_typename, actor=$actor, data=$data, insertedAt=$insertedAt, recipient=$recipient, updatedAt=$updatedAt, additionalProperties=$additionalProperties}"
 }

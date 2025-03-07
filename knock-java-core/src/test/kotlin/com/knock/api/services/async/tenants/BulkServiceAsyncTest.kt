@@ -25,11 +25,11 @@ class BulkServiceAsyncTest {
                 .build()
         val bulkServiceAsync = client.tenants().bulk()
 
-        val bulkFuture =
+        val bulkOperationFuture =
             bulkServiceAsync.delete(TenantBulkDeleteParams.builder().addTenantId("string").build())
 
-        val bulk = bulkFuture.get()
-        bulk.validate()
+        val bulkOperation = bulkOperationFuture.get()
+        bulkOperation.validate()
     }
 
     @Disabled(
@@ -44,10 +44,10 @@ class BulkServiceAsyncTest {
                 .build()
         val bulkServiceAsync = client.tenants().bulk()
 
-        val responseFuture =
+        val bulkOperationFuture =
             bulkServiceAsync.set(TenantBulkSetParams.builder().addTenant("string").build())
 
-        val response = responseFuture.get()
-        response.validate()
+        val bulkOperation = bulkOperationFuture.get()
+        bulkOperation.validate()
     }
 }

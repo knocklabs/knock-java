@@ -25,7 +25,7 @@ class BulkServiceAsyncTest {
                 .build()
         val bulkServiceAsync = client.channels().bulk()
 
-        val responseFuture =
+        val bulkOperationFuture =
             bulkServiceAsync.updateMessageStatus(
                 ChannelBulkUpdateMessageStatusParams.builder()
                     .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -46,7 +46,7 @@ class BulkServiceAsyncTest {
                     .build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val bulkOperation = bulkOperationFuture.get()
+        bulkOperation.validate()
     }
 }

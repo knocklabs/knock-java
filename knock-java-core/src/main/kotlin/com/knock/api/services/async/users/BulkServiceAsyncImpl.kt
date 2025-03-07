@@ -15,12 +15,10 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepareAsync
 import com.knock.api.errors.KnockError
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.UserBulkDeleteParams
-import com.knock.api.models.UserBulkDeleteResponse
 import com.knock.api.models.UserBulkIdentifyParams
-import com.knock.api.models.UserBulkIdentifyResponse
 import com.knock.api.models.UserBulkSetPreferencesParams
-import com.knock.api.models.UserBulkSetPreferencesResponse
 import java.util.concurrent.CompletableFuture
 
 class BulkServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -35,21 +33,21 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun delete(
         params: UserBulkDeleteParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<UserBulkDeleteResponse> =
+    ): CompletableFuture<BulkOperation> =
         // post /v1/users/bulk/delete
         withRawResponse().delete(params, requestOptions).thenApply { it.parse() }
 
     override fun identify(
         params: UserBulkIdentifyParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<UserBulkIdentifyResponse> =
+    ): CompletableFuture<BulkOperation> =
         // post /v1/users/bulk/identify
         withRawResponse().identify(params, requestOptions).thenApply { it.parse() }
 
     override fun setPreferences(
         params: UserBulkSetPreferencesParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<UserBulkSetPreferencesResponse> =
+    ): CompletableFuture<BulkOperation> =
         // post /v1/users/bulk/preferences
         withRawResponse().setPreferences(params, requestOptions).thenApply { it.parse() }
 
@@ -58,14 +56,13 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val deleteHandler: Handler<UserBulkDeleteResponse> =
-            jsonHandler<UserBulkDeleteResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val deleteHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun delete(
             params: UserBulkDeleteParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<UserBulkDeleteResponse>> {
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -89,14 +86,13 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 }
         }
 
-        private val identifyHandler: Handler<UserBulkIdentifyResponse> =
-            jsonHandler<UserBulkIdentifyResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val identifyHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun identify(
             params: UserBulkIdentifyParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<UserBulkIdentifyResponse>> {
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -120,14 +116,13 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 }
         }
 
-        private val setPreferencesHandler: Handler<UserBulkSetPreferencesResponse> =
-            jsonHandler<UserBulkSetPreferencesResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val setPreferencesHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun setPreferences(
             params: UserBulkSetPreferencesParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<UserBulkSetPreferencesResponse>> {
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

@@ -15,12 +15,10 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepare
 import com.knock.api.errors.KnockError
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.UserBulkDeleteParams
-import com.knock.api.models.UserBulkDeleteResponse
 import com.knock.api.models.UserBulkIdentifyParams
-import com.knock.api.models.UserBulkIdentifyResponse
 import com.knock.api.models.UserBulkSetPreferencesParams
-import com.knock.api.models.UserBulkSetPreferencesResponse
 
 class BulkServiceImpl internal constructor(private val clientOptions: ClientOptions) : BulkService {
 
@@ -33,21 +31,21 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun delete(
         params: UserBulkDeleteParams,
         requestOptions: RequestOptions,
-    ): UserBulkDeleteResponse =
+    ): BulkOperation =
         // post /v1/users/bulk/delete
         withRawResponse().delete(params, requestOptions).parse()
 
     override fun identify(
         params: UserBulkIdentifyParams,
         requestOptions: RequestOptions,
-    ): UserBulkIdentifyResponse =
+    ): BulkOperation =
         // post /v1/users/bulk/identify
         withRawResponse().identify(params, requestOptions).parse()
 
     override fun setPreferences(
         params: UserBulkSetPreferencesParams,
         requestOptions: RequestOptions,
-    ): UserBulkSetPreferencesResponse =
+    ): BulkOperation =
         // post /v1/users/bulk/preferences
         withRawResponse().setPreferences(params, requestOptions).parse()
 
@@ -56,14 +54,13 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val deleteHandler: Handler<UserBulkDeleteResponse> =
-            jsonHandler<UserBulkDeleteResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val deleteHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun delete(
             params: UserBulkDeleteParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<UserBulkDeleteResponse> {
+        ): HttpResponseFor<BulkOperation> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -84,14 +81,13 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val identifyHandler: Handler<UserBulkIdentifyResponse> =
-            jsonHandler<UserBulkIdentifyResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val identifyHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun identify(
             params: UserBulkIdentifyParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<UserBulkIdentifyResponse> {
+        ): HttpResponseFor<BulkOperation> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -112,14 +108,13 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val setPreferencesHandler: Handler<UserBulkSetPreferencesResponse> =
-            jsonHandler<UserBulkSetPreferencesResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val setPreferencesHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun setPreferences(
             params: UserBulkSetPreferencesParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<UserBulkSetPreferencesResponse> {
+        ): HttpResponseFor<BulkOperation> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

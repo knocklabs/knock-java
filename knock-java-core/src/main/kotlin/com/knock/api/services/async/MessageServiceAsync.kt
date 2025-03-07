@@ -7,12 +7,11 @@ package com.knock.api.services.async
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
+import com.knock.api.models.Message
 import com.knock.api.models.MessageArchiveParams
-import com.knock.api.models.MessageArchiveResponse
 import com.knock.api.models.MessageGetContentParams
 import com.knock.api.models.MessageGetContentResponse
 import com.knock.api.models.MessageGetParams
-import com.knock.api.models.MessageGetResponse
 import com.knock.api.models.MessageListActivitiesPageAsync
 import com.knock.api.models.MessageListActivitiesParams
 import com.knock.api.models.MessageListDeliveryLogsPageAsync
@@ -22,17 +21,11 @@ import com.knock.api.models.MessageListEventsParams
 import com.knock.api.models.MessageListPageAsync
 import com.knock.api.models.MessageListParams
 import com.knock.api.models.MessageMarkAsInteractedParams
-import com.knock.api.models.MessageMarkAsInteractedResponse
 import com.knock.api.models.MessageMarkAsReadParams
-import com.knock.api.models.MessageMarkAsReadResponse
 import com.knock.api.models.MessageMarkAsSeenParams
-import com.knock.api.models.MessageMarkAsSeenResponse
 import com.knock.api.models.MessageMarkAsUnreadParams
-import com.knock.api.models.MessageMarkAsUnreadResponse
 import com.knock.api.models.MessageMarkAsUnseenParams
-import com.knock.api.models.MessageMarkAsUnseenResponse
 import com.knock.api.models.MessageUnarchiveParams
-import com.knock.api.models.MessageUnarchiveResponse
 import com.knock.api.services.async.messages.BatchServiceAsync
 import java.util.concurrent.CompletableFuture
 
@@ -61,14 +54,14 @@ interface MessageServiceAsync {
     fun archive(
         params: MessageArchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<MessageArchiveResponse>
+    ): CompletableFuture<Message>
 
     /** Get message */
     @JvmOverloads
     fun get(
         params: MessageGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<MessageGetResponse>
+    ): CompletableFuture<Message>
 
     /**
      * Returns the fully rendered contents of a message, where the response depends on the channel
@@ -106,42 +99,42 @@ interface MessageServiceAsync {
     fun markAsInteracted(
         params: MessageMarkAsInteractedParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<MessageMarkAsInteractedResponse>
+    ): CompletableFuture<Message>
 
     /** Mark message as read */
     @JvmOverloads
     fun markAsRead(
         params: MessageMarkAsReadParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<MessageMarkAsReadResponse>
+    ): CompletableFuture<Message>
 
     /** Mark message as seen */
     @JvmOverloads
     fun markAsSeen(
         params: MessageMarkAsSeenParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<MessageMarkAsSeenResponse>
+    ): CompletableFuture<Message>
 
     /** Mark message as unread */
     @JvmOverloads
     fun markAsUnread(
         params: MessageMarkAsUnreadParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<MessageMarkAsUnreadResponse>
+    ): CompletableFuture<Message>
 
     /** Mark message as unseen */
     @JvmOverloads
     fun markAsUnseen(
         params: MessageMarkAsUnseenParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<MessageMarkAsUnseenResponse>
+    ): CompletableFuture<Message>
 
     /** Unarchive message */
     @JvmOverloads
     fun unarchive(
         params: MessageUnarchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<MessageUnarchiveResponse>
+    ): CompletableFuture<Message>
 
     /**
      * A view of [MessageServiceAsync] that provides access to raw HTTP responses for each method.
@@ -180,7 +173,7 @@ interface MessageServiceAsync {
         fun archive(
             params: MessageArchiveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<MessageArchiveResponse>>
+        ): CompletableFuture<HttpResponseFor<Message>>
 
         /**
          * Returns a raw HTTP response for `get /v1/messages/{message_id}`, but is otherwise the
@@ -191,7 +184,7 @@ interface MessageServiceAsync {
         fun get(
             params: MessageGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<MessageGetResponse>>
+        ): CompletableFuture<HttpResponseFor<Message>>
 
         /**
          * Returns a raw HTTP response for `get /v1/messages/{message_id}/content`, but is otherwise
@@ -246,7 +239,7 @@ interface MessageServiceAsync {
         fun markAsInteracted(
             params: MessageMarkAsInteractedParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<MessageMarkAsInteractedResponse>>
+        ): CompletableFuture<HttpResponseFor<Message>>
 
         /**
          * Returns a raw HTTP response for `put /v1/messages/{message_id}/read`, but is otherwise
@@ -257,7 +250,7 @@ interface MessageServiceAsync {
         fun markAsRead(
             params: MessageMarkAsReadParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<MessageMarkAsReadResponse>>
+        ): CompletableFuture<HttpResponseFor<Message>>
 
         /**
          * Returns a raw HTTP response for `put /v1/messages/{message_id}/seen`, but is otherwise
@@ -268,7 +261,7 @@ interface MessageServiceAsync {
         fun markAsSeen(
             params: MessageMarkAsSeenParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<MessageMarkAsSeenResponse>>
+        ): CompletableFuture<HttpResponseFor<Message>>
 
         /**
          * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unread`, but is
@@ -279,7 +272,7 @@ interface MessageServiceAsync {
         fun markAsUnread(
             params: MessageMarkAsUnreadParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<MessageMarkAsUnreadResponse>>
+        ): CompletableFuture<HttpResponseFor<Message>>
 
         /**
          * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unseen`, but is
@@ -290,7 +283,7 @@ interface MessageServiceAsync {
         fun markAsUnseen(
             params: MessageMarkAsUnseenParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<MessageMarkAsUnseenResponse>>
+        ): CompletableFuture<HttpResponseFor<Message>>
 
         /**
          * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unarchived`, but is
@@ -301,6 +294,6 @@ interface MessageServiceAsync {
         fun unarchive(
             params: MessageUnarchiveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<MessageUnarchiveResponse>>
+        ): CompletableFuture<HttpResponseFor<Message>>
     }
 }

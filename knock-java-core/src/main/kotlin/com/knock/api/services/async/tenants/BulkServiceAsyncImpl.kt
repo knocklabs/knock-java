@@ -15,10 +15,9 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepareAsync
 import com.knock.api.errors.KnockError
+import com.knock.api.models.BulkOperation
 import com.knock.api.models.TenantBulkDeleteParams
-import com.knock.api.models.TenantBulkDeleteResponse
 import com.knock.api.models.TenantBulkSetParams
-import com.knock.api.models.TenantBulkSetResponse
 import java.util.concurrent.CompletableFuture
 
 class BulkServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -33,14 +32,14 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun delete(
         params: TenantBulkDeleteParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<TenantBulkDeleteResponse> =
+    ): CompletableFuture<BulkOperation> =
         // post /v1/tenants/bulk/delete
         withRawResponse().delete(params, requestOptions).thenApply { it.parse() }
 
     override fun set(
         params: TenantBulkSetParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<TenantBulkSetResponse> =
+    ): CompletableFuture<BulkOperation> =
         // post /v1/tenants/bulk/set
         withRawResponse().set(params, requestOptions).thenApply { it.parse() }
 
@@ -49,14 +48,13 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val deleteHandler: Handler<TenantBulkDeleteResponse> =
-            jsonHandler<TenantBulkDeleteResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val deleteHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun delete(
             params: TenantBulkDeleteParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<TenantBulkDeleteResponse>> {
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -80,14 +78,13 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 }
         }
 
-        private val setHandler: Handler<TenantBulkSetResponse> =
-            jsonHandler<TenantBulkSetResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val setHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun set(
             params: TenantBulkSetParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<TenantBulkSetResponse>> {
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

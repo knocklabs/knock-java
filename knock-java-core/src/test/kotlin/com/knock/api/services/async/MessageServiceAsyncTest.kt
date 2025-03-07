@@ -54,13 +54,13 @@ class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val responseFuture =
+        val messageFuture =
             messageServiceAsync.archive(
                 MessageArchiveParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val message = messageFuture.get()
+        message.validate()
     }
 
     @Disabled(
@@ -180,7 +180,7 @@ class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val responseFuture =
+        val messageFuture =
             messageServiceAsync.markAsInteracted(
                 MessageMarkAsInteractedParams.builder()
                     .messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
@@ -192,8 +192,8 @@ class MessageServiceAsyncTest {
                     .build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val message = messageFuture.get()
+        message.validate()
     }
 
     @Disabled(
@@ -208,13 +208,13 @@ class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val responseFuture =
+        val messageFuture =
             messageServiceAsync.markAsRead(
                 MessageMarkAsReadParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val message = messageFuture.get()
+        message.validate()
     }
 
     @Disabled(
@@ -229,13 +229,13 @@ class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val responseFuture =
+        val messageFuture =
             messageServiceAsync.markAsSeen(
                 MessageMarkAsSeenParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val message = messageFuture.get()
+        message.validate()
     }
 
     @Disabled(
@@ -250,13 +250,13 @@ class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val responseFuture =
+        val messageFuture =
             messageServiceAsync.markAsUnread(
                 MessageMarkAsUnreadParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val message = messageFuture.get()
+        message.validate()
     }
 
     @Disabled(
@@ -271,13 +271,13 @@ class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val responseFuture =
+        val messageFuture =
             messageServiceAsync.markAsUnseen(
                 MessageMarkAsUnseenParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val message = messageFuture.get()
+        message.validate()
     }
 
     @Disabled(
@@ -292,12 +292,12 @@ class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val responseFuture =
+        val messageFuture =
             messageServiceAsync.unarchive(
                 MessageUnarchiveParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val message = messageFuture.get()
+        message.validate()
     }
 }

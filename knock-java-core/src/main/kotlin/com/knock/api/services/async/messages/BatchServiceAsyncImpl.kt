@@ -15,6 +15,7 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepareAsync
 import com.knock.api.errors.KnockError
+import com.knock.api.models.Message
 import com.knock.api.models.MessageBatchArchiveParams
 import com.knock.api.models.MessageBatchGetContentParams
 import com.knock.api.models.MessageBatchMarkAsInteractedParams

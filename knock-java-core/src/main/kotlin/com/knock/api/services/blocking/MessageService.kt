@@ -7,12 +7,11 @@ package com.knock.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
+import com.knock.api.models.Message
 import com.knock.api.models.MessageArchiveParams
-import com.knock.api.models.MessageArchiveResponse
 import com.knock.api.models.MessageGetContentParams
 import com.knock.api.models.MessageGetContentResponse
 import com.knock.api.models.MessageGetParams
-import com.knock.api.models.MessageGetResponse
 import com.knock.api.models.MessageListActivitiesPage
 import com.knock.api.models.MessageListActivitiesParams
 import com.knock.api.models.MessageListDeliveryLogsPage
@@ -22,17 +21,11 @@ import com.knock.api.models.MessageListEventsParams
 import com.knock.api.models.MessageListPage
 import com.knock.api.models.MessageListParams
 import com.knock.api.models.MessageMarkAsInteractedParams
-import com.knock.api.models.MessageMarkAsInteractedResponse
 import com.knock.api.models.MessageMarkAsReadParams
-import com.knock.api.models.MessageMarkAsReadResponse
 import com.knock.api.models.MessageMarkAsSeenParams
-import com.knock.api.models.MessageMarkAsSeenResponse
 import com.knock.api.models.MessageMarkAsUnreadParams
-import com.knock.api.models.MessageMarkAsUnreadResponse
 import com.knock.api.models.MessageMarkAsUnseenParams
-import com.knock.api.models.MessageMarkAsUnseenResponse
 import com.knock.api.models.MessageUnarchiveParams
-import com.knock.api.models.MessageUnarchiveResponse
 import com.knock.api.services.blocking.messages.BatchService
 
 interface MessageService {
@@ -60,14 +53,14 @@ interface MessageService {
     fun archive(
         params: MessageArchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageArchiveResponse
+    ): Message
 
     /** Get message */
     @JvmOverloads
     fun get(
         params: MessageGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageGetResponse
+    ): Message
 
     /**
      * Returns the fully rendered contents of a message, where the response depends on the channel
@@ -105,42 +98,42 @@ interface MessageService {
     fun markAsInteracted(
         params: MessageMarkAsInteractedParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageMarkAsInteractedResponse
+    ): Message
 
     /** Mark message as read */
     @JvmOverloads
     fun markAsRead(
         params: MessageMarkAsReadParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageMarkAsReadResponse
+    ): Message
 
     /** Mark message as seen */
     @JvmOverloads
     fun markAsSeen(
         params: MessageMarkAsSeenParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageMarkAsSeenResponse
+    ): Message
 
     /** Mark message as unread */
     @JvmOverloads
     fun markAsUnread(
         params: MessageMarkAsUnreadParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageMarkAsUnreadResponse
+    ): Message
 
     /** Mark message as unseen */
     @JvmOverloads
     fun markAsUnseen(
         params: MessageMarkAsUnseenParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageMarkAsUnseenResponse
+    ): Message
 
     /** Unarchive message */
     @JvmOverloads
     fun unarchive(
         params: MessageUnarchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageUnarchiveResponse
+    ): Message
 
     /** A view of [MessageService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -175,7 +168,7 @@ interface MessageService {
         fun archive(
             params: MessageArchiveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageArchiveResponse>
+        ): HttpResponseFor<Message>
 
         /**
          * Returns a raw HTTP response for `get /v1/messages/{message_id}`, but is otherwise the
@@ -186,7 +179,7 @@ interface MessageService {
         fun get(
             params: MessageGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageGetResponse>
+        ): HttpResponseFor<Message>
 
         /**
          * Returns a raw HTTP response for `get /v1/messages/{message_id}/content`, but is otherwise
@@ -241,7 +234,7 @@ interface MessageService {
         fun markAsInteracted(
             params: MessageMarkAsInteractedParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageMarkAsInteractedResponse>
+        ): HttpResponseFor<Message>
 
         /**
          * Returns a raw HTTP response for `put /v1/messages/{message_id}/read`, but is otherwise
@@ -252,7 +245,7 @@ interface MessageService {
         fun markAsRead(
             params: MessageMarkAsReadParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageMarkAsReadResponse>
+        ): HttpResponseFor<Message>
 
         /**
          * Returns a raw HTTP response for `put /v1/messages/{message_id}/seen`, but is otherwise
@@ -263,7 +256,7 @@ interface MessageService {
         fun markAsSeen(
             params: MessageMarkAsSeenParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageMarkAsSeenResponse>
+        ): HttpResponseFor<Message>
 
         /**
          * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unread`, but is
@@ -274,7 +267,7 @@ interface MessageService {
         fun markAsUnread(
             params: MessageMarkAsUnreadParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageMarkAsUnreadResponse>
+        ): HttpResponseFor<Message>
 
         /**
          * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unseen`, but is
@@ -285,7 +278,7 @@ interface MessageService {
         fun markAsUnseen(
             params: MessageMarkAsUnseenParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageMarkAsUnseenResponse>
+        ): HttpResponseFor<Message>
 
         /**
          * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unarchived`, but is
@@ -296,6 +289,6 @@ interface MessageService {
         fun unarchive(
             params: MessageUnarchiveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageUnarchiveResponse>
+        ): HttpResponseFor<Message>
     }
 }

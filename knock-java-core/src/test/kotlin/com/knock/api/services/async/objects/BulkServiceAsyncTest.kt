@@ -32,7 +32,7 @@ class BulkServiceAsyncTest {
                 .build()
         val bulkServiceAsync = client.objects().bulk()
 
-        val bulkFuture =
+        val bulkOperationFuture =
             bulkServiceAsync.delete(
                 ObjectBulkDeleteParams.builder()
                     .collection("collection")
@@ -40,8 +40,8 @@ class BulkServiceAsyncTest {
                     .build()
             )
 
-        val bulk = bulkFuture.get()
-        bulk.validate()
+        val bulkOperation = bulkOperationFuture.get()
+        bulkOperation.validate()
     }
 
     @Disabled(
@@ -56,7 +56,7 @@ class BulkServiceAsyncTest {
                 .build()
         val bulkServiceAsync = client.objects().bulk()
 
-        val responseFuture =
+        val bulkOperationFuture =
             bulkServiceAsync.addSubscriptions(
                 ObjectBulkAddSubscriptionsParams.builder()
                     .collection("projects")
@@ -168,8 +168,8 @@ class BulkServiceAsyncTest {
                     .build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val bulkOperation = bulkOperationFuture.get()
+        bulkOperation.validate()
     }
 
     @Disabled(
@@ -184,7 +184,7 @@ class BulkServiceAsyncTest {
                 .build()
         val bulkServiceAsync = client.objects().bulk()
 
-        val responseFuture =
+        val bulkOperationFuture =
             bulkServiceAsync.set(
                 ObjectBulkSetParams.builder()
                     .collection("collection")
@@ -283,7 +283,7 @@ class BulkServiceAsyncTest {
                     .build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val bulkOperation = bulkOperationFuture.get()
+        bulkOperation.validate()
     }
 }
