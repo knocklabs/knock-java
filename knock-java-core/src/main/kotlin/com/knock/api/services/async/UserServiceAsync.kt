@@ -1,0 +1,325 @@
+// File generated from our OpenAPI spec by Stainless.
+
+@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
+
+package com.knock.api.services.async
+
+import com.google.errorprone.annotations.MustBeClosed
+import com.knock.api.core.RequestOptions
+import com.knock.api.core.http.HttpResponseFor
+import com.knock.api.models.ChannelData
+import com.knock.api.models.PreferenceSet
+import com.knock.api.models.User
+import com.knock.api.models.UserDeleteParams
+import com.knock.api.models.UserGetChannelDataParams
+import com.knock.api.models.UserGetParams
+import com.knock.api.models.UserGetPreferencesParams
+import com.knock.api.models.UserListMessagesPageAsync
+import com.knock.api.models.UserListMessagesParams
+import com.knock.api.models.UserListPageAsync
+import com.knock.api.models.UserListParams
+import com.knock.api.models.UserListPreferencesParams
+import com.knock.api.models.UserListSchedulesPageAsync
+import com.knock.api.models.UserListSchedulesParams
+import com.knock.api.models.UserListSubscriptionsPageAsync
+import com.knock.api.models.UserListSubscriptionsParams
+import com.knock.api.models.UserMergeParams
+import com.knock.api.models.UserSetChannelDataParams
+import com.knock.api.models.UserSetPreferencesParams
+import com.knock.api.models.UserUnsetChannelDataParams
+import com.knock.api.models.UserUpdateParams
+import com.knock.api.services.async.users.BulkServiceAsync
+import com.knock.api.services.async.users.FeedServiceAsync
+import java.util.concurrent.CompletableFuture
+
+interface UserServiceAsync {
+
+    /**
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     */
+    fun withRawResponse(): WithRawResponse
+
+    fun feeds(): FeedServiceAsync
+
+    fun bulk(): BulkServiceAsync
+
+    /** Identify user */
+    @JvmOverloads
+    fun update(
+        params: UserUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<User>
+
+    /** List users */
+    @JvmOverloads
+    fun list(
+        params: UserListParams = UserListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<UserListPageAsync>
+
+    /** List users */
+    fun list(requestOptions: RequestOptions): CompletableFuture<UserListPageAsync> =
+        list(UserListParams.none(), requestOptions)
+
+    /** Delete user */
+    @JvmOverloads
+    fun delete(
+        params: UserDeleteParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<String>
+
+    /** Get user */
+    @JvmOverloads
+    fun get(
+        params: UserGetParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<User>
+
+    /** Get channel data */
+    @JvmOverloads
+    fun getChannelData(
+        params: UserGetChannelDataParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<ChannelData>
+
+    /** Get preference set */
+    @JvmOverloads
+    fun getPreferences(
+        params: UserGetPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PreferenceSet>
+
+    /** List messages */
+    @JvmOverloads
+    fun listMessages(
+        params: UserListMessagesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<UserListMessagesPageAsync>
+
+    /** List preference sets */
+    @JvmOverloads
+    fun listPreferences(
+        params: UserListPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<List<PreferenceSet>>
+
+    /** List schedules */
+    @JvmOverloads
+    fun listSchedules(
+        params: UserListSchedulesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<UserListSchedulesPageAsync>
+
+    /** List subscriptions */
+    @JvmOverloads
+    fun listSubscriptions(
+        params: UserListSubscriptionsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<UserListSubscriptionsPageAsync>
+
+    /**
+     * Merge two users together, where the user specified with the `from_user_id` param will be
+     * merged into the user specified by `user_id`.
+     */
+    @JvmOverloads
+    fun merge(
+        params: UserMergeParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<User>
+
+    /** Set channel data */
+    @JvmOverloads
+    fun setChannelData(
+        params: UserSetChannelDataParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<ChannelData>
+
+    /**
+     * Updates a complete preference set for a user. This is a destructive operation that will
+     * replace the existing preference set for the user.
+     */
+    @JvmOverloads
+    fun setPreferences(
+        params: UserSetPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PreferenceSet>
+
+    /** Unset channel data */
+    @JvmOverloads
+    fun unsetChannelData(
+        params: UserUnsetChannelDataParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<String>
+
+    /** A view of [UserServiceAsync] that provides access to raw HTTP responses for each method. */
+    interface WithRawResponse {
+
+        fun feeds(): FeedServiceAsync.WithRawResponse
+
+        fun bulk(): BulkServiceAsync.WithRawResponse
+
+        /**
+         * Returns a raw HTTP response for `put /v1/users/{user_id}`, but is otherwise the same as
+         * [UserServiceAsync.update].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun update(
+            params: UserUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<User>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/users`, but is otherwise the same as
+         * [UserServiceAsync.list].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: UserListParams = UserListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<UserListPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/users`, but is otherwise the same as
+         * [UserServiceAsync.list].
+         */
+        @MustBeClosed
+        fun list(
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<UserListPageAsync>> =
+            list(UserListParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `delete /v1/users/{user_id}`, but is otherwise the same
+         * as [UserServiceAsync.delete].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun delete(
+            params: UserDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<String>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/users/{user_id}`, but is otherwise the same as
+         * [UserServiceAsync.get].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun get(
+            params: UserGetParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<User>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/users/{user_id}/channel_data/{channel_id}`, but
+         * is otherwise the same as [UserServiceAsync.getChannelData].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun getChannelData(
+            params: UserGetChannelDataParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<ChannelData>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/users/{user_id}/preferences/{id}`, but is
+         * otherwise the same as [UserServiceAsync.getPreferences].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun getPreferences(
+            params: UserGetPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PreferenceSet>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/users/{user_id}/messages`, but is otherwise the
+         * same as [UserServiceAsync.listMessages].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun listMessages(
+            params: UserListMessagesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<UserListMessagesPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/users/{user_id}/preferences`, but is otherwise
+         * the same as [UserServiceAsync.listPreferences].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun listPreferences(
+            params: UserListPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<List<PreferenceSet>>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/users/{user_id}/schedules`, but is otherwise the
+         * same as [UserServiceAsync.listSchedules].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun listSchedules(
+            params: UserListSchedulesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<UserListSchedulesPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/users/{user_id}/subscriptions`, but is otherwise
+         * the same as [UserServiceAsync.listSubscriptions].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun listSubscriptions(
+            params: UserListSubscriptionsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<UserListSubscriptionsPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `post /v1/users/{user_id}/merge`, but is otherwise the
+         * same as [UserServiceAsync.merge].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun merge(
+            params: UserMergeParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<User>>
+
+        /**
+         * Returns a raw HTTP response for `put /v1/users/{user_id}/channel_data/{channel_id}`, but
+         * is otherwise the same as [UserServiceAsync.setChannelData].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun setChannelData(
+            params: UserSetChannelDataParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<ChannelData>>
+
+        /**
+         * Returns a raw HTTP response for `put /v1/users/{user_id}/preferences/{id}`, but is
+         * otherwise the same as [UserServiceAsync.setPreferences].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun setPreferences(
+            params: UserSetPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PreferenceSet>>
+
+        /**
+         * Returns a raw HTTP response for `delete /v1/users/{user_id}/channel_data/{channel_id}`,
+         * but is otherwise the same as [UserServiceAsync.unsetChannelData].
+         */
+        @JvmOverloads
+        @MustBeClosed
+        fun unsetChannelData(
+            params: UserUnsetChannelDataParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<String>>
+    }
+}

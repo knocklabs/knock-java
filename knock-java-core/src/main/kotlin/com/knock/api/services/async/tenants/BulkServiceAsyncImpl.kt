@@ -1,0 +1,114 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.knock.api.services.async.tenants
+
+import com.knock.api.core.ClientOptions
+import com.knock.api.core.RequestOptions
+import com.knock.api.core.handlers.errorHandler
+import com.knock.api.core.handlers.jsonHandler
+import com.knock.api.core.handlers.withErrorHandler
+import com.knock.api.core.http.HttpMethod
+import com.knock.api.core.http.HttpRequest
+import com.knock.api.core.http.HttpResponse.Handler
+import com.knock.api.core.http.HttpResponseFor
+import com.knock.api.core.http.json
+import com.knock.api.core.http.parseable
+import com.knock.api.core.prepareAsync
+import com.knock.api.errors.KnockError
+import com.knock.api.models.TenantBulkDeleteParams
+import com.knock.api.models.TenantBulkDeleteResponse
+import com.knock.api.models.TenantBulkSetParams
+import com.knock.api.models.TenantBulkSetResponse
+import java.util.concurrent.CompletableFuture
+
+class BulkServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    BulkServiceAsync {
+
+    private val withRawResponse: BulkServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
+
+    override fun withRawResponse(): BulkServiceAsync.WithRawResponse = withRawResponse
+
+    override fun delete(
+        params: TenantBulkDeleteParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<TenantBulkDeleteResponse> =
+        // post /v1/tenants/bulk/delete
+        withRawResponse().delete(params, requestOptions).thenApply { it.parse() }
+
+    override fun set(
+        params: TenantBulkSetParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<TenantBulkSetResponse> =
+        // post /v1/tenants/bulk/set
+        withRawResponse().set(params, requestOptions).thenApply { it.parse() }
+
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        BulkServiceAsync.WithRawResponse {
+
+        private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
+
+        private val deleteHandler: Handler<TenantBulkDeleteResponse> =
+            jsonHandler<TenantBulkDeleteResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun delete(
+            params: TenantBulkDeleteParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<TenantBulkDeleteResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("v1", "tenants", "bulk", "delete")
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { deleteHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val setHandler: Handler<TenantBulkSetResponse> =
+            jsonHandler<TenantBulkSetResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun set(
+            params: TenantBulkSetParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<TenantBulkSetResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("v1", "tenants", "bulk", "set")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { setHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+    }
+}
