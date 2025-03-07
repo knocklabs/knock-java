@@ -8,6 +8,7 @@ import com.knock.api.services.blocking.ChannelService
 import com.knock.api.services.blocking.MessageService
 import com.knock.api.services.blocking.ObjectService
 import com.knock.api.services.blocking.ProviderService
+import com.knock.api.services.blocking.RecipientService
 import com.knock.api.services.blocking.ScheduleService
 import com.knock.api.services.blocking.TenantService
 import com.knock.api.services.blocking.UserService
@@ -41,6 +42,8 @@ interface KnockClient {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    fun recipients(): RecipientService
 
     fun users(): UserService
 
@@ -77,6 +80,8 @@ interface KnockClient {
 
     /** A view of [KnockClient] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        fun recipients(): RecipientService.WithRawResponse
 
         fun users(): UserService.WithRawResponse
 

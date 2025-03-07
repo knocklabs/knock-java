@@ -8,6 +8,7 @@ import com.knock.api.services.async.ChannelServiceAsync
 import com.knock.api.services.async.MessageServiceAsync
 import com.knock.api.services.async.ObjectServiceAsync
 import com.knock.api.services.async.ProviderServiceAsync
+import com.knock.api.services.async.RecipientServiceAsync
 import com.knock.api.services.async.ScheduleServiceAsync
 import com.knock.api.services.async.TenantServiceAsync
 import com.knock.api.services.async.UserServiceAsync
@@ -41,6 +42,8 @@ interface KnockClientAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    fun recipients(): RecipientServiceAsync
 
     fun users(): UserServiceAsync
 
@@ -77,6 +80,8 @@ interface KnockClientAsync {
 
     /** A view of [KnockClientAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        fun recipients(): RecipientServiceAsync.WithRawResponse
 
         fun users(): UserServiceAsync.WithRawResponse
 

@@ -31,7 +31,7 @@ import java.util.Optional
 
 /** A message delivery log */
 @NoAutoDetect
-class MessageListDeliveryLogsResponse
+class MessageDeliveryLog
 @JsonCreator
 private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
@@ -98,7 +98,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): MessageListDeliveryLogsResponse = apply {
+    fun validate(): MessageDeliveryLog = apply {
         if (validated) {
             return@apply
         }
@@ -118,8 +118,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [MessageListDeliveryLogsResponse].
+         * Returns a mutable builder for constructing an instance of [MessageDeliveryLog].
          *
          * The following fields are required:
          * ```java
@@ -135,7 +134,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [MessageListDeliveryLogsResponse]. */
+    /** A builder for [MessageDeliveryLog]. */
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
@@ -148,18 +147,16 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(messageListDeliveryLogsResponse: MessageListDeliveryLogsResponse) =
-            apply {
-                id = messageListDeliveryLogsResponse.id
-                _typename = messageListDeliveryLogsResponse._typename
-                environmentId = messageListDeliveryLogsResponse.environmentId
-                insertedAt = messageListDeliveryLogsResponse.insertedAt
-                request = messageListDeliveryLogsResponse.request
-                response = messageListDeliveryLogsResponse.response
-                serviceName = messageListDeliveryLogsResponse.serviceName
-                additionalProperties =
-                    messageListDeliveryLogsResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(messageDeliveryLog: MessageDeliveryLog) = apply {
+            id = messageDeliveryLog.id
+            _typename = messageDeliveryLog._typename
+            environmentId = messageDeliveryLog.environmentId
+            insertedAt = messageDeliveryLog.insertedAt
+            request = messageDeliveryLog.request
+            response = messageDeliveryLog.response
+            serviceName = messageDeliveryLog.serviceName
+            additionalProperties = messageDeliveryLog.additionalProperties.toMutableMap()
+        }
 
         fun id(id: String) = id(JsonField.of(id))
 
@@ -214,8 +211,8 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
-        fun build(): MessageListDeliveryLogsResponse =
-            MessageListDeliveryLogsResponse(
+        fun build(): MessageDeliveryLog =
+            MessageDeliveryLog(
                 checkRequired("id", id),
                 checkRequired("_typename", _typename),
                 checkRequired("environmentId", environmentId),
@@ -1256,7 +1253,7 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is MessageListDeliveryLogsResponse && id == other.id && _typename == other._typename && environmentId == other.environmentId && insertedAt == other.insertedAt && request == other.request && response == other.response && serviceName == other.serviceName && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is MessageDeliveryLog && id == other.id && _typename == other._typename && environmentId == other.environmentId && insertedAt == other.insertedAt && request == other.request && response == other.response && serviceName == other.serviceName && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -1266,5 +1263,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "MessageListDeliveryLogsResponse{id=$id, _typename=$_typename, environmentId=$environmentId, insertedAt=$insertedAt, request=$request, response=$response, serviceName=$serviceName, additionalProperties=$additionalProperties}"
+        "MessageDeliveryLog{id=$id, _typename=$_typename, environmentId=$environmentId, insertedAt=$insertedAt, request=$request, response=$response, serviceName=$serviceName, additionalProperties=$additionalProperties}"
 }

@@ -6,43 +6,43 @@ import com.knock.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class MessageListDeliveryLogsResponseTest {
+class MessageDeliveryLogTest {
 
     @Test
-    fun createMessageListDeliveryLogsResponse() {
-        val messageListDeliveryLogsResponse =
-            MessageListDeliveryLogsResponse.builder()
+    fun createMessageDeliveryLog() {
+        val messageDeliveryLog =
+            MessageDeliveryLog.builder()
                 .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                 ._typename("MessageDeliveryLog")
                 .environmentId("123e4567-e89b-12d3-a456-426614174000")
                 .insertedAt("2021-01-01T00:00:00Z")
                 .request(
-                    MessageListDeliveryLogsResponse.Request.builder()
+                    MessageDeliveryLog.Request.builder()
                         .body(
-                            MessageListDeliveryLogsResponse.Request.Body.UnionMember1.builder()
+                            MessageDeliveryLog.Request.Body.UnionMember1.builder()
                                 .putAdditionalProperty("html_content", JsonValue.from("bar"))
                                 .build()
                         )
                         .headers(
-                            MessageListDeliveryLogsResponse.Request.Headers.builder()
+                            MessageDeliveryLog.Request.Headers.builder()
                                 .putAdditionalProperty("Content-Type", JsonValue.from("bar"))
                                 .build()
                         )
                         .host("localhost")
-                        .method(MessageListDeliveryLogsResponse.Request.Method.GET)
+                        .method(MessageDeliveryLog.Request.Method.GET)
                         .path("/")
                         .query("?foo=bar")
                         .build()
                 )
                 .response(
-                    MessageListDeliveryLogsResponse.Response.builder()
+                    MessageDeliveryLog.Response.builder()
                         .body(
-                            MessageListDeliveryLogsResponse.Response.Body.UnionMember1.builder()
+                            MessageDeliveryLog.Response.Body.UnionMember1.builder()
                                 .putAdditionalProperty("success", JsonValue.from("bar"))
                                 .build()
                         )
                         .headers(
-                            MessageListDeliveryLogsResponse.Response.Headers.builder()
+                            MessageDeliveryLog.Response.Headers.builder()
                                 .putAdditionalProperty("Content-Type", JsonValue.from("bar"))
                                 .build()
                         )
@@ -51,47 +51,47 @@ class MessageListDeliveryLogsResponseTest {
                 )
                 .serviceName("Postmark")
                 .build()
-        assertThat(messageListDeliveryLogsResponse).isNotNull
-        assertThat(messageListDeliveryLogsResponse.id()).isEqualTo("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
-        assertThat(messageListDeliveryLogsResponse._typename()).isEqualTo("MessageDeliveryLog")
-        assertThat(messageListDeliveryLogsResponse.environmentId())
+        assertThat(messageDeliveryLog).isNotNull
+        assertThat(messageDeliveryLog.id()).isEqualTo("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
+        assertThat(messageDeliveryLog._typename()).isEqualTo("MessageDeliveryLog")
+        assertThat(messageDeliveryLog.environmentId())
             .isEqualTo("123e4567-e89b-12d3-a456-426614174000")
-        assertThat(messageListDeliveryLogsResponse.insertedAt()).isEqualTo("2021-01-01T00:00:00Z")
-        assertThat(messageListDeliveryLogsResponse.request())
+        assertThat(messageDeliveryLog.insertedAt()).isEqualTo("2021-01-01T00:00:00Z")
+        assertThat(messageDeliveryLog.request())
             .isEqualTo(
-                MessageListDeliveryLogsResponse.Request.builder()
+                MessageDeliveryLog.Request.builder()
                     .body(
-                        MessageListDeliveryLogsResponse.Request.Body.UnionMember1.builder()
+                        MessageDeliveryLog.Request.Body.UnionMember1.builder()
                             .putAdditionalProperty("html_content", JsonValue.from("bar"))
                             .build()
                     )
                     .headers(
-                        MessageListDeliveryLogsResponse.Request.Headers.builder()
+                        MessageDeliveryLog.Request.Headers.builder()
                             .putAdditionalProperty("Content-Type", JsonValue.from("bar"))
                             .build()
                     )
                     .host("localhost")
-                    .method(MessageListDeliveryLogsResponse.Request.Method.GET)
+                    .method(MessageDeliveryLog.Request.Method.GET)
                     .path("/")
                     .query("?foo=bar")
                     .build()
             )
-        assertThat(messageListDeliveryLogsResponse.response())
+        assertThat(messageDeliveryLog.response())
             .isEqualTo(
-                MessageListDeliveryLogsResponse.Response.builder()
+                MessageDeliveryLog.Response.builder()
                     .body(
-                        MessageListDeliveryLogsResponse.Response.Body.UnionMember1.builder()
+                        MessageDeliveryLog.Response.Body.UnionMember1.builder()
                             .putAdditionalProperty("success", JsonValue.from("bar"))
                             .build()
                     )
                     .headers(
-                        MessageListDeliveryLogsResponse.Response.Headers.builder()
+                        MessageDeliveryLog.Response.Headers.builder()
                             .putAdditionalProperty("Content-Type", JsonValue.from("bar"))
                             .build()
                     )
                     .status(200L)
                     .build()
             )
-        assertThat(messageListDeliveryLogsResponse.serviceName()).isEqualTo("Postmark")
+        assertThat(messageDeliveryLog.serviceName()).isEqualTo("Postmark")
     }
 }

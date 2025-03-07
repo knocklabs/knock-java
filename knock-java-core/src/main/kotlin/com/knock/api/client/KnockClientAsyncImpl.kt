@@ -16,6 +16,8 @@ import com.knock.api.services.async.ObjectServiceAsync
 import com.knock.api.services.async.ObjectServiceAsyncImpl
 import com.knock.api.services.async.ProviderServiceAsync
 import com.knock.api.services.async.ProviderServiceAsyncImpl
+import com.knock.api.services.async.RecipientServiceAsync
+import com.knock.api.services.async.RecipientServiceAsyncImpl
 import com.knock.api.services.async.ScheduleServiceAsync
 import com.knock.api.services.async.ScheduleServiceAsyncImpl
 import com.knock.api.services.async.TenantServiceAsync
@@ -40,6 +42,10 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
 
     private val withRawResponse: KnockClientAsync.WithRawResponse by lazy {
         WithRawResponseImpl(clientOptions)
+    }
+
+    private val recipients: RecipientServiceAsync by lazy {
+        RecipientServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
     private val users: UserServiceAsync by lazy { UserServiceAsyncImpl(clientOptionsWithUserAgent) }
@@ -84,6 +90,8 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
 
     override fun withRawResponse(): KnockClientAsync.WithRawResponse = withRawResponse
 
+    override fun recipients(): RecipientServiceAsync = recipients
+
     override fun users(): UserServiceAsync = users
 
     override fun objects(): ObjectServiceAsync = objects
@@ -108,6 +116,10 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         KnockClientAsync.WithRawResponse {
+
+        private val recipients: RecipientServiceAsync.WithRawResponse by lazy {
+            RecipientServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
 
         private val users: UserServiceAsync.WithRawResponse by lazy {
             UserServiceAsyncImpl.WithRawResponseImpl(clientOptions)
@@ -148,6 +160,8 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
         private val audiences: AudienceServiceAsync.WithRawResponse by lazy {
             AudienceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun recipients(): RecipientServiceAsync.WithRawResponse = recipients
 
         override fun users(): UserServiceAsync.WithRawResponse = users
 

@@ -16,6 +16,8 @@ import com.knock.api.services.blocking.ObjectService
 import com.knock.api.services.blocking.ObjectServiceImpl
 import com.knock.api.services.blocking.ProviderService
 import com.knock.api.services.blocking.ProviderServiceImpl
+import com.knock.api.services.blocking.RecipientService
+import com.knock.api.services.blocking.RecipientServiceImpl
 import com.knock.api.services.blocking.ScheduleService
 import com.knock.api.services.blocking.ScheduleServiceImpl
 import com.knock.api.services.blocking.TenantService
@@ -40,6 +42,10 @@ class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
 
     private val withRawResponse: KnockClient.WithRawResponse by lazy {
         WithRawResponseImpl(clientOptions)
+    }
+
+    private val recipients: RecipientService by lazy {
+        RecipientServiceImpl(clientOptionsWithUserAgent)
     }
 
     private val users: UserService by lazy { UserServiceImpl(clientOptionsWithUserAgent) }
@@ -76,6 +82,8 @@ class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
 
     override fun withRawResponse(): KnockClient.WithRawResponse = withRawResponse
 
+    override fun recipients(): RecipientService = recipients
+
     override fun users(): UserService = users
 
     override fun objects(): ObjectService = objects
@@ -100,6 +108,10 @@ class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         KnockClient.WithRawResponse {
+
+        private val recipients: RecipientService.WithRawResponse by lazy {
+            RecipientServiceImpl.WithRawResponseImpl(clientOptions)
+        }
 
         private val users: UserService.WithRawResponse by lazy {
             UserServiceImpl.WithRawResponseImpl(clientOptions)
@@ -140,6 +152,8 @@ class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
         private val audiences: AudienceService.WithRawResponse by lazy {
             AudienceServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun recipients(): RecipientService.WithRawResponse = recipients
 
         override fun users(): UserService.WithRawResponse = users
 
