@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -25,29 +23,41 @@ interface TenantService {
     fun bulk(): BulkService
 
     /** List tenants */
-    @JvmOverloads
+    fun list(): TenantListPage = list(TenantListParams.none())
+
+    /** @see [list] */
     fun list(
         params: TenantListParams = TenantListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): TenantListPage
 
-    /** List tenants */
+    /** @see [list] */
+    fun list(params: TenantListParams = TenantListParams.none()): TenantListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): TenantListPage =
         list(TenantListParams.none(), requestOptions)
 
     /** Delete a tenant */
-    @JvmOverloads
+    fun delete(params: TenantDeleteParams): String = delete(params, RequestOptions.none())
+
+    /** @see [delete] */
     fun delete(
         params: TenantDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): String
 
     /** Get a tenant */
-    @JvmOverloads
+    fun get(params: TenantGetParams): Tenant = get(params, RequestOptions.none())
+
+    /** @see [get] */
     fun get(params: TenantGetParams, requestOptions: RequestOptions = RequestOptions.none()): Tenant
 
     /** Set a tenant */
-    @JvmOverloads
+    fun set(params: TenantSetParams): Tenant = set(params, RequestOptions.none())
+
+    /** @see [set] */
     fun set(params: TenantSetParams, requestOptions: RequestOptions = RequestOptions.none()): Tenant
 
     /** A view of [TenantService] that provides access to raw HTTP responses for each method. */
@@ -59,17 +69,22 @@ interface TenantService {
          * Returns a raw HTTP response for `get /v1/tenants`, but is otherwise the same as
          * [TenantService.list].
          */
-        @JvmOverloads
+        @MustBeClosed fun list(): HttpResponseFor<TenantListPage> = list(TenantListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: TenantListParams = TenantListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<TenantListPage>
 
-        /**
-         * Returns a raw HTTP response for `get /v1/tenants`, but is otherwise the same as
-         * [TenantService.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: TenantListParams = TenantListParams.none()
+        ): HttpResponseFor<TenantListPage> = list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<TenantListPage> =
             list(TenantListParams.none(), requestOptions)
@@ -78,7 +93,11 @@ interface TenantService {
          * Returns a raw HTTP response for `delete /v1/tenants/{id}`, but is otherwise the same as
          * [TenantService.delete].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun delete(params: TenantDeleteParams): HttpResponseFor<String> =
+            delete(params, RequestOptions.none())
+
+        /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: TenantDeleteParams,
@@ -89,7 +108,11 @@ interface TenantService {
          * Returns a raw HTTP response for `get /v1/tenants/{id}`, but is otherwise the same as
          * [TenantService.get].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun get(params: TenantGetParams): HttpResponseFor<Tenant> =
+            get(params, RequestOptions.none())
+
+        /** @see [get] */
         @MustBeClosed
         fun get(
             params: TenantGetParams,
@@ -100,7 +123,11 @@ interface TenantService {
          * Returns a raw HTTP response for `put /v1/tenants/{id}`, but is otherwise the same as
          * [TenantService.set].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun set(params: TenantSetParams): HttpResponseFor<Tenant> =
+            set(params, RequestOptions.none())
+
+        /** @see [set] */
         @MustBeClosed
         fun set(
             params: TenantSetParams,

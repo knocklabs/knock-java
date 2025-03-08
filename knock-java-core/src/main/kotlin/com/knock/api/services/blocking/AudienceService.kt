@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -20,21 +18,30 @@ interface AudienceService {
     fun withRawResponse(): WithRawResponse
 
     /** Add members */
-    @JvmOverloads
+    fun addMembers(params: AudienceAddMembersParams): String =
+        addMembers(params, RequestOptions.none())
+
+    /** @see [addMembers] */
     fun addMembers(
         params: AudienceAddMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): String
 
     /** List members */
-    @JvmOverloads
+    fun listMembers(params: AudienceListMembersParams): AudienceListMembersResponse =
+        listMembers(params, RequestOptions.none())
+
+    /** @see [listMembers] */
     fun listMembers(
         params: AudienceListMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AudienceListMembersResponse
 
     /** Remove members */
-    @JvmOverloads
+    fun removeMembers(params: AudienceRemoveMembersParams): String =
+        removeMembers(params, RequestOptions.none())
+
+    /** @see [removeMembers] */
     fun removeMembers(
         params: AudienceRemoveMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -47,7 +54,11 @@ interface AudienceService {
          * Returns a raw HTTP response for `post /v1/audiences/{key}/members`, but is otherwise the
          * same as [AudienceService.addMembers].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun addMembers(params: AudienceAddMembersParams): HttpResponseFor<String> =
+            addMembers(params, RequestOptions.none())
+
+        /** @see [addMembers] */
         @MustBeClosed
         fun addMembers(
             params: AudienceAddMembersParams,
@@ -58,7 +69,12 @@ interface AudienceService {
          * Returns a raw HTTP response for `get /v1/audiences/{key}/members`, but is otherwise the
          * same as [AudienceService.listMembers].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listMembers(
+            params: AudienceListMembersParams
+        ): HttpResponseFor<AudienceListMembersResponse> = listMembers(params, RequestOptions.none())
+
+        /** @see [listMembers] */
         @MustBeClosed
         fun listMembers(
             params: AudienceListMembersParams,
@@ -69,7 +85,11 @@ interface AudienceService {
          * Returns a raw HTTP response for `delete /v1/audiences/{key}/members`, but is otherwise
          * the same as [AudienceService.removeMembers].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun removeMembers(params: AudienceRemoveMembersParams): HttpResponseFor<String> =
+            removeMembers(params, RequestOptions.none())
+
+        /** @see [removeMembers] */
         @MustBeClosed
         fun removeMembers(
             params: AudienceRemoveMembersParams,

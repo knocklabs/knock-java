@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -24,7 +22,10 @@ interface WorkflowServiceAsync {
      * any queued workflow runs associated with that key/cancellation key pair. Can optionally be
      * provided one or more recipients to scope the request to.
      */
-    @JvmOverloads
+    fun cancel(params: WorkflowCancelParams): CompletableFuture<String> =
+        cancel(params, RequestOptions.none())
+
+    /** @see [cancel] */
     fun cancel(
         params: WorkflowCancelParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -35,7 +36,10 @@ interface WorkflowServiceAsync {
      * provided. Returns an identifier for the workflow run request. All workflow runs are executed
      * asynchronously.
      */
-    @JvmOverloads
+    fun trigger(params: WorkflowTriggerParams): CompletableFuture<WorkflowTriggerResponse> =
+        trigger(params, RequestOptions.none())
+
+    /** @see [trigger] */
     fun trigger(
         params: WorkflowTriggerParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -50,7 +54,11 @@ interface WorkflowServiceAsync {
          * Returns a raw HTTP response for `post /v1/workflows/{key}/cancel`, but is otherwise the
          * same as [WorkflowServiceAsync.cancel].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun cancel(params: WorkflowCancelParams): CompletableFuture<HttpResponseFor<String>> =
+            cancel(params, RequestOptions.none())
+
+        /** @see [cancel] */
         @MustBeClosed
         fun cancel(
             params: WorkflowCancelParams,
@@ -61,7 +69,13 @@ interface WorkflowServiceAsync {
          * Returns a raw HTTP response for `post /v1/workflows/{key}/trigger`, but is otherwise the
          * same as [WorkflowServiceAsync.trigger].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun trigger(
+            params: WorkflowTriggerParams
+        ): CompletableFuture<HttpResponseFor<WorkflowTriggerResponse>> =
+            trigger(params, RequestOptions.none())
+
+        /** @see [trigger] */
         @MustBeClosed
         fun trigger(
             params: WorkflowTriggerParams,

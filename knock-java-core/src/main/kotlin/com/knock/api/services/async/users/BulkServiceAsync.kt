@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.async.users
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -21,21 +19,30 @@ interface BulkServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** Bulk delete users */
-    @JvmOverloads
+    fun delete(params: UserBulkDeleteParams): CompletableFuture<BulkOperation> =
+        delete(params, RequestOptions.none())
+
+    /** @see [delete] */
     fun delete(
         params: UserBulkDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
     /** Bulk identifies users */
-    @JvmOverloads
+    fun identify(params: UserBulkIdentifyParams): CompletableFuture<BulkOperation> =
+        identify(params, RequestOptions.none())
+
+    /** @see [identify] */
     fun identify(
         params: UserBulkIdentifyParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
     /** Bulk set preferences */
-    @JvmOverloads
+    fun setPreferences(params: UserBulkSetPreferencesParams): CompletableFuture<BulkOperation> =
+        setPreferences(params, RequestOptions.none())
+
+    /** @see [setPreferences] */
     fun setPreferences(
         params: UserBulkSetPreferencesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -48,7 +55,12 @@ interface BulkServiceAsync {
          * Returns a raw HTTP response for `post /v1/users/bulk/delete`, but is otherwise the same
          * as [BulkServiceAsync.delete].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun delete(
+            params: UserBulkDeleteParams
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> = delete(params, RequestOptions.none())
+
+        /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: UserBulkDeleteParams,
@@ -59,7 +71,13 @@ interface BulkServiceAsync {
          * Returns a raw HTTP response for `post /v1/users/bulk/identify`, but is otherwise the same
          * as [BulkServiceAsync.identify].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun identify(
+            params: UserBulkIdentifyParams
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            identify(params, RequestOptions.none())
+
+        /** @see [identify] */
         @MustBeClosed
         fun identify(
             params: UserBulkIdentifyParams,
@@ -70,7 +88,13 @@ interface BulkServiceAsync {
          * Returns a raw HTTP response for `post /v1/users/bulk/preferences`, but is otherwise the
          * same as [BulkServiceAsync.setPreferences].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun setPreferences(
+            params: UserBulkSetPreferencesParams
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            setPreferences(params, RequestOptions.none())
+
+        /** @see [setPreferences] */
         @MustBeClosed
         fun setPreferences(
             params: UserBulkSetPreferencesParams,

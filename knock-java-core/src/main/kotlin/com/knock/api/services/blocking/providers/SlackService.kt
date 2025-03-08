@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.blocking.providers
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -21,21 +19,30 @@ interface SlackService {
     fun withRawResponse(): WithRawResponse
 
     /** Check if a Slack channel is authenticated */
-    @JvmOverloads
+    fun checkAuth(params: ProviderSlackCheckAuthParams): ProviderSlackCheckAuthResponse =
+        checkAuth(params, RequestOptions.none())
+
+    /** @see [checkAuth] */
     fun checkAuth(
         params: ProviderSlackCheckAuthParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProviderSlackCheckAuthResponse
 
     /** List Slack channels for a Slack workspace */
-    @JvmOverloads
+    fun listChannels(params: ProviderSlackListChannelsParams): ProviderSlackListChannelsResponse =
+        listChannels(params, RequestOptions.none())
+
+    /** @see [listChannels] */
     fun listChannels(
         params: ProviderSlackListChannelsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ProviderSlackListChannelsResponse
 
     /** Revoke access for a Slack channel */
-    @JvmOverloads
+    fun revokeAccess(params: ProviderSlackRevokeAccessParams): String =
+        revokeAccess(params, RequestOptions.none())
+
+    /** @see [revokeAccess] */
     fun revokeAccess(
         params: ProviderSlackRevokeAccessParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -48,7 +55,13 @@ interface SlackService {
          * Returns a raw HTTP response for `get /v1/providers/slack/{channel_id}/auth_check`, but is
          * otherwise the same as [SlackService.checkAuth].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun checkAuth(
+            params: ProviderSlackCheckAuthParams
+        ): HttpResponseFor<ProviderSlackCheckAuthResponse> =
+            checkAuth(params, RequestOptions.none())
+
+        /** @see [checkAuth] */
         @MustBeClosed
         fun checkAuth(
             params: ProviderSlackCheckAuthParams,
@@ -59,7 +72,13 @@ interface SlackService {
          * Returns a raw HTTP response for `get /v1/providers/slack/{channel_id}/channels`, but is
          * otherwise the same as [SlackService.listChannels].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listChannels(
+            params: ProviderSlackListChannelsParams
+        ): HttpResponseFor<ProviderSlackListChannelsResponse> =
+            listChannels(params, RequestOptions.none())
+
+        /** @see [listChannels] */
         @MustBeClosed
         fun listChannels(
             params: ProviderSlackListChannelsParams,
@@ -70,7 +89,11 @@ interface SlackService {
          * Returns a raw HTTP response for `put /v1/providers/slack/{channel_id}/revoke_access`, but
          * is otherwise the same as [SlackService.revokeAccess].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun revokeAccess(params: ProviderSlackRevokeAccessParams): HttpResponseFor<String> =
+            revokeAccess(params, RequestOptions.none())
+
+        /** @see [revokeAccess] */
         @MustBeClosed
         fun revokeAccess(
             params: ProviderSlackRevokeAccessParams,

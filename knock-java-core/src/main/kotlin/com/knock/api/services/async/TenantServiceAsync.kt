@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -26,32 +24,46 @@ interface TenantServiceAsync {
     fun bulk(): BulkServiceAsync
 
     /** List tenants */
-    @JvmOverloads
+    fun list(): CompletableFuture<TenantListPageAsync> = list(TenantListParams.none())
+
+    /** @see [list] */
     fun list(
         params: TenantListParams = TenantListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<TenantListPageAsync>
 
-    /** List tenants */
+    /** @see [list] */
+    fun list(
+        params: TenantListParams = TenantListParams.none()
+    ): CompletableFuture<TenantListPageAsync> = list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): CompletableFuture<TenantListPageAsync> =
         list(TenantListParams.none(), requestOptions)
 
     /** Delete a tenant */
-    @JvmOverloads
+    fun delete(params: TenantDeleteParams): CompletableFuture<String> =
+        delete(params, RequestOptions.none())
+
+    /** @see [delete] */
     fun delete(
         params: TenantDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<String>
 
     /** Get a tenant */
-    @JvmOverloads
+    fun get(params: TenantGetParams): CompletableFuture<Tenant> = get(params, RequestOptions.none())
+
+    /** @see [get] */
     fun get(
         params: TenantGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Tenant>
 
     /** Set a tenant */
-    @JvmOverloads
+    fun set(params: TenantSetParams): CompletableFuture<Tenant> = set(params, RequestOptions.none())
+
+    /** @see [set] */
     fun set(
         params: TenantSetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -68,17 +80,25 @@ interface TenantServiceAsync {
          * Returns a raw HTTP response for `get /v1/tenants`, but is otherwise the same as
          * [TenantServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(): CompletableFuture<HttpResponseFor<TenantListPageAsync>> =
+            list(TenantListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: TenantListParams = TenantListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<TenantListPageAsync>>
 
-        /**
-         * Returns a raw HTTP response for `get /v1/tenants`, but is otherwise the same as
-         * [TenantServiceAsync.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            params: TenantListParams = TenantListParams.none()
+        ): CompletableFuture<HttpResponseFor<TenantListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             requestOptions: RequestOptions
@@ -89,7 +109,11 @@ interface TenantServiceAsync {
          * Returns a raw HTTP response for `delete /v1/tenants/{id}`, but is otherwise the same as
          * [TenantServiceAsync.delete].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun delete(params: TenantDeleteParams): CompletableFuture<HttpResponseFor<String>> =
+            delete(params, RequestOptions.none())
+
+        /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: TenantDeleteParams,
@@ -100,7 +124,11 @@ interface TenantServiceAsync {
          * Returns a raw HTTP response for `get /v1/tenants/{id}`, but is otherwise the same as
          * [TenantServiceAsync.get].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun get(params: TenantGetParams): CompletableFuture<HttpResponseFor<Tenant>> =
+            get(params, RequestOptions.none())
+
+        /** @see [get] */
         @MustBeClosed
         fun get(
             params: TenantGetParams,
@@ -111,7 +139,11 @@ interface TenantServiceAsync {
          * Returns a raw HTTP response for `put /v1/tenants/{id}`, but is otherwise the same as
          * [TenantServiceAsync.set].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun set(params: TenantSetParams): CompletableFuture<HttpResponseFor<Tenant>> =
+            set(params, RequestOptions.none())
+
+        /** @see [set] */
         @MustBeClosed
         fun set(
             params: TenantSetParams,

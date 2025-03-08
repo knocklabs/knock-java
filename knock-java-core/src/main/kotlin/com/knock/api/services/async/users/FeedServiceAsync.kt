@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.async.users
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -21,14 +19,21 @@ interface FeedServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** Returns the feed settings for a user. */
-    @JvmOverloads
+    fun getSettings(
+        params: UserFeedGetSettingsParams
+    ): CompletableFuture<UserFeedGetSettingsResponse> = getSettings(params, RequestOptions.none())
+
+    /** @see [getSettings] */
     fun getSettings(
         params: UserFeedGetSettingsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<UserFeedGetSettingsResponse>
 
     /** Returns a paginated list of feed items for a user, including metadata about the feed. */
-    @JvmOverloads
+    fun listItems(params: UserFeedListItemsParams): CompletableFuture<UserFeedListItemsPageAsync> =
+        listItems(params, RequestOptions.none())
+
+    /** @see [listItems] */
     fun listItems(
         params: UserFeedListItemsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -41,7 +46,13 @@ interface FeedServiceAsync {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/feeds/{id}/settings`, but is
          * otherwise the same as [FeedServiceAsync.getSettings].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun getSettings(
+            params: UserFeedGetSettingsParams
+        ): CompletableFuture<HttpResponseFor<UserFeedGetSettingsResponse>> =
+            getSettings(params, RequestOptions.none())
+
+        /** @see [getSettings] */
         @MustBeClosed
         fun getSettings(
             params: UserFeedGetSettingsParams,
@@ -52,7 +63,13 @@ interface FeedServiceAsync {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/feeds/{id}`, but is otherwise
          * the same as [FeedServiceAsync.listItems].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listItems(
+            params: UserFeedListItemsParams
+        ): CompletableFuture<HttpResponseFor<UserFeedListItemsPageAsync>> =
+            listItems(params, RequestOptions.none())
+
+        /** @see [listItems] */
         @MustBeClosed
         fun listItems(
             params: UserFeedListItemsParams,

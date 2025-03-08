@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -18,7 +16,9 @@ interface BulkOperationService {
     fun withRawResponse(): WithRawResponse
 
     /** Retrieves a bulk operation (if it exists) and displays the current state of it. */
-    @JvmOverloads
+    fun get(params: BulkOperationGetParams): BulkOperation = get(params, RequestOptions.none())
+
+    /** @see [get] */
     fun get(
         params: BulkOperationGetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -33,7 +33,11 @@ interface BulkOperationService {
          * Returns a raw HTTP response for `get /v1/bulk_operations/{id}`, but is otherwise the same
          * as [BulkOperationService.get].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun get(params: BulkOperationGetParams): HttpResponseFor<BulkOperation> =
+            get(params, RequestOptions.none())
+
+        /** @see [get] */
         @MustBeClosed
         fun get(
             params: BulkOperationGetParams,

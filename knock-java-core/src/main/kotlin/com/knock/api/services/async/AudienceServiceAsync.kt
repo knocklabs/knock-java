@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -21,21 +19,31 @@ interface AudienceServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** Add members */
-    @JvmOverloads
+    fun addMembers(params: AudienceAddMembersParams): CompletableFuture<String> =
+        addMembers(params, RequestOptions.none())
+
+    /** @see [addMembers] */
     fun addMembers(
         params: AudienceAddMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<String>
 
     /** List members */
-    @JvmOverloads
+    fun listMembers(
+        params: AudienceListMembersParams
+    ): CompletableFuture<AudienceListMembersResponse> = listMembers(params, RequestOptions.none())
+
+    /** @see [listMembers] */
     fun listMembers(
         params: AudienceListMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<AudienceListMembersResponse>
 
     /** Remove members */
-    @JvmOverloads
+    fun removeMembers(params: AudienceRemoveMembersParams): CompletableFuture<String> =
+        removeMembers(params, RequestOptions.none())
+
+    /** @see [removeMembers] */
     fun removeMembers(
         params: AudienceRemoveMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -50,7 +58,12 @@ interface AudienceServiceAsync {
          * Returns a raw HTTP response for `post /v1/audiences/{key}/members`, but is otherwise the
          * same as [AudienceServiceAsync.addMembers].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun addMembers(
+            params: AudienceAddMembersParams
+        ): CompletableFuture<HttpResponseFor<String>> = addMembers(params, RequestOptions.none())
+
+        /** @see [addMembers] */
         @MustBeClosed
         fun addMembers(
             params: AudienceAddMembersParams,
@@ -61,7 +74,13 @@ interface AudienceServiceAsync {
          * Returns a raw HTTP response for `get /v1/audiences/{key}/members`, but is otherwise the
          * same as [AudienceServiceAsync.listMembers].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listMembers(
+            params: AudienceListMembersParams
+        ): CompletableFuture<HttpResponseFor<AudienceListMembersResponse>> =
+            listMembers(params, RequestOptions.none())
+
+        /** @see [listMembers] */
         @MustBeClosed
         fun listMembers(
             params: AudienceListMembersParams,
@@ -72,7 +91,12 @@ interface AudienceServiceAsync {
          * Returns a raw HTTP response for `delete /v1/audiences/{key}/members`, but is otherwise
          * the same as [AudienceServiceAsync.removeMembers].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun removeMembers(
+            params: AudienceRemoveMembersParams
+        ): CompletableFuture<HttpResponseFor<String>> = removeMembers(params, RequestOptions.none())
+
+        /** @see [removeMembers] */
         @MustBeClosed
         fun removeMembers(
             params: AudienceRemoveMembersParams,

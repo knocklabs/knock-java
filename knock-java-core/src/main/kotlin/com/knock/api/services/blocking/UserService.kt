@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -43,71 +41,101 @@ interface UserService {
     fun bulk(): BulkService
 
     /** Identify user */
-    @JvmOverloads
+    fun update(params: UserUpdateParams): User = update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: UserUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): User
 
     /** List users */
-    @JvmOverloads
+    fun list(): UserListPage = list(UserListParams.none())
+
+    /** @see [list] */
     fun list(
         params: UserListParams = UserListParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): UserListPage
 
-    /** List users */
+    /** @see [list] */
+    fun list(params: UserListParams = UserListParams.none()): UserListPage =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(requestOptions: RequestOptions): UserListPage =
         list(UserListParams.none(), requestOptions)
 
     /** Delete user */
-    @JvmOverloads
+    fun delete(params: UserDeleteParams): String = delete(params, RequestOptions.none())
+
+    /** @see [delete] */
     fun delete(
         params: UserDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): String
 
     /** Get user */
-    @JvmOverloads
+    fun get(params: UserGetParams): User = get(params, RequestOptions.none())
+
+    /** @see [get] */
     fun get(params: UserGetParams, requestOptions: RequestOptions = RequestOptions.none()): User
 
     /** Get channel data */
-    @JvmOverloads
+    fun getChannelData(params: UserGetChannelDataParams): ChannelData =
+        getChannelData(params, RequestOptions.none())
+
+    /** @see [getChannelData] */
     fun getChannelData(
         params: UserGetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ChannelData
 
     /** Get preference set */
-    @JvmOverloads
+    fun getPreferences(params: UserGetPreferencesParams): PreferenceSet =
+        getPreferences(params, RequestOptions.none())
+
+    /** @see [getPreferences] */
     fun getPreferences(
         params: UserGetPreferencesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PreferenceSet
 
     /** List messages */
-    @JvmOverloads
+    fun listMessages(params: UserListMessagesParams): UserListMessagesPage =
+        listMessages(params, RequestOptions.none())
+
+    /** @see [listMessages] */
     fun listMessages(
         params: UserListMessagesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): UserListMessagesPage
 
     /** List preference sets */
-    @JvmOverloads
+    fun listPreferences(params: UserListPreferencesParams): List<PreferenceSet> =
+        listPreferences(params, RequestOptions.none())
+
+    /** @see [listPreferences] */
     fun listPreferences(
         params: UserListPreferencesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<PreferenceSet>
 
     /** List schedules */
-    @JvmOverloads
+    fun listSchedules(params: UserListSchedulesParams): UserListSchedulesPage =
+        listSchedules(params, RequestOptions.none())
+
+    /** @see [listSchedules] */
     fun listSchedules(
         params: UserListSchedulesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): UserListSchedulesPage
 
     /** List subscriptions */
-    @JvmOverloads
+    fun listSubscriptions(params: UserListSubscriptionsParams): UserListSubscriptionsPage =
+        listSubscriptions(params, RequestOptions.none())
+
+    /** @see [listSubscriptions] */
     fun listSubscriptions(
         params: UserListSubscriptionsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -117,11 +145,16 @@ interface UserService {
      * Merge two users together, where the user specified with the `from_user_id` param will be
      * merged into the user specified by `user_id`.
      */
-    @JvmOverloads
+    fun merge(params: UserMergeParams): User = merge(params, RequestOptions.none())
+
+    /** @see [merge] */
     fun merge(params: UserMergeParams, requestOptions: RequestOptions = RequestOptions.none()): User
 
     /** Set channel data */
-    @JvmOverloads
+    fun setChannelData(params: UserSetChannelDataParams): ChannelData =
+        setChannelData(params, RequestOptions.none())
+
+    /** @see [setChannelData] */
     fun setChannelData(
         params: UserSetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -131,14 +164,20 @@ interface UserService {
      * Updates a complete preference set for a user. This is a destructive operation that will
      * replace the existing preference set for the user.
      */
-    @JvmOverloads
+    fun setPreferences(params: UserSetPreferencesParams): PreferenceSet =
+        setPreferences(params, RequestOptions.none())
+
+    /** @see [setPreferences] */
     fun setPreferences(
         params: UserSetPreferencesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PreferenceSet
 
     /** Unset channel data */
-    @JvmOverloads
+    fun unsetChannelData(params: UserUnsetChannelDataParams): String =
+        unsetChannelData(params, RequestOptions.none())
+
+    /** @see [unsetChannelData] */
     fun unsetChannelData(
         params: UserUnsetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -155,7 +194,11 @@ interface UserService {
          * Returns a raw HTTP response for `put /v1/users/{user_id}`, but is otherwise the same as
          * [UserService.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: UserUpdateParams): HttpResponseFor<User> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: UserUpdateParams,
@@ -166,17 +209,21 @@ interface UserService {
          * Returns a raw HTTP response for `get /v1/users`, but is otherwise the same as
          * [UserService.list].
          */
-        @JvmOverloads
+        @MustBeClosed fun list(): HttpResponseFor<UserListPage> = list(UserListParams.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: UserListParams = UserListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<UserListPage>
 
-        /**
-         * Returns a raw HTTP response for `get /v1/users`, but is otherwise the same as
-         * [UserService.list].
-         */
+        /** @see [list] */
+        @MustBeClosed
+        fun list(params: UserListParams = UserListParams.none()): HttpResponseFor<UserListPage> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(requestOptions: RequestOptions): HttpResponseFor<UserListPage> =
             list(UserListParams.none(), requestOptions)
@@ -185,7 +232,11 @@ interface UserService {
          * Returns a raw HTTP response for `delete /v1/users/{user_id}`, but is otherwise the same
          * as [UserService.delete].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun delete(params: UserDeleteParams): HttpResponseFor<String> =
+            delete(params, RequestOptions.none())
+
+        /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: UserDeleteParams,
@@ -196,7 +247,10 @@ interface UserService {
          * Returns a raw HTTP response for `get /v1/users/{user_id}`, but is otherwise the same as
          * [UserService.get].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun get(params: UserGetParams): HttpResponseFor<User> = get(params, RequestOptions.none())
+
+        /** @see [get] */
         @MustBeClosed
         fun get(
             params: UserGetParams,
@@ -207,7 +261,11 @@ interface UserService {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/channel_data/{channel_id}`, but
          * is otherwise the same as [UserService.getChannelData].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun getChannelData(params: UserGetChannelDataParams): HttpResponseFor<ChannelData> =
+            getChannelData(params, RequestOptions.none())
+
+        /** @see [getChannelData] */
         @MustBeClosed
         fun getChannelData(
             params: UserGetChannelDataParams,
@@ -218,7 +276,11 @@ interface UserService {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/preferences/{id}`, but is
          * otherwise the same as [UserService.getPreferences].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun getPreferences(params: UserGetPreferencesParams): HttpResponseFor<PreferenceSet> =
+            getPreferences(params, RequestOptions.none())
+
+        /** @see [getPreferences] */
         @MustBeClosed
         fun getPreferences(
             params: UserGetPreferencesParams,
@@ -229,7 +291,11 @@ interface UserService {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/messages`, but is otherwise the
          * same as [UserService.listMessages].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listMessages(params: UserListMessagesParams): HttpResponseFor<UserListMessagesPage> =
+            listMessages(params, RequestOptions.none())
+
+        /** @see [listMessages] */
         @MustBeClosed
         fun listMessages(
             params: UserListMessagesParams,
@@ -240,7 +306,12 @@ interface UserService {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/preferences`, but is otherwise
          * the same as [UserService.listPreferences].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listPreferences(
+            params: UserListPreferencesParams
+        ): HttpResponseFor<List<PreferenceSet>> = listPreferences(params, RequestOptions.none())
+
+        /** @see [listPreferences] */
         @MustBeClosed
         fun listPreferences(
             params: UserListPreferencesParams,
@@ -251,7 +322,11 @@ interface UserService {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/schedules`, but is otherwise the
          * same as [UserService.listSchedules].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listSchedules(params: UserListSchedulesParams): HttpResponseFor<UserListSchedulesPage> =
+            listSchedules(params, RequestOptions.none())
+
+        /** @see [listSchedules] */
         @MustBeClosed
         fun listSchedules(
             params: UserListSchedulesParams,
@@ -262,7 +337,13 @@ interface UserService {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/subscriptions`, but is otherwise
          * the same as [UserService.listSubscriptions].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun listSubscriptions(
+            params: UserListSubscriptionsParams
+        ): HttpResponseFor<UserListSubscriptionsPage> =
+            listSubscriptions(params, RequestOptions.none())
+
+        /** @see [listSubscriptions] */
         @MustBeClosed
         fun listSubscriptions(
             params: UserListSubscriptionsParams,
@@ -273,7 +354,11 @@ interface UserService {
          * Returns a raw HTTP response for `post /v1/users/{user_id}/merge`, but is otherwise the
          * same as [UserService.merge].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun merge(params: UserMergeParams): HttpResponseFor<User> =
+            merge(params, RequestOptions.none())
+
+        /** @see [merge] */
         @MustBeClosed
         fun merge(
             params: UserMergeParams,
@@ -284,7 +369,11 @@ interface UserService {
          * Returns a raw HTTP response for `put /v1/users/{user_id}/channel_data/{channel_id}`, but
          * is otherwise the same as [UserService.setChannelData].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun setChannelData(params: UserSetChannelDataParams): HttpResponseFor<ChannelData> =
+            setChannelData(params, RequestOptions.none())
+
+        /** @see [setChannelData] */
         @MustBeClosed
         fun setChannelData(
             params: UserSetChannelDataParams,
@@ -295,7 +384,11 @@ interface UserService {
          * Returns a raw HTTP response for `put /v1/users/{user_id}/preferences/{id}`, but is
          * otherwise the same as [UserService.setPreferences].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun setPreferences(params: UserSetPreferencesParams): HttpResponseFor<PreferenceSet> =
+            setPreferences(params, RequestOptions.none())
+
+        /** @see [setPreferences] */
         @MustBeClosed
         fun setPreferences(
             params: UserSetPreferencesParams,
@@ -306,7 +399,11 @@ interface UserService {
          * Returns a raw HTTP response for `delete /v1/users/{user_id}/channel_data/{channel_id}`,
          * but is otherwise the same as [UserService.unsetChannelData].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun unsetChannelData(params: UserUnsetChannelDataParams): HttpResponseFor<String> =
+            unsetChannelData(params, RequestOptions.none())
+
+        /** @see [unsetChannelData] */
         @MustBeClosed
         fun unsetChannelData(
             params: UserUnsetChannelDataParams,

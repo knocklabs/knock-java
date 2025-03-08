@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.blocking.channels
 
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -26,7 +24,10 @@ interface BulkService {
      * parameter. The action to perform is specified by the `action` parameter, where the action is
      * a status change action (e.g. `archive`, `unarchive`).
      */
-    @JvmOverloads
+    fun updateMessageStatus(params: ChannelBulkUpdateMessageStatusParams): BulkOperation =
+        updateMessageStatus(params, RequestOptions.none())
+
+    /** @see [updateMessageStatus] */
     fun updateMessageStatus(
         params: ChannelBulkUpdateMessageStatusParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -184,7 +185,12 @@ interface BulkService {
          * Returns a raw HTTP response for `post /v1/channels/{channel_id}/messages/bulk/{action}`,
          * but is otherwise the same as [BulkService.updateMessageStatus].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun updateMessageStatus(
+            params: ChannelBulkUpdateMessageStatusParams
+        ): HttpResponseFor<BulkOperation> = updateMessageStatus(params, RequestOptions.none())
+
+        /** @see [updateMessageStatus] */
         @MustBeClosed
         fun updateMessageStatus(
             params: ChannelBulkUpdateMessageStatusParams,

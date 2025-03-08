@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.async
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -23,28 +21,40 @@ interface ScheduleServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** Create schedules */
-    @JvmOverloads
+    fun create(params: ScheduleCreateParams): CompletableFuture<List<Schedule>> =
+        create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: ScheduleCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<List<Schedule>>
 
     /** Update schedules */
-    @JvmOverloads
+    fun update(params: ScheduleUpdateParams): CompletableFuture<List<Schedule>> =
+        update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: ScheduleUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<List<Schedule>>
 
     /** List schedules */
-    @JvmOverloads
+    fun list(params: ScheduleListParams): CompletableFuture<ScheduleListPageAsync> =
+        list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: ScheduleListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ScheduleListPageAsync>
 
     /** Delete schedules */
-    @JvmOverloads
+    fun delete(params: ScheduleDeleteParams): CompletableFuture<List<Schedule>> =
+        delete(params, RequestOptions.none())
+
+    /** @see [delete] */
     fun delete(
         params: ScheduleDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -59,7 +69,13 @@ interface ScheduleServiceAsync {
          * Returns a raw HTTP response for `post /v1/schedules`, but is otherwise the same as
          * [ScheduleServiceAsync.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(
+            params: ScheduleCreateParams
+        ): CompletableFuture<HttpResponseFor<List<Schedule>>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: ScheduleCreateParams,
@@ -70,7 +86,13 @@ interface ScheduleServiceAsync {
          * Returns a raw HTTP response for `put /v1/schedules`, but is otherwise the same as
          * [ScheduleServiceAsync.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(
+            params: ScheduleUpdateParams
+        ): CompletableFuture<HttpResponseFor<List<Schedule>>> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: ScheduleUpdateParams,
@@ -81,7 +103,13 @@ interface ScheduleServiceAsync {
          * Returns a raw HTTP response for `get /v1/schedules`, but is otherwise the same as
          * [ScheduleServiceAsync.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(
+            params: ScheduleListParams
+        ): CompletableFuture<HttpResponseFor<ScheduleListPageAsync>> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: ScheduleListParams,
@@ -92,7 +120,13 @@ interface ScheduleServiceAsync {
          * Returns a raw HTTP response for `delete /v1/schedules`, but is otherwise the same as
          * [ScheduleServiceAsync.delete].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun delete(
+            params: ScheduleDeleteParams
+        ): CompletableFuture<HttpResponseFor<List<Schedule>>> =
+            delete(params, RequestOptions.none())
+
+        /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: ScheduleDeleteParams,

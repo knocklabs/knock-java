@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.blocking.users
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -20,21 +18,29 @@ interface BulkService {
     fun withRawResponse(): WithRawResponse
 
     /** Bulk delete users */
-    @JvmOverloads
+    fun delete(params: UserBulkDeleteParams): BulkOperation = delete(params, RequestOptions.none())
+
+    /** @see [delete] */
     fun delete(
         params: UserBulkDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
     /** Bulk identifies users */
-    @JvmOverloads
+    fun identify(params: UserBulkIdentifyParams): BulkOperation =
+        identify(params, RequestOptions.none())
+
+    /** @see [identify] */
     fun identify(
         params: UserBulkIdentifyParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
     /** Bulk set preferences */
-    @JvmOverloads
+    fun setPreferences(params: UserBulkSetPreferencesParams): BulkOperation =
+        setPreferences(params, RequestOptions.none())
+
+    /** @see [setPreferences] */
     fun setPreferences(
         params: UserBulkSetPreferencesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -47,7 +53,11 @@ interface BulkService {
          * Returns a raw HTTP response for `post /v1/users/bulk/delete`, but is otherwise the same
          * as [BulkService.delete].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun delete(params: UserBulkDeleteParams): HttpResponseFor<BulkOperation> =
+            delete(params, RequestOptions.none())
+
+        /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: UserBulkDeleteParams,
@@ -58,7 +68,11 @@ interface BulkService {
          * Returns a raw HTTP response for `post /v1/users/bulk/identify`, but is otherwise the same
          * as [BulkService.identify].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun identify(params: UserBulkIdentifyParams): HttpResponseFor<BulkOperation> =
+            identify(params, RequestOptions.none())
+
+        /** @see [identify] */
         @MustBeClosed
         fun identify(
             params: UserBulkIdentifyParams,
@@ -69,7 +83,11 @@ interface BulkService {
          * Returns a raw HTTP response for `post /v1/users/bulk/preferences`, but is otherwise the
          * same as [BulkService.setPreferences].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun setPreferences(params: UserBulkSetPreferencesParams): HttpResponseFor<BulkOperation> =
+            setPreferences(params, RequestOptions.none())
+
+        /** @see [setPreferences] */
         @MustBeClosed
         fun setPreferences(
             params: UserBulkSetPreferencesParams,

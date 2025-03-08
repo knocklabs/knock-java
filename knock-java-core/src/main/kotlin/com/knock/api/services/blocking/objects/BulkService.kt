@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.blocking.objects
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -20,7 +18,10 @@ interface BulkService {
     fun withRawResponse(): WithRawResponse
 
     /** Bulk delete objects */
-    @JvmOverloads
+    fun delete(params: ObjectBulkDeleteParams): BulkOperation =
+        delete(params, RequestOptions.none())
+
+    /** @see [delete] */
     fun delete(
         params: ObjectBulkDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -30,14 +31,19 @@ interface BulkService {
      * Add subscriptions for a set of objects in a single collection. If a subscription already
      * exists, it will be updated.
      */
-    @JvmOverloads
+    fun addSubscriptions(params: ObjectBulkAddSubscriptionsParams): BulkOperation =
+        addSubscriptions(params, RequestOptions.none())
+
+    /** @see [addSubscriptions] */
     fun addSubscriptions(
         params: ObjectBulkAddSubscriptionsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
     /** Bulk set objects */
-    @JvmOverloads
+    fun set(params: ObjectBulkSetParams): BulkOperation = set(params, RequestOptions.none())
+
+    /** @see [set] */
     fun set(
         params: ObjectBulkSetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -50,7 +56,11 @@ interface BulkService {
          * Returns a raw HTTP response for `post /v1/objects/{collection}/bulk/delete`, but is
          * otherwise the same as [BulkService.delete].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun delete(params: ObjectBulkDeleteParams): HttpResponseFor<BulkOperation> =
+            delete(params, RequestOptions.none())
+
+        /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: ObjectBulkDeleteParams,
@@ -61,7 +71,12 @@ interface BulkService {
          * Returns a raw HTTP response for `post /v1/objects/{collection}/bulk/subscriptions/add`,
          * but is otherwise the same as [BulkService.addSubscriptions].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun addSubscriptions(
+            params: ObjectBulkAddSubscriptionsParams
+        ): HttpResponseFor<BulkOperation> = addSubscriptions(params, RequestOptions.none())
+
+        /** @see [addSubscriptions] */
         @MustBeClosed
         fun addSubscriptions(
             params: ObjectBulkAddSubscriptionsParams,
@@ -72,7 +87,11 @@ interface BulkService {
          * Returns a raw HTTP response for `post /v1/objects/{collection}/bulk/set`, but is
          * otherwise the same as [BulkService.set].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun set(params: ObjectBulkSetParams): HttpResponseFor<BulkOperation> =
+            set(params, RequestOptions.none())
+
+        /** @see [set] */
         @MustBeClosed
         fun set(
             params: ObjectBulkSetParams,

@@ -1,7 +1,5 @@
 // File generated from our OpenAPI spec by Stainless.
 
-@file:Suppress("OVERLOADS_INTERFACE") // See https://youtrack.jetbrains.com/issue/KT-36102
-
 package com.knock.api.services.blocking
 
 import com.google.errorprone.annotations.MustBeClosed
@@ -22,28 +20,36 @@ interface ScheduleService {
     fun withRawResponse(): WithRawResponse
 
     /** Create schedules */
-    @JvmOverloads
+    fun create(params: ScheduleCreateParams): List<Schedule> = create(params, RequestOptions.none())
+
+    /** @see [create] */
     fun create(
         params: ScheduleCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Schedule>
 
     /** Update schedules */
-    @JvmOverloads
+    fun update(params: ScheduleUpdateParams): List<Schedule> = update(params, RequestOptions.none())
+
+    /** @see [update] */
     fun update(
         params: ScheduleUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Schedule>
 
     /** List schedules */
-    @JvmOverloads
+    fun list(params: ScheduleListParams): ScheduleListPage = list(params, RequestOptions.none())
+
+    /** @see [list] */
     fun list(
         params: ScheduleListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ScheduleListPage
 
     /** Delete schedules */
-    @JvmOverloads
+    fun delete(params: ScheduleDeleteParams): List<Schedule> = delete(params, RequestOptions.none())
+
+    /** @see [delete] */
     fun delete(
         params: ScheduleDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
@@ -56,7 +62,11 @@ interface ScheduleService {
          * Returns a raw HTTP response for `post /v1/schedules`, but is otherwise the same as
          * [ScheduleService.create].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun create(params: ScheduleCreateParams): HttpResponseFor<List<Schedule>> =
+            create(params, RequestOptions.none())
+
+        /** @see [create] */
         @MustBeClosed
         fun create(
             params: ScheduleCreateParams,
@@ -67,7 +77,11 @@ interface ScheduleService {
          * Returns a raw HTTP response for `put /v1/schedules`, but is otherwise the same as
          * [ScheduleService.update].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun update(params: ScheduleUpdateParams): HttpResponseFor<List<Schedule>> =
+            update(params, RequestOptions.none())
+
+        /** @see [update] */
         @MustBeClosed
         fun update(
             params: ScheduleUpdateParams,
@@ -78,7 +92,11 @@ interface ScheduleService {
          * Returns a raw HTTP response for `get /v1/schedules`, but is otherwise the same as
          * [ScheduleService.list].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun list(params: ScheduleListParams): HttpResponseFor<ScheduleListPage> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
         @MustBeClosed
         fun list(
             params: ScheduleListParams,
@@ -89,7 +107,11 @@ interface ScheduleService {
          * Returns a raw HTTP response for `delete /v1/schedules`, but is otherwise the same as
          * [ScheduleService.delete].
          */
-        @JvmOverloads
+        @MustBeClosed
+        fun delete(params: ScheduleDeleteParams): HttpResponseFor<List<Schedule>> =
+            delete(params, RequestOptions.none())
+
+        /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: ScheduleDeleteParams,
