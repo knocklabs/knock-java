@@ -41,8 +41,8 @@ interface FeedService {
     interface WithRawResponse {
 
         /**
-         * Returns a raw HTTP response for `get /v1/users/{user_id}/feeds/{id}/settings`, but is
-         * otherwise the same as [FeedService.getSettings].
+         * Returns a raw HTTP response for `get /v1/users/{user_id}/feeds/{channel_id}/settings`,
+         * but is otherwise the same as [FeedService.getSettings].
          */
         @MustBeClosed
         fun getSettings(
@@ -57,8 +57,8 @@ interface FeedService {
         ): HttpResponseFor<UserFeedGetSettingsResponse>
 
         /**
-         * Returns a raw HTTP response for `get /v1/users/{user_id}/feeds/{id}`, but is otherwise
-         * the same as [FeedService.listItems].
+         * Returns a raw HTTP response for `get /v1/users/{user_id}/feeds/{channel_id}`, but is
+         * otherwise the same as [FeedService.listItems].
          */
         @MustBeClosed
         fun listItems(params: UserFeedListItemsParams): HttpResponseFor<UserFeedListItemsPage> =

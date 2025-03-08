@@ -49,7 +49,8 @@ class TenantServiceAsyncTest {
                 .build()
         val tenantServiceAsync = client.tenants()
 
-        val tenantFuture = tenantServiceAsync.delete(TenantDeleteParams.builder().id("id").build())
+        val tenantFuture =
+            tenantServiceAsync.delete(TenantDeleteParams.builder().tenantId("tenant_id").build())
 
         val tenant = tenantFuture.get()
     }
@@ -66,7 +67,8 @@ class TenantServiceAsyncTest {
                 .build()
         val tenantServiceAsync = client.tenants()
 
-        val tenantFuture = tenantServiceAsync.get(TenantGetParams.builder().id("id").build())
+        val tenantFuture =
+            tenantServiceAsync.get(TenantGetParams.builder().tenantId("tenant_id").build())
 
         val tenant = tenantFuture.get()
         tenant.validate()
@@ -87,7 +89,7 @@ class TenantServiceAsyncTest {
         val tenantFuture =
             tenantServiceAsync.set(
                 TenantSetParams.builder()
-                    .id("id")
+                    .tenantId("tenant_id")
                     .channelData(
                         InlineChannelDataRequest.builder()
                             .putAdditionalProperty(

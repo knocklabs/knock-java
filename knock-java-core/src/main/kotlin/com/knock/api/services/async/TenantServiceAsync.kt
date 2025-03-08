@@ -106,8 +106,8 @@ interface TenantServiceAsync {
             list(TenantListParams.none(), requestOptions)
 
         /**
-         * Returns a raw HTTP response for `delete /v1/tenants/{id}`, but is otherwise the same as
-         * [TenantServiceAsync.delete].
+         * Returns a raw HTTP response for `delete /v1/tenants/{tenant_id}`, but is otherwise the
+         * same as [TenantServiceAsync.delete].
          */
         @MustBeClosed
         fun delete(params: TenantDeleteParams): CompletableFuture<HttpResponseFor<String>> =
@@ -121,8 +121,8 @@ interface TenantServiceAsync {
         ): CompletableFuture<HttpResponseFor<String>>
 
         /**
-         * Returns a raw HTTP response for `get /v1/tenants/{id}`, but is otherwise the same as
-         * [TenantServiceAsync.get].
+         * Returns a raw HTTP response for `get /v1/tenants/{tenant_id}`, but is otherwise the same
+         * as [TenantServiceAsync.get].
          */
         @MustBeClosed
         fun get(params: TenantGetParams): CompletableFuture<HttpResponseFor<Tenant>> =
@@ -136,8 +136,8 @@ interface TenantServiceAsync {
         ): CompletableFuture<HttpResponseFor<Tenant>>
 
         /**
-         * Returns a raw HTTP response for `put /v1/tenants/{id}`, but is otherwise the same as
-         * [TenantServiceAsync.set].
+         * Returns a raw HTTP response for `put /v1/tenants/{tenant_id}`, but is otherwise the same
+         * as [TenantServiceAsync.set].
          */
         @MustBeClosed
         fun set(params: TenantSetParams): CompletableFuture<HttpResponseFor<Tenant>> =

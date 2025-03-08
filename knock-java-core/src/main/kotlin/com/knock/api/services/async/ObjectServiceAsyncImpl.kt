@@ -28,7 +28,6 @@ import com.knock.api.models.ObjectListMessagesPageAsync
 import com.knock.api.models.ObjectListMessagesParams
 import com.knock.api.models.ObjectListPageAsync
 import com.knock.api.models.ObjectListParams
-import com.knock.api.models.ObjectListPreferencesParams
 import com.knock.api.models.ObjectListSchedulesPageAsync
 import com.knock.api.models.ObjectListSchedulesParams
 import com.knock.api.models.ObjectListSubscriptionsPageAsync
@@ -67,7 +66,7 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
         params: ObjectDeleteParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<String> =
-        // delete /v1/objects/{collection}/{id}
+        // delete /v1/objects/{collection}/{object_id}
         withRawResponse().delete(params, requestOptions).thenApply { it.parse() }
 
     override fun addSubscriptions(
@@ -88,7 +87,7 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
         params: ObjectGetParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<Object> =
-        // get /v1/objects/{collection}/{id}
+        // get /v1/objects/{collection}/{object_id}
         withRawResponse().get(params, requestOptions).thenApply { it.parse() }
 
     override fun getChannelData(
@@ -102,28 +101,21 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
         params: ObjectGetPreferencesParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<PreferenceSet> =
-        // get /v1/objects/{collection}/{object_id}/preferences/{id}
+        // get /v1/objects/{collection}/{object_id}/preferences/{preference_set_id}
         withRawResponse().getPreferences(params, requestOptions).thenApply { it.parse() }
 
     override fun listMessages(
         params: ObjectListMessagesParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<ObjectListMessagesPageAsync> =
-        // get /v1/objects/{collection}/{id}/messages
+        // get /v1/objects/{collection}/{object_id}/messages
         withRawResponse().listMessages(params, requestOptions).thenApply { it.parse() }
-
-    override fun listPreferences(
-        params: ObjectListPreferencesParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<List<PreferenceSet>> =
-        // get /v1/objects/{collection}/{object_id}/preferences
-        withRawResponse().listPreferences(params, requestOptions).thenApply { it.parse() }
 
     override fun listSchedules(
         params: ObjectListSchedulesParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<ObjectListSchedulesPageAsync> =
-        // get /v1/objects/{collection}/{id}/schedules
+        // get /v1/objects/{collection}/{object_id}/schedules
         withRawResponse().listSchedules(params, requestOptions).thenApply { it.parse() }
 
     override fun listSubscriptions(
@@ -137,7 +129,7 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
         params: ObjectSetParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<Object> =
-        // put /v1/objects/{collection}/{id}
+        // put /v1/objects/{collection}/{object_id}
         withRawResponse().set(params, requestOptions).thenApply { it.parse() }
 
     override fun setChannelData(
@@ -151,7 +143,7 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
         params: ObjectSetPreferencesParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<PreferenceSet> =
-        // put /v1/objects/{collection}/{object_id}/preferences/{id}
+        // put /v1/objects/{collection}/{object_id}/preferences/{preference_set_id}
         withRawResponse().setPreferences(params, requestOptions).thenApply { it.parse() }
 
     override fun unsetChannelData(
@@ -451,42 +443,6 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                                     params,
                                     it,
                                 )
-                            }
-                    }
-                }
-        }
-
-        private val listPreferencesHandler: Handler<List<PreferenceSet>> =
-            jsonHandler<List<PreferenceSet>>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
-
-        override fun listPreferences(
-            params: ObjectListPreferencesParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<List<PreferenceSet>>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments(
-                        "v1",
-                        "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
-                        "preferences",
-                    )
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { listPreferencesHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.forEach { it.validate() }
-                                }
                             }
                     }
                 }

@@ -25,7 +25,7 @@ import kotlin.jvm.optionals.getOrNull
 class ObjectSetParams
 private constructor(
     private val collection: String,
-    private val id: String,
+    private val objectId: String,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -33,7 +33,7 @@ private constructor(
 
     fun collection(): String = collection
 
-    fun id(): String = id
+    fun objectId(): String = objectId
 
     /** Allows inline setting channel data for a recipient */
     fun channelData(): Optional<InlineChannelDataRequest> = body.channelData()
@@ -62,7 +62,7 @@ private constructor(
     fun getPathParam(index: Int): String {
         return when (index) {
             0 -> collection
-            1 -> id
+            1 -> objectId
             else -> ""
         }
     }
@@ -214,7 +214,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .collection()
-         * .id()
+         * .objectId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -225,7 +225,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var collection: String? = null
-        private var id: String? = null
+        private var objectId: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -233,7 +233,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(objectSetParams: ObjectSetParams) = apply {
             collection = objectSetParams.collection
-            id = objectSetParams.id
+            objectId = objectSetParams.objectId
             body = objectSetParams.body.toBuilder()
             additionalHeaders = objectSetParams.additionalHeaders.toBuilder()
             additionalQueryParams = objectSetParams.additionalQueryParams.toBuilder()
@@ -241,7 +241,7 @@ private constructor(
 
         fun collection(collection: String) = apply { this.collection = collection }
 
-        fun id(id: String) = apply { this.id = id }
+        fun objectId(objectId: String) = apply { this.objectId = objectId }
 
         /** Allows inline setting channel data for a recipient */
         fun channelData(channelData: InlineChannelDataRequest?) = apply {
@@ -391,7 +391,7 @@ private constructor(
         fun build(): ObjectSetParams =
             ObjectSetParams(
                 checkRequired("collection", collection),
-                checkRequired("id", id),
+                checkRequired("objectId", objectId),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -403,11 +403,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectSetParams && collection == other.collection && id == other.id && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ObjectSetParams && collection == other.collection && objectId == other.objectId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, id, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ObjectSetParams{collection=$collection, id=$id, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ObjectSetParams{collection=$collection, objectId=$objectId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -17,7 +17,7 @@ import java.util.Objects
 class UserSetPreferencesParams
 private constructor(
     private val userId: String,
-    private val id: String,
+    private val preferenceSetId: String,
     private val preferenceSetRequest: PreferenceSetRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -25,7 +25,7 @@ private constructor(
 
     fun userId(): String = userId
 
-    fun id(): String = id
+    fun preferenceSetId(): String = preferenceSetId
 
     /** Set preferences for a recipient */
     fun preferenceSetRequest(): PreferenceSetRequest = preferenceSetRequest
@@ -46,7 +46,7 @@ private constructor(
     fun getPathParam(index: Int): String {
         return when (index) {
             0 -> userId
-            1 -> id
+            1 -> preferenceSetId
             else -> ""
         }
     }
@@ -61,7 +61,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .userId()
-         * .id()
+         * .preferenceSetId()
          * .preferenceSetRequest()
          * ```
          */
@@ -73,7 +73,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var userId: String? = null
-        private var id: String? = null
+        private var preferenceSetId: String? = null
         private var preferenceSetRequest: PreferenceSetRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -81,7 +81,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(userSetPreferencesParams: UserSetPreferencesParams) = apply {
             userId = userSetPreferencesParams.userId
-            id = userSetPreferencesParams.id
+            preferenceSetId = userSetPreferencesParams.preferenceSetId
             preferenceSetRequest = userSetPreferencesParams.preferenceSetRequest
             additionalHeaders = userSetPreferencesParams.additionalHeaders.toBuilder()
             additionalQueryParams = userSetPreferencesParams.additionalQueryParams.toBuilder()
@@ -89,7 +89,9 @@ private constructor(
 
         fun userId(userId: String) = apply { this.userId = userId }
 
-        fun id(id: String) = apply { this.id = id }
+        fun preferenceSetId(preferenceSetId: String) = apply {
+            this.preferenceSetId = preferenceSetId
+        }
 
         /** Set preferences for a recipient */
         fun preferenceSetRequest(preferenceSetRequest: PreferenceSetRequest) = apply {
@@ -197,7 +199,7 @@ private constructor(
         fun build(): UserSetPreferencesParams =
             UserSetPreferencesParams(
                 checkRequired("userId", userId),
-                checkRequired("id", id),
+                checkRequired("preferenceSetId", preferenceSetId),
                 checkRequired("preferenceSetRequest", preferenceSetRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -209,11 +211,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is UserSetPreferencesParams && userId == other.userId && id == other.id && preferenceSetRequest == other.preferenceSetRequest && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is UserSetPreferencesParams && userId == other.userId && preferenceSetId == other.preferenceSetId && preferenceSetRequest == other.preferenceSetRequest && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, id, preferenceSetRequest, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, preferenceSetId, preferenceSetRequest, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "UserSetPreferencesParams{userId=$userId, id=$id, preferenceSetRequest=$preferenceSetRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserSetPreferencesParams{userId=$userId, preferenceSetId=$preferenceSetId, preferenceSetRequest=$preferenceSetRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

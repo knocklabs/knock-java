@@ -12,7 +12,7 @@ class TenantSetParamsTest {
     @Test
     fun create() {
         TenantSetParams.builder()
-            .id("id")
+            .tenantId("tenant_id")
             .channelData(
                 InlineChannelDataRequest.builder()
                     .putAdditionalProperty(
@@ -177,7 +177,7 @@ class TenantSetParamsTest {
     fun body() {
         val params =
             TenantSetParams.builder()
-                .id("id")
+                .tenantId("tenant_id")
                 .channelData(
                     InlineChannelDataRequest.builder()
                         .putAdditionalProperty(
@@ -506,7 +506,7 @@ class TenantSetParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = TenantSetParams.builder().id("id").build()
+        val params = TenantSetParams.builder().tenantId("tenant_id").build()
 
         val body = params._body()
 
@@ -515,10 +515,10 @@ class TenantSetParamsTest {
 
     @Test
     fun getPathParam() {
-        val params = TenantSetParams.builder().id("id").build()
+        val params = TenantSetParams.builder().tenantId("tenant_id").build()
         assertThat(params).isNotNull
-        // path param "id"
-        assertThat(params.getPathParam(0)).isEqualTo("id")
+        // path param "tenantId"
+        assertThat(params.getPathParam(0)).isEqualTo("tenant_id")
         // out-of-bound path param
         assertThat(params.getPathParam(1)).isEqualTo("")
     }

@@ -43,15 +43,15 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
         withRawResponse().list(params, requestOptions).parse()
 
     override fun delete(params: TenantDeleteParams, requestOptions: RequestOptions): String =
-        // delete /v1/tenants/{id}
+        // delete /v1/tenants/{tenant_id}
         withRawResponse().delete(params, requestOptions).parse()
 
     override fun get(params: TenantGetParams, requestOptions: RequestOptions): Tenant =
-        // get /v1/tenants/{id}
+        // get /v1/tenants/{tenant_id}
         withRawResponse().get(params, requestOptions).parse()
 
     override fun set(params: TenantSetParams, requestOptions: RequestOptions): Tenant =
-        // put /v1/tenants/{id}
+        // put /v1/tenants/{tenant_id}
         withRawResponse().set(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :

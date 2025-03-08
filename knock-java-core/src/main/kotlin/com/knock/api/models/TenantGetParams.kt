@@ -12,12 +12,12 @@ import java.util.Objects
 /** Get a tenant */
 class TenantGetParams
 private constructor(
-    private val id: String,
+    private val tenantId: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun id(): String = id
+    fun tenantId(): String = tenantId
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -29,7 +29,7 @@ private constructor(
 
     fun getPathParam(index: Int): String {
         return when (index) {
-            0 -> id
+            0 -> tenantId
             else -> ""
         }
     }
@@ -43,7 +43,7 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .id()
+         * .tenantId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -53,18 +53,18 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var id: String? = null
+        private var tenantId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(tenantGetParams: TenantGetParams) = apply {
-            id = tenantGetParams.id
+            tenantId = tenantGetParams.tenantId
             additionalHeaders = tenantGetParams.additionalHeaders.toBuilder()
             additionalQueryParams = tenantGetParams.additionalQueryParams.toBuilder()
         }
 
-        fun id(id: String) = apply { this.id = id }
+        fun tenantId(tenantId: String) = apply { this.tenantId = tenantId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,7 +166,7 @@ private constructor(
 
         fun build(): TenantGetParams =
             TenantGetParams(
-                checkRequired("id", id),
+                checkRequired("tenantId", tenantId),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -177,11 +177,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is TenantGetParams && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is TenantGetParams && tenantId == other.tenantId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(tenantId, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "TenantGetParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TenantGetParams{tenantId=$tenantId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

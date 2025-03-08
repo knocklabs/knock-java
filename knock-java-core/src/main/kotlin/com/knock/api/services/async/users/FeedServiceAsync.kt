@@ -43,8 +43,8 @@ interface FeedServiceAsync {
     interface WithRawResponse {
 
         /**
-         * Returns a raw HTTP response for `get /v1/users/{user_id}/feeds/{id}/settings`, but is
-         * otherwise the same as [FeedServiceAsync.getSettings].
+         * Returns a raw HTTP response for `get /v1/users/{user_id}/feeds/{channel_id}/settings`,
+         * but is otherwise the same as [FeedServiceAsync.getSettings].
          */
         @MustBeClosed
         fun getSettings(
@@ -60,8 +60,8 @@ interface FeedServiceAsync {
         ): CompletableFuture<HttpResponseFor<UserFeedGetSettingsResponse>>
 
         /**
-         * Returns a raw HTTP response for `get /v1/users/{user_id}/feeds/{id}`, but is otherwise
-         * the same as [FeedServiceAsync.listItems].
+         * Returns a raw HTTP response for `get /v1/users/{user_id}/feeds/{channel_id}`, but is
+         * otherwise the same as [FeedServiceAsync.listItems].
          */
         @MustBeClosed
         fun listItems(

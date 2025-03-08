@@ -15,7 +15,7 @@ import kotlin.jvm.optionals.getOrNull
 class ObjectListSchedulesParams
 private constructor(
     private val collection: String,
-    private val id: String,
+    private val objectId: String,
     private val after: String?,
     private val before: String?,
     private val pageSize: Long?,
@@ -27,7 +27,7 @@ private constructor(
 
     fun collection(): String = collection
 
-    fun id(): String = id
+    fun objectId(): String = objectId
 
     /** The cursor to fetch entries after */
     fun after(): Optional<String> = Optional.ofNullable(after)
@@ -64,7 +64,7 @@ private constructor(
     fun getPathParam(index: Int): String {
         return when (index) {
             0 -> collection
-            1 -> id
+            1 -> objectId
             else -> ""
         }
     }
@@ -79,7 +79,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .collection()
-         * .id()
+         * .objectId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -90,7 +90,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var collection: String? = null
-        private var id: String? = null
+        private var objectId: String? = null
         private var after: String? = null
         private var before: String? = null
         private var pageSize: Long? = null
@@ -102,7 +102,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(objectListSchedulesParams: ObjectListSchedulesParams) = apply {
             collection = objectListSchedulesParams.collection
-            id = objectListSchedulesParams.id
+            objectId = objectListSchedulesParams.objectId
             after = objectListSchedulesParams.after
             before = objectListSchedulesParams.before
             pageSize = objectListSchedulesParams.pageSize
@@ -114,7 +114,7 @@ private constructor(
 
         fun collection(collection: String) = apply { this.collection = collection }
 
-        fun id(id: String) = apply { this.id = id }
+        fun objectId(objectId: String) = apply { this.objectId = objectId }
 
         /** The cursor to fetch entries after */
         fun after(after: String?) = apply { this.after = after }
@@ -250,7 +250,7 @@ private constructor(
         fun build(): ObjectListSchedulesParams =
             ObjectListSchedulesParams(
                 checkRequired("collection", collection),
-                checkRequired("id", id),
+                checkRequired("objectId", objectId),
                 after,
                 before,
                 pageSize,
@@ -266,11 +266,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectListSchedulesParams && collection == other.collection && id == other.id && after == other.after && before == other.before && pageSize == other.pageSize && tenant == other.tenant && workflow == other.workflow && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ObjectListSchedulesParams && collection == other.collection && objectId == other.objectId && after == other.after && before == other.before && pageSize == other.pageSize && tenant == other.tenant && workflow == other.workflow && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, id, after, before, pageSize, tenant, workflow, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, after, before, pageSize, tenant, workflow, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ObjectListSchedulesParams{collection=$collection, id=$id, after=$after, before=$before, pageSize=$pageSize, tenant=$tenant, workflow=$workflow, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ObjectListSchedulesParams{collection=$collection, objectId=$objectId, after=$after, before=$before, pageSize=$pageSize, tenant=$tenant, workflow=$workflow, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

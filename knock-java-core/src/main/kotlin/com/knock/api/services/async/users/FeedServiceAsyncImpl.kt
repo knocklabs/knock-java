@@ -33,14 +33,14 @@ class FeedServiceAsyncImpl internal constructor(private val clientOptions: Clien
         params: UserFeedGetSettingsParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<UserFeedGetSettingsResponse> =
-        // get /v1/users/{user_id}/feeds/{id}/settings
+        // get /v1/users/{user_id}/feeds/{channel_id}/settings
         withRawResponse().getSettings(params, requestOptions).thenApply { it.parse() }
 
     override fun listItems(
         params: UserFeedListItemsParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<UserFeedListItemsPageAsync> =
-        // get /v1/users/{user_id}/feeds/{id}
+        // get /v1/users/{user_id}/feeds/{channel_id}
         withRawResponse().listItems(params, requestOptions).thenApply { it.parse() }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :

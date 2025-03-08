@@ -16,6 +16,7 @@ class ObjectListSubscriptionsParamsTest {
             .after("after")
             .before("before")
             .mode(ObjectListSubscriptionsParams.Mode.RECIPIENT)
+            .addObject("user_123")
             .pageSize(0L)
             .addRecipient("user_123")
             .build()
@@ -30,6 +31,7 @@ class ObjectListSubscriptionsParamsTest {
                 .after("after")
                 .before("before")
                 .mode(ObjectListSubscriptionsParams.Mode.RECIPIENT)
+                .addObject("user_123")
                 .pageSize(0L)
                 .addRecipient("user_123")
                 .build()
@@ -37,6 +39,10 @@ class ObjectListSubscriptionsParamsTest {
         expected.put("after", "after")
         expected.put("before", "before")
         expected.put("mode", ObjectListSubscriptionsParams.Mode.RECIPIENT.toString())
+        expected.put(
+            "objects[]",
+            ObjectListSubscriptionsParams.Object.ofString("user_123").toString(),
+        )
         expected.put("page_size", "0")
         expected.put(
             "recipients[]",

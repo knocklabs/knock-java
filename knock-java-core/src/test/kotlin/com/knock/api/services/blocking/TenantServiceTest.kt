@@ -48,7 +48,7 @@ class TenantServiceTest {
                 .build()
         val tenantService = client.tenants()
 
-        tenantService.delete(TenantDeleteParams.builder().id("id").build())
+        tenantService.delete(TenantDeleteParams.builder().tenantId("tenant_id").build())
     }
 
     @Disabled(
@@ -63,7 +63,7 @@ class TenantServiceTest {
                 .build()
         val tenantService = client.tenants()
 
-        val tenant = tenantService.get(TenantGetParams.builder().id("id").build())
+        val tenant = tenantService.get(TenantGetParams.builder().tenantId("tenant_id").build())
 
         tenant.validate()
     }
@@ -83,7 +83,7 @@ class TenantServiceTest {
         val tenant =
             tenantService.set(
                 TenantSetParams.builder()
-                    .id("id")
+                    .tenantId("tenant_id")
                     .channelData(
                         InlineChannelDataRequest.builder()
                             .putAdditionalProperty(

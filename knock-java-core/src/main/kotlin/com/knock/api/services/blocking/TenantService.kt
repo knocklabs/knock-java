@@ -90,8 +90,8 @@ interface TenantService {
             list(TenantListParams.none(), requestOptions)
 
         /**
-         * Returns a raw HTTP response for `delete /v1/tenants/{id}`, but is otherwise the same as
-         * [TenantService.delete].
+         * Returns a raw HTTP response for `delete /v1/tenants/{tenant_id}`, but is otherwise the
+         * same as [TenantService.delete].
          */
         @MustBeClosed
         fun delete(params: TenantDeleteParams): HttpResponseFor<String> =
@@ -105,8 +105,8 @@ interface TenantService {
         ): HttpResponseFor<String>
 
         /**
-         * Returns a raw HTTP response for `get /v1/tenants/{id}`, but is otherwise the same as
-         * [TenantService.get].
+         * Returns a raw HTTP response for `get /v1/tenants/{tenant_id}`, but is otherwise the same
+         * as [TenantService.get].
          */
         @MustBeClosed
         fun get(params: TenantGetParams): HttpResponseFor<Tenant> =
@@ -120,8 +120,8 @@ interface TenantService {
         ): HttpResponseFor<Tenant>
 
         /**
-         * Returns a raw HTTP response for `put /v1/tenants/{id}`, but is otherwise the same as
-         * [TenantService.set].
+         * Returns a raw HTTP response for `put /v1/tenants/{tenant_id}`, but is otherwise the same
+         * as [TenantService.set].
          */
         @MustBeClosed
         fun set(params: TenantSetParams): HttpResponseFor<Tenant> =

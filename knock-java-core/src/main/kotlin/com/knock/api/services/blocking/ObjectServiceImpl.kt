@@ -28,7 +28,6 @@ import com.knock.api.models.ObjectListMessagesPage
 import com.knock.api.models.ObjectListMessagesParams
 import com.knock.api.models.ObjectListPage
 import com.knock.api.models.ObjectListParams
-import com.knock.api.models.ObjectListPreferencesParams
 import com.knock.api.models.ObjectListSchedulesPage
 import com.knock.api.models.ObjectListSchedulesParams
 import com.knock.api.models.ObjectListSubscriptionsPage
@@ -60,7 +59,7 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
         withRawResponse().list(params, requestOptions).parse()
 
     override fun delete(params: ObjectDeleteParams, requestOptions: RequestOptions): String =
-        // delete /v1/objects/{collection}/{id}
+        // delete /v1/objects/{collection}/{object_id}
         withRawResponse().delete(params, requestOptions).parse()
 
     override fun addSubscriptions(
@@ -78,7 +77,7 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
         withRawResponse().deleteSubscriptions(params, requestOptions).parse()
 
     override fun get(params: ObjectGetParams, requestOptions: RequestOptions): Object =
-        // get /v1/objects/{collection}/{id}
+        // get /v1/objects/{collection}/{object_id}
         withRawResponse().get(params, requestOptions).parse()
 
     override fun getChannelData(
@@ -92,28 +91,21 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
         params: ObjectGetPreferencesParams,
         requestOptions: RequestOptions,
     ): PreferenceSet =
-        // get /v1/objects/{collection}/{object_id}/preferences/{id}
+        // get /v1/objects/{collection}/{object_id}/preferences/{preference_set_id}
         withRawResponse().getPreferences(params, requestOptions).parse()
 
     override fun listMessages(
         params: ObjectListMessagesParams,
         requestOptions: RequestOptions,
     ): ObjectListMessagesPage =
-        // get /v1/objects/{collection}/{id}/messages
+        // get /v1/objects/{collection}/{object_id}/messages
         withRawResponse().listMessages(params, requestOptions).parse()
-
-    override fun listPreferences(
-        params: ObjectListPreferencesParams,
-        requestOptions: RequestOptions,
-    ): List<PreferenceSet> =
-        // get /v1/objects/{collection}/{object_id}/preferences
-        withRawResponse().listPreferences(params, requestOptions).parse()
 
     override fun listSchedules(
         params: ObjectListSchedulesParams,
         requestOptions: RequestOptions,
     ): ObjectListSchedulesPage =
-        // get /v1/objects/{collection}/{id}/schedules
+        // get /v1/objects/{collection}/{object_id}/schedules
         withRawResponse().listSchedules(params, requestOptions).parse()
 
     override fun listSubscriptions(
@@ -124,7 +116,7 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
         withRawResponse().listSubscriptions(params, requestOptions).parse()
 
     override fun set(params: ObjectSetParams, requestOptions: RequestOptions): Object =
-        // put /v1/objects/{collection}/{id}
+        // put /v1/objects/{collection}/{object_id}
         withRawResponse().set(params, requestOptions).parse()
 
     override fun setChannelData(
@@ -138,7 +130,7 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
         params: ObjectSetPreferencesParams,
         requestOptions: RequestOptions,
     ): PreferenceSet =
-        // put /v1/objects/{collection}/{object_id}/preferences/{id}
+        // put /v1/objects/{collection}/{object_id}/preferences/{preference_set_id}
         withRawResponse().setPreferences(params, requestOptions).parse()
 
     override fun unsetChannelData(
@@ -404,39 +396,6 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                         }
                     }
                     .let { ObjectListMessagesPage.of(ObjectServiceImpl(clientOptions), params, it) }
-            }
-        }
-
-        private val listPreferencesHandler: Handler<List<PreferenceSet>> =
-            jsonHandler<List<PreferenceSet>>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
-
-        override fun listPreferences(
-            params: ObjectListPreferencesParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<List<PreferenceSet>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments(
-                        "v1",
-                        "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
-                        "preferences",
-                    )
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { listPreferencesHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.forEach { it.validate() }
-                        }
-                    }
             }
         }
 

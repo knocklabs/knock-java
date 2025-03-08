@@ -17,7 +17,6 @@ import com.knock.api.models.ObjectGetParams
 import com.knock.api.models.ObjectGetPreferencesParams
 import com.knock.api.models.ObjectListMessagesParams
 import com.knock.api.models.ObjectListParams
-import com.knock.api.models.ObjectListPreferencesParams
 import com.knock.api.models.ObjectListSchedulesParams
 import com.knock.api.models.ObjectListSubscriptionsParams
 import com.knock.api.models.ObjectSetChannelDataParams
@@ -68,7 +67,7 @@ class ObjectServiceAsyncTest {
 
         val objectFuture =
             objectServiceAsync.delete(
-                ObjectDeleteParams.builder().collection("collection").id("id").build()
+                ObjectDeleteParams.builder().collection("collection").objectId("object_id").build()
             )
 
         val object_ = objectFuture.get()
@@ -234,7 +233,7 @@ class ObjectServiceAsyncTest {
 
         val objectFuture =
             objectServiceAsync.get(
-                ObjectGetParams.builder().collection("collection").id("id").build()
+                ObjectGetParams.builder().collection("collection").objectId("object_id").build()
             )
 
         val object_ = objectFuture.get()
@@ -283,7 +282,7 @@ class ObjectServiceAsyncTest {
                 ObjectGetPreferencesParams.builder()
                     .collection("collection")
                     .objectId("object_id")
-                    .id("id")
+                    .preferenceSetId("default")
                     .tenant("tenant")
                     .build()
             )
@@ -306,35 +305,14 @@ class ObjectServiceAsyncTest {
 
         val pageFuture =
             objectServiceAsync.listMessages(
-                ObjectListMessagesParams.builder().collection("projects").id("project-123").build()
+                ObjectListMessagesParams.builder()
+                    .collection("projects")
+                    .objectId("project-123")
+                    .build()
             )
 
         val page = pageFuture.get()
         page.response().validate()
-    }
-
-    @Disabled(
-        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
-    )
-    @Test
-    fun listPreferences() {
-        val client =
-            KnockOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val objectServiceAsync = client.objects()
-
-        val preferenceSetsFuture =
-            objectServiceAsync.listPreferences(
-                ObjectListPreferencesParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .build()
-            )
-
-        val preferenceSets = preferenceSetsFuture.get()
-        preferenceSets.forEach { it.validate() }
     }
 
     @Disabled(
@@ -351,7 +329,10 @@ class ObjectServiceAsyncTest {
 
         val pageFuture =
             objectServiceAsync.listSchedules(
-                ObjectListSchedulesParams.builder().collection("collection").id("id").build()
+                ObjectListSchedulesParams.builder()
+                    .collection("collection")
+                    .objectId("object_id")
+                    .build()
             )
 
         val page = pageFuture.get()
@@ -398,7 +379,7 @@ class ObjectServiceAsyncTest {
             objectServiceAsync.set(
                 ObjectSetParams.builder()
                     .collection("collection")
-                    .id("id")
+                    .objectId("object_id")
                     .channelData(
                         InlineChannelDataRequest.builder()
                             .putAdditionalProperty(
@@ -531,7 +512,7 @@ class ObjectServiceAsyncTest {
                 ObjectSetPreferencesParams.builder()
                     .collection("collection")
                     .objectId("object_id")
-                    .id("id")
+                    .preferenceSetId("default")
                     .preferenceSetRequest(
                         PreferenceSetRequest.builder()
                             .categories(

@@ -13,14 +13,14 @@ import java.util.Objects
 class ObjectGetParams
 private constructor(
     private val collection: String,
-    private val id: String,
+    private val objectId: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun collection(): String = collection
 
-    fun id(): String = id
+    fun objectId(): String = objectId
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -33,7 +33,7 @@ private constructor(
     fun getPathParam(index: Int): String {
         return when (index) {
             0 -> collection
-            1 -> id
+            1 -> objectId
             else -> ""
         }
     }
@@ -48,7 +48,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .collection()
-         * .id()
+         * .objectId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -59,21 +59,21 @@ private constructor(
     class Builder internal constructor() {
 
         private var collection: String? = null
-        private var id: String? = null
+        private var objectId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(objectGetParams: ObjectGetParams) = apply {
             collection = objectGetParams.collection
-            id = objectGetParams.id
+            objectId = objectGetParams.objectId
             additionalHeaders = objectGetParams.additionalHeaders.toBuilder()
             additionalQueryParams = objectGetParams.additionalQueryParams.toBuilder()
         }
 
         fun collection(collection: String) = apply { this.collection = collection }
 
-        fun id(id: String) = apply { this.id = id }
+        fun objectId(objectId: String) = apply { this.objectId = objectId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -176,7 +176,7 @@ private constructor(
         fun build(): ObjectGetParams =
             ObjectGetParams(
                 checkRequired("collection", collection),
-                checkRequired("id", id),
+                checkRequired("objectId", objectId),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -187,11 +187,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectGetParams && collection == other.collection && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ObjectGetParams && collection == other.collection && objectId == other.objectId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, id, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ObjectGetParams{collection=$collection, id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ObjectGetParams{collection=$collection, objectId=$objectId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

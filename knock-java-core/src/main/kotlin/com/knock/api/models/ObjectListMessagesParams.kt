@@ -20,7 +20,7 @@ import kotlin.jvm.optionals.getOrNull
 class ObjectListMessagesParams
 private constructor(
     private val collection: String,
-    private val id: String,
+    private val objectId: String,
     private val after: String?,
     private val before: String?,
     private val channelId: String?,
@@ -40,7 +40,7 @@ private constructor(
 
     fun collection(): String = collection
 
-    fun id(): String = id
+    fun objectId(): String = objectId
 
     /** The cursor to fetch entries after */
     fun after(): Optional<String> = Optional.ofNullable(after)
@@ -113,7 +113,7 @@ private constructor(
     fun getPathParam(index: Int): String {
         return when (index) {
             0 -> collection
-            1 -> id
+            1 -> objectId
             else -> ""
         }
     }
@@ -128,7 +128,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .collection()
-         * .id()
+         * .objectId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -139,7 +139,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var collection: String? = null
-        private var id: String? = null
+        private var objectId: String? = null
         private var after: String? = null
         private var before: String? = null
         private var channelId: String? = null
@@ -159,7 +159,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(objectListMessagesParams: ObjectListMessagesParams) = apply {
             collection = objectListMessagesParams.collection
-            id = objectListMessagesParams.id
+            objectId = objectListMessagesParams.objectId
             after = objectListMessagesParams.after
             before = objectListMessagesParams.before
             channelId = objectListMessagesParams.channelId
@@ -179,7 +179,7 @@ private constructor(
 
         fun collection(collection: String) = apply { this.collection = collection }
 
-        fun id(id: String) = apply { this.id = id }
+        fun objectId(objectId: String) = apply { this.objectId = objectId }
 
         /** The cursor to fetch entries after */
         fun after(after: String?) = apply { this.after = after }
@@ -397,7 +397,7 @@ private constructor(
         fun build(): ObjectListMessagesParams =
             ObjectListMessagesParams(
                 checkRequired("collection", collection),
-                checkRequired("id", id),
+                checkRequired("objectId", objectId),
                 after,
                 before,
                 channelId,
@@ -667,11 +667,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectListMessagesParams && collection == other.collection && id == other.id && after == other.after && before == other.before && channelId == other.channelId && engagementStatus == other.engagementStatus && messageIds == other.messageIds && pageSize == other.pageSize && source == other.source && status == other.status && tenant == other.tenant && triggerData == other.triggerData && workflowCategories == other.workflowCategories && workflowRecipientRunId == other.workflowRecipientRunId && workflowRunId == other.workflowRunId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ObjectListMessagesParams && collection == other.collection && objectId == other.objectId && after == other.after && before == other.before && channelId == other.channelId && engagementStatus == other.engagementStatus && messageIds == other.messageIds && pageSize == other.pageSize && source == other.source && status == other.status && tenant == other.tenant && triggerData == other.triggerData && workflowCategories == other.workflowCategories && workflowRecipientRunId == other.workflowRecipientRunId && workflowRunId == other.workflowRunId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, id, after, before, channelId, engagementStatus, messageIds, pageSize, source, status, tenant, triggerData, workflowCategories, workflowRecipientRunId, workflowRunId, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, after, before, channelId, engagementStatus, messageIds, pageSize, source, status, tenant, triggerData, workflowCategories, workflowRecipientRunId, workflowRunId, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ObjectListMessagesParams{collection=$collection, id=$id, after=$after, before=$before, channelId=$channelId, engagementStatus=$engagementStatus, messageIds=$messageIds, pageSize=$pageSize, source=$source, status=$status, tenant=$tenant, triggerData=$triggerData, workflowCategories=$workflowCategories, workflowRecipientRunId=$workflowRecipientRunId, workflowRunId=$workflowRunId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ObjectListMessagesParams{collection=$collection, objectId=$objectId, after=$after, before=$before, channelId=$channelId, engagementStatus=$engagementStatus, messageIds=$messageIds, pageSize=$pageSize, source=$source, status=$status, tenant=$tenant, triggerData=$triggerData, workflowCategories=$workflowCategories, workflowRecipientRunId=$workflowRecipientRunId, workflowRunId=$workflowRunId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

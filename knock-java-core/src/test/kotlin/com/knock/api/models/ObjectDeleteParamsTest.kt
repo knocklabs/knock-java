@@ -9,17 +9,18 @@ class ObjectDeleteParamsTest {
 
     @Test
     fun create() {
-        ObjectDeleteParams.builder().collection("collection").id("id").build()
+        ObjectDeleteParams.builder().collection("collection").objectId("object_id").build()
     }
 
     @Test
     fun getPathParam() {
-        val params = ObjectDeleteParams.builder().collection("collection").id("id").build()
+        val params =
+            ObjectDeleteParams.builder().collection("collection").objectId("object_id").build()
         assertThat(params).isNotNull
         // path param "collection"
         assertThat(params.getPathParam(0)).isEqualTo("collection")
-        // path param "id"
-        assertThat(params.getPathParam(1)).isEqualTo("id")
+        // path param "objectId"
+        assertThat(params.getPathParam(1)).isEqualTo("object_id")
         // out-of-bound path param
         assertThat(params.getPathParam(2)).isEqualTo("")
     }

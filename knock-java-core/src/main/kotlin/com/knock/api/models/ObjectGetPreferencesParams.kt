@@ -16,7 +16,7 @@ class ObjectGetPreferencesParams
 private constructor(
     private val collection: String,
     private val objectId: String,
-    private val id: String,
+    private val preferenceSetId: String,
     private val tenant: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -26,7 +26,7 @@ private constructor(
 
     fun objectId(): String = objectId
 
-    fun id(): String = id
+    fun preferenceSetId(): String = preferenceSetId
 
     /** Tenant ID */
     fun tenant(): Optional<String> = Optional.ofNullable(tenant)
@@ -48,7 +48,7 @@ private constructor(
         return when (index) {
             0 -> collection
             1 -> objectId
-            2 -> id
+            2 -> preferenceSetId
             else -> ""
         }
     }
@@ -64,7 +64,7 @@ private constructor(
          * ```java
          * .collection()
          * .objectId()
-         * .id()
+         * .preferenceSetId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -76,7 +76,7 @@ private constructor(
 
         private var collection: String? = null
         private var objectId: String? = null
-        private var id: String? = null
+        private var preferenceSetId: String? = null
         private var tenant: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -85,7 +85,7 @@ private constructor(
         internal fun from(objectGetPreferencesParams: ObjectGetPreferencesParams) = apply {
             collection = objectGetPreferencesParams.collection
             objectId = objectGetPreferencesParams.objectId
-            id = objectGetPreferencesParams.id
+            preferenceSetId = objectGetPreferencesParams.preferenceSetId
             tenant = objectGetPreferencesParams.tenant
             additionalHeaders = objectGetPreferencesParams.additionalHeaders.toBuilder()
             additionalQueryParams = objectGetPreferencesParams.additionalQueryParams.toBuilder()
@@ -95,7 +95,9 @@ private constructor(
 
         fun objectId(objectId: String) = apply { this.objectId = objectId }
 
-        fun id(id: String) = apply { this.id = id }
+        fun preferenceSetId(preferenceSetId: String) = apply {
+            this.preferenceSetId = preferenceSetId
+        }
 
         /** Tenant ID */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
@@ -205,7 +207,7 @@ private constructor(
             ObjectGetPreferencesParams(
                 checkRequired("collection", collection),
                 checkRequired("objectId", objectId),
-                checkRequired("id", id),
+                checkRequired("preferenceSetId", preferenceSetId),
                 tenant,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -217,11 +219,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectGetPreferencesParams && collection == other.collection && objectId == other.objectId && id == other.id && tenant == other.tenant && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ObjectGetPreferencesParams && collection == other.collection && objectId == other.objectId && preferenceSetId == other.preferenceSetId && tenant == other.tenant && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, id, tenant, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, preferenceSetId, tenant, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ObjectGetPreferencesParams{collection=$collection, objectId=$objectId, id=$id, tenant=$tenant, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ObjectGetPreferencesParams{collection=$collection, objectId=$objectId, preferenceSetId=$preferenceSetId, tenant=$tenant, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

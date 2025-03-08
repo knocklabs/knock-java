@@ -20,7 +20,7 @@ import kotlin.jvm.optionals.getOrNull
 class UserFeedListItemsParams
 private constructor(
     private val userId: String,
-    private val id: String,
+    private val channelId: String,
     private val after: String?,
     private val archived: Archived?,
     private val before: String?,
@@ -37,7 +37,7 @@ private constructor(
 
     fun userId(): String = userId
 
-    fun id(): String = id
+    fun channelId(): String = channelId
 
     /** The cursor to fetch entries after */
     fun after(): Optional<String> = Optional.ofNullable(after)
@@ -96,7 +96,7 @@ private constructor(
     fun getPathParam(index: Int): String {
         return when (index) {
             0 -> userId
-            1 -> id
+            1 -> channelId
             else -> ""
         }
     }
@@ -111,7 +111,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .userId()
-         * .id()
+         * .channelId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -122,7 +122,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var userId: String? = null
-        private var id: String? = null
+        private var channelId: String? = null
         private var after: String? = null
         private var archived: Archived? = null
         private var before: String? = null
@@ -139,7 +139,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(userFeedListItemsParams: UserFeedListItemsParams) = apply {
             userId = userFeedListItemsParams.userId
-            id = userFeedListItemsParams.id
+            channelId = userFeedListItemsParams.channelId
             after = userFeedListItemsParams.after
             archived = userFeedListItemsParams.archived
             before = userFeedListItemsParams.before
@@ -156,7 +156,7 @@ private constructor(
 
         fun userId(userId: String) = apply { this.userId = userId }
 
-        fun id(id: String) = apply { this.id = id }
+        fun channelId(channelId: String) = apply { this.channelId = channelId }
 
         /** The cursor to fetch entries after */
         fun after(after: String?) = apply { this.after = after }
@@ -334,7 +334,7 @@ private constructor(
         fun build(): UserFeedListItemsParams =
             UserFeedListItemsParams(
                 checkRequired("userId", userId),
-                checkRequired("id", id),
+                checkRequired("channelId", channelId),
                 after,
                 archived,
                 before,
@@ -575,11 +575,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is UserFeedListItemsParams && userId == other.userId && id == other.id && after == other.after && archived == other.archived && before == other.before && hasTenant == other.hasTenant && pageSize == other.pageSize && source == other.source && status == other.status && tenant == other.tenant && triggerData == other.triggerData && workflowCategories == other.workflowCategories && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is UserFeedListItemsParams && userId == other.userId && channelId == other.channelId && after == other.after && archived == other.archived && before == other.before && hasTenant == other.hasTenant && pageSize == other.pageSize && source == other.source && status == other.status && tenant == other.tenant && triggerData == other.triggerData && workflowCategories == other.workflowCategories && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, id, after, archived, before, hasTenant, pageSize, source, status, tenant, triggerData, workflowCategories, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, channelId, after, archived, before, hasTenant, pageSize, source, status, tenant, triggerData, workflowCategories, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "UserFeedListItemsParams{userId=$userId, id=$id, after=$after, archived=$archived, before=$before, hasTenant=$hasTenant, pageSize=$pageSize, source=$source, status=$status, tenant=$tenant, triggerData=$triggerData, workflowCategories=$workflowCategories, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserFeedListItemsParams{userId=$userId, channelId=$channelId, after=$after, archived=$archived, before=$before, hasTenant=$hasTenant, pageSize=$pageSize, source=$source, status=$status, tenant=$tenant, triggerData=$triggerData, workflowCategories=$workflowCategories, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

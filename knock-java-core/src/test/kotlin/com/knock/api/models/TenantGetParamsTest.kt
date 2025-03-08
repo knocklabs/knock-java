@@ -9,15 +9,15 @@ class TenantGetParamsTest {
 
     @Test
     fun create() {
-        TenantGetParams.builder().id("id").build()
+        TenantGetParams.builder().tenantId("tenant_id").build()
     }
 
     @Test
     fun getPathParam() {
-        val params = TenantGetParams.builder().id("id").build()
+        val params = TenantGetParams.builder().tenantId("tenant_id").build()
         assertThat(params).isNotNull
-        // path param "id"
-        assertThat(params.getPathParam(0)).isEqualTo("id")
+        // path param "tenantId"
+        assertThat(params.getPathParam(0)).isEqualTo("tenant_id")
         // out-of-bound path param
         assertThat(params.getPathParam(1)).isEqualTo("")
     }

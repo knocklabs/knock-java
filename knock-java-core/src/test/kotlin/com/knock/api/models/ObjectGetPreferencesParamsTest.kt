@@ -13,7 +13,7 @@ class ObjectGetPreferencesParamsTest {
         ObjectGetPreferencesParams.builder()
             .collection("collection")
             .objectId("object_id")
-            .id("id")
+            .preferenceSetId("default")
             .tenant("tenant")
             .build()
     }
@@ -24,7 +24,7 @@ class ObjectGetPreferencesParamsTest {
             ObjectGetPreferencesParams.builder()
                 .collection("collection")
                 .objectId("object_id")
-                .id("id")
+                .preferenceSetId("default")
                 .tenant("tenant")
                 .build()
         val expected = QueryParams.builder()
@@ -38,7 +38,7 @@ class ObjectGetPreferencesParamsTest {
             ObjectGetPreferencesParams.builder()
                 .collection("collection")
                 .objectId("object_id")
-                .id("id")
+                .preferenceSetId("default")
                 .build()
         val expected = QueryParams.builder()
         assertThat(params._queryParams()).isEqualTo(expected.build())
@@ -50,15 +50,15 @@ class ObjectGetPreferencesParamsTest {
             ObjectGetPreferencesParams.builder()
                 .collection("collection")
                 .objectId("object_id")
-                .id("id")
+                .preferenceSetId("default")
                 .build()
         assertThat(params).isNotNull
         // path param "collection"
         assertThat(params.getPathParam(0)).isEqualTo("collection")
         // path param "objectId"
         assertThat(params.getPathParam(1)).isEqualTo("object_id")
-        // path param "id"
-        assertThat(params.getPathParam(2)).isEqualTo("id")
+        // path param "preferenceSetId"
+        assertThat(params.getPathParam(2)).isEqualTo("default")
         // out-of-bound path param
         assertThat(params.getPathParam(3)).isEqualTo("")
     }

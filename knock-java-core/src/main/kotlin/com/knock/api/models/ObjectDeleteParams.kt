@@ -16,7 +16,7 @@ import java.util.Optional
 class ObjectDeleteParams
 private constructor(
     private val collection: String,
-    private val id: String,
+    private val objectId: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
@@ -24,7 +24,7 @@ private constructor(
 
     fun collection(): String = collection
 
-    fun id(): String = id
+    fun objectId(): String = objectId
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -43,7 +43,7 @@ private constructor(
     fun getPathParam(index: Int): String {
         return when (index) {
             0 -> collection
-            1 -> id
+            1 -> objectId
             else -> ""
         }
     }
@@ -58,7 +58,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .collection()
-         * .id()
+         * .objectId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -69,7 +69,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var collection: String? = null
-        private var id: String? = null
+        private var objectId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
         private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -77,7 +77,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(objectDeleteParams: ObjectDeleteParams) = apply {
             collection = objectDeleteParams.collection
-            id = objectDeleteParams.id
+            objectId = objectDeleteParams.objectId
             additionalHeaders = objectDeleteParams.additionalHeaders.toBuilder()
             additionalQueryParams = objectDeleteParams.additionalQueryParams.toBuilder()
             additionalBodyProperties = objectDeleteParams.additionalBodyProperties.toMutableMap()
@@ -85,7 +85,7 @@ private constructor(
 
         fun collection(collection: String) = apply { this.collection = collection }
 
-        fun id(id: String) = apply { this.id = id }
+        fun objectId(objectId: String) = apply { this.objectId = objectId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -210,7 +210,7 @@ private constructor(
         fun build(): ObjectDeleteParams =
             ObjectDeleteParams(
                 checkRequired("collection", collection),
-                checkRequired("id", id),
+                checkRequired("objectId", objectId),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -222,11 +222,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectDeleteParams && collection == other.collection && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ObjectDeleteParams && collection == other.collection && objectId == other.objectId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, id, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
-        "ObjectDeleteParams{collection=$collection, id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ObjectDeleteParams{collection=$collection, objectId=$objectId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

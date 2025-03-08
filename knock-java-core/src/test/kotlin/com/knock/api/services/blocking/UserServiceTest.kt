@@ -233,7 +233,7 @@ class UserServiceTest {
             userService.getPreferences(
                 UserGetPreferencesParams.builder()
                     .userId("user_id")
-                    .id("id")
+                    .preferenceSetId("default")
                     .tenant("tenant")
                     .build()
             )
@@ -381,7 +381,7 @@ class UserServiceTest {
             userService.setPreferences(
                 UserSetPreferencesParams.builder()
                     .userId("user_id")
-                    .id("id")
+                    .preferenceSetId("default")
                     .preferenceSetRequest(
                         PreferenceSetRequest.builder()
                             .categories(

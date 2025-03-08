@@ -15,13 +15,13 @@ import java.util.Optional
 /** Delete a tenant */
 class TenantDeleteParams
 private constructor(
-    private val id: String,
+    private val tenantId: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun id(): String = id
+    fun tenantId(): String = tenantId
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -39,7 +39,7 @@ private constructor(
 
     fun getPathParam(index: Int): String {
         return when (index) {
-            0 -> id
+            0 -> tenantId
             else -> ""
         }
     }
@@ -53,7 +53,7 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .id()
+         * .tenantId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -63,20 +63,20 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var id: String? = null
+        private var tenantId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
         private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(tenantDeleteParams: TenantDeleteParams) = apply {
-            id = tenantDeleteParams.id
+            tenantId = tenantDeleteParams.tenantId
             additionalHeaders = tenantDeleteParams.additionalHeaders.toBuilder()
             additionalQueryParams = tenantDeleteParams.additionalQueryParams.toBuilder()
             additionalBodyProperties = tenantDeleteParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun id(id: String) = apply { this.id = id }
+        fun tenantId(tenantId: String) = apply { this.tenantId = tenantId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -200,7 +200,7 @@ private constructor(
 
         fun build(): TenantDeleteParams =
             TenantDeleteParams(
-                checkRequired("id", id),
+                checkRequired("tenantId", tenantId),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -212,11 +212,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is TenantDeleteParams && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is TenantDeleteParams && tenantId == other.tenantId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(tenantId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
-        "TenantDeleteParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "TenantDeleteParams{tenantId=$tenantId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

@@ -15,7 +15,7 @@ import kotlin.jvm.optionals.getOrNull
 class UserGetPreferencesParams
 private constructor(
     private val userId: String,
-    private val id: String,
+    private val preferenceSetId: String,
     private val tenant: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -23,7 +23,7 @@ private constructor(
 
     fun userId(): String = userId
 
-    fun id(): String = id
+    fun preferenceSetId(): String = preferenceSetId
 
     /** Tenant ID */
     fun tenant(): Optional<String> = Optional.ofNullable(tenant)
@@ -44,7 +44,7 @@ private constructor(
     fun getPathParam(index: Int): String {
         return when (index) {
             0 -> userId
-            1 -> id
+            1 -> preferenceSetId
             else -> ""
         }
     }
@@ -59,7 +59,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .userId()
-         * .id()
+         * .preferenceSetId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -70,7 +70,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var userId: String? = null
-        private var id: String? = null
+        private var preferenceSetId: String? = null
         private var tenant: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -78,7 +78,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(userGetPreferencesParams: UserGetPreferencesParams) = apply {
             userId = userGetPreferencesParams.userId
-            id = userGetPreferencesParams.id
+            preferenceSetId = userGetPreferencesParams.preferenceSetId
             tenant = userGetPreferencesParams.tenant
             additionalHeaders = userGetPreferencesParams.additionalHeaders.toBuilder()
             additionalQueryParams = userGetPreferencesParams.additionalQueryParams.toBuilder()
@@ -86,7 +86,9 @@ private constructor(
 
         fun userId(userId: String) = apply { this.userId = userId }
 
-        fun id(id: String) = apply { this.id = id }
+        fun preferenceSetId(preferenceSetId: String) = apply {
+            this.preferenceSetId = preferenceSetId
+        }
 
         /** Tenant ID */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
@@ -195,7 +197,7 @@ private constructor(
         fun build(): UserGetPreferencesParams =
             UserGetPreferencesParams(
                 checkRequired("userId", userId),
-                checkRequired("id", id),
+                checkRequired("preferenceSetId", preferenceSetId),
                 tenant,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -207,11 +209,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is UserGetPreferencesParams && userId == other.userId && id == other.id && tenant == other.tenant && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is UserGetPreferencesParams && userId == other.userId && preferenceSetId == other.preferenceSetId && tenant == other.tenant && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, id, tenant, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, preferenceSetId, tenant, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "UserGetPreferencesParams{userId=$userId, id=$id, tenant=$tenant, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserGetPreferencesParams{userId=$userId, preferenceSetId=$preferenceSetId, tenant=$tenant, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

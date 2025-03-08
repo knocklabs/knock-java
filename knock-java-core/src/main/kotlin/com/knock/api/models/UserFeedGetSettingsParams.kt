@@ -13,14 +13,14 @@ import java.util.Objects
 class UserFeedGetSettingsParams
 private constructor(
     private val userId: String,
-    private val id: String,
+    private val channelId: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun userId(): String = userId
 
-    fun id(): String = id
+    fun channelId(): String = channelId
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -33,7 +33,7 @@ private constructor(
     fun getPathParam(index: Int): String {
         return when (index) {
             0 -> userId
-            1 -> id
+            1 -> channelId
             else -> ""
         }
     }
@@ -48,7 +48,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .userId()
-         * .id()
+         * .channelId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -59,21 +59,21 @@ private constructor(
     class Builder internal constructor() {
 
         private var userId: String? = null
-        private var id: String? = null
+        private var channelId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(userFeedGetSettingsParams: UserFeedGetSettingsParams) = apply {
             userId = userFeedGetSettingsParams.userId
-            id = userFeedGetSettingsParams.id
+            channelId = userFeedGetSettingsParams.channelId
             additionalHeaders = userFeedGetSettingsParams.additionalHeaders.toBuilder()
             additionalQueryParams = userFeedGetSettingsParams.additionalQueryParams.toBuilder()
         }
 
         fun userId(userId: String) = apply { this.userId = userId }
 
-        fun id(id: String) = apply { this.id = id }
+        fun channelId(channelId: String) = apply { this.channelId = channelId }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -176,7 +176,7 @@ private constructor(
         fun build(): UserFeedGetSettingsParams =
             UserFeedGetSettingsParams(
                 checkRequired("userId", userId),
-                checkRequired("id", id),
+                checkRequired("channelId", channelId),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -187,11 +187,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is UserFeedGetSettingsParams && userId == other.userId && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is UserFeedGetSettingsParams && userId == other.userId && channelId == other.channelId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, id, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, channelId, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "UserFeedGetSettingsParams{userId=$userId, id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserFeedGetSettingsParams{userId=$userId, channelId=$channelId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

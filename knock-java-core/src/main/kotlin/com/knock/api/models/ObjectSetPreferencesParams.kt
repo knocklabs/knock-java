@@ -15,7 +15,7 @@ class ObjectSetPreferencesParams
 private constructor(
     private val collection: String,
     private val objectId: String,
-    private val id: String,
+    private val preferenceSetId: String,
     private val preferenceSetRequest: PreferenceSetRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -25,7 +25,7 @@ private constructor(
 
     fun objectId(): String = objectId
 
-    fun id(): String = id
+    fun preferenceSetId(): String = preferenceSetId
 
     /** Set preferences for a recipient */
     fun preferenceSetRequest(): PreferenceSetRequest = preferenceSetRequest
@@ -47,7 +47,7 @@ private constructor(
         return when (index) {
             0 -> collection
             1 -> objectId
-            2 -> id
+            2 -> preferenceSetId
             else -> ""
         }
     }
@@ -63,7 +63,7 @@ private constructor(
          * ```java
          * .collection()
          * .objectId()
-         * .id()
+         * .preferenceSetId()
          * .preferenceSetRequest()
          * ```
          */
@@ -76,7 +76,7 @@ private constructor(
 
         private var collection: String? = null
         private var objectId: String? = null
-        private var id: String? = null
+        private var preferenceSetId: String? = null
         private var preferenceSetRequest: PreferenceSetRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -85,7 +85,7 @@ private constructor(
         internal fun from(objectSetPreferencesParams: ObjectSetPreferencesParams) = apply {
             collection = objectSetPreferencesParams.collection
             objectId = objectSetPreferencesParams.objectId
-            id = objectSetPreferencesParams.id
+            preferenceSetId = objectSetPreferencesParams.preferenceSetId
             preferenceSetRequest = objectSetPreferencesParams.preferenceSetRequest
             additionalHeaders = objectSetPreferencesParams.additionalHeaders.toBuilder()
             additionalQueryParams = objectSetPreferencesParams.additionalQueryParams.toBuilder()
@@ -95,7 +95,9 @@ private constructor(
 
         fun objectId(objectId: String) = apply { this.objectId = objectId }
 
-        fun id(id: String) = apply { this.id = id }
+        fun preferenceSetId(preferenceSetId: String) = apply {
+            this.preferenceSetId = preferenceSetId
+        }
 
         /** Set preferences for a recipient */
         fun preferenceSetRequest(preferenceSetRequest: PreferenceSetRequest) = apply {
@@ -204,7 +206,7 @@ private constructor(
             ObjectSetPreferencesParams(
                 checkRequired("collection", collection),
                 checkRequired("objectId", objectId),
-                checkRequired("id", id),
+                checkRequired("preferenceSetId", preferenceSetId),
                 checkRequired("preferenceSetRequest", preferenceSetRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -216,11 +218,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectSetPreferencesParams && collection == other.collection && objectId == other.objectId && id == other.id && preferenceSetRequest == other.preferenceSetRequest && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ObjectSetPreferencesParams && collection == other.collection && objectId == other.objectId && preferenceSetId == other.preferenceSetId && preferenceSetRequest == other.preferenceSetRequest && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, id, preferenceSetRequest, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, preferenceSetId, preferenceSetRequest, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ObjectSetPreferencesParams{collection=$collection, objectId=$objectId, id=$id, preferenceSetRequest=$preferenceSetRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ObjectSetPreferencesParams{collection=$collection, objectId=$objectId, preferenceSetId=$preferenceSetId, preferenceSetRequest=$preferenceSetRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

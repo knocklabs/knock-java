@@ -99,7 +99,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
         params: UserGetPreferencesParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<PreferenceSet> =
-        // get /v1/users/{user_id}/preferences/{id}
+        // get /v1/users/{user_id}/preferences/{preference_set_id}
         withRawResponse().getPreferences(params, requestOptions).thenApply { it.parse() }
 
     override fun listMessages(
@@ -148,7 +148,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
         params: UserSetPreferencesParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<PreferenceSet> =
-        // put /v1/users/{user_id}/preferences/{id}
+        // put /v1/users/{user_id}/preferences/{preference_set_id}
         withRawResponse().setPreferences(params, requestOptions).thenApply { it.parse() }
 
     override fun unsetChannelData(

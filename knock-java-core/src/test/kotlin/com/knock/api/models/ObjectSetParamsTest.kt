@@ -13,7 +13,7 @@ class ObjectSetParamsTest {
     fun create() {
         ObjectSetParams.builder()
             .collection("collection")
-            .id("id")
+            .objectId("object_id")
             .channelData(
                 InlineChannelDataRequest.builder()
                     .putAdditionalProperty(
@@ -96,7 +96,7 @@ class ObjectSetParamsTest {
         val params =
             ObjectSetParams.builder()
                 .collection("collection")
-                .id("id")
+                .objectId("object_id")
                 .channelData(
                     InlineChannelDataRequest.builder()
                         .putAdditionalProperty(
@@ -258,7 +258,8 @@ class ObjectSetParamsTest {
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = ObjectSetParams.builder().collection("collection").id("id").build()
+        val params =
+            ObjectSetParams.builder().collection("collection").objectId("object_id").build()
 
         val body = params._body()
 
@@ -267,12 +268,13 @@ class ObjectSetParamsTest {
 
     @Test
     fun getPathParam() {
-        val params = ObjectSetParams.builder().collection("collection").id("id").build()
+        val params =
+            ObjectSetParams.builder().collection("collection").objectId("object_id").build()
         assertThat(params).isNotNull
         // path param "collection"
         assertThat(params.getPathParam(0)).isEqualTo("collection")
-        // path param "id"
-        assertThat(params.getPathParam(1)).isEqualTo("id")
+        // path param "objectId"
+        assertThat(params.getPathParam(1)).isEqualTo("object_id")
         // out-of-bound path param
         assertThat(params.getPathParam(2)).isEqualTo("")
     }

@@ -17,7 +17,6 @@ import com.knock.api.models.ObjectGetParams
 import com.knock.api.models.ObjectGetPreferencesParams
 import com.knock.api.models.ObjectListMessagesParams
 import com.knock.api.models.ObjectListParams
-import com.knock.api.models.ObjectListPreferencesParams
 import com.knock.api.models.ObjectListSchedulesParams
 import com.knock.api.models.ObjectListSubscriptionsParams
 import com.knock.api.models.ObjectSetChannelDataParams
@@ -64,7 +63,9 @@ class ObjectServiceTest {
                 .build()
         val objectService = client.objects()
 
-        objectService.delete(ObjectDeleteParams.builder().collection("collection").id("id").build())
+        objectService.delete(
+            ObjectDeleteParams.builder().collection("collection").objectId("object_id").build()
+        )
     }
 
     @Disabled(
@@ -224,7 +225,9 @@ class ObjectServiceTest {
         val objectService = client.objects()
 
         val object_ =
-            objectService.get(ObjectGetParams.builder().collection("collection").id("id").build())
+            objectService.get(
+                ObjectGetParams.builder().collection("collection").objectId("object_id").build()
+            )
 
         object_.validate()
     }
@@ -270,7 +273,7 @@ class ObjectServiceTest {
                 ObjectGetPreferencesParams.builder()
                     .collection("collection")
                     .objectId("object_id")
-                    .id("id")
+                    .preferenceSetId("default")
                     .tenant("tenant")
                     .build()
             )
@@ -292,33 +295,13 @@ class ObjectServiceTest {
 
         val page =
             objectService.listMessages(
-                ObjectListMessagesParams.builder().collection("projects").id("project-123").build()
-            )
-
-        page.response().validate()
-    }
-
-    @Disabled(
-        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
-    )
-    @Test
-    fun listPreferences() {
-        val client =
-            KnockOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val objectService = client.objects()
-
-        val preferenceSets =
-            objectService.listPreferences(
-                ObjectListPreferencesParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
+                ObjectListMessagesParams.builder()
+                    .collection("projects")
+                    .objectId("project-123")
                     .build()
             )
 
-        preferenceSets.forEach { it.validate() }
+        page.response().validate()
     }
 
     @Disabled(
@@ -335,7 +318,10 @@ class ObjectServiceTest {
 
         val page =
             objectService.listSchedules(
-                ObjectListSchedulesParams.builder().collection("collection").id("id").build()
+                ObjectListSchedulesParams.builder()
+                    .collection("collection")
+                    .objectId("object_id")
+                    .build()
             )
 
         page.response().validate()
@@ -380,7 +366,7 @@ class ObjectServiceTest {
             objectService.set(
                 ObjectSetParams.builder()
                     .collection("collection")
-                    .id("id")
+                    .objectId("object_id")
                     .channelData(
                         InlineChannelDataRequest.builder()
                             .putAdditionalProperty(
@@ -511,7 +497,7 @@ class ObjectServiceTest {
                 ObjectSetPreferencesParams.builder()
                     .collection("collection")
                     .objectId("object_id")
-                    .id("id")
+                    .preferenceSetId("default")
                     .preferenceSetRequest(
                         PreferenceSetRequest.builder()
                             .categories(

@@ -35,11 +35,7 @@ class BulkServiceAsyncTest {
 
         val bulkOperationFuture =
             bulkServiceAsync.delete(
-                UserBulkDeleteParams.builder()
-                    .addUserId("string")
-                    .addUserId("user_1")
-                    .addUserId("user_2")
-                    .build()
+                UserBulkDeleteParams.builder().addUserId("user_1").addUserId("user_2").build()
             )
 
         val bulkOperation = bulkOperationFuture.get()

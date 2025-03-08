@@ -38,6 +38,7 @@ private constructor(
     private val after: String?,
     private val before: String?,
     private val mode: Mode?,
+    private val objects: List<Object>?,
     private val pageSize: Long?,
     private val recipients: List<Recipient>?,
     private val additionalHeaders: Headers,
@@ -57,6 +58,9 @@ private constructor(
     /** Mode of the request */
     fun mode(): Optional<Mode> = Optional.ofNullable(mode)
 
+    /** Objects to filter by (only used if mode is `recipient`) */
+    fun objects(): Optional<List<Object>> = Optional.ofNullable(objects)
+
     /** The page size to fetch */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
@@ -74,6 +78,7 @@ private constructor(
         this.after?.let { queryParams.put("after", listOf(it.toString())) }
         this.before?.let { queryParams.put("before", listOf(it.toString())) }
         this.mode?.let { queryParams.put("mode", listOf(it.toString())) }
+        this.objects?.let { queryParams.put("objects[]", it.map(Any::toString)) }
         this.pageSize?.let { queryParams.put("page_size", listOf(it.toString())) }
         this.recipients?.let { queryParams.put("recipients[]", it.map(Any::toString)) }
         queryParams.putAll(additionalQueryParams)
@@ -114,6 +119,7 @@ private constructor(
         private var after: String? = null
         private var before: String? = null
         private var mode: Mode? = null
+        private var objects: MutableList<Object>? = null
         private var pageSize: Long? = null
         private var recipients: MutableList<Recipient>? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -126,6 +132,7 @@ private constructor(
             after = objectListSubscriptionsParams.after
             before = objectListSubscriptionsParams.before
             mode = objectListSubscriptionsParams.mode
+            objects = objectListSubscriptionsParams.objects?.toMutableList()
             pageSize = objectListSubscriptionsParams.pageSize
             recipients = objectListSubscriptionsParams.recipients?.toMutableList()
             additionalHeaders = objectListSubscriptionsParams.additionalHeaders.toBuilder()
@@ -153,6 +160,23 @@ private constructor(
 
         /** Mode of the request */
         fun mode(mode: Optional<Mode>) = mode(mode.getOrNull())
+
+        /** Objects to filter by (only used if mode is `recipient`) */
+        fun objects(objects: List<Object>?) = apply { this.objects = objects?.toMutableList() }
+
+        /** Objects to filter by (only used if mode is `recipient`) */
+        fun objects(objects: Optional<List<Object>>) = objects(objects.getOrNull())
+
+        /** Objects to filter by (only used if mode is `recipient`) */
+        fun addObject(object_: Object) = apply {
+            objects = (objects ?: mutableListOf()).apply { add(object_) }
+        }
+
+        /** A user identifier */
+        fun addObject(string: String) = addObject(Object.ofString(string))
+
+        /** An object reference to a recipient */
+        fun addObject(reference: Object.ObjectReference) = addObject(Object.ofReference(reference))
 
         /** The page size to fetch */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
@@ -288,6 +312,7 @@ private constructor(
                 after,
                 before,
                 mode,
+                objects?.toImmutable(),
                 pageSize,
                 recipients?.toImmutable(),
                 additionalHeaders.build(),
@@ -391,6 +416,206 @@ private constructor(
         override fun hashCode() = value.hashCode()
 
         override fun toString() = value.toString()
+    }
+
+    /**
+     * A reference to a recipient, either a user identifier (string) or an object reference (id,
+     * collection).
+     */
+    @JsonDeserialize(using = Object.Deserializer::class)
+    @JsonSerialize(using = Object.Serializer::class)
+    class Object
+    private constructor(
+        private val string: String? = null,
+        private val reference: ObjectReference? = null,
+        private val _json: JsonValue? = null,
+    ) {
+
+        /** A user identifier */
+        fun string(): Optional<String> = Optional.ofNullable(string)
+
+        /** An object reference to a recipient */
+        fun reference(): Optional<ObjectReference> = Optional.ofNullable(reference)
+
+        fun isString(): Boolean = string != null
+
+        fun isReference(): Boolean = reference != null
+
+        /** A user identifier */
+        fun asString(): String = string.getOrThrow("string")
+
+        /** An object reference to a recipient */
+        fun asReference(): ObjectReference = reference.getOrThrow("reference")
+
+        fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
+
+        fun <T> accept(visitor: Visitor<T>): T {
+            return when {
+                string != null -> visitor.visitString(string)
+                reference != null -> visitor.visitReference(reference)
+                else -> visitor.unknown(_json)
+            }
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Object && string == other.string && reference == other.reference /* spotless:on */
+        }
+
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, reference) /* spotless:on */
+
+        override fun toString(): String =
+            when {
+                string != null -> "Object{string=$string}"
+                reference != null -> "Object{reference=$reference}"
+                _json != null -> "Object{_unknown=$_json}"
+                else -> throw IllegalStateException("Invalid Object")
+            }
+
+        companion object {
+
+            /** A user identifier */
+            @JvmStatic fun ofString(string: String) = Object(string = string)
+
+            /** An object reference to a recipient */
+            @JvmStatic fun ofReference(reference: ObjectReference) = Object(reference = reference)
+        }
+
+        /** An interface that defines how to map each variant of [Object] to a value of type [T]. */
+        interface Visitor<out T> {
+
+            /** A user identifier */
+            fun visitString(string: String): T
+
+            /** An object reference to a recipient */
+            fun visitReference(reference: ObjectReference): T
+
+            /**
+             * Maps an unknown variant of [Object] to a value of type [T].
+             *
+             * An instance of [Object] can contain an unknown variant if it was deserialized from
+             * data that doesn't match any known variant. For example, if the SDK is on an older
+             * version than the API, then the API may respond with new variants that the SDK is
+             * unaware of.
+             *
+             * @throws KnockInvalidDataException in the default implementation.
+             */
+            fun unknown(json: JsonValue?): T {
+                throw KnockInvalidDataException("Unknown Object: $json")
+            }
+        }
+
+        internal class Deserializer : BaseDeserializer<Object>(Object::class) {
+
+            override fun ObjectCodec.deserialize(node: JsonNode): Object {
+                val json = JsonValue.fromJsonNode(node)
+
+                tryDeserialize(node, jacksonTypeRef<String>())?.let {
+                    return Object(string = it, _json = json)
+                }
+                tryDeserialize(node, jacksonTypeRef<ObjectReference>())?.let {
+                    return Object(reference = it, _json = json)
+                }
+
+                return Object(_json = json)
+            }
+        }
+
+        internal class Serializer : BaseSerializer<Object>(Object::class) {
+
+            override fun serialize(
+                value: Object,
+                generator: JsonGenerator,
+                provider: SerializerProvider,
+            ) {
+                when {
+                    value.string != null -> generator.writeObject(value.string)
+                    value.reference != null -> generator.writeObject(value.reference)
+                    value._json != null -> generator.writeObject(value._json)
+                    else -> throw IllegalStateException("Invalid Object")
+                }
+            }
+        }
+
+        /** An object reference to a recipient */
+        class ObjectReference
+        private constructor(private val id: String, private val collection: String) {
+
+            /** An object identifier */
+            fun id(): String = id
+
+            /** The collection the object belongs to */
+            fun collection(): String = collection
+
+            @JvmSynthetic
+            internal fun forEachQueryParam(putParam: (String, List<String>) -> Unit) {
+                this.id.let { putParam("id", listOf(it.toString())) }
+                this.collection.let { putParam("collection", listOf(it.toString())) }
+                additionalProperties.keys().forEach {
+                    putParam(it, additionalProperties.values(it))
+                }
+            }
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /**
+                 * Returns a mutable builder for constructing an instance of [ObjectReference].
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .collection()
+                 * ```
+                 */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [ObjectReference]. */
+            class Builder internal constructor() {
+
+                private var id: String? = null
+                private var collection: String? = null
+
+                @JvmSynthetic
+                internal fun from(objectReference: ObjectReference) = apply {
+                    id = objectReference.id
+                    collection = objectReference.collection
+                }
+
+                /** An object identifier */
+                fun id(id: String) = apply { this.id = id }
+
+                /** The collection the object belongs to */
+                fun collection(collection: String) = apply { this.collection = collection }
+
+                fun build(): ObjectReference =
+                    ObjectReference(
+                        checkRequired("id", id),
+                        checkRequired("collection", collection),
+                    )
+            }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is ObjectReference && id == other.id && collection == other.collection /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(id, collection) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() = "ObjectReference{id=$id, collection=$collection}"
+        }
     }
 
     /**
@@ -602,11 +827,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectListSubscriptionsParams && collection == other.collection && objectId == other.objectId && after == other.after && before == other.before && mode == other.mode && pageSize == other.pageSize && recipients == other.recipients && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ObjectListSubscriptionsParams && collection == other.collection && objectId == other.objectId && after == other.after && before == other.before && mode == other.mode && objects == other.objects && pageSize == other.pageSize && recipients == other.recipients && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, after, before, mode, pageSize, recipients, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, after, before, mode, objects, pageSize, recipients, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ObjectListSubscriptionsParams{collection=$collection, objectId=$objectId, after=$after, before=$before, mode=$mode, pageSize=$pageSize, recipients=$recipients, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ObjectListSubscriptionsParams{collection=$collection, objectId=$objectId, after=$after, before=$before, mode=$mode, objects=$objects, pageSize=$pageSize, recipients=$recipients, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -11,7 +11,7 @@ class UserFeedGetSettingsParamsTest {
     fun create() {
         UserFeedGetSettingsParams.builder()
             .userId("user_id")
-            .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .build()
     }
 
@@ -20,12 +20,12 @@ class UserFeedGetSettingsParamsTest {
         val params =
             UserFeedGetSettingsParams.builder()
                 .userId("user_id")
-                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .build()
         assertThat(params).isNotNull
         // path param "userId"
         assertThat(params.getPathParam(0)).isEqualTo("user_id")
-        // path param "id"
+        // path param "channelId"
         assertThat(params.getPathParam(1)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         // out-of-bound path param
         assertThat(params.getPathParam(2)).isEqualTo("")

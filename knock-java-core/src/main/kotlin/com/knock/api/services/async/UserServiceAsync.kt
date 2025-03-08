@@ -295,8 +295,9 @@ interface UserServiceAsync {
         ): CompletableFuture<HttpResponseFor<ChannelData>>
 
         /**
-         * Returns a raw HTTP response for `get /v1/users/{user_id}/preferences/{id}`, but is
-         * otherwise the same as [UserServiceAsync.getPreferences].
+         * Returns a raw HTTP response for `get
+         * /v1/users/{user_id}/preferences/{preference_set_id}`, but is otherwise the same as
+         * [UserServiceAsync.getPreferences].
          */
         @MustBeClosed
         fun getPreferences(
@@ -412,8 +413,9 @@ interface UserServiceAsync {
         ): CompletableFuture<HttpResponseFor<ChannelData>>
 
         /**
-         * Returns a raw HTTP response for `put /v1/users/{user_id}/preferences/{id}`, but is
-         * otherwise the same as [UserServiceAsync.setPreferences].
+         * Returns a raw HTTP response for `put
+         * /v1/users/{user_id}/preferences/{preference_set_id}`, but is otherwise the same as
+         * [UserServiceAsync.setPreferences].
          */
         @MustBeClosed
         fun setPreferences(

@@ -12,7 +12,7 @@ class UserSetPreferencesParamsTest {
     fun create() {
         UserSetPreferencesParams.builder()
             .userId("user_id")
-            .id("id")
+            .preferenceSetId("default")
             .preferenceSetRequest(
                 PreferenceSetRequest.builder()
                     .categories(
@@ -92,7 +92,7 @@ class UserSetPreferencesParamsTest {
         val params =
             UserSetPreferencesParams.builder()
                 .userId("user_id")
-                .id("id")
+                .preferenceSetId("default")
                 .preferenceSetRequest(
                     PreferenceSetRequest.builder()
                         .categories(
@@ -247,7 +247,7 @@ class UserSetPreferencesParamsTest {
         val params =
             UserSetPreferencesParams.builder()
                 .userId("user_id")
-                .id("id")
+                .preferenceSetId("default")
                 .preferenceSetRequest(PreferenceSetRequest.builder().build())
                 .build()
 
@@ -261,14 +261,14 @@ class UserSetPreferencesParamsTest {
         val params =
             UserSetPreferencesParams.builder()
                 .userId("user_id")
-                .id("id")
+                .preferenceSetId("default")
                 .preferenceSetRequest(PreferenceSetRequest.builder().build())
                 .build()
         assertThat(params).isNotNull
         // path param "userId"
         assertThat(params.getPathParam(0)).isEqualTo("user_id")
-        // path param "id"
-        assertThat(params.getPathParam(1)).isEqualTo("id")
+        // path param "preferenceSetId"
+        assertThat(params.getPathParam(1)).isEqualTo("default")
         // out-of-bound path param
         assertThat(params.getPathParam(2)).isEqualTo("")
     }

@@ -10,13 +10,21 @@ class UserGetPreferencesParamsTest {
 
     @Test
     fun create() {
-        UserGetPreferencesParams.builder().userId("user_id").id("id").tenant("tenant").build()
+        UserGetPreferencesParams.builder()
+            .userId("user_id")
+            .preferenceSetId("default")
+            .tenant("tenant")
+            .build()
     }
 
     @Test
     fun queryParams() {
         val params =
-            UserGetPreferencesParams.builder().userId("user_id").id("id").tenant("tenant").build()
+            UserGetPreferencesParams.builder()
+                .userId("user_id")
+                .preferenceSetId("default")
+                .tenant("tenant")
+                .build()
         val expected = QueryParams.builder()
         expected.put("tenant", "tenant")
         assertThat(params._queryParams()).isEqualTo(expected.build())
@@ -24,19 +32,21 @@ class UserGetPreferencesParamsTest {
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-        val params = UserGetPreferencesParams.builder().userId("user_id").id("id").build()
+        val params =
+            UserGetPreferencesParams.builder().userId("user_id").preferenceSetId("default").build()
         val expected = QueryParams.builder()
         assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
     fun getPathParam() {
-        val params = UserGetPreferencesParams.builder().userId("user_id").id("id").build()
+        val params =
+            UserGetPreferencesParams.builder().userId("user_id").preferenceSetId("default").build()
         assertThat(params).isNotNull
         // path param "userId"
         assertThat(params.getPathParam(0)).isEqualTo("user_id")
-        // path param "id"
-        assertThat(params.getPathParam(1)).isEqualTo("id")
+        // path param "preferenceSetId"
+        assertThat(params.getPathParam(1)).isEqualTo("default")
         // out-of-bound path param
         assertThat(params.getPathParam(2)).isEqualTo("")
     }

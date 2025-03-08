@@ -24,13 +24,13 @@ import kotlin.jvm.optionals.getOrNull
 /** Set a tenant */
 class TenantSetParams
 private constructor(
-    private val id: String,
+    private val tenantId: String,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun id(): String = id
+    fun tenantId(): String = tenantId
 
     /** Allows inline setting channel data for a recipient */
     fun channelData(): Optional<InlineChannelDataRequest> = body.channelData()
@@ -62,7 +62,7 @@ private constructor(
 
     fun getPathParam(index: Int): String {
         return when (index) {
-            0 -> id
+            0 -> tenantId
             else -> ""
         }
     }
@@ -231,7 +231,7 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .id()
+         * .tenantId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -241,20 +241,20 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var id: String? = null
+        private var tenantId: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(tenantSetParams: TenantSetParams) = apply {
-            id = tenantSetParams.id
+            tenantId = tenantSetParams.tenantId
             body = tenantSetParams.body.toBuilder()
             additionalHeaders = tenantSetParams.additionalHeaders.toBuilder()
             additionalQueryParams = tenantSetParams.additionalQueryParams.toBuilder()
         }
 
-        fun id(id: String) = apply { this.id = id }
+        fun tenantId(tenantId: String) = apply { this.tenantId = tenantId }
 
         /** Allows inline setting channel data for a recipient */
         fun channelData(channelData: InlineChannelDataRequest?) = apply {
@@ -407,7 +407,7 @@ private constructor(
 
         fun build(): TenantSetParams =
             TenantSetParams(
-                checkRequired("id", id),
+                checkRequired("tenantId", tenantId),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -710,11 +710,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is TenantSetParams && id == other.id && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is TenantSetParams && tenantId == other.tenantId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(tenantId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "TenantSetParams{id=$id, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TenantSetParams{tenantId=$tenantId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

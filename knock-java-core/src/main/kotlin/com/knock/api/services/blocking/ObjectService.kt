@@ -17,7 +17,6 @@ import com.knock.api.models.ObjectListMessagesPage
 import com.knock.api.models.ObjectListMessagesParams
 import com.knock.api.models.ObjectListPage
 import com.knock.api.models.ObjectListParams
-import com.knock.api.models.ObjectListPreferencesParams
 import com.knock.api.models.ObjectListSchedulesPage
 import com.knock.api.models.ObjectListSchedulesParams
 import com.knock.api.models.ObjectListSubscriptionsPage
@@ -113,16 +112,6 @@ interface ObjectService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ObjectListMessagesPage
 
-    /** List preference sets */
-    fun listPreferences(params: ObjectListPreferencesParams): List<PreferenceSet> =
-        listPreferences(params, RequestOptions.none())
-
-    /** @see [listPreferences] */
-    fun listPreferences(
-        params: ObjectListPreferencesParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): List<PreferenceSet>
-
     /** List schedules */
     fun listSchedules(params: ObjectListSchedulesParams): ObjectListSchedulesPage =
         listSchedules(params, RequestOptions.none())
@@ -203,8 +192,8 @@ interface ObjectService {
         ): HttpResponseFor<ObjectListPage>
 
         /**
-         * Returns a raw HTTP response for `delete /v1/objects/{collection}/{id}`, but is otherwise
-         * the same as [ObjectService.delete].
+         * Returns a raw HTTP response for `delete /v1/objects/{collection}/{object_id}`, but is
+         * otherwise the same as [ObjectService.delete].
          */
         @MustBeClosed
         fun delete(params: ObjectDeleteParams): HttpResponseFor<String> =
@@ -252,8 +241,8 @@ interface ObjectService {
         ): HttpResponseFor<List<Subscription>>
 
         /**
-         * Returns a raw HTTP response for `get /v1/objects/{collection}/{id}`, but is otherwise the
-         * same as [ObjectService.get].
+         * Returns a raw HTTP response for `get /v1/objects/{collection}/{object_id}`, but is
+         * otherwise the same as [ObjectService.get].
          */
         @MustBeClosed
         fun get(params: ObjectGetParams): HttpResponseFor<Object> =
@@ -284,8 +273,8 @@ interface ObjectService {
 
         /**
          * Returns a raw HTTP response for `get
-         * /v1/objects/{collection}/{object_id}/preferences/{id}`, but is otherwise the same as
-         * [ObjectService.getPreferences].
+         * /v1/objects/{collection}/{object_id}/preferences/{preference_set_id}`, but is otherwise
+         * the same as [ObjectService.getPreferences].
          */
         @MustBeClosed
         fun getPreferences(params: ObjectGetPreferencesParams): HttpResponseFor<PreferenceSet> =
@@ -299,8 +288,8 @@ interface ObjectService {
         ): HttpResponseFor<PreferenceSet>
 
         /**
-         * Returns a raw HTTP response for `get /v1/objects/{collection}/{id}/messages`, but is
-         * otherwise the same as [ObjectService.listMessages].
+         * Returns a raw HTTP response for `get /v1/objects/{collection}/{object_id}/messages`, but
+         * is otherwise the same as [ObjectService.listMessages].
          */
         @MustBeClosed
         fun listMessages(
@@ -315,24 +304,8 @@ interface ObjectService {
         ): HttpResponseFor<ObjectListMessagesPage>
 
         /**
-         * Returns a raw HTTP response for `get /v1/objects/{collection}/{object_id}/preferences`,
-         * but is otherwise the same as [ObjectService.listPreferences].
-         */
-        @MustBeClosed
-        fun listPreferences(
-            params: ObjectListPreferencesParams
-        ): HttpResponseFor<List<PreferenceSet>> = listPreferences(params, RequestOptions.none())
-
-        /** @see [listPreferences] */
-        @MustBeClosed
-        fun listPreferences(
-            params: ObjectListPreferencesParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<List<PreferenceSet>>
-
-        /**
-         * Returns a raw HTTP response for `get /v1/objects/{collection}/{id}/schedules`, but is
-         * otherwise the same as [ObjectService.listSchedules].
+         * Returns a raw HTTP response for `get /v1/objects/{collection}/{object_id}/schedules`, but
+         * is otherwise the same as [ObjectService.listSchedules].
          */
         @MustBeClosed
         fun listSchedules(
@@ -364,8 +337,8 @@ interface ObjectService {
         ): HttpResponseFor<ObjectListSubscriptionsPage>
 
         /**
-         * Returns a raw HTTP response for `put /v1/objects/{collection}/{id}`, but is otherwise the
-         * same as [ObjectService.set].
+         * Returns a raw HTTP response for `put /v1/objects/{collection}/{object_id}`, but is
+         * otherwise the same as [ObjectService.set].
          */
         @MustBeClosed
         fun set(params: ObjectSetParams): HttpResponseFor<Object> =
@@ -396,8 +369,8 @@ interface ObjectService {
 
         /**
          * Returns a raw HTTP response for `put
-         * /v1/objects/{collection}/{object_id}/preferences/{id}`, but is otherwise the same as
-         * [ObjectService.setPreferences].
+         * /v1/objects/{collection}/{object_id}/preferences/{preference_set_id}`, but is otherwise
+         * the same as [ObjectService.setPreferences].
          */
         @MustBeClosed
         fun setPreferences(params: ObjectSetPreferencesParams): HttpResponseFor<PreferenceSet> =

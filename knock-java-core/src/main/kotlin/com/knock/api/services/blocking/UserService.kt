@@ -273,8 +273,9 @@ interface UserService {
         ): HttpResponseFor<ChannelData>
 
         /**
-         * Returns a raw HTTP response for `get /v1/users/{user_id}/preferences/{id}`, but is
-         * otherwise the same as [UserService.getPreferences].
+         * Returns a raw HTTP response for `get
+         * /v1/users/{user_id}/preferences/{preference_set_id}`, but is otherwise the same as
+         * [UserService.getPreferences].
          */
         @MustBeClosed
         fun getPreferences(params: UserGetPreferencesParams): HttpResponseFor<PreferenceSet> =
@@ -381,8 +382,9 @@ interface UserService {
         ): HttpResponseFor<ChannelData>
 
         /**
-         * Returns a raw HTTP response for `put /v1/users/{user_id}/preferences/{id}`, but is
-         * otherwise the same as [UserService.setPreferences].
+         * Returns a raw HTTP response for `put
+         * /v1/users/{user_id}/preferences/{preference_set_id}`, but is otherwise the same as
+         * [UserService.setPreferences].
          */
         @MustBeClosed
         fun setPreferences(params: UserSetPreferencesParams): HttpResponseFor<PreferenceSet> =

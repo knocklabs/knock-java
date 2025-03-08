@@ -31,14 +31,14 @@ class FeedServiceImpl internal constructor(private val clientOptions: ClientOpti
         params: UserFeedGetSettingsParams,
         requestOptions: RequestOptions,
     ): UserFeedGetSettingsResponse =
-        // get /v1/users/{user_id}/feeds/{id}/settings
+        // get /v1/users/{user_id}/feeds/{channel_id}/settings
         withRawResponse().getSettings(params, requestOptions).parse()
 
     override fun listItems(
         params: UserFeedListItemsParams,
         requestOptions: RequestOptions,
     ): UserFeedListItemsPage =
-        // get /v1/users/{user_id}/feeds/{id}
+        // get /v1/users/{user_id}/feeds/{channel_id}
         withRawResponse().listItems(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :

@@ -240,7 +240,7 @@ class UserServiceAsyncTest {
             userServiceAsync.getPreferences(
                 UserGetPreferencesParams.builder()
                     .userId("user_id")
-                    .id("id")
+                    .preferenceSetId("default")
                     .tenant("tenant")
                     .build()
             )
@@ -399,7 +399,7 @@ class UserServiceAsyncTest {
             userServiceAsync.setPreferences(
                 UserSetPreferencesParams.builder()
                     .userId("user_id")
-                    .id("id")
+                    .preferenceSetId("default")
                     .preferenceSetRequest(
                         PreferenceSetRequest.builder()
                             .categories(

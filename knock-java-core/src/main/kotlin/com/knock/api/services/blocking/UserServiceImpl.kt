@@ -85,7 +85,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
         params: UserGetPreferencesParams,
         requestOptions: RequestOptions,
     ): PreferenceSet =
-        // get /v1/users/{user_id}/preferences/{id}
+        // get /v1/users/{user_id}/preferences/{preference_set_id}
         withRawResponse().getPreferences(params, requestOptions).parse()
 
     override fun listMessages(
@@ -131,7 +131,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
         params: UserSetPreferencesParams,
         requestOptions: RequestOptions,
     ): PreferenceSet =
-        // put /v1/users/{user_id}/preferences/{id}
+        // put /v1/users/{user_id}/preferences/{preference_set_id}
         withRawResponse().setPreferences(params, requestOptions).parse()
 
     override fun unsetChannelData(

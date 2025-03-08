@@ -13,7 +13,7 @@ class ObjectSetPreferencesParamsTest {
         ObjectSetPreferencesParams.builder()
             .collection("collection")
             .objectId("object_id")
-            .id("id")
+            .preferenceSetId("default")
             .preferenceSetRequest(
                 PreferenceSetRequest.builder()
                     .categories(
@@ -94,7 +94,7 @@ class ObjectSetPreferencesParamsTest {
             ObjectSetPreferencesParams.builder()
                 .collection("collection")
                 .objectId("object_id")
-                .id("id")
+                .preferenceSetId("default")
                 .preferenceSetRequest(
                     PreferenceSetRequest.builder()
                         .categories(
@@ -250,7 +250,7 @@ class ObjectSetPreferencesParamsTest {
             ObjectSetPreferencesParams.builder()
                 .collection("collection")
                 .objectId("object_id")
-                .id("id")
+                .preferenceSetId("default")
                 .preferenceSetRequest(PreferenceSetRequest.builder().build())
                 .build()
 
@@ -265,7 +265,7 @@ class ObjectSetPreferencesParamsTest {
             ObjectSetPreferencesParams.builder()
                 .collection("collection")
                 .objectId("object_id")
-                .id("id")
+                .preferenceSetId("default")
                 .preferenceSetRequest(PreferenceSetRequest.builder().build())
                 .build()
         assertThat(params).isNotNull
@@ -273,8 +273,8 @@ class ObjectSetPreferencesParamsTest {
         assertThat(params.getPathParam(0)).isEqualTo("collection")
         // path param "objectId"
         assertThat(params.getPathParam(1)).isEqualTo("object_id")
-        // path param "id"
-        assertThat(params.getPathParam(2)).isEqualTo("id")
+        // path param "preferenceSetId"
+        assertThat(params.getPathParam(2)).isEqualTo("default")
         // out-of-bound path param
         assertThat(params.getPathParam(3)).isEqualTo("")
     }

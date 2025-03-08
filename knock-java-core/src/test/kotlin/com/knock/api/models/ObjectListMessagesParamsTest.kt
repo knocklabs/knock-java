@@ -12,7 +12,7 @@ class ObjectListMessagesParamsTest {
     fun create() {
         ObjectListMessagesParams.builder()
             .collection("projects")
-            .id("project-123")
+            .objectId("project-123")
             .after("after")
             .before("before")
             .channelId("channel_id")
@@ -34,7 +34,7 @@ class ObjectListMessagesParamsTest {
         val params =
             ObjectListMessagesParams.builder()
                 .collection("projects")
-                .id("project-123")
+                .objectId("project-123")
                 .after("after")
                 .before("before")
                 .channelId("channel_id")
@@ -72,7 +72,10 @@ class ObjectListMessagesParamsTest {
     @Test
     fun queryParamsWithoutOptionalFields() {
         val params =
-            ObjectListMessagesParams.builder().collection("projects").id("project-123").build()
+            ObjectListMessagesParams.builder()
+                .collection("projects")
+                .objectId("project-123")
+                .build()
         val expected = QueryParams.builder()
         assertThat(params._queryParams()).isEqualTo(expected.build())
     }
@@ -80,11 +83,14 @@ class ObjectListMessagesParamsTest {
     @Test
     fun getPathParam() {
         val params =
-            ObjectListMessagesParams.builder().collection("projects").id("project-123").build()
+            ObjectListMessagesParams.builder()
+                .collection("projects")
+                .objectId("project-123")
+                .build()
         assertThat(params).isNotNull
         // path param "collection"
         assertThat(params.getPathParam(0)).isEqualTo("projects")
-        // path param "id"
+        // path param "objectId"
         assertThat(params.getPathParam(1)).isEqualTo("project-123")
         // out-of-bound path param
         assertThat(params.getPathParam(2)).isEqualTo("")

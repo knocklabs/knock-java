@@ -50,21 +50,21 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
         params: TenantDeleteParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<String> =
-        // delete /v1/tenants/{id}
+        // delete /v1/tenants/{tenant_id}
         withRawResponse().delete(params, requestOptions).thenApply { it.parse() }
 
     override fun get(
         params: TenantGetParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<Tenant> =
-        // get /v1/tenants/{id}
+        // get /v1/tenants/{tenant_id}
         withRawResponse().get(params, requestOptions).thenApply { it.parse() }
 
     override fun set(
         params: TenantSetParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<Tenant> =
-        // put /v1/tenants/{id}
+        // put /v1/tenants/{tenant_id}
         withRawResponse().set(params, requestOptions).thenApply { it.parse() }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :

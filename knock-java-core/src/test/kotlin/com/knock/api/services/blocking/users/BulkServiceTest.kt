@@ -35,11 +35,7 @@ class BulkServiceTest {
 
         val bulkOperation =
             bulkService.delete(
-                UserBulkDeleteParams.builder()
-                    .addUserId("string")
-                    .addUserId("user_1")
-                    .addUserId("user_2")
-                    .build()
+                UserBulkDeleteParams.builder().addUserId("user_1").addUserId("user_2").build()
             )
 
         bulkOperation.validate()

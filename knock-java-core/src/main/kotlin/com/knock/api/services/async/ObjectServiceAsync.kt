@@ -17,7 +17,6 @@ import com.knock.api.models.ObjectListMessagesPageAsync
 import com.knock.api.models.ObjectListMessagesParams
 import com.knock.api.models.ObjectListPageAsync
 import com.knock.api.models.ObjectListParams
-import com.knock.api.models.ObjectListPreferencesParams
 import com.knock.api.models.ObjectListSchedulesPageAsync
 import com.knock.api.models.ObjectListSchedulesParams
 import com.knock.api.models.ObjectListSubscriptionsPageAsync
@@ -122,17 +121,6 @@ interface ObjectServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ObjectListMessagesPageAsync>
 
-    /** List preference sets */
-    fun listPreferences(
-        params: ObjectListPreferencesParams
-    ): CompletableFuture<List<PreferenceSet>> = listPreferences(params, RequestOptions.none())
-
-    /** @see [listPreferences] */
-    fun listPreferences(
-        params: ObjectListPreferencesParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<List<PreferenceSet>>
-
     /** List schedules */
     fun listSchedules(
         params: ObjectListSchedulesParams
@@ -224,8 +212,8 @@ interface ObjectServiceAsync {
         ): CompletableFuture<HttpResponseFor<ObjectListPageAsync>>
 
         /**
-         * Returns a raw HTTP response for `delete /v1/objects/{collection}/{id}`, but is otherwise
-         * the same as [ObjectServiceAsync.delete].
+         * Returns a raw HTTP response for `delete /v1/objects/{collection}/{object_id}`, but is
+         * otherwise the same as [ObjectServiceAsync.delete].
          */
         @MustBeClosed
         fun delete(params: ObjectDeleteParams): CompletableFuture<HttpResponseFor<String>> =
@@ -275,8 +263,8 @@ interface ObjectServiceAsync {
         ): CompletableFuture<HttpResponseFor<List<Subscription>>>
 
         /**
-         * Returns a raw HTTP response for `get /v1/objects/{collection}/{id}`, but is otherwise the
-         * same as [ObjectServiceAsync.get].
+         * Returns a raw HTTP response for `get /v1/objects/{collection}/{object_id}`, but is
+         * otherwise the same as [ObjectServiceAsync.get].
          */
         @MustBeClosed
         fun get(params: ObjectGetParams): CompletableFuture<HttpResponseFor<Object>> =
@@ -309,8 +297,8 @@ interface ObjectServiceAsync {
 
         /**
          * Returns a raw HTTP response for `get
-         * /v1/objects/{collection}/{object_id}/preferences/{id}`, but is otherwise the same as
-         * [ObjectServiceAsync.getPreferences].
+         * /v1/objects/{collection}/{object_id}/preferences/{preference_set_id}`, but is otherwise
+         * the same as [ObjectServiceAsync.getPreferences].
          */
         @MustBeClosed
         fun getPreferences(
@@ -326,8 +314,8 @@ interface ObjectServiceAsync {
         ): CompletableFuture<HttpResponseFor<PreferenceSet>>
 
         /**
-         * Returns a raw HTTP response for `get /v1/objects/{collection}/{id}/messages`, but is
-         * otherwise the same as [ObjectServiceAsync.listMessages].
+         * Returns a raw HTTP response for `get /v1/objects/{collection}/{object_id}/messages`, but
+         * is otherwise the same as [ObjectServiceAsync.listMessages].
          */
         @MustBeClosed
         fun listMessages(
@@ -343,25 +331,8 @@ interface ObjectServiceAsync {
         ): CompletableFuture<HttpResponseFor<ObjectListMessagesPageAsync>>
 
         /**
-         * Returns a raw HTTP response for `get /v1/objects/{collection}/{object_id}/preferences`,
-         * but is otherwise the same as [ObjectServiceAsync.listPreferences].
-         */
-        @MustBeClosed
-        fun listPreferences(
-            params: ObjectListPreferencesParams
-        ): CompletableFuture<HttpResponseFor<List<PreferenceSet>>> =
-            listPreferences(params, RequestOptions.none())
-
-        /** @see [listPreferences] */
-        @MustBeClosed
-        fun listPreferences(
-            params: ObjectListPreferencesParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<List<PreferenceSet>>>
-
-        /**
-         * Returns a raw HTTP response for `get /v1/objects/{collection}/{id}/schedules`, but is
-         * otherwise the same as [ObjectServiceAsync.listSchedules].
+         * Returns a raw HTTP response for `get /v1/objects/{collection}/{object_id}/schedules`, but
+         * is otherwise the same as [ObjectServiceAsync.listSchedules].
          */
         @MustBeClosed
         fun listSchedules(
@@ -394,8 +365,8 @@ interface ObjectServiceAsync {
         ): CompletableFuture<HttpResponseFor<ObjectListSubscriptionsPageAsync>>
 
         /**
-         * Returns a raw HTTP response for `put /v1/objects/{collection}/{id}`, but is otherwise the
-         * same as [ObjectServiceAsync.set].
+         * Returns a raw HTTP response for `put /v1/objects/{collection}/{object_id}`, but is
+         * otherwise the same as [ObjectServiceAsync.set].
          */
         @MustBeClosed
         fun set(params: ObjectSetParams): CompletableFuture<HttpResponseFor<Object>> =
@@ -428,8 +399,8 @@ interface ObjectServiceAsync {
 
         /**
          * Returns a raw HTTP response for `put
-         * /v1/objects/{collection}/{object_id}/preferences/{id}`, but is otherwise the same as
-         * [ObjectServiceAsync.setPreferences].
+         * /v1/objects/{collection}/{object_id}/preferences/{preference_set_id}`, but is otherwise
+         * the same as [ObjectServiceAsync.setPreferences].
          */
         @MustBeClosed
         fun setPreferences(

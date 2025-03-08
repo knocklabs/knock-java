@@ -29,7 +29,7 @@ class FeedServiceTest {
             feedService.getSettings(
                 UserFeedGetSettingsParams.builder()
                     .userId("user_id")
-                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .build()
             )
 
@@ -52,7 +52,7 @@ class FeedServiceTest {
             feedService.listItems(
                 UserFeedListItemsParams.builder()
                     .userId("user_id")
-                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .build()
             )
 

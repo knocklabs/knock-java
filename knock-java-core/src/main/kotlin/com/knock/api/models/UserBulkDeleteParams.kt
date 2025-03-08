@@ -23,14 +23,10 @@ import java.util.Objects
 /** Bulk delete users */
 class UserBulkDeleteParams
 private constructor(
-    private val userIds: List<String>,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
-
-    /** The IDs of the users to delete */
-    fun userIds(): List<String> = userIds
 
     fun userIds(): List<String> = body.userIds()
 
@@ -46,12 +42,7 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.userIds.let { queryParams.put("user_ids[]", it.map(Any::toString)) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     /** A request to delete users in bulk */
     @NoAutoDetect
@@ -178,7 +169,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .userIds()
-         * .userIds()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -188,25 +178,15 @@ private constructor(
     @NoAutoDetect
     class Builder internal constructor() {
 
-        private var userIds: MutableList<String>? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(userBulkDeleteParams: UserBulkDeleteParams) = apply {
-            userIds = userBulkDeleteParams.userIds.toMutableList()
             body = userBulkDeleteParams.body.toBuilder()
             additionalHeaders = userBulkDeleteParams.additionalHeaders.toBuilder()
             additionalQueryParams = userBulkDeleteParams.additionalQueryParams.toBuilder()
-        }
-
-        /** The IDs of the users to delete */
-        fun userIds(userIds: List<String>) = apply { this.userIds = userIds.toMutableList() }
-
-        /** The IDs of the users to delete */
-        fun addUserId(userId: String) = apply {
-            userIds = (userIds ?: mutableListOf()).apply { add(userId) }
         }
 
         fun userIds(userIds: List<String>) = apply { body.userIds(userIds) }
@@ -334,7 +314,6 @@ private constructor(
 
         fun build(): UserBulkDeleteParams =
             UserBulkDeleteParams(
-                checkRequired("userIds", userIds).toImmutable(),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -346,11 +325,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is UserBulkDeleteParams && userIds == other.userIds && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is UserBulkDeleteParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userIds, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "UserBulkDeleteParams{userIds=$userIds, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserBulkDeleteParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
