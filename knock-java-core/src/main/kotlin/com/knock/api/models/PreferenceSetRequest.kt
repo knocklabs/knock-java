@@ -15,6 +15,7 @@ import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Set preferences for a recipient */
 @NoAutoDetect
@@ -120,7 +121,7 @@ private constructor(
          * A setting for a preference set, where the key in the object is the category, and the
          * values are the preference settings for that category.
          */
-        fun categories(categories: Optional<Categories>) = categories(categories.orElse(null))
+        fun categories(categories: Optional<Categories>) = categories(categories.getOrNull())
 
         /**
          * A setting for a preference set, where the key in the object is the category, and the
@@ -134,7 +135,7 @@ private constructor(
 
         /** Channel type preferences */
         fun channelTypes(channelTypes: Optional<PreferenceSetChannelTypes>) =
-            channelTypes(channelTypes.orElse(null))
+            channelTypes(channelTypes.getOrNull())
 
         /** Channel type preferences */
         fun channelTypes(channelTypes: JsonField<PreferenceSetChannelTypes>) = apply {
@@ -151,7 +152,7 @@ private constructor(
          * A setting for a preference set, where the key in the object is the workflow key, and the
          * values are the preference settings for that workflow.
          */
-        fun workflows(workflows: Optional<Workflows>) = workflows(workflows.orElse(null))
+        fun workflows(workflows: Optional<Workflows>) = workflows(workflows.getOrNull())
 
         /**
          * A setting for a preference set, where the key in the object is the workflow key, and the

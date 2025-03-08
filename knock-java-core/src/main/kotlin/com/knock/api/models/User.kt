@@ -17,6 +17,7 @@ import com.knock.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** A user object */
 @NoAutoDetect
@@ -173,37 +174,37 @@ private constructor(
 
         fun avatar(avatar: String?) = avatar(JsonField.ofNullable(avatar))
 
-        fun avatar(avatar: Optional<String>) = avatar(avatar.orElse(null))
+        fun avatar(avatar: Optional<String>) = avatar(avatar.getOrNull())
 
         fun avatar(avatar: JsonField<String>) = apply { this.avatar = avatar }
 
         fun createdAt(createdAt: OffsetDateTime?) = createdAt(JsonField.ofNullable(createdAt))
 
-        fun createdAt(createdAt: Optional<OffsetDateTime>) = createdAt(createdAt.orElse(null))
+        fun createdAt(createdAt: Optional<OffsetDateTime>) = createdAt(createdAt.getOrNull())
 
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         fun email(email: String?) = email(JsonField.ofNullable(email))
 
-        fun email(email: Optional<String>) = email(email.orElse(null))
+        fun email(email: Optional<String>) = email(email.getOrNull())
 
         fun email(email: JsonField<String>) = apply { this.email = email }
 
         fun name(name: String?) = name(JsonField.ofNullable(name))
 
-        fun name(name: Optional<String>) = name(name.orElse(null))
+        fun name(name: Optional<String>) = name(name.getOrNull())
 
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun phoneNumber(phoneNumber: String?) = phoneNumber(JsonField.ofNullable(phoneNumber))
 
-        fun phoneNumber(phoneNumber: Optional<String>) = phoneNumber(phoneNumber.orElse(null))
+        fun phoneNumber(phoneNumber: Optional<String>) = phoneNumber(phoneNumber.getOrNull())
 
         fun phoneNumber(phoneNumber: JsonField<String>) = apply { this.phoneNumber = phoneNumber }
 
         fun timezone(timezone: String?) = timezone(JsonField.ofNullable(timezone))
 
-        fun timezone(timezone: Optional<String>) = timezone(timezone.orElse(null))
+        fun timezone(timezone: Optional<String>) = timezone(timezone.getOrNull())
 
         fun timezone(timezone: JsonField<String>) = apply { this.timezone = timezone }
 

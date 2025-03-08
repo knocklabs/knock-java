@@ -20,6 +20,7 @@ import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Trigger a workflow specified by the key to run for the given recipients, using the parameters
@@ -257,7 +258,7 @@ private constructor(
              * inline user request (object), or an inline object request, which is determined by the
              * presence of a `collection` property.
              */
-            fun actor(actor: Optional<RecipientRequest>) = actor(actor.orElse(null))
+            fun actor(actor: Optional<RecipientRequest>) = actor(actor.getOrNull())
 
             /**
              * Specifies a recipient in a request. This can either be a user identifier (string), an
@@ -294,7 +295,7 @@ private constructor(
              * cancellation of any workflow runs associated with this trigger.
              */
             fun cancellationKey(cancellationKey: Optional<String>) =
-                cancellationKey(cancellationKey.orElse(null))
+                cancellationKey(cancellationKey.getOrNull())
 
             /**
              * An optional key that is used in the workflow cancellation endpoint to target a
@@ -314,7 +315,7 @@ private constructor(
              * An optional map of data to be used in the workflow. This data will be available to
              * the workflow as a map in the `data` field.
              */
-            fun data(data: Optional<Data>) = data(data.orElse(null))
+            fun data(data: Optional<Data>) = data(data.getOrNull())
 
             /**
              * An optional map of data to be used in the workflow. This data will be available to
@@ -368,7 +369,7 @@ private constructor(
             fun tenant(tenant: InlineTenantRequest?) = tenant(JsonField.ofNullable(tenant))
 
             /** An inline tenant request */
-            fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.orElse(null))
+            fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.getOrNull())
 
             /** An inline tenant request */
             fun tenant(tenant: JsonField<InlineTenantRequest>) = apply { this.tenant = tenant }
@@ -474,7 +475,7 @@ private constructor(
          * inline user request (object), or an inline object request, which is determined by the
          * presence of a `collection` property.
          */
-        fun actor(actor: Optional<RecipientRequest>) = actor(actor.orElse(null))
+        fun actor(actor: Optional<RecipientRequest>) = actor(actor.getOrNull())
 
         /**
          * Specifies a recipient in a request. This can either be a user identifier (string), an
@@ -511,7 +512,7 @@ private constructor(
          * cancellation of any workflow runs associated with this trigger.
          */
         fun cancellationKey(cancellationKey: Optional<String>) =
-            cancellationKey(cancellationKey.orElse(null))
+            cancellationKey(cancellationKey.getOrNull())
 
         /**
          * An optional key that is used in the workflow cancellation endpoint to target a
@@ -531,7 +532,7 @@ private constructor(
          * An optional map of data to be used in the workflow. This data will be available to the
          * workflow as a map in the `data` field.
          */
-        fun data(data: Optional<Data>) = data(data.orElse(null))
+        fun data(data: Optional<Data>) = data(data.getOrNull())
 
         /**
          * An optional map of data to be used in the workflow. This data will be available to the
@@ -580,7 +581,7 @@ private constructor(
         fun tenant(tenant: InlineTenantRequest?) = apply { body.tenant(tenant) }
 
         /** An inline tenant request */
-        fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.orElse(null))
+        fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.getOrNull())
 
         /** An inline tenant request */
         fun tenant(tenant: JsonField<InlineTenantRequest>) = apply { body.tenant(tenant) }

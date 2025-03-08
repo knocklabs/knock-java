@@ -20,6 +20,7 @@ import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Add members */
 class AudienceAddMembersParams
@@ -435,7 +436,7 @@ private constructor(
 
             fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
 
-            fun tenant(tenant: Optional<String>) = tenant(tenant.orElse(null))
+            fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
             fun tenant(tenant: JsonField<String>) = apply { this.tenant = tenant }
 

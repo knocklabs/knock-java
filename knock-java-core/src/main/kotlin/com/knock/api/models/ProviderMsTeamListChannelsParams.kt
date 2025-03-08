@@ -9,6 +9,7 @@ import com.knock.api.core.http.Headers
 import com.knock.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * List the Microsoft Teams channels within a team. By default, archived and private channels are
@@ -114,7 +115,7 @@ private constructor(
         fun queryOptions(queryOptions: QueryOptions?) = apply { this.queryOptions = queryOptions }
 
         fun queryOptions(queryOptions: Optional<QueryOptions>) =
-            queryOptions(queryOptions.orElse(null))
+            queryOptions(queryOptions.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -285,7 +286,7 @@ private constructor(
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
              * Microsoft Graph API to filter channels
              */
-            fun filter(filter: Optional<String>) = filter(filter.orElse(null))
+            fun filter(filter: Optional<String>) = filter(filter.getOrNull())
 
             /**
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
@@ -297,7 +298,7 @@ private constructor(
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
              * Microsoft Graph API to select fields on a channel
              */
-            fun select(select: Optional<String>) = select(select.orElse(null))
+            fun select(select: Optional<String>) = select(select.getOrNull())
 
             fun additionalProperties(additionalProperties: QueryParams) = apply {
                 this.additionalProperties.clear()

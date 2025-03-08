@@ -32,6 +32,7 @@ import com.knock.api.errors.KnockInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Create schedules */
 class ScheduleCreateParams
@@ -255,13 +256,13 @@ private constructor(
 
             fun data(data: Data?) = data(JsonField.ofNullable(data))
 
-            fun data(data: Optional<Data>) = data(data.orElse(null))
+            fun data(data: Optional<Data>) = data(data.getOrNull())
 
             fun data(data: JsonField<Data>) = apply { this.data = data }
 
             fun endingAt(endingAt: OffsetDateTime?) = endingAt(JsonField.ofNullable(endingAt))
 
-            fun endingAt(endingAt: Optional<OffsetDateTime>) = endingAt(endingAt.orElse(null))
+            fun endingAt(endingAt: Optional<OffsetDateTime>) = endingAt(endingAt.getOrNull())
 
             fun endingAt(endingAt: JsonField<OffsetDateTime>) = apply { this.endingAt = endingAt }
 
@@ -269,7 +270,7 @@ private constructor(
                 scheduledAt(JsonField.ofNullable(scheduledAt))
 
             fun scheduledAt(scheduledAt: Optional<OffsetDateTime>) =
-                scheduledAt(scheduledAt.orElse(null))
+                scheduledAt(scheduledAt.getOrNull())
 
             fun scheduledAt(scheduledAt: JsonField<OffsetDateTime>) = apply {
                 this.scheduledAt = scheduledAt
@@ -279,7 +280,7 @@ private constructor(
             fun tenant(tenant: InlineTenantRequest?) = tenant(JsonField.ofNullable(tenant))
 
             /** An inline tenant request */
-            fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.orElse(null))
+            fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.getOrNull())
 
             /** An inline tenant request */
             fun tenant(tenant: JsonField<InlineTenantRequest>) = apply { this.tenant = tenant }
@@ -401,20 +402,20 @@ private constructor(
 
         fun data(data: Data?) = apply { body.data(data) }
 
-        fun data(data: Optional<Data>) = data(data.orElse(null))
+        fun data(data: Optional<Data>) = data(data.getOrNull())
 
         fun data(data: JsonField<Data>) = apply { body.data(data) }
 
         fun endingAt(endingAt: OffsetDateTime?) = apply { body.endingAt(endingAt) }
 
-        fun endingAt(endingAt: Optional<OffsetDateTime>) = endingAt(endingAt.orElse(null))
+        fun endingAt(endingAt: Optional<OffsetDateTime>) = endingAt(endingAt.getOrNull())
 
         fun endingAt(endingAt: JsonField<OffsetDateTime>) = apply { body.endingAt(endingAt) }
 
         fun scheduledAt(scheduledAt: OffsetDateTime?) = apply { body.scheduledAt(scheduledAt) }
 
         fun scheduledAt(scheduledAt: Optional<OffsetDateTime>) =
-            scheduledAt(scheduledAt.orElse(null))
+            scheduledAt(scheduledAt.getOrNull())
 
         fun scheduledAt(scheduledAt: JsonField<OffsetDateTime>) = apply {
             body.scheduledAt(scheduledAt)
@@ -424,7 +425,7 @@ private constructor(
         fun tenant(tenant: InlineTenantRequest?) = apply { body.tenant(tenant) }
 
         /** An inline tenant request */
-        fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.orElse(null))
+        fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.getOrNull())
 
         /** An inline tenant request */
         fun tenant(tenant: JsonField<InlineTenantRequest>) = apply { body.tenant(tenant) }

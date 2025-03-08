@@ -28,6 +28,7 @@ import com.knock.api.core.toImmutable
 import com.knock.api.errors.KnockInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Slack channel data */
 @NoAutoDetect
@@ -123,7 +124,7 @@ private constructor(
         fun token(token: Token?) = token(JsonField.ofNullable(token))
 
         /** A token that's used to store the access token for a Slack workspace. */
-        fun token(token: Optional<Token>) = token(token.orElse(null))
+        fun token(token: Optional<Token>) = token(token.getOrNull())
 
         /** A token that's used to store the access token for a Slack workspace. */
         fun token(token: JsonField<Token>) = apply { this.token = token }
@@ -394,7 +395,7 @@ private constructor(
                     accessToken(JsonField.ofNullable(accessToken))
 
                 fun accessToken(accessToken: Optional<String>) =
-                    accessToken(accessToken.orElse(null))
+                    accessToken(accessToken.getOrNull())
 
                 fun accessToken(accessToken: JsonField<String>) = apply {
                     this.accessToken = accessToken
@@ -402,13 +403,13 @@ private constructor(
 
                 fun channelId(channelId: String?) = channelId(JsonField.ofNullable(channelId))
 
-                fun channelId(channelId: Optional<String>) = channelId(channelId.orElse(null))
+                fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
                 fun channelId(channelId: JsonField<String>) = apply { this.channelId = channelId }
 
                 fun userId(userId: String?) = userId(JsonField.ofNullable(userId))
 
-                fun userId(userId: Optional<String>) = userId(userId.orElse(null))
+                fun userId(userId: Optional<String>) = userId(userId.getOrNull())
 
                 fun userId(userId: JsonField<String>) = apply { this.userId = userId }
 
@@ -637,7 +638,7 @@ private constructor(
 
             fun accessToken(accessToken: String?) = accessToken(JsonField.ofNullable(accessToken))
 
-            fun accessToken(accessToken: Optional<String>) = accessToken(accessToken.orElse(null))
+            fun accessToken(accessToken: Optional<String>) = accessToken(accessToken.getOrNull())
 
             fun accessToken(accessToken: JsonField<String>) = apply {
                 this.accessToken = accessToken

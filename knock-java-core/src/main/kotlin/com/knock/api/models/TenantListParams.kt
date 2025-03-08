@@ -8,6 +8,7 @@ import com.knock.api.core.http.Headers
 import com.knock.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** List tenants */
 class TenantListParams
@@ -76,13 +77,13 @@ private constructor(
         fun after(after: String?) = apply { this.after = after }
 
         /** The cursor to fetch entries after */
-        fun after(after: Optional<String>) = after(after.orElse(null))
+        fun after(after: Optional<String>) = after(after.getOrNull())
 
         /** The cursor to fetch entries before */
         fun before(before: String?) = apply { this.before = before }
 
         /** The cursor to fetch entries before */
-        fun before(before: Optional<String>) = before(before.orElse(null))
+        fun before(before: Optional<String>) = before(before.getOrNull())
 
         /** The page size to fetch */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
@@ -91,8 +92,7 @@ private constructor(
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
         /** The page size to fetch */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.orElse(null) as Long?)
+        fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

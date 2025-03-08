@@ -17,6 +17,7 @@ import com.knock.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** A user belonging to an audience */
 @NoAutoDetect
@@ -138,7 +139,7 @@ private constructor(
 
         fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
 
-        fun tenant(tenant: Optional<String>) = tenant(tenant.orElse(null))
+        fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         fun tenant(tenant: JsonField<String>) = apply { this.tenant = tenant }
 

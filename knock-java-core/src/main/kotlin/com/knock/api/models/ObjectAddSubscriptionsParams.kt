@@ -20,6 +20,7 @@ import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Add subscriptions for an object. If a subscription already exists, it will be updated. */
 class ObjectAddSubscriptionsParams
@@ -181,7 +182,7 @@ private constructor(
             fun properties(properties: Properties?) = properties(JsonField.ofNullable(properties))
 
             /** The custom properties associated with the subscription */
-            fun properties(properties: Optional<Properties>) = properties(properties.orElse(null))
+            fun properties(properties: Optional<Properties>) = properties(properties.getOrNull())
 
             /** The custom properties associated with the subscription */
             fun properties(properties: JsonField<Properties>) = apply {
@@ -305,7 +306,7 @@ private constructor(
         fun properties(properties: Properties?) = apply { body.properties(properties) }
 
         /** The custom properties associated with the subscription */
-        fun properties(properties: Optional<Properties>) = properties(properties.orElse(null))
+        fun properties(properties: Optional<Properties>) = properties(properties.getOrNull())
 
         /** The custom properties associated with the subscription */
         fun properties(properties: JsonField<Properties>) = apply { body.properties(properties) }

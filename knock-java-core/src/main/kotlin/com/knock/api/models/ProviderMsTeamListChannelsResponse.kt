@@ -17,6 +17,7 @@ import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** The response from a channels for Microsoft Teams provider request */
 @NoAutoDetect
@@ -260,7 +261,7 @@ private constructor(
 
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: Optional<String>) = description(description.getOrNull())
 
             fun description(description: JsonField<String>) = apply {
                 this.description = description

@@ -30,6 +30,7 @@ import com.knock.api.errors.KnockInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** The contents of a message */
 @NoAutoDetect
@@ -617,19 +618,19 @@ private constructor(
 
                 fun bcc(bcc: String?) = bcc(JsonField.ofNullable(bcc))
 
-                fun bcc(bcc: Optional<String>) = bcc(bcc.orElse(null))
+                fun bcc(bcc: Optional<String>) = bcc(bcc.getOrNull())
 
                 fun bcc(bcc: JsonField<String>) = apply { this.bcc = bcc }
 
                 fun cc(cc: String?) = cc(JsonField.ofNullable(cc))
 
-                fun cc(cc: Optional<String>) = cc(cc.orElse(null))
+                fun cc(cc: Optional<String>) = cc(cc.getOrNull())
 
                 fun cc(cc: JsonField<String>) = apply { this.cc = cc }
 
                 fun replyTo(replyTo: String?) = replyTo(JsonField.ofNullable(replyTo))
 
-                fun replyTo(replyTo: Optional<String>) = replyTo(replyTo.orElse(null))
+                fun replyTo(replyTo: Optional<String>) = replyTo(replyTo.getOrNull())
 
                 fun replyTo(replyTo: JsonField<String>) = apply { this.replyTo = replyTo }
 
@@ -952,7 +953,7 @@ private constructor(
 
                 fun data(data: InnerData?) = data(JsonField.ofNullable(data))
 
-                fun data(data: Optional<InnerData>) = data(data.orElse(null))
+                fun data(data: Optional<InnerData>) = data(data.getOrNull())
 
                 fun data(data: JsonField<InnerData>) = apply { this.data = data }
 
@@ -1208,7 +1209,7 @@ private constructor(
 
                 fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
 
-                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
                 fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
@@ -1412,7 +1413,7 @@ private constructor(
                     fun blocks(blocks: List<Block>?) = blocks(JsonField.ofNullable(blocks))
 
                     /** The structured blocks of the message */
-                    fun blocks(blocks: Optional<List<Block>>) = blocks(blocks.orElse(null))
+                    fun blocks(blocks: Optional<List<Block>>) = blocks(blocks.getOrNull())
 
                     /** The structured blocks of the message */
                     fun blocks(blocks: JsonField<List<Block>>) = apply {
@@ -1433,7 +1434,7 @@ private constructor(
 
                     /** The JSON content of the message */
                     fun jsonContent(jsonContent: Optional<JsonContent>) =
-                        jsonContent(jsonContent.orElse(null))
+                        jsonContent(jsonContent.getOrNull())
 
                     /** The JSON content of the message */
                     fun jsonContent(jsonContent: JsonField<JsonContent>) = apply {
@@ -1442,7 +1443,7 @@ private constructor(
 
                     fun summary(summary: String?) = summary(JsonField.ofNullable(summary))
 
-                    fun summary(summary: Optional<String>) = summary(summary.orElse(null))
+                    fun summary(summary: Optional<String>) = summary(summary.getOrNull())
 
                     fun summary(summary: JsonField<String>) = apply { this.summary = summary }
 

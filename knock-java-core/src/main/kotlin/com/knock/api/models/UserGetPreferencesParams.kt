@@ -9,6 +9,7 @@ import com.knock.api.core.http.Headers
 import com.knock.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Get preference set */
 class UserGetPreferencesParams
@@ -91,7 +92,7 @@ private constructor(
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
         /** Tenant ID */
-        fun tenant(tenant: Optional<String>) = tenant(tenant.orElse(null))
+        fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

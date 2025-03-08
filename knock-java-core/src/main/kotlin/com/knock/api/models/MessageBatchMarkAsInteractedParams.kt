@@ -20,6 +20,7 @@ import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Mark messages as interacted */
 class MessageBatchMarkAsInteractedParams
@@ -147,7 +148,7 @@ private constructor(
             fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
 
             /** Metadata about the interaction */
-            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+            fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
             /** Metadata about the interaction */
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
@@ -243,7 +244,7 @@ private constructor(
         fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
 
         /** Metadata about the interaction */
-        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.orElse(null))
+        fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
         /** Metadata about the interaction */
         fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }

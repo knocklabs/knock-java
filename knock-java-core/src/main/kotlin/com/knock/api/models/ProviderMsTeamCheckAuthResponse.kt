@@ -16,6 +16,7 @@ import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** The response from a Microsoft Teams auth check request */
 @NoAutoDetect
@@ -180,7 +181,7 @@ private constructor(
 
             fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
-            fun reason(reason: Optional<String>) = reason(reason.orElse(null))
+            fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
             fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 

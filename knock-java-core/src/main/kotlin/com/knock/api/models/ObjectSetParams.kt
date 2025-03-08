@@ -19,6 +19,7 @@ import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Set (identify) an object */
 class ObjectSetParams
@@ -143,7 +144,7 @@ private constructor(
 
             /** Allows inline setting channel data for a recipient */
             fun channelData(channelData: Optional<InlineChannelDataRequest>) =
-                channelData(channelData.orElse(null))
+                channelData(channelData.getOrNull())
 
             /** Allows inline setting channel data for a recipient */
             fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
@@ -156,7 +157,7 @@ private constructor(
 
             /** Inline set preferences for a recipient, where the key is the preference set name */
             fun preferences(preferences: Optional<InlinePreferenceSetRequest>) =
-                preferences(preferences.orElse(null))
+                preferences(preferences.getOrNull())
 
             /** Inline set preferences for a recipient, where the key is the preference set name */
             fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {
@@ -249,7 +250,7 @@ private constructor(
 
         /** Allows inline setting channel data for a recipient */
         fun channelData(channelData: Optional<InlineChannelDataRequest>) =
-            channelData(channelData.orElse(null))
+            channelData(channelData.getOrNull())
 
         /** Allows inline setting channel data for a recipient */
         fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
@@ -263,7 +264,7 @@ private constructor(
 
         /** Inline set preferences for a recipient, where the key is the preference set name */
         fun preferences(preferences: Optional<InlinePreferenceSetRequest>) =
-            preferences(preferences.orElse(null))
+            preferences(preferences.getOrNull())
 
         /** Inline set preferences for a recipient, where the key is the preference set name */
         fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {

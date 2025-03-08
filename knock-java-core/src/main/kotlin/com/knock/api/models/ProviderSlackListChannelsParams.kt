@@ -9,6 +9,7 @@ import com.knock.api.core.http.Headers
 import com.knock.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** List Slack channels for a Slack workspace */
 class ProviderSlackListChannelsParams
@@ -98,7 +99,7 @@ private constructor(
         fun queryOptions(queryOptions: QueryOptions?) = apply { this.queryOptions = queryOptions }
 
         fun queryOptions(queryOptions: Optional<QueryOptions>) =
-            queryOptions(queryOptions.orElse(null))
+            queryOptions(queryOptions.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -277,7 +278,7 @@ private constructor(
             fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
             /** A cursor to paginate through the channels */
-            fun cursor(cursor: Optional<String>) = cursor(cursor.orElse(null))
+            fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
             /** Whether to exclude archived channels */
             fun excludeArchived(excludeArchived: Boolean?) = apply {
@@ -289,9 +290,8 @@ private constructor(
                 excludeArchived(excludeArchived as Boolean?)
 
             /** Whether to exclude archived channels */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
             fun excludeArchived(excludeArchived: Optional<Boolean>) =
-                excludeArchived(excludeArchived.orElse(null) as Boolean?)
+                excludeArchived(excludeArchived.getOrNull())
 
             /** The number of channels to return */
             fun limit(limit: Long?) = apply { this.limit = limit }
@@ -300,20 +300,19 @@ private constructor(
             fun limit(limit: Long) = limit(limit as Long?)
 
             /** The number of channels to return */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun limit(limit: Optional<Long>) = limit(limit.orElse(null) as Long?)
+            fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
             /** The ID of the Slack team to get channels for */
             fun teamId(teamId: String?) = apply { this.teamId = teamId }
 
             /** The ID of the Slack team to get channels for */
-            fun teamId(teamId: Optional<String>) = teamId(teamId.orElse(null))
+            fun teamId(teamId: Optional<String>) = teamId(teamId.getOrNull())
 
             /** The types of channels to return (comma separated list) */
             fun types(types: String?) = apply { this.types = types }
 
             /** The types of channels to return (comma separated list) */
-            fun types(types: Optional<String>) = types(types.orElse(null))
+            fun types(types: Optional<String>) = types(types.getOrNull())
 
             fun additionalProperties(additionalProperties: QueryParams) = apply {
                 this.additionalProperties.clear()

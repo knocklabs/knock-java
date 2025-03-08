@@ -17,6 +17,7 @@ import com.knock.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** A subscription object */
 @NoAutoDetect
@@ -178,7 +179,7 @@ private constructor(
         fun properties(properties: Properties?) = properties(JsonField.ofNullable(properties))
 
         /** The custom properties associated with the subscription */
-        fun properties(properties: Optional<Properties>) = properties(properties.orElse(null))
+        fun properties(properties: Optional<Properties>) = properties(properties.getOrNull())
 
         /** The custom properties associated with the subscription */
         fun properties(properties: JsonField<Properties>) = apply { this.properties = properties }

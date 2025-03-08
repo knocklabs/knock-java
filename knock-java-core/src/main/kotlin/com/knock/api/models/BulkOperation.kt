@@ -20,6 +20,7 @@ import com.knock.api.errors.KnockInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** A bulk operation entity */
 @NoAutoDetect
@@ -281,7 +282,7 @@ private constructor(
             completedAt(JsonField.ofNullable(completedAt))
 
         fun completedAt(completedAt: Optional<OffsetDateTime>) =
-            completedAt(completedAt.orElse(null))
+            completedAt(completedAt.getOrNull())
 
         fun completedAt(completedAt: JsonField<OffsetDateTime>) = apply {
             this.completedAt = completedAt
@@ -309,13 +310,13 @@ private constructor(
 
         fun failedAt(failedAt: OffsetDateTime?) = failedAt(JsonField.ofNullable(failedAt))
 
-        fun failedAt(failedAt: Optional<OffsetDateTime>) = failedAt(failedAt.orElse(null))
+        fun failedAt(failedAt: Optional<OffsetDateTime>) = failedAt(failedAt.getOrNull())
 
         fun failedAt(failedAt: JsonField<OffsetDateTime>) = apply { this.failedAt = failedAt }
 
         fun startedAt(startedAt: OffsetDateTime?) = startedAt(JsonField.ofNullable(startedAt))
 
-        fun startedAt(startedAt: Optional<OffsetDateTime>) = startedAt(startedAt.orElse(null))
+        fun startedAt(startedAt: Optional<OffsetDateTime>) = startedAt(startedAt.getOrNull())
 
         fun startedAt(startedAt: JsonField<OffsetDateTime>) = apply { this.startedAt = startedAt }
 
@@ -541,7 +542,7 @@ private constructor(
 
             fun collection(collection: String?) = collection(JsonField.ofNullable(collection))
 
-            fun collection(collection: Optional<String>) = collection(collection.orElse(null))
+            fun collection(collection: Optional<String>) = collection(collection.getOrNull())
 
             fun collection(collection: JsonField<String>) = apply { this.collection = collection }
 

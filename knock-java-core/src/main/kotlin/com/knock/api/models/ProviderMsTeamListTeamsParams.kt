@@ -9,6 +9,7 @@ import com.knock.api.core.http.Headers
 import com.knock.api.core.http.QueryParams
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Get a list of teams belonging to the Microsoft Entra tenant. By default, archived and private
@@ -101,7 +102,7 @@ private constructor(
         fun queryOptions(queryOptions: QueryOptions?) = apply { this.queryOptions = queryOptions }
 
         fun queryOptions(queryOptions: Optional<QueryOptions>) =
-            queryOptions(queryOptions.orElse(null))
+            queryOptions(queryOptions.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -291,7 +292,7 @@ private constructor(
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
              * Microsoft Graph API to filter teams
              */
-            fun filter(filter: Optional<String>) = filter(filter.orElse(null))
+            fun filter(filter: Optional<String>) = filter(filter.getOrNull())
 
             /**
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
@@ -303,7 +304,7 @@ private constructor(
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
              * Microsoft Graph API to select fields on a team
              */
-            fun select(select: Optional<String>) = select(select.orElse(null))
+            fun select(select: Optional<String>) = select(select.getOrNull())
 
             /**
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
@@ -315,7 +316,7 @@ private constructor(
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
              * Microsoft Graph API to retrieve the next page of results
              */
-            fun skiptoken(skiptoken: Optional<String>) = skiptoken(skiptoken.orElse(null))
+            fun skiptoken(skiptoken: Optional<String>) = skiptoken(skiptoken.getOrNull())
 
             /**
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
@@ -333,8 +334,7 @@ private constructor(
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
              * Microsoft Graph API to limit the number of teams returned
              */
-            @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-            fun top(top: Optional<Long>) = top(top.orElse(null) as Long?)
+            fun top(top: Optional<Long>) = top(top.getOrNull())
 
             fun additionalProperties(additionalProperties: QueryParams) = apply {
                 this.additionalProperties.clear()

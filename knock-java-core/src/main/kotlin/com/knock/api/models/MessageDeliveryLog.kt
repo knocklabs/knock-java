@@ -28,6 +28,7 @@ import com.knock.api.core.toImmutable
 import com.knock.api.errors.KnockInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** A message delivery log */
 @NoAutoDetect
@@ -333,7 +334,7 @@ private constructor(
 
             fun headers(headers: Headers?) = headers(JsonField.ofNullable(headers))
 
-            fun headers(headers: Optional<Headers>) = headers(headers.orElse(null))
+            fun headers(headers: Optional<Headers>) = headers(headers.getOrNull())
 
             fun headers(headers: JsonField<Headers>) = apply { this.headers = headers }
 
@@ -351,7 +352,7 @@ private constructor(
 
             fun query(query: String?) = query(JsonField.ofNullable(query))
 
-            fun query(query: Optional<String>) = query(query.orElse(null))
+            fun query(query: Optional<String>) = query(query.getOrNull())
 
             fun query(query: JsonField<String>) = apply { this.query = query }
 
@@ -901,7 +902,7 @@ private constructor(
 
             fun headers(headers: Headers?) = headers(JsonField.ofNullable(headers))
 
-            fun headers(headers: Optional<Headers>) = headers(headers.orElse(null))
+            fun headers(headers: Optional<Headers>) = headers(headers.getOrNull())
 
             fun headers(headers: JsonField<Headers>) = apply { this.headers = headers }
 

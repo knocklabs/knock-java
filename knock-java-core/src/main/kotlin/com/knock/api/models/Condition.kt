@@ -18,6 +18,7 @@ import com.knock.api.core.toImmutable
 import com.knock.api.errors.KnockInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** A condition to be evaluated */
 @NoAutoDetect
@@ -100,7 +101,7 @@ private constructor(
 
         fun argument(argument: String?) = argument(JsonField.ofNullable(argument))
 
-        fun argument(argument: Optional<String>) = argument(argument.orElse(null))
+        fun argument(argument: Optional<String>) = argument(argument.getOrNull())
 
         fun argument(argument: JsonField<String>) = apply { this.argument = argument }
 

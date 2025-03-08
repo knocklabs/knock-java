@@ -28,6 +28,7 @@ import com.knock.api.core.toImmutable
 import com.knock.api.errors.KnockInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Microsoft Teams channel data */
 @NoAutoDetect
@@ -130,7 +131,7 @@ private constructor(
 
         /** The Microsoft Teams tenant ID */
         fun msTeamsTenantId(msTeamsTenantId: Optional<String>) =
-            msTeamsTenantId(msTeamsTenantId.orElse(null))
+            msTeamsTenantId(msTeamsTenantId.getOrNull())
 
         /** The Microsoft Teams tenant ID */
         fun msTeamsTenantId(msTeamsTenantId: JsonField<String>) = apply {
@@ -434,7 +435,7 @@ private constructor(
 
                 /** The Microsoft Teams channel ID */
                 fun msTeamsChannelId(msTeamsChannelId: Optional<String>) =
-                    msTeamsChannelId(msTeamsChannelId.orElse(null))
+                    msTeamsChannelId(msTeamsChannelId.getOrNull())
 
                 /** The Microsoft Teams channel ID */
                 fun msTeamsChannelId(msTeamsChannelId: JsonField<String>) = apply {
@@ -447,7 +448,7 @@ private constructor(
 
                 /** The Microsoft Teams team ID */
                 fun msTeamsTeamId(msTeamsTeamId: Optional<String>) =
-                    msTeamsTeamId(msTeamsTeamId.orElse(null))
+                    msTeamsTeamId(msTeamsTeamId.getOrNull())
 
                 /** The Microsoft Teams team ID */
                 fun msTeamsTeamId(msTeamsTeamId: JsonField<String>) = apply {
@@ -460,7 +461,7 @@ private constructor(
 
                 /** The Microsoft Teams tenant ID */
                 fun msTeamsTenantId(msTeamsTenantId: Optional<String>) =
-                    msTeamsTenantId(msTeamsTenantId.orElse(null))
+                    msTeamsTenantId(msTeamsTenantId.getOrNull())
 
                 /** The Microsoft Teams tenant ID */
                 fun msTeamsTenantId(msTeamsTenantId: JsonField<String>) = apply {
@@ -473,7 +474,7 @@ private constructor(
 
                 /** The Microsoft Teams user ID */
                 fun msTeamsUserId(msTeamsUserId: Optional<String>) =
-                    msTeamsUserId(msTeamsUserId.orElse(null))
+                    msTeamsUserId(msTeamsUserId.getOrNull())
 
                 /** The Microsoft Teams user ID */
                 fun msTeamsUserId(msTeamsUserId: JsonField<String>) = apply {

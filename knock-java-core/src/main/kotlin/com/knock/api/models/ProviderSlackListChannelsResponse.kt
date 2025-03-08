@@ -17,6 +17,7 @@ import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** The response from a Slack channels for provider request */
 @NoAutoDetect
@@ -94,7 +95,7 @@ private constructor(
 
         fun nextCursor(nextCursor: String?) = nextCursor(JsonField.ofNullable(nextCursor))
 
-        fun nextCursor(nextCursor: Optional<String>) = nextCursor(nextCursor.orElse(null))
+        fun nextCursor(nextCursor: Optional<String>) = nextCursor(nextCursor.getOrNull())
 
         fun nextCursor(nextCursor: JsonField<String>) = apply { this.nextCursor = nextCursor }
 

@@ -14,6 +14,7 @@ import com.knock.api.core.toImmutable
 import com.knock.api.errors.KnockInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** List messages */
 class ObjectListMessagesParams
@@ -184,19 +185,19 @@ private constructor(
         fun after(after: String?) = apply { this.after = after }
 
         /** The cursor to fetch entries after */
-        fun after(after: Optional<String>) = after(after.orElse(null))
+        fun after(after: Optional<String>) = after(after.getOrNull())
 
         /** The cursor to fetch entries before */
         fun before(before: String?) = apply { this.before = before }
 
         /** The cursor to fetch entries before */
-        fun before(before: Optional<String>) = before(before.orElse(null))
+        fun before(before: Optional<String>) = before(before.getOrNull())
 
         /** The channel ID */
         fun channelId(channelId: String?) = apply { this.channelId = channelId }
 
         /** The channel ID */
-        fun channelId(channelId: Optional<String>) = channelId(channelId.orElse(null))
+        fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
         /** The engagement status of the message */
         fun engagementStatus(engagementStatus: List<EngagementStatus>?) = apply {
@@ -205,7 +206,7 @@ private constructor(
 
         /** The engagement status of the message */
         fun engagementStatus(engagementStatus: Optional<List<EngagementStatus>>) =
-            engagementStatus(engagementStatus.orElse(null))
+            engagementStatus(engagementStatus.getOrNull())
 
         /** The engagement status of the message */
         fun addEngagementStatus(engagementStatus: EngagementStatus) = apply {
@@ -219,7 +220,7 @@ private constructor(
         }
 
         /** The message IDs to filter messages by */
-        fun messageIds(messageIds: Optional<List<String>>) = messageIds(messageIds.orElse(null))
+        fun messageIds(messageIds: Optional<List<String>>) = messageIds(messageIds.getOrNull())
 
         /** The message IDs to filter messages by */
         fun addMessageId(messageId: String) = apply {
@@ -233,20 +234,19 @@ private constructor(
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
         /** The page size to fetch */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.orElse(null) as Long?)
+        fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
         /** The source of the message (workflow key) */
         fun source(source: String?) = apply { this.source = source }
 
         /** The source of the message (workflow key) */
-        fun source(source: Optional<String>) = source(source.orElse(null))
+        fun source(source: Optional<String>) = source(source.getOrNull())
 
         /** The status of the message */
         fun status(status: List<Status>?) = apply { this.status = status?.toMutableList() }
 
         /** The status of the message */
-        fun status(status: Optional<List<Status>>) = status(status.orElse(null))
+        fun status(status: Optional<List<Status>>) = status(status.getOrNull())
 
         /** The status of the message */
         fun addStatus(status: Status) = apply {
@@ -257,13 +257,13 @@ private constructor(
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
         /** The tenant ID */
-        fun tenant(tenant: Optional<String>) = tenant(tenant.orElse(null))
+        fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         /** The trigger data to filter messages by. Must be a valid JSON object. */
         fun triggerData(triggerData: String?) = apply { this.triggerData = triggerData }
 
         /** The trigger data to filter messages by. Must be a valid JSON object. */
-        fun triggerData(triggerData: Optional<String>) = triggerData(triggerData.orElse(null))
+        fun triggerData(triggerData: Optional<String>) = triggerData(triggerData.getOrNull())
 
         /** The workflow categories to filter messages by */
         fun workflowCategories(workflowCategories: List<String>?) = apply {
@@ -272,7 +272,7 @@ private constructor(
 
         /** The workflow categories to filter messages by */
         fun workflowCategories(workflowCategories: Optional<List<String>>) =
-            workflowCategories(workflowCategories.orElse(null))
+            workflowCategories(workflowCategories.getOrNull())
 
         /** The workflow categories to filter messages by */
         fun addWorkflowCategory(workflowCategory: String) = apply {
@@ -287,14 +287,14 @@ private constructor(
 
         /** The workflow recipient run ID to filter messages by */
         fun workflowRecipientRunId(workflowRecipientRunId: Optional<String>) =
-            workflowRecipientRunId(workflowRecipientRunId.orElse(null))
+            workflowRecipientRunId(workflowRecipientRunId.getOrNull())
 
         /** The workflow run ID to filter messages by */
         fun workflowRunId(workflowRunId: String?) = apply { this.workflowRunId = workflowRunId }
 
         /** The workflow run ID to filter messages by */
         fun workflowRunId(workflowRunId: Optional<String>) =
-            workflowRunId(workflowRunId.orElse(null))
+            workflowRunId(workflowRunId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

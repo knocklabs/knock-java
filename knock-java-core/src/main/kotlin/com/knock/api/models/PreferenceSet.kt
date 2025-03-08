@@ -16,6 +16,7 @@ import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** A preference set object. */
 @NoAutoDetect
@@ -137,7 +138,7 @@ private constructor(
         fun categories(categories: Categories?) = categories(JsonField.ofNullable(categories))
 
         /** A map of categories and their settings */
-        fun categories(categories: Optional<Categories>) = categories(categories.orElse(null))
+        fun categories(categories: Optional<Categories>) = categories(categories.getOrNull())
 
         /** A map of categories and their settings */
         fun categories(categories: JsonField<Categories>) = apply { this.categories = categories }
@@ -148,7 +149,7 @@ private constructor(
 
         /** Channel type preferences */
         fun channelTypes(channelTypes: Optional<PreferenceSetChannelTypes>) =
-            channelTypes(channelTypes.orElse(null))
+            channelTypes(channelTypes.getOrNull())
 
         /** Channel type preferences */
         fun channelTypes(channelTypes: JsonField<PreferenceSetChannelTypes>) = apply {
@@ -159,7 +160,7 @@ private constructor(
         fun workflows(workflows: Workflows?) = workflows(JsonField.ofNullable(workflows))
 
         /** A map of workflows and their settings */
-        fun workflows(workflows: Optional<Workflows>) = workflows(workflows.orElse(null))
+        fun workflows(workflows: Optional<Workflows>) = workflows(workflows.getOrNull())
 
         /** A map of workflows and their settings */
         fun workflows(workflows: JsonField<Workflows>) = apply { this.workflows = workflows }

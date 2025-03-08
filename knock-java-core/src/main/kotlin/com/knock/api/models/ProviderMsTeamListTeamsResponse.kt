@@ -17,6 +17,7 @@ import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** The response from a teams for Microsoft Teams provider request */
 @NoAutoDetect
@@ -107,7 +108,7 @@ private constructor(
 
         fun skipToken(skipToken: String?) = skipToken(JsonField.ofNullable(skipToken))
 
-        fun skipToken(skipToken: Optional<String>) = skipToken(skipToken.orElse(null))
+        fun skipToken(skipToken: Optional<String>) = skipToken(skipToken.getOrNull())
 
         fun skipToken(skipToken: JsonField<String>) = apply { this.skipToken = skipToken }
 
@@ -231,7 +232,7 @@ private constructor(
 
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
-            fun description(description: Optional<String>) = description(description.orElse(null))
+            fun description(description: Optional<String>) = description(description.getOrNull())
 
             fun description(description: JsonField<String>) = apply {
                 this.description = description

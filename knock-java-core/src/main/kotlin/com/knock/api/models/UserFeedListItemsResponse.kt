@@ -29,6 +29,7 @@ import com.knock.api.core.toImmutable
 import com.knock.api.errors.KnockInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** An in-app feed message in a user's feed */
 @NoAutoDetect
@@ -337,7 +338,7 @@ private constructor(
 
         fun data(data: Data?) = data(JsonField.ofNullable(data))
 
-        fun data(data: Optional<Data>) = data(data.orElse(null))
+        fun data(data: Optional<Data>) = data(data.getOrNull())
 
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
@@ -351,7 +352,7 @@ private constructor(
 
         fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
 
-        fun tenant(tenant: Optional<String>) = tenant(tenant.orElse(null))
+        fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         fun tenant(tenant: JsonField<String>) = apply { this.tenant = tenant }
 
@@ -371,19 +372,19 @@ private constructor(
 
         fun archivedAt(archivedAt: String?) = archivedAt(JsonField.ofNullable(archivedAt))
 
-        fun archivedAt(archivedAt: Optional<String>) = archivedAt(archivedAt.orElse(null))
+        fun archivedAt(archivedAt: Optional<String>) = archivedAt(archivedAt.getOrNull())
 
         fun archivedAt(archivedAt: JsonField<String>) = apply { this.archivedAt = archivedAt }
 
         fun clickedAt(clickedAt: String?) = clickedAt(JsonField.ofNullable(clickedAt))
 
-        fun clickedAt(clickedAt: Optional<String>) = clickedAt(clickedAt.orElse(null))
+        fun clickedAt(clickedAt: Optional<String>) = clickedAt(clickedAt.getOrNull())
 
         fun clickedAt(clickedAt: JsonField<String>) = apply { this.clickedAt = clickedAt }
 
         fun interactedAt(interactedAt: String?) = interactedAt(JsonField.ofNullable(interactedAt))
 
-        fun interactedAt(interactedAt: Optional<String>) = interactedAt(interactedAt.orElse(null))
+        fun interactedAt(interactedAt: Optional<String>) = interactedAt(interactedAt.getOrNull())
 
         fun interactedAt(interactedAt: JsonField<String>) = apply {
             this.interactedAt = interactedAt
@@ -393,7 +394,7 @@ private constructor(
             linkClickedAt(JsonField.ofNullable(linkClickedAt))
 
         fun linkClickedAt(linkClickedAt: Optional<String>) =
-            linkClickedAt(linkClickedAt.orElse(null))
+            linkClickedAt(linkClickedAt.getOrNull())
 
         fun linkClickedAt(linkClickedAt: JsonField<String>) = apply {
             this.linkClickedAt = linkClickedAt
@@ -401,13 +402,13 @@ private constructor(
 
         fun readAt(readAt: String?) = readAt(JsonField.ofNullable(readAt))
 
-        fun readAt(readAt: Optional<String>) = readAt(readAt.orElse(null))
+        fun readAt(readAt: Optional<String>) = readAt(readAt.getOrNull())
 
         fun readAt(readAt: JsonField<String>) = apply { this.readAt = readAt }
 
         fun seenAt(seenAt: String?) = seenAt(JsonField.ofNullable(seenAt))
 
-        fun seenAt(seenAt: Optional<String>) = seenAt(seenAt.orElse(null))
+        fun seenAt(seenAt: Optional<String>) = seenAt(seenAt.getOrNull())
 
         fun seenAt(seenAt: JsonField<String>) = apply { this.seenAt = seenAt }
 

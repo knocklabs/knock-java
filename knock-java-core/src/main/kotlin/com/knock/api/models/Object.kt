@@ -17,6 +17,7 @@ import com.knock.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** A custom-object entity which belongs to a collection. */
 @NoAutoDetect
@@ -139,7 +140,7 @@ private constructor(
 
         fun createdAt(createdAt: OffsetDateTime?) = createdAt(JsonField.ofNullable(createdAt))
 
-        fun createdAt(createdAt: Optional<OffsetDateTime>) = createdAt(createdAt.orElse(null))
+        fun createdAt(createdAt: Optional<OffsetDateTime>) = createdAt(createdAt.getOrNull())
 
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 

@@ -25,6 +25,7 @@ import com.knock.api.core.toImmutable
 import com.knock.api.errors.KnockInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * List subscriptions for an object. Either list all subscriptions that belong to the object, or all
@@ -139,19 +140,19 @@ private constructor(
         fun after(after: String?) = apply { this.after = after }
 
         /** The cursor to fetch entries after */
-        fun after(after: Optional<String>) = after(after.orElse(null))
+        fun after(after: Optional<String>) = after(after.getOrNull())
 
         /** The cursor to fetch entries before */
         fun before(before: String?) = apply { this.before = before }
 
         /** The cursor to fetch entries before */
-        fun before(before: Optional<String>) = before(before.orElse(null))
+        fun before(before: Optional<String>) = before(before.getOrNull())
 
         /** Mode of the request */
         fun mode(mode: Mode?) = apply { this.mode = mode }
 
         /** Mode of the request */
-        fun mode(mode: Optional<Mode>) = mode(mode.orElse(null))
+        fun mode(mode: Optional<Mode>) = mode(mode.getOrNull())
 
         /** The page size to fetch */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
@@ -160,8 +161,7 @@ private constructor(
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
         /** The page size to fetch */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.orElse(null) as Long?)
+        fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
         /** Recipients to filter by (only used if mode is `object`) */
         fun recipients(recipients: List<Recipient>?) = apply {
@@ -169,7 +169,7 @@ private constructor(
         }
 
         /** Recipients to filter by (only used if mode is `object`) */
-        fun recipients(recipients: Optional<List<Recipient>>) = recipients(recipients.orElse(null))
+        fun recipients(recipients: Optional<List<Recipient>>) = recipients(recipients.getOrNull())
 
         /** Recipients to filter by (only used if mode is `object`) */
         fun addRecipient(recipient: Recipient) = apply {

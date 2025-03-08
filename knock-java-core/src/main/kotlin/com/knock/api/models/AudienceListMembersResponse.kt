@@ -17,6 +17,7 @@ import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** A response containing a list of audience members */
 @NoAutoDetect
@@ -235,13 +236,13 @@ private constructor(
 
             fun after(after: String?) = after(JsonField.ofNullable(after))
 
-            fun after(after: Optional<String>) = after(after.orElse(null))
+            fun after(after: Optional<String>) = after(after.getOrNull())
 
             fun after(after: JsonField<String>) = apply { this.after = after }
 
             fun before(before: String?) = before(JsonField.ofNullable(before))
 
-            fun before(before: Optional<String>) = before(before.orElse(null))
+            fun before(before: Optional<String>) = before(before.getOrNull())
 
             fun before(before: JsonField<String>) = apply { this.before = before }
 

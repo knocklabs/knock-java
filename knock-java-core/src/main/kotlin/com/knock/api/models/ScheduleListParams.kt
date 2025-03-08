@@ -22,6 +22,7 @@ import com.knock.api.core.toImmutable
 import com.knock.api.errors.KnockInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** List schedules */
 class ScheduleListParams
@@ -119,13 +120,13 @@ private constructor(
         fun after(after: String?) = apply { this.after = after }
 
         /** The cursor to fetch entries after */
-        fun after(after: Optional<String>) = after(after.orElse(null))
+        fun after(after: Optional<String>) = after(after.getOrNull())
 
         /** The cursor to fetch entries before */
         fun before(before: String?) = apply { this.before = before }
 
         /** The cursor to fetch entries before */
-        fun before(before: Optional<String>) = before(before.orElse(null))
+        fun before(before: Optional<String>) = before(before.getOrNull())
 
         /** The page size to fetch */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
@@ -134,8 +135,7 @@ private constructor(
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
         /** The page size to fetch */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.orElse(null) as Long?)
+        fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
         /** Filter by recipient */
         fun recipients(recipients: List<Recipient>?) = apply {
@@ -143,7 +143,7 @@ private constructor(
         }
 
         /** Filter by recipient */
-        fun recipients(recipients: Optional<List<Recipient>>) = recipients(recipients.orElse(null))
+        fun recipients(recipients: Optional<List<Recipient>>) = recipients(recipients.getOrNull())
 
         /** Filter by recipient */
         fun addRecipient(recipient: Recipient) = apply {
@@ -161,7 +161,7 @@ private constructor(
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
         /** Filter by tenant */
-        fun tenant(tenant: Optional<String>) = tenant(tenant.orElse(null))
+        fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()

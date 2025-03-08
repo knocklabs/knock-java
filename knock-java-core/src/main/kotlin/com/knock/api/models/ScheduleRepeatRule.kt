@@ -19,6 +19,7 @@ import com.knock.api.core.toImmutable
 import com.knock.api.errors.KnockInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** A schedule repeat rule */
 @NoAutoDetect
@@ -146,14 +147,13 @@ private constructor(
 
         fun dayOfMonth(dayOfMonth: Long) = dayOfMonth(dayOfMonth as Long?)
 
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun dayOfMonth(dayOfMonth: Optional<Long>) = dayOfMonth(dayOfMonth.orElse(null) as Long?)
+        fun dayOfMonth(dayOfMonth: Optional<Long>) = dayOfMonth(dayOfMonth.getOrNull())
 
         fun dayOfMonth(dayOfMonth: JsonField<Long>) = apply { this.dayOfMonth = dayOfMonth }
 
         fun days(days: List<Day>?) = days(JsonField.ofNullable(days))
 
-        fun days(days: Optional<List<Day>>) = days(days.orElse(null))
+        fun days(days: Optional<List<Day>>) = days(days.getOrNull())
 
         fun days(days: JsonField<List<Day>>) = apply { this.days = days.map { it.toMutableList() } }
 
@@ -165,8 +165,7 @@ private constructor(
 
         fun hours(hours: Long) = hours(hours as Long?)
 
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun hours(hours: Optional<Long>) = hours(hours.orElse(null) as Long?)
+        fun hours(hours: Optional<Long>) = hours(hours.getOrNull())
 
         fun hours(hours: JsonField<Long>) = apply { this.hours = hours }
 
@@ -178,8 +177,7 @@ private constructor(
 
         fun minutes(minutes: Long) = minutes(minutes as Long?)
 
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun minutes(minutes: Optional<Long>) = minutes(minutes.orElse(null) as Long?)
+        fun minutes(minutes: Optional<Long>) = minutes(minutes.getOrNull())
 
         fun minutes(minutes: JsonField<Long>) = apply { this.minutes = minutes }
 

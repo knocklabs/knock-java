@@ -18,6 +18,7 @@ import com.knock.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** A schedule that represents a recurring workflow execution */
 @NoAutoDetect
@@ -254,7 +255,7 @@ private constructor(
         fun actor(actor: Recipient?) = actor(JsonField.ofNullable(actor))
 
         /** A recipient, which is either a user or an object */
-        fun actor(actor: Optional<Recipient>) = actor(actor.orElse(null))
+        fun actor(actor: Optional<Recipient>) = actor(actor.getOrNull())
 
         /** A recipient, which is either a user or an object */
         fun actor(actor: JsonField<Recipient>) = apply { this.actor = actor }
@@ -267,7 +268,7 @@ private constructor(
 
         fun data(data: Data?) = data(JsonField.ofNullable(data))
 
-        fun data(data: Optional<Data>) = data(data.orElse(null))
+        fun data(data: Optional<Data>) = data(data.getOrNull())
 
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
@@ -275,7 +276,7 @@ private constructor(
             lastOccurrenceAt(JsonField.ofNullable(lastOccurrenceAt))
 
         fun lastOccurrenceAt(lastOccurrenceAt: Optional<OffsetDateTime>) =
-            lastOccurrenceAt(lastOccurrenceAt.orElse(null))
+            lastOccurrenceAt(lastOccurrenceAt.getOrNull())
 
         fun lastOccurrenceAt(lastOccurrenceAt: JsonField<OffsetDateTime>) = apply {
             this.lastOccurrenceAt = lastOccurrenceAt
@@ -285,7 +286,7 @@ private constructor(
             nextOccurrenceAt(JsonField.ofNullable(nextOccurrenceAt))
 
         fun nextOccurrenceAt(nextOccurrenceAt: Optional<OffsetDateTime>) =
-            nextOccurrenceAt(nextOccurrenceAt.orElse(null))
+            nextOccurrenceAt(nextOccurrenceAt.getOrNull())
 
         fun nextOccurrenceAt(nextOccurrenceAt: JsonField<OffsetDateTime>) = apply {
             this.nextOccurrenceAt = nextOccurrenceAt
@@ -293,7 +294,7 @@ private constructor(
 
         fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
 
-        fun tenant(tenant: Optional<String>) = tenant(tenant.orElse(null))
+        fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         fun tenant(tenant: JsonField<String>) = apply { this.tenant = tenant }
 

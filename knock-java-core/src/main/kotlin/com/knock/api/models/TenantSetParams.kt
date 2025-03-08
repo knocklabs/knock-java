@@ -19,6 +19,7 @@ import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Set a tenant */
 class TenantSetParams
@@ -156,7 +157,7 @@ private constructor(
 
             /** Allows inline setting channel data for a recipient */
             fun channelData(channelData: Optional<InlineChannelDataRequest>) =
-                channelData(channelData.orElse(null))
+                channelData(channelData.getOrNull())
 
             /** Allows inline setting channel data for a recipient */
             fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
@@ -169,7 +170,7 @@ private constructor(
 
             /** Inline set preferences for a recipient, where the key is the preference set name */
             fun preferences(preferences: Optional<InlinePreferenceSetRequest>) =
-                preferences(preferences.orElse(null))
+                preferences(preferences.getOrNull())
 
             /** Inline set preferences for a recipient, where the key is the preference set name */
             fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {
@@ -262,7 +263,7 @@ private constructor(
 
         /** Allows inline setting channel data for a recipient */
         fun channelData(channelData: Optional<InlineChannelDataRequest>) =
-            channelData(channelData.orElse(null))
+            channelData(channelData.getOrNull())
 
         /** Allows inline setting channel data for a recipient */
         fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
@@ -276,7 +277,7 @@ private constructor(
 
         /** Inline set preferences for a recipient, where the key is the preference set name */
         fun preferences(preferences: Optional<InlinePreferenceSetRequest>) =
-            preferences(preferences.orElse(null))
+            preferences(preferences.getOrNull())
 
         /** Inline set preferences for a recipient, where the key is the preference set name */
         fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {
@@ -488,7 +489,7 @@ private constructor(
 
             /** Set preferences for a recipient */
             fun preferenceSet(preferenceSet: Optional<PreferenceSetRequest>) =
-                preferenceSet(preferenceSet.orElse(null))
+                preferenceSet(preferenceSet.getOrNull())
 
             /** Set preferences for a recipient */
             fun preferenceSet(preferenceSet: JsonField<PreferenceSetRequest>) = apply {
@@ -606,13 +607,13 @@ private constructor(
 
                 fun iconUrl(iconUrl: String?) = iconUrl(JsonField.ofNullable(iconUrl))
 
-                fun iconUrl(iconUrl: Optional<String>) = iconUrl(iconUrl.orElse(null))
+                fun iconUrl(iconUrl: Optional<String>) = iconUrl(iconUrl.getOrNull())
 
                 fun iconUrl(iconUrl: JsonField<String>) = apply { this.iconUrl = iconUrl }
 
                 fun logoUrl(logoUrl: String?) = logoUrl(JsonField.ofNullable(logoUrl))
 
-                fun logoUrl(logoUrl: Optional<String>) = logoUrl(logoUrl.orElse(null))
+                fun logoUrl(logoUrl: Optional<String>) = logoUrl(logoUrl.getOrNull())
 
                 fun logoUrl(logoUrl: JsonField<String>) = apply { this.logoUrl = logoUrl }
 
@@ -620,7 +621,7 @@ private constructor(
                     primaryColor(JsonField.ofNullable(primaryColor))
 
                 fun primaryColor(primaryColor: Optional<String>) =
-                    primaryColor(primaryColor.orElse(null))
+                    primaryColor(primaryColor.getOrNull())
 
                 fun primaryColor(primaryColor: JsonField<String>) = apply {
                     this.primaryColor = primaryColor
@@ -630,7 +631,7 @@ private constructor(
                     primaryColorContrast(JsonField.ofNullable(primaryColorContrast))
 
                 fun primaryColorContrast(primaryColorContrast: Optional<String>) =
-                    primaryColorContrast(primaryColorContrast.orElse(null))
+                    primaryColorContrast(primaryColorContrast.getOrNull())
 
                 fun primaryColorContrast(primaryColorContrast: JsonField<String>) = apply {
                     this.primaryColorContrast = primaryColorContrast

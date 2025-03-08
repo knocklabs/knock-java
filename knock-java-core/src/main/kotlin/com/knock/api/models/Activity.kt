@@ -16,6 +16,7 @@ import com.knock.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** An activity associated with a workflow run */
 @NoAutoDetect
@@ -147,7 +148,7 @@ private constructor(
         fun actor(actor: Recipient?) = actor(JsonField.ofNullable(actor))
 
         /** A recipient, which is either a user or an object */
-        fun actor(actor: Optional<Recipient>) = actor(actor.orElse(null))
+        fun actor(actor: Optional<Recipient>) = actor(actor.getOrNull())
 
         /** A recipient, which is either a user or an object */
         fun actor(actor: JsonField<Recipient>) = apply { this.actor = actor }
@@ -162,7 +163,7 @@ private constructor(
         fun data(data: Data?) = data(JsonField.ofNullable(data))
 
         /** The data associated with the activity */
-        fun data(data: Optional<Data>) = data(data.orElse(null))
+        fun data(data: Optional<Data>) = data(data.getOrNull())
 
         /** The data associated with the activity */
         fun data(data: JsonField<Data>) = apply { this.data = data }

@@ -20,6 +20,7 @@ import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * When invoked for a workflow using a specific workflow key and cancellation key, will cancel any
@@ -193,7 +194,7 @@ private constructor(
             /**
              * An optional list of recipients to cancel the workflow for using the cancellation key.
              */
-            fun recipients(recipients: Optional<List<String>>) = recipients(recipients.orElse(null))
+            fun recipients(recipients: Optional<List<String>>) = recipients(recipients.getOrNull())
 
             /**
              * An optional list of recipients to cancel the workflow for using the cancellation key.
@@ -214,7 +215,7 @@ private constructor(
 
             fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
 
-            fun tenant(tenant: Optional<String>) = tenant(tenant.orElse(null))
+            fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
             fun tenant(tenant: JsonField<String>) = apply { this.tenant = tenant }
 
@@ -319,7 +320,7 @@ private constructor(
         fun recipients(recipients: List<String>?) = apply { body.recipients(recipients) }
 
         /** An optional list of recipients to cancel the workflow for using the cancellation key. */
-        fun recipients(recipients: Optional<List<String>>) = recipients(recipients.orElse(null))
+        fun recipients(recipients: Optional<List<String>>) = recipients(recipients.getOrNull())
 
         /** An optional list of recipients to cancel the workflow for using the cancellation key. */
         fun recipients(recipients: JsonField<List<String>>) = apply { body.recipients(recipients) }
@@ -329,7 +330,7 @@ private constructor(
 
         fun tenant(tenant: String?) = apply { body.tenant(tenant) }
 
-        fun tenant(tenant: Optional<String>) = tenant(tenant.orElse(null))
+        fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         fun tenant(tenant: JsonField<String>) = apply { body.tenant(tenant) }
 

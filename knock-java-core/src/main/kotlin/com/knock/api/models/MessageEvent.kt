@@ -29,6 +29,7 @@ import com.knock.api.errors.KnockInvalidDataException
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** A single event that occurred for a message */
 @NoAutoDetect
@@ -188,7 +189,7 @@ private constructor(
         fun data(data: Data?) = data(JsonField.ofNullable(data))
 
         /** The data associated with the event. Only present for some event types */
-        fun data(data: Optional<Data>) = data(data.orElse(null))
+        fun data(data: Optional<Data>) = data(data.getOrNull())
 
         /** The data associated with the event. Only present for some event types */
         fun data(data: JsonField<Data>) = apply { this.data = data }

@@ -16,6 +16,7 @@ import com.knock.api.core.toImmutable
 import java.time.OffsetDateTime
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * A set of parameters to identify a user with. Does not include the user ID, as that's specified
@@ -110,7 +111,7 @@ private constructor(
 
         /** Allows inline setting channel data for a recipient */
         fun channelData(channelData: Optional<InlineChannelDataRequest>) =
-            channelData(channelData.orElse(null))
+            channelData(channelData.getOrNull())
 
         /** Allows inline setting channel data for a recipient */
         fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
@@ -119,7 +120,7 @@ private constructor(
 
         fun createdAt(createdAt: OffsetDateTime?) = createdAt(JsonField.ofNullable(createdAt))
 
-        fun createdAt(createdAt: Optional<OffsetDateTime>) = createdAt(createdAt.orElse(null))
+        fun createdAt(createdAt: Optional<OffsetDateTime>) = createdAt(createdAt.getOrNull())
 
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
@@ -129,7 +130,7 @@ private constructor(
 
         /** Inline set preferences for a recipient, where the key is the preference set name */
         fun preferences(preferences: Optional<InlinePreferenceSetRequest>) =
-            preferences(preferences.orElse(null))
+            preferences(preferences.getOrNull())
 
         /** Inline set preferences for a recipient, where the key is the preference set name */
         fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {

@@ -14,6 +14,7 @@ import com.knock.api.core.toImmutable
 import com.knock.api.errors.KnockInvalidDataException
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Returns a paginated list of feed items for a user, including metadata about the feed. */
 class UserFeedListItemsParams
@@ -161,19 +162,19 @@ private constructor(
         fun after(after: String?) = apply { this.after = after }
 
         /** The cursor to fetch entries after */
-        fun after(after: Optional<String>) = after(after.orElse(null))
+        fun after(after: Optional<String>) = after(after.getOrNull())
 
         /** The archived status of the feed items to return */
         fun archived(archived: Archived?) = apply { this.archived = archived }
 
         /** The archived status of the feed items to return */
-        fun archived(archived: Optional<Archived>) = archived(archived.orElse(null))
+        fun archived(archived: Optional<Archived>) = archived(archived.getOrNull())
 
         /** The cursor to fetch entries before */
         fun before(before: String?) = apply { this.before = before }
 
         /** The cursor to fetch entries before */
-        fun before(before: Optional<String>) = before(before.orElse(null))
+        fun before(before: Optional<String>) = before(before.getOrNull())
 
         /** Whether the feed items have a tenant */
         fun hasTenant(hasTenant: Boolean?) = apply { this.hasTenant = hasTenant }
@@ -182,8 +183,7 @@ private constructor(
         fun hasTenant(hasTenant: Boolean) = hasTenant(hasTenant as Boolean?)
 
         /** Whether the feed items have a tenant */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun hasTenant(hasTenant: Optional<Boolean>) = hasTenant(hasTenant.orElse(null) as Boolean?)
+        fun hasTenant(hasTenant: Optional<Boolean>) = hasTenant(hasTenant.getOrNull())
 
         /** The page size to fetch */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
@@ -192,32 +192,31 @@ private constructor(
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
         /** The page size to fetch */
-        @Suppress("USELESS_CAST") // See https://youtrack.jetbrains.com/issue/KT-74228
-        fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.orElse(null) as Long?)
+        fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
         /** The source of the feed items to return */
         fun source(source: String?) = apply { this.source = source }
 
         /** The source of the feed items to return */
-        fun source(source: Optional<String>) = source(source.orElse(null))
+        fun source(source: Optional<String>) = source(source.getOrNull())
 
         /** The status of the feed items to return */
         fun status(status: Status?) = apply { this.status = status }
 
         /** The status of the feed items to return */
-        fun status(status: Optional<Status>) = status(status.orElse(null))
+        fun status(status: Optional<Status>) = status(status.getOrNull())
 
         /** The tenant of the feed items to return */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
         /** The tenant of the feed items to return */
-        fun tenant(tenant: Optional<String>) = tenant(tenant.orElse(null))
+        fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         /** The trigger data of the feed items to return (as a JSON string) */
         fun triggerData(triggerData: String?) = apply { this.triggerData = triggerData }
 
         /** The trigger data of the feed items to return (as a JSON string) */
-        fun triggerData(triggerData: Optional<String>) = triggerData(triggerData.orElse(null))
+        fun triggerData(triggerData: Optional<String>) = triggerData(triggerData.getOrNull())
 
         /** The workflow categories of the feed items to return */
         fun workflowCategories(workflowCategories: List<String>?) = apply {
@@ -226,7 +225,7 @@ private constructor(
 
         /** The workflow categories of the feed items to return */
         fun workflowCategories(workflowCategories: Optional<List<String>>) =
-            workflowCategories(workflowCategories.orElse(null))
+            workflowCategories(workflowCategories.getOrNull())
 
         /** The workflow categories of the feed items to return */
         fun addWorkflowCategory(workflowCategory: String) = apply {
