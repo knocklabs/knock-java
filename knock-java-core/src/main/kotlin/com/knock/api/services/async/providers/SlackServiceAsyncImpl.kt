@@ -18,8 +18,8 @@ import com.knock.api.core.prepareAsync
 import com.knock.api.errors.KnockError
 import com.knock.api.models.ProviderSlackCheckAuthParams
 import com.knock.api.models.ProviderSlackCheckAuthResponse
+import com.knock.api.models.ProviderSlackListChannelsPageAsync
 import com.knock.api.models.ProviderSlackListChannelsParams
-import com.knock.api.models.ProviderSlackListChannelsResponse
 import com.knock.api.models.ProviderSlackRevokeAccessParams
 import java.util.concurrent.CompletableFuture
 
@@ -42,7 +42,7 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override fun listChannels(
         params: ProviderSlackListChannelsParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<ProviderSlackListChannelsResponse> =
+    ): CompletableFuture<ProviderSlackListChannelsPageAsync> =
         // get /v1/providers/slack/{channel_id}/channels
         withRawResponse().listChannels(params, requestOptions).thenApply { it.parse() }
 
@@ -94,14 +94,14 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val listChannelsHandler: Handler<ProviderSlackListChannelsResponse> =
-            jsonHandler<ProviderSlackListChannelsResponse>(clientOptions.jsonMapper)
+        private val listChannelsHandler: Handler<ProviderSlackListChannelsPageAsync.Response> =
+            jsonHandler<ProviderSlackListChannelsPageAsync.Response>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listChannels(
             params: ProviderSlackListChannelsParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<ProviderSlackListChannelsResponse>> {
+        ): CompletableFuture<HttpResponseFor<ProviderSlackListChannelsPageAsync>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -119,6 +119,13 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()
                                 }
+                            }
+                            .let {
+                                ProviderSlackListChannelsPageAsync.of(
+                                    SlackServiceAsyncImpl(clientOptions),
+                                    params,
+                                    it,
+                                )
                             }
                     }
                 }

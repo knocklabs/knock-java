@@ -7,8 +7,8 @@ import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
 import com.knock.api.models.ProviderSlackCheckAuthParams
 import com.knock.api.models.ProviderSlackCheckAuthResponse
+import com.knock.api.models.ProviderSlackListChannelsPageAsync
 import com.knock.api.models.ProviderSlackListChannelsParams
-import com.knock.api.models.ProviderSlackListChannelsResponse
 import com.knock.api.models.ProviderSlackRevokeAccessParams
 import java.util.concurrent.CompletableFuture
 
@@ -33,14 +33,14 @@ interface SlackServiceAsync {
     /** List Slack channels for a Slack workspace */
     fun listChannels(
         params: ProviderSlackListChannelsParams
-    ): CompletableFuture<ProviderSlackListChannelsResponse> =
+    ): CompletableFuture<ProviderSlackListChannelsPageAsync> =
         listChannels(params, RequestOptions.none())
 
     /** @see [listChannels] */
     fun listChannels(
         params: ProviderSlackListChannelsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<ProviderSlackListChannelsResponse>
+    ): CompletableFuture<ProviderSlackListChannelsPageAsync>
 
     /** Revoke access for a Slack channel */
     fun revokeAccess(params: ProviderSlackRevokeAccessParams): CompletableFuture<String> =
@@ -79,7 +79,7 @@ interface SlackServiceAsync {
         @MustBeClosed
         fun listChannels(
             params: ProviderSlackListChannelsParams
-        ): CompletableFuture<HttpResponseFor<ProviderSlackListChannelsResponse>> =
+        ): CompletableFuture<HttpResponseFor<ProviderSlackListChannelsPageAsync>> =
             listChannels(params, RequestOptions.none())
 
         /** @see [listChannels] */
@@ -87,7 +87,7 @@ interface SlackServiceAsync {
         fun listChannels(
             params: ProviderSlackListChannelsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<ProviderSlackListChannelsResponse>>
+        ): CompletableFuture<HttpResponseFor<ProviderSlackListChannelsPageAsync>>
 
         /**
          * Returns a raw HTTP response for `put /v1/providers/slack/{channel_id}/revoke_access`, but

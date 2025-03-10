@@ -7,8 +7,8 @@ import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
 import com.knock.api.models.ProviderSlackCheckAuthParams
 import com.knock.api.models.ProviderSlackCheckAuthResponse
+import com.knock.api.models.ProviderSlackListChannelsPage
 import com.knock.api.models.ProviderSlackListChannelsParams
-import com.knock.api.models.ProviderSlackListChannelsResponse
 import com.knock.api.models.ProviderSlackRevokeAccessParams
 
 interface SlackService {
@@ -29,14 +29,14 @@ interface SlackService {
     ): ProviderSlackCheckAuthResponse
 
     /** List Slack channels for a Slack workspace */
-    fun listChannels(params: ProviderSlackListChannelsParams): ProviderSlackListChannelsResponse =
+    fun listChannels(params: ProviderSlackListChannelsParams): ProviderSlackListChannelsPage =
         listChannels(params, RequestOptions.none())
 
     /** @see [listChannels] */
     fun listChannels(
         params: ProviderSlackListChannelsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): ProviderSlackListChannelsResponse
+    ): ProviderSlackListChannelsPage
 
     /** Revoke access for a Slack channel */
     fun revokeAccess(params: ProviderSlackRevokeAccessParams): String =
@@ -75,7 +75,7 @@ interface SlackService {
         @MustBeClosed
         fun listChannels(
             params: ProviderSlackListChannelsParams
-        ): HttpResponseFor<ProviderSlackListChannelsResponse> =
+        ): HttpResponseFor<ProviderSlackListChannelsPage> =
             listChannels(params, RequestOptions.none())
 
         /** @see [listChannels] */
@@ -83,7 +83,7 @@ interface SlackService {
         fun listChannels(
             params: ProviderSlackListChannelsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ProviderSlackListChannelsResponse>
+        ): HttpResponseFor<ProviderSlackListChannelsPage>
 
         /**
          * Returns a raw HTTP response for `put /v1/providers/slack/{channel_id}/revoke_access`, but
