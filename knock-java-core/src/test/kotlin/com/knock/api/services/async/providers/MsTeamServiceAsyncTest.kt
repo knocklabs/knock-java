@@ -4,10 +4,10 @@ package com.knock.api.services.async.providers
 
 import com.knock.api.TestServerExtension
 import com.knock.api.client.okhttp.KnockOkHttpClientAsync
-import com.knock.api.models.ProviderMsTeamCheckAuthParams
-import com.knock.api.models.ProviderMsTeamListChannelsParams
-import com.knock.api.models.ProviderMsTeamListTeamsParams
-import com.knock.api.models.ProviderMsTeamRevokeAccessParams
+import com.knock.api.models.providers.msteams.MsTeamCheckAuthParams
+import com.knock.api.models.providers.msteams.MsTeamListChannelsParams
+import com.knock.api.models.providers.msteams.MsTeamListTeamsParams
+import com.knock.api.models.providers.msteams.MsTeamRevokeAccessParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -29,7 +29,7 @@ class MsTeamServiceAsyncTest {
 
         val responseFuture =
             msTeamServiceAsync.checkAuth(
-                ProviderMsTeamCheckAuthParams.builder()
+                MsTeamCheckAuthParams.builder()
                     .channelId("channel_id")
                     .msTeamsTenantObject("ms_teams_tenant_object")
                     .build()
@@ -53,12 +53,12 @@ class MsTeamServiceAsyncTest {
 
         val responseFuture =
             msTeamServiceAsync.listChannels(
-                ProviderMsTeamListChannelsParams.builder()
+                MsTeamListChannelsParams.builder()
                     .channelId("channel_id")
                     .msTeamsTenantObject("ms_teams_tenant_object")
                     .teamId("team_id")
                     .queryOptions(
-                        ProviderMsTeamListChannelsParams.QueryOptions.builder()
+                        MsTeamListChannelsParams.QueryOptions.builder()
                             .filter("\$filter")
                             .select("\$select")
                             .build()
@@ -84,11 +84,11 @@ class MsTeamServiceAsyncTest {
 
         val responseFuture =
             msTeamServiceAsync.listTeams(
-                ProviderMsTeamListTeamsParams.builder()
+                MsTeamListTeamsParams.builder()
                     .channelId("channel_id")
                     .msTeamsTenantObject("ms_teams_tenant_object")
                     .queryOptions(
-                        ProviderMsTeamListTeamsParams.QueryOptions.builder()
+                        MsTeamListTeamsParams.QueryOptions.builder()
                             .filter("\$filter")
                             .select("\$select")
                             .skiptoken("\$skiptoken")
@@ -116,7 +116,7 @@ class MsTeamServiceAsyncTest {
 
         val responseFuture =
             msTeamServiceAsync.revokeAccess(
-                ProviderMsTeamRevokeAccessParams.builder()
+                MsTeamRevokeAccessParams.builder()
                     .channelId("channel_id")
                     .msTeamsTenantObject("ms_teams_tenant_object")
                     .build()

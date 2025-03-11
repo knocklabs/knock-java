@@ -5,12 +5,12 @@ package com.knock.api.services.async
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
-import com.knock.api.models.Tenant
-import com.knock.api.models.TenantDeleteParams
-import com.knock.api.models.TenantGetParams
-import com.knock.api.models.TenantListPageAsync
-import com.knock.api.models.TenantListParams
-import com.knock.api.models.TenantSetParams
+import com.knock.api.models.tenants.Tenant
+import com.knock.api.models.tenants.TenantDeleteParams
+import com.knock.api.models.tenants.TenantGetParams
+import com.knock.api.models.tenants.TenantListPageAsync
+import com.knock.api.models.tenants.TenantListParams
+import com.knock.api.models.tenants.TenantSetParams
 import com.knock.api.services.async.tenants.BulkServiceAsync
 import java.util.concurrent.CompletableFuture
 

@@ -4,8 +4,8 @@ package com.knock.api.services.async.users
 
 import com.knock.api.TestServerExtension
 import com.knock.api.client.okhttp.KnockOkHttpClientAsync
-import com.knock.api.models.UserFeedGetSettingsParams
-import com.knock.api.models.UserFeedListItemsParams
+import com.knock.api.models.users.feeds.FeedGetSettingsParams
+import com.knock.api.models.users.feeds.FeedListItemsParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -27,7 +27,7 @@ class FeedServiceAsyncTest {
 
         val responseFuture =
             feedServiceAsync.getSettings(
-                UserFeedGetSettingsParams.builder()
+                FeedGetSettingsParams.builder()
                     .userId("user_id")
                     .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .build()
@@ -51,7 +51,7 @@ class FeedServiceAsyncTest {
 
         val pageFuture =
             feedServiceAsync.listItems(
-                UserFeedListItemsParams.builder()
+                FeedListItemsParams.builder()
                     .userId("user_id")
                     .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .build()

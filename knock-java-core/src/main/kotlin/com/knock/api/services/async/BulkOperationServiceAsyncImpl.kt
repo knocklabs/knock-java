@@ -14,8 +14,8 @@ import com.knock.api.core.http.HttpResponseFor
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepareAsync
 import com.knock.api.errors.KnockError
-import com.knock.api.models.BulkOperation
-import com.knock.api.models.BulkOperationGetParams
+import com.knock.api.models.bulkoperations.BulkOperation
+import com.knock.api.models.bulkoperations.BulkOperationGetParams
 import java.util.concurrent.CompletableFuture
 
 class BulkOperationServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :

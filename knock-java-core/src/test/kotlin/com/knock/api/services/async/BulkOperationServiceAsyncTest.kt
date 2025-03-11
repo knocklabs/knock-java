@@ -4,7 +4,7 @@ package com.knock.api.services.async
 
 import com.knock.api.TestServerExtension
 import com.knock.api.client.okhttp.KnockOkHttpClientAsync
-import com.knock.api.models.BulkOperationGetParams
+import com.knock.api.models.bulkoperations.BulkOperationGetParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

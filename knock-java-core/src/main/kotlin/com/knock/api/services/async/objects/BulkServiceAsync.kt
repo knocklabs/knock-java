@@ -5,10 +5,10 @@ package com.knock.api.services.async.objects
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
-import com.knock.api.models.BulkOperation
-import com.knock.api.models.ObjectBulkAddSubscriptionsParams
-import com.knock.api.models.ObjectBulkDeleteParams
-import com.knock.api.models.ObjectBulkSetParams
+import com.knock.api.models.bulkoperations.BulkOperation
+import com.knock.api.models.objects.bulk.BulkAddSubscriptionsParams
+import com.knock.api.models.objects.bulk.BulkDeleteParams
+import com.knock.api.models.objects.bulk.BulkSetParams
 import java.util.concurrent.CompletableFuture
 
 interface BulkServiceAsync {
@@ -19,12 +19,12 @@ interface BulkServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** Bulk delete objects */
-    fun delete(params: ObjectBulkDeleteParams): CompletableFuture<BulkOperation> =
+    fun delete(params: BulkDeleteParams): CompletableFuture<BulkOperation> =
         delete(params, RequestOptions.none())
 
     /** @see [delete] */
     fun delete(
-        params: ObjectBulkDeleteParams,
+        params: BulkDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
@@ -32,23 +32,22 @@ interface BulkServiceAsync {
      * Add subscriptions for a set of objects in a single collection. If a subscription already
      * exists, it will be updated.
      */
-    fun addSubscriptions(
-        params: ObjectBulkAddSubscriptionsParams
-    ): CompletableFuture<BulkOperation> = addSubscriptions(params, RequestOptions.none())
+    fun addSubscriptions(params: BulkAddSubscriptionsParams): CompletableFuture<BulkOperation> =
+        addSubscriptions(params, RequestOptions.none())
 
     /** @see [addSubscriptions] */
     fun addSubscriptions(
-        params: ObjectBulkAddSubscriptionsParams,
+        params: BulkAddSubscriptionsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
     /** Bulk set objects */
-    fun set(params: ObjectBulkSetParams): CompletableFuture<BulkOperation> =
+    fun set(params: BulkSetParams): CompletableFuture<BulkOperation> =
         set(params, RequestOptions.none())
 
     /** @see [set] */
     fun set(
-        params: ObjectBulkSetParams,
+        params: BulkSetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
@@ -60,14 +59,13 @@ interface BulkServiceAsync {
          * otherwise the same as [BulkServiceAsync.delete].
          */
         @MustBeClosed
-        fun delete(
-            params: ObjectBulkDeleteParams
-        ): CompletableFuture<HttpResponseFor<BulkOperation>> = delete(params, RequestOptions.none())
+        fun delete(params: BulkDeleteParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
-            params: ObjectBulkDeleteParams,
+            params: BulkDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
 
@@ -77,14 +75,14 @@ interface BulkServiceAsync {
          */
         @MustBeClosed
         fun addSubscriptions(
-            params: ObjectBulkAddSubscriptionsParams
+            params: BulkAddSubscriptionsParams
         ): CompletableFuture<HttpResponseFor<BulkOperation>> =
             addSubscriptions(params, RequestOptions.none())
 
         /** @see [addSubscriptions] */
         @MustBeClosed
         fun addSubscriptions(
-            params: ObjectBulkAddSubscriptionsParams,
+            params: BulkAddSubscriptionsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
 
@@ -93,13 +91,13 @@ interface BulkServiceAsync {
          * otherwise the same as [BulkServiceAsync.set].
          */
         @MustBeClosed
-        fun set(params: ObjectBulkSetParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
+        fun set(params: BulkSetParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
             set(params, RequestOptions.none())
 
         /** @see [set] */
         @MustBeClosed
         fun set(
-            params: ObjectBulkSetParams,
+            params: BulkSetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
     }

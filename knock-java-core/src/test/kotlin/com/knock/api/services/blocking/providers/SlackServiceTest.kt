@@ -4,9 +4,9 @@ package com.knock.api.services.blocking.providers
 
 import com.knock.api.TestServerExtension
 import com.knock.api.client.okhttp.KnockOkHttpClient
-import com.knock.api.models.ProviderSlackCheckAuthParams
-import com.knock.api.models.ProviderSlackListChannelsParams
-import com.knock.api.models.ProviderSlackRevokeAccessParams
+import com.knock.api.models.providers.slack.SlackCheckAuthParams
+import com.knock.api.models.providers.slack.SlackListChannelsParams
+import com.knock.api.models.providers.slack.SlackRevokeAccessParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -28,7 +28,7 @@ class SlackServiceTest {
 
         val response =
             slackService.checkAuth(
-                ProviderSlackCheckAuthParams.builder()
+                SlackCheckAuthParams.builder()
                     .channelId("channel_id")
                     .accessTokenObject("access_token_object")
                     .build()
@@ -51,7 +51,7 @@ class SlackServiceTest {
 
         val page =
             slackService.listChannels(
-                ProviderSlackListChannelsParams.builder()
+                SlackListChannelsParams.builder()
                     .channelId("channel_id")
                     .accessTokenObject("access_token_object")
                     .build()
@@ -73,7 +73,7 @@ class SlackServiceTest {
         val slackService = client.providers().slack()
 
         slackService.revokeAccess(
-            ProviderSlackRevokeAccessParams.builder()
+            SlackRevokeAccessParams.builder()
                 .channelId("channel_id")
                 .accessTokenObject("access_token_object")
                 .build()

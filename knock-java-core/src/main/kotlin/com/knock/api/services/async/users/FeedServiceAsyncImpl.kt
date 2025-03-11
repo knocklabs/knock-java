@@ -14,10 +14,10 @@ import com.knock.api.core.http.HttpResponseFor
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepareAsync
 import com.knock.api.errors.KnockError
-import com.knock.api.models.UserFeedGetSettingsParams
-import com.knock.api.models.UserFeedGetSettingsResponse
-import com.knock.api.models.UserFeedListItemsPageAsync
-import com.knock.api.models.UserFeedListItemsParams
+import com.knock.api.models.users.feeds.FeedGetSettingsParams
+import com.knock.api.models.users.feeds.FeedGetSettingsResponse
+import com.knock.api.models.users.feeds.FeedListItemsPageAsync
+import com.knock.api.models.users.feeds.FeedListItemsParams
 import java.util.concurrent.CompletableFuture
 
 class FeedServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -30,16 +30,16 @@ class FeedServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun withRawResponse(): FeedServiceAsync.WithRawResponse = withRawResponse
 
     override fun getSettings(
-        params: UserFeedGetSettingsParams,
+        params: FeedGetSettingsParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<UserFeedGetSettingsResponse> =
+    ): CompletableFuture<FeedGetSettingsResponse> =
         // get /v1/users/{user_id}/feeds/{channel_id}/settings
         withRawResponse().getSettings(params, requestOptions).thenApply { it.parse() }
 
     override fun listItems(
-        params: UserFeedListItemsParams,
+        params: FeedListItemsParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<UserFeedListItemsPageAsync> =
+    ): CompletableFuture<FeedListItemsPageAsync> =
         // get /v1/users/{user_id}/feeds/{channel_id}
         withRawResponse().listItems(params, requestOptions).thenApply { it.parse() }
 
@@ -48,14 +48,14 @@ class FeedServiceAsyncImpl internal constructor(private val clientOptions: Clien
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val getSettingsHandler: Handler<UserFeedGetSettingsResponse> =
-            jsonHandler<UserFeedGetSettingsResponse>(clientOptions.jsonMapper)
+        private val getSettingsHandler: Handler<FeedGetSettingsResponse> =
+            jsonHandler<FeedGetSettingsResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun getSettings(
-            params: UserFeedGetSettingsParams,
+            params: FeedGetSettingsParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<UserFeedGetSettingsResponse>> {
+        ): CompletableFuture<HttpResponseFor<FeedGetSettingsResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -85,14 +85,14 @@ class FeedServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 }
         }
 
-        private val listItemsHandler: Handler<UserFeedListItemsPageAsync.Response> =
-            jsonHandler<UserFeedListItemsPageAsync.Response>(clientOptions.jsonMapper)
+        private val listItemsHandler: Handler<FeedListItemsPageAsync.Response> =
+            jsonHandler<FeedListItemsPageAsync.Response>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listItems(
-            params: UserFeedListItemsParams,
+            params: FeedListItemsParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<UserFeedListItemsPageAsync>> {
+        ): CompletableFuture<HttpResponseFor<FeedListItemsPageAsync>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -118,7 +118,7 @@ class FeedServiceAsyncImpl internal constructor(private val clientOptions: Clien
                                 }
                             }
                             .let {
-                                UserFeedListItemsPageAsync.of(
+                                FeedListItemsPageAsync.of(
                                     FeedServiceAsyncImpl(clientOptions),
                                     params,
                                     it,

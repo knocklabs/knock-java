@@ -15,10 +15,10 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepare
 import com.knock.api.errors.KnockError
-import com.knock.api.models.BulkOperation
-import com.knock.api.models.UserBulkDeleteParams
-import com.knock.api.models.UserBulkIdentifyParams
-import com.knock.api.models.UserBulkSetPreferencesParams
+import com.knock.api.models.bulkoperations.BulkOperation
+import com.knock.api.models.users.bulk.BulkDeleteParams
+import com.knock.api.models.users.bulk.BulkIdentifyParams
+import com.knock.api.models.users.bulk.BulkSetPreferencesParams
 
 class BulkServiceImpl internal constructor(private val clientOptions: ClientOptions) : BulkService {
 
@@ -28,22 +28,19 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
 
     override fun withRawResponse(): BulkService.WithRawResponse = withRawResponse
 
-    override fun delete(
-        params: UserBulkDeleteParams,
-        requestOptions: RequestOptions,
-    ): BulkOperation =
+    override fun delete(params: BulkDeleteParams, requestOptions: RequestOptions): BulkOperation =
         // post /v1/users/bulk/delete
         withRawResponse().delete(params, requestOptions).parse()
 
     override fun identify(
-        params: UserBulkIdentifyParams,
+        params: BulkIdentifyParams,
         requestOptions: RequestOptions,
     ): BulkOperation =
         // post /v1/users/bulk/identify
         withRawResponse().identify(params, requestOptions).parse()
 
     override fun setPreferences(
-        params: UserBulkSetPreferencesParams,
+        params: BulkSetPreferencesParams,
         requestOptions: RequestOptions,
     ): BulkOperation =
         // post /v1/users/bulk/preferences
@@ -58,7 +55,7 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
             jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun delete(
-            params: UserBulkDeleteParams,
+            params: BulkDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<BulkOperation> {
             val request =
@@ -85,7 +82,7 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
             jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun identify(
-            params: UserBulkIdentifyParams,
+            params: BulkIdentifyParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<BulkOperation> {
             val request =
@@ -112,7 +109,7 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
             jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun setPreferences(
-            params: UserBulkSetPreferencesParams,
+            params: BulkSetPreferencesParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<BulkOperation> {
             val request =

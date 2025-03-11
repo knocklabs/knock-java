@@ -17,8 +17,8 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import com.knock.api.client.KnockClient
 import com.knock.api.client.okhttp.KnockOkHttpClient
 import com.knock.api.core.JsonValue
-import com.knock.api.models.UserGetParams
-import com.knock.api.models.WorkflowTriggerParams
+import com.knock.api.models.users.UserGetParams
+import com.knock.api.models.workflows.WorkflowTriggerParams
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test

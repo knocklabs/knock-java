@@ -16,13 +16,13 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepareAsync
 import com.knock.api.errors.KnockError
-import com.knock.api.models.ProviderMsTeamCheckAuthParams
-import com.knock.api.models.ProviderMsTeamCheckAuthResponse
-import com.knock.api.models.ProviderMsTeamListChannelsParams
-import com.knock.api.models.ProviderMsTeamListChannelsResponse
-import com.knock.api.models.ProviderMsTeamListTeamsParams
-import com.knock.api.models.ProviderMsTeamListTeamsResponse
-import com.knock.api.models.ProviderMsTeamRevokeAccessParams
+import com.knock.api.models.providers.msteams.MsTeamCheckAuthParams
+import com.knock.api.models.providers.msteams.MsTeamCheckAuthResponse
+import com.knock.api.models.providers.msteams.MsTeamListChannelsParams
+import com.knock.api.models.providers.msteams.MsTeamListChannelsResponse
+import com.knock.api.models.providers.msteams.MsTeamListTeamsParams
+import com.knock.api.models.providers.msteams.MsTeamListTeamsResponse
+import com.knock.api.models.providers.msteams.MsTeamRevokeAccessParams
 import java.util.concurrent.CompletableFuture
 
 class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -35,28 +35,28 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
     override fun withRawResponse(): MsTeamServiceAsync.WithRawResponse = withRawResponse
 
     override fun checkAuth(
-        params: ProviderMsTeamCheckAuthParams,
+        params: MsTeamCheckAuthParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<ProviderMsTeamCheckAuthResponse> =
+    ): CompletableFuture<MsTeamCheckAuthResponse> =
         // get /v1/providers/ms-teams/{channel_id}/auth_check
         withRawResponse().checkAuth(params, requestOptions).thenApply { it.parse() }
 
     override fun listChannels(
-        params: ProviderMsTeamListChannelsParams,
+        params: MsTeamListChannelsParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<ProviderMsTeamListChannelsResponse> =
+    ): CompletableFuture<MsTeamListChannelsResponse> =
         // get /v1/providers/ms-teams/{channel_id}/channels
         withRawResponse().listChannels(params, requestOptions).thenApply { it.parse() }
 
     override fun listTeams(
-        params: ProviderMsTeamListTeamsParams,
+        params: MsTeamListTeamsParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<ProviderMsTeamListTeamsResponse> =
+    ): CompletableFuture<MsTeamListTeamsResponse> =
         // get /v1/providers/ms-teams/{channel_id}/teams
         withRawResponse().listTeams(params, requestOptions).thenApply { it.parse() }
 
     override fun revokeAccess(
-        params: ProviderMsTeamRevokeAccessParams,
+        params: MsTeamRevokeAccessParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<String> =
         // put /v1/providers/ms-teams/{channel_id}/revoke_access
@@ -67,14 +67,14 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val checkAuthHandler: Handler<ProviderMsTeamCheckAuthResponse> =
-            jsonHandler<ProviderMsTeamCheckAuthResponse>(clientOptions.jsonMapper)
+        private val checkAuthHandler: Handler<MsTeamCheckAuthResponse> =
+            jsonHandler<MsTeamCheckAuthResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun checkAuth(
-            params: ProviderMsTeamCheckAuthParams,
+            params: MsTeamCheckAuthParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<ProviderMsTeamCheckAuthResponse>> {
+        ): CompletableFuture<HttpResponseFor<MsTeamCheckAuthResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -103,14 +103,14 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val listChannelsHandler: Handler<ProviderMsTeamListChannelsResponse> =
-            jsonHandler<ProviderMsTeamListChannelsResponse>(clientOptions.jsonMapper)
+        private val listChannelsHandler: Handler<MsTeamListChannelsResponse> =
+            jsonHandler<MsTeamListChannelsResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listChannels(
-            params: ProviderMsTeamListChannelsParams,
+            params: MsTeamListChannelsParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<ProviderMsTeamListChannelsResponse>> {
+        ): CompletableFuture<HttpResponseFor<MsTeamListChannelsResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -139,14 +139,14 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val listTeamsHandler: Handler<ProviderMsTeamListTeamsResponse> =
-            jsonHandler<ProviderMsTeamListTeamsResponse>(clientOptions.jsonMapper)
+        private val listTeamsHandler: Handler<MsTeamListTeamsResponse> =
+            jsonHandler<MsTeamListTeamsResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listTeams(
-            params: ProviderMsTeamListTeamsParams,
+            params: MsTeamListTeamsParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<ProviderMsTeamListTeamsResponse>> {
+        ): CompletableFuture<HttpResponseFor<MsTeamListTeamsResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -173,7 +173,7 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
             stringHandler().withErrorHandler(errorHandler)
 
         override fun revokeAccess(
-            params: ProviderMsTeamRevokeAccessParams,
+            params: MsTeamRevokeAccessParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<String>> {
             val request =

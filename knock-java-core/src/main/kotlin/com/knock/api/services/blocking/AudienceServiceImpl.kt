@@ -16,10 +16,10 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepare
 import com.knock.api.errors.KnockError
-import com.knock.api.models.AudienceAddMembersParams
-import com.knock.api.models.AudienceListMembersParams
-import com.knock.api.models.AudienceListMembersResponse
-import com.knock.api.models.AudienceRemoveMembersParams
+import com.knock.api.models.audiences.AudienceAddMembersParams
+import com.knock.api.models.audiences.AudienceListMembersParams
+import com.knock.api.models.audiences.AudienceListMembersResponse
+import com.knock.api.models.audiences.AudienceRemoveMembersParams
 
 class AudienceServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     AudienceService {

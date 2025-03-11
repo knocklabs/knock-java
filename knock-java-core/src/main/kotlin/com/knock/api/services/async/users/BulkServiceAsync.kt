@@ -5,10 +5,10 @@ package com.knock.api.services.async.users
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
-import com.knock.api.models.BulkOperation
-import com.knock.api.models.UserBulkDeleteParams
-import com.knock.api.models.UserBulkIdentifyParams
-import com.knock.api.models.UserBulkSetPreferencesParams
+import com.knock.api.models.bulkoperations.BulkOperation
+import com.knock.api.models.users.bulk.BulkDeleteParams
+import com.knock.api.models.users.bulk.BulkIdentifyParams
+import com.knock.api.models.users.bulk.BulkSetPreferencesParams
 import java.util.concurrent.CompletableFuture
 
 interface BulkServiceAsync {
@@ -19,32 +19,32 @@ interface BulkServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** Bulk delete users */
-    fun delete(params: UserBulkDeleteParams): CompletableFuture<BulkOperation> =
+    fun delete(params: BulkDeleteParams): CompletableFuture<BulkOperation> =
         delete(params, RequestOptions.none())
 
     /** @see [delete] */
     fun delete(
-        params: UserBulkDeleteParams,
+        params: BulkDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
     /** Bulk identifies users */
-    fun identify(params: UserBulkIdentifyParams): CompletableFuture<BulkOperation> =
+    fun identify(params: BulkIdentifyParams): CompletableFuture<BulkOperation> =
         identify(params, RequestOptions.none())
 
     /** @see [identify] */
     fun identify(
-        params: UserBulkIdentifyParams,
+        params: BulkIdentifyParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
     /** Bulk set preferences */
-    fun setPreferences(params: UserBulkSetPreferencesParams): CompletableFuture<BulkOperation> =
+    fun setPreferences(params: BulkSetPreferencesParams): CompletableFuture<BulkOperation> =
         setPreferences(params, RequestOptions.none())
 
     /** @see [setPreferences] */
     fun setPreferences(
-        params: UserBulkSetPreferencesParams,
+        params: BulkSetPreferencesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
@@ -56,14 +56,13 @@ interface BulkServiceAsync {
          * as [BulkServiceAsync.delete].
          */
         @MustBeClosed
-        fun delete(
-            params: UserBulkDeleteParams
-        ): CompletableFuture<HttpResponseFor<BulkOperation>> = delete(params, RequestOptions.none())
+        fun delete(params: BulkDeleteParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
-            params: UserBulkDeleteParams,
+            params: BulkDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
 
@@ -73,14 +72,14 @@ interface BulkServiceAsync {
          */
         @MustBeClosed
         fun identify(
-            params: UserBulkIdentifyParams
+            params: BulkIdentifyParams
         ): CompletableFuture<HttpResponseFor<BulkOperation>> =
             identify(params, RequestOptions.none())
 
         /** @see [identify] */
         @MustBeClosed
         fun identify(
-            params: UserBulkIdentifyParams,
+            params: BulkIdentifyParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
 
@@ -90,14 +89,14 @@ interface BulkServiceAsync {
          */
         @MustBeClosed
         fun setPreferences(
-            params: UserBulkSetPreferencesParams
+            params: BulkSetPreferencesParams
         ): CompletableFuture<HttpResponseFor<BulkOperation>> =
             setPreferences(params, RequestOptions.none())
 
         /** @see [setPreferences] */
         @MustBeClosed
         fun setPreferences(
-            params: UserBulkSetPreferencesParams,
+            params: BulkSetPreferencesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
     }

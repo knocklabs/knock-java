@@ -5,14 +5,14 @@ package com.knock.api.services.async.users
 import com.knock.api.TestServerExtension
 import com.knock.api.client.okhttp.KnockOkHttpClientAsync
 import com.knock.api.core.JsonValue
-import com.knock.api.models.InlineChannelDataRequest
-import com.knock.api.models.InlineIdentifyUserRequest
-import com.knock.api.models.InlinePreferenceSetRequest
-import com.knock.api.models.PreferenceSetChannelTypes
-import com.knock.api.models.PreferenceSetRequest
-import com.knock.api.models.UserBulkDeleteParams
-import com.knock.api.models.UserBulkIdentifyParams
-import com.knock.api.models.UserBulkSetPreferencesParams
+import com.knock.api.models.recipients.InlineChannelDataRequest
+import com.knock.api.models.recipients.InlinePreferenceSetRequest
+import com.knock.api.models.recipients.PreferenceSetChannelTypes
+import com.knock.api.models.recipients.PreferenceSetRequest
+import com.knock.api.models.users.InlineIdentifyUserRequest
+import com.knock.api.models.users.bulk.BulkDeleteParams
+import com.knock.api.models.users.bulk.BulkIdentifyParams
+import com.knock.api.models.users.bulk.BulkSetPreferencesParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -35,7 +35,7 @@ class BulkServiceAsyncTest {
 
         val bulkOperationFuture =
             bulkServiceAsync.delete(
-                UserBulkDeleteParams.builder().addUserId("user_1").addUserId("user_2").build()
+                BulkDeleteParams.builder().addUserId("user_1").addUserId("user_2").build()
             )
 
         val bulkOperation = bulkOperationFuture.get()
@@ -56,7 +56,7 @@ class BulkServiceAsyncTest {
 
         val bulkOperationFuture =
             bulkServiceAsync.identify(
-                UserBulkIdentifyParams.builder()
+                BulkIdentifyParams.builder()
                     .addUser(
                         InlineIdentifyUserRequest.builder()
                             .id("user_1")
@@ -169,7 +169,7 @@ class BulkServiceAsyncTest {
 
         val bulkOperationFuture =
             bulkServiceAsync.setPreferences(
-                UserBulkSetPreferencesParams.builder()
+                BulkSetPreferencesParams.builder()
                     .preferences(
                         PreferenceSetRequest.builder()
                             .categories(

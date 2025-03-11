@@ -16,13 +16,13 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepare
 import com.knock.api.errors.KnockError
-import com.knock.api.models.ProviderMsTeamCheckAuthParams
-import com.knock.api.models.ProviderMsTeamCheckAuthResponse
-import com.knock.api.models.ProviderMsTeamListChannelsParams
-import com.knock.api.models.ProviderMsTeamListChannelsResponse
-import com.knock.api.models.ProviderMsTeamListTeamsParams
-import com.knock.api.models.ProviderMsTeamListTeamsResponse
-import com.knock.api.models.ProviderMsTeamRevokeAccessParams
+import com.knock.api.models.providers.msteams.MsTeamCheckAuthParams
+import com.knock.api.models.providers.msteams.MsTeamCheckAuthResponse
+import com.knock.api.models.providers.msteams.MsTeamListChannelsParams
+import com.knock.api.models.providers.msteams.MsTeamListChannelsResponse
+import com.knock.api.models.providers.msteams.MsTeamListTeamsParams
+import com.knock.api.models.providers.msteams.MsTeamListTeamsResponse
+import com.knock.api.models.providers.msteams.MsTeamRevokeAccessParams
 
 class MsTeamServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     MsTeamService {
@@ -34,28 +34,28 @@ class MsTeamServiceImpl internal constructor(private val clientOptions: ClientOp
     override fun withRawResponse(): MsTeamService.WithRawResponse = withRawResponse
 
     override fun checkAuth(
-        params: ProviderMsTeamCheckAuthParams,
+        params: MsTeamCheckAuthParams,
         requestOptions: RequestOptions,
-    ): ProviderMsTeamCheckAuthResponse =
+    ): MsTeamCheckAuthResponse =
         // get /v1/providers/ms-teams/{channel_id}/auth_check
         withRawResponse().checkAuth(params, requestOptions).parse()
 
     override fun listChannels(
-        params: ProviderMsTeamListChannelsParams,
+        params: MsTeamListChannelsParams,
         requestOptions: RequestOptions,
-    ): ProviderMsTeamListChannelsResponse =
+    ): MsTeamListChannelsResponse =
         // get /v1/providers/ms-teams/{channel_id}/channels
         withRawResponse().listChannels(params, requestOptions).parse()
 
     override fun listTeams(
-        params: ProviderMsTeamListTeamsParams,
+        params: MsTeamListTeamsParams,
         requestOptions: RequestOptions,
-    ): ProviderMsTeamListTeamsResponse =
+    ): MsTeamListTeamsResponse =
         // get /v1/providers/ms-teams/{channel_id}/teams
         withRawResponse().listTeams(params, requestOptions).parse()
 
     override fun revokeAccess(
-        params: ProviderMsTeamRevokeAccessParams,
+        params: MsTeamRevokeAccessParams,
         requestOptions: RequestOptions,
     ): String =
         // put /v1/providers/ms-teams/{channel_id}/revoke_access
@@ -66,14 +66,14 @@ class MsTeamServiceImpl internal constructor(private val clientOptions: ClientOp
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val checkAuthHandler: Handler<ProviderMsTeamCheckAuthResponse> =
-            jsonHandler<ProviderMsTeamCheckAuthResponse>(clientOptions.jsonMapper)
+        private val checkAuthHandler: Handler<MsTeamCheckAuthResponse> =
+            jsonHandler<MsTeamCheckAuthResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun checkAuth(
-            params: ProviderMsTeamCheckAuthParams,
+            params: MsTeamCheckAuthParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<ProviderMsTeamCheckAuthResponse> {
+        ): HttpResponseFor<MsTeamCheckAuthResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -99,14 +99,14 @@ class MsTeamServiceImpl internal constructor(private val clientOptions: ClientOp
             }
         }
 
-        private val listChannelsHandler: Handler<ProviderMsTeamListChannelsResponse> =
-            jsonHandler<ProviderMsTeamListChannelsResponse>(clientOptions.jsonMapper)
+        private val listChannelsHandler: Handler<MsTeamListChannelsResponse> =
+            jsonHandler<MsTeamListChannelsResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listChannels(
-            params: ProviderMsTeamListChannelsParams,
+            params: MsTeamListChannelsParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<ProviderMsTeamListChannelsResponse> {
+        ): HttpResponseFor<MsTeamListChannelsResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -132,14 +132,14 @@ class MsTeamServiceImpl internal constructor(private val clientOptions: ClientOp
             }
         }
 
-        private val listTeamsHandler: Handler<ProviderMsTeamListTeamsResponse> =
-            jsonHandler<ProviderMsTeamListTeamsResponse>(clientOptions.jsonMapper)
+        private val listTeamsHandler: Handler<MsTeamListTeamsResponse> =
+            jsonHandler<MsTeamListTeamsResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listTeams(
-            params: ProviderMsTeamListTeamsParams,
+            params: MsTeamListTeamsParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<ProviderMsTeamListTeamsResponse> {
+        ): HttpResponseFor<MsTeamListTeamsResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -163,7 +163,7 @@ class MsTeamServiceImpl internal constructor(private val clientOptions: ClientOp
             stringHandler().withErrorHandler(errorHandler)
 
         override fun revokeAccess(
-            params: ProviderMsTeamRevokeAccessParams,
+            params: MsTeamRevokeAccessParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<String> {
             val request =

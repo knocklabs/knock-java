@@ -15,15 +15,15 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepare
 import com.knock.api.errors.KnockError
-import com.knock.api.models.Message
-import com.knock.api.models.MessageBatchArchiveParams
-import com.knock.api.models.MessageBatchGetContentParams
-import com.knock.api.models.MessageBatchMarkAsInteractedParams
-import com.knock.api.models.MessageBatchMarkAsReadParams
-import com.knock.api.models.MessageBatchMarkAsSeenParams
-import com.knock.api.models.MessageBatchMarkAsUnreadParams
-import com.knock.api.models.MessageBatchMarkAsUnseenParams
-import com.knock.api.models.MessageBatchUnarchiveParams
+import com.knock.api.models.messages.Message
+import com.knock.api.models.messages.batch.BatchArchiveParams
+import com.knock.api.models.messages.batch.BatchGetContentParams
+import com.knock.api.models.messages.batch.BatchMarkAsInteractedParams
+import com.knock.api.models.messages.batch.BatchMarkAsReadParams
+import com.knock.api.models.messages.batch.BatchMarkAsSeenParams
+import com.knock.api.models.messages.batch.BatchMarkAsUnreadParams
+import com.knock.api.models.messages.batch.BatchMarkAsUnseenParams
+import com.knock.api.models.messages.batch.BatchUnarchiveParams
 
 class BatchServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     BatchService {
@@ -35,56 +35,56 @@ class BatchServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun withRawResponse(): BatchService.WithRawResponse = withRawResponse
 
     override fun archive(
-        params: MessageBatchArchiveParams,
+        params: BatchArchiveParams,
         requestOptions: RequestOptions,
     ): List<Message> =
         // post /v1/messages/batch/archived
         withRawResponse().archive(params, requestOptions).parse()
 
     override fun getContent(
-        params: MessageBatchGetContentParams,
+        params: BatchGetContentParams,
         requestOptions: RequestOptions,
     ): List<MessageContent> =
         // get /v1/messages/batch/content
         withRawResponse().getContent(params, requestOptions).parse()
 
     override fun markAsInteracted(
-        params: MessageBatchMarkAsInteractedParams,
+        params: BatchMarkAsInteractedParams,
         requestOptions: RequestOptions,
     ): List<Message> =
         // post /v1/messages/batch/interacted
         withRawResponse().markAsInteracted(params, requestOptions).parse()
 
     override fun markAsRead(
-        params: MessageBatchMarkAsReadParams,
+        params: BatchMarkAsReadParams,
         requestOptions: RequestOptions,
     ): List<Message> =
         // post /v1/messages/batch/read
         withRawResponse().markAsRead(params, requestOptions).parse()
 
     override fun markAsSeen(
-        params: MessageBatchMarkAsSeenParams,
+        params: BatchMarkAsSeenParams,
         requestOptions: RequestOptions,
     ): List<Message> =
         // post /v1/messages/batch/seen
         withRawResponse().markAsSeen(params, requestOptions).parse()
 
     override fun markAsUnread(
-        params: MessageBatchMarkAsUnreadParams,
+        params: BatchMarkAsUnreadParams,
         requestOptions: RequestOptions,
     ): List<Message> =
         // post /v1/messages/batch/unread
         withRawResponse().markAsUnread(params, requestOptions).parse()
 
     override fun markAsUnseen(
-        params: MessageBatchMarkAsUnseenParams,
+        params: BatchMarkAsUnseenParams,
         requestOptions: RequestOptions,
     ): List<Message> =
         // post /v1/messages/batch/unseen
         withRawResponse().markAsUnseen(params, requestOptions).parse()
 
     override fun unarchive(
-        params: MessageBatchUnarchiveParams,
+        params: BatchUnarchiveParams,
         requestOptions: RequestOptions,
     ): List<Message> =
         // post /v1/messages/batch/unarchived
@@ -99,7 +99,7 @@ class BatchServiceImpl internal constructor(private val clientOptions: ClientOpt
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun archive(
-            params: MessageBatchArchiveParams,
+            params: BatchArchiveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<List<Message>> {
             val request =
@@ -127,7 +127,7 @@ class BatchServiceImpl internal constructor(private val clientOptions: ClientOpt
                 .withErrorHandler(errorHandler)
 
         override fun getContent(
-            params: MessageBatchGetContentParams,
+            params: BatchGetContentParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<List<MessageContent>> {
             val request =
@@ -153,7 +153,7 @@ class BatchServiceImpl internal constructor(private val clientOptions: ClientOpt
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsInteracted(
-            params: MessageBatchMarkAsInteractedParams,
+            params: BatchMarkAsInteractedParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<List<Message>> {
             val request =
@@ -180,7 +180,7 @@ class BatchServiceImpl internal constructor(private val clientOptions: ClientOpt
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsRead(
-            params: MessageBatchMarkAsReadParams,
+            params: BatchMarkAsReadParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<List<Message>> {
             val request =
@@ -207,7 +207,7 @@ class BatchServiceImpl internal constructor(private val clientOptions: ClientOpt
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsSeen(
-            params: MessageBatchMarkAsSeenParams,
+            params: BatchMarkAsSeenParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<List<Message>> {
             val request =
@@ -234,7 +234,7 @@ class BatchServiceImpl internal constructor(private val clientOptions: ClientOpt
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsUnread(
-            params: MessageBatchMarkAsUnreadParams,
+            params: BatchMarkAsUnreadParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<List<Message>> {
             val request =
@@ -261,7 +261,7 @@ class BatchServiceImpl internal constructor(private val clientOptions: ClientOpt
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsUnseen(
-            params: MessageBatchMarkAsUnseenParams,
+            params: BatchMarkAsUnseenParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<List<Message>> {
             val request =
@@ -288,7 +288,7 @@ class BatchServiceImpl internal constructor(private val clientOptions: ClientOpt
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun unarchive(
-            params: MessageBatchUnarchiveParams,
+            params: BatchUnarchiveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<List<Message>> {
             val request =

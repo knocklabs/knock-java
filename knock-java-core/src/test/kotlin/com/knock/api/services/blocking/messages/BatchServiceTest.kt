@@ -5,8 +5,8 @@ package com.knock.api.services.blocking.messages
 import com.knock.api.TestServerExtension
 import com.knock.api.client.okhttp.KnockOkHttpClient
 import com.knock.api.core.JsonValue
-import com.knock.api.models.MessageBatchGetContentParams
-import com.knock.api.models.MessageBatchMarkAsInteractedParams
+import com.knock.api.models.messages.batch.BatchGetContentParams
+import com.knock.api.models.messages.batch.BatchMarkAsInteractedParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -44,9 +44,7 @@ class BatchServiceTest {
         val batchService = client.messages().batch()
 
         val response =
-            batchService.getContent(
-                MessageBatchGetContentParams.builder().addMessageId("string").build()
-            )
+            batchService.getContent(BatchGetContentParams.builder().addMessageId("string").build())
 
         response.forEach { it.validate() }
     }
@@ -65,10 +63,10 @@ class BatchServiceTest {
 
         val messages =
             batchService.markAsInteracted(
-                MessageBatchMarkAsInteractedParams.builder()
+                BatchMarkAsInteractedParams.builder()
                     .addMessageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
                     .metadata(
-                        MessageBatchMarkAsInteractedParams.Metadata.builder()
+                        BatchMarkAsInteractedParams.Metadata.builder()
                             .putAdditionalProperty("key", JsonValue.from("bar"))
                             .build()
                     )

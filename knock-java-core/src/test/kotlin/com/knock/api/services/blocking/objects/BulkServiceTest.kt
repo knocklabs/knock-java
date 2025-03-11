@@ -5,13 +5,13 @@ package com.knock.api.services.blocking.objects
 import com.knock.api.TestServerExtension
 import com.knock.api.client.okhttp.KnockOkHttpClient
 import com.knock.api.core.JsonValue
-import com.knock.api.models.InlineChannelDataRequest
-import com.knock.api.models.InlineIdentifyUserRequest
-import com.knock.api.models.InlineObjectRequest
-import com.knock.api.models.InlinePreferenceSetRequest
-import com.knock.api.models.ObjectBulkAddSubscriptionsParams
-import com.knock.api.models.ObjectBulkDeleteParams
-import com.knock.api.models.ObjectBulkSetParams
+import com.knock.api.models.objects.InlineObjectRequest
+import com.knock.api.models.objects.bulk.BulkAddSubscriptionsParams
+import com.knock.api.models.objects.bulk.BulkDeleteParams
+import com.knock.api.models.objects.bulk.BulkSetParams
+import com.knock.api.models.recipients.InlineChannelDataRequest
+import com.knock.api.models.recipients.InlinePreferenceSetRequest
+import com.knock.api.models.users.InlineIdentifyUserRequest
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -34,10 +34,7 @@ class BulkServiceTest {
 
         val bulkOperation =
             bulkService.delete(
-                ObjectBulkDeleteParams.builder()
-                    .collection("collection")
-                    .addObjectId("string")
-                    .build()
+                BulkDeleteParams.builder().collection("collection").addObjectId("string").build()
             )
 
         bulkOperation.validate()
@@ -57,10 +54,10 @@ class BulkServiceTest {
 
         val bulkOperation =
             bulkService.addSubscriptions(
-                ObjectBulkAddSubscriptionsParams.builder()
+                BulkAddSubscriptionsParams.builder()
                     .collection("projects")
                     .addSubscription(
-                        ObjectBulkAddSubscriptionsParams.Subscription.builder()
+                        BulkAddSubscriptionsParams.Subscription.builder()
                             .id("project-1")
                             .addRecipient(
                                 InlineIdentifyUserRequest.builder()
@@ -158,7 +155,7 @@ class BulkServiceTest {
                                     .build()
                             )
                             .properties(
-                                ObjectBulkAddSubscriptionsParams.Subscription.Properties.builder()
+                                BulkAddSubscriptionsParams.Subscription.Properties.builder()
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
@@ -184,7 +181,7 @@ class BulkServiceTest {
 
         val bulkOperation =
             bulkService.set(
-                ObjectBulkSetParams.builder()
+                BulkSetParams.builder()
                     .collection("collection")
                     .addObject(
                         InlineObjectRequest.builder()

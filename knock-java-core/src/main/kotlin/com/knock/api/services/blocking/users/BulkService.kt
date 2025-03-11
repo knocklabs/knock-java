@@ -5,10 +5,10 @@ package com.knock.api.services.blocking.users
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
-import com.knock.api.models.BulkOperation
-import com.knock.api.models.UserBulkDeleteParams
-import com.knock.api.models.UserBulkIdentifyParams
-import com.knock.api.models.UserBulkSetPreferencesParams
+import com.knock.api.models.bulkoperations.BulkOperation
+import com.knock.api.models.users.bulk.BulkDeleteParams
+import com.knock.api.models.users.bulk.BulkIdentifyParams
+import com.knock.api.models.users.bulk.BulkSetPreferencesParams
 
 interface BulkService {
 
@@ -18,31 +18,31 @@ interface BulkService {
     fun withRawResponse(): WithRawResponse
 
     /** Bulk delete users */
-    fun delete(params: UserBulkDeleteParams): BulkOperation = delete(params, RequestOptions.none())
+    fun delete(params: BulkDeleteParams): BulkOperation = delete(params, RequestOptions.none())
 
     /** @see [delete] */
     fun delete(
-        params: UserBulkDeleteParams,
+        params: BulkDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
     /** Bulk identifies users */
-    fun identify(params: UserBulkIdentifyParams): BulkOperation =
+    fun identify(params: BulkIdentifyParams): BulkOperation =
         identify(params, RequestOptions.none())
 
     /** @see [identify] */
     fun identify(
-        params: UserBulkIdentifyParams,
+        params: BulkIdentifyParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
     /** Bulk set preferences */
-    fun setPreferences(params: UserBulkSetPreferencesParams): BulkOperation =
+    fun setPreferences(params: BulkSetPreferencesParams): BulkOperation =
         setPreferences(params, RequestOptions.none())
 
     /** @see [setPreferences] */
     fun setPreferences(
-        params: UserBulkSetPreferencesParams,
+        params: BulkSetPreferencesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
@@ -54,13 +54,13 @@ interface BulkService {
          * as [BulkService.delete].
          */
         @MustBeClosed
-        fun delete(params: UserBulkDeleteParams): HttpResponseFor<BulkOperation> =
+        fun delete(params: BulkDeleteParams): HttpResponseFor<BulkOperation> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
-            params: UserBulkDeleteParams,
+            params: BulkDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BulkOperation>
 
@@ -69,13 +69,13 @@ interface BulkService {
          * as [BulkService.identify].
          */
         @MustBeClosed
-        fun identify(params: UserBulkIdentifyParams): HttpResponseFor<BulkOperation> =
+        fun identify(params: BulkIdentifyParams): HttpResponseFor<BulkOperation> =
             identify(params, RequestOptions.none())
 
         /** @see [identify] */
         @MustBeClosed
         fun identify(
-            params: UserBulkIdentifyParams,
+            params: BulkIdentifyParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BulkOperation>
 
@@ -84,13 +84,13 @@ interface BulkService {
          * same as [BulkService.setPreferences].
          */
         @MustBeClosed
-        fun setPreferences(params: UserBulkSetPreferencesParams): HttpResponseFor<BulkOperation> =
+        fun setPreferences(params: BulkSetPreferencesParams): HttpResponseFor<BulkOperation> =
             setPreferences(params, RequestOptions.none())
 
         /** @see [setPreferences] */
         @MustBeClosed
         fun setPreferences(
-            params: UserBulkSetPreferencesParams,
+            params: BulkSetPreferencesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BulkOperation>
     }

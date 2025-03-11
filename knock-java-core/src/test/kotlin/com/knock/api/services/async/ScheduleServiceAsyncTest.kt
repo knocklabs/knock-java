@@ -5,11 +5,11 @@ package com.knock.api.services.async
 import com.knock.api.TestServerExtension
 import com.knock.api.client.okhttp.KnockOkHttpClientAsync
 import com.knock.api.core.JsonValue
-import com.knock.api.models.ScheduleCreateParams
-import com.knock.api.models.ScheduleDeleteParams
-import com.knock.api.models.ScheduleListParams
-import com.knock.api.models.ScheduleRepeatRule
-import com.knock.api.models.ScheduleUpdateParams
+import com.knock.api.models.schedules.ScheduleCreateParams
+import com.knock.api.models.schedules.ScheduleDeleteParams
+import com.knock.api.models.schedules.ScheduleListParams
+import com.knock.api.models.schedules.ScheduleRepeatRule
+import com.knock.api.models.schedules.ScheduleUpdateParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

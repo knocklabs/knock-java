@@ -5,10 +5,10 @@ package com.knock.api.services.blocking.objects
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
-import com.knock.api.models.BulkOperation
-import com.knock.api.models.ObjectBulkAddSubscriptionsParams
-import com.knock.api.models.ObjectBulkDeleteParams
-import com.knock.api.models.ObjectBulkSetParams
+import com.knock.api.models.bulkoperations.BulkOperation
+import com.knock.api.models.objects.bulk.BulkAddSubscriptionsParams
+import com.knock.api.models.objects.bulk.BulkDeleteParams
+import com.knock.api.models.objects.bulk.BulkSetParams
 
 interface BulkService {
 
@@ -18,12 +18,11 @@ interface BulkService {
     fun withRawResponse(): WithRawResponse
 
     /** Bulk delete objects */
-    fun delete(params: ObjectBulkDeleteParams): BulkOperation =
-        delete(params, RequestOptions.none())
+    fun delete(params: BulkDeleteParams): BulkOperation = delete(params, RequestOptions.none())
 
     /** @see [delete] */
     fun delete(
-        params: ObjectBulkDeleteParams,
+        params: BulkDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
@@ -31,21 +30,21 @@ interface BulkService {
      * Add subscriptions for a set of objects in a single collection. If a subscription already
      * exists, it will be updated.
      */
-    fun addSubscriptions(params: ObjectBulkAddSubscriptionsParams): BulkOperation =
+    fun addSubscriptions(params: BulkAddSubscriptionsParams): BulkOperation =
         addSubscriptions(params, RequestOptions.none())
 
     /** @see [addSubscriptions] */
     fun addSubscriptions(
-        params: ObjectBulkAddSubscriptionsParams,
+        params: BulkAddSubscriptionsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
     /** Bulk set objects */
-    fun set(params: ObjectBulkSetParams): BulkOperation = set(params, RequestOptions.none())
+    fun set(params: BulkSetParams): BulkOperation = set(params, RequestOptions.none())
 
     /** @see [set] */
     fun set(
-        params: ObjectBulkSetParams,
+        params: BulkSetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
@@ -57,13 +56,13 @@ interface BulkService {
          * otherwise the same as [BulkService.delete].
          */
         @MustBeClosed
-        fun delete(params: ObjectBulkDeleteParams): HttpResponseFor<BulkOperation> =
+        fun delete(params: BulkDeleteParams): HttpResponseFor<BulkOperation> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
-            params: ObjectBulkDeleteParams,
+            params: BulkDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BulkOperation>
 
@@ -72,14 +71,13 @@ interface BulkService {
          * but is otherwise the same as [BulkService.addSubscriptions].
          */
         @MustBeClosed
-        fun addSubscriptions(
-            params: ObjectBulkAddSubscriptionsParams
-        ): HttpResponseFor<BulkOperation> = addSubscriptions(params, RequestOptions.none())
+        fun addSubscriptions(params: BulkAddSubscriptionsParams): HttpResponseFor<BulkOperation> =
+            addSubscriptions(params, RequestOptions.none())
 
         /** @see [addSubscriptions] */
         @MustBeClosed
         fun addSubscriptions(
-            params: ObjectBulkAddSubscriptionsParams,
+            params: BulkAddSubscriptionsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BulkOperation>
 
@@ -88,13 +86,13 @@ interface BulkService {
          * otherwise the same as [BulkService.set].
          */
         @MustBeClosed
-        fun set(params: ObjectBulkSetParams): HttpResponseFor<BulkOperation> =
+        fun set(params: BulkSetParams): HttpResponseFor<BulkOperation> =
             set(params, RequestOptions.none())
 
         /** @see [set] */
         @MustBeClosed
         fun set(
-            params: ObjectBulkSetParams,
+            params: BulkSetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BulkOperation>
     }

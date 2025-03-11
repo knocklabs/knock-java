@@ -5,9 +5,9 @@ package com.knock.api.services.async.tenants
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
-import com.knock.api.models.BulkOperation
-import com.knock.api.models.TenantBulkDeleteParams
-import com.knock.api.models.TenantBulkSetParams
+import com.knock.api.models.bulkoperations.BulkOperation
+import com.knock.api.models.tenants.bulk.BulkDeleteParams
+import com.knock.api.models.tenants.bulk.BulkSetParams
 import java.util.concurrent.CompletableFuture
 
 interface BulkServiceAsync {
@@ -18,22 +18,22 @@ interface BulkServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** Bulk delete tenants */
-    fun delete(params: TenantBulkDeleteParams): CompletableFuture<BulkOperation> =
+    fun delete(params: BulkDeleteParams): CompletableFuture<BulkOperation> =
         delete(params, RequestOptions.none())
 
     /** @see [delete] */
     fun delete(
-        params: TenantBulkDeleteParams,
+        params: BulkDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
     /** Bulk set tenants */
-    fun set(params: TenantBulkSetParams): CompletableFuture<BulkOperation> =
+    fun set(params: BulkSetParams): CompletableFuture<BulkOperation> =
         set(params, RequestOptions.none())
 
     /** @see [set] */
     fun set(
-        params: TenantBulkSetParams,
+        params: BulkSetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
@@ -45,14 +45,13 @@ interface BulkServiceAsync {
          * as [BulkServiceAsync.delete].
          */
         @MustBeClosed
-        fun delete(
-            params: TenantBulkDeleteParams
-        ): CompletableFuture<HttpResponseFor<BulkOperation>> = delete(params, RequestOptions.none())
+        fun delete(params: BulkDeleteParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
-            params: TenantBulkDeleteParams,
+            params: BulkDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
 
@@ -61,13 +60,13 @@ interface BulkServiceAsync {
          * [BulkServiceAsync.set].
          */
         @MustBeClosed
-        fun set(params: TenantBulkSetParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
+        fun set(params: BulkSetParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
             set(params, RequestOptions.none())
 
         /** @see [set] */
         @MustBeClosed
         fun set(
-            params: TenantBulkSetParams,
+            params: BulkSetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
     }

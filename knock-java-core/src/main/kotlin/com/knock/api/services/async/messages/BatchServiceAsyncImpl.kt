@@ -15,15 +15,15 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepareAsync
 import com.knock.api.errors.KnockError
-import com.knock.api.models.Message
-import com.knock.api.models.MessageBatchArchiveParams
-import com.knock.api.models.MessageBatchGetContentParams
-import com.knock.api.models.MessageBatchMarkAsInteractedParams
-import com.knock.api.models.MessageBatchMarkAsReadParams
-import com.knock.api.models.MessageBatchMarkAsSeenParams
-import com.knock.api.models.MessageBatchMarkAsUnreadParams
-import com.knock.api.models.MessageBatchMarkAsUnseenParams
-import com.knock.api.models.MessageBatchUnarchiveParams
+import com.knock.api.models.messages.Message
+import com.knock.api.models.messages.batch.BatchArchiveParams
+import com.knock.api.models.messages.batch.BatchGetContentParams
+import com.knock.api.models.messages.batch.BatchMarkAsInteractedParams
+import com.knock.api.models.messages.batch.BatchMarkAsReadParams
+import com.knock.api.models.messages.batch.BatchMarkAsSeenParams
+import com.knock.api.models.messages.batch.BatchMarkAsUnreadParams
+import com.knock.api.models.messages.batch.BatchMarkAsUnseenParams
+import com.knock.api.models.messages.batch.BatchUnarchiveParams
 import java.util.concurrent.CompletableFuture
 
 class BatchServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -36,56 +36,56 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override fun withRawResponse(): BatchServiceAsync.WithRawResponse = withRawResponse
 
     override fun archive(
-        params: MessageBatchArchiveParams,
+        params: BatchArchiveParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<List<Message>> =
         // post /v1/messages/batch/archived
         withRawResponse().archive(params, requestOptions).thenApply { it.parse() }
 
     override fun getContent(
-        params: MessageBatchGetContentParams,
+        params: BatchGetContentParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<List<MessageContent>> =
         // get /v1/messages/batch/content
         withRawResponse().getContent(params, requestOptions).thenApply { it.parse() }
 
     override fun markAsInteracted(
-        params: MessageBatchMarkAsInteractedParams,
+        params: BatchMarkAsInteractedParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<List<Message>> =
         // post /v1/messages/batch/interacted
         withRawResponse().markAsInteracted(params, requestOptions).thenApply { it.parse() }
 
     override fun markAsRead(
-        params: MessageBatchMarkAsReadParams,
+        params: BatchMarkAsReadParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<List<Message>> =
         // post /v1/messages/batch/read
         withRawResponse().markAsRead(params, requestOptions).thenApply { it.parse() }
 
     override fun markAsSeen(
-        params: MessageBatchMarkAsSeenParams,
+        params: BatchMarkAsSeenParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<List<Message>> =
         // post /v1/messages/batch/seen
         withRawResponse().markAsSeen(params, requestOptions).thenApply { it.parse() }
 
     override fun markAsUnread(
-        params: MessageBatchMarkAsUnreadParams,
+        params: BatchMarkAsUnreadParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<List<Message>> =
         // post /v1/messages/batch/unread
         withRawResponse().markAsUnread(params, requestOptions).thenApply { it.parse() }
 
     override fun markAsUnseen(
-        params: MessageBatchMarkAsUnseenParams,
+        params: BatchMarkAsUnseenParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<List<Message>> =
         // post /v1/messages/batch/unseen
         withRawResponse().markAsUnseen(params, requestOptions).thenApply { it.parse() }
 
     override fun unarchive(
-        params: MessageBatchUnarchiveParams,
+        params: BatchUnarchiveParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<List<Message>> =
         // post /v1/messages/batch/unarchived
@@ -100,7 +100,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun archive(
-            params: MessageBatchArchiveParams,
+            params: BatchArchiveParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<List<Message>>> {
             val request =
@@ -131,7 +131,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 .withErrorHandler(errorHandler)
 
         override fun getContent(
-            params: MessageBatchGetContentParams,
+            params: BatchGetContentParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<List<MessageContent>>> {
             val request =
@@ -160,7 +160,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsInteracted(
-            params: MessageBatchMarkAsInteractedParams,
+            params: BatchMarkAsInteractedParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<List<Message>>> {
             val request =
@@ -190,7 +190,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsRead(
-            params: MessageBatchMarkAsReadParams,
+            params: BatchMarkAsReadParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<List<Message>>> {
             val request =
@@ -220,7 +220,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsSeen(
-            params: MessageBatchMarkAsSeenParams,
+            params: BatchMarkAsSeenParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<List<Message>>> {
             val request =
@@ -250,7 +250,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsUnread(
-            params: MessageBatchMarkAsUnreadParams,
+            params: BatchMarkAsUnreadParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<List<Message>>> {
             val request =
@@ -280,7 +280,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun markAsUnseen(
-            params: MessageBatchMarkAsUnseenParams,
+            params: BatchMarkAsUnseenParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<List<Message>>> {
             val request =
@@ -310,7 +310,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun unarchive(
-            params: MessageBatchUnarchiveParams,
+            params: BatchUnarchiveParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<List<Message>>> {
             val request =

@@ -14,10 +14,10 @@ import com.knock.api.core.http.HttpResponseFor
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepare
 import com.knock.api.errors.KnockError
-import com.knock.api.models.UserFeedGetSettingsParams
-import com.knock.api.models.UserFeedGetSettingsResponse
-import com.knock.api.models.UserFeedListItemsPage
-import com.knock.api.models.UserFeedListItemsParams
+import com.knock.api.models.users.feeds.FeedGetSettingsParams
+import com.knock.api.models.users.feeds.FeedGetSettingsResponse
+import com.knock.api.models.users.feeds.FeedListItemsPage
+import com.knock.api.models.users.feeds.FeedListItemsParams
 
 class FeedServiceImpl internal constructor(private val clientOptions: ClientOptions) : FeedService {
 
@@ -28,16 +28,16 @@ class FeedServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun withRawResponse(): FeedService.WithRawResponse = withRawResponse
 
     override fun getSettings(
-        params: UserFeedGetSettingsParams,
+        params: FeedGetSettingsParams,
         requestOptions: RequestOptions,
-    ): UserFeedGetSettingsResponse =
+    ): FeedGetSettingsResponse =
         // get /v1/users/{user_id}/feeds/{channel_id}/settings
         withRawResponse().getSettings(params, requestOptions).parse()
 
     override fun listItems(
-        params: UserFeedListItemsParams,
+        params: FeedListItemsParams,
         requestOptions: RequestOptions,
-    ): UserFeedListItemsPage =
+    ): FeedListItemsPage =
         // get /v1/users/{user_id}/feeds/{channel_id}
         withRawResponse().listItems(params, requestOptions).parse()
 
@@ -46,14 +46,14 @@ class FeedServiceImpl internal constructor(private val clientOptions: ClientOpti
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val getSettingsHandler: Handler<UserFeedGetSettingsResponse> =
-            jsonHandler<UserFeedGetSettingsResponse>(clientOptions.jsonMapper)
+        private val getSettingsHandler: Handler<FeedGetSettingsResponse> =
+            jsonHandler<FeedGetSettingsResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun getSettings(
-            params: UserFeedGetSettingsParams,
+            params: FeedGetSettingsParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<UserFeedGetSettingsResponse> {
+        ): HttpResponseFor<FeedGetSettingsResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -80,14 +80,14 @@ class FeedServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val listItemsHandler: Handler<UserFeedListItemsPage.Response> =
-            jsonHandler<UserFeedListItemsPage.Response>(clientOptions.jsonMapper)
+        private val listItemsHandler: Handler<FeedListItemsPage.Response> =
+            jsonHandler<FeedListItemsPage.Response>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listItems(
-            params: UserFeedListItemsParams,
+            params: FeedListItemsParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<UserFeedListItemsPage> {
+        ): HttpResponseFor<FeedListItemsPage> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -110,7 +110,7 @@ class FeedServiceImpl internal constructor(private val clientOptions: ClientOpti
                             it.validate()
                         }
                     }
-                    .let { UserFeedListItemsPage.of(FeedServiceImpl(clientOptions), params, it) }
+                    .let { FeedListItemsPage.of(FeedServiceImpl(clientOptions), params, it) }
             }
         }
     }

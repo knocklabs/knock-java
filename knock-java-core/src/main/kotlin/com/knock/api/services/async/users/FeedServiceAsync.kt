@@ -5,10 +5,10 @@ package com.knock.api.services.async.users
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
-import com.knock.api.models.UserFeedGetSettingsParams
-import com.knock.api.models.UserFeedGetSettingsResponse
-import com.knock.api.models.UserFeedListItemsPageAsync
-import com.knock.api.models.UserFeedListItemsParams
+import com.knock.api.models.users.feeds.FeedGetSettingsParams
+import com.knock.api.models.users.feeds.FeedGetSettingsResponse
+import com.knock.api.models.users.feeds.FeedListItemsPageAsync
+import com.knock.api.models.users.feeds.FeedListItemsParams
 import java.util.concurrent.CompletableFuture
 
 interface FeedServiceAsync {
@@ -19,25 +19,24 @@ interface FeedServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** Returns the feed settings for a user. */
-    fun getSettings(
-        params: UserFeedGetSettingsParams
-    ): CompletableFuture<UserFeedGetSettingsResponse> = getSettings(params, RequestOptions.none())
+    fun getSettings(params: FeedGetSettingsParams): CompletableFuture<FeedGetSettingsResponse> =
+        getSettings(params, RequestOptions.none())
 
     /** @see [getSettings] */
     fun getSettings(
-        params: UserFeedGetSettingsParams,
+        params: FeedGetSettingsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<UserFeedGetSettingsResponse>
+    ): CompletableFuture<FeedGetSettingsResponse>
 
     /** Returns a paginated list of feed items for a user, including metadata about the feed. */
-    fun listItems(params: UserFeedListItemsParams): CompletableFuture<UserFeedListItemsPageAsync> =
+    fun listItems(params: FeedListItemsParams): CompletableFuture<FeedListItemsPageAsync> =
         listItems(params, RequestOptions.none())
 
     /** @see [listItems] */
     fun listItems(
-        params: UserFeedListItemsParams,
+        params: FeedListItemsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<UserFeedListItemsPageAsync>
+    ): CompletableFuture<FeedListItemsPageAsync>
 
     /** A view of [FeedServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -48,16 +47,16 @@ interface FeedServiceAsync {
          */
         @MustBeClosed
         fun getSettings(
-            params: UserFeedGetSettingsParams
-        ): CompletableFuture<HttpResponseFor<UserFeedGetSettingsResponse>> =
+            params: FeedGetSettingsParams
+        ): CompletableFuture<HttpResponseFor<FeedGetSettingsResponse>> =
             getSettings(params, RequestOptions.none())
 
         /** @see [getSettings] */
         @MustBeClosed
         fun getSettings(
-            params: UserFeedGetSettingsParams,
+            params: FeedGetSettingsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<UserFeedGetSettingsResponse>>
+        ): CompletableFuture<HttpResponseFor<FeedGetSettingsResponse>>
 
         /**
          * Returns a raw HTTP response for `get /v1/users/{user_id}/feeds/{channel_id}`, but is
@@ -65,15 +64,15 @@ interface FeedServiceAsync {
          */
         @MustBeClosed
         fun listItems(
-            params: UserFeedListItemsParams
-        ): CompletableFuture<HttpResponseFor<UserFeedListItemsPageAsync>> =
+            params: FeedListItemsParams
+        ): CompletableFuture<HttpResponseFor<FeedListItemsPageAsync>> =
             listItems(params, RequestOptions.none())
 
         /** @see [listItems] */
         @MustBeClosed
         fun listItems(
-            params: UserFeedListItemsParams,
+            params: FeedListItemsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<UserFeedListItemsPageAsync>>
+        ): CompletableFuture<HttpResponseFor<FeedListItemsPageAsync>>
     }
 }

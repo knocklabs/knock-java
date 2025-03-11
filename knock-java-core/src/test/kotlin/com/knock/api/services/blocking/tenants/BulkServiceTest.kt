@@ -4,8 +4,8 @@ package com.knock.api.services.blocking.tenants
 
 import com.knock.api.TestServerExtension
 import com.knock.api.client.okhttp.KnockOkHttpClient
-import com.knock.api.models.TenantBulkDeleteParams
-import com.knock.api.models.TenantBulkSetParams
+import com.knock.api.models.tenants.bulk.BulkDeleteParams
+import com.knock.api.models.tenants.bulk.BulkSetParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -26,7 +26,7 @@ class BulkServiceTest {
         val bulkService = client.tenants().bulk()
 
         val bulkOperation =
-            bulkService.delete(TenantBulkDeleteParams.builder().addTenantId("string").build())
+            bulkService.delete(BulkDeleteParams.builder().addTenantId("string").build())
 
         bulkOperation.validate()
     }
@@ -43,8 +43,7 @@ class BulkServiceTest {
                 .build()
         val bulkService = client.tenants().bulk()
 
-        val bulkOperation =
-            bulkService.set(TenantBulkSetParams.builder().addTenant("string").build())
+        val bulkOperation = bulkService.set(BulkSetParams.builder().addTenant("string").build())
 
         bulkOperation.validate()
     }

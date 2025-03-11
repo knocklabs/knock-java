@@ -5,9 +5,9 @@ package com.knock.api.services.async
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
-import com.knock.api.models.WorkflowCancelParams
-import com.knock.api.models.WorkflowTriggerParams
-import com.knock.api.models.WorkflowTriggerResponse
+import com.knock.api.models.workflows.WorkflowCancelParams
+import com.knock.api.models.workflows.WorkflowTriggerParams
+import com.knock.api.models.workflows.WorkflowTriggerResponse
 import java.util.concurrent.CompletableFuture
 
 interface WorkflowServiceAsync {

@@ -16,11 +16,11 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepare
 import com.knock.api.errors.KnockError
-import com.knock.api.models.ProviderSlackCheckAuthParams
-import com.knock.api.models.ProviderSlackCheckAuthResponse
-import com.knock.api.models.ProviderSlackListChannelsPage
-import com.knock.api.models.ProviderSlackListChannelsParams
-import com.knock.api.models.ProviderSlackRevokeAccessParams
+import com.knock.api.models.providers.slack.SlackCheckAuthParams
+import com.knock.api.models.providers.slack.SlackCheckAuthResponse
+import com.knock.api.models.providers.slack.SlackListChannelsPage
+import com.knock.api.models.providers.slack.SlackListChannelsParams
+import com.knock.api.models.providers.slack.SlackRevokeAccessParams
 
 class SlackServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     SlackService {
@@ -32,21 +32,21 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun withRawResponse(): SlackService.WithRawResponse = withRawResponse
 
     override fun checkAuth(
-        params: ProviderSlackCheckAuthParams,
+        params: SlackCheckAuthParams,
         requestOptions: RequestOptions,
-    ): ProviderSlackCheckAuthResponse =
+    ): SlackCheckAuthResponse =
         // get /v1/providers/slack/{channel_id}/auth_check
         withRawResponse().checkAuth(params, requestOptions).parse()
 
     override fun listChannels(
-        params: ProviderSlackListChannelsParams,
+        params: SlackListChannelsParams,
         requestOptions: RequestOptions,
-    ): ProviderSlackListChannelsPage =
+    ): SlackListChannelsPage =
         // get /v1/providers/slack/{channel_id}/channels
         withRawResponse().listChannels(params, requestOptions).parse()
 
     override fun revokeAccess(
-        params: ProviderSlackRevokeAccessParams,
+        params: SlackRevokeAccessParams,
         requestOptions: RequestOptions,
     ): String =
         // put /v1/providers/slack/{channel_id}/revoke_access
@@ -57,14 +57,14 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val checkAuthHandler: Handler<ProviderSlackCheckAuthResponse> =
-            jsonHandler<ProviderSlackCheckAuthResponse>(clientOptions.jsonMapper)
+        private val checkAuthHandler: Handler<SlackCheckAuthResponse> =
+            jsonHandler<SlackCheckAuthResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun checkAuth(
-            params: ProviderSlackCheckAuthParams,
+            params: SlackCheckAuthParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<ProviderSlackCheckAuthResponse> {
+        ): HttpResponseFor<SlackCheckAuthResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -90,14 +90,14 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
             }
         }
 
-        private val listChannelsHandler: Handler<ProviderSlackListChannelsPage.Response> =
-            jsonHandler<ProviderSlackListChannelsPage.Response>(clientOptions.jsonMapper)
+        private val listChannelsHandler: Handler<SlackListChannelsPage.Response> =
+            jsonHandler<SlackListChannelsPage.Response>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listChannels(
-            params: ProviderSlackListChannelsParams,
+            params: SlackListChannelsParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<ProviderSlackListChannelsPage> {
+        ): HttpResponseFor<SlackListChannelsPage> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -114,13 +114,7 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
                             it.validate()
                         }
                     }
-                    .let {
-                        ProviderSlackListChannelsPage.of(
-                            SlackServiceImpl(clientOptions),
-                            params,
-                            it,
-                        )
-                    }
+                    .let { SlackListChannelsPage.of(SlackServiceImpl(clientOptions), params, it) }
             }
         }
 
@@ -128,7 +122,7 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
             stringHandler().withErrorHandler(errorHandler)
 
         override fun revokeAccess(
-            params: ProviderSlackRevokeAccessParams,
+            params: SlackRevokeAccessParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<String> {
             val request =

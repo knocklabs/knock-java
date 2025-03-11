@@ -5,8 +5,8 @@ package com.knock.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
-import com.knock.api.models.BulkOperation
-import com.knock.api.models.BulkOperationGetParams
+import com.knock.api.models.bulkoperations.BulkOperation
+import com.knock.api.models.bulkoperations.BulkOperationGetParams
 
 interface BulkOperationService {
 

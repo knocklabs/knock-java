@@ -5,10 +5,10 @@ package com.knock.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
-import com.knock.api.models.AudienceAddMembersParams
-import com.knock.api.models.AudienceListMembersParams
-import com.knock.api.models.AudienceListMembersResponse
-import com.knock.api.models.AudienceRemoveMembersParams
+import com.knock.api.models.audiences.AudienceAddMembersParams
+import com.knock.api.models.audiences.AudienceListMembersParams
+import com.knock.api.models.audiences.AudienceListMembersResponse
+import com.knock.api.models.audiences.AudienceRemoveMembersParams
 
 interface AudienceService {
 

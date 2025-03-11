@@ -16,9 +16,9 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepareAsync
 import com.knock.api.errors.KnockError
-import com.knock.api.models.WorkflowCancelParams
-import com.knock.api.models.WorkflowTriggerParams
-import com.knock.api.models.WorkflowTriggerResponse
+import com.knock.api.models.workflows.WorkflowCancelParams
+import com.knock.api.models.workflows.WorkflowTriggerParams
+import com.knock.api.models.workflows.WorkflowTriggerResponse
 import java.util.concurrent.CompletableFuture
 
 class WorkflowServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :

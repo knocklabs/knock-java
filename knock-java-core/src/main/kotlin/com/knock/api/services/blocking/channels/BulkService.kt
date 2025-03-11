@@ -9,8 +9,8 @@ import com.knock.api.core.JsonField
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
 import com.knock.api.errors.KnockInvalidDataException
-import com.knock.api.models.BulkOperation
-import com.knock.api.models.ChannelBulkUpdateMessageStatusParams
+import com.knock.api.models.bulkoperations.BulkOperation
+import com.knock.api.models.channels.bulk.BulkUpdateMessageStatusParams
 
 interface BulkService {
 
@@ -24,12 +24,12 @@ interface BulkService {
      * parameter. The action to perform is specified by the `action` parameter, where the action is
      * a status change action (e.g. `archive`, `unarchive`).
      */
-    fun updateMessageStatus(params: ChannelBulkUpdateMessageStatusParams): BulkOperation =
+    fun updateMessageStatus(params: BulkUpdateMessageStatusParams): BulkOperation =
         updateMessageStatus(params, RequestOptions.none())
 
     /** @see [updateMessageStatus] */
     fun updateMessageStatus(
-        params: ChannelBulkUpdateMessageStatusParams,
+        params: BulkUpdateMessageStatusParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
@@ -187,13 +187,13 @@ interface BulkService {
          */
         @MustBeClosed
         fun updateMessageStatus(
-            params: ChannelBulkUpdateMessageStatusParams
+            params: BulkUpdateMessageStatusParams
         ): HttpResponseFor<BulkOperation> = updateMessageStatus(params, RequestOptions.none())
 
         /** @see [updateMessageStatus] */
         @MustBeClosed
         fun updateMessageStatus(
-            params: ChannelBulkUpdateMessageStatusParams,
+            params: BulkUpdateMessageStatusParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BulkOperation>
     }

@@ -23,7 +23,7 @@ import com.knock.api.errors.RateLimitException
 import com.knock.api.errors.UnauthorizedException
 import com.knock.api.errors.UnexpectedStatusCodeException
 import com.knock.api.errors.UnprocessableEntityException
-import com.knock.api.models.UserGetParams
+import com.knock.api.models.users.UserGetParams
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.entry
 import org.junit.jupiter.api.BeforeEach

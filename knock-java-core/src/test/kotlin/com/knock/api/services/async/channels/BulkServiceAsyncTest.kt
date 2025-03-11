@@ -4,7 +4,7 @@ package com.knock.api.services.async.channels
 
 import com.knock.api.TestServerExtension
 import com.knock.api.client.okhttp.KnockOkHttpClientAsync
-import com.knock.api.models.ChannelBulkUpdateMessageStatusParams
+import com.knock.api.models.channels.bulk.BulkUpdateMessageStatusParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -27,12 +27,12 @@ class BulkServiceAsyncTest {
 
         val bulkOperationFuture =
             bulkServiceAsync.updateMessageStatus(
-                ChannelBulkUpdateMessageStatusParams.builder()
+                BulkUpdateMessageStatusParams.builder()
                     .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .action(ChannelBulkUpdateMessageStatusParams.Action.SEEN)
-                    .archived(ChannelBulkUpdateMessageStatusParams.Archived.EXCLUDE)
-                    .deliveryStatus(ChannelBulkUpdateMessageStatusParams.DeliveryStatus.QUEUED)
-                    .engagementStatus(ChannelBulkUpdateMessageStatusParams.EngagementStatus.SEEN)
+                    .action(BulkUpdateMessageStatusParams.Action.SEEN)
+                    .archived(BulkUpdateMessageStatusParams.Archived.EXCLUDE)
+                    .deliveryStatus(BulkUpdateMessageStatusParams.DeliveryStatus.QUEUED)
+                    .engagementStatus(BulkUpdateMessageStatusParams.EngagementStatus.SEEN)
                     .hasTenant(true)
                     .newerThan(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
                     .olderThan(OffsetDateTime.parse("2024-01-01T00:00:00Z"))

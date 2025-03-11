@@ -37,8 +37,8 @@ This library requires Java 8 or later.
 import com.knock.api.client.KnockClient;
 import com.knock.api.client.okhttp.KnockOkHttpClient;
 import com.knock.api.core.JsonValue;
-import com.knock.api.models.WorkflowTriggerParams;
-import com.knock.api.models.WorkflowTriggerResponse;
+import com.knock.api.models.workflows.WorkflowTriggerParams;
+import com.knock.api.models.workflows.WorkflowTriggerResponse;
 
 // Configures using the `KNOCK_API_KEY` environment variable
 KnockClient client = KnockOkHttpClient.fromEnv();
@@ -121,8 +121,8 @@ The default client is synchronous. To switch to asynchronous execution, call the
 import com.knock.api.client.KnockClient;
 import com.knock.api.client.okhttp.KnockOkHttpClient;
 import com.knock.api.core.JsonValue;
-import com.knock.api.models.WorkflowTriggerParams;
-import com.knock.api.models.WorkflowTriggerResponse;
+import com.knock.api.models.workflows.WorkflowTriggerParams;
+import com.knock.api.models.workflows.WorkflowTriggerResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `KNOCK_API_KEY` environment variable
@@ -144,8 +144,8 @@ Or create an asynchronous client from the beginning:
 import com.knock.api.client.KnockClientAsync;
 import com.knock.api.client.okhttp.KnockOkHttpClientAsync;
 import com.knock.api.core.JsonValue;
-import com.knock.api.models.WorkflowTriggerParams;
-import com.knock.api.models.WorkflowTriggerResponse;
+import com.knock.api.models.workflows.WorkflowTriggerParams;
+import com.knock.api.models.workflows.WorkflowTriggerResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `KNOCK_API_KEY` environment variable
@@ -172,8 +172,8 @@ To access this data, prefix any HTTP method call on a client or service with `wi
 ```java
 import com.knock.api.core.http.Headers;
 import com.knock.api.core.http.HttpResponseFor;
-import com.knock.api.models.User;
-import com.knock.api.models.UserGetParams;
+import com.knock.api.models.users.User;
+import com.knock.api.models.users.UserGetParams;
 
 UserGetParams params = UserGetParams.builder()
     .userId("dnedry")
@@ -187,7 +187,7 @@ Headers headers = user.headers();
 You can still deserialize the response into an instance of a Java class if needed:
 
 ```java
-import com.knock.api.models.User;
+import com.knock.api.models.users.User;
 
 User parsedUser = user.parse();
 ```
@@ -226,8 +226,8 @@ To iterate through all results across all pages, you can use `autoPager`, which 
 ### Synchronous
 
 ```java
-import com.knock.api.models.User;
-import com.knock.api.models.UserListPage;
+import com.knock.api.models.users.User;
+import com.knock.api.models.users.UserListPage;
 
 // As an Iterable:
 UserListPage page = client.users().list(params);
@@ -254,8 +254,8 @@ asyncClient.users().list(params).autoPager()
 If none of the above helpers meet your needs, you can also manually request pages one-by-one. A page of results has a `data()` method to fetch the list of objects, as well as top-level `response` and other methods to fetch top-level data about the page. It also has methods `hasNextPage`, `getNextPage`, and `getNextPageParams` methods to help with pagination.
 
 ```java
-import com.knock.api.models.User;
-import com.knock.api.models.UserListPage;
+import com.knock.api.models.users.User;
+import com.knock.api.models.users.UserListPage;
 
 UserListPage page = client.users().list(params);
 while (page != null) {
@@ -319,8 +319,8 @@ To set a custom timeout, configure the method call using the `timeout` method:
 
 ```java
 import com.knock.api.core.JsonValue;
-import com.knock.api.models.WorkflowTriggerParams;
-import com.knock.api.models.WorkflowTriggerResponse;
+import com.knock.api.models.workflows.WorkflowTriggerParams;
+import com.knock.api.models.workflows.WorkflowTriggerResponse;
 
 WorkflowTriggerResponse response = client.workflows().trigger(
   params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
@@ -370,7 +370,7 @@ To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQu
 
 ```java
 import com.knock.api.core.JsonValue;
-import com.knock.api.models.WorkflowTriggerParams;
+import com.knock.api.models.workflows.WorkflowTriggerParams;
 
 WorkflowTriggerParams params = WorkflowTriggerParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
@@ -385,7 +385,7 @@ To set a documented parameter or property to an undocumented or not yet supporte
 
 ```java
 import com.knock.api.core.JsonValue;
-import com.knock.api.models.WorkflowTriggerParams;
+import com.knock.api.models.workflows.WorkflowTriggerParams;
 
 WorkflowTriggerParams params = WorkflowTriggerParams.builder()
     .key("dinosaurs-loose")
@@ -471,7 +471,7 @@ To access a property's raw JSON value, which may be undocumented, call its `_` p
 
 ```java
 import com.knock.api.core.JsonField;
-import com.knock.api.models.RecipientRequest;
+import com.knock.api.models.recipients.RecipientRequest;
 import java.util.Optional;
 
 JsonField<RecipientRequest> actor = client.workflows().trigger(params)._actor();
@@ -499,7 +499,7 @@ By default, the SDK will not throw an exception in this case. It will throw [`Kn
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
-import com.knock.api.models.WorkflowTriggerResponse;
+import com.knock.api.models.workflows.WorkflowTriggerResponse;
 
 WorkflowTriggerResponse response = client.workflows().trigger(params).validate();
 ```
@@ -508,8 +508,8 @@ Or configure the method call to validate the response using the `responseValidat
 
 ```java
 import com.knock.api.core.JsonValue;
-import com.knock.api.models.WorkflowTriggerParams;
-import com.knock.api.models.WorkflowTriggerResponse;
+import com.knock.api.models.workflows.WorkflowTriggerParams;
+import com.knock.api.models.workflows.WorkflowTriggerResponse;
 
 WorkflowTriggerResponse response = client.workflows().trigger(
   params, RequestOptions.builder().responseValidation(true).build()

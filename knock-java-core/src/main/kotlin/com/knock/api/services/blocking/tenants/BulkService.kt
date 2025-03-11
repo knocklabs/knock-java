@@ -5,9 +5,9 @@ package com.knock.api.services.blocking.tenants
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
-import com.knock.api.models.BulkOperation
-import com.knock.api.models.TenantBulkDeleteParams
-import com.knock.api.models.TenantBulkSetParams
+import com.knock.api.models.bulkoperations.BulkOperation
+import com.knock.api.models.tenants.bulk.BulkDeleteParams
+import com.knock.api.models.tenants.bulk.BulkSetParams
 
 interface BulkService {
 
@@ -17,21 +17,20 @@ interface BulkService {
     fun withRawResponse(): WithRawResponse
 
     /** Bulk delete tenants */
-    fun delete(params: TenantBulkDeleteParams): BulkOperation =
-        delete(params, RequestOptions.none())
+    fun delete(params: BulkDeleteParams): BulkOperation = delete(params, RequestOptions.none())
 
     /** @see [delete] */
     fun delete(
-        params: TenantBulkDeleteParams,
+        params: BulkDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
     /** Bulk set tenants */
-    fun set(params: TenantBulkSetParams): BulkOperation = set(params, RequestOptions.none())
+    fun set(params: BulkSetParams): BulkOperation = set(params, RequestOptions.none())
 
     /** @see [set] */
     fun set(
-        params: TenantBulkSetParams,
+        params: BulkSetParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
@@ -43,13 +42,13 @@ interface BulkService {
          * as [BulkService.delete].
          */
         @MustBeClosed
-        fun delete(params: TenantBulkDeleteParams): HttpResponseFor<BulkOperation> =
+        fun delete(params: BulkDeleteParams): HttpResponseFor<BulkOperation> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
-            params: TenantBulkDeleteParams,
+            params: BulkDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BulkOperation>
 
@@ -58,13 +57,13 @@ interface BulkService {
          * [BulkService.set].
          */
         @MustBeClosed
-        fun set(params: TenantBulkSetParams): HttpResponseFor<BulkOperation> =
+        fun set(params: BulkSetParams): HttpResponseFor<BulkOperation> =
             set(params, RequestOptions.none())
 
         /** @see [set] */
         @MustBeClosed
         fun set(
-            params: TenantBulkSetParams,
+            params: BulkSetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BulkOperation>
     }

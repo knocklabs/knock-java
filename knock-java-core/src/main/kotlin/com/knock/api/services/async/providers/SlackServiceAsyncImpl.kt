@@ -16,11 +16,11 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepareAsync
 import com.knock.api.errors.KnockError
-import com.knock.api.models.ProviderSlackCheckAuthParams
-import com.knock.api.models.ProviderSlackCheckAuthResponse
-import com.knock.api.models.ProviderSlackListChannelsPageAsync
-import com.knock.api.models.ProviderSlackListChannelsParams
-import com.knock.api.models.ProviderSlackRevokeAccessParams
+import com.knock.api.models.providers.slack.SlackCheckAuthParams
+import com.knock.api.models.providers.slack.SlackCheckAuthResponse
+import com.knock.api.models.providers.slack.SlackListChannelsPageAsync
+import com.knock.api.models.providers.slack.SlackListChannelsParams
+import com.knock.api.models.providers.slack.SlackRevokeAccessParams
 import java.util.concurrent.CompletableFuture
 
 class SlackServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -33,21 +33,21 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override fun withRawResponse(): SlackServiceAsync.WithRawResponse = withRawResponse
 
     override fun checkAuth(
-        params: ProviderSlackCheckAuthParams,
+        params: SlackCheckAuthParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<ProviderSlackCheckAuthResponse> =
+    ): CompletableFuture<SlackCheckAuthResponse> =
         // get /v1/providers/slack/{channel_id}/auth_check
         withRawResponse().checkAuth(params, requestOptions).thenApply { it.parse() }
 
     override fun listChannels(
-        params: ProviderSlackListChannelsParams,
+        params: SlackListChannelsParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<ProviderSlackListChannelsPageAsync> =
+    ): CompletableFuture<SlackListChannelsPageAsync> =
         // get /v1/providers/slack/{channel_id}/channels
         withRawResponse().listChannels(params, requestOptions).thenApply { it.parse() }
 
     override fun revokeAccess(
-        params: ProviderSlackRevokeAccessParams,
+        params: SlackRevokeAccessParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<String> =
         // put /v1/providers/slack/{channel_id}/revoke_access
@@ -58,14 +58,14 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val checkAuthHandler: Handler<ProviderSlackCheckAuthResponse> =
-            jsonHandler<ProviderSlackCheckAuthResponse>(clientOptions.jsonMapper)
+        private val checkAuthHandler: Handler<SlackCheckAuthResponse> =
+            jsonHandler<SlackCheckAuthResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun checkAuth(
-            params: ProviderSlackCheckAuthParams,
+            params: SlackCheckAuthParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<ProviderSlackCheckAuthResponse>> {
+        ): CompletableFuture<HttpResponseFor<SlackCheckAuthResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -94,14 +94,14 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val listChannelsHandler: Handler<ProviderSlackListChannelsPageAsync.Response> =
-            jsonHandler<ProviderSlackListChannelsPageAsync.Response>(clientOptions.jsonMapper)
+        private val listChannelsHandler: Handler<SlackListChannelsPageAsync.Response> =
+            jsonHandler<SlackListChannelsPageAsync.Response>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listChannels(
-            params: ProviderSlackListChannelsParams,
+            params: SlackListChannelsParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<ProviderSlackListChannelsPageAsync>> {
+        ): CompletableFuture<HttpResponseFor<SlackListChannelsPageAsync>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -121,7 +121,7 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
                                 }
                             }
                             .let {
-                                ProviderSlackListChannelsPageAsync.of(
+                                SlackListChannelsPageAsync.of(
                                     SlackServiceAsyncImpl(clientOptions),
                                     params,
                                     it,
@@ -135,7 +135,7 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
             stringHandler().withErrorHandler(errorHandler)
 
         override fun revokeAccess(
-            params: ProviderSlackRevokeAccessParams,
+            params: SlackRevokeAccessParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<String>> {
             val request =

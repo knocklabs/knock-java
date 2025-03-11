@@ -15,9 +15,9 @@ import com.knock.api.core.http.json
 import com.knock.api.core.http.parseable
 import com.knock.api.core.prepare
 import com.knock.api.errors.KnockError
-import com.knock.api.models.BulkOperation
-import com.knock.api.models.TenantBulkDeleteParams
-import com.knock.api.models.TenantBulkSetParams
+import com.knock.api.models.bulkoperations.BulkOperation
+import com.knock.api.models.tenants.bulk.BulkDeleteParams
+import com.knock.api.models.tenants.bulk.BulkSetParams
 
 class BulkServiceImpl internal constructor(private val clientOptions: ClientOptions) : BulkService {
 
@@ -27,14 +27,11 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
 
     override fun withRawResponse(): BulkService.WithRawResponse = withRawResponse
 
-    override fun delete(
-        params: TenantBulkDeleteParams,
-        requestOptions: RequestOptions,
-    ): BulkOperation =
+    override fun delete(params: BulkDeleteParams, requestOptions: RequestOptions): BulkOperation =
         // post /v1/tenants/bulk/delete
         withRawResponse().delete(params, requestOptions).parse()
 
-    override fun set(params: TenantBulkSetParams, requestOptions: RequestOptions): BulkOperation =
+    override fun set(params: BulkSetParams, requestOptions: RequestOptions): BulkOperation =
         // post /v1/tenants/bulk/set
         withRawResponse().set(params, requestOptions).parse()
 
@@ -47,7 +44,7 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
             jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun delete(
-            params: TenantBulkDeleteParams,
+            params: BulkDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<BulkOperation> {
             val request =
@@ -74,7 +71,7 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
             jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun set(
-            params: TenantBulkSetParams,
+            params: BulkSetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<BulkOperation> {
             val request =

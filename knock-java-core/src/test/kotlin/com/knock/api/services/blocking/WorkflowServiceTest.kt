@@ -5,8 +5,8 @@ package com.knock.api.services.blocking
 import com.knock.api.TestServerExtension
 import com.knock.api.client.okhttp.KnockOkHttpClient
 import com.knock.api.core.JsonValue
-import com.knock.api.models.WorkflowCancelParams
-import com.knock.api.models.WorkflowTriggerParams
+import com.knock.api.models.workflows.WorkflowCancelParams
+import com.knock.api.models.workflows.WorkflowTriggerParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith

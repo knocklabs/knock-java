@@ -5,12 +5,12 @@ package com.knock.api.services.blocking
 import com.google.errorprone.annotations.MustBeClosed
 import com.knock.api.core.RequestOptions
 import com.knock.api.core.http.HttpResponseFor
-import com.knock.api.models.Schedule
-import com.knock.api.models.ScheduleCreateParams
-import com.knock.api.models.ScheduleDeleteParams
-import com.knock.api.models.ScheduleListPage
-import com.knock.api.models.ScheduleListParams
-import com.knock.api.models.ScheduleUpdateParams
+import com.knock.api.models.schedules.Schedule
+import com.knock.api.models.schedules.ScheduleCreateParams
+import com.knock.api.models.schedules.ScheduleDeleteParams
+import com.knock.api.models.schedules.ScheduleListPage
+import com.knock.api.models.schedules.ScheduleListParams
+import com.knock.api.models.schedules.ScheduleUpdateParams
 
 interface ScheduleService {
 
