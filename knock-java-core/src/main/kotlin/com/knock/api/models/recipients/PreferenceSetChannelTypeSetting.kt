@@ -19,16 +19,14 @@ import com.knock.api.models.Condition
 import java.util.Objects
 
 /**
- * A set of settings for a channel type. Currently, this can only be a list of conditions to apply.
+ * A set of settings for a channel type. Currently, this can only be a list of
+ * conditions to apply.
  */
 @NoAutoDetect
-class PreferenceSetChannelTypeSetting
-@JsonCreator
-private constructor(
-    @JsonProperty("conditions")
-    @ExcludeMissing
-    private val conditions: JsonField<List<Condition>> = JsonMissing.of(),
+class PreferenceSetChannelTypeSetting @JsonCreator private constructor(
+    @JsonProperty("conditions") @ExcludeMissing private val conditions: JsonField<List<Condition>> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
 ) {
 
     fun conditions(): List<Condition> = conditions.getRequired("conditions")
@@ -43,14 +41,15 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): PreferenceSetChannelTypeSetting = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): PreferenceSetChannelTypeSetting =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        conditions().forEach { it.validate() }
-        validated = true
-    }
+            conditions().forEach { it.validate() }
+            validated = true
+        }
 
     fun toBuilder() = Builder().from(this)
 
@@ -61,11 +60,13 @@ private constructor(
          * [PreferenceSetChannelTypeSetting].
          *
          * The following fields are required:
+         *
          * ```java
          * .conditions()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [PreferenceSetChannelTypeSetting]. */
@@ -78,55 +79,63 @@ private constructor(
         internal fun from(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
             apply {
                 conditions = preferenceSetChannelTypeSetting.conditions.map { it.toMutableList() }
-                additionalProperties =
-                    preferenceSetChannelTypeSetting.additionalProperties.toMutableMap()
+                additionalProperties = preferenceSetChannelTypeSetting.additionalProperties.toMutableMap()
             }
 
         fun conditions(conditions: List<Condition>) = conditions(JsonField.of(conditions))
 
-        fun conditions(conditions: JsonField<List<Condition>>) = apply {
-            this.conditions = conditions.map { it.toMutableList() }
-        }
+        fun conditions(conditions: JsonField<List<Condition>>) =
+            apply {
+                this.conditions = conditions.map { it.toMutableList() }
+            }
 
-        fun addCondition(condition: Condition) = apply {
-            conditions =
-                (conditions ?: JsonField.of(mutableListOf())).also {
+        fun addCondition(condition: Condition) =
+            apply {
+                conditions = (conditions ?: JsonField.of(mutableListOf())).also {
                     checkKnown("conditions", it).add(condition)
                 }
-        }
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         fun build(): PreferenceSetChannelTypeSetting =
             PreferenceSetChannelTypeSetting(
-                checkRequired("conditions", conditions).map { it.toImmutable() },
-                additionalProperties.toImmutable(),
+              checkRequired(
+                "conditions", conditions
+              ).map { it.toImmutable() }, additionalProperties.toImmutable()
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is PreferenceSetChannelTypeSetting && conditions == other.conditions && additionalProperties == other.additionalProperties /* spotless:on */
+      return /* spotless:off */ other is PreferenceSetChannelTypeSetting && conditions == other.conditions && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -135,6 +144,5 @@ private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "PreferenceSetChannelTypeSetting{conditions=$conditions, additionalProperties=$additionalProperties}"
+    override fun toString() = "PreferenceSetChannelTypeSetting{conditions=$conditions, additionalProperties=$additionalProperties}"
 }

@@ -22,44 +22,37 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * A set of parameters to inline-identify a user with. Inline identifying the user will ensure that
- * the user is available before the request is executed in Knock. It will perform an upsert against
- * the user you're supplying, replacing any properties specified.
+ * A set of parameters to inline-identify a user with. Inline identifying the user
+ * will ensure that the user is available before the request is executed in Knock.
+ * It will perform an upsert against the user you're supplying, replacing any
+ * properties specified.
  */
 @NoAutoDetect
-class InlineIdentifyUserRequest
-@JsonCreator
-private constructor(
+class InlineIdentifyUserRequest @JsonCreator private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("channel_data")
-    @ExcludeMissing
-    private val channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of(),
-    @JsonProperty("created_at")
-    @ExcludeMissing
-    private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("preferences")
-    @ExcludeMissing
-    private val preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of(),
+    @JsonProperty("channel_data") @ExcludeMissing private val channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of(),
+    @JsonProperty("created_at") @ExcludeMissing private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("preferences") @ExcludeMissing private val preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
 ) {
 
     /** The ID of the user to identify. This is an ID that you supply. */
     fun id(): String = id.getRequired("id")
 
     /** Allows inline setting channel data for a recipient */
-    fun channelData(): Optional<InlineChannelDataRequest> =
-        Optional.ofNullable(channelData.getNullable("channel_data"))
+    fun channelData(): Optional<InlineChannelDataRequest> = Optional.ofNullable(channelData.getNullable("channel_data"))
 
     /** The creation date of the user from your system. */
-    fun createdAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(createdAt.getNullable("created_at"))
+    fun createdAt(): Optional<OffsetDateTime> = Optional.ofNullable(createdAt.getNullable("created_at"))
 
     /** Inline set preferences for a recipient, where the key is the preference set name */
-    fun preferences(): Optional<InlinePreferenceSetRequest> =
-        Optional.ofNullable(preferences.getNullable("preferences"))
+    fun preferences(): Optional<InlinePreferenceSetRequest> = Optional.ofNullable(preferences.getNullable("preferences"))
 
     /** The ID of the user to identify. This is an ID that you supply. */
-    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+    @JsonProperty("id")
+    @ExcludeMissing
+    fun _id(): JsonField<String> = id
 
     /** Allows inline setting channel data for a recipient */
     @JsonProperty("channel_data")
@@ -82,31 +75,35 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): InlineIdentifyUserRequest = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): InlineIdentifyUserRequest =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        id()
-        channelData().ifPresent { it.validate() }
-        createdAt()
-        preferences().ifPresent { it.validate() }
-        validated = true
-    }
+            id()
+            channelData().ifPresent { it.validate() }
+            createdAt()
+            preferences().ifPresent { it.validate() }
+            validated = true
+        }
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [InlineIdentifyUserRequest].
+         * Returns a mutable builder for constructing an instance of
+         * [InlineIdentifyUserRequest].
          *
          * The following fields are required:
+         *
          * ```java
          * .id()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [InlineIdentifyUserRequest]. */
@@ -119,32 +116,35 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(inlineIdentifyUserRequest: InlineIdentifyUserRequest) = apply {
-            id = inlineIdentifyUserRequest.id
-            channelData = inlineIdentifyUserRequest.channelData
-            createdAt = inlineIdentifyUserRequest.createdAt
-            preferences = inlineIdentifyUserRequest.preferences
-            additionalProperties = inlineIdentifyUserRequest.additionalProperties.toMutableMap()
-        }
+        internal fun from(inlineIdentifyUserRequest: InlineIdentifyUserRequest) =
+            apply {
+                id = inlineIdentifyUserRequest.id
+                channelData = inlineIdentifyUserRequest.channelData
+                createdAt = inlineIdentifyUserRequest.createdAt
+                preferences = inlineIdentifyUserRequest.preferences
+                additionalProperties = inlineIdentifyUserRequest.additionalProperties.toMutableMap()
+            }
 
         /** The ID of the user to identify. This is an ID that you supply. */
         fun id(id: String) = id(JsonField.of(id))
 
         /** The ID of the user to identify. This is an ID that you supply. */
-        fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) =
+            apply {
+                this.id = id
+            }
 
         /** Allows inline setting channel data for a recipient */
-        fun channelData(channelData: InlineChannelDataRequest?) =
-            channelData(JsonField.ofNullable(channelData))
+        fun channelData(channelData: InlineChannelDataRequest?) = channelData(JsonField.ofNullable(channelData))
 
         /** Allows inline setting channel data for a recipient */
-        fun channelData(channelData: Optional<InlineChannelDataRequest>) =
-            channelData(channelData.getOrNull())
+        fun channelData(channelData: Optional<InlineChannelDataRequest>) = channelData(channelData.getOrNull())
 
         /** Allows inline setting channel data for a recipient */
-        fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
-            this.channelData = channelData
-        }
+        fun channelData(channelData: JsonField<InlineChannelDataRequest>) =
+            apply {
+                this.channelData = channelData
+            }
 
         /** The creation date of the user from your system. */
         fun createdAt(createdAt: OffsetDateTime?) = createdAt(JsonField.ofNullable(createdAt))
@@ -153,56 +153,67 @@ private constructor(
         fun createdAt(createdAt: Optional<OffsetDateTime>) = createdAt(createdAt.getOrNull())
 
         /** The creation date of the user from your system. */
-        fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
+        fun createdAt(createdAt: JsonField<OffsetDateTime>) =
+            apply {
+                this.createdAt = createdAt
+            }
 
         /** Inline set preferences for a recipient, where the key is the preference set name */
-        fun preferences(preferences: InlinePreferenceSetRequest?) =
-            preferences(JsonField.ofNullable(preferences))
+        fun preferences(preferences: InlinePreferenceSetRequest?) = preferences(JsonField.ofNullable(preferences))
 
         /** Inline set preferences for a recipient, where the key is the preference set name */
-        fun preferences(preferences: Optional<InlinePreferenceSetRequest>) =
-            preferences(preferences.getOrNull())
+        fun preferences(preferences: Optional<InlinePreferenceSetRequest>) = preferences(preferences.getOrNull())
 
         /** Inline set preferences for a recipient, where the key is the preference set name */
-        fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {
-            this.preferences = preferences
-        }
+        fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) =
+            apply {
+                this.preferences = preferences
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         fun build(): InlineIdentifyUserRequest =
             InlineIdentifyUserRequest(
-                checkRequired("id", id),
-                channelData,
-                createdAt,
-                preferences,
-                additionalProperties.toImmutable(),
+              checkRequired(
+                "id", id
+              ),
+              channelData,
+              createdAt,
+              preferences,
+              additionalProperties.toImmutable(),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is InlineIdentifyUserRequest && id == other.id && channelData == other.channelData && createdAt == other.createdAt && preferences == other.preferences && additionalProperties == other.additionalProperties /* spotless:on */
+      return /* spotless:off */ other is InlineIdentifyUserRequest && id == other.id && channelData == other.channelData && createdAt == other.createdAt && preferences == other.preferences && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -211,6 +222,5 @@ private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "InlineIdentifyUserRequest{id=$id, channelData=$channelData, createdAt=$createdAt, preferences=$preferences, additionalProperties=$additionalProperties}"
+    override fun toString() = "InlineIdentifyUserRequest{id=$id, channelData=$channelData, createdAt=$createdAt, preferences=$preferences, additionalProperties=$additionalProperties}"
 }

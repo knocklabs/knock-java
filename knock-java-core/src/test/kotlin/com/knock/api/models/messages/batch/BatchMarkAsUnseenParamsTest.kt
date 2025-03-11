@@ -8,6 +8,6 @@ class BatchMarkAsUnseenParamsTest {
 
     @Test
     fun create() {
-        BatchMarkAsUnseenParams.builder().build()
+      BatchMarkAsUnseenParams.builder().build()
     }
 }

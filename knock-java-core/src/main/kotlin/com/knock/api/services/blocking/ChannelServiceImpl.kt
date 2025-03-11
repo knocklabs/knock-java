@@ -6,12 +6,12 @@ import com.knock.api.core.ClientOptions
 import com.knock.api.services.blocking.channels.BulkService
 import com.knock.api.services.blocking.channels.BulkServiceImpl
 
-class ChannelServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    ChannelService {
+class ChannelServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: ChannelService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : ChannelService {
+
+    private val withRawResponse: ChannelService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     private val bulk: BulkService by lazy { BulkServiceImpl(clientOptions) }
 
@@ -19,12 +19,12 @@ class ChannelServiceImpl internal constructor(private val clientOptions: ClientO
 
     override fun bulk(): BulkService = bulk
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        ChannelService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val bulk: BulkService.WithRawResponse by lazy {
-            BulkServiceImpl.WithRawResponseImpl(clientOptions)
-        }
+    ) : ChannelService.WithRawResponse {
+
+        private val bulk: BulkService.WithRawResponse by lazy { BulkServiceImpl.WithRawResponseImpl(clientOptions) }
 
         override fun bulk(): BulkService.WithRawResponse = bulk
     }

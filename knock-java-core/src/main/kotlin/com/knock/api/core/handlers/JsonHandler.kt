@@ -7,6 +7,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.knock.api.core.enhanceJacksonException
 import com.knock.api.core.http.HttpResponse
 import com.knock.api.core.http.HttpResponse.Handler
+import com.knock.api.errors.KnockException
 
 @JvmSynthetic
 internal inline fun <reified T> jsonHandler(jsonMapper: JsonMapper): Handler<T> =

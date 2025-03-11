@@ -16,116 +16,84 @@ import com.knock.api.core.prepareAsync
 import com.knock.api.errors.KnockError
 import com.knock.api.models.users.feeds.FeedGetSettingsParams
 import com.knock.api.models.users.feeds.FeedGetSettingsResponse
+import com.knock.api.models.users.feeds.FeedListItemsPage
 import com.knock.api.models.users.feeds.FeedListItemsPageAsync
 import com.knock.api.models.users.feeds.FeedListItemsParams
 import java.util.concurrent.CompletableFuture
 
-class FeedServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
-    FeedServiceAsync {
+class FeedServiceAsyncImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: FeedServiceAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : FeedServiceAsync {
+
+    private val withRawResponse: FeedServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): FeedServiceAsync.WithRawResponse = withRawResponse
 
-    override fun getSettings(
-        params: FeedGetSettingsParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<FeedGetSettingsResponse> =
+    override fun getSettings(params: FeedGetSettingsParams, requestOptions: RequestOptions): CompletableFuture<FeedGetSettingsResponse> =
         // get /v1/users/{user_id}/feeds/{channel_id}/settings
         withRawResponse().getSettings(params, requestOptions).thenApply { it.parse() }
 
-    override fun listItems(
-        params: FeedListItemsParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<FeedListItemsPageAsync> =
+    override fun listItems(params: FeedListItemsParams, requestOptions: RequestOptions): CompletableFuture<FeedListItemsPageAsync> =
         // get /v1/users/{user_id}/feeds/{channel_id}
         withRawResponse().listItems(params, requestOptions).thenApply { it.parse() }
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        FeedServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : FeedServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val getSettingsHandler: Handler<FeedGetSettingsResponse> =
-            jsonHandler<FeedGetSettingsResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val getSettingsHandler: Handler<FeedGetSettingsResponse> = jsonHandler<FeedGetSettingsResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun getSettings(
-            params: FeedGetSettingsParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<FeedGetSettingsResponse>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments(
-                        "v1",
-                        "users",
-                        params.getPathParam(0),
-                        "feeds",
-                        params.getPathParam(1),
-                        "settings",
-                    )
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { getSettingsHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
+        override fun getSettings(params: FeedGetSettingsParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<FeedGetSettingsResponse>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .addPathSegments("v1", "users", params.getPathParam(0), "feeds", params.getPathParam(1), "settings")
+            .build()
+            .prepareAsync(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> response.parseable {
+              response.use {
+                  getSettingsHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          } }
         }
 
-        private val listItemsHandler: Handler<FeedListItemsPageAsync.Response> =
-            jsonHandler<FeedListItemsPageAsync.Response>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val listItemsHandler: Handler<FeedListItemsPageAsync.Response> = jsonHandler<FeedListItemsPageAsync.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun listItems(
-            params: FeedListItemsParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<FeedListItemsPageAsync>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments(
-                        "v1",
-                        "users",
-                        params.getPathParam(0),
-                        "feeds",
-                        params.getPathParam(1),
-                    )
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { listItemsHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                            .let {
-                                FeedListItemsPageAsync.of(
-                                    FeedServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
-                            }
-                    }
-                }
+        override fun listItems(params: FeedListItemsParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<FeedListItemsPageAsync>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .addPathSegments("v1", "users", params.getPathParam(0), "feeds", params.getPathParam(1))
+            .build()
+            .prepareAsync(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> response.parseable {
+              response.use {
+                  listItemsHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+              .let {
+                  FeedListItemsPageAsync.of(FeedServiceAsyncImpl(clientOptions), params, it)
+              }
+          } }
         }
     }
 }

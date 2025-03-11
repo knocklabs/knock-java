@@ -11,57 +11,51 @@ class MessageMarkAsInteractedParamsTest {
 
     @Test
     fun create() {
-        MessageMarkAsInteractedParams.builder()
-            .messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
-            .metadata(
-                MessageMarkAsInteractedParams.Metadata.builder()
-                    .putAdditionalProperty("key", JsonValue.from("bar"))
-                    .build()
-            )
-            .build()
+      MessageMarkAsInteractedParams.builder()
+          .messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
+          .metadata(MessageMarkAsInteractedParams.Metadata.builder()
+              .putAdditionalProperty("key", JsonValue.from("bar"))
+              .build())
+          .build()
     }
 
     @Test
     fun body() {
-        val params =
-            MessageMarkAsInteractedParams.builder()
-                .messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
-                .metadata(
-                    MessageMarkAsInteractedParams.Metadata.builder()
-                        .putAdditionalProperty("key", JsonValue.from("bar"))
-                        .build()
-                )
-                .build()
+      val params = MessageMarkAsInteractedParams.builder()
+          .messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
+          .metadata(MessageMarkAsInteractedParams.Metadata.builder()
+              .putAdditionalProperty("key", JsonValue.from("bar"))
+              .build())
+          .build()
 
-        val body = params._body()
+      val body = params._body()
 
-        assertNotNull(body)
-        assertThat(body.metadata())
-            .contains(
-                MessageMarkAsInteractedParams.Metadata.builder()
-                    .putAdditionalProperty("key", JsonValue.from("bar"))
-                    .build()
-            )
+      assertNotNull(body)
+      assertThat(body.metadata()).contains(MessageMarkAsInteractedParams.Metadata.builder()
+          .putAdditionalProperty("key", JsonValue.from("bar"))
+          .build())
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params =
-            MessageMarkAsInteractedParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
+      val params = MessageMarkAsInteractedParams.builder()
+          .messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
+          .build()
 
-        val body = params._body()
+      val body = params._body()
 
-        assertNotNull(body)
+      assertNotNull(body)
     }
 
     @Test
     fun getPathParam() {
-        val params =
-            MessageMarkAsInteractedParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-        assertThat(params).isNotNull
-        // path param "messageId"
-        assertThat(params.getPathParam(0)).isEqualTo("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+      val params = MessageMarkAsInteractedParams.builder()
+          .messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
+          .build()
+      assertThat(params).isNotNull
+      // path param "messageId"
+      assertThat(params.getPathParam(0)).isEqualTo("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
+      // out-of-bound path param
+      assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

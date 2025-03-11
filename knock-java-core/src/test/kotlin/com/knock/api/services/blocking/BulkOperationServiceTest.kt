@@ -12,23 +12,19 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(TestServerExtension::class)
 class BulkOperationServiceTest {
 
-    @Disabled(
-        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
-    )
+    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
     @Test
     fun get() {
-        val client =
-            KnockOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val bulkOperationService = client.bulkOperations()
+      val client = KnockOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val bulkOperationService = client.bulkOperations()
 
-        val bulkOperation =
-            bulkOperationService.get(
-                BulkOperationGetParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
-            )
+      val bulkOperation = bulkOperationService.get(BulkOperationGetParams.builder()
+          .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+          .build())
 
-        bulkOperation.validate()
+      bulkOperation.validate()
     }
 }

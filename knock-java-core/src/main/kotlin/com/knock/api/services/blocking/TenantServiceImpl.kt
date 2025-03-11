@@ -25,12 +25,12 @@ import com.knock.api.models.tenants.TenantSetParams
 import com.knock.api.services.blocking.tenants.BulkService
 import com.knock.api.services.blocking.tenants.BulkServiceImpl
 
-class TenantServiceImpl internal constructor(private val clientOptions: ClientOptions) :
-    TenantService {
+class TenantServiceImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: TenantService.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : TenantService {
+
+    private val withRawResponse: TenantService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     private val bulk: BulkService by lazy { BulkServiceImpl(clientOptions) }
 
@@ -54,114 +54,115 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
         // put /v1/tenants/{tenant_id}
         withRawResponse().set(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        TenantService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : TenantService.WithRawResponse {
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val bulk: BulkService.WithRawResponse by lazy {
-            BulkServiceImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val bulk: BulkService.WithRawResponse by lazy { BulkServiceImpl.WithRawResponseImpl(clientOptions) }
 
         override fun bulk(): BulkService.WithRawResponse = bulk
 
-        private val listHandler: Handler<TenantListPage.Response> =
-            jsonHandler<TenantListPage.Response>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val listHandler: Handler<TenantListPage.Response> = jsonHandler<TenantListPage.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun list(
-            params: TenantListParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<TenantListPage> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments("v1", "tenants")
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { listHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-                    .let { TenantListPage.of(TenantServiceImpl(clientOptions), params, it) }
-            }
+        override fun list(params: TenantListParams, requestOptions: RequestOptions): HttpResponseFor<TenantListPage> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .addPathSegments("v1", "tenants")
+            .build()
+            .prepare(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return response.parseable {
+              response.use {
+                  listHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+              .let {
+                  TenantListPage.of(TenantServiceImpl(clientOptions), params, it)
+              }
+          }
         }
 
         private val deleteHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
 
-        override fun delete(
-            params: TenantDeleteParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<String> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.DELETE)
-                    .addPathSegments("v1", "tenants", params.getPathParam(0))
-                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable { response.use { deleteHandler.handle(it) } }
+        override fun delete(params: TenantDeleteParams, requestOptions: RequestOptions): HttpResponseFor<String> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.DELETE)
+            .addPathSegments("v1", "tenants", params.getPathParam(0))
+            .apply { params._body().ifPresent{ body(json(clientOptions.jsonMapper, it)) } }
+            .build()
+            .prepare(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return response.parseable {
+              response.use {
+                  deleteHandler.handle(it)
+              }
+          }
         }
 
-        private val getHandler: Handler<Tenant> =
-            jsonHandler<Tenant>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val getHandler: Handler<Tenant> = jsonHandler<Tenant>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun get(
-            params: TenantGetParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<Tenant> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments("v1", "tenants", params.getPathParam(0))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { getHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun get(params: TenantGetParams, requestOptions: RequestOptions): HttpResponseFor<Tenant> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .addPathSegments("v1", "tenants", params.getPathParam(0))
+            .build()
+            .prepare(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return response.parseable {
+              response.use {
+                  getHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
 
-        private val setHandler: Handler<Tenant> =
-            jsonHandler<Tenant>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val setHandler: Handler<Tenant> = jsonHandler<Tenant>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun set(
-            params: TenantSetParams,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<Tenant> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.PUT)
-                    .addPathSegments("v1", "tenants", params.getPathParam(0))
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepare(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable {
-                response
-                    .use { setHandler.handle(it) }
-                    .also {
-                        if (requestOptions.responseValidation!!) {
-                            it.validate()
-                        }
-                    }
-            }
+        override fun set(params: TenantSetParams, requestOptions: RequestOptions): HttpResponseFor<Tenant> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.PUT)
+            .addPathSegments("v1", "tenants", params.getPathParam(0))
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepare(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          val response = clientOptions.httpClient.execute(
+            request, requestOptions
+          )
+          return response.parseable {
+              response.use {
+                  setHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          }
         }
     }
 }

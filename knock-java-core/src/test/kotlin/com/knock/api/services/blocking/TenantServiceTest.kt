@@ -11,6 +11,7 @@ import com.knock.api.models.recipients.PreferenceSetChannelTypes
 import com.knock.api.models.recipients.PreferenceSetRequest
 import com.knock.api.models.tenants.TenantDeleteParams
 import com.knock.api.models.tenants.TenantGetParams
+import com.knock.api.models.tenants.TenantListParams
 import com.knock.api.models.tenants.TenantSetParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -19,242 +20,157 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(TestServerExtension::class)
 class TenantServiceTest {
 
-    @Disabled(
-        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
-    )
+    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
     @Test
     fun list() {
-        val client =
-            KnockOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val tenantService = client.tenants()
+      val client = KnockOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val tenantService = client.tenants()
 
-        val page = tenantService.list()
+      val page = tenantService.list()
 
-        page.response().validate()
+      page.response().validate()
     }
 
-    @Disabled(
-        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
-    )
+    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
     @Test
     fun delete() {
-        val client =
-            KnockOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val tenantService = client.tenants()
+      val client = KnockOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val tenantService = client.tenants()
 
-        tenantService.delete(TenantDeleteParams.builder().tenantId("tenant_id").build())
+      tenantService.delete(TenantDeleteParams.builder()
+          .tenantId("tenant_id")
+          .build())
     }
 
-    @Disabled(
-        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
-    )
+    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
     @Test
     fun get() {
-        val client =
-            KnockOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val tenantService = client.tenants()
+      val client = KnockOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val tenantService = client.tenants()
 
-        val tenant = tenantService.get(TenantGetParams.builder().tenantId("tenant_id").build())
+      val tenant = tenantService.get(TenantGetParams.builder()
+          .tenantId("tenant_id")
+          .build())
 
-        tenant.validate()
+      tenant.validate()
     }
 
-    @Disabled(
-        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
-    )
+    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
     @Test
     fun set() {
-        val client =
-            KnockOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val tenantService = client.tenants()
+      val client = KnockOkHttpClient.builder()
+          .baseUrl(TestServerExtension.BASE_URL)
+          .bearerToken("My Bearer Token")
+          .build()
+      val tenantService = client.tenants()
 
-        val tenant =
-            tenantService.set(
-                TenantSetParams.builder()
-                    .tenantId("tenant_id")
-                    .channelData(
-                        InlineChannelDataRequest.builder()
-                            .putAdditionalProperty(
-                                "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                                JsonValue.from(
-                                    mapOf("data" to mapOf("tokens" to listOf("push_token_xxx")))
-                                ),
-                            )
-                            .build()
-                    )
-                    .preferences(
-                        InlinePreferenceSetRequest.builder()
-                            .putAdditionalProperty(
-                                "default",
-                                JsonValue.from(
-                                    mapOf(
-                                        "categories" to
-                                            mapOf(
-                                                "transactional" to
-                                                    mapOf(
-                                                        "channel_types" to
-                                                            mapOf(
-                                                                "chat" to true,
-                                                                "email" to false,
-                                                                "http" to true,
-                                                                "in_app_feed" to true,
-                                                                "push" to true,
-                                                                "sms" to true,
-                                                            ),
-                                                        "conditions" to
-                                                            listOf(
-                                                                mapOf(
-                                                                    "argument" to "some_property",
-                                                                    "operator" to "equal_to",
-                                                                    "variable" to
-                                                                        "recipient.property",
-                                                                )
-                                                            ),
-                                                    )
-                                            ),
-                                        "channel_types" to
-                                            mapOf(
-                                                "chat" to true,
-                                                "email" to true,
-                                                "http" to true,
-                                                "in_app_feed" to true,
-                                                "push" to true,
-                                                "sms" to true,
-                                            ),
-                                        "workflows" to
-                                            mapOf(
-                                                "dinosaurs-loose" to
-                                                    mapOf(
-                                                        "channel_types" to
-                                                            mapOf(
-                                                                "chat" to true,
-                                                                "email" to true,
-                                                                "http" to true,
-                                                                "in_app_feed" to true,
-                                                                "push" to true,
-                                                                "sms" to true,
-                                                            ),
-                                                        "conditions" to
-                                                            listOf(
-                                                                mapOf(
-                                                                    "argument" to "some_property",
-                                                                    "operator" to "equal_to",
-                                                                    "variable" to
-                                                                        "recipient.property",
-                                                                )
-                                                            ),
-                                                    )
-                                            ),
-                                    )
-                                ),
-                            )
-                            .build()
-                    )
-                    .settings(
-                        TenantSetParams.Settings.builder()
-                            .branding(
-                                TenantSetParams.Settings.Branding.builder()
-                                    .iconUrl("https://example.com/icon.png")
-                                    .logoUrl("https://example.com/logo.png")
-                                    .primaryColor("#000000")
-                                    .primaryColorContrast("#FFFFFF")
-                                    .build()
-                            )
-                            .preferenceSet(
-                                PreferenceSetRequest.builder()
-                                    .categories(
-                                        PreferenceSetRequest.Categories.builder()
-                                            .putAdditionalProperty(
-                                                "marketing",
-                                                JsonValue.from(false),
-                                            )
-                                            .putAdditionalProperty(
-                                                "transactional",
-                                                JsonValue.from(
-                                                    mapOf(
-                                                        "channel_types" to
-                                                            mapOf(
-                                                                "chat" to true,
-                                                                "email" to false,
-                                                                "http" to true,
-                                                                "in_app_feed" to true,
-                                                                "push" to true,
-                                                                "sms" to true,
-                                                            ),
-                                                        "conditions" to
-                                                            listOf(
-                                                                mapOf(
-                                                                    "argument" to "some_property",
-                                                                    "operator" to "equal_to",
-                                                                    "variable" to
-                                                                        "recipient.property",
-                                                                )
-                                                            ),
-                                                    )
-                                                ),
-                                            )
-                                            .build()
-                                    )
-                                    .channelTypes(
-                                        PreferenceSetChannelTypes.builder()
-                                            .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                                            .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                                            .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                                            .inAppFeed(
-                                                PreferenceSetChannelTypes.InAppFeed.ofBool(true)
-                                            )
-                                            .push(PreferenceSetChannelTypes.Push.ofBool(true))
-                                            .sms(PreferenceSetChannelTypes.Sms.ofBool(true))
-                                            .build()
-                                    )
-                                    .workflows(
-                                        PreferenceSetRequest.Workflows.builder()
-                                            .putAdditionalProperty(
-                                                "dinosaurs-loose",
-                                                JsonValue.from(
-                                                    mapOf(
-                                                        "channel_types" to
-                                                            mapOf(
-                                                                "chat" to true,
-                                                                "email" to false,
-                                                                "http" to true,
-                                                                "in_app_feed" to true,
-                                                                "push" to true,
-                                                                "sms" to true,
-                                                            ),
-                                                        "conditions" to
-                                                            listOf(
-                                                                mapOf(
-                                                                    "argument" to "some_property",
-                                                                    "operator" to "equal_to",
-                                                                    "variable" to
-                                                                        "recipient.property",
-                                                                )
-                                                            ),
-                                                    )
-                                                ),
-                                            )
-                                            .build()
-                                    )
-                                    .build()
-                            )
-                            .build()
-                    )
-                    .build()
-            )
+      val tenant = tenantService.set(TenantSetParams.builder()
+          .tenantId("tenant_id")
+          .channelData(InlineChannelDataRequest.builder()
+              .putAdditionalProperty("97c5837d-c65c-4d54-aa39-080eeb81c69d", JsonValue.from(mapOf("data" to mapOf("tokens" to listOf("push_token_xxx")))))
+              .build())
+          .preferences(InlinePreferenceSetRequest.builder()
+              .putAdditionalProperty("default", JsonValue.from(mapOf(
+                "categories" to mapOf("transactional" to mapOf(
+                  "channel_types" to mapOf(
+                    "chat" to true,
+                    "email" to false,
+                    "http" to true,
+                    "in_app_feed" to true,
+                    "push" to true,
+                    "sms" to true,
+                  ), "conditions" to listOf(mapOf(
+                    "argument" to "some_property",
+                    "operator" to "equal_to",
+                    "variable" to "recipient.property",
+                  ))
+                )),
+                "channel_types" to mapOf(
+                  "chat" to true,
+                  "email" to true,
+                  "http" to true,
+                  "in_app_feed" to true,
+                  "push" to true,
+                  "sms" to true,
+                ),
+                "workflows" to mapOf("dinosaurs-loose" to mapOf(
+                  "channel_types" to mapOf(
+                    "chat" to true,
+                    "email" to true,
+                    "http" to true,
+                    "in_app_feed" to true,
+                    "push" to true,
+                    "sms" to true,
+                  ), "conditions" to listOf(mapOf(
+                    "argument" to "some_property",
+                    "operator" to "equal_to",
+                    "variable" to "recipient.property",
+                  ))
+                )),
+              )))
+              .build())
+          .settings(TenantSetParams.Settings.builder()
+              .branding(TenantSetParams.Settings.Branding.builder()
+                  .iconUrl("https://example.com/icon.png")
+                  .logoUrl("https://example.com/logo.png")
+                  .primaryColor("#000000")
+                  .primaryColorContrast("#FFFFFF")
+                  .build())
+              .preferenceSet(PreferenceSetRequest.builder()
+                  .categories(PreferenceSetRequest.Categories.builder()
+                      .putAdditionalProperty("marketing", JsonValue.from(false))
+                      .putAdditionalProperty("transactional", JsonValue.from(mapOf(
+                        "channel_types" to mapOf(
+                          "chat" to true,
+                          "email" to false,
+                          "http" to true,
+                          "in_app_feed" to true,
+                          "push" to true,
+                          "sms" to true,
+                        ), "conditions" to listOf(mapOf(
+                          "argument" to "some_property",
+                          "operator" to "equal_to",
+                          "variable" to "recipient.property",
+                        ))
+                      )))
+                      .build())
+                  .channelTypes(PreferenceSetChannelTypes.builder()
+                      .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
+                      .email(PreferenceSetChannelTypes.Email.ofBool(true))
+                      .http(PreferenceSetChannelTypes.Http.ofBool(true))
+                      .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
+                      .push(PreferenceSetChannelTypes.Push.ofBool(true))
+                      .sms(PreferenceSetChannelTypes.Sms.ofBool(true))
+                      .build())
+                  .workflows(PreferenceSetRequest.Workflows.builder()
+                      .putAdditionalProperty("dinosaurs-loose", JsonValue.from(mapOf(
+                        "channel_types" to mapOf(
+                          "chat" to true,
+                          "email" to false,
+                          "http" to true,
+                          "in_app_feed" to true,
+                          "push" to true,
+                          "sms" to true,
+                        ), "conditions" to listOf(mapOf(
+                          "argument" to "some_property",
+                          "operator" to "equal_to",
+                          "variable" to "recipient.property",
+                        ))
+                      )))
+                      .build())
+                  .build())
+              .build())
+          .build())
 
-        tenant.validate()
+      tenant.validate()
     }
 }

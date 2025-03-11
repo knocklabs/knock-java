@@ -29,7 +29,8 @@ import com.knock.api.services.blocking.messages.BatchService
 interface MessageService {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     * Returns a view of this service that provides access to raw HTTP responses for
+     * each method.
      */
     fun withRawResponse(): WithRawResponse
 
@@ -39,141 +40,132 @@ interface MessageService {
     fun list(): MessageListPage = list(MessageListParams.none())
 
     /** @see [list] */
-    fun list(
-        params: MessageListParams = MessageListParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageListPage
+    fun list(params: MessageListParams = MessageListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): MessageListPage
 
     /** @see [list] */
     fun list(params: MessageListParams = MessageListParams.none()): MessageListPage =
-        list(params, RequestOptions.none())
+        list(
+          params, RequestOptions.none()
+        )
 
     /** @see [list] */
-    fun list(requestOptions: RequestOptions): MessageListPage =
-        list(MessageListParams.none(), requestOptions)
+    fun list(requestOptions: RequestOptions): MessageListPage = list(MessageListParams.none(), requestOptions)
 
     /** Archive message */
-    fun archive(params: MessageArchiveParams): Message = archive(params, RequestOptions.none())
+    fun archive(params: MessageArchiveParams): Message =
+        archive(
+          params, RequestOptions.none()
+        )
 
     /** @see [archive] */
-    fun archive(
-        params: MessageArchiveParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Message
+    fun archive(params: MessageArchiveParams, requestOptions: RequestOptions = RequestOptions.none()): Message
 
     /** Get message */
-    fun get(params: MessageGetParams): Message = get(params, RequestOptions.none())
+    fun get(params: MessageGetParams): Message =
+        get(
+          params, RequestOptions.none()
+        )
 
     /** @see [get] */
-    fun get(
-        params: MessageGetParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Message
+    fun get(params: MessageGetParams, requestOptions: RequestOptions = RequestOptions.none()): Message
 
     /**
-     * Returns the fully rendered contents of a message, where the response depends on the channel
-     * the message was sent on.
+     * Returns the fully rendered contents of a message, where the response depends on
+     * the channel the message was sent on.
      */
     fun getContent(params: MessageGetContentParams): MessageGetContentResponse =
-        getContent(params, RequestOptions.none())
+        getContent(
+          params, RequestOptions.none()
+        )
 
     /** @see [getContent] */
-    fun getContent(
-        params: MessageGetContentParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageGetContentResponse
+    fun getContent(params: MessageGetContentParams, requestOptions: RequestOptions = RequestOptions.none()): MessageGetContentResponse
 
     /** List activities */
     fun listActivities(params: MessageListActivitiesParams): MessageListActivitiesPage =
-        listActivities(params, RequestOptions.none())
+        listActivities(
+          params, RequestOptions.none()
+        )
 
     /** @see [listActivities] */
-    fun listActivities(
-        params: MessageListActivitiesParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageListActivitiesPage
+    fun listActivities(params: MessageListActivitiesParams, requestOptions: RequestOptions = RequestOptions.none()): MessageListActivitiesPage
 
     /** List delivery logs */
     fun listDeliveryLogs(params: MessageListDeliveryLogsParams): MessageListDeliveryLogsPage =
-        listDeliveryLogs(params, RequestOptions.none())
+        listDeliveryLogs(
+          params, RequestOptions.none()
+        )
 
     /** @see [listDeliveryLogs] */
-    fun listDeliveryLogs(
-        params: MessageListDeliveryLogsParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageListDeliveryLogsPage
+    fun listDeliveryLogs(params: MessageListDeliveryLogsParams, requestOptions: RequestOptions = RequestOptions.none()): MessageListDeliveryLogsPage
 
     /** List events */
     fun listEvents(params: MessageListEventsParams): MessageListEventsPage =
-        listEvents(params, RequestOptions.none())
+        listEvents(
+          params, RequestOptions.none()
+        )
 
     /** @see [listEvents] */
-    fun listEvents(
-        params: MessageListEventsParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageListEventsPage
+    fun listEvents(params: MessageListEventsParams, requestOptions: RequestOptions = RequestOptions.none()): MessageListEventsPage
 
     /** Mark message as interacted */
     fun markAsInteracted(params: MessageMarkAsInteractedParams): Message =
-        markAsInteracted(params, RequestOptions.none())
+        markAsInteracted(
+          params, RequestOptions.none()
+        )
 
     /** @see [markAsInteracted] */
-    fun markAsInteracted(
-        params: MessageMarkAsInteractedParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Message
+    fun markAsInteracted(params: MessageMarkAsInteractedParams, requestOptions: RequestOptions = RequestOptions.none()): Message
 
     /** Mark message as read */
     fun markAsRead(params: MessageMarkAsReadParams): Message =
-        markAsRead(params, RequestOptions.none())
+        markAsRead(
+          params, RequestOptions.none()
+        )
 
     /** @see [markAsRead] */
-    fun markAsRead(
-        params: MessageMarkAsReadParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Message
+    fun markAsRead(params: MessageMarkAsReadParams, requestOptions: RequestOptions = RequestOptions.none()): Message
 
     /** Mark message as seen */
     fun markAsSeen(params: MessageMarkAsSeenParams): Message =
-        markAsSeen(params, RequestOptions.none())
+        markAsSeen(
+          params, RequestOptions.none()
+        )
 
     /** @see [markAsSeen] */
-    fun markAsSeen(
-        params: MessageMarkAsSeenParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Message
+    fun markAsSeen(params: MessageMarkAsSeenParams, requestOptions: RequestOptions = RequestOptions.none()): Message
 
     /** Mark message as unread */
     fun markAsUnread(params: MessageMarkAsUnreadParams): Message =
-        markAsUnread(params, RequestOptions.none())
+        markAsUnread(
+          params, RequestOptions.none()
+        )
 
     /** @see [markAsUnread] */
-    fun markAsUnread(
-        params: MessageMarkAsUnreadParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Message
+    fun markAsUnread(params: MessageMarkAsUnreadParams, requestOptions: RequestOptions = RequestOptions.none()): Message
 
     /** Mark message as unseen */
     fun markAsUnseen(params: MessageMarkAsUnseenParams): Message =
-        markAsUnseen(params, RequestOptions.none())
+        markAsUnseen(
+          params, RequestOptions.none()
+        )
 
     /** @see [markAsUnseen] */
-    fun markAsUnseen(
-        params: MessageMarkAsUnseenParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Message
+    fun markAsUnseen(params: MessageMarkAsUnseenParams, requestOptions: RequestOptions = RequestOptions.none()): Message
 
     /** Unarchive message */
     fun unarchive(params: MessageUnarchiveParams): Message =
-        unarchive(params, RequestOptions.none())
+        unarchive(
+          params, RequestOptions.none()
+        )
 
     /** @see [unarchive] */
-    fun unarchive(
-        params: MessageUnarchiveParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): Message
+    fun unarchive(params: MessageUnarchiveParams, requestOptions: RequestOptions = RequestOptions.none()): Message
 
-    /** A view of [MessageService] that provides access to raw HTTP responses for each method. */
+    /**
+     * A view of [MessageService] that provides access to raw HTTP responses for each
+     * method.
+     */
     interface WithRawResponse {
 
         fun batch(): BatchService.WithRawResponse
@@ -182,25 +174,23 @@ interface MessageService {
          * Returns a raw HTTP response for `get /v1/messages`, but is otherwise the same as
          * [MessageService.list].
          */
-        @MustBeClosed fun list(): HttpResponseFor<MessageListPage> = list(MessageListParams.none())
+        @MustBeClosed
+        fun list(): HttpResponseFor<MessageListPage> = list(MessageListParams.none())
 
         /** @see [list] */
         @MustBeClosed
-        fun list(
-            params: MessageListParams = MessageListParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageListPage>
+        fun list(params: MessageListParams = MessageListParams.none(), requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<MessageListPage>
 
         /** @see [list] */
         @MustBeClosed
-        fun list(
-            params: MessageListParams = MessageListParams.none()
-        ): HttpResponseFor<MessageListPage> = list(params, RequestOptions.none())
+        fun list(params: MessageListParams = MessageListParams.none()): HttpResponseFor<MessageListPage> =
+            list(
+              params, RequestOptions.none()
+            )
 
         /** @see [list] */
         @MustBeClosed
-        fun list(requestOptions: RequestOptions): HttpResponseFor<MessageListPage> =
-            list(MessageListParams.none(), requestOptions)
+        fun list(requestOptions: RequestOptions): HttpResponseFor<MessageListPage> = list(MessageListParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `put /v1/messages/{message_id}/archived`, but is
@@ -208,183 +198,166 @@ interface MessageService {
          */
         @MustBeClosed
         fun archive(params: MessageArchiveParams): HttpResponseFor<Message> =
-            archive(params, RequestOptions.none())
+            archive(
+              params, RequestOptions.none()
+            )
 
         /** @see [archive] */
         @MustBeClosed
-        fun archive(
-            params: MessageArchiveParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Message>
+        fun archive(params: MessageArchiveParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<Message>
 
         /**
-         * Returns a raw HTTP response for `get /v1/messages/{message_id}`, but is otherwise the
-         * same as [MessageService.get].
+         * Returns a raw HTTP response for `get /v1/messages/{message_id}`, but is
+         * otherwise the same as [MessageService.get].
          */
         @MustBeClosed
         fun get(params: MessageGetParams): HttpResponseFor<Message> =
-            get(params, RequestOptions.none())
+            get(
+              params, RequestOptions.none()
+            )
 
         /** @see [get] */
         @MustBeClosed
-        fun get(
-            params: MessageGetParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Message>
+        fun get(params: MessageGetParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<Message>
 
         /**
-         * Returns a raw HTTP response for `get /v1/messages/{message_id}/content`, but is otherwise
-         * the same as [MessageService.getContent].
+         * Returns a raw HTTP response for `get /v1/messages/{message_id}/content`, but is
+         * otherwise the same as [MessageService.getContent].
          */
         @MustBeClosed
-        fun getContent(
-            params: MessageGetContentParams
-        ): HttpResponseFor<MessageGetContentResponse> = getContent(params, RequestOptions.none())
+        fun getContent(params: MessageGetContentParams): HttpResponseFor<MessageGetContentResponse> =
+            getContent(
+              params, RequestOptions.none()
+            )
 
         /** @see [getContent] */
         @MustBeClosed
-        fun getContent(
-            params: MessageGetContentParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageGetContentResponse>
+        fun getContent(params: MessageGetContentParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<MessageGetContentResponse>
 
         /**
-         * Returns a raw HTTP response for `get /v1/messages/{message_id}/activities`, but is
-         * otherwise the same as [MessageService.listActivities].
+         * Returns a raw HTTP response for `get /v1/messages/{message_id}/activities`, but
+         * is otherwise the same as [MessageService.listActivities].
          */
         @MustBeClosed
-        fun listActivities(
-            params: MessageListActivitiesParams
-        ): HttpResponseFor<MessageListActivitiesPage> =
-            listActivities(params, RequestOptions.none())
+        fun listActivities(params: MessageListActivitiesParams): HttpResponseFor<MessageListActivitiesPage> =
+            listActivities(
+              params, RequestOptions.none()
+            )
 
         /** @see [listActivities] */
         @MustBeClosed
-        fun listActivities(
-            params: MessageListActivitiesParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageListActivitiesPage>
+        fun listActivities(params: MessageListActivitiesParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<MessageListActivitiesPage>
 
         /**
-         * Returns a raw HTTP response for `get /v1/messages/{message_id}/delivery_logs`, but is
-         * otherwise the same as [MessageService.listDeliveryLogs].
+         * Returns a raw HTTP response for `get /v1/messages/{message_id}/delivery_logs`,
+         * but is otherwise the same as [MessageService.listDeliveryLogs].
          */
         @MustBeClosed
-        fun listDeliveryLogs(
-            params: MessageListDeliveryLogsParams
-        ): HttpResponseFor<MessageListDeliveryLogsPage> =
-            listDeliveryLogs(params, RequestOptions.none())
+        fun listDeliveryLogs(params: MessageListDeliveryLogsParams): HttpResponseFor<MessageListDeliveryLogsPage> =
+            listDeliveryLogs(
+              params, RequestOptions.none()
+            )
 
         /** @see [listDeliveryLogs] */
         @MustBeClosed
-        fun listDeliveryLogs(
-            params: MessageListDeliveryLogsParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageListDeliveryLogsPage>
+        fun listDeliveryLogs(params: MessageListDeliveryLogsParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<MessageListDeliveryLogsPage>
 
         /**
-         * Returns a raw HTTP response for `get /v1/messages/{message_id}/events`, but is otherwise
-         * the same as [MessageService.listEvents].
+         * Returns a raw HTTP response for `get /v1/messages/{message_id}/events`, but is
+         * otherwise the same as [MessageService.listEvents].
          */
         @MustBeClosed
         fun listEvents(params: MessageListEventsParams): HttpResponseFor<MessageListEventsPage> =
-            listEvents(params, RequestOptions.none())
+            listEvents(
+              params, RequestOptions.none()
+            )
 
         /** @see [listEvents] */
         @MustBeClosed
-        fun listEvents(
-            params: MessageListEventsParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageListEventsPage>
+        fun listEvents(params: MessageListEventsParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<MessageListEventsPage>
 
         /**
-         * Returns a raw HTTP response for `put /v1/messages/{message_id}/interacted`, but is
-         * otherwise the same as [MessageService.markAsInteracted].
+         * Returns a raw HTTP response for `put /v1/messages/{message_id}/interacted`, but
+         * is otherwise the same as [MessageService.markAsInteracted].
          */
         @MustBeClosed
         fun markAsInteracted(params: MessageMarkAsInteractedParams): HttpResponseFor<Message> =
-            markAsInteracted(params, RequestOptions.none())
+            markAsInteracted(
+              params, RequestOptions.none()
+            )
 
         /** @see [markAsInteracted] */
         @MustBeClosed
-        fun markAsInteracted(
-            params: MessageMarkAsInteractedParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Message>
+        fun markAsInteracted(params: MessageMarkAsInteractedParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<Message>
 
         /**
-         * Returns a raw HTTP response for `put /v1/messages/{message_id}/read`, but is otherwise
-         * the same as [MessageService.markAsRead].
+         * Returns a raw HTTP response for `put /v1/messages/{message_id}/read`, but is
+         * otherwise the same as [MessageService.markAsRead].
          */
         @MustBeClosed
         fun markAsRead(params: MessageMarkAsReadParams): HttpResponseFor<Message> =
-            markAsRead(params, RequestOptions.none())
+            markAsRead(
+              params, RequestOptions.none()
+            )
 
         /** @see [markAsRead] */
         @MustBeClosed
-        fun markAsRead(
-            params: MessageMarkAsReadParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Message>
+        fun markAsRead(params: MessageMarkAsReadParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<Message>
 
         /**
-         * Returns a raw HTTP response for `put /v1/messages/{message_id}/seen`, but is otherwise
-         * the same as [MessageService.markAsSeen].
+         * Returns a raw HTTP response for `put /v1/messages/{message_id}/seen`, but is
+         * otherwise the same as [MessageService.markAsSeen].
          */
         @MustBeClosed
         fun markAsSeen(params: MessageMarkAsSeenParams): HttpResponseFor<Message> =
-            markAsSeen(params, RequestOptions.none())
+            markAsSeen(
+              params, RequestOptions.none()
+            )
 
         /** @see [markAsSeen] */
         @MustBeClosed
-        fun markAsSeen(
-            params: MessageMarkAsSeenParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Message>
+        fun markAsSeen(params: MessageMarkAsSeenParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<Message>
 
         /**
-         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unread`, but is
-         * otherwise the same as [MessageService.markAsUnread].
+         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unread`, but
+         * is otherwise the same as [MessageService.markAsUnread].
          */
         @MustBeClosed
         fun markAsUnread(params: MessageMarkAsUnreadParams): HttpResponseFor<Message> =
-            markAsUnread(params, RequestOptions.none())
+            markAsUnread(
+              params, RequestOptions.none()
+            )
 
         /** @see [markAsUnread] */
         @MustBeClosed
-        fun markAsUnread(
-            params: MessageMarkAsUnreadParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Message>
+        fun markAsUnread(params: MessageMarkAsUnreadParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<Message>
 
         /**
-         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unseen`, but is
-         * otherwise the same as [MessageService.markAsUnseen].
+         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unseen`, but
+         * is otherwise the same as [MessageService.markAsUnseen].
          */
         @MustBeClosed
         fun markAsUnseen(params: MessageMarkAsUnseenParams): HttpResponseFor<Message> =
-            markAsUnseen(params, RequestOptions.none())
+            markAsUnseen(
+              params, RequestOptions.none()
+            )
 
         /** @see [markAsUnseen] */
         @MustBeClosed
-        fun markAsUnseen(
-            params: MessageMarkAsUnseenParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Message>
+        fun markAsUnseen(params: MessageMarkAsUnseenParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<Message>
 
         /**
-         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unarchived`, but is
-         * otherwise the same as [MessageService.unarchive].
+         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unarchived`,
+         * but is otherwise the same as [MessageService.unarchive].
          */
         @MustBeClosed
         fun unarchive(params: MessageUnarchiveParams): HttpResponseFor<Message> =
-            unarchive(params, RequestOptions.none())
+            unarchive(
+              params, RequestOptions.none()
+            )
 
         /** @see [unarchive] */
         @MustBeClosed
-        fun unarchive(
-            params: MessageUnarchiveParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Message>
+        fun unarchive(params: MessageUnarchiveParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<Message>
     }
 }

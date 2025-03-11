@@ -32,29 +32,16 @@ import kotlin.jvm.optionals.getOrNull
 
 /** A message delivery log */
 @NoAutoDetect
-class MessageDeliveryLog
-@JsonCreator
-private constructor(
+class MessageDeliveryLog @JsonCreator private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("__typename")
-    @ExcludeMissing
-    private val _typename: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("environment_id")
-    @ExcludeMissing
-    private val environmentId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("inserted_at")
-    @ExcludeMissing
-    private val insertedAt: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("request")
-    @ExcludeMissing
-    private val request: JsonField<Request> = JsonMissing.of(),
-    @JsonProperty("response")
-    @ExcludeMissing
-    private val response: JsonField<Response> = JsonMissing.of(),
-    @JsonProperty("service_name")
-    @ExcludeMissing
-    private val serviceName: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("__typename") @ExcludeMissing private val _typename: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("environment_id") @ExcludeMissing private val environmentId: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("inserted_at") @ExcludeMissing private val insertedAt: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("request") @ExcludeMissing private val request: JsonField<Request> = JsonMissing.of(),
+    @JsonProperty("response") @ExcludeMissing private val response: JsonField<Response> = JsonMissing.of(),
+    @JsonProperty("service_name") @ExcludeMissing private val serviceName: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
 ) {
 
     fun id(): String = id.getRequired("id")
@@ -73,21 +60,31 @@ private constructor(
 
     fun serviceName(): String = serviceName.getRequired("service_name")
 
-    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+    @JsonProperty("id")
+    @ExcludeMissing
+    fun _id(): JsonField<String> = id
 
-    @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
+    @JsonProperty("__typename")
+    @ExcludeMissing
+    fun __typename(): JsonField<String> = _typename
 
     @JsonProperty("environment_id")
     @ExcludeMissing
     fun _environmentId(): JsonField<String> = environmentId
 
-    @JsonProperty("inserted_at") @ExcludeMissing fun _insertedAt(): JsonField<String> = insertedAt
+    @JsonProperty("inserted_at")
+    @ExcludeMissing
+    fun _insertedAt(): JsonField<String> = insertedAt
 
     /** A message delivery log request */
-    @JsonProperty("request") @ExcludeMissing fun _request(): JsonField<Request> = request
+    @JsonProperty("request")
+    @ExcludeMissing
+    fun _request(): JsonField<Request> = request
 
     /** A message delivery log response */
-    @JsonProperty("response") @ExcludeMissing fun _response(): JsonField<Response> = response
+    @JsonProperty("response")
+    @ExcludeMissing
+    fun _response(): JsonField<Response> = response
 
     @JsonProperty("service_name")
     @ExcludeMissing
@@ -99,20 +96,21 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): MessageDeliveryLog = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): MessageDeliveryLog =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        id()
-        _typename()
-        environmentId()
-        insertedAt()
-        request().validate()
-        response().validate()
-        serviceName()
-        validated = true
-    }
+            id()
+            _typename()
+            environmentId()
+            insertedAt()
+            request().validate()
+            response().validate()
+            serviceName()
+            validated = true
+        }
 
     fun toBuilder() = Builder().from(this)
 
@@ -122,6 +120,7 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [MessageDeliveryLog].
          *
          * The following fields are required:
+         *
          * ```java
          * .id()
          * ._typename()
@@ -132,7 +131,8 @@ private constructor(
          * .serviceName()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [MessageDeliveryLog]. */
@@ -148,106 +148,135 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(messageDeliveryLog: MessageDeliveryLog) = apply {
-            id = messageDeliveryLog.id
-            _typename = messageDeliveryLog._typename
-            environmentId = messageDeliveryLog.environmentId
-            insertedAt = messageDeliveryLog.insertedAt
-            request = messageDeliveryLog.request
-            response = messageDeliveryLog.response
-            serviceName = messageDeliveryLog.serviceName
-            additionalProperties = messageDeliveryLog.additionalProperties.toMutableMap()
-        }
+        internal fun from(messageDeliveryLog: MessageDeliveryLog) =
+            apply {
+                id = messageDeliveryLog.id
+                _typename = messageDeliveryLog._typename
+                environmentId = messageDeliveryLog.environmentId
+                insertedAt = messageDeliveryLog.insertedAt
+                request = messageDeliveryLog.request
+                response = messageDeliveryLog.response
+                serviceName = messageDeliveryLog.serviceName
+                additionalProperties = messageDeliveryLog.additionalProperties.toMutableMap()
+            }
 
         fun id(id: String) = id(JsonField.of(id))
 
-        fun id(id: JsonField<String>) = apply { this.id = id }
+        fun id(id: JsonField<String>) =
+            apply {
+                this.id = id
+            }
 
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
-        fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
+        fun _typename(_typename: JsonField<String>) =
+            apply {
+                this._typename = _typename
+            }
 
         fun environmentId(environmentId: String) = environmentId(JsonField.of(environmentId))
 
-        fun environmentId(environmentId: JsonField<String>) = apply {
-            this.environmentId = environmentId
-        }
+        fun environmentId(environmentId: JsonField<String>) =
+            apply {
+                this.environmentId = environmentId
+            }
 
         fun insertedAt(insertedAt: String) = insertedAt(JsonField.of(insertedAt))
 
-        fun insertedAt(insertedAt: JsonField<String>) = apply { this.insertedAt = insertedAt }
+        fun insertedAt(insertedAt: JsonField<String>) =
+            apply {
+                this.insertedAt = insertedAt
+            }
 
         /** A message delivery log request */
         fun request(request: Request) = request(JsonField.of(request))
 
         /** A message delivery log request */
-        fun request(request: JsonField<Request>) = apply { this.request = request }
+        fun request(request: JsonField<Request>) =
+            apply {
+                this.request = request
+            }
 
         /** A message delivery log response */
         fun response(response: Response) = response(JsonField.of(response))
 
         /** A message delivery log response */
-        fun response(response: JsonField<Response>) = apply { this.response = response }
+        fun response(response: JsonField<Response>) =
+            apply {
+                this.response = response
+            }
 
         fun serviceName(serviceName: String) = serviceName(JsonField.of(serviceName))
 
-        fun serviceName(serviceName: JsonField<String>) = apply { this.serviceName = serviceName }
+        fun serviceName(serviceName: JsonField<String>) =
+            apply {
+                this.serviceName = serviceName
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         fun build(): MessageDeliveryLog =
             MessageDeliveryLog(
-                checkRequired("id", id),
-                checkRequired("_typename", _typename),
-                checkRequired("environmentId", environmentId),
-                checkRequired("insertedAt", insertedAt),
-                checkRequired("request", request),
-                checkRequired("response", response),
-                checkRequired("serviceName", serviceName),
-                additionalProperties.toImmutable(),
+              checkRequired(
+                "id", id
+              ),
+              checkRequired(
+                "_typename", _typename
+              ),
+              checkRequired(
+                "environmentId", environmentId
+              ),
+              checkRequired(
+                "insertedAt", insertedAt
+              ),
+              checkRequired(
+                "request", request
+              ),
+              checkRequired(
+                "response", response
+              ),
+              checkRequired(
+                "serviceName", serviceName
+              ),
+              additionalProperties.toImmutable(),
             )
     }
 
     /** A message delivery log request */
     @NoAutoDetect
-    class Request
-    @JsonCreator
-    private constructor(
+    class Request @JsonCreator private constructor(
         @JsonProperty("body") @ExcludeMissing private val body: JsonField<Body> = JsonMissing.of(),
-        @JsonProperty("headers")
-        @ExcludeMissing
-        private val headers: JsonField<Headers> = JsonMissing.of(),
-        @JsonProperty("host")
-        @ExcludeMissing
-        private val host: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("method")
-        @ExcludeMissing
-        private val method: JsonField<Method> = JsonMissing.of(),
-        @JsonProperty("path")
-        @ExcludeMissing
-        private val path: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("query")
-        @ExcludeMissing
-        private val query: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        @JsonProperty("headers") @ExcludeMissing private val headers: JsonField<Headers> = JsonMissing.of(),
+        @JsonProperty("host") @ExcludeMissing private val host: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("method") @ExcludeMissing private val method: JsonField<Method> = JsonMissing.of(),
+        @JsonProperty("path") @ExcludeMissing private val path: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("query") @ExcludeMissing private val query: JsonField<String> = JsonMissing.of(),
+        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
     ) {
 
         fun body(): Optional<Body> = Optional.ofNullable(body.getNullable("body"))
@@ -262,17 +291,29 @@ private constructor(
 
         fun query(): Optional<String> = Optional.ofNullable(query.getNullable("query"))
 
-        @JsonProperty("body") @ExcludeMissing fun _body(): JsonField<Body> = body
+        @JsonProperty("body")
+        @ExcludeMissing
+        fun _body(): JsonField<Body> = body
 
-        @JsonProperty("headers") @ExcludeMissing fun _headers(): JsonField<Headers> = headers
+        @JsonProperty("headers")
+        @ExcludeMissing
+        fun _headers(): JsonField<Headers> = headers
 
-        @JsonProperty("host") @ExcludeMissing fun _host(): JsonField<String> = host
+        @JsonProperty("host")
+        @ExcludeMissing
+        fun _host(): JsonField<String> = host
 
-        @JsonProperty("method") @ExcludeMissing fun _method(): JsonField<Method> = method
+        @JsonProperty("method")
+        @ExcludeMissing
+        fun _method(): JsonField<Method> = method
 
-        @JsonProperty("path") @ExcludeMissing fun _path(): JsonField<String> = path
+        @JsonProperty("path")
+        @ExcludeMissing
+        fun _path(): JsonField<String> = path
 
-        @JsonProperty("query") @ExcludeMissing fun _query(): JsonField<String> = query
+        @JsonProperty("query")
+        @ExcludeMissing
+        fun _query(): JsonField<String> = query
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -280,26 +321,28 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Request = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Request =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            body().ifPresent { it.validate() }
-            headers().ifPresent { it.validate() }
-            host()
-            method()
-            path()
-            query()
-            validated = true
-        }
+                body().ifPresent { it.validate() }
+                headers().ifPresent { it.validate() }
+                host()
+                method()
+                path()
+                query()
+                validated = true
+            }
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [Request]. */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [Request]. */
@@ -314,19 +357,23 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(request: Request) = apply {
-                body = request.body
-                headers = request.headers
-                host = request.host
-                method = request.method
-                path = request.path
-                query = request.query
-                additionalProperties = request.additionalProperties.toMutableMap()
-            }
+            internal fun from(request: Request) =
+                apply {
+                    body = request.body
+                    headers = request.headers
+                    host = request.host
+                    method = request.method
+                    path = request.path
+                    query = request.query
+                    additionalProperties = request.additionalProperties.toMutableMap()
+                }
 
             fun body(body: Body) = body(JsonField.of(body))
 
-            fun body(body: JsonField<Body>) = apply { this.body = body }
+            fun body(body: JsonField<Body>) =
+                apply {
+                    this.body = body
+                }
 
             fun body(string: String) = body(Body.ofString(string))
 
@@ -336,64 +383,86 @@ private constructor(
 
             fun headers(headers: Optional<Headers>) = headers(headers.getOrNull())
 
-            fun headers(headers: JsonField<Headers>) = apply { this.headers = headers }
+            fun headers(headers: JsonField<Headers>) =
+                apply {
+                    this.headers = headers
+                }
 
             fun host(host: String) = host(JsonField.of(host))
 
-            fun host(host: JsonField<String>) = apply { this.host = host }
+            fun host(host: JsonField<String>) =
+                apply {
+                    this.host = host
+                }
 
             fun method(method: Method) = method(JsonField.of(method))
 
-            fun method(method: JsonField<Method>) = apply { this.method = method }
+            fun method(method: JsonField<Method>) =
+                apply {
+                    this.method = method
+                }
 
             fun path(path: String) = path(JsonField.of(path))
 
-            fun path(path: JsonField<String>) = apply { this.path = path }
+            fun path(path: JsonField<String>) =
+                apply {
+                    this.path = path
+                }
 
             fun query(query: String?) = query(JsonField.ofNullable(query))
 
             fun query(query: Optional<String>) = query(query.getOrNull())
 
-            fun query(query: JsonField<String>) = apply { this.query = query }
+            fun query(query: JsonField<String>) =
+                apply {
+                    this.query = query
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             fun build(): Request =
                 Request(
-                    body,
-                    headers,
-                    host,
-                    method,
-                    path,
-                    query,
-                    additionalProperties.toImmutable(),
+                  body,
+                  headers,
+                  host,
+                  method,
+                  path,
+                  query,
+                  additionalProperties.toImmutable(),
                 )
         }
 
         @JsonDeserialize(using = Body.Deserializer::class)
         @JsonSerialize(using = Body.Serializer::class)
-        class Body
-        private constructor(
+        class Body private constructor(
             private val string: String? = null,
             private val unionMember1: UnionMember1? = null,
             private val _json: JsonValue? = null,
+
         ) {
 
             fun string(): Optional<String> = Optional.ofNullable(string)
@@ -411,38 +480,39 @@ private constructor(
             fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
             fun <T> accept(visitor: Visitor<T>): T {
-                return when {
-                    string != null -> visitor.visitString(string)
-                    unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
-                    else -> visitor.unknown(_json)
-                }
+              return when {
+                  string != null -> visitor.visitString(string)
+                  unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
+                  else -> visitor.unknown(_json)
+              }
             }
 
             private var validated: Boolean = false
 
-            fun validate(): Body = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): Body =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                accept(
-                    object : Visitor<Unit> {
-                        override fun visitString(string: String) {}
+                    accept(object : Visitor<Unit> {
+                        override fun visitString(string: String) {
+
+                        }
 
                         override fun visitUnionMember1(unionMember1: UnionMember1) {
-                            unionMember1.validate()
+                          unionMember1.validate()
                         }
-                    }
-                )
-                validated = true
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
+                    })
+                    validated = true
                 }
 
-                return /* spotless:off */ other is Body && string == other.string && unionMember1 == other.unionMember1 /* spotless:on */
+            override fun equals(other: Any?): Boolean {
+              if (this === other) {
+                  return true
+              }
+
+              return /* spotless:off */ other is Body && string == other.string && unionMember1 == other.unionMember1 /* spotless:on */
             }
 
             override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, unionMember1) /* spotless:on */
@@ -457,14 +527,16 @@ private constructor(
 
             companion object {
 
-                @JvmStatic fun ofString(string: String) = Body(string = string)
+                @JvmStatic
+                fun ofString(string: String) = Body(string = string)
 
                 @JvmStatic
                 fun ofUnionMember1(unionMember1: UnionMember1) = Body(unionMember1 = unionMember1)
             }
 
             /**
-             * An interface that defines how to map each variant of [Body] to a value of type [T].
+             * An interface that defines how to map each variant of [Body] to a value of type
+             * [T].
              */
             interface Visitor<out T> {
 
@@ -476,56 +548,49 @@ private constructor(
                  * Maps an unknown variant of [Body] to a value of type [T].
                  *
                  * An instance of [Body] can contain an unknown variant if it was deserialized from
-                 * data that doesn't match any known variant. For example, if the SDK is on an older
-                 * version than the API, then the API may respond with new variants that the SDK is
-                 * unaware of.
+                 * data that doesn't match any known variant. For example, if the SDK is on an
+                 * older version than the API, then the API may respond with new variants that the
+                 * SDK is unaware of.
                  *
                  * @throws KnockInvalidDataException in the default implementation.
                  */
                 fun unknown(json: JsonValue?): T {
-                    throw KnockInvalidDataException("Unknown Body: $json")
+                  throw KnockInvalidDataException("Unknown Body: $json")
                 }
             }
 
             internal class Deserializer : BaseDeserializer<Body>(Body::class) {
 
                 override fun ObjectCodec.deserialize(node: JsonNode): Body {
-                    val json = JsonValue.fromJsonNode(node)
+                  val json = JsonValue.fromJsonNode(node)
 
-                    tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                        return Body(string = it, _json = json)
-                    }
-                    tryDeserialize(node, jacksonTypeRef<UnionMember1>()) { it.validate() }
-                        ?.let {
-                            return Body(unionMember1 = it, _json = json)
-                        }
+                  tryDeserialize(node, jacksonTypeRef<String>())?.let {
+                      return Body(string = it, _json = json)
+                  }
+                  tryDeserialize(node, jacksonTypeRef<UnionMember1>()){ it.validate() }?.let {
+                      return Body(unionMember1 = it, _json = json)
+                  }
 
-                    return Body(_json = json)
+                  return Body(_json = json)
                 }
             }
 
             internal class Serializer : BaseSerializer<Body>(Body::class) {
 
-                override fun serialize(
-                    value: Body,
-                    generator: JsonGenerator,
-                    provider: SerializerProvider,
-                ) {
-                    when {
-                        value.string != null -> generator.writeObject(value.string)
-                        value.unionMember1 != null -> generator.writeObject(value.unionMember1)
-                        value._json != null -> generator.writeObject(value._json)
-                        else -> throw IllegalStateException("Invalid Body")
-                    }
+                override fun serialize(value: Body, generator: JsonGenerator, provider: SerializerProvider) {
+                  when {
+                      value.string != null -> generator.writeObject(value.string)
+                      value.unionMember1 != null -> generator.writeObject(value.unionMember1)
+                      value._json != null -> generator.writeObject(value._json)
+                      else -> throw IllegalStateException("Invalid Body")
+                  }
                 }
             }
 
             @NoAutoDetect
-            class UnionMember1
-            @JsonCreator
-            private constructor(
-                @JsonAnySetter
-                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
+            class UnionMember1 @JsonCreator private constructor(
+                @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
             ) {
 
                 @JsonAnyGetter
@@ -534,20 +599,22 @@ private constructor(
 
                 private var validated: Boolean = false
 
-                fun validate(): UnionMember1 = apply {
-                    if (validated) {
-                        return@apply
-                    }
+                fun validate(): UnionMember1 =
+                    apply {
+                        if (validated) {
+                          return@apply
+                        }
 
-                    validated = true
-                }
+                        validated = true
+                    }
 
                 fun toBuilder() = Builder().from(this)
 
                 companion object {
 
                     /** Returns a mutable builder for constructing an instance of [UnionMember1]. */
-                    @JvmStatic fun builder() = Builder()
+                    @JvmStatic
+                    fun builder() = Builder()
                 }
 
                 /** A builder for [UnionMember1]. */
@@ -556,41 +623,46 @@ private constructor(
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
-                    internal fun from(unionMember1: UnionMember1) = apply {
-                        additionalProperties = unionMember1.additionalProperties.toMutableMap()
-                    }
+                    internal fun from(unionMember1: UnionMember1) =
+                        apply {
+                            additionalProperties = unionMember1.additionalProperties.toMutableMap()
+                        }
 
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.clear()
+                            putAllAdditionalProperties(additionalProperties)
+                        }
 
-                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        additionalProperties.put(key, value)
-                    }
+                    fun putAdditionalProperty(key: String, value: JsonValue) =
+                        apply {
+                            additionalProperties.put(key, value)
+                        }
 
                     fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                         apply {
                             this.additionalProperties.putAll(additionalProperties)
                         }
 
-                    fun removeAdditionalProperty(key: String) = apply {
-                        additionalProperties.remove(key)
-                    }
+                    fun removeAdditionalProperty(key: String) =
+                        apply {
+                            additionalProperties.remove(key)
+                        }
 
-                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                    fun removeAllAdditionalProperties(keys: Set<String>) =
+                        apply {
+                            keys.forEach(::removeAdditionalProperty)
+                        }
 
                     fun build(): UnionMember1 = UnionMember1(additionalProperties.toImmutable())
                 }
 
                 override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
+                  if (this === other) {
+                      return true
+                  }
 
-                    return /* spotless:off */ other is UnionMember1 && additionalProperties == other.additionalProperties /* spotless:on */
+                  return /* spotless:off */ other is UnionMember1 && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
@@ -604,11 +676,9 @@ private constructor(
         }
 
         @NoAutoDetect
-        class Headers
-        @JsonCreator
-        private constructor(
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
+        class Headers @JsonCreator private constructor(
+            @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
         ) {
 
             @JsonAnyGetter
@@ -617,20 +687,22 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): Headers = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): Headers =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                validated = true
-            }
+                    validated = true
+                }
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
                 /** Returns a mutable builder for constructing an instance of [Headers]. */
-                @JvmStatic fun builder() = Builder()
+                @JvmStatic
+                fun builder() = Builder()
             }
 
             /** A builder for [Headers]. */
@@ -639,41 +711,46 @@ private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(headers: Headers) = apply {
-                    additionalProperties = headers.additionalProperties.toMutableMap()
-                }
+                internal fun from(headers: Headers) =
+                    apply {
+                        additionalProperties = headers.additionalProperties.toMutableMap()
+                    }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
+                fun putAdditionalProperty(key: String, value: JsonValue) =
+                    apply {
+                        additionalProperties.put(key, value)
+                    }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
+                fun removeAdditionalProperty(key: String) =
+                    apply {
+                        additionalProperties.remove(key)
+                    }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+                fun removeAllAdditionalProperties(keys: Set<String>) =
+                    apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                 fun build(): Headers = Headers(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return /* spotless:off */ other is Headers && additionalProperties == other.additionalProperties /* spotless:on */
+              return /* spotless:off */ other is Headers && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -685,17 +762,21 @@ private constructor(
             override fun toString() = "Headers{additionalProperties=$additionalProperties}"
         }
 
-        class Method @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+        class Method @JsonCreator private constructor(
+            private val value: JsonField<String>,
+
+        ) : Enum {
 
             /**
              * Returns this class instance's raw value.
              *
-             * This is usually only useful if this instance was deserialized from data that doesn't
-             * match any known member, and you want to know that value. For example, if the SDK is
-             * on an older version than the API, then the API may respond with new members that the
-             * SDK is unaware of.
+             * This is usually only useful if this instance was deserialized from data that
+             * doesn't match any known member, and you want to know that value. For example, if
+             * the SDK is on an older version than the API, then the API may respond with new
+             * members that the SDK is unaware of.
              */
-            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+            @com.fasterxml.jackson.annotation.JsonValue
+            fun _value(): JsonField<String> = value
 
             companion object {
 
@@ -725,9 +806,11 @@ private constructor(
              * An enum containing [Method]'s known values, as well as an [_UNKNOWN] member.
              *
              * An instance of [Method] can contain an unknown value in a couple of cases:
-             * - It was deserialized from data that doesn't match any known member. For example, if
-             *   the SDK is on an older version than the API, then the API may respond with new
-             *   members that the SDK is unaware of.
+             *
+             * - It was deserialized from data that doesn't match any known member. For
+             *   example, if the SDK is on an older version than the API, then the API may
+             *   respond with new members that the SDK is unaware of.
+             *
              * - It was constructed with an arbitrary value using the [of] method.
              */
             enum class Value {
@@ -736,9 +819,7 @@ private constructor(
                 PUT,
                 DELETE,
                 PATCH,
-                /**
-                 * An enum member indicating that [Method] was instantiated with an unknown value.
-                 */
+                /** An enum member indicating that [Method] was instantiated with an unknown value. */
                 _UNKNOWN,
             }
 
@@ -746,8 +827,8 @@ private constructor(
              * Returns an enum member corresponding to this class instance's value, or
              * [Value._UNKNOWN] if the class was instantiated with an unknown value.
              *
-             * Use the [known] method instead if you're certain the value is always known or if you
-             * want to throw for the unknown case.
+             * Use the [known] method instead if you're certain the value is always known or if
+             * you want to throw for the unknown case.
              */
             fun value(): Value =
                 when (this) {
@@ -765,8 +846,8 @@ private constructor(
              * Use the [value] method instead if you're uncertain the value is always known and
              * don't want to throw for the unknown case.
              *
-             * @throws KnockInvalidDataException if this class instance's value is a not a known
-             *   member.
+             * @throws KnockInvalidDataException if this class instance's value is a not a
+             * known member.
              */
             fun known(): Known =
                 when (this) {
@@ -784,20 +865,17 @@ private constructor(
              * This differs from the [toString] method because that method is primarily for
              * debugging and generally doesn't throw.
              *
-             * @throws KnockInvalidDataException if this class instance's value does not have the
-             *   expected primitive type.
+             * @throws KnockInvalidDataException if this class instance's value does not have
+             * the expected primitive type.
              */
-            fun asString(): String =
-                _value().asString().orElseThrow {
-                    KnockInvalidDataException("Value is not a String")
-                }
+            fun asString(): String = _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return /* spotless:off */ other is Method && value == other.value /* spotless:on */
+              return /* spotless:off */ other is Method && value == other.value /* spotless:on */
             }
 
             override fun hashCode() = value.hashCode()
@@ -806,11 +884,11 @@ private constructor(
         }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Request && body == other.body && headers == other.headers && host == other.host && method == other.method && path == other.path && query == other.query && additionalProperties == other.additionalProperties /* spotless:on */
+          return /* spotless:off */ other is Request && body == other.body && headers == other.headers && host == other.host && method == other.method && path == other.path && query == other.query && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -819,24 +897,17 @@ private constructor(
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "Request{body=$body, headers=$headers, host=$host, method=$method, path=$path, query=$query, additionalProperties=$additionalProperties}"
+        override fun toString() = "Request{body=$body, headers=$headers, host=$host, method=$method, path=$path, query=$query, additionalProperties=$additionalProperties}"
     }
 
     /** A message delivery log response */
     @NoAutoDetect
-    class Response
-    @JsonCreator
-    private constructor(
+    class Response @JsonCreator private constructor(
         @JsonProperty("body") @ExcludeMissing private val body: JsonField<Body> = JsonMissing.of(),
-        @JsonProperty("headers")
-        @ExcludeMissing
-        private val headers: JsonField<Headers> = JsonMissing.of(),
-        @JsonProperty("status")
-        @ExcludeMissing
-        private val status: JsonField<Long> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        @JsonProperty("headers") @ExcludeMissing private val headers: JsonField<Headers> = JsonMissing.of(),
+        @JsonProperty("status") @ExcludeMissing private val status: JsonField<Long> = JsonMissing.of(),
+        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
     ) {
 
         fun body(): Optional<Body> = Optional.ofNullable(body.getNullable("body"))
@@ -845,11 +916,17 @@ private constructor(
 
         fun status(): Optional<Long> = Optional.ofNullable(status.getNullable("status"))
 
-        @JsonProperty("body") @ExcludeMissing fun _body(): JsonField<Body> = body
+        @JsonProperty("body")
+        @ExcludeMissing
+        fun _body(): JsonField<Body> = body
 
-        @JsonProperty("headers") @ExcludeMissing fun _headers(): JsonField<Headers> = headers
+        @JsonProperty("headers")
+        @ExcludeMissing
+        fun _headers(): JsonField<Headers> = headers
 
-        @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<Long> = status
+        @JsonProperty("status")
+        @ExcludeMissing
+        fun _status(): JsonField<Long> = status
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -857,23 +934,25 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Response =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            body().ifPresent { it.validate() }
-            headers().ifPresent { it.validate() }
-            status()
-            validated = true
-        }
+                body().ifPresent { it.validate() }
+                headers().ifPresent { it.validate() }
+                status()
+                validated = true
+            }
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [Response]. */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [Response]. */
@@ -885,16 +964,20 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(response: Response) = apply {
-                body = response.body
-                headers = response.headers
-                status = response.status
-                additionalProperties = response.additionalProperties.toMutableMap()
-            }
+            internal fun from(response: Response) =
+                apply {
+                    body = response.body
+                    headers = response.headers
+                    status = response.status
+                    additionalProperties = response.additionalProperties.toMutableMap()
+                }
 
             fun body(body: Body) = body(JsonField.of(body))
 
-            fun body(body: JsonField<Body>) = apply { this.body = body }
+            fun body(body: JsonField<Body>) =
+                apply {
+                    this.body = body
+                }
 
             fun body(string: String) = body(Body.ofString(string))
 
@@ -904,42 +987,60 @@ private constructor(
 
             fun headers(headers: Optional<Headers>) = headers(headers.getOrNull())
 
-            fun headers(headers: JsonField<Headers>) = apply { this.headers = headers }
+            fun headers(headers: JsonField<Headers>) =
+                apply {
+                    this.headers = headers
+                }
 
             fun status(status: Long) = status(JsonField.of(status))
 
-            fun status(status: JsonField<Long>) = apply { this.status = status }
+            fun status(status: JsonField<Long>) =
+                apply {
+                    this.status = status
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             fun build(): Response =
-                Response(body, headers, status, additionalProperties.toImmutable())
+                Response(
+                  body,
+                  headers,
+                  status,
+                  additionalProperties.toImmutable(),
+                )
         }
 
         @JsonDeserialize(using = Body.Deserializer::class)
         @JsonSerialize(using = Body.Serializer::class)
-        class Body
-        private constructor(
+        class Body private constructor(
             private val string: String? = null,
             private val unionMember1: UnionMember1? = null,
             private val _json: JsonValue? = null,
+
         ) {
 
             fun string(): Optional<String> = Optional.ofNullable(string)
@@ -957,38 +1058,39 @@ private constructor(
             fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
             fun <T> accept(visitor: Visitor<T>): T {
-                return when {
-                    string != null -> visitor.visitString(string)
-                    unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
-                    else -> visitor.unknown(_json)
-                }
+              return when {
+                  string != null -> visitor.visitString(string)
+                  unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
+                  else -> visitor.unknown(_json)
+              }
             }
 
             private var validated: Boolean = false
 
-            fun validate(): Body = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): Body =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                accept(
-                    object : Visitor<Unit> {
-                        override fun visitString(string: String) {}
+                    accept(object : Visitor<Unit> {
+                        override fun visitString(string: String) {
+
+                        }
 
                         override fun visitUnionMember1(unionMember1: UnionMember1) {
-                            unionMember1.validate()
+                          unionMember1.validate()
                         }
-                    }
-                )
-                validated = true
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
+                    })
+                    validated = true
                 }
 
-                return /* spotless:off */ other is Body && string == other.string && unionMember1 == other.unionMember1 /* spotless:on */
+            override fun equals(other: Any?): Boolean {
+              if (this === other) {
+                  return true
+              }
+
+              return /* spotless:off */ other is Body && string == other.string && unionMember1 == other.unionMember1 /* spotless:on */
             }
 
             override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, unionMember1) /* spotless:on */
@@ -1003,14 +1105,16 @@ private constructor(
 
             companion object {
 
-                @JvmStatic fun ofString(string: String) = Body(string = string)
+                @JvmStatic
+                fun ofString(string: String) = Body(string = string)
 
                 @JvmStatic
                 fun ofUnionMember1(unionMember1: UnionMember1) = Body(unionMember1 = unionMember1)
             }
 
             /**
-             * An interface that defines how to map each variant of [Body] to a value of type [T].
+             * An interface that defines how to map each variant of [Body] to a value of type
+             * [T].
              */
             interface Visitor<out T> {
 
@@ -1022,56 +1126,49 @@ private constructor(
                  * Maps an unknown variant of [Body] to a value of type [T].
                  *
                  * An instance of [Body] can contain an unknown variant if it was deserialized from
-                 * data that doesn't match any known variant. For example, if the SDK is on an older
-                 * version than the API, then the API may respond with new variants that the SDK is
-                 * unaware of.
+                 * data that doesn't match any known variant. For example, if the SDK is on an
+                 * older version than the API, then the API may respond with new variants that the
+                 * SDK is unaware of.
                  *
                  * @throws KnockInvalidDataException in the default implementation.
                  */
                 fun unknown(json: JsonValue?): T {
-                    throw KnockInvalidDataException("Unknown Body: $json")
+                  throw KnockInvalidDataException("Unknown Body: $json")
                 }
             }
 
             internal class Deserializer : BaseDeserializer<Body>(Body::class) {
 
                 override fun ObjectCodec.deserialize(node: JsonNode): Body {
-                    val json = JsonValue.fromJsonNode(node)
+                  val json = JsonValue.fromJsonNode(node)
 
-                    tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                        return Body(string = it, _json = json)
-                    }
-                    tryDeserialize(node, jacksonTypeRef<UnionMember1>()) { it.validate() }
-                        ?.let {
-                            return Body(unionMember1 = it, _json = json)
-                        }
+                  tryDeserialize(node, jacksonTypeRef<String>())?.let {
+                      return Body(string = it, _json = json)
+                  }
+                  tryDeserialize(node, jacksonTypeRef<UnionMember1>()){ it.validate() }?.let {
+                      return Body(unionMember1 = it, _json = json)
+                  }
 
-                    return Body(_json = json)
+                  return Body(_json = json)
                 }
             }
 
             internal class Serializer : BaseSerializer<Body>(Body::class) {
 
-                override fun serialize(
-                    value: Body,
-                    generator: JsonGenerator,
-                    provider: SerializerProvider,
-                ) {
-                    when {
-                        value.string != null -> generator.writeObject(value.string)
-                        value.unionMember1 != null -> generator.writeObject(value.unionMember1)
-                        value._json != null -> generator.writeObject(value._json)
-                        else -> throw IllegalStateException("Invalid Body")
-                    }
+                override fun serialize(value: Body, generator: JsonGenerator, provider: SerializerProvider) {
+                  when {
+                      value.string != null -> generator.writeObject(value.string)
+                      value.unionMember1 != null -> generator.writeObject(value.unionMember1)
+                      value._json != null -> generator.writeObject(value._json)
+                      else -> throw IllegalStateException("Invalid Body")
+                  }
                 }
             }
 
             @NoAutoDetect
-            class UnionMember1
-            @JsonCreator
-            private constructor(
-                @JsonAnySetter
-                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
+            class UnionMember1 @JsonCreator private constructor(
+                @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
             ) {
 
                 @JsonAnyGetter
@@ -1080,20 +1177,22 @@ private constructor(
 
                 private var validated: Boolean = false
 
-                fun validate(): UnionMember1 = apply {
-                    if (validated) {
-                        return@apply
-                    }
+                fun validate(): UnionMember1 =
+                    apply {
+                        if (validated) {
+                          return@apply
+                        }
 
-                    validated = true
-                }
+                        validated = true
+                    }
 
                 fun toBuilder() = Builder().from(this)
 
                 companion object {
 
                     /** Returns a mutable builder for constructing an instance of [UnionMember1]. */
-                    @JvmStatic fun builder() = Builder()
+                    @JvmStatic
+                    fun builder() = Builder()
                 }
 
                 /** A builder for [UnionMember1]. */
@@ -1102,41 +1201,46 @@ private constructor(
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                     @JvmSynthetic
-                    internal fun from(unionMember1: UnionMember1) = apply {
-                        additionalProperties = unionMember1.additionalProperties.toMutableMap()
-                    }
+                    internal fun from(unionMember1: UnionMember1) =
+                        apply {
+                            additionalProperties = unionMember1.additionalProperties.toMutableMap()
+                        }
 
-                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.clear()
+                            putAllAdditionalProperties(additionalProperties)
+                        }
 
-                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                        additionalProperties.put(key, value)
-                    }
+                    fun putAdditionalProperty(key: String, value: JsonValue) =
+                        apply {
+                            additionalProperties.put(key, value)
+                        }
 
                     fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                         apply {
                             this.additionalProperties.putAll(additionalProperties)
                         }
 
-                    fun removeAdditionalProperty(key: String) = apply {
-                        additionalProperties.remove(key)
-                    }
+                    fun removeAdditionalProperty(key: String) =
+                        apply {
+                            additionalProperties.remove(key)
+                        }
 
-                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                    fun removeAllAdditionalProperties(keys: Set<String>) =
+                        apply {
+                            keys.forEach(::removeAdditionalProperty)
+                        }
 
                     fun build(): UnionMember1 = UnionMember1(additionalProperties.toImmutable())
                 }
 
                 override fun equals(other: Any?): Boolean {
-                    if (this === other) {
-                        return true
-                    }
+                  if (this === other) {
+                      return true
+                  }
 
-                    return /* spotless:off */ other is UnionMember1 && additionalProperties == other.additionalProperties /* spotless:on */
+                  return /* spotless:off */ other is UnionMember1 && additionalProperties == other.additionalProperties /* spotless:on */
                 }
 
                 /* spotless:off */
@@ -1150,11 +1254,9 @@ private constructor(
         }
 
         @NoAutoDetect
-        class Headers
-        @JsonCreator
-        private constructor(
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
+        class Headers @JsonCreator private constructor(
+            @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
         ) {
 
             @JsonAnyGetter
@@ -1163,20 +1265,22 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): Headers = apply {
-                if (validated) {
-                    return@apply
-                }
+            fun validate(): Headers =
+                apply {
+                    if (validated) {
+                      return@apply
+                    }
 
-                validated = true
-            }
+                    validated = true
+                }
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
                 /** Returns a mutable builder for constructing an instance of [Headers]. */
-                @JvmStatic fun builder() = Builder()
+                @JvmStatic
+                fun builder() = Builder()
             }
 
             /** A builder for [Headers]. */
@@ -1185,41 +1289,46 @@ private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(headers: Headers) = apply {
-                    additionalProperties = headers.additionalProperties.toMutableMap()
-                }
+                internal fun from(headers: Headers) =
+                    apply {
+                        additionalProperties = headers.additionalProperties.toMutableMap()
+                    }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
+                fun putAdditionalProperty(key: String, value: JsonValue) =
+                    apply {
+                        additionalProperties.put(key, value)
+                    }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
+                fun removeAdditionalProperty(key: String) =
+                    apply {
+                        additionalProperties.remove(key)
+                    }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+                fun removeAllAdditionalProperties(keys: Set<String>) =
+                    apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
 
                 fun build(): Headers = Headers(additionalProperties.toImmutable())
             }
 
             override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
+              if (this === other) {
+                  return true
+              }
 
-                return /* spotless:off */ other is Headers && additionalProperties == other.additionalProperties /* spotless:on */
+              return /* spotless:off */ other is Headers && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -1232,11 +1341,11 @@ private constructor(
         }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Response && body == other.body && headers == other.headers && status == other.status && additionalProperties == other.additionalProperties /* spotless:on */
+          return /* spotless:off */ other is Response && body == other.body && headers == other.headers && status == other.status && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -1245,16 +1354,15 @@ private constructor(
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "Response{body=$body, headers=$headers, status=$status, additionalProperties=$additionalProperties}"
+        override fun toString() = "Response{body=$body, headers=$headers, status=$status, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is MessageDeliveryLog && id == other.id && _typename == other._typename && environmentId == other.environmentId && insertedAt == other.insertedAt && request == other.request && response == other.response && serviceName == other.serviceName && additionalProperties == other.additionalProperties /* spotless:on */
+      return /* spotless:off */ other is MessageDeliveryLog && id == other.id && _typename == other._typename && environmentId == other.environmentId && insertedAt == other.insertedAt && request == other.request && response == other.response && serviceName == other.serviceName && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -1263,6 +1371,5 @@ private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "MessageDeliveryLog{id=$id, _typename=$_typename, environmentId=$environmentId, insertedAt=$insertedAt, request=$request, response=$response, serviceName=$serviceName, additionalProperties=$additionalProperties}"
+    override fun toString() = "MessageDeliveryLog{id=$id, _typename=$_typename, environmentId=$environmentId, insertedAt=$insertedAt, request=$request, response=$response, serviceName=$serviceName, additionalProperties=$additionalProperties}"
 }

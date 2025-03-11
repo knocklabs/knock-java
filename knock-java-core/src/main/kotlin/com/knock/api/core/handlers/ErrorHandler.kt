@@ -8,10 +8,11 @@ import com.knock.api.core.http.HttpResponse
 import com.knock.api.core.http.HttpResponse.Handler
 import com.knock.api.errors.BadRequestException
 import com.knock.api.errors.InternalServerException
-import com.knock.api.errors.KnockError
 import com.knock.api.errors.NotFoundException
 import com.knock.api.errors.PermissionDeniedException
 import com.knock.api.errors.RateLimitException
+import com.knock.api.errors.KnockError
+import com.knock.api.errors.KnockException
 import com.knock.api.errors.UnauthorizedException
 import com.knock.api.errors.UnexpectedStatusCodeException
 import com.knock.api.errors.UnprocessableEntityException

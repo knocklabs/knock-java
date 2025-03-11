@@ -13,6 +13,7 @@ import com.knock.api.core.JsonValue
 import com.knock.api.core.NoAutoDetect
 import com.knock.api.core.immutableEmptyMap
 import com.knock.api.core.toImmutable
+import com.knock.api.models
 import com.knock.api.services.blocking.UserService
 import java.util.Objects
 import java.util.Optional
@@ -21,11 +22,11 @@ import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
 /** List users */
-class UserListPage
-private constructor(
+class UserListPage private constructor(
     private val usersService: UserService,
     private val params: UserListParams,
     private val response: Response,
+
 ) {
 
     fun response(): Response = response
@@ -35,41 +36,35 @@ private constructor(
     fun pageInfo(): Optional<PageInfo> = response().pageInfo()
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is UserListPage && usersService == other.usersService && params == other.params && response == other.response /* spotless:on */
+      return /* spotless:off */ other is UserListPage && usersService == other.usersService && params == other.params && response == other.response /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(usersService, params, response) /* spotless:on */
 
-    override fun toString() =
-        "UserListPage{usersService=$usersService, params=$params, response=$response}"
+    override fun toString() = "UserListPage{usersService=$usersService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean {
-        if (entries().isEmpty()) {
-            return false
-        }
+      if (entries().isEmpty()) {
+        return false;
+      }
 
-        return pageInfo().flatMap { it.after() }.isPresent
+      return pageInfo().flatMap { it.after()}.isPresent
     }
 
     fun getNextPageParams(): Optional<UserListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
+      if (!hasNextPage()) {
+        return Optional.empty()
+      }
 
-        return Optional.of(
-            UserListParams.builder()
-                .from(params)
-                .apply { pageInfo().flatMap { it.after() }.ifPresent { this.after(it) } }
-                .build()
-        )
+      return Optional.of(UserListParams.builder().from(params).apply {pageInfo().flatMap { it.after()}.ifPresent{ this.after(it) } }.build())
     }
 
     fun getNextPage(): Optional<UserListPage> {
-        return getNextPageParams().map { usersService.list(it) }
+      return getNextPageParams().map { usersService.list(it) }
     }
 
     fun autoPager(): AutoPager = AutoPager(this)
@@ -78,17 +73,19 @@ private constructor(
 
         @JvmStatic
         fun of(usersService: UserService, params: UserListParams, response: Response) =
-            UserListPage(usersService, params, response)
+            UserListPage(
+              usersService,
+              params,
+              response,
+            )
     }
 
     @NoAutoDetect
-    class Response
-    @JsonCreator
-    constructor(
+    class Response @JsonCreator constructor(
         @JsonProperty("entries") private val entries: JsonField<List<User>> = JsonMissing.of(),
         @JsonProperty("page_info") private val pageInfo: JsonField<PageInfo> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
     ) {
 
         fun entries(): List<User> = entries.getNullable("entries") ?: listOf()
@@ -107,35 +104,36 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Response =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            entries().map { it.validate() }
-            pageInfo().ifPresent { it.validate() }
-            validated = true
-        }
+                entries().map { it.validate() }
+                pageInfo().ifPresent { it.validate() }
+                validated = true
+            }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Response && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
+          return /* spotless:off */ other is Response && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         override fun hashCode(): Int = /* spotless:off */ Objects.hash(entries, pageInfo, additionalProperties) /* spotless:on */
 
-        override fun toString() =
-            "Response{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
+        override fun toString() = "Response{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
 
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [UserListPage]. */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         class Builder {
@@ -145,11 +143,12 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.entries = page.entries
-                this.pageInfo = page.pageInfo
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
+            internal fun from(page: Response) =
+                apply {
+                    this.entries = page.entries
+                    this.pageInfo = page.pageInfo
+                    this.additionalProperties.putAll(page.additionalProperties)
+                }
 
             fun entries(entries: List<User>) = entries(JsonField.of(entries))
 
@@ -159,30 +158,40 @@ private constructor(
 
             fun pageInfo(pageInfo: JsonField<PageInfo>) = apply { this.pageInfo = pageInfo }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    this.additionalProperties.put(key, value)
+                }
 
-            fun build() = Response(entries, pageInfo, additionalProperties.toImmutable())
+            fun build() =
+                Response(
+                  entries,
+                  pageInfo,
+                  additionalProperties.toImmutable(),
+                )
         }
     }
 
-    class AutoPager(private val firstPage: UserListPage) : Iterable<User> {
+    class AutoPager(
+        private val firstPage: UserListPage,
 
-        override fun iterator(): Iterator<User> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.entries().size) {
+    ) : Iterable<User> {
+
+        override fun iterator(): Iterator<User> =
+            iterator {
+                var page = firstPage
+                var index = 0
+                while (true) {
+                  while (index < page.entries().size) {
                     yield(page.entries()[index++])
+                  }
+                  page = page.getNextPage().getOrNull() ?: break
+                  index = 0
                 }
-                page = page.getNextPage().getOrNull() ?: break
-                index = 0
             }
-        }
 
         fun stream(): Stream<User> {
-            return StreamSupport.stream(spliterator(), false)
+          return StreamSupport.stream(spliterator(), false)
         }
     }
 }

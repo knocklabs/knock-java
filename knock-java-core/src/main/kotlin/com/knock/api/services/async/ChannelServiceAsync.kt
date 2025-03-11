@@ -7,14 +7,16 @@ import com.knock.api.services.async.channels.BulkServiceAsync
 interface ChannelServiceAsync {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     * Returns a view of this service that provides access to raw HTTP responses for
+     * each method.
      */
     fun withRawResponse(): WithRawResponse
 
     fun bulk(): BulkServiceAsync
 
     /**
-     * A view of [ChannelServiceAsync] that provides access to raw HTTP responses for each method.
+     * A view of [ChannelServiceAsync] that provides access to raw HTTP responses for
+     * each method.
      */
     interface WithRawResponse {
 

@@ -25,17 +25,18 @@ import java.util.Objects
 import java.util.Optional
 
 /**
- * Bulk update messages for a specific channel. The channel is specified by the `channel_id`
- * parameter. The action to perform is specified by the `action` parameter, where the action is a
- * status change action (e.g. `archive`, `unarchive`).
+ * Bulk update messages for a specific channel. The channel is specified by the
+ * `channel_id` parameter. The action to perform is specified by the `action`
+ * parameter, where the action is a status change action (e.g. `archive`,
+ * `unarchive`).
  */
-class BulkUpdateMessageStatusParams
-private constructor(
+class BulkUpdateMessageStatusParams private constructor(
     private val channelId: String,
     private val action: Action,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
+
 ) : Params {
 
     fun channelId(): String = channelId
@@ -88,88 +89,61 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): Body = body
+    @JvmSynthetic
+    internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> channelId
-            1 -> action.toString()
-            else -> ""
-        }
+      return when (index) {
+          0 -> channelId
+          1 -> action.toString()
+          else -> ""
+      }
     }
 
     /** Request body for bulk updating messages for a specific channel */
     @NoAutoDetect
-    class Body
-    @JsonCreator
-    private constructor(
-        @JsonProperty("archived")
-        @ExcludeMissing
-        private val archived: JsonField<Archived> = JsonMissing.of(),
-        @JsonProperty("delivery_status")
-        @ExcludeMissing
-        private val deliveryStatus: JsonField<DeliveryStatus> = JsonMissing.of(),
-        @JsonProperty("engagement_status")
-        @ExcludeMissing
-        private val engagementStatus: JsonField<EngagementStatus> = JsonMissing.of(),
-        @JsonProperty("has_tenant")
-        @ExcludeMissing
-        private val hasTenant: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("newer_than")
-        @ExcludeMissing
-        private val newerThan: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("older_than")
-        @ExcludeMissing
-        private val olderThan: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("recipient_ids")
-        @ExcludeMissing
-        private val recipientIds: JsonField<List<String>> = JsonMissing.of(),
-        @JsonProperty("tenants")
-        @ExcludeMissing
-        private val tenants: JsonField<List<String>> = JsonMissing.of(),
-        @JsonProperty("trigger_data")
-        @ExcludeMissing
-        private val triggerData: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("workflows")
-        @ExcludeMissing
-        private val workflows: JsonField<List<String>> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    class Body @JsonCreator private constructor(
+        @JsonProperty("archived") @ExcludeMissing private val archived: JsonField<Archived> = JsonMissing.of(),
+        @JsonProperty("delivery_status") @ExcludeMissing private val deliveryStatus: JsonField<DeliveryStatus> = JsonMissing.of(),
+        @JsonProperty("engagement_status") @ExcludeMissing private val engagementStatus: JsonField<EngagementStatus> = JsonMissing.of(),
+        @JsonProperty("has_tenant") @ExcludeMissing private val hasTenant: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("newer_than") @ExcludeMissing private val newerThan: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("older_than") @ExcludeMissing private val olderThan: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("recipient_ids") @ExcludeMissing private val recipientIds: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("tenants") @ExcludeMissing private val tenants: JsonField<List<String>> = JsonMissing.of(),
+        @JsonProperty("trigger_data") @ExcludeMissing private val triggerData: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("workflows") @ExcludeMissing private val workflows: JsonField<List<String>> = JsonMissing.of(),
+        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
     ) {
 
         fun archived(): Optional<Archived> = Optional.ofNullable(archived.getNullable("archived"))
 
-        fun deliveryStatus(): Optional<DeliveryStatus> =
-            Optional.ofNullable(deliveryStatus.getNullable("delivery_status"))
+        fun deliveryStatus(): Optional<DeliveryStatus> = Optional.ofNullable(deliveryStatus.getNullable("delivery_status"))
 
-        fun engagementStatus(): Optional<EngagementStatus> =
-            Optional.ofNullable(engagementStatus.getNullable("engagement_status"))
+        fun engagementStatus(): Optional<EngagementStatus> = Optional.ofNullable(engagementStatus.getNullable("engagement_status"))
 
-        fun hasTenant(): Optional<Boolean> =
-            Optional.ofNullable(hasTenant.getNullable("has_tenant"))
+        fun hasTenant(): Optional<Boolean> = Optional.ofNullable(hasTenant.getNullable("has_tenant"))
 
-        fun newerThan(): Optional<OffsetDateTime> =
-            Optional.ofNullable(newerThan.getNullable("newer_than"))
+        fun newerThan(): Optional<OffsetDateTime> = Optional.ofNullable(newerThan.getNullable("newer_than"))
 
-        fun olderThan(): Optional<OffsetDateTime> =
-            Optional.ofNullable(olderThan.getNullable("older_than"))
+        fun olderThan(): Optional<OffsetDateTime> = Optional.ofNullable(olderThan.getNullable("older_than"))
 
-        fun recipientIds(): Optional<List<String>> =
-            Optional.ofNullable(recipientIds.getNullable("recipient_ids"))
+        fun recipientIds(): Optional<List<String>> = Optional.ofNullable(recipientIds.getNullable("recipient_ids"))
 
         fun tenants(): Optional<List<String>> = Optional.ofNullable(tenants.getNullable("tenants"))
 
-        fun triggerData(): Optional<String> =
-            Optional.ofNullable(triggerData.getNullable("trigger_data"))
+        fun triggerData(): Optional<String> = Optional.ofNullable(triggerData.getNullable("trigger_data"))
 
-        fun workflows(): Optional<List<String>> =
-            Optional.ofNullable(workflows.getNullable("workflows"))
+        fun workflows(): Optional<List<String>> = Optional.ofNullable(workflows.getNullable("workflows"))
 
-        @JsonProperty("archived") @ExcludeMissing fun _archived(): JsonField<Archived> = archived
+        @JsonProperty("archived")
+        @ExcludeMissing
+        fun _archived(): JsonField<Archived> = archived
 
         @JsonProperty("delivery_status")
         @ExcludeMissing
@@ -179,7 +153,9 @@ private constructor(
         @ExcludeMissing
         fun _engagementStatus(): JsonField<EngagementStatus> = engagementStatus
 
-        @JsonProperty("has_tenant") @ExcludeMissing fun _hasTenant(): JsonField<Boolean> = hasTenant
+        @JsonProperty("has_tenant")
+        @ExcludeMissing
+        fun _hasTenant(): JsonField<Boolean> = hasTenant
 
         @JsonProperty("newer_than")
         @ExcludeMissing
@@ -193,7 +169,9 @@ private constructor(
         @ExcludeMissing
         fun _recipientIds(): JsonField<List<String>> = recipientIds
 
-        @JsonProperty("tenants") @ExcludeMissing fun _tenants(): JsonField<List<String>> = tenants
+        @JsonProperty("tenants")
+        @ExcludeMissing
+        fun _tenants(): JsonField<List<String>> = tenants
 
         @JsonProperty("trigger_data")
         @ExcludeMissing
@@ -209,30 +187,32 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Body =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            archived()
-            deliveryStatus()
-            engagementStatus()
-            hasTenant()
-            newerThan()
-            olderThan()
-            recipientIds()
-            tenants()
-            triggerData()
-            workflows()
-            validated = true
-        }
+                archived()
+                deliveryStatus()
+                engagementStatus()
+                hasTenant()
+                newerThan()
+                olderThan()
+                recipientIds()
+                tenants()
+                triggerData()
+                workflows()
+                validated = true
+            }
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [Body]. */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [Body]. */
@@ -251,140 +231,160 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(body: Body) = apply {
-                archived = body.archived
-                deliveryStatus = body.deliveryStatus
-                engagementStatus = body.engagementStatus
-                hasTenant = body.hasTenant
-                newerThan = body.newerThan
-                olderThan = body.olderThan
-                recipientIds = body.recipientIds.map { it.toMutableList() }
-                tenants = body.tenants.map { it.toMutableList() }
-                triggerData = body.triggerData
-                workflows = body.workflows.map { it.toMutableList() }
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
+            internal fun from(body: Body) =
+                apply {
+                    archived = body.archived
+                    deliveryStatus = body.deliveryStatus
+                    engagementStatus = body.engagementStatus
+                    hasTenant = body.hasTenant
+                    newerThan = body.newerThan
+                    olderThan = body.olderThan
+                    recipientIds = body.recipientIds.map { it.toMutableList() }
+                    tenants = body.tenants.map { it.toMutableList() }
+                    triggerData = body.triggerData
+                    workflows = body.workflows.map { it.toMutableList() }
+                    additionalProperties = body.additionalProperties.toMutableMap()
+                }
 
             fun archived(archived: Archived) = archived(JsonField.of(archived))
 
-            fun archived(archived: JsonField<Archived>) = apply { this.archived = archived }
+            fun archived(archived: JsonField<Archived>) =
+                apply {
+                    this.archived = archived
+                }
 
-            fun deliveryStatus(deliveryStatus: DeliveryStatus) =
-                deliveryStatus(JsonField.of(deliveryStatus))
+            fun deliveryStatus(deliveryStatus: DeliveryStatus) = deliveryStatus(JsonField.of(deliveryStatus))
 
-            fun deliveryStatus(deliveryStatus: JsonField<DeliveryStatus>) = apply {
-                this.deliveryStatus = deliveryStatus
-            }
+            fun deliveryStatus(deliveryStatus: JsonField<DeliveryStatus>) =
+                apply {
+                    this.deliveryStatus = deliveryStatus
+                }
 
-            fun engagementStatus(engagementStatus: EngagementStatus) =
-                engagementStatus(JsonField.of(engagementStatus))
+            fun engagementStatus(engagementStatus: EngagementStatus) = engagementStatus(JsonField.of(engagementStatus))
 
-            fun engagementStatus(engagementStatus: JsonField<EngagementStatus>) = apply {
-                this.engagementStatus = engagementStatus
-            }
+            fun engagementStatus(engagementStatus: JsonField<EngagementStatus>) =
+                apply {
+                    this.engagementStatus = engagementStatus
+                }
 
             fun hasTenant(hasTenant: Boolean) = hasTenant(JsonField.of(hasTenant))
 
-            fun hasTenant(hasTenant: JsonField<Boolean>) = apply { this.hasTenant = hasTenant }
+            fun hasTenant(hasTenant: JsonField<Boolean>) =
+                apply {
+                    this.hasTenant = hasTenant
+                }
 
             fun newerThan(newerThan: OffsetDateTime) = newerThan(JsonField.of(newerThan))
 
-            fun newerThan(newerThan: JsonField<OffsetDateTime>) = apply {
-                this.newerThan = newerThan
-            }
+            fun newerThan(newerThan: JsonField<OffsetDateTime>) =
+                apply {
+                    this.newerThan = newerThan
+                }
 
             fun olderThan(olderThan: OffsetDateTime) = olderThan(JsonField.of(olderThan))
 
-            fun olderThan(olderThan: JsonField<OffsetDateTime>) = apply {
-                this.olderThan = olderThan
-            }
+            fun olderThan(olderThan: JsonField<OffsetDateTime>) =
+                apply {
+                    this.olderThan = olderThan
+                }
 
             fun recipientIds(recipientIds: List<String>) = recipientIds(JsonField.of(recipientIds))
 
-            fun recipientIds(recipientIds: JsonField<List<String>>) = apply {
-                this.recipientIds = recipientIds.map { it.toMutableList() }
-            }
+            fun recipientIds(recipientIds: JsonField<List<String>>) =
+                apply {
+                    this.recipientIds = recipientIds.map { it.toMutableList() }
+                }
 
-            fun addRecipientId(recipientId: String) = apply {
-                recipientIds =
-                    (recipientIds ?: JsonField.of(mutableListOf())).also {
+            fun addRecipientId(recipientId: String) =
+                apply {
+                    recipientIds = (recipientIds ?: JsonField.of(mutableListOf())).also {
                         checkKnown("recipientIds", it).add(recipientId)
                     }
-            }
+                }
 
             fun tenants(tenants: List<String>) = tenants(JsonField.of(tenants))
 
-            fun tenants(tenants: JsonField<List<String>>) = apply {
-                this.tenants = tenants.map { it.toMutableList() }
-            }
+            fun tenants(tenants: JsonField<List<String>>) =
+                apply {
+                    this.tenants = tenants.map { it.toMutableList() }
+                }
 
-            fun addTenant(tenant: String) = apply {
-                tenants =
-                    (tenants ?: JsonField.of(mutableListOf())).also {
+            fun addTenant(tenant: String) =
+                apply {
+                    tenants = (tenants ?: JsonField.of(mutableListOf())).also {
                         checkKnown("tenants", it).add(tenant)
                     }
-            }
+                }
 
             fun triggerData(triggerData: String) = triggerData(JsonField.of(triggerData))
 
-            fun triggerData(triggerData: JsonField<String>) = apply {
-                this.triggerData = triggerData
-            }
+            fun triggerData(triggerData: JsonField<String>) =
+                apply {
+                    this.triggerData = triggerData
+                }
 
             fun workflows(workflows: List<String>) = workflows(JsonField.of(workflows))
 
-            fun workflows(workflows: JsonField<List<String>>) = apply {
-                this.workflows = workflows.map { it.toMutableList() }
-            }
+            fun workflows(workflows: JsonField<List<String>>) =
+                apply {
+                    this.workflows = workflows.map { it.toMutableList() }
+                }
 
-            fun addWorkflow(workflow: String) = apply {
-                workflows =
-                    (workflows ?: JsonField.of(mutableListOf())).also {
+            fun addWorkflow(workflow: String) =
+                apply {
+                    workflows = (workflows ?: JsonField.of(mutableListOf())).also {
                         checkKnown("workflows", it).add(workflow)
                     }
-            }
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             fun build(): Body =
                 Body(
-                    archived,
-                    deliveryStatus,
-                    engagementStatus,
-                    hasTenant,
-                    newerThan,
-                    olderThan,
-                    (recipientIds ?: JsonMissing.of()).map { it.toImmutable() },
-                    (tenants ?: JsonMissing.of()).map { it.toImmutable() },
-                    triggerData,
-                    (workflows ?: JsonMissing.of()).map { it.toImmutable() },
-                    additionalProperties.toImmutable(),
+                  archived,
+                  deliveryStatus,
+                  engagementStatus,
+                  hasTenant,
+                  newerThan,
+                  olderThan,
+                  (recipientIds ?: JsonMissing.of()).map { it.toImmutable() },
+                  (tenants ?: JsonMissing.of()).map { it.toImmutable() },
+                  triggerData,
+                  (workflows ?: JsonMissing.of()).map { it.toImmutable() },
+                  additionalProperties.toImmutable(),
                 )
         }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Body && archived == other.archived && deliveryStatus == other.deliveryStatus && engagementStatus == other.engagementStatus && hasTenant == other.hasTenant && newerThan == other.newerThan && olderThan == other.olderThan && recipientIds == other.recipientIds && tenants == other.tenants && triggerData == other.triggerData && workflows == other.workflows && additionalProperties == other.additionalProperties /* spotless:on */
+          return /* spotless:off */ other is Body && archived == other.archived && deliveryStatus == other.deliveryStatus && engagementStatus == other.engagementStatus && hasTenant == other.hasTenant && newerThan == other.newerThan && olderThan == other.olderThan && recipientIds == other.recipientIds && tenants == other.tenants && triggerData == other.triggerData && workflows == other.workflows && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -393,8 +393,7 @@ private constructor(
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "Body{archived=$archived, deliveryStatus=$deliveryStatus, engagementStatus=$engagementStatus, hasTenant=$hasTenant, newerThan=$newerThan, olderThan=$olderThan, recipientIds=$recipientIds, tenants=$tenants, triggerData=$triggerData, workflows=$workflows, additionalProperties=$additionalProperties}"
+        override fun toString() = "Body{archived=$archived, deliveryStatus=$deliveryStatus, engagementStatus=$engagementStatus, hasTenant=$hasTenant, newerThan=$newerThan, olderThan=$olderThan, recipientIds=$recipientIds, tenants=$tenants, triggerData=$triggerData, workflows=$workflows, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -406,12 +405,14 @@ private constructor(
          * [BulkUpdateMessageStatusParams].
          *
          * The following fields are required:
+         *
          * ```java
          * .channelId()
          * .action()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [BulkUpdateMessageStatusParams]. */
@@ -425,212 +426,320 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(bulkUpdateMessageStatusParams: BulkUpdateMessageStatusParams) = apply {
-            channelId = bulkUpdateMessageStatusParams.channelId
-            action = bulkUpdateMessageStatusParams.action
-            body = bulkUpdateMessageStatusParams.body.toBuilder()
-            additionalHeaders = bulkUpdateMessageStatusParams.additionalHeaders.toBuilder()
-            additionalQueryParams = bulkUpdateMessageStatusParams.additionalQueryParams.toBuilder()
-        }
+        internal fun from(bulkUpdateMessageStatusParams: BulkUpdateMessageStatusParams) =
+            apply {
+                channelId = bulkUpdateMessageStatusParams.channelId
+                action = bulkUpdateMessageStatusParams.action
+                body = bulkUpdateMessageStatusParams.body.toBuilder()
+                additionalHeaders = bulkUpdateMessageStatusParams.additionalHeaders.toBuilder()
+                additionalQueryParams = bulkUpdateMessageStatusParams.additionalQueryParams.toBuilder()
+            }
 
-        fun channelId(channelId: String) = apply { this.channelId = channelId }
+        fun channelId(channelId: String) =
+            apply {
+                this.channelId = channelId
+            }
 
-        fun action(action: Action) = apply { this.action = action }
+        fun action(action: Action) =
+            apply {
+                this.action = action
+            }
 
-        fun archived(archived: Archived) = apply { body.archived(archived) }
+        fun archived(archived: Archived) =
+            apply {
+                body.archived(archived)
+            }
 
-        fun archived(archived: JsonField<Archived>) = apply { body.archived(archived) }
+        fun archived(archived: JsonField<Archived>) =
+            apply {
+                body.archived(archived)
+            }
 
-        fun deliveryStatus(deliveryStatus: DeliveryStatus) = apply {
-            body.deliveryStatus(deliveryStatus)
-        }
+        fun deliveryStatus(deliveryStatus: DeliveryStatus) =
+            apply {
+                body.deliveryStatus(deliveryStatus)
+            }
 
-        fun deliveryStatus(deliveryStatus: JsonField<DeliveryStatus>) = apply {
-            body.deliveryStatus(deliveryStatus)
-        }
+        fun deliveryStatus(deliveryStatus: JsonField<DeliveryStatus>) =
+            apply {
+                body.deliveryStatus(deliveryStatus)
+            }
 
-        fun engagementStatus(engagementStatus: EngagementStatus) = apply {
-            body.engagementStatus(engagementStatus)
-        }
+        fun engagementStatus(engagementStatus: EngagementStatus) =
+            apply {
+                body.engagementStatus(engagementStatus)
+            }
 
-        fun engagementStatus(engagementStatus: JsonField<EngagementStatus>) = apply {
-            body.engagementStatus(engagementStatus)
-        }
+        fun engagementStatus(engagementStatus: JsonField<EngagementStatus>) =
+            apply {
+                body.engagementStatus(engagementStatus)
+            }
 
-        fun hasTenant(hasTenant: Boolean) = apply { body.hasTenant(hasTenant) }
+        fun hasTenant(hasTenant: Boolean) =
+            apply {
+                body.hasTenant(hasTenant)
+            }
 
-        fun hasTenant(hasTenant: JsonField<Boolean>) = apply { body.hasTenant(hasTenant) }
+        fun hasTenant(hasTenant: JsonField<Boolean>) =
+            apply {
+                body.hasTenant(hasTenant)
+            }
 
-        fun newerThan(newerThan: OffsetDateTime) = apply { body.newerThan(newerThan) }
+        fun newerThan(newerThan: OffsetDateTime) =
+            apply {
+                body.newerThan(newerThan)
+            }
 
-        fun newerThan(newerThan: JsonField<OffsetDateTime>) = apply { body.newerThan(newerThan) }
+        fun newerThan(newerThan: JsonField<OffsetDateTime>) =
+            apply {
+                body.newerThan(newerThan)
+            }
 
-        fun olderThan(olderThan: OffsetDateTime) = apply { body.olderThan(olderThan) }
+        fun olderThan(olderThan: OffsetDateTime) =
+            apply {
+                body.olderThan(olderThan)
+            }
 
-        fun olderThan(olderThan: JsonField<OffsetDateTime>) = apply { body.olderThan(olderThan) }
+        fun olderThan(olderThan: JsonField<OffsetDateTime>) =
+            apply {
+                body.olderThan(olderThan)
+            }
 
-        fun recipientIds(recipientIds: List<String>) = apply { body.recipientIds(recipientIds) }
+        fun recipientIds(recipientIds: List<String>) =
+            apply {
+                body.recipientIds(recipientIds)
+            }
 
-        fun recipientIds(recipientIds: JsonField<List<String>>) = apply {
-            body.recipientIds(recipientIds)
-        }
+        fun recipientIds(recipientIds: JsonField<List<String>>) =
+            apply {
+                body.recipientIds(recipientIds)
+            }
 
-        fun addRecipientId(recipientId: String) = apply { body.addRecipientId(recipientId) }
+        fun addRecipientId(recipientId: String) =
+            apply {
+                body.addRecipientId(recipientId)
+            }
 
-        fun tenants(tenants: List<String>) = apply { body.tenants(tenants) }
+        fun tenants(tenants: List<String>) =
+            apply {
+                body.tenants(tenants)
+            }
 
-        fun tenants(tenants: JsonField<List<String>>) = apply { body.tenants(tenants) }
+        fun tenants(tenants: JsonField<List<String>>) =
+            apply {
+                body.tenants(tenants)
+            }
 
-        fun addTenant(tenant: String) = apply { body.addTenant(tenant) }
+        fun addTenant(tenant: String) =
+            apply {
+                body.addTenant(tenant)
+            }
 
-        fun triggerData(triggerData: String) = apply { body.triggerData(triggerData) }
+        fun triggerData(triggerData: String) =
+            apply {
+                body.triggerData(triggerData)
+            }
 
-        fun triggerData(triggerData: JsonField<String>) = apply { body.triggerData(triggerData) }
+        fun triggerData(triggerData: JsonField<String>) =
+            apply {
+                body.triggerData(triggerData)
+            }
 
-        fun workflows(workflows: List<String>) = apply { body.workflows(workflows) }
+        fun workflows(workflows: List<String>) =
+            apply {
+                body.workflows(workflows)
+            }
 
-        fun workflows(workflows: JsonField<List<String>>) = apply { body.workflows(workflows) }
+        fun workflows(workflows: JsonField<List<String>>) =
+            apply {
+                body.workflows(workflows)
+            }
 
-        fun addWorkflow(workflow: String) = apply { body.addWorkflow(workflow) }
+        fun addWorkflow(workflow: String) =
+            apply {
+                body.addWorkflow(workflow)
+            }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.additionalProperties(additionalBodyProperties)
+            }
 
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) =
+            apply {
+                body.putAdditionalProperty(
+                  key, value
+                )
+            }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
                 body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+        fun removeAdditionalBodyProperty(key: String) =
+            apply {
+                body.removeAdditionalProperty(key)
+            }
 
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) =
+            apply {
+                body.removeAllAdditionalProperties(keys)
+            }
 
-        fun additionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun putAdditionalHeader(name: String, value: String) = apply {
-            additionalHeaders.put(name, value)
-        }
+        fun putAdditionalHeader(name: String, value: String) =
+            apply {
+                additionalHeaders.put(name, value)
+            }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.put(name, values)
-        }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.put(name, values)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun replaceAdditionalHeaders(name: String, value: String) = apply {
-            additionalHeaders.replace(name, value)
-        }
+        fun replaceAdditionalHeaders(name: String, value: String) =
+            apply {
+                additionalHeaders.replace(name, value)
+            }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.replace(name, values)
-        }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.replace(name, values)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
+        fun removeAdditionalHeaders(name: String) =
+            apply {
+                additionalHeaders.remove(name)
+            }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
-            additionalHeaders.removeAll(names)
-        }
+        fun removeAllAdditionalHeaders(names: Set<String>) =
+            apply {
+                additionalHeaders.removeAll(names)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun putAdditionalQueryParam(key: String, value: String) = apply {
-            additionalQueryParams.put(key, value)
-        }
+        fun putAdditionalQueryParam(key: String, value: String) =
+            apply {
+                additionalQueryParams.put(key, value)
+            }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.put(key, values)
-        }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.put(key, values)
+            }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.putAll(additionalQueryParams)
-        }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.putAll(additionalQueryParams)
+            }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
-            additionalQueryParams.replace(key, value)
-        }
+        fun replaceAdditionalQueryParams(key: String, value: String) =
+            apply {
+                additionalQueryParams.replace(key, value)
+            }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.replace(key, values)
-        }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.replace(key, values)
+            }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.replaceAll(additionalQueryParams)
-        }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.replaceAll(additionalQueryParams)
+            }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
+        fun removeAdditionalQueryParams(key: String) =
+            apply {
+                additionalQueryParams.remove(key)
+            }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
-            additionalQueryParams.removeAll(keys)
-        }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) =
+            apply {
+                additionalQueryParams.removeAll(keys)
+            }
 
         fun build(): BulkUpdateMessageStatusParams =
             BulkUpdateMessageStatusParams(
-                checkRequired("channelId", channelId),
-                checkRequired("action", action),
-                body.build(),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
+              checkRequired(
+                "channelId", channelId
+              ),
+              checkRequired(
+                "action", action
+              ),
+              body.build(),
+              additionalHeaders.build(),
+              additionalQueryParams.build(),
             )
     }
 
-    class Archived @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+    class Archived @JsonCreator private constructor(
+        private val value: JsonField<String>,
+
+    ) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
+         * This is usually only useful if this instance was deserialized from data that
+         * doesn't match any known member, and you want to know that value. For example, if
+         * the SDK is on an older version than the API, then the API may respond with new
+         * members that the SDK is unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -654,25 +763,30 @@ private constructor(
          * An enum containing [Archived]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [Archived] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
+         *
+         * - It was deserialized from data that doesn't match any known member. For
+         *   example, if the SDK is on an older version than the API, then the API may
+         *   respond with new members that the SDK is unaware of.
+         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
             EXCLUDE,
             INCLUDE,
             ONLY,
-            /** An enum member indicating that [Archived] was instantiated with an unknown value. */
+            /**
+             * An enum member indicating that [Archived] was instantiated with an unknown
+             * value.
+             */
             _UNKNOWN,
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or
+         * [Value._UNKNOWN] if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if
+         * you want to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -685,10 +799,11 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and
+         * don't want to throw for the unknown case.
          *
-         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
+         * @throws KnockInvalidDataException if this class instance's value is a not a
+         * known member.
          */
         fun known(): Known =
             when (this) {
@@ -701,21 +816,20 @@ private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for
+         * debugging and generally doesn't throw.
          *
-         * @throws KnockInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
+         * @throws KnockInvalidDataException if this class instance's value does not have
+         * the expected primitive type.
          */
-        fun asString(): String =
-            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+        fun asString(): String = _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Archived && value == other.value /* spotless:on */
+          return /* spotless:off */ other is Archived && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -723,18 +837,21 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    class DeliveryStatus @JsonCreator private constructor(private val value: JsonField<String>) :
-        Enum {
+    class DeliveryStatus @JsonCreator private constructor(
+        private val value: JsonField<String>,
+
+    ) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
+         * This is usually only useful if this instance was deserialized from data that
+         * doesn't match any known member, and you want to know that value. For example, if
+         * the SDK is on an older version than the API, then the API may respond with new
+         * members that the SDK is unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -767,12 +884,16 @@ private constructor(
         }
 
         /**
-         * An enum containing [DeliveryStatus]'s known values, as well as an [_UNKNOWN] member.
+         * An enum containing [DeliveryStatus]'s known values, as well as an [_UNKNOWN]
+         * member.
          *
-         * An instance of [DeliveryStatus] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
+         * An instance of [DeliveryStatus] can contain an unknown value in a couple of
+         * cases:
+         *
+         * - It was deserialized from data that doesn't match any known member. For
+         *   example, if the SDK is on an older version than the API, then the API may
+         *   respond with new members that the SDK is unaware of.
+         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -791,11 +912,11 @@ private constructor(
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or
+         * [Value._UNKNOWN] if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if
+         * you want to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -812,10 +933,11 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and
+         * don't want to throw for the unknown case.
          *
-         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
+         * @throws KnockInvalidDataException if this class instance's value is a not a
+         * known member.
          */
         fun known(): Known =
             when (this) {
@@ -832,21 +954,20 @@ private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for
+         * debugging and generally doesn't throw.
          *
-         * @throws KnockInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
+         * @throws KnockInvalidDataException if this class instance's value does not have
+         * the expected primitive type.
          */
-        fun asString(): String =
-            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+        fun asString(): String = _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is DeliveryStatus && value == other.value /* spotless:on */
+          return /* spotless:off */ other is DeliveryStatus && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -854,18 +975,21 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    class EngagementStatus @JsonCreator private constructor(private val value: JsonField<String>) :
-        Enum {
+    class EngagementStatus @JsonCreator private constructor(
+        private val value: JsonField<String>,
+
+    ) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
+         * This is usually only useful if this instance was deserialized from data that
+         * doesn't match any known member, and you want to know that value. For example, if
+         * the SDK is on an older version than the API, then the API may respond with new
+         * members that the SDK is unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -901,12 +1025,16 @@ private constructor(
         }
 
         /**
-         * An enum containing [EngagementStatus]'s known values, as well as an [_UNKNOWN] member.
+         * An enum containing [EngagementStatus]'s known values, as well as an [_UNKNOWN]
+         * member.
          *
-         * An instance of [EngagementStatus] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
+         * An instance of [EngagementStatus] can contain an unknown value in a couple of
+         * cases:
+         *
+         * - It was deserialized from data that doesn't match any known member. For
+         *   example, if the SDK is on an older version than the API, then the API may
+         *   respond with new members that the SDK is unaware of.
+         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -919,18 +1047,18 @@ private constructor(
             LINK_CLICKED,
             INTERACTED,
             /**
-             * An enum member indicating that [EngagementStatus] was instantiated with an unknown
-             * value.
+             * An enum member indicating that [EngagementStatus] was instantiated with an
+             * unknown value.
              */
             _UNKNOWN,
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or
+         * [Value._UNKNOWN] if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if
+         * you want to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -948,10 +1076,11 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and
+         * don't want to throw for the unknown case.
          *
-         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
+         * @throws KnockInvalidDataException if this class instance's value is a not a
+         * known member.
          */
         fun known(): Known =
             when (this) {
@@ -969,21 +1098,20 @@ private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for
+         * debugging and generally doesn't throw.
          *
-         * @throws KnockInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
+         * @throws KnockInvalidDataException if this class instance's value does not have
+         * the expected primitive type.
          */
-        fun asString(): String =
-            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+        fun asString(): String = _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is EngagementStatus && value == other.value /* spotless:on */
+          return /* spotless:off */ other is EngagementStatus && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -991,17 +1119,21 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    class Action @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+    class Action @JsonCreator private constructor(
+        private val value: JsonField<String>,
+
+    ) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
+         * This is usually only useful if this instance was deserialized from data that
+         * doesn't match any known member, and you want to know that value. For example, if
+         * the SDK is on an older version than the API, then the API may respond with new
+         * members that the SDK is unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -1046,9 +1178,11 @@ private constructor(
          * An enum containing [Action]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [Action] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
+         *
+         * - It was deserialized from data that doesn't match any known member. For
+         *   example, if the SDK is on an older version than the API, then the API may
+         *   respond with new members that the SDK is unaware of.
+         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -1067,11 +1201,11 @@ private constructor(
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or
+         * [Value._UNKNOWN] if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if
+         * you want to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -1091,10 +1225,11 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and
+         * don't want to throw for the unknown case.
          *
-         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
+         * @throws KnockInvalidDataException if this class instance's value is a not a
+         * known member.
          */
         fun known(): Known =
             when (this) {
@@ -1114,21 +1249,20 @@ private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for
+         * debugging and generally doesn't throw.
          *
-         * @throws KnockInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
+         * @throws KnockInvalidDataException if this class instance's value does not have
+         * the expected primitive type.
          */
-        fun asString(): String =
-            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+        fun asString(): String = _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Action && value == other.value /* spotless:on */
+          return /* spotless:off */ other is Action && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -1137,15 +1271,14 @@ private constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is BulkUpdateMessageStatusParams && channelId == other.channelId && action == other.action && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+      return /* spotless:off */ other is BulkUpdateMessageStatusParams && channelId == other.channelId && action == other.action && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(channelId, action, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
-    override fun toString() =
-        "BulkUpdateMessageStatusParams{channelId=$channelId, action=$action, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() = "BulkUpdateMessageStatusParams{channelId=$channelId, action=$action, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

@@ -7,13 +7,17 @@ import com.knock.api.services.blocking.channels.BulkService
 interface ChannelService {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     * Returns a view of this service that provides access to raw HTTP responses for
+     * each method.
      */
     fun withRawResponse(): WithRawResponse
 
     fun bulk(): BulkService
 
-    /** A view of [ChannelService] that provides access to raw HTTP responses for each method. */
+    /**
+     * A view of [ChannelService] that provides access to raw HTTP responses for each
+     * method.
+     */
     interface WithRawResponse {
 
         fun bulk(): BulkService.WithRawResponse

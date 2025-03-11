@@ -14,10 +14,9 @@ import java.util.Objects
 
 /** Inline set preferences for a recipient, where the key is the preference set name */
 @NoAutoDetect
-class InlinePreferenceSetRequest
-@JsonCreator
-private constructor(
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
+class InlinePreferenceSetRequest @JsonCreator private constructor(
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
 ) {
 
     @JsonAnyGetter
@@ -26,22 +25,25 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): InlinePreferenceSetRequest = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): InlinePreferenceSetRequest =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        validated = true
-    }
+            validated = true
+        }
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [InlinePreferenceSetRequest].
+         * Returns a mutable builder for constructing an instance of
+         * [InlinePreferenceSetRequest].
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [InlinePreferenceSetRequest]. */
@@ -50,39 +52,46 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(inlinePreferenceSetRequest: InlinePreferenceSetRequest) = apply {
-            additionalProperties = inlinePreferenceSetRequest.additionalProperties.toMutableMap()
-        }
+        internal fun from(inlinePreferenceSetRequest: InlinePreferenceSetRequest) =
+            apply {
+                additionalProperties = inlinePreferenceSetRequest.additionalProperties.toMutableMap()
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
-        fun build(): InlinePreferenceSetRequest =
-            InlinePreferenceSetRequest(additionalProperties.toImmutable())
+        fun build(): InlinePreferenceSetRequest = InlinePreferenceSetRequest(additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is InlinePreferenceSetRequest && additionalProperties == other.additionalProperties /* spotless:on */
+      return /* spotless:off */ other is InlinePreferenceSetRequest && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -91,6 +100,5 @@ private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "InlinePreferenceSetRequest{additionalProperties=$additionalProperties}"
+    override fun toString() = "InlinePreferenceSetRequest{additionalProperties=$additionalProperties}"
 }
