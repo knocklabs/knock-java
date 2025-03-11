@@ -1,27 +1,27 @@
 # Knock Java API Library
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.knock.api/knock-java)](https://central.sonatype.com/artifact/com.knock.api/knock-java/0.0.1-alpha.0)
-[![javadoc](https://javadoc.io/badge2/com.knock.api/knock-java/0.0.1-alpha.0/javadoc.svg)](https://javadoc.io/doc/com.knock.api/knock-java/0.0.1-alpha.0)
+[![Maven Central](https://img.shields.io/maven-central/v/app.knock.api/knock-java)](https://central.sonatype.com/artifact/app.knock.api/knock-java/0.0.1-alpha.0)
+[![javadoc](https://javadoc.io/badge2/app.knock.api/knock-java/0.0.1-alpha.0/javadoc.svg)](https://javadoc.io/doc/app.knock.api/knock-java/0.0.1-alpha.0)
 
 The Knock Java SDK provides convenient access to the Knock REST API from applications written in Java.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-The REST API documentation can be found on [docs.knock.app](https://docs.knock.app). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/com.knock.api/knock-java/0.0.1-alpha.0).
+The REST API documentation can be found on [docs.knock.app](https://docs.knock.app). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/app.knock.api/knock-java/0.0.1-alpha.0).
 
 ## Installation
 
 ### Gradle
 
 ```kotlin
-implementation("com.knock.api:knock-java:0.0.1-alpha.0")
+implementation("app.knock.api:knock-java:0.0.1-alpha.0")
 ```
 
 ### Maven
 
 ```xml
 <dependency>
-    <groupId>com.knock.api</groupId>
+    <groupId>app.knock.api</groupId>
     <artifactId>knock-java</artifactId>
     <version>0.0.1-alpha.0</version>
 </dependency>
@@ -34,11 +34,11 @@ This library requires Java 8 or later.
 ## Usage
 
 ```java
-import com.knock.api.client.KnockClient;
-import com.knock.api.client.okhttp.KnockOkHttpClient;
-import com.knock.api.core.JsonValue;
-import com.knock.api.models.workflows.WorkflowTriggerParams;
-import com.knock.api.models.workflows.WorkflowTriggerResponse;
+import app.knock.api.client.KnockClient;
+import app.knock.api.client.okhttp.KnockOkHttpClient;
+import app.knock.api.core.JsonValue;
+import app.knock.api.models.workflows.WorkflowTriggerParams;
+import app.knock.api.models.workflows.WorkflowTriggerResponse;
 
 // Configures using the `KNOCK_API_KEY` environment variable
 KnockClient client = KnockOkHttpClient.fromEnv();
@@ -58,8 +58,8 @@ WorkflowTriggerResponse response = client.workflows().trigger(params);
 Configure the client using environment variables:
 
 ```java
-import com.knock.api.client.KnockClient;
-import com.knock.api.client.okhttp.KnockOkHttpClient;
+import app.knock.api.client.KnockClient;
+import app.knock.api.client.okhttp.KnockOkHttpClient;
 
 // Configures using the `KNOCK_API_KEY` environment variable
 KnockClient client = KnockOkHttpClient.fromEnv();
@@ -68,8 +68,8 @@ KnockClient client = KnockOkHttpClient.fromEnv();
 Or manually:
 
 ```java
-import com.knock.api.client.KnockClient;
-import com.knock.api.client.okhttp.KnockOkHttpClient;
+import app.knock.api.client.KnockClient;
+import app.knock.api.client.okhttp.KnockOkHttpClient;
 
 KnockClient client = KnockOkHttpClient.builder()
     .bearerToken("My Bearer Token")
@@ -79,8 +79,8 @@ KnockClient client = KnockOkHttpClient.builder()
 Or using a combination of the two approaches:
 
 ```java
-import com.knock.api.client.KnockClient;
-import com.knock.api.client.okhttp.KnockOkHttpClient;
+import app.knock.api.client.KnockClient;
+import app.knock.api.client.okhttp.KnockOkHttpClient;
 
 KnockClient client = KnockOkHttpClient.builder()
     // Configures using the `KNOCK_API_KEY` environment variable
@@ -118,11 +118,11 @@ Because each class is immutable, builder modification will _never_ affect alread
 The default client is synchronous. To switch to asynchronous execution, call the `async()` method:
 
 ```java
-import com.knock.api.client.KnockClient;
-import com.knock.api.client.okhttp.KnockOkHttpClient;
-import com.knock.api.core.JsonValue;
-import com.knock.api.models.workflows.WorkflowTriggerParams;
-import com.knock.api.models.workflows.WorkflowTriggerResponse;
+import app.knock.api.client.KnockClient;
+import app.knock.api.client.okhttp.KnockOkHttpClient;
+import app.knock.api.core.JsonValue;
+import app.knock.api.models.workflows.WorkflowTriggerParams;
+import app.knock.api.models.workflows.WorkflowTriggerResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `KNOCK_API_KEY` environment variable
@@ -141,11 +141,11 @@ CompletableFuture<WorkflowTriggerResponse> response = client.async().workflows()
 Or create an asynchronous client from the beginning:
 
 ```java
-import com.knock.api.client.KnockClientAsync;
-import com.knock.api.client.okhttp.KnockOkHttpClientAsync;
-import com.knock.api.core.JsonValue;
-import com.knock.api.models.workflows.WorkflowTriggerParams;
-import com.knock.api.models.workflows.WorkflowTriggerResponse;
+import app.knock.api.client.KnockClientAsync;
+import app.knock.api.client.okhttp.KnockOkHttpClientAsync;
+import app.knock.api.core.JsonValue;
+import app.knock.api.models.workflows.WorkflowTriggerParams;
+import app.knock.api.models.workflows.WorkflowTriggerResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `KNOCK_API_KEY` environment variable
@@ -170,10 +170,10 @@ The SDK defines methods that deserialize responses into instances of Java classe
 To access this data, prefix any HTTP method call on a client or service with `withRawResponse()`:
 
 ```java
-import com.knock.api.core.http.Headers;
-import com.knock.api.core.http.HttpResponseFor;
-import com.knock.api.models.users.User;
-import com.knock.api.models.users.UserGetParams;
+import app.knock.api.core.http.Headers;
+import app.knock.api.core.http.HttpResponseFor;
+import app.knock.api.models.users.User;
+import app.knock.api.models.users.UserGetParams;
 
 UserGetParams params = UserGetParams.builder()
     .userId("dnedry")
@@ -187,7 +187,7 @@ Headers headers = user.headers();
 You can still deserialize the response into an instance of a Java class if needed:
 
 ```java
-import com.knock.api.models.users.User;
+import app.knock.api.models.users.User;
 
 User parsedUser = user.parse();
 ```
@@ -196,7 +196,7 @@ User parsedUser = user.parse();
 
 The SDK throws custom unchecked exception types:
 
-- [`KnockServiceException`](knock-java-core/src/main/kotlin/com/knock/api/errors/KnockServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
+- [`KnockServiceException`](knock-java-core/src/main/kotlin/app/knock/api/errors/KnockServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
 
   | Status | Exception                       |
   | ------ | ------------------------------- |
@@ -209,11 +209,11 @@ The SDK throws custom unchecked exception types:
   | 5xx    | `InternalServerException`       |
   | others | `UnexpectedStatusCodeException` |
 
-- [`KnockIoException`](knock-java-core/src/main/kotlin/com/knock/api/errors/KnockIoException.kt): I/O networking errors.
+- [`KnockIoException`](knock-java-core/src/main/kotlin/app/knock/api/errors/KnockIoException.kt): I/O networking errors.
 
-- [`KnockInvalidDataException`](knock-java-core/src/main/kotlin/com/knock/api/errors/KnockInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
+- [`KnockInvalidDataException`](knock-java-core/src/main/kotlin/app/knock/api/errors/KnockInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
 
-- [`KnockException`](knock-java-core/src/main/kotlin/com/knock/api/errors/KnockException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
+- [`KnockException`](knock-java-core/src/main/kotlin/app/knock/api/errors/KnockException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
 
 ## Pagination
 
@@ -226,8 +226,8 @@ To iterate through all results across all pages, you can use `autoPager`, which 
 ### Synchronous
 
 ```java
-import com.knock.api.models.users.User;
-import com.knock.api.models.users.UserListPage;
+import app.knock.api.models.users.User;
+import app.knock.api.models.users.UserListPage;
 
 // As an Iterable:
 UserListPage page = client.users().list(params);
@@ -254,8 +254,8 @@ asyncClient.users().list(params).autoPager()
 If none of the above helpers meet your needs, you can also manually request pages one-by-one. A page of results has a `data()` method to fetch the list of objects, as well as top-level `response` and other methods to fetch top-level data about the page. It also has methods `hasNextPage`, `getNextPage`, and `getNextPageParams` methods to help with pagination.
 
 ```java
-import com.knock.api.models.users.User;
-import com.knock.api.models.users.UserListPage;
+import app.knock.api.models.users.User;
+import app.knock.api.models.users.UserListPage;
 
 UserListPage page = client.users().list(params);
 while (page != null) {
@@ -302,8 +302,8 @@ The API may also explicitly instruct the SDK to retry or not retry a response.
 To set a custom number of retries, configure the client using the `maxRetries` method:
 
 ```java
-import com.knock.api.client.KnockClient;
-import com.knock.api.client.okhttp.KnockOkHttpClient;
+import app.knock.api.client.KnockClient;
+import app.knock.api.client.okhttp.KnockOkHttpClient;
 
 KnockClient client = KnockOkHttpClient.builder()
     .fromEnv()
@@ -318,9 +318,9 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```java
-import com.knock.api.core.JsonValue;
-import com.knock.api.models.workflows.WorkflowTriggerParams;
-import com.knock.api.models.workflows.WorkflowTriggerResponse;
+import app.knock.api.core.JsonValue;
+import app.knock.api.models.workflows.WorkflowTriggerParams;
+import app.knock.api.models.workflows.WorkflowTriggerResponse;
 
 WorkflowTriggerResponse response = client.workflows().trigger(
   params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
@@ -330,8 +330,8 @@ WorkflowTriggerResponse response = client.workflows().trigger(
 Or configure the default for all method calls at the client level:
 
 ```java
-import com.knock.api.client.KnockClient;
-import com.knock.api.client.okhttp.KnockOkHttpClient;
+import app.knock.api.client.KnockClient;
+import app.knock.api.client.okhttp.KnockOkHttpClient;
 import java.time.Duration;
 
 KnockClient client = KnockOkHttpClient.builder()
@@ -345,8 +345,8 @@ KnockClient client = KnockOkHttpClient.builder()
 To route requests through a proxy, configure the client using the `proxy` method:
 
 ```java
-import com.knock.api.client.KnockClient;
-import com.knock.api.client.okhttp.KnockOkHttpClient;
+import app.knock.api.client.KnockClient;
+import app.knock.api.client.okhttp.KnockOkHttpClient;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
@@ -369,8 +369,8 @@ The SDK is typed for convenient usage of the documented API. However, it also su
 To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQueryParam`, or `putAdditionalBodyProperty` methods on any `Params` class:
 
 ```java
-import com.knock.api.core.JsonValue;
-import com.knock.api.models.workflows.WorkflowTriggerParams;
+import app.knock.api.core.JsonValue;
+import app.knock.api.models.workflows.WorkflowTriggerParams;
 
 WorkflowTriggerParams params = WorkflowTriggerParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
@@ -381,11 +381,11 @@ WorkflowTriggerParams params = WorkflowTriggerParams.builder()
 
 These can be accessed on the built object later using the `_additionalHeaders()`, `_additionalQueryParams()`, and `_additionalBodyProperties()` methods.
 
-To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](knock-java-core/src/main/kotlin/com/knock/api/core/Values.kt) object to its setter:
+To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](knock-java-core/src/main/kotlin/app/knock/api/core/Values.kt) object to its setter:
 
 ```java
-import com.knock.api.core.JsonValue;
-import com.knock.api.models.workflows.WorkflowTriggerParams;
+import app.knock.api.core.JsonValue;
+import app.knock.api.models.workflows.WorkflowTriggerParams;
 
 WorkflowTriggerParams params = WorkflowTriggerParams.builder()
     .key("dinosaurs-loose")
@@ -396,10 +396,10 @@ WorkflowTriggerParams params = WorkflowTriggerParams.builder()
     .build();
 ```
 
-The most straightforward way to create a [`JsonValue`](knock-java-core/src/main/kotlin/com/knock/api/core/Values.kt) is using its `from(...)` method:
+The most straightforward way to create a [`JsonValue`](knock-java-core/src/main/kotlin/app/knock/api/core/Values.kt) is using its `from(...)` method:
 
 ```java
-import com.knock.api.core.JsonValue;
+import app.knock.api.core.JsonValue;
 import java.util.List;
 import java.util.Map;
 
@@ -440,7 +440,7 @@ JsonValue complexValue = JsonValue.from(Map.of(
 To access undocumented response properties, call the `_additionalProperties()` method:
 
 ```java
-import com.knock.api.core.JsonValue;
+import app.knock.api.core.JsonValue;
 import java.util.Map;
 
 Map<String, JsonValue> additionalProperties = client.workflows().trigger(params)._additionalProperties();
@@ -470,8 +470,8 @@ String result = secretPropertyValue.accept(new JsonValue.Visitor<>() {
 To access a property's raw JSON value, which may be undocumented, call its `_` prefixed method:
 
 ```java
-import com.knock.api.core.JsonField;
-import com.knock.api.models.recipients.RecipientRequest;
+import app.knock.api.core.JsonField;
+import app.knock.api.models.recipients.RecipientRequest;
 import java.util.Optional;
 
 JsonField<RecipientRequest> actor = client.workflows().trigger(params)._actor();
@@ -494,12 +494,12 @@ if (actor.isMissing()) {
 
 In rare cases, the API may return a response that doesn't match the expected type. For example, the SDK may expect a property to contain a `String`, but the API could return something else.
 
-By default, the SDK will not throw an exception in this case. It will throw [`KnockInvalidDataException`](knock-java-core/src/main/kotlin/com/knock/api/errors/KnockInvalidDataException.kt) only if you directly access the property.
+By default, the SDK will not throw an exception in this case. It will throw [`KnockInvalidDataException`](knock-java-core/src/main/kotlin/app/knock/api/errors/KnockInvalidDataException.kt) only if you directly access the property.
 
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
-import com.knock.api.models.workflows.WorkflowTriggerResponse;
+import app.knock.api.models.workflows.WorkflowTriggerResponse;
 
 WorkflowTriggerResponse response = client.workflows().trigger(params).validate();
 ```
@@ -507,9 +507,9 @@ WorkflowTriggerResponse response = client.workflows().trigger(params).validate()
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```java
-import com.knock.api.core.JsonValue;
-import com.knock.api.models.workflows.WorkflowTriggerParams;
-import com.knock.api.models.workflows.WorkflowTriggerResponse;
+import app.knock.api.core.JsonValue;
+import app.knock.api.models.workflows.WorkflowTriggerParams;
+import app.knock.api.models.workflows.WorkflowTriggerResponse;
 
 WorkflowTriggerResponse response = client.workflows().trigger(
   params, RequestOptions.builder().responseValidation(true).build()
@@ -519,8 +519,8 @@ WorkflowTriggerResponse response = client.workflows().trigger(
 Or configure the default for all method calls at the client level:
 
 ```java
-import com.knock.api.client.KnockClient;
-import com.knock.api.client.okhttp.KnockOkHttpClient;
+import app.knock.api.client.KnockClient;
+import app.knock.api.client.okhttp.KnockOkHttpClient;
 
 KnockClient client = KnockOkHttpClient.builder()
     .fromEnv()

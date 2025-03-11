@@ -14,5 +14,5 @@ tasks.withType<JavaCompile>().configureEach {
 }
 
 application {
-    mainClass = "com.knock.api.example.Main"
+    mainClass = "app.knock.api.example.Main"
 }

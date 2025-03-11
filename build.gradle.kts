@@ -8,7 +8,7 @@ repositories {
 }
 
 allprojects {
-    group = "com.knock.api"
+    group = "app.knock.api"
     version = "0.0.1-alpha.0"
 }
 
