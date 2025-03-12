@@ -10,24 +10,18 @@ import app.knock.api.services.async.recipients.PreferenceServiceAsyncImpl
 import app.knock.api.services.async.recipients.SubscriptionServiceAsync
 import app.knock.api.services.async.recipients.SubscriptionServiceAsyncImpl
 
-class RecipientServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
-    RecipientServiceAsync {
+class RecipientServiceAsyncImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: RecipientServiceAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : RecipientServiceAsync {
 
-    private val subscriptions: SubscriptionServiceAsync by lazy {
-        SubscriptionServiceAsyncImpl(clientOptions)
-    }
+    private val withRawResponse: RecipientServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
-    private val preferences: PreferenceServiceAsync by lazy {
-        PreferenceServiceAsyncImpl(clientOptions)
-    }
+    private val subscriptions: SubscriptionServiceAsync by lazy { SubscriptionServiceAsyncImpl(clientOptions) }
 
-    private val channelData: ChannelDataServiceAsync by lazy {
-        ChannelDataServiceAsyncImpl(clientOptions)
-    }
+    private val preferences: PreferenceServiceAsync by lazy { PreferenceServiceAsyncImpl(clientOptions) }
+
+    private val channelData: ChannelDataServiceAsync by lazy { ChannelDataServiceAsyncImpl(clientOptions) }
 
     override fun withRawResponse(): RecipientServiceAsync.WithRawResponse = withRawResponse
 
@@ -37,20 +31,16 @@ class RecipientServiceAsyncImpl internal constructor(private val clientOptions: 
 
     override fun channelData(): ChannelDataServiceAsync = channelData
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        RecipientServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val subscriptions: SubscriptionServiceAsync.WithRawResponse by lazy {
-            SubscriptionServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+    ) : RecipientServiceAsync.WithRawResponse {
 
-        private val preferences: PreferenceServiceAsync.WithRawResponse by lazy {
-            PreferenceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val subscriptions: SubscriptionServiceAsync.WithRawResponse by lazy { SubscriptionServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val channelData: ChannelDataServiceAsync.WithRawResponse by lazy {
-            ChannelDataServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val preferences: PreferenceServiceAsync.WithRawResponse by lazy { PreferenceServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
+
+        private val channelData: ChannelDataServiceAsync.WithRawResponse by lazy { ChannelDataServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
         override fun subscriptions(): SubscriptionServiceAsync.WithRawResponse = subscriptions
 

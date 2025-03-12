@@ -9,17 +9,20 @@ class MessageMarkAsReadParamsTest {
 
     @Test
     fun create() {
-        MessageMarkAsReadParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
+      MessageMarkAsReadParams.builder()
+          .messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
+          .build()
     }
 
     @Test
     fun getPathParam() {
-        val params =
-            MessageMarkAsReadParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-        assertThat(params).isNotNull
-        // path param "messageId"
-        assertThat(params.getPathParam(0)).isEqualTo("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+      val params = MessageMarkAsReadParams.builder()
+          .messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
+          .build()
+      assertThat(params).isNotNull
+      // path param "messageId"
+      assertThat(params.getPathParam(0)).isEqualTo("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
+      // out-of-bound path param
+      assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

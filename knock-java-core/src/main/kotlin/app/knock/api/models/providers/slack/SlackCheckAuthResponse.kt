@@ -20,13 +20,10 @@ import kotlin.jvm.optionals.getOrNull
 
 /** The response from a Slack auth check request */
 @NoAutoDetect
-class SlackCheckAuthResponse
-@JsonCreator
-private constructor(
-    @JsonProperty("connection")
-    @ExcludeMissing
-    private val connection: JsonField<Connection> = JsonMissing.of(),
+class SlackCheckAuthResponse @JsonCreator private constructor(
+    @JsonProperty("connection") @ExcludeMissing private val connection: JsonField<Connection> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
 ) {
 
     fun connection(): Connection = connection.getRequired("connection")
@@ -41,28 +38,32 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): SlackCheckAuthResponse = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): SlackCheckAuthResponse =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        connection().validate()
-        validated = true
-    }
+            connection().validate()
+            validated = true
+        }
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [SlackCheckAuthResponse].
+         * Returns a mutable builder for constructing an instance of
+         * [SlackCheckAuthResponse].
          *
          * The following fields are required:
+         *
          * ```java
          * .connection()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [SlackCheckAuthResponse]. */
@@ -72,60 +73,72 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(slackCheckAuthResponse: SlackCheckAuthResponse) = apply {
-            connection = slackCheckAuthResponse.connection
-            additionalProperties = slackCheckAuthResponse.additionalProperties.toMutableMap()
-        }
+        internal fun from(slackCheckAuthResponse: SlackCheckAuthResponse) =
+            apply {
+                connection = slackCheckAuthResponse.connection
+                additionalProperties = slackCheckAuthResponse.additionalProperties.toMutableMap()
+            }
 
         fun connection(connection: Connection) = connection(JsonField.of(connection))
 
-        fun connection(connection: JsonField<Connection>) = apply { this.connection = connection }
+        fun connection(connection: JsonField<Connection>) =
+            apply {
+                this.connection = connection
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
         fun build(): SlackCheckAuthResponse =
             SlackCheckAuthResponse(
-                checkRequired("connection", connection),
-                additionalProperties.toImmutable(),
+              checkRequired(
+                "connection", connection
+              ), additionalProperties.toImmutable()
             )
     }
 
     @NoAutoDetect
-    class Connection
-    @JsonCreator
-    private constructor(
+    class Connection @JsonCreator private constructor(
         @JsonProperty("ok") @ExcludeMissing private val ok: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("reason")
-        @ExcludeMissing
-        private val reason: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        @JsonProperty("reason") @ExcludeMissing private val reason: JsonField<String> = JsonMissing.of(),
+        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
     ) {
 
         fun ok(): Boolean = ok.getRequired("ok")
 
         fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
 
-        @JsonProperty("ok") @ExcludeMissing fun _ok(): JsonField<Boolean> = ok
+        @JsonProperty("ok")
+        @ExcludeMissing
+        fun _ok(): JsonField<Boolean> = ok
 
-        @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
+        @JsonProperty("reason")
+        @ExcludeMissing
+        fun _reason(): JsonField<String> = reason
 
         @JsonAnyGetter
         @ExcludeMissing
@@ -133,15 +146,16 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Connection = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Connection =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            ok()
-            reason()
-            validated = true
-        }
+                ok()
+                reason()
+                validated = true
+            }
 
         fun toBuilder() = Builder().from(this)
 
@@ -151,11 +165,13 @@ private constructor(
              * Returns a mutable builder for constructing an instance of [Connection].
              *
              * The following fields are required:
+             *
              * ```java
              * .ok()
              * ```
              */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         /** A builder for [Connection]. */
@@ -166,51 +182,71 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(connection: Connection) = apply {
-                ok = connection.ok
-                reason = connection.reason
-                additionalProperties = connection.additionalProperties.toMutableMap()
-            }
+            internal fun from(connection: Connection) =
+                apply {
+                    ok = connection.ok
+                    reason = connection.reason
+                    additionalProperties = connection.additionalProperties.toMutableMap()
+                }
 
             fun ok(ok: Boolean) = ok(JsonField.of(ok))
 
-            fun ok(ok: JsonField<Boolean>) = apply { this.ok = ok }
+            fun ok(ok: JsonField<Boolean>) =
+                apply {
+                    this.ok = ok
+                }
 
             fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
             fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
-            fun reason(reason: JsonField<String>) = apply { this.reason = reason }
+            fun reason(reason: JsonField<String>) =
+                apply {
+                    this.reason = reason
+                }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    additionalProperties.put(key, value)
+                }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
 
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+            fun removeAdditionalProperty(key: String) =
+                apply {
+                    additionalProperties.remove(key)
+                }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+            fun removeAllAdditionalProperties(keys: Set<String>) =
+                apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
             fun build(): Connection =
-                Connection(checkRequired("ok", ok), reason, additionalProperties.toImmutable())
+                Connection(
+                  checkRequired(
+                    "ok", ok
+                  ),
+                  reason,
+                  additionalProperties.toImmutable(),
+                )
         }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Connection && ok == other.ok && reason == other.reason && additionalProperties == other.additionalProperties /* spotless:on */
+          return /* spotless:off */ other is Connection && ok == other.ok && reason == other.reason && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -219,16 +255,15 @@ private constructor(
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() =
-            "Connection{ok=$ok, reason=$reason, additionalProperties=$additionalProperties}"
+        override fun toString() = "Connection{ok=$ok, reason=$reason, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is SlackCheckAuthResponse && connection == other.connection && additionalProperties == other.additionalProperties /* spotless:on */
+      return /* spotless:off */ other is SlackCheckAuthResponse && connection == other.connection && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -237,6 +272,5 @@ private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() =
-        "SlackCheckAuthResponse{connection=$connection, additionalProperties=$additionalProperties}"
+    override fun toString() = "SlackCheckAuthResponse{connection=$connection, additionalProperties=$additionalProperties}"
 }

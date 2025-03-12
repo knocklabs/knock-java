@@ -8,7 +8,8 @@ import app.knock.api.services.blocking.providers.SlackService
 interface ProviderService {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     * Returns a view of this service that provides access to raw HTTP responses for
+     * each method.
      */
     fun withRawResponse(): WithRawResponse
 
@@ -16,7 +17,10 @@ interface ProviderService {
 
     fun msTeams(): MsTeamService
 
-    /** A view of [ProviderService] that provides access to raw HTTP responses for each method. */
+    /**
+     * A view of [ProviderService] that provides access to raw HTTP responses for each
+     * method.
+     */
     interface WithRawResponse {
 
         fun slack(): SlackService.WithRawResponse

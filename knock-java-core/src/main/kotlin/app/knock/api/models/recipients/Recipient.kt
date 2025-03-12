@@ -22,11 +22,11 @@ import java.util.Optional
 /** A recipient, which is either a user or an object */
 @JsonDeserialize(using = Recipient.Deserializer::class)
 @JsonSerialize(using = Recipient.Serializer::class)
-class Recipient
-private constructor(
+class Recipient private constructor(
     private val user: User? = null,
     private val object_: Object? = null,
     private val _json: JsonValue? = null,
+
 ) {
 
     /** A user object */
@@ -48,40 +48,39 @@ private constructor(
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
     fun <T> accept(visitor: Visitor<T>): T {
-        return when {
-            user != null -> visitor.visitUser(user)
-            object_ != null -> visitor.visitObject(object_)
-            else -> visitor.unknown(_json)
-        }
+      return when {
+          user != null -> visitor.visitUser(user)
+          object_ != null -> visitor.visitObject(object_)
+          else -> visitor.unknown(_json)
+      }
     }
 
     private var validated: Boolean = false
 
-    fun validate(): Recipient = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): Recipient =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        accept(
-            object : Visitor<Unit> {
+            accept(object : Visitor<Unit> {
                 override fun visitUser(user: User) {
-                    user.validate()
+                  user.validate()
                 }
 
                 override fun visitObject(object_: Object) {
-                    object_.validate()
+                  object_.validate()
                 }
-            }
-        )
-        validated = true
-    }
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
+            })
+            validated = true
         }
 
-        return /* spotless:off */ other is Recipient && user == other.user && object_ == other.object_ /* spotless:on */
+    override fun equals(other: Any?): Boolean {
+      if (this === other) {
+          return true
+      }
+
+      return /* spotless:off */ other is Recipient && user == other.user && object_ == other.object_ /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(user, object_) /* spotless:on */
@@ -97,13 +96,18 @@ private constructor(
     companion object {
 
         /** A user object */
-        @JvmStatic fun ofUser(user: User) = Recipient(user = user)
+        @JvmStatic
+        fun ofUser(user: User) = Recipient(user = user)
 
         /** A custom-object entity which belongs to a collection. */
-        @JvmStatic fun ofObject(object_: Object) = Recipient(object_ = object_)
+        @JvmStatic
+        fun ofObject(object_: Object) = Recipient(object_ = object_)
     }
 
-    /** An interface that defines how to map each variant of [Recipient] to a value of type [T]. */
+    /**
+     * An interface that defines how to map each variant of [Recipient] to a value of
+     * type [T].
+     */
     interface Visitor<out T> {
 
         /** A user object */
@@ -115,48 +119,43 @@ private constructor(
         /**
          * Maps an unknown variant of [Recipient] to a value of type [T].
          *
-         * An instance of [Recipient] can contain an unknown variant if it was deserialized from
-         * data that doesn't match any known variant. For example, if the SDK is on an older version
-         * than the API, then the API may respond with new variants that the SDK is unaware of.
+         * An instance of [Recipient] can contain an unknown variant if it was deserialized
+         * from data that doesn't match any known variant. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new variants that the
+         * SDK is unaware of.
          *
          * @throws KnockInvalidDataException in the default implementation.
          */
         fun unknown(json: JsonValue?): T {
-            throw KnockInvalidDataException("Unknown Recipient: $json")
+          throw KnockInvalidDataException("Unknown Recipient: $json")
         }
     }
 
     internal class Deserializer : BaseDeserializer<Recipient>(Recipient::class) {
 
         override fun ObjectCodec.deserialize(node: JsonNode): Recipient {
-            val json = JsonValue.fromJsonNode(node)
+          val json = JsonValue.fromJsonNode(node)
 
-            tryDeserialize(node, jacksonTypeRef<User>()) { it.validate() }
-                ?.let {
-                    return Recipient(user = it, _json = json)
-                }
-            tryDeserialize(node, jacksonTypeRef<Object>()) { it.validate() }
-                ?.let {
-                    return Recipient(object_ = it, _json = json)
-                }
+          tryDeserialize(node, jacksonTypeRef<User>()){ it.validate() }?.let {
+              return Recipient(user = it, _json = json)
+          }
+          tryDeserialize(node, jacksonTypeRef<Object>()){ it.validate() }?.let {
+              return Recipient(object_ = it, _json = json)
+          }
 
-            return Recipient(_json = json)
+          return Recipient(_json = json)
         }
     }
 
     internal class Serializer : BaseSerializer<Recipient>(Recipient::class) {
 
-        override fun serialize(
-            value: Recipient,
-            generator: JsonGenerator,
-            provider: SerializerProvider,
-        ) {
-            when {
-                value.user != null -> generator.writeObject(value.user)
-                value.object_ != null -> generator.writeObject(value.object_)
-                value._json != null -> generator.writeObject(value._json)
-                else -> throw IllegalStateException("Invalid Recipient")
-            }
+        override fun serialize(value: Recipient, generator: JsonGenerator, provider: SerializerProvider) {
+          when {
+              value.user != null -> generator.writeObject(value.user)
+              value.object_ != null -> generator.writeObject(value.object_)
+              value._json != null -> generator.writeObject(value._json)
+              else -> throw IllegalStateException("Invalid Recipient")
+          }
         }
     }
 }

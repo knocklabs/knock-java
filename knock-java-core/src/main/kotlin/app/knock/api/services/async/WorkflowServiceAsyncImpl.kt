@@ -21,84 +21,73 @@ import app.knock.api.models.workflows.WorkflowTriggerParams
 import app.knock.api.models.workflows.WorkflowTriggerResponse
 import java.util.concurrent.CompletableFuture
 
-class WorkflowServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
-    WorkflowServiceAsync {
+class WorkflowServiceAsyncImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: WorkflowServiceAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : WorkflowServiceAsync {
+
+    private val withRawResponse: WorkflowServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): WorkflowServiceAsync.WithRawResponse = withRawResponse
 
-    override fun cancel(
-        params: WorkflowCancelParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
+    override fun cancel(params: WorkflowCancelParams, requestOptions: RequestOptions): CompletableFuture<String> =
         // post /v1/workflows/{key}/cancel
         withRawResponse().cancel(params, requestOptions).thenApply { it.parse() }
 
-    override fun trigger(
-        params: WorkflowTriggerParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<WorkflowTriggerResponse> =
+    override fun trigger(params: WorkflowTriggerParams, requestOptions: RequestOptions): CompletableFuture<WorkflowTriggerResponse> =
         // post /v1/workflows/{key}/trigger
         withRawResponse().trigger(params, requestOptions).thenApply { it.parse() }
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        WorkflowServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : WorkflowServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
         private val cancelHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
 
-        override fun cancel(
-            params: WorkflowCancelParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .addPathSegments("v1", "workflows", params.getPathParam(0), "cancel")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable { response.use { cancelHandler.handle(it) } }
-                }
+        override fun cancel(params: WorkflowCancelParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<String>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .addPathSegments("v1", "workflows", params.getPathParam(0), "cancel")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepareAsync(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> response.parseable {
+              response.use {
+                  cancelHandler.handle(it)
+              }
+          } }
         }
 
-        private val triggerHandler: Handler<WorkflowTriggerResponse> =
-            jsonHandler<WorkflowTriggerResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val triggerHandler: Handler<WorkflowTriggerResponse> = jsonHandler<WorkflowTriggerResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun trigger(
-            params: WorkflowTriggerParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<WorkflowTriggerResponse>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .addPathSegments("v1", "workflows", params.getPathParam(0), "trigger")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { triggerHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
+        override fun trigger(params: WorkflowTriggerParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<WorkflowTriggerResponse>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .addPathSegments("v1", "workflows", params.getPathParam(0), "trigger")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepareAsync(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> response.parseable {
+              response.use {
+                  triggerHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          } }
         }
     }
 }

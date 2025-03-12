@@ -10,24 +10,18 @@ class PreferenceSetChannelTypeSettingTest {
 
     @Test
     fun createPreferenceSetChannelTypeSetting() {
-        val preferenceSetChannelTypeSetting =
-            PreferenceSetChannelTypeSetting.builder()
-                .addCondition(
-                    Condition.builder()
-                        .argument("US")
-                        .operator(Condition.Operator.EQUAL_TO)
-                        .variable("recipient.country_code")
-                        .build()
-                )
-                .build()
-        assertThat(preferenceSetChannelTypeSetting).isNotNull
-        assertThat(preferenceSetChannelTypeSetting.conditions())
-            .containsExactly(
-                Condition.builder()
-                    .argument("US")
-                    .operator(Condition.Operator.EQUAL_TO)
-                    .variable("recipient.country_code")
-                    .build()
-            )
+      val preferenceSetChannelTypeSetting = PreferenceSetChannelTypeSetting.builder()
+          .addCondition(Condition.builder()
+              .argument("US")
+              .operator(Condition.Operator.EQUAL_TO)
+              .variable("recipient.country_code")
+              .build())
+          .build()
+      assertThat(preferenceSetChannelTypeSetting).isNotNull
+      assertThat(preferenceSetChannelTypeSetting.conditions()).containsExactly(Condition.builder()
+          .argument("US")
+          .operator(Condition.Operator.EQUAL_TO)
+          .variable("recipient.country_code")
+          .build())
     }
 }

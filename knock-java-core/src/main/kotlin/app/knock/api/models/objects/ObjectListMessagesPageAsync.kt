@@ -9,6 +9,7 @@ import app.knock.api.core.JsonValue
 import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.models
 import app.knock.api.models.messages.Message
 import app.knock.api.services.async.ObjectServiceAsync
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -20,13 +21,16 @@ import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.FlowCollector
 
 /** List messages */
-class ObjectListMessagesPageAsync
-private constructor(
+class ObjectListMessagesPageAsync private constructor(
     private val objectsService: ObjectServiceAsync,
     private val params: ObjectListMessagesParams,
     private val response: Response,
+
 ) {
 
     fun response(): Response = response
@@ -36,43 +40,39 @@ private constructor(
     fun pageInfo(): Optional<PageInfo> = response().pageInfo()
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is ObjectListMessagesPageAsync && objectsService == other.objectsService && params == other.params && response == other.response /* spotless:on */
+      return /* spotless:off */ other is ObjectListMessagesPageAsync && objectsService == other.objectsService && params == other.params && response == other.response /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(objectsService, params, response) /* spotless:on */
 
-    override fun toString() =
-        "ObjectListMessagesPageAsync{objectsService=$objectsService, params=$params, response=$response}"
+    override fun toString() = "ObjectListMessagesPageAsync{objectsService=$objectsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean {
-        if (entries().isEmpty()) {
-            return false
-        }
+      if (entries().isEmpty()) {
+        return false;
+      }
 
-        return pageInfo().flatMap { it.after() }.isPresent
+      return pageInfo().flatMap { it.after()}.isPresent
     }
 
     fun getNextPageParams(): Optional<ObjectListMessagesParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
+      if (!hasNextPage()) {
+        return Optional.empty()
+      }
 
-        return Optional.of(
-            ObjectListMessagesParams.builder()
-                .from(params)
-                .apply { pageInfo().flatMap { it.after() }.ifPresent { this.after(it) } }
-                .build()
-        )
+      return Optional.of(ObjectListMessagesParams.builder().from(params).apply {pageInfo().flatMap { it.after()}.ifPresent{ this.after(it) } }.build())
     }
 
     fun getNextPage(): CompletableFuture<Optional<ObjectListMessagesPageAsync>> {
-        return getNextPageParams()
-            .map { objectsService.listMessages(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
+      return getNextPageParams().map {
+        objectsService.listMessages(it).thenApply { Optional.of(it) }
+      }.orElseGet {
+          CompletableFuture.completedFuture(Optional.empty())
+      }
     }
 
     fun autoPager(): AutoPager = AutoPager(this)
@@ -80,21 +80,20 @@ private constructor(
     companion object {
 
         @JvmStatic
-        fun of(
-            objectsService: ObjectServiceAsync,
-            params: ObjectListMessagesParams,
-            response: Response,
-        ) = ObjectListMessagesPageAsync(objectsService, params, response)
+        fun of(objectsService: ObjectServiceAsync, params: ObjectListMessagesParams, response: Response) =
+            ObjectListMessagesPageAsync(
+              objectsService,
+              params,
+              response,
+            )
     }
 
     @NoAutoDetect
-    class Response
-    @JsonCreator
-    constructor(
+    class Response @JsonCreator constructor(
         @JsonProperty("entries") private val entries: JsonField<List<Message>> = JsonMissing.of(),
         @JsonProperty("page_info") private val pageInfo: JsonField<PageInfo> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
     ) {
 
         fun entries(): List<Message> = entries.getNullable("entries") ?: listOf()
@@ -113,30 +112,30 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
+        fun validate(): Response =
+            apply {
+                if (validated) {
+                  return@apply
+                }
 
-            entries().map { it.validate() }
-            pageInfo().ifPresent { it.validate() }
-            validated = true
-        }
+                entries().map { it.validate() }
+                pageInfo().ifPresent { it.validate() }
+                validated = true
+            }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Response && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
+          return /* spotless:off */ other is Response && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         override fun hashCode(): Int = /* spotless:off */ Objects.hash(entries, pageInfo, additionalProperties) /* spotless:on */
 
-        override fun toString() =
-            "Response{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
+        override fun toString() = "Response{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -144,7 +143,8 @@ private constructor(
              * Returns a mutable builder for constructing an instance of
              * [ObjectListMessagesPageAsync].
              */
-            @JvmStatic fun builder() = Builder()
+            @JvmStatic
+            fun builder() = Builder()
         }
 
         class Builder {
@@ -154,11 +154,12 @@ private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.entries = page.entries
-                this.pageInfo = page.pageInfo
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
+            internal fun from(page: Response) =
+                apply {
+                    this.entries = page.entries
+                    this.pageInfo = page.pageInfo
+                    this.additionalProperties.putAll(page.additionalProperties)
+                }
 
             fun entries(entries: List<Message>) = entries(JsonField.of(entries))
 
@@ -168,37 +169,55 @@ private constructor(
 
             fun pageInfo(pageInfo: JsonField<PageInfo>) = apply { this.pageInfo = pageInfo }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
+            fun putAdditionalProperty(key: String, value: JsonValue) =
+                apply {
+                    this.additionalProperties.put(key, value)
+                }
 
-            fun build() = Response(entries, pageInfo, additionalProperties.toImmutable())
+            fun build() =
+                Response(
+                  entries,
+                  pageInfo,
+                  additionalProperties.toImmutable(),
+                )
         }
     }
 
-    class AutoPager(private val firstPage: ObjectListMessagesPageAsync) {
+    class AutoPager(
+        private val firstPage: ObjectListMessagesPageAsync,
+
+    ) {
 
         fun forEach(action: Predicate<Message>, executor: Executor): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<ObjectListMessagesPageAsync>>.forEach(
-                action: (Message) -> Boolean,
-                executor: Executor,
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.entries().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor,
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
+          fun CompletableFuture<Optional<ObjectListMessagesPageAsync>>.forEach(action: (Message) -> Boolean, executor: Executor): CompletableFuture<Void> =
+              thenComposeAsync(
+                { page ->
+                    page
+                    .filter {
+                        it.entries().all(action)
+                    }
+                    .map {
+                        it.getNextPage().forEach(action, executor)
+                    }
+                    .orElseGet {
+                        CompletableFuture.completedFuture(null)
+                    }
+                }, executor
+              )
+          return CompletableFuture.completedFuture(Optional.of(firstPage))
+          .forEach(
+            action::test, executor
+          )
         }
 
         fun toList(executor: Executor): CompletableFuture<List<Message>> {
-            val values = mutableListOf<Message>()
-            return forEach(values::add, executor).thenApply { values }
+          val values = mutableListOf<Message>()
+          return forEach(
+            values::add, executor
+          )
+          .thenApply {
+              values
+          }
         }
     }
 }

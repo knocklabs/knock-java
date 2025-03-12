@@ -14,10 +14,9 @@ import java.util.Objects
 
 /** Allows inline setting channel data for a recipient */
 @NoAutoDetect
-class InlineChannelDataRequest
-@JsonCreator
-private constructor(
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
+class InlineChannelDataRequest @JsonCreator private constructor(
+    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+
 ) {
 
     @JsonAnyGetter
@@ -26,20 +25,25 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): InlineChannelDataRequest = apply {
-        if (validated) {
-            return@apply
-        }
+    fun validate(): InlineChannelDataRequest =
+        apply {
+            if (validated) {
+              return@apply
+            }
 
-        validated = true
-    }
+            validated = true
+        }
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
-        /** Returns a mutable builder for constructing an instance of [InlineChannelDataRequest]. */
-        @JvmStatic fun builder() = Builder()
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [InlineChannelDataRequest].
+         */
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [InlineChannelDataRequest]. */
@@ -48,39 +52,46 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(inlineChannelDataRequest: InlineChannelDataRequest) = apply {
-            additionalProperties = inlineChannelDataRequest.additionalProperties.toMutableMap()
-        }
+        internal fun from(inlineChannelDataRequest: InlineChannelDataRequest) =
+            apply {
+                additionalProperties = inlineChannelDataRequest.additionalProperties.toMutableMap()
+            }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.clear()
-            putAllAdditionalProperties(additionalProperties)
-        }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-            additionalProperties.put(key, value)
-        }
+        fun putAdditionalProperty(key: String, value: JsonValue) =
+            apply {
+                additionalProperties.put(key, value)
+            }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-            this.additionalProperties.putAll(additionalProperties)
-        }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+        fun removeAdditionalProperty(key: String) =
+            apply {
+                additionalProperties.remove(key)
+            }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalProperty)
-        }
+        fun removeAllAdditionalProperties(keys: Set<String>) =
+            apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
-        fun build(): InlineChannelDataRequest =
-            InlineChannelDataRequest(additionalProperties.toImmutable())
+        fun build(): InlineChannelDataRequest = InlineChannelDataRequest(additionalProperties.toImmutable())
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is InlineChannelDataRequest && additionalProperties == other.additionalProperties /* spotless:on */
+      return /* spotless:off */ other is InlineChannelDataRequest && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */

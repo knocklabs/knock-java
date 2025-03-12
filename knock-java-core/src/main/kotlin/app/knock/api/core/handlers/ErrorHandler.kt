@@ -2,19 +2,20 @@
 
 package app.knock.api.core.handlers
 
+import com.fasterxml.jackson.databind.json.JsonMapper
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponse.Handler
 import app.knock.api.errors.BadRequestException
 import app.knock.api.errors.InternalServerException
-import app.knock.api.errors.KnockError
 import app.knock.api.errors.NotFoundException
 import app.knock.api.errors.PermissionDeniedException
 import app.knock.api.errors.RateLimitException
+import app.knock.api.errors.KnockError
+import app.knock.api.errors.KnockException
 import app.knock.api.errors.UnauthorizedException
 import app.knock.api.errors.UnexpectedStatusCodeException
 import app.knock.api.errors.UnprocessableEntityException
-import com.fasterxml.jackson.databind.json.JsonMapper
 import java.io.ByteArrayInputStream
 import java.io.InputStream
 

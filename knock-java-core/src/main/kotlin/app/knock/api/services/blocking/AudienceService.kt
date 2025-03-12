@@ -13,87 +13,84 @@ import com.google.errorprone.annotations.MustBeClosed
 interface AudienceService {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for each method.
+     * Returns a view of this service that provides access to raw HTTP responses for
+     * each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /** Add members */
     fun addMembers(params: AudienceAddMembersParams): String =
-        addMembers(params, RequestOptions.none())
+        addMembers(
+          params, RequestOptions.none()
+        )
 
     /** @see [addMembers] */
-    fun addMembers(
-        params: AudienceAddMembersParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): String
+    fun addMembers(params: AudienceAddMembersParams, requestOptions: RequestOptions = RequestOptions.none()): String
 
     /** List members */
     fun listMembers(params: AudienceListMembersParams): AudienceListMembersResponse =
-        listMembers(params, RequestOptions.none())
+        listMembers(
+          params, RequestOptions.none()
+        )
 
     /** @see [listMembers] */
-    fun listMembers(
-        params: AudienceListMembersParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): AudienceListMembersResponse
+    fun listMembers(params: AudienceListMembersParams, requestOptions: RequestOptions = RequestOptions.none()): AudienceListMembersResponse
 
     /** Remove members */
     fun removeMembers(params: AudienceRemoveMembersParams): String =
-        removeMembers(params, RequestOptions.none())
+        removeMembers(
+          params, RequestOptions.none()
+        )
 
     /** @see [removeMembers] */
-    fun removeMembers(
-        params: AudienceRemoveMembersParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): String
+    fun removeMembers(params: AudienceRemoveMembersParams, requestOptions: RequestOptions = RequestOptions.none()): String
 
-    /** A view of [AudienceService] that provides access to raw HTTP responses for each method. */
+    /**
+     * A view of [AudienceService] that provides access to raw HTTP responses for each
+     * method.
+     */
     interface WithRawResponse {
 
         /**
-         * Returns a raw HTTP response for `post /v1/audiences/{key}/members`, but is otherwise the
-         * same as [AudienceService.addMembers].
+         * Returns a raw HTTP response for `post /v1/audiences/{key}/members`, but is
+         * otherwise the same as [AudienceService.addMembers].
          */
         @MustBeClosed
         fun addMembers(params: AudienceAddMembersParams): HttpResponseFor<String> =
-            addMembers(params, RequestOptions.none())
+            addMembers(
+              params, RequestOptions.none()
+            )
 
         /** @see [addMembers] */
         @MustBeClosed
-        fun addMembers(
-            params: AudienceAddMembersParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String>
+        fun addMembers(params: AudienceAddMembersParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<String>
 
         /**
-         * Returns a raw HTTP response for `get /v1/audiences/{key}/members`, but is otherwise the
-         * same as [AudienceService.listMembers].
+         * Returns a raw HTTP response for `get /v1/audiences/{key}/members`, but is
+         * otherwise the same as [AudienceService.listMembers].
          */
         @MustBeClosed
-        fun listMembers(
-            params: AudienceListMembersParams
-        ): HttpResponseFor<AudienceListMembersResponse> = listMembers(params, RequestOptions.none())
+        fun listMembers(params: AudienceListMembersParams): HttpResponseFor<AudienceListMembersResponse> =
+            listMembers(
+              params, RequestOptions.none()
+            )
 
         /** @see [listMembers] */
         @MustBeClosed
-        fun listMembers(
-            params: AudienceListMembersParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<AudienceListMembersResponse>
+        fun listMembers(params: AudienceListMembersParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<AudienceListMembersResponse>
 
         /**
-         * Returns a raw HTTP response for `delete /v1/audiences/{key}/members`, but is otherwise
-         * the same as [AudienceService.removeMembers].
+         * Returns a raw HTTP response for `delete /v1/audiences/{key}/members`, but is
+         * otherwise the same as [AudienceService.removeMembers].
          */
         @MustBeClosed
         fun removeMembers(params: AudienceRemoveMembersParams): HttpResponseFor<String> =
-            removeMembers(params, RequestOptions.none())
+            removeMembers(
+              params, RequestOptions.none()
+            )
 
         /** @see [removeMembers] */
         @MustBeClosed
-        fun removeMembers(
-            params: AudienceRemoveMembersParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String>
+        fun removeMembers(params: AudienceRemoveMembersParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<String>
     }
 }

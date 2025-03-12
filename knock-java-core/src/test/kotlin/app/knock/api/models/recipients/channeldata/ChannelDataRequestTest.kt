@@ -9,16 +9,14 @@ class ChannelDataRequestTest {
 
     @Test
     fun createChannelDataRequest() {
-        val channelDataRequest =
-            ChannelDataRequest.builder()
-                .data(PushChannelData.builder().addToken("push_token_1").build())
-                .build()
-        assertThat(channelDataRequest).isNotNull
-        assertThat(channelDataRequest.data())
-            .isEqualTo(
-                ChannelDataRequest.Data.ofPushChannel(
-                    PushChannelData.builder().addToken("push_token_1").build()
-                )
-            )
+      val channelDataRequest = ChannelDataRequest.builder()
+          .data(PushChannelData.builder()
+              .addToken("push_token_1")
+              .build())
+          .build()
+      assertThat(channelDataRequest).isNotNull
+      assertThat(channelDataRequest.data()).isEqualTo(ChannelDataRequest.Data.ofPushChannel(PushChannelData.builder()
+          .addToken("push_token_1")
+          .build()))
     }
 }
