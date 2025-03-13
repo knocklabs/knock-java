@@ -12,61 +12,59 @@ import com.google.errorprone.annotations.MustBeClosed
 interface BulkService {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for
-     * each method.
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /** Bulk delete tenants */
-    fun delete(params: BulkDeleteParams): BulkOperation =
-        delete(
-          params, RequestOptions.none()
-        )
+    fun delete(params: BulkDeleteParams): BulkOperation = delete(params, RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(params: BulkDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): BulkOperation
+    fun delete(
+        params: BulkDeleteParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BulkOperation
 
     /** Bulk set tenants */
-    fun set(params: BulkSetParams): BulkOperation =
-        set(
-          params, RequestOptions.none()
-        )
+    fun set(params: BulkSetParams): BulkOperation = set(params, RequestOptions.none())
 
     /** @see [set] */
-    fun set(params: BulkSetParams, requestOptions: RequestOptions = RequestOptions.none()): BulkOperation
+    fun set(
+        params: BulkSetParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BulkOperation
 
-    /**
-     * A view of [BulkService] that provides access to raw HTTP responses for each
-     * method.
-     */
+    /** A view of [BulkService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
         /**
-         * Returns a raw HTTP response for `post /v1/tenants/bulk/delete`, but is otherwise
-         * the same as [BulkService.delete].
+         * Returns a raw HTTP response for `post /v1/tenants/bulk/delete`, but is otherwise the same
+         * as [BulkService.delete].
          */
         @MustBeClosed
         fun delete(params: BulkDeleteParams): HttpResponseFor<BulkOperation> =
-            delete(
-              params, RequestOptions.none()
-            )
+            delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
-        fun delete(params: BulkDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BulkOperation>
+        fun delete(
+            params: BulkDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BulkOperation>
 
         /**
-         * Returns a raw HTTP response for `post /v1/tenants/bulk/set`, but is otherwise
-         * the same as [BulkService.set].
+         * Returns a raw HTTP response for `post /v1/tenants/bulk/set`, but is otherwise the same as
+         * [BulkService.set].
          */
         @MustBeClosed
         fun set(params: BulkSetParams): HttpResponseFor<BulkOperation> =
-            set(
-              params, RequestOptions.none()
-            )
+            set(params, RequestOptions.none())
 
         /** @see [set] */
         @MustBeClosed
-        fun set(params: BulkSetParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BulkOperation>
+        fun set(
+            params: BulkSetParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BulkOperation>
     }
 }

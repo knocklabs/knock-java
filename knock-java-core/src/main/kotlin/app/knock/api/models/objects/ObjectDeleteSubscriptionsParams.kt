@@ -23,13 +23,13 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Objects
 
 /** Delete subscriptions */
-class ObjectDeleteSubscriptionsParams private constructor(
+class ObjectDeleteSubscriptionsParams
+private constructor(
     private val collection: String,
     private val objectId: String,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-
 ) : Params {
 
     fun collection(): String = collection
@@ -46,27 +46,30 @@ class ObjectDeleteSubscriptionsParams private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic
-    internal fun _body(): Body = body
+    @JvmSynthetic internal fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun getPathParam(index: Int): String {
-      return when (index) {
-          0 -> collection
-          1 -> objectId
-          else -> ""
-      }
+        return when (index) {
+            0 -> collection
+            1 -> objectId
+            else -> ""
+        }
     }
 
     /** Request to delete subscriptions */
     @NoAutoDetect
-    class Body @JsonCreator private constructor(
-        @JsonProperty("recipients") @ExcludeMissing private val recipients: JsonField<List<RecipientRequest>> = JsonMissing.of(),
-        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
+    class Body
+    @JsonCreator
+    private constructor(
+        @JsonProperty("recipients")
+        @ExcludeMissing
+        private val recipients: JsonField<List<RecipientRequest>> = JsonMissing.of(),
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun recipients(): List<RecipientRequest> = recipients.getRequired("recipients")
@@ -81,15 +84,14 @@ class ObjectDeleteSubscriptionsParams private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Body =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                recipients().forEach { it.validate() }
-                validated = true
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
             }
+
+            recipients().forEach { it.validate() }
+            validated = true
+        }
 
         fun toBuilder() = Builder().from(this)
 
@@ -99,13 +101,11 @@ class ObjectDeleteSubscriptionsParams private constructor(
              * Returns a mutable builder for constructing an instance of [Body].
              *
              * The following fields are required:
-             *
              * ```java
              * .recipients()
              * ```
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Body]. */
@@ -115,80 +115,73 @@ class ObjectDeleteSubscriptionsParams private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(body: Body) =
-                apply {
-                    recipients = body.recipients.map { it.toMutableList() }
-                    additionalProperties = body.additionalProperties.toMutableMap()
-                }
+            internal fun from(body: Body) = apply {
+                recipients = body.recipients.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
 
-            fun recipients(recipients: List<RecipientRequest>) = recipients(JsonField.of(recipients))
+            fun recipients(recipients: List<RecipientRequest>) =
+                recipients(JsonField.of(recipients))
 
-            fun recipients(recipients: JsonField<List<RecipientRequest>>) =
-                apply {
-                    this.recipients = recipients.map { it.toMutableList() }
-                }
+            fun recipients(recipients: JsonField<List<RecipientRequest>>) = apply {
+                this.recipients = recipients.map { it.toMutableList() }
+            }
 
-            fun addRecipient(recipient: RecipientRequest) =
-                apply {
-                    recipients = (recipients ?: JsonField.of(mutableListOf())).also {
+            fun addRecipient(recipient: RecipientRequest) = apply {
+                recipients =
+                    (recipients ?: JsonField.of(mutableListOf())).also {
                         checkKnown("recipients", it).add(recipient)
                     }
-                }
+            }
 
             /** A user identifier */
             fun addRecipient(string: String) = addRecipient(RecipientRequest.ofString(string))
 
             /**
-             * A set of parameters to inline-identify a user with. Inline identifying the user
-             * will ensure that the user is available before the request is executed in Knock.
-             * It will perform an upsert against the user you're supplying, replacing any
-             * properties specified.
+             * A set of parameters to inline-identify a user with. Inline identifying the user will
+             * ensure that the user is available before the request is executed in Knock. It will
+             * perform an upsert against the user you're supplying, replacing any properties
+             * specified.
              */
-            fun addRecipient(inlineIdentifyUser: InlineIdentifyUserRequest) = addRecipient(RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser))
+            fun addRecipient(inlineIdentifyUser: InlineIdentifyUserRequest) =
+                addRecipient(RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser))
 
             /** Inline identifies a custom object belonging to a collection */
-            fun addRecipient(inlineObject: InlineObjectRequest) = addRecipient(RecipientRequest.ofInlineObject(inlineObject))
+            fun addRecipient(inlineObject: InlineObjectRequest) =
+                addRecipient(RecipientRequest.ofInlineObject(inlineObject))
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             fun build(): Body =
                 Body(
-                  checkRequired(
-                    "recipients", recipients
-                  ).map { it.toImmutable() }, additionalProperties.toImmutable()
+                    checkRequired("recipients", recipients).map { it.toImmutable() },
+                    additionalProperties.toImmutable(),
                 )
         }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return /* spotless:off */ other is Body && recipients == other.recipients && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && recipients == other.recipients && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -197,7 +190,8 @@ class ObjectDeleteSubscriptionsParams private constructor(
 
         override fun hashCode(): Int = hashCode
 
-        override fun toString() = "Body{recipients=$recipients, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Body{recipients=$recipients, additionalProperties=$additionalProperties}"
     }
 
     fun toBuilder() = Builder().from(this)
@@ -209,15 +203,13 @@ class ObjectDeleteSubscriptionsParams private constructor(
          * [ObjectDeleteSubscriptionsParams].
          *
          * The following fields are required:
-         *
          * ```java
          * .collection()
          * .objectId()
          * .recipients()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [ObjectDeleteSubscriptionsParams]. */
@@ -237,231 +229,176 @@ class ObjectDeleteSubscriptionsParams private constructor(
                 objectId = objectDeleteSubscriptionsParams.objectId
                 body = objectDeleteSubscriptionsParams.body.toBuilder()
                 additionalHeaders = objectDeleteSubscriptionsParams.additionalHeaders.toBuilder()
-                additionalQueryParams = objectDeleteSubscriptionsParams.additionalQueryParams.toBuilder()
+                additionalQueryParams =
+                    objectDeleteSubscriptionsParams.additionalQueryParams.toBuilder()
             }
 
-        fun collection(collection: String) =
-            apply {
-                this.collection = collection
-            }
+        fun collection(collection: String) = apply { this.collection = collection }
 
-        fun objectId(objectId: String) =
-            apply {
-                this.objectId = objectId
-            }
+        fun objectId(objectId: String) = apply { this.objectId = objectId }
 
-        fun recipients(recipients: List<RecipientRequest>) =
-            apply {
-                body.recipients(recipients)
-            }
+        fun recipients(recipients: List<RecipientRequest>) = apply { body.recipients(recipients) }
 
-        fun recipients(recipients: JsonField<List<RecipientRequest>>) =
-            apply {
-                body.recipients(recipients)
-            }
+        fun recipients(recipients: JsonField<List<RecipientRequest>>) = apply {
+            body.recipients(recipients)
+        }
 
-        fun addRecipient(recipient: RecipientRequest) =
-            apply {
-                body.addRecipient(recipient)
-            }
+        fun addRecipient(recipient: RecipientRequest) = apply { body.addRecipient(recipient) }
 
         /** A user identifier */
-        fun addRecipient(string: String) =
-            apply {
-                body.addRecipient(string)
-            }
+        fun addRecipient(string: String) = apply { body.addRecipient(string) }
 
         /**
-         * A set of parameters to inline-identify a user with. Inline identifying the user
-         * will ensure that the user is available before the request is executed in Knock.
-         * It will perform an upsert against the user you're supplying, replacing any
-         * properties specified.
+         * A set of parameters to inline-identify a user with. Inline identifying the user will
+         * ensure that the user is available before the request is executed in Knock. It will
+         * perform an upsert against the user you're supplying, replacing any properties specified.
          */
-        fun addRecipient(inlineIdentifyUser: InlineIdentifyUserRequest) =
-            apply {
-                body.addRecipient(inlineIdentifyUser)
-            }
+        fun addRecipient(inlineIdentifyUser: InlineIdentifyUserRequest) = apply {
+            body.addRecipient(inlineIdentifyUser)
+        }
 
         /** Inline identifies a custom object belonging to a collection */
-        fun addRecipient(inlineObject: InlineObjectRequest) =
-            apply {
-                body.addRecipient(inlineObject)
-            }
+        fun addRecipient(inlineObject: InlineObjectRequest) = apply {
+            body.addRecipient(inlineObject)
+        }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.additionalProperties(additionalBodyProperties)
-            }
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
 
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) =
-            apply {
-                body.putAdditionalProperty(
-                  key, value
-                )
-            }
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
 
         fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
             apply {
                 body.putAllAdditionalProperties(additionalBodyProperties)
             }
 
-        fun removeAdditionalBodyProperty(key: String) =
-            apply {
-                body.removeAdditionalProperty(key)
-            }
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
 
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) =
-            apply {
-                body.removeAllAdditionalProperties(keys)
-            }
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
-        fun additionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.clear()
-                putAllAdditionalHeaders(additionalHeaders)
-            }
+        fun additionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.clear()
-                putAllAdditionalHeaders(additionalHeaders)
-            }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.clear()
+            putAllAdditionalHeaders(additionalHeaders)
+        }
 
-        fun putAdditionalHeader(name: String, value: String) =
-            apply {
-                additionalHeaders.put(name, value)
-            }
+        fun putAdditionalHeader(name: String, value: String) = apply {
+            additionalHeaders.put(name, value)
+        }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
-            apply {
-                additionalHeaders.put(name, values)
-            }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.put(name, values)
+        }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.putAll(additionalHeaders)
-            }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.putAll(additionalHeaders)
+        }
 
-        fun replaceAdditionalHeaders(name: String, value: String) =
-            apply {
-                additionalHeaders.replace(name, value)
-            }
+        fun replaceAdditionalHeaders(name: String, value: String) = apply {
+            additionalHeaders.replace(name, value)
+        }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
-            apply {
-                additionalHeaders.replace(name, values)
-            }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
+            additionalHeaders.replace(name, values)
+        }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalHeaders.replaceAll(additionalHeaders)
-            }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
+            this.additionalHeaders.replaceAll(additionalHeaders)
+        }
 
-        fun removeAdditionalHeaders(name: String) =
-            apply {
-                additionalHeaders.remove(name)
-            }
+        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) =
-            apply {
-                additionalHeaders.removeAll(names)
-            }
+        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
+            additionalHeaders.removeAll(names)
+        }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.clear()
-                putAllAdditionalQueryParams(additionalQueryParams)
-            }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
-            apply {
-                this.additionalQueryParams.clear()
-                putAllAdditionalQueryParams(additionalQueryParams)
-            }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
+            this.additionalQueryParams.clear()
+            putAllAdditionalQueryParams(additionalQueryParams)
+        }
 
-        fun putAdditionalQueryParam(key: String, value: String) =
-            apply {
-                additionalQueryParams.put(key, value)
-            }
+        fun putAdditionalQueryParam(key: String, value: String) = apply {
+            additionalQueryParams.put(key, value)
+        }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
-            apply {
-                additionalQueryParams.put(key, values)
-            }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.put(key, values)
+        }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.putAll(additionalQueryParams)
-            }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.putAll(additionalQueryParams)
+        }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) =
-            apply {
-                additionalQueryParams.replace(key, value)
-            }
+        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
+            additionalQueryParams.replace(key, value)
+        }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
-            apply {
-                additionalQueryParams.replace(key, values)
-            }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
+            additionalQueryParams.replace(key, values)
+        }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
-            apply {
-                this.additionalQueryParams.replaceAll(additionalQueryParams)
-            }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
+            this.additionalQueryParams.replaceAll(additionalQueryParams)
+        }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) =
-            apply {
-                additionalQueryParams.remove(key)
-            }
+        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) =
-            apply {
-                additionalQueryParams.removeAll(keys)
-            }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
+            additionalQueryParams.removeAll(keys)
+        }
 
         fun build(): ObjectDeleteSubscriptionsParams =
             ObjectDeleteSubscriptionsParams(
-              checkRequired(
-                "collection", collection
-              ),
-              checkRequired(
-                "objectId", objectId
-              ),
-              body.build(),
-              additionalHeaders.build(),
-              additionalQueryParams.build(),
+                checkRequired("collection", collection),
+                checkRequired("objectId", objectId),
+                body.build(),
+                additionalHeaders.build(),
+                additionalQueryParams.build(),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is ObjectDeleteSubscriptionsParams && collection == other.collection && objectId == other.objectId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ObjectDeleteSubscriptionsParams && collection == other.collection && objectId == other.objectId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
-    override fun toString() = "ObjectDeleteSubscriptionsParams{collection=$collection, objectId=$objectId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() =
+        "ObjectDeleteSubscriptionsParams{collection=$collection, objectId=$objectId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

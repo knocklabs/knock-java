@@ -4,17 +4,15 @@ package app.knock.api.services.blocking.recipients
 
 import app.knock.api.core.ClientOptions
 
-class ChannelDataServiceImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class ChannelDataServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    ChannelDataService {
 
-) : ChannelDataService {
-
-    private val withRawResponse: ChannelDataService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: ChannelDataService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): ChannelDataService.WithRawResponse = withRawResponse
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : ChannelDataService.WithRawResponse
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        ChannelDataService.WithRawResponse
 }

@@ -9,7 +9,6 @@ import app.knock.api.core.JsonValue
 import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
-import app.knock.api.models
 import app.knock.api.models.messages.Message
 import app.knock.api.services.blocking.ObjectService
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -23,11 +22,11 @@ import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
 /** List messages */
-class ObjectListMessagesPage private constructor(
+class ObjectListMessagesPage
+private constructor(
     private val objectsService: ObjectService,
     private val params: ObjectListMessagesParams,
     private val response: Response,
-
 ) {
 
     fun response(): Response = response
@@ -37,35 +36,41 @@ class ObjectListMessagesPage private constructor(
     fun pageInfo(): Optional<PageInfo> = response().pageInfo()
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is ObjectListMessagesPage && objectsService == other.objectsService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is ObjectListMessagesPage && objectsService == other.objectsService && params == other.params && response == other.response /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(objectsService, params, response) /* spotless:on */
 
-    override fun toString() = "ObjectListMessagesPage{objectsService=$objectsService, params=$params, response=$response}"
+    override fun toString() =
+        "ObjectListMessagesPage{objectsService=$objectsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean {
-      if (entries().isEmpty()) {
-        return false;
-      }
+        if (entries().isEmpty()) {
+            return false
+        }
 
-      return pageInfo().flatMap { it.after()}.isPresent
+        return pageInfo().flatMap { it.after() }.isPresent
     }
 
     fun getNextPageParams(): Optional<ObjectListMessagesParams> {
-      if (!hasNextPage()) {
-        return Optional.empty()
-      }
+        if (!hasNextPage()) {
+            return Optional.empty()
+        }
 
-      return Optional.of(ObjectListMessagesParams.builder().from(params).apply {pageInfo().flatMap { it.after()}.ifPresent{ this.after(it) } }.build())
+        return Optional.of(
+            ObjectListMessagesParams.builder()
+                .from(params)
+                .apply { pageInfo().flatMap { it.after() }.ifPresent { this.after(it) } }
+                .build()
+        )
     }
 
     fun getNextPage(): Optional<ObjectListMessagesPage> {
-      return getNextPageParams().map { objectsService.listMessages(it) }
+        return getNextPageParams().map { objectsService.listMessages(it) }
     }
 
     fun autoPager(): AutoPager = AutoPager(this)
@@ -73,20 +78,21 @@ class ObjectListMessagesPage private constructor(
     companion object {
 
         @JvmStatic
-        fun of(objectsService: ObjectService, params: ObjectListMessagesParams, response: Response) =
-            ObjectListMessagesPage(
-              objectsService,
-              params,
-              response,
-            )
+        fun of(
+            objectsService: ObjectService,
+            params: ObjectListMessagesParams,
+            response: Response,
+        ) = ObjectListMessagesPage(objectsService, params, response)
     }
 
     @NoAutoDetect
-    class Response @JsonCreator constructor(
+    class Response
+    @JsonCreator
+    constructor(
         @JsonProperty("entries") private val entries: JsonField<List<Message>> = JsonMissing.of(),
         @JsonProperty("page_info") private val pageInfo: JsonField<PageInfo> = JsonMissing.of(),
-        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun entries(): List<Message> = entries.getNullable("entries") ?: listOf()
@@ -105,39 +111,37 @@ class ObjectListMessagesPage private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Response =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                entries().map { it.validate() }
-                pageInfo().ifPresent { it.validate() }
-                validated = true
+        fun validate(): Response = apply {
+            if (validated) {
+                return@apply
             }
+
+            entries().map { it.validate() }
+            pageInfo().ifPresent { it.validate() }
+            validated = true
+        }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return /* spotless:off */ other is Response && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Response && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         override fun hashCode(): Int = /* spotless:off */ Objects.hash(entries, pageInfo, additionalProperties) /* spotless:on */
 
-        override fun toString() = "Response{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Response{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
 
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of
-             * [ObjectListMessagesPage].
+             * Returns a mutable builder for constructing an instance of [ObjectListMessagesPage].
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         class Builder {
@@ -147,12 +151,11 @@ class ObjectListMessagesPage private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(page: Response) =
-                apply {
-                    this.entries = page.entries
-                    this.pageInfo = page.pageInfo
-                    this.additionalProperties.putAll(page.additionalProperties)
-                }
+            internal fun from(page: Response) = apply {
+                this.entries = page.entries
+                this.pageInfo = page.pageInfo
+                this.additionalProperties.putAll(page.additionalProperties)
+            }
 
             fun entries(entries: List<Message>) = entries(JsonField.of(entries))
 
@@ -162,40 +165,30 @@ class ObjectListMessagesPage private constructor(
 
             fun pageInfo(pageInfo: JsonField<PageInfo>) = apply { this.pageInfo = pageInfo }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    this.additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
 
-            fun build() =
-                Response(
-                  entries,
-                  pageInfo,
-                  additionalProperties.toImmutable(),
-                )
+            fun build() = Response(entries, pageInfo, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: ObjectListMessagesPage,
+    class AutoPager(private val firstPage: ObjectListMessagesPage) : Iterable<Message> {
 
-    ) : Iterable<Message> {
-
-        override fun iterator(): Iterator<Message> =
-            iterator {
-                var page = firstPage
-                var index = 0
-                while (true) {
-                  while (index < page.entries().size) {
+        override fun iterator(): Iterator<Message> = iterator {
+            var page = firstPage
+            var index = 0
+            while (true) {
+                while (index < page.entries().size) {
                     yield(page.entries()[index++])
-                  }
-                  page = page.getNextPage().getOrNull() ?: break
-                  index = 0
                 }
+                page = page.getNextPage().getOrNull() ?: break
+                index = 0
             }
+        }
 
         fun stream(): Stream<Message> {
-          return StreamSupport.stream(spliterator(), false)
+            return StreamSupport.stream(spliterator(), false)
         }
     }
 }

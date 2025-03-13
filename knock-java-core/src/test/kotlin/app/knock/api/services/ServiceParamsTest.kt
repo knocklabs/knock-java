@@ -30,60 +30,71 @@ internal class ServiceParamsTest {
 
     @BeforeEach
     fun beforeEach(wmRuntimeInfo: WireMockRuntimeInfo) {
-      client = KnockOkHttpClient.builder()
-          .baseUrl(wmRuntimeInfo.httpBaseUrl)
-          .bearerToken("My Bearer Token")
-          .build()
+        client =
+            KnockOkHttpClient.builder()
+                .baseUrl(wmRuntimeInfo.httpBaseUrl)
+                .bearerToken("My Bearer Token")
+                .build()
     }
 
-    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
     @Test
     fun get() {
-      val userService = client.users()
-      stubFor(get(anyUrl()).willReturn(ok("{}")))
+        val userService = client.users()
+        stubFor(get(anyUrl()).willReturn(ok("{}")))
 
-      userService.get(UserGetParams.builder()
-          .userId("user_id")
-          .putAdditionalHeader("Secret-Header", "42")
-          .putAdditionalQueryParam("secret_query_param", "42")
-          .build())
+        userService.get(
+            UserGetParams.builder()
+                .userId("user_id")
+                .putAdditionalHeader("Secret-Header", "42")
+                .putAdditionalQueryParam("secret_query_param", "42")
+                .build()
+        )
 
-      verify(
-          getRequestedFor(anyUrl())
-              .withHeader("Secret-Header", equalTo("42"))
-              .withQueryParam("secret_query_param", equalTo("42"))
-      )
+        verify(
+            getRequestedFor(anyUrl())
+                .withHeader("Secret-Header", equalTo("42"))
+                .withQueryParam("secret_query_param", equalTo("42"))
+        )
     }
 
-    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
     @Test
     fun trigger() {
-      val workflowService = client.workflows()
-      stubFor(post(anyUrl()).willReturn(ok("{}")))
+        val workflowService = client.workflows()
+        stubFor(post(anyUrl()).willReturn(ok("{}")))
 
-      workflowService.trigger(WorkflowTriggerParams.builder()
-          .key("key")
-          .actor("string")
-          .cancellationKey(null)
-          .data(WorkflowTriggerParams.Data.builder()
-              .putAdditionalProperty("dinosaur_names", JsonValue.from("bar"))
-              .putAdditionalProperty("is_alert", JsonValue.from("bar"))
-              .putAdditionalProperty("park_id", JsonValue.from("bar"))
-              .putAdditionalProperty("severity", JsonValue.from("bar"))
-              .putAdditionalProperty("welcome_message", JsonValue.from("bar"))
-              .build())
-          .addRecipient("jhammond")
-          .tenant("acme_corp")
-          .putAdditionalHeader("Secret-Header", "42")
-          .putAdditionalQueryParam("secret_query_param", "42")
-          .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))
-          .build())
+        workflowService.trigger(
+            WorkflowTriggerParams.builder()
+                .key("key")
+                .actor("string")
+                .cancellationKey(null)
+                .data(
+                    WorkflowTriggerParams.Data.builder()
+                        .putAdditionalProperty("dinosaur_names", JsonValue.from("bar"))
+                        .putAdditionalProperty("is_alert", JsonValue.from("bar"))
+                        .putAdditionalProperty("park_id", JsonValue.from("bar"))
+                        .putAdditionalProperty("severity", JsonValue.from("bar"))
+                        .putAdditionalProperty("welcome_message", JsonValue.from("bar"))
+                        .build()
+                )
+                .addRecipient("jhammond")
+                .tenant("acme_corp")
+                .putAdditionalHeader("Secret-Header", "42")
+                .putAdditionalQueryParam("secret_query_param", "42")
+                .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))
+                .build()
+        )
 
-      verify(
-          postRequestedFor(anyUrl())
-              .withHeader("Secret-Header", equalTo("42"))
-              .withQueryParam("secret_query_param", equalTo("42"))
-              .withRequestBody(matchingJsonPath("$.secretProperty", equalTo("42")))
-      )
+        verify(
+            postRequestedFor(anyUrl())
+                .withHeader("Secret-Header", equalTo("42"))
+                .withQueryParam("secret_query_param", equalTo("42"))
+                .withRequestBody(matchingJsonPath("$.secretProperty", equalTo("42")))
+        )
     }
 }

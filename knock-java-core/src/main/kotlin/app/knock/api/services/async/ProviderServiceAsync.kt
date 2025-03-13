@@ -8,8 +8,7 @@ import app.knock.api.services.async.providers.SlackServiceAsync
 interface ProviderServiceAsync {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for
-     * each method.
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
 
@@ -18,8 +17,7 @@ interface ProviderServiceAsync {
     fun msTeams(): MsTeamServiceAsync
 
     /**
-     * A view of [ProviderServiceAsync] that provides access to raw HTTP responses for
-     * each method.
+     * A view of [ProviderServiceAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
 

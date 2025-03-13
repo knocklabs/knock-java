@@ -8,12 +8,12 @@ import app.knock.api.services.async.providers.MsTeamServiceAsyncImpl
 import app.knock.api.services.async.providers.SlackServiceAsync
 import app.knock.api.services.async.providers.SlackServiceAsyncImpl
 
-class ProviderServiceAsyncImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class ProviderServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    ProviderServiceAsync {
 
-) : ProviderServiceAsync {
-
-    private val withRawResponse: ProviderServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: ProviderServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     private val slack: SlackServiceAsync by lazy { SlackServiceAsyncImpl(clientOptions) }
 
@@ -25,14 +25,16 @@ class ProviderServiceAsyncImpl internal constructor(
 
     override fun msTeams(): MsTeamServiceAsync = msTeams
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        ProviderServiceAsync.WithRawResponse {
 
-    ) : ProviderServiceAsync.WithRawResponse {
+        private val slack: SlackServiceAsync.WithRawResponse by lazy {
+            SlackServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
 
-        private val slack: SlackServiceAsync.WithRawResponse by lazy { SlackServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
-
-        private val msTeams: MsTeamServiceAsync.WithRawResponse by lazy { MsTeamServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
+        private val msTeams: MsTeamServiceAsync.WithRawResponse by lazy {
+            MsTeamServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
 
         override fun slack(): SlackServiceAsync.WithRawResponse = slack
 

@@ -13,75 +13,73 @@ import com.google.errorprone.annotations.MustBeClosed
 interface BulkService {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for
-     * each method.
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /** Bulk delete objects */
-    fun delete(params: BulkDeleteParams): BulkOperation =
-        delete(
-          params, RequestOptions.none()
-        )
+    fun delete(params: BulkDeleteParams): BulkOperation = delete(params, RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(params: BulkDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): BulkOperation
+    fun delete(
+        params: BulkDeleteParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BulkOperation
 
     /**
-     * Add subscriptions for a set of objects in a single collection. If a subscription
-     * already exists, it will be updated.
+     * Add subscriptions for a set of objects in a single collection. If a subscription already
+     * exists, it will be updated.
      */
     fun addSubscriptions(params: BulkAddSubscriptionsParams): BulkOperation =
-        addSubscriptions(
-          params, RequestOptions.none()
-        )
+        addSubscriptions(params, RequestOptions.none())
 
     /** @see [addSubscriptions] */
-    fun addSubscriptions(params: BulkAddSubscriptionsParams, requestOptions: RequestOptions = RequestOptions.none()): BulkOperation
+    fun addSubscriptions(
+        params: BulkAddSubscriptionsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BulkOperation
 
     /** Bulk set objects */
-    fun set(params: BulkSetParams): BulkOperation =
-        set(
-          params, RequestOptions.none()
-        )
+    fun set(params: BulkSetParams): BulkOperation = set(params, RequestOptions.none())
 
     /** @see [set] */
-    fun set(params: BulkSetParams, requestOptions: RequestOptions = RequestOptions.none()): BulkOperation
+    fun set(
+        params: BulkSetParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BulkOperation
 
-    /**
-     * A view of [BulkService] that provides access to raw HTTP responses for each
-     * method.
-     */
+    /** A view of [BulkService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
         /**
-         * Returns a raw HTTP response for `post /v1/objects/{collection}/bulk/delete`, but
-         * is otherwise the same as [BulkService.delete].
+         * Returns a raw HTTP response for `post /v1/objects/{collection}/bulk/delete`, but is
+         * otherwise the same as [BulkService.delete].
          */
         @MustBeClosed
         fun delete(params: BulkDeleteParams): HttpResponseFor<BulkOperation> =
-            delete(
-              params, RequestOptions.none()
-            )
+            delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
-        fun delete(params: BulkDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BulkOperation>
+        fun delete(
+            params: BulkDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BulkOperation>
 
         /**
-         * Returns a raw HTTP response for
-         * `post /v1/objects/{collection}/bulk/subscriptions/add`, but is otherwise the
-         * same as [BulkService.addSubscriptions].
+         * Returns a raw HTTP response for `post /v1/objects/{collection}/bulk/subscriptions/add`,
+         * but is otherwise the same as [BulkService.addSubscriptions].
          */
         @MustBeClosed
         fun addSubscriptions(params: BulkAddSubscriptionsParams): HttpResponseFor<BulkOperation> =
-            addSubscriptions(
-              params, RequestOptions.none()
-            )
+            addSubscriptions(params, RequestOptions.none())
 
         /** @see [addSubscriptions] */
         @MustBeClosed
-        fun addSubscriptions(params: BulkAddSubscriptionsParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BulkOperation>
+        fun addSubscriptions(
+            params: BulkAddSubscriptionsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BulkOperation>
 
         /**
          * Returns a raw HTTP response for `post /v1/objects/{collection}/bulk/set`, but is
@@ -89,12 +87,13 @@ interface BulkService {
          */
         @MustBeClosed
         fun set(params: BulkSetParams): HttpResponseFor<BulkOperation> =
-            set(
-              params, RequestOptions.none()
-            )
+            set(params, RequestOptions.none())
 
         /** @see [set] */
         @MustBeClosed
-        fun set(params: BulkSetParams, requestOptions: RequestOptions = RequestOptions.none()): HttpResponseFor<BulkOperation>
+        fun set(
+            params: BulkSetParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BulkOperation>
     }
 }

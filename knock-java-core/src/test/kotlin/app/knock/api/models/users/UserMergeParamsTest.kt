@@ -10,48 +10,36 @@ class UserMergeParamsTest {
 
     @Test
     fun create() {
-      UserMergeParams.builder()
-          .userId("user_id")
-          .fromUserId("user_1")
-          .build()
+        UserMergeParams.builder().userId("user_id").fromUserId("user_1").build()
     }
 
     @Test
     fun body() {
-      val params = UserMergeParams.builder()
-          .userId("user_id")
-          .fromUserId("user_1")
-          .build()
+        val params = UserMergeParams.builder().userId("user_id").fromUserId("user_1").build()
 
-      val body = params._body()
+        val body = params._body()
 
-      assertNotNull(body)
-      assertThat(body.fromUserId()).isEqualTo("user_1")
+        assertNotNull(body)
+        assertThat(body.fromUserId()).isEqualTo("user_1")
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-      val params = UserMergeParams.builder()
-          .userId("user_id")
-          .fromUserId("user_1")
-          .build()
+        val params = UserMergeParams.builder().userId("user_id").fromUserId("user_1").build()
 
-      val body = params._body()
+        val body = params._body()
 
-      assertNotNull(body)
-      assertThat(body.fromUserId()).isEqualTo("user_1")
+        assertNotNull(body)
+        assertThat(body.fromUserId()).isEqualTo("user_1")
     }
 
     @Test
     fun getPathParam() {
-      val params = UserMergeParams.builder()
-          .userId("user_id")
-          .fromUserId("user_1")
-          .build()
-      assertThat(params).isNotNull
-      // path param "userId"
-      assertThat(params.getPathParam(0)).isEqualTo("user_id")
-      // out-of-bound path param
-      assertThat(params.getPathParam(1)).isEqualTo("")
+        val params = UserMergeParams.builder().userId("user_id").fromUserId("user_1").build()
+        assertThat(params).isNotNull
+        // path param "userId"
+        assertThat(params.getPathParam(0)).isEqualTo("user_id")
+        // out-of-bound path param
+        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

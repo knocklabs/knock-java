@@ -19,10 +19,13 @@ import java.util.Objects
 
 /** OneSignal channel data */
 @NoAutoDetect
-class OneSignalChannelData @JsonCreator private constructor(
-    @JsonProperty("player_ids") @ExcludeMissing private val playerIds: JsonField<List<String>> = JsonMissing.of(),
+class OneSignalChannelData
+@JsonCreator
+private constructor(
+    @JsonProperty("player_ids")
+    @ExcludeMissing
+    private val playerIds: JsonField<List<String>> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
 ) {
 
     /** The OneSignal player IDs */
@@ -39,32 +42,28 @@ class OneSignalChannelData @JsonCreator private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): OneSignalChannelData =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            playerIds()
-            validated = true
+    fun validate(): OneSignalChannelData = apply {
+        if (validated) {
+            return@apply
         }
+
+        playerIds()
+        validated = true
+    }
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [OneSignalChannelData].
+         * Returns a mutable builder for constructing an instance of [OneSignalChannelData].
          *
          * The following fields are required:
-         *
          * ```java
          * .playerIds()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [OneSignalChannelData]. */
@@ -74,69 +73,59 @@ class OneSignalChannelData @JsonCreator private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(oneSignalChannelData: OneSignalChannelData) =
-            apply {
-                playerIds = oneSignalChannelData.playerIds.map { it.toMutableList() }
-                additionalProperties = oneSignalChannelData.additionalProperties.toMutableMap()
-            }
+        internal fun from(oneSignalChannelData: OneSignalChannelData) = apply {
+            playerIds = oneSignalChannelData.playerIds.map { it.toMutableList() }
+            additionalProperties = oneSignalChannelData.additionalProperties.toMutableMap()
+        }
 
         /** The OneSignal player IDs */
         fun playerIds(playerIds: List<String>) = playerIds(JsonField.of(playerIds))
 
         /** The OneSignal player IDs */
-        fun playerIds(playerIds: JsonField<List<String>>) =
-            apply {
-                this.playerIds = playerIds.map { it.toMutableList() }
-            }
+        fun playerIds(playerIds: JsonField<List<String>>) = apply {
+            this.playerIds = playerIds.map { it.toMutableList() }
+        }
 
         /** The OneSignal player IDs */
-        fun addPlayerId(playerId: String) =
-            apply {
-                playerIds = (playerIds ?: JsonField.of(mutableListOf())).also {
+        fun addPlayerId(playerId: String) = apply {
+            playerIds =
+                (playerIds ?: JsonField.of(mutableListOf())).also {
                     checkKnown("playerIds", it).add(playerId)
                 }
-            }
+        }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         fun build(): OneSignalChannelData =
             OneSignalChannelData(
-              checkRequired(
-                "playerIds", playerIds
-              ).map { it.toImmutable() }, additionalProperties.toImmutable()
+                checkRequired("playerIds", playerIds).map { it.toImmutable() },
+                additionalProperties.toImmutable(),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is OneSignalChannelData && playerIds == other.playerIds && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is OneSignalChannelData && playerIds == other.playerIds && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -145,5 +134,6 @@ class OneSignalChannelData @JsonCreator private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "OneSignalChannelData{playerIds=$playerIds, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "OneSignalChannelData{playerIds=$playerIds, additionalProperties=$additionalProperties}"
 }

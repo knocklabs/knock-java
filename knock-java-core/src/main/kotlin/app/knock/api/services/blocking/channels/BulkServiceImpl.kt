@@ -18,50 +18,58 @@ import app.knock.api.errors.KnockError
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.channels.bulk.BulkUpdateMessageStatusParams
 
-class BulkServiceImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class BulkServiceImpl internal constructor(private val clientOptions: ClientOptions) : BulkService {
 
-) : BulkService {
-
-    private val withRawResponse: BulkService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: BulkService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): BulkService.WithRawResponse = withRawResponse
 
-    override fun updateMessageStatus(params: BulkUpdateMessageStatusParams, requestOptions: RequestOptions): BulkOperation =
+    override fun updateMessageStatus(
+        params: BulkUpdateMessageStatusParams,
+        requestOptions: RequestOptions,
+    ): BulkOperation =
         // post /v1/channels/{channel_id}/messages/bulk/{action}
         withRawResponse().updateMessageStatus(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : BulkService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        BulkService.WithRawResponse {
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val updateMessageStatusHandler: Handler<BulkOperation> = jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateMessageStatusHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun updateMessageStatus(params: BulkUpdateMessageStatusParams, requestOptions: RequestOptions): HttpResponseFor<BulkOperation> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .addPathSegments("v1", "channels", params.getPathParam(0), "messages", "bulk", params.getPathParam(1))
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  updateMessageStatusHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun updateMessageStatus(
+            params: BulkUpdateMessageStatusParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BulkOperation> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments(
+                        "v1",
+                        "channels",
+                        params.getPathParam(0),
+                        "messages",
+                        "bulk",
+                        params.getPathParam(1),
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { updateMessageStatusHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
     }
 }

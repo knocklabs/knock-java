@@ -13,37 +13,41 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(TestServerExtension::class)
 class BulkServiceAsyncTest {
 
-    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
     @Test
     fun delete() {
-      val client = KnockOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val bulkServiceAsync = client.tenants().bulk()
+        val client =
+            KnockOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val bulkServiceAsync = client.tenants().bulk()
 
-      val bulkOperationFuture = bulkServiceAsync.delete(BulkDeleteParams.builder()
-          .addTenantId("string")
-          .build())
+        val bulkOperationFuture =
+            bulkServiceAsync.delete(BulkDeleteParams.builder().addTenantId("string").build())
 
-      val bulkOperation = bulkOperationFuture.get()
-      bulkOperation.validate()
+        val bulkOperation = bulkOperationFuture.get()
+        bulkOperation.validate()
     }
 
-    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
     @Test
     fun set() {
-      val client = KnockOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val bulkServiceAsync = client.tenants().bulk()
+        val client =
+            KnockOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val bulkServiceAsync = client.tenants().bulk()
 
-      val bulkOperationFuture = bulkServiceAsync.set(BulkSetParams.builder()
-          .addTenant("string")
-          .build())
+        val bulkOperationFuture =
+            bulkServiceAsync.set(BulkSetParams.builder().addTenant("string").build())
 
-      val bulkOperation = bulkOperationFuture.get()
-      bulkOperation.validate()
+        val bulkOperation = bulkOperationFuture.get()
+        bulkOperation.validate()
     }
 }

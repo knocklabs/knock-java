@@ -42,12 +42,11 @@ import app.knock.api.services.blocking.users.BulkServiceImpl
 import app.knock.api.services.blocking.users.FeedService
 import app.knock.api.services.blocking.users.FeedServiceImpl
 
-class UserServiceImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class UserServiceImpl internal constructor(private val clientOptions: ClientOptions) : UserService {
 
-) : UserService {
-
-    private val withRawResponse: UserService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: UserService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     private val feeds: FeedService by lazy { FeedServiceImpl(clientOptions) }
 
@@ -75,27 +74,45 @@ class UserServiceImpl internal constructor(
         // get /v1/users/{user_id}
         withRawResponse().get(params, requestOptions).parse()
 
-    override fun getChannelData(params: UserGetChannelDataParams, requestOptions: RequestOptions): ChannelData =
+    override fun getChannelData(
+        params: UserGetChannelDataParams,
+        requestOptions: RequestOptions,
+    ): ChannelData =
         // get /v1/users/{user_id}/channel_data/{channel_id}
         withRawResponse().getChannelData(params, requestOptions).parse()
 
-    override fun getPreferences(params: UserGetPreferencesParams, requestOptions: RequestOptions): PreferenceSet =
+    override fun getPreferences(
+        params: UserGetPreferencesParams,
+        requestOptions: RequestOptions,
+    ): PreferenceSet =
         // get /v1/users/{user_id}/preferences/{preference_set_id}
         withRawResponse().getPreferences(params, requestOptions).parse()
 
-    override fun listMessages(params: UserListMessagesParams, requestOptions: RequestOptions): UserListMessagesPage =
+    override fun listMessages(
+        params: UserListMessagesParams,
+        requestOptions: RequestOptions,
+    ): UserListMessagesPage =
         // get /v1/users/{user_id}/messages
         withRawResponse().listMessages(params, requestOptions).parse()
 
-    override fun listPreferences(params: UserListPreferencesParams, requestOptions: RequestOptions): List<PreferenceSet> =
+    override fun listPreferences(
+        params: UserListPreferencesParams,
+        requestOptions: RequestOptions,
+    ): List<PreferenceSet> =
         // get /v1/users/{user_id}/preferences
         withRawResponse().listPreferences(params, requestOptions).parse()
 
-    override fun listSchedules(params: UserListSchedulesParams, requestOptions: RequestOptions): UserListSchedulesPage =
+    override fun listSchedules(
+        params: UserListSchedulesParams,
+        requestOptions: RequestOptions,
+    ): UserListSchedulesPage =
         // get /v1/users/{user_id}/schedules
         withRawResponse().listSchedules(params, requestOptions).parse()
 
-    override fun listSubscriptions(params: UserListSubscriptionsParams, requestOptions: RequestOptions): UserListSubscriptionsPage =
+    override fun listSubscriptions(
+        params: UserListSubscriptionsParams,
+        requestOptions: RequestOptions,
+    ): UserListSubscriptionsPage =
         // get /v1/users/{user_id}/subscriptions
         withRawResponse().listSubscriptions(params, requestOptions).parse()
 
@@ -103,389 +120,436 @@ class UserServiceImpl internal constructor(
         // post /v1/users/{user_id}/merge
         withRawResponse().merge(params, requestOptions).parse()
 
-    override fun setChannelData(params: UserSetChannelDataParams, requestOptions: RequestOptions): ChannelData =
+    override fun setChannelData(
+        params: UserSetChannelDataParams,
+        requestOptions: RequestOptions,
+    ): ChannelData =
         // put /v1/users/{user_id}/channel_data/{channel_id}
         withRawResponse().setChannelData(params, requestOptions).parse()
 
-    override fun setPreferences(params: UserSetPreferencesParams, requestOptions: RequestOptions): PreferenceSet =
+    override fun setPreferences(
+        params: UserSetPreferencesParams,
+        requestOptions: RequestOptions,
+    ): PreferenceSet =
         // put /v1/users/{user_id}/preferences/{preference_set_id}
         withRawResponse().setPreferences(params, requestOptions).parse()
 
-    override fun unsetChannelData(params: UserUnsetChannelDataParams, requestOptions: RequestOptions): String =
+    override fun unsetChannelData(
+        params: UserUnsetChannelDataParams,
+        requestOptions: RequestOptions,
+    ): String =
         // delete /v1/users/{user_id}/channel_data/{channel_id}
         withRawResponse().unsetChannelData(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : UserService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        UserService.WithRawResponse {
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val feeds: FeedService.WithRawResponse by lazy { FeedServiceImpl.WithRawResponseImpl(clientOptions) }
+        private val feeds: FeedService.WithRawResponse by lazy {
+            FeedServiceImpl.WithRawResponseImpl(clientOptions)
+        }
 
-        private val bulk: BulkService.WithRawResponse by lazy { BulkServiceImpl.WithRawResponseImpl(clientOptions) }
+        private val bulk: BulkService.WithRawResponse by lazy {
+            BulkServiceImpl.WithRawResponseImpl(clientOptions)
+        }
 
         override fun feeds(): FeedService.WithRawResponse = feeds
 
         override fun bulk(): BulkService.WithRawResponse = bulk
 
-        private val updateHandler: Handler<User> = jsonHandler<User>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateHandler: Handler<User> =
+            jsonHandler<User>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun update(params: UserUpdateParams, requestOptions: RequestOptions): HttpResponseFor<User> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.PUT)
-            .addPathSegments("v1", "users", params.getPathParam(0))
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  updateHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun update(
+            params: UserUpdateParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<User> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments("v1", "users", params.getPathParam(0))
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { updateHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val listHandler: Handler<UserListPage.Response> = jsonHandler<UserListPage.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listHandler: Handler<UserListPage.Response> =
+            jsonHandler<UserListPage.Response>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun list(params: UserListParams, requestOptions: RequestOptions): HttpResponseFor<UserListPage> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "users")
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  listHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  UserListPage.of(UserServiceImpl(clientOptions), params, it)
-              }
-          }
+        override fun list(
+            params: UserListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<UserListPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("v1", "users")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let { UserListPage.of(UserServiceImpl(clientOptions), params, it) }
+            }
         }
 
         private val deleteHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
 
-        override fun delete(params: UserDeleteParams, requestOptions: RequestOptions): HttpResponseFor<String> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.DELETE)
-            .addPathSegments("v1", "users", params.getPathParam(0))
-            .apply { params._body().ifPresent{ body(json(clientOptions.jsonMapper, it)) } }
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  deleteHandler.handle(it)
-              }
-          }
+        override fun delete(
+            params: UserDeleteParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<String> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments("v1", "users", params.getPathParam(0))
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable { response.use { deleteHandler.handle(it) } }
         }
 
-        private val getHandler: Handler<User> = jsonHandler<User>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val getHandler: Handler<User> =
+            jsonHandler<User>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun get(params: UserGetParams, requestOptions: RequestOptions): HttpResponseFor<User> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "users", params.getPathParam(0))
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  getHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun get(
+            params: UserGetParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<User> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("v1", "users", params.getPathParam(0))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { getHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val getChannelDataHandler: Handler<ChannelData> = jsonHandler<ChannelData>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val getChannelDataHandler: Handler<ChannelData> =
+            jsonHandler<ChannelData>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun getChannelData(params: UserGetChannelDataParams, requestOptions: RequestOptions): HttpResponseFor<ChannelData> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "users", params.getPathParam(0), "channel_data", params.getPathParam(1))
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  getChannelDataHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun getChannelData(
+            params: UserGetChannelDataParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ChannelData> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments(
+                        "v1",
+                        "users",
+                        params.getPathParam(0),
+                        "channel_data",
+                        params.getPathParam(1),
+                    )
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { getChannelDataHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val getPreferencesHandler: Handler<PreferenceSet> = jsonHandler<PreferenceSet>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val getPreferencesHandler: Handler<PreferenceSet> =
+            jsonHandler<PreferenceSet>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun getPreferences(params: UserGetPreferencesParams, requestOptions: RequestOptions): HttpResponseFor<PreferenceSet> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "users", params.getPathParam(0), "preferences", params.getPathParam(1))
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  getPreferencesHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun getPreferences(
+            params: UserGetPreferencesParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PreferenceSet> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments(
+                        "v1",
+                        "users",
+                        params.getPathParam(0),
+                        "preferences",
+                        params.getPathParam(1),
+                    )
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { getPreferencesHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val listMessagesHandler: Handler<UserListMessagesPage.Response> = jsonHandler<UserListMessagesPage.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listMessagesHandler: Handler<UserListMessagesPage.Response> =
+            jsonHandler<UserListMessagesPage.Response>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun listMessages(params: UserListMessagesParams, requestOptions: RequestOptions): HttpResponseFor<UserListMessagesPage> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "users", params.getPathParam(0), "messages")
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  listMessagesHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  UserListMessagesPage.of(UserServiceImpl(clientOptions), params, it)
-              }
-          }
+        override fun listMessages(
+            params: UserListMessagesParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<UserListMessagesPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("v1", "users", params.getPathParam(0), "messages")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { listMessagesHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let { UserListMessagesPage.of(UserServiceImpl(clientOptions), params, it) }
+            }
         }
 
-        private val listPreferencesHandler: Handler<List<PreferenceSet>> = jsonHandler<List<PreferenceSet>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listPreferencesHandler: Handler<List<PreferenceSet>> =
+            jsonHandler<List<PreferenceSet>>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun listPreferences(params: UserListPreferencesParams, requestOptions: RequestOptions): HttpResponseFor<List<PreferenceSet>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "users", params.getPathParam(0), "preferences")
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  listPreferencesHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.forEach { it.validate() }
-                  }
-              }
-          }
+        override fun listPreferences(
+            params: UserListPreferencesParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<List<PreferenceSet>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("v1", "users", params.getPathParam(0), "preferences")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { listPreferencesHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.forEach { it.validate() }
+                        }
+                    }
+            }
         }
 
-        private val listSchedulesHandler: Handler<UserListSchedulesPage.Response> = jsonHandler<UserListSchedulesPage.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listSchedulesHandler: Handler<UserListSchedulesPage.Response> =
+            jsonHandler<UserListSchedulesPage.Response>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun listSchedules(params: UserListSchedulesParams, requestOptions: RequestOptions): HttpResponseFor<UserListSchedulesPage> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "users", params.getPathParam(0), "schedules")
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  listSchedulesHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  UserListSchedulesPage.of(UserServiceImpl(clientOptions), params, it)
-              }
-          }
+        override fun listSchedules(
+            params: UserListSchedulesParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<UserListSchedulesPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("v1", "users", params.getPathParam(0), "schedules")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { listSchedulesHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let { UserListSchedulesPage.of(UserServiceImpl(clientOptions), params, it) }
+            }
         }
 
-        private val listSubscriptionsHandler: Handler<UserListSubscriptionsPage.Response> = jsonHandler<UserListSubscriptionsPage.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listSubscriptionsHandler: Handler<UserListSubscriptionsPage.Response> =
+            jsonHandler<UserListSubscriptionsPage.Response>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun listSubscriptions(params: UserListSubscriptionsParams, requestOptions: RequestOptions): HttpResponseFor<UserListSubscriptionsPage> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "users", params.getPathParam(0), "subscriptions")
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  listSubscriptionsHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  UserListSubscriptionsPage.of(UserServiceImpl(clientOptions), params, it)
-              }
-          }
+        override fun listSubscriptions(
+            params: UserListSubscriptionsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<UserListSubscriptionsPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("v1", "users", params.getPathParam(0), "subscriptions")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { listSubscriptionsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        UserListSubscriptionsPage.of(UserServiceImpl(clientOptions), params, it)
+                    }
+            }
         }
 
-        private val mergeHandler: Handler<User> = jsonHandler<User>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val mergeHandler: Handler<User> =
+            jsonHandler<User>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun merge(params: UserMergeParams, requestOptions: RequestOptions): HttpResponseFor<User> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.POST)
-            .addPathSegments("v1", "users", params.getPathParam(0), "merge")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  mergeHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun merge(
+            params: UserMergeParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<User> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments("v1", "users", params.getPathParam(0), "merge")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { mergeHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val setChannelDataHandler: Handler<ChannelData> = jsonHandler<ChannelData>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val setChannelDataHandler: Handler<ChannelData> =
+            jsonHandler<ChannelData>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun setChannelData(params: UserSetChannelDataParams, requestOptions: RequestOptions): HttpResponseFor<ChannelData> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.PUT)
-            .addPathSegments("v1", "users", params.getPathParam(0), "channel_data", params.getPathParam(1))
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  setChannelDataHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun setChannelData(
+            params: UserSetChannelDataParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ChannelData> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments(
+                        "v1",
+                        "users",
+                        params.getPathParam(0),
+                        "channel_data",
+                        params.getPathParam(1),
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { setChannelDataHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val setPreferencesHandler: Handler<PreferenceSet> = jsonHandler<PreferenceSet>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val setPreferencesHandler: Handler<PreferenceSet> =
+            jsonHandler<PreferenceSet>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun setPreferences(params: UserSetPreferencesParams, requestOptions: RequestOptions): HttpResponseFor<PreferenceSet> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.PUT)
-            .addPathSegments("v1", "users", params.getPathParam(0), "preferences", params.getPathParam(1))
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  setPreferencesHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun setPreferences(
+            params: UserSetPreferencesParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PreferenceSet> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments(
+                        "v1",
+                        "users",
+                        params.getPathParam(0),
+                        "preferences",
+                        params.getPathParam(1),
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { setPreferencesHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val unsetChannelDataHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
+        private val unsetChannelDataHandler: Handler<String> =
+            stringHandler().withErrorHandler(errorHandler)
 
-        override fun unsetChannelData(params: UserUnsetChannelDataParams, requestOptions: RequestOptions): HttpResponseFor<String> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.DELETE)
-            .addPathSegments("v1", "users", params.getPathParam(0), "channel_data", params.getPathParam(1))
-            .apply { params._body().ifPresent{ body(json(clientOptions.jsonMapper, it)) } }
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  unsetChannelDataHandler.handle(it)
-              }
-          }
+        override fun unsetChannelData(
+            params: UserUnsetChannelDataParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<String> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments(
+                        "v1",
+                        "users",
+                        params.getPathParam(0),
+                        "channel_data",
+                        params.getPathParam(1),
+                    )
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable { response.use { unsetChannelDataHandler.handle(it) } }
         }
     }
 }

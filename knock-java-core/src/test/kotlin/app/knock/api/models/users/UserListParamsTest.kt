@@ -10,31 +10,23 @@ class UserListParamsTest {
 
     @Test
     fun create() {
-      UserListParams.builder()
-          .after("after")
-          .before("before")
-          .pageSize(0L)
-          .build()
+        UserListParams.builder().after("after").before("before").pageSize(0L).build()
     }
 
     @Test
     fun queryParams() {
-      val params = UserListParams.builder()
-          .after("after")
-          .before("before")
-          .pageSize(0L)
-          .build()
-      val expected = QueryParams.builder()
-      expected.put("after", "after")
-      expected.put("before", "before")
-      expected.put("page_size", "0")
-      assertThat(params._queryParams()).isEqualTo(expected.build())
+        val params = UserListParams.builder().after("after").before("before").pageSize(0L).build()
+        val expected = QueryParams.builder()
+        expected.put("after", "after")
+        expected.put("before", "before")
+        expected.put("page_size", "0")
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-      val params = UserListParams.builder().build()
-      val expected = QueryParams.builder()
-      assertThat(params._queryParams()).isEqualTo(expected.build())
+        val params = UserListParams.builder().build()
+        val expected = QueryParams.builder()
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 }

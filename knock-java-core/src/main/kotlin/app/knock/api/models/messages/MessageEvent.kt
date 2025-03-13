@@ -33,15 +33,22 @@ import kotlin.jvm.optionals.getOrNull
 
 /** A single event that occurred for a message */
 @NoAutoDetect
-class MessageEvent @JsonCreator private constructor(
+class MessageEvent
+@JsonCreator
+private constructor(
     @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("__typename") @ExcludeMissing private val _typename: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("inserted_at") @ExcludeMissing private val insertedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("recipient") @ExcludeMissing private val recipient: JsonField<Recipient> = JsonMissing.of(),
+    @JsonProperty("__typename")
+    @ExcludeMissing
+    private val _typename: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("inserted_at")
+    @ExcludeMissing
+    private val insertedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    @JsonProperty("recipient")
+    @ExcludeMissing
+    private val recipient: JsonField<Recipient> = JsonMissing.of(),
     @JsonProperty("type") @ExcludeMissing private val type: JsonField<Type> = JsonMissing.of(),
     @JsonProperty("data") @ExcludeMissing private val data: JsonField<Data> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
 ) {
 
     fun id(): String = id.getRequired("id")
@@ -51,8 +58,8 @@ class MessageEvent @JsonCreator private constructor(
     fun insertedAt(): OffsetDateTime = insertedAt.getRequired("inserted_at")
 
     /**
-     * A reference to a recipient, either a user identifier (string) or an object
-     * reference (id, collection).
+     * A reference to a recipient, either a user identifier (string) or an object reference (id,
+     * collection).
      */
     fun recipient(): Recipient = recipient.getRequired("recipient")
 
@@ -61,34 +68,24 @@ class MessageEvent @JsonCreator private constructor(
     /** The data associated with the event. Only present for some event types */
     fun data(): Optional<Data> = Optional.ofNullable(data.getNullable("data"))
 
-    @JsonProperty("id")
-    @ExcludeMissing
-    fun _id(): JsonField<String> = id
+    @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    @JsonProperty("__typename")
-    @ExcludeMissing
-    fun __typename(): JsonField<String> = _typename
+    @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
     @JsonProperty("inserted_at")
     @ExcludeMissing
     fun _insertedAt(): JsonField<OffsetDateTime> = insertedAt
 
     /**
-     * A reference to a recipient, either a user identifier (string) or an object
-     * reference (id, collection).
+     * A reference to a recipient, either a user identifier (string) or an object reference (id,
+     * collection).
      */
-    @JsonProperty("recipient")
-    @ExcludeMissing
-    fun _recipient(): JsonField<Recipient> = recipient
+    @JsonProperty("recipient") @ExcludeMissing fun _recipient(): JsonField<Recipient> = recipient
 
-    @JsonProperty("type")
-    @ExcludeMissing
-    fun _type(): JsonField<Type> = type
+    @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
     /** The data associated with the event. Only present for some event types */
-    @JsonProperty("data")
-    @ExcludeMissing
-    fun _data(): JsonField<Data> = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -96,20 +93,19 @@ class MessageEvent @JsonCreator private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): MessageEvent =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            id()
-            _typename()
-            insertedAt()
-            recipient().validate()
-            type()
-            data().ifPresent { it.validate() }
-            validated = true
+    fun validate(): MessageEvent = apply {
+        if (validated) {
+            return@apply
         }
+
+        id()
+        _typename()
+        insertedAt()
+        recipient().validate()
+        type()
+        data().ifPresent { it.validate() }
+        validated = true
+    }
 
     fun toBuilder() = Builder().from(this)
 
@@ -119,7 +115,6 @@ class MessageEvent @JsonCreator private constructor(
          * Returns a mutable builder for constructing an instance of [MessageEvent].
          *
          * The following fields are required:
-         *
          * ```java
          * .id()
          * ._typename()
@@ -128,8 +123,7 @@ class MessageEvent @JsonCreator private constructor(
          * .type()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [MessageEvent]. */
@@ -144,65 +138,52 @@ class MessageEvent @JsonCreator private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(messageEvent: MessageEvent) =
-            apply {
-                id = messageEvent.id
-                _typename = messageEvent._typename
-                insertedAt = messageEvent.insertedAt
-                recipient = messageEvent.recipient
-                type = messageEvent.type
-                data = messageEvent.data
-                additionalProperties = messageEvent.additionalProperties.toMutableMap()
-            }
+        internal fun from(messageEvent: MessageEvent) = apply {
+            id = messageEvent.id
+            _typename = messageEvent._typename
+            insertedAt = messageEvent.insertedAt
+            recipient = messageEvent.recipient
+            type = messageEvent.type
+            data = messageEvent.data
+            additionalProperties = messageEvent.additionalProperties.toMutableMap()
+        }
 
         fun id(id: String) = id(JsonField.of(id))
 
-        fun id(id: JsonField<String>) =
-            apply {
-                this.id = id
-            }
+        fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
-        fun _typename(_typename: JsonField<String>) =
-            apply {
-                this._typename = _typename
-            }
+        fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         fun insertedAt(insertedAt: OffsetDateTime) = insertedAt(JsonField.of(insertedAt))
 
-        fun insertedAt(insertedAt: JsonField<OffsetDateTime>) =
-            apply {
-                this.insertedAt = insertedAt
-            }
+        fun insertedAt(insertedAt: JsonField<OffsetDateTime>) = apply {
+            this.insertedAt = insertedAt
+        }
 
         /**
-         * A reference to a recipient, either a user identifier (string) or an object
-         * reference (id, collection).
+         * A reference to a recipient, either a user identifier (string) or an object reference (id,
+         * collection).
          */
         fun recipient(recipient: Recipient) = recipient(JsonField.of(recipient))
 
         /**
-         * A reference to a recipient, either a user identifier (string) or an object
-         * reference (id, collection).
+         * A reference to a recipient, either a user identifier (string) or an object reference (id,
+         * collection).
          */
-        fun recipient(recipient: JsonField<Recipient>) =
-            apply {
-                this.recipient = recipient
-            }
+        fun recipient(recipient: JsonField<Recipient>) = apply { this.recipient = recipient }
 
         /** A user identifier */
         fun recipient(string: String) = recipient(Recipient.ofString(string))
 
         /** An object reference to a recipient */
-        fun recipient(objectReference: Recipient.ObjectReference) = recipient(Recipient.ofObjectReference(objectReference))
+        fun recipient(objectReference: Recipient.ObjectReference) =
+            recipient(Recipient.ofObjectReference(objectReference))
 
         fun type(type: Type) = type(JsonField.of(type))
 
-        fun type(type: JsonField<Type>) =
-            apply {
-                this.type = type
-            }
+        fun type(type: JsonField<Type>) = apply { this.type = type }
 
         /** The data associated with the event. Only present for some event types */
         fun data(data: Data?) = data(JsonField.ofNullable(data))
@@ -211,70 +192,50 @@ class MessageEvent @JsonCreator private constructor(
         fun data(data: Optional<Data>) = data(data.getOrNull())
 
         /** The data associated with the event. Only present for some event types */
-        fun data(data: JsonField<Data>) =
-            apply {
-                this.data = data
-            }
+        fun data(data: JsonField<Data>) = apply { this.data = data }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         fun build(): MessageEvent =
             MessageEvent(
-              checkRequired(
-                "id", id
-              ),
-              checkRequired(
-                "_typename", _typename
-              ),
-              checkRequired(
-                "insertedAt", insertedAt
-              ),
-              checkRequired(
-                "recipient", recipient
-              ),
-              checkRequired(
-                "type", type
-              ),
-              data,
-              additionalProperties.toImmutable(),
+                checkRequired("id", id),
+                checkRequired("_typename", _typename),
+                checkRequired("insertedAt", insertedAt),
+                checkRequired("recipient", recipient),
+                checkRequired("type", type),
+                data,
+                additionalProperties.toImmutable(),
             )
     }
 
     /**
-     * A reference to a recipient, either a user identifier (string) or an object
-     * reference (id, collection).
+     * A reference to a recipient, either a user identifier (string) or an object reference (id,
+     * collection).
      */
     @JsonDeserialize(using = Recipient.Deserializer::class)
     @JsonSerialize(using = Recipient.Serializer::class)
-    class Recipient private constructor(
+    class Recipient
+    private constructor(
         private val string: String? = null,
         private val objectReference: ObjectReference? = null,
         private val _json: JsonValue? = null,
-
     ) {
 
         /** A user identifier */
@@ -296,39 +257,38 @@ class MessageEvent @JsonCreator private constructor(
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T {
-          return when {
-              string != null -> visitor.visitString(string)
-              objectReference != null -> visitor.visitObjectReference(objectReference)
-              else -> visitor.unknown(_json)
-          }
+            return when {
+                string != null -> visitor.visitString(string)
+                objectReference != null -> visitor.visitObjectReference(objectReference)
+                else -> visitor.unknown(_json)
+            }
         }
 
         private var validated: Boolean = false
 
-        fun validate(): Recipient =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                accept(object : Visitor<Unit> {
-                    override fun visitString(string: String) {
-
-                    }
-
-                    override fun visitObjectReference(objectReference: ObjectReference) {
-                      objectReference.validate()
-                    }
-                })
-                validated = true
+        fun validate(): Recipient = apply {
+            if (validated) {
+                return@apply
             }
 
-        override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            accept(
+                object : Visitor<Unit> {
+                    override fun visitString(string: String) {}
 
-          return /* spotless:off */ other is Recipient && string == other.string && objectReference == other.objectReference /* spotless:on */
+                    override fun visitObjectReference(objectReference: ObjectReference) {
+                        objectReference.validate()
+                    }
+                }
+            )
+            validated = true
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Recipient && string == other.string && objectReference == other.objectReference /* spotless:on */
         }
 
         override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, objectReference) /* spotless:on */
@@ -344,17 +304,16 @@ class MessageEvent @JsonCreator private constructor(
         companion object {
 
             /** A user identifier */
-            @JvmStatic
-            fun ofString(string: String) = Recipient(string = string)
+            @JvmStatic fun ofString(string: String) = Recipient(string = string)
 
             /** An object reference to a recipient */
             @JvmStatic
-            fun ofObjectReference(objectReference: ObjectReference) = Recipient(objectReference = objectReference)
+            fun ofObjectReference(objectReference: ObjectReference) =
+                Recipient(objectReference = objectReference)
         }
 
         /**
-         * An interface that defines how to map each variant of [Recipient] to a value of
-         * type [T].
+         * An interface that defines how to map each variant of [Recipient] to a value of type [T].
          */
         interface Visitor<out T> {
 
@@ -367,53 +326,64 @@ class MessageEvent @JsonCreator private constructor(
             /**
              * Maps an unknown variant of [Recipient] to a value of type [T].
              *
-             * An instance of [Recipient] can contain an unknown variant if it was deserialized
-             * from data that doesn't match any known variant. For example, if the SDK is on an
-             * older version than the API, then the API may respond with new variants that the
-             * SDK is unaware of.
+             * An instance of [Recipient] can contain an unknown variant if it was deserialized from
+             * data that doesn't match any known variant. For example, if the SDK is on an older
+             * version than the API, then the API may respond with new variants that the SDK is
+             * unaware of.
              *
              * @throws KnockInvalidDataException in the default implementation.
              */
             fun unknown(json: JsonValue?): T {
-              throw KnockInvalidDataException("Unknown Recipient: $json")
+                throw KnockInvalidDataException("Unknown Recipient: $json")
             }
         }
 
         internal class Deserializer : BaseDeserializer<Recipient>(Recipient::class) {
 
             override fun ObjectCodec.deserialize(node: JsonNode): Recipient {
-              val json = JsonValue.fromJsonNode(node)
+                val json = JsonValue.fromJsonNode(node)
 
-              tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                  return Recipient(string = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<ObjectReference>()){ it.validate() }?.let {
-                  return Recipient(objectReference = it, _json = json)
-              }
+                tryDeserialize(node, jacksonTypeRef<String>())?.let {
+                    return Recipient(string = it, _json = json)
+                }
+                tryDeserialize(node, jacksonTypeRef<ObjectReference>()) { it.validate() }
+                    ?.let {
+                        return Recipient(objectReference = it, _json = json)
+                    }
 
-              return Recipient(_json = json)
+                return Recipient(_json = json)
             }
         }
 
         internal class Serializer : BaseSerializer<Recipient>(Recipient::class) {
 
-            override fun serialize(value: Recipient, generator: JsonGenerator, provider: SerializerProvider) {
-              when {
-                  value.string != null -> generator.writeObject(value.string)
-                  value.objectReference != null -> generator.writeObject(value.objectReference)
-                  value._json != null -> generator.writeObject(value._json)
-                  else -> throw IllegalStateException("Invalid Recipient")
-              }
+            override fun serialize(
+                value: Recipient,
+                generator: JsonGenerator,
+                provider: SerializerProvider,
+            ) {
+                when {
+                    value.string != null -> generator.writeObject(value.string)
+                    value.objectReference != null -> generator.writeObject(value.objectReference)
+                    value._json != null -> generator.writeObject(value._json)
+                    else -> throw IllegalStateException("Invalid Recipient")
+                }
             }
         }
 
         /** An object reference to a recipient */
         @NoAutoDetect
-        class ObjectReference @JsonCreator private constructor(
-            @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("collection") @ExcludeMissing private val collection: JsonField<String> = JsonMissing.of(),
-            @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
+        class ObjectReference
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id")
+            @ExcludeMissing
+            private val id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("collection")
+            @ExcludeMissing
+            private val collection: JsonField<String> = JsonMissing.of(),
+            @JsonAnySetter
+            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
             /** An object identifier */
@@ -423,9 +393,7 @@ class MessageEvent @JsonCreator private constructor(
             fun collection(): String = collection.getRequired("collection")
 
             /** An object identifier */
-            @JsonProperty("id")
-            @ExcludeMissing
-            fun _id(): JsonField<String> = id
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
             /** The collection the object belongs to */
             @JsonProperty("collection")
@@ -438,16 +406,15 @@ class MessageEvent @JsonCreator private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): ObjectReference =
-                apply {
-                    if (validated) {
-                      return@apply
-                    }
-
-                    id()
-                    collection()
-                    validated = true
+            fun validate(): ObjectReference = apply {
+                if (validated) {
+                    return@apply
                 }
+
+                id()
+                collection()
+                validated = true
+            }
 
             fun toBuilder() = Builder().from(this)
 
@@ -457,14 +424,12 @@ class MessageEvent @JsonCreator private constructor(
                  * Returns a mutable builder for constructing an instance of [ObjectReference].
                  *
                  * The following fields are required:
-                 *
                  * ```java
                  * .id()
                  * .collection()
                  * ```
                  */
-                @JvmStatic
-                fun builder() = Builder()
+                @JvmStatic fun builder() = Builder()
             }
 
             /** A builder for [ObjectReference]. */
@@ -475,75 +440,62 @@ class MessageEvent @JsonCreator private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(objectReference: ObjectReference) =
-                    apply {
-                        id = objectReference.id
-                        collection = objectReference.collection
-                        additionalProperties = objectReference.additionalProperties.toMutableMap()
-                    }
+                internal fun from(objectReference: ObjectReference) = apply {
+                    id = objectReference.id
+                    collection = objectReference.collection
+                    additionalProperties = objectReference.additionalProperties.toMutableMap()
+                }
 
                 /** An object identifier */
                 fun id(id: String) = id(JsonField.of(id))
 
                 /** An object identifier */
-                fun id(id: JsonField<String>) =
-                    apply {
-                        this.id = id
-                    }
+                fun id(id: JsonField<String>) = apply { this.id = id }
 
                 /** The collection the object belongs to */
                 fun collection(collection: String) = collection(JsonField.of(collection))
 
                 /** The collection the object belongs to */
-                fun collection(collection: JsonField<String>) =
-                    apply {
-                        this.collection = collection
-                    }
+                fun collection(collection: JsonField<String>) = apply {
+                    this.collection = collection
+                }
 
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.clear()
-                        putAllAdditionalProperties(additionalProperties)
-                    }
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
 
-                fun putAdditionalProperty(key: String, value: JsonValue) =
-                    apply {
-                        additionalProperties.put(key, value)
-                    }
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
 
                 fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
                     apply {
                         this.additionalProperties.putAll(additionalProperties)
                     }
 
-                fun removeAdditionalProperty(key: String) =
-                    apply {
-                        additionalProperties.remove(key)
-                    }
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
 
-                fun removeAllAdditionalProperties(keys: Set<String>) =
-                    apply {
-                        keys.forEach(::removeAdditionalProperty)
-                    }
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
 
                 fun build(): ObjectReference =
                     ObjectReference(
-                      checkRequired(
-                        "id", id
-                      ),
-                      checkRequired(
-                        "collection", collection
-                      ),
-                      additionalProperties.toImmutable(),
+                        checkRequired("id", id),
+                        checkRequired("collection", collection),
+                        additionalProperties.toImmutable(),
                     )
             }
 
             override fun equals(other: Any?): Boolean {
-              if (this === other) {
-                  return true
-              }
+                if (this === other) {
+                    return true
+                }
 
-              return /* spotless:off */ other is ObjectReference && id == other.id && collection == other.collection && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is ObjectReference && id == other.id && collection == other.collection && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -552,25 +504,22 @@ class MessageEvent @JsonCreator private constructor(
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() = "ObjectReference{id=$id, collection=$collection, additionalProperties=$additionalProperties}"
+            override fun toString() =
+                "ObjectReference{id=$id, collection=$collection, additionalProperties=$additionalProperties}"
         }
     }
 
-    class Type @JsonCreator private constructor(
-        private val value: JsonField<String>,
-
-    ) : Enum {
+    class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that
-         * doesn't match any known member, and you want to know that value. For example, if
-         * the SDK is on an older version than the API, then the API may respond with new
-         * members that the SDK is unaware of.
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue
-        fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -624,11 +573,9 @@ class MessageEvent @JsonCreator private constructor(
          * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [Type] can contain an unknown value in a couple of cases:
-         *
-         * - It was deserialized from data that doesn't match any known member. For
-         *   example, if the SDK is on an older version than the API, then the API may
-         *   respond with new members that the SDK is unaware of.
-         *
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -650,11 +597,11 @@ class MessageEvent @JsonCreator private constructor(
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or
-         * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if
-         * you want to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -677,11 +624,10 @@ class MessageEvent @JsonCreator private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and
-         * don't want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
          *
-         * @throws KnockInvalidDataException if this class instance's value is a not a
-         * known member.
+         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
          */
         fun known(): Known =
             when (this) {
@@ -704,20 +650,21 @@ class MessageEvent @JsonCreator private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for
-         * debugging and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
          *
-         * @throws KnockInvalidDataException if this class instance's value does not have
-         * the expected primitive type.
+         * @throws KnockInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
          */
-        fun asString(): String = _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+        fun asString(): String =
+            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return /* spotless:off */ other is Type && value == other.value /* spotless:on */
+            return /* spotless:off */ other is Type && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -727,9 +674,11 @@ class MessageEvent @JsonCreator private constructor(
 
     /** The data associated with the event. Only present for some event types */
     @NoAutoDetect
-    class Data @JsonCreator private constructor(
-        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
+    class Data
+    @JsonCreator
+    private constructor(
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
     ) {
 
         @JsonAnyGetter
@@ -738,22 +687,20 @@ class MessageEvent @JsonCreator private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Data =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                validated = true
+        fun validate(): Data = apply {
+            if (validated) {
+                return@apply
             }
+
+            validated = true
+        }
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [Data]. */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Data]. */
@@ -762,46 +709,38 @@ class MessageEvent @JsonCreator private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(data: Data) =
-                apply {
-                    additionalProperties = data.additionalProperties.toMutableMap()
-                }
+            internal fun from(data: Data) = apply {
+                additionalProperties = data.additionalProperties.toMutableMap()
+            }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             fun build(): Data = Data(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return /* spotless:off */ other is Data && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Data && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -814,11 +753,11 @@ class MessageEvent @JsonCreator private constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is MessageEvent && id == other.id && _typename == other._typename && insertedAt == other.insertedAt && recipient == other.recipient && type == other.type && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is MessageEvent && id == other.id && _typename == other._typename && insertedAt == other.insertedAt && recipient == other.recipient && type == other.type && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -827,5 +766,6 @@ class MessageEvent @JsonCreator private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "MessageEvent{id=$id, _typename=$_typename, insertedAt=$insertedAt, recipient=$recipient, type=$type, data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "MessageEvent{id=$id, _typename=$_typename, insertedAt=$insertedAt, recipient=$recipient, type=$type, data=$data, additionalProperties=$additionalProperties}"
 }

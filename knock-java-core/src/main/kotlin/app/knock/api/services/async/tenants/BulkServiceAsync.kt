@@ -13,61 +13,61 @@ import java.util.concurrent.CompletableFuture
 interface BulkServiceAsync {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for
-     * each method.
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
 
     /** Bulk delete tenants */
     fun delete(params: BulkDeleteParams): CompletableFuture<BulkOperation> =
-        delete(
-          params, RequestOptions.none()
-        )
+        delete(params, RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(params: BulkDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<BulkOperation>
+    fun delete(
+        params: BulkDeleteParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<BulkOperation>
 
     /** Bulk set tenants */
     fun set(params: BulkSetParams): CompletableFuture<BulkOperation> =
-        set(
-          params, RequestOptions.none()
-        )
+        set(params, RequestOptions.none())
 
     /** @see [set] */
-    fun set(params: BulkSetParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<BulkOperation>
+    fun set(
+        params: BulkSetParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<BulkOperation>
 
-    /**
-     * A view of [BulkServiceAsync] that provides access to raw HTTP responses for each
-     * method.
-     */
+    /** A view of [BulkServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
         /**
-         * Returns a raw HTTP response for `post /v1/tenants/bulk/delete`, but is otherwise
-         * the same as [BulkServiceAsync.delete].
+         * Returns a raw HTTP response for `post /v1/tenants/bulk/delete`, but is otherwise the same
+         * as [BulkServiceAsync.delete].
          */
         @MustBeClosed
         fun delete(params: BulkDeleteParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
-            delete(
-              params, RequestOptions.none()
-            )
+            delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
-        fun delete(params: BulkDeleteParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<BulkOperation>>
+        fun delete(
+            params: BulkDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
 
         /**
-         * Returns a raw HTTP response for `post /v1/tenants/bulk/set`, but is otherwise
-         * the same as [BulkServiceAsync.set].
+         * Returns a raw HTTP response for `post /v1/tenants/bulk/set`, but is otherwise the same as
+         * [BulkServiceAsync.set].
          */
         @MustBeClosed
         fun set(params: BulkSetParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
-            set(
-              params, RequestOptions.none()
-            )
+            set(params, RequestOptions.none())
 
         /** @see [set] */
         @MustBeClosed
-        fun set(params: BulkSetParams, requestOptions: RequestOptions = RequestOptions.none()): CompletableFuture<HttpResponseFor<BulkOperation>>
+        fun set(
+            params: BulkSetParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
     }
 }

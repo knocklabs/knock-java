@@ -8,6 +8,6 @@ class BatchArchiveParamsTest {
 
     @Test
     fun create() {
-      BatchArchiveParams.builder().build()
+        BatchArchiveParams.builder().build()
     }
 }

@@ -9,8 +9,7 @@ import app.knock.api.services.blocking.recipients.SubscriptionService
 interface RecipientService {
 
     /**
-     * Returns a view of this service that provides access to raw HTTP responses for
-     * each method.
+     * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
 
@@ -20,10 +19,7 @@ interface RecipientService {
 
     fun channelData(): ChannelDataService
 
-    /**
-     * A view of [RecipientService] that provides access to raw HTTP responses for each
-     * method.
-     */
+    /** A view of [RecipientService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
 
         fun subscriptions(): SubscriptionService.WithRawResponse

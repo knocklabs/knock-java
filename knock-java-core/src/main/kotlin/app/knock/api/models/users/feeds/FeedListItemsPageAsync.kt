@@ -9,7 +9,6 @@ import app.knock.api.core.JsonValue
 import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
-import app.knock.api.models
 import app.knock.api.services.async.users.FeedServiceAsync
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -20,19 +19,13 @@ import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
-import kotlin.jvm.optionals.getOrNull
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 
-/**
- * Returns a paginated list of feed items for a user, including metadata about the
- * feed.
- */
-class FeedListItemsPageAsync private constructor(
+/** Returns a paginated list of feed items for a user, including metadata about the feed. */
+class FeedListItemsPageAsync
+private constructor(
     private val feedsService: FeedServiceAsync,
     private val params: FeedListItemsParams,
     private val response: Response,
-
 ) {
 
     fun response(): Response = response
@@ -42,39 +35,43 @@ class FeedListItemsPageAsync private constructor(
     fun pageInfo(): Optional<PageInfo> = response().pageInfo()
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is FeedListItemsPageAsync && feedsService == other.feedsService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is FeedListItemsPageAsync && feedsService == other.feedsService && params == other.params && response == other.response /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(feedsService, params, response) /* spotless:on */
 
-    override fun toString() = "FeedListItemsPageAsync{feedsService=$feedsService, params=$params, response=$response}"
+    override fun toString() =
+        "FeedListItemsPageAsync{feedsService=$feedsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean {
-      if (entries().isEmpty()) {
-        return false;
-      }
+        if (entries().isEmpty()) {
+            return false
+        }
 
-      return pageInfo().flatMap { it.after()}.isPresent
+        return pageInfo().flatMap { it.after() }.isPresent
     }
 
     fun getNextPageParams(): Optional<FeedListItemsParams> {
-      if (!hasNextPage()) {
-        return Optional.empty()
-      }
+        if (!hasNextPage()) {
+            return Optional.empty()
+        }
 
-      return Optional.of(FeedListItemsParams.builder().from(params).apply {pageInfo().flatMap { it.after()}.ifPresent{ this.after(it) } }.build())
+        return Optional.of(
+            FeedListItemsParams.builder()
+                .from(params)
+                .apply { pageInfo().flatMap { it.after() }.ifPresent { this.after(it) } }
+                .build()
+        )
     }
 
     fun getNextPage(): CompletableFuture<Optional<FeedListItemsPageAsync>> {
-      return getNextPageParams().map {
-        feedsService.listItems(it).thenApply { Optional.of(it) }
-      }.orElseGet {
-          CompletableFuture.completedFuture(Optional.empty())
-      }
+        return getNextPageParams()
+            .map { feedsService.listItems(it).thenApply { Optional.of(it) } }
+            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
     }
 
     fun autoPager(): AutoPager = AutoPager(this)
@@ -83,19 +80,18 @@ class FeedListItemsPageAsync private constructor(
 
         @JvmStatic
         fun of(feedsService: FeedServiceAsync, params: FeedListItemsParams, response: Response) =
-            FeedListItemsPageAsync(
-              feedsService,
-              params,
-              response,
-            )
+            FeedListItemsPageAsync(feedsService, params, response)
     }
 
     @NoAutoDetect
-    class Response @JsonCreator constructor(
-        @JsonProperty("entries") private val entries: JsonField<List<FeedListItemsResponse>> = JsonMissing.of(),
+    class Response
+    @JsonCreator
+    constructor(
+        @JsonProperty("entries")
+        private val entries: JsonField<List<FeedListItemsResponse>> = JsonMissing.of(),
         @JsonProperty("page_info") private val pageInfo: JsonField<PageInfo> = JsonMissing.of(),
-        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun entries(): List<FeedListItemsResponse> = entries.getNullable("entries") ?: listOf()
@@ -103,7 +99,8 @@ class FeedListItemsPageAsync private constructor(
         fun pageInfo(): Optional<PageInfo> = Optional.ofNullable(pageInfo.getNullable("page_info"))
 
         @JsonProperty("entries")
-        fun _entries(): Optional<JsonField<List<FeedListItemsResponse>>> = Optional.ofNullable(entries)
+        fun _entries(): Optional<JsonField<List<FeedListItemsResponse>>> =
+            Optional.ofNullable(entries)
 
         @JsonProperty("page_info")
         fun _pageInfo(): Optional<JsonField<PageInfo>> = Optional.ofNullable(pageInfo)
@@ -114,39 +111,37 @@ class FeedListItemsPageAsync private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Response =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                entries().map { it.validate() }
-                pageInfo().ifPresent { it.validate() }
-                validated = true
+        fun validate(): Response = apply {
+            if (validated) {
+                return@apply
             }
+
+            entries().map { it.validate() }
+            pageInfo().ifPresent { it.validate() }
+            validated = true
+        }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return /* spotless:off */ other is Response && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Response && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         override fun hashCode(): Int = /* spotless:off */ Objects.hash(entries, pageInfo, additionalProperties) /* spotless:on */
 
-        override fun toString() = "Response{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Response{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
 
         companion object {
 
             /**
-             * Returns a mutable builder for constructing an instance of
-             * [FeedListItemsPageAsync].
+             * Returns a mutable builder for constructing an instance of [FeedListItemsPageAsync].
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         class Builder {
@@ -156,70 +151,56 @@ class FeedListItemsPageAsync private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(page: Response) =
-                apply {
-                    this.entries = page.entries
-                    this.pageInfo = page.pageInfo
-                    this.additionalProperties.putAll(page.additionalProperties)
-                }
+            internal fun from(page: Response) = apply {
+                this.entries = page.entries
+                this.pageInfo = page.pageInfo
+                this.additionalProperties.putAll(page.additionalProperties)
+            }
 
             fun entries(entries: List<FeedListItemsResponse>) = entries(JsonField.of(entries))
 
-            fun entries(entries: JsonField<List<FeedListItemsResponse>>) = apply { this.entries = entries }
+            fun entries(entries: JsonField<List<FeedListItemsResponse>>) = apply {
+                this.entries = entries
+            }
 
             fun pageInfo(pageInfo: PageInfo) = pageInfo(JsonField.of(pageInfo))
 
             fun pageInfo(pageInfo: JsonField<PageInfo>) = apply { this.pageInfo = pageInfo }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    this.additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
 
-            fun build() =
-                Response(
-                  entries,
-                  pageInfo,
-                  additionalProperties.toImmutable(),
-                )
+            fun build() = Response(entries, pageInfo, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: FeedListItemsPageAsync,
+    class AutoPager(private val firstPage: FeedListItemsPageAsync) {
 
-    ) {
-
-        fun forEach(action: Predicate<FeedListItemsResponse>, executor: Executor): CompletableFuture<Void> {
-          fun CompletableFuture<Optional<FeedListItemsPageAsync>>.forEach(action: (FeedListItemsResponse) -> Boolean, executor: Executor): CompletableFuture<Void> =
-              thenComposeAsync(
-                { page ->
-                    page
-                    .filter {
-                        it.entries().all(action)
-                    }
-                    .map {
-                        it.getNextPage().forEach(action, executor)
-                    }
-                    .orElseGet {
-                        CompletableFuture.completedFuture(null)
-                    }
-                }, executor
-              )
-          return CompletableFuture.completedFuture(Optional.of(firstPage))
-          .forEach(
-            action::test, executor
-          )
+        fun forEach(
+            action: Predicate<FeedListItemsResponse>,
+            executor: Executor,
+        ): CompletableFuture<Void> {
+            fun CompletableFuture<Optional<FeedListItemsPageAsync>>.forEach(
+                action: (FeedListItemsResponse) -> Boolean,
+                executor: Executor,
+            ): CompletableFuture<Void> =
+                thenComposeAsync(
+                    { page ->
+                        page
+                            .filter { it.entries().all(action) }
+                            .map { it.getNextPage().forEach(action, executor) }
+                            .orElseGet { CompletableFuture.completedFuture(null) }
+                    },
+                    executor,
+                )
+            return CompletableFuture.completedFuture(Optional.of(firstPage))
+                .forEach(action::test, executor)
         }
 
         fun toList(executor: Executor): CompletableFuture<List<FeedListItemsResponse>> {
-          val values = mutableListOf<FeedListItemsResponse>()
-          return forEach(
-            values::add, executor
-          )
-          .thenApply {
-              values
-          }
+            val values = mutableListOf<FeedListItemsResponse>()
+            return forEach(values::add, executor).thenApply { values }
         }
     }
 }
