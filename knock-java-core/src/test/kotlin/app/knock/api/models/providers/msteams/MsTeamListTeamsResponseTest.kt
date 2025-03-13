@@ -9,20 +9,26 @@ class MsTeamListTeamsResponseTest {
 
     @Test
     fun createMsTeamListTeamsResponse() {
-      val msTeamListTeamsResponse = MsTeamListTeamsResponse.builder()
-          .addMsTeamsTeam(MsTeamListTeamsResponse.MsTeamsTeam.builder()
-              .id("team-id-1")
-              .displayName("Engineering Team")
-              .description("description")
-              .build())
-          .skipToken("token-for-next-page")
-          .build()
-      assertThat(msTeamListTeamsResponse).isNotNull
-      assertThat(msTeamListTeamsResponse.msTeamsTeams()).containsExactly(MsTeamListTeamsResponse.MsTeamsTeam.builder()
-          .id("team-id-1")
-          .displayName("Engineering Team")
-          .description("description")
-          .build())
-      assertThat(msTeamListTeamsResponse.skipToken()).contains("token-for-next-page")
+        val msTeamListTeamsResponse =
+            MsTeamListTeamsResponse.builder()
+                .addMsTeamsTeam(
+                    MsTeamListTeamsResponse.MsTeamsTeam.builder()
+                        .id("team-id-1")
+                        .displayName("Engineering Team")
+                        .description("description")
+                        .build()
+                )
+                .skipToken("token-for-next-page")
+                .build()
+        assertThat(msTeamListTeamsResponse).isNotNull
+        assertThat(msTeamListTeamsResponse.msTeamsTeams())
+            .containsExactly(
+                MsTeamListTeamsResponse.MsTeamsTeam.builder()
+                    .id("team-id-1")
+                    .displayName("Engineering Team")
+                    .description("description")
+                    .build()
+            )
+        assertThat(msTeamListTeamsResponse.skipToken()).contains("token-for-next-page")
     }
 }

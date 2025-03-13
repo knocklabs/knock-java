@@ -18,48 +18,54 @@ import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.bulkoperations.BulkOperationGetParams
 import java.util.concurrent.CompletableFuture
 
-class BulkOperationServiceAsyncImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class BulkOperationServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
+    BulkOperationServiceAsync {
 
-) : BulkOperationServiceAsync {
-
-    private val withRawResponse: BulkOperationServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: BulkOperationServiceAsync.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): BulkOperationServiceAsync.WithRawResponse = withRawResponse
 
-    override fun get(params: BulkOperationGetParams, requestOptions: RequestOptions): CompletableFuture<BulkOperation> =
+    override fun get(
+        params: BulkOperationGetParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<BulkOperation> =
         // get /v1/bulk_operations/{id}
         withRawResponse().get(params, requestOptions).thenApply { it.parse() }
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : BulkOperationServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        BulkOperationServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val getHandler: Handler<BulkOperation> = jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val getHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun get(params: BulkOperationGetParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<BulkOperation>> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "bulk_operations", params.getPathParam(0))
-            .build()
-            .prepareAsync(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
-            it, requestOptions
-          ) }.thenApply { response -> response.parseable {
-              response.use {
-                  getHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          } }
+        override fun get(
+            params: BulkOperationGetParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("v1", "bulk_operations", params.getPathParam(0))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { getHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
         }
     }
 }

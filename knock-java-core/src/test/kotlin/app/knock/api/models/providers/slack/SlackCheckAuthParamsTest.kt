@@ -10,44 +10,47 @@ class SlackCheckAuthParamsTest {
 
     @Test
     fun create() {
-      SlackCheckAuthParams.builder()
-          .channelId("channel_id")
-          .accessTokenObject("access_token_object")
-          .build()
+        SlackCheckAuthParams.builder()
+            .channelId("channel_id")
+            .accessTokenObject("access_token_object")
+            .build()
     }
 
     @Test
     fun queryParams() {
-      val params = SlackCheckAuthParams.builder()
-          .channelId("channel_id")
-          .accessTokenObject("access_token_object")
-          .build()
-      val expected = QueryParams.builder()
-      expected.put("access_token_object", "access_token_object")
-      assertThat(params._queryParams()).isEqualTo(expected.build())
+        val params =
+            SlackCheckAuthParams.builder()
+                .channelId("channel_id")
+                .accessTokenObject("access_token_object")
+                .build()
+        val expected = QueryParams.builder()
+        expected.put("access_token_object", "access_token_object")
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-      val params = SlackCheckAuthParams.builder()
-          .channelId("channel_id")
-          .accessTokenObject("access_token_object")
-          .build()
-      val expected = QueryParams.builder()
-      expected.put("access_token_object", "access_token_object")
-      assertThat(params._queryParams()).isEqualTo(expected.build())
+        val params =
+            SlackCheckAuthParams.builder()
+                .channelId("channel_id")
+                .accessTokenObject("access_token_object")
+                .build()
+        val expected = QueryParams.builder()
+        expected.put("access_token_object", "access_token_object")
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
     fun getPathParam() {
-      val params = SlackCheckAuthParams.builder()
-          .channelId("channel_id")
-          .accessTokenObject("access_token_object")
-          .build()
-      assertThat(params).isNotNull
-      // path param "channelId"
-      assertThat(params.getPathParam(0)).isEqualTo("channel_id")
-      // out-of-bound path param
-      assertThat(params.getPathParam(1)).isEqualTo("")
+        val params =
+            SlackCheckAuthParams.builder()
+                .channelId("channel_id")
+                .accessTokenObject("access_token_object")
+                .build()
+        assertThat(params).isNotNull
+        // path param "channelId"
+        assertThat(params.getPathParam(0)).isEqualTo("channel_id")
+        // out-of-bound path param
+        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

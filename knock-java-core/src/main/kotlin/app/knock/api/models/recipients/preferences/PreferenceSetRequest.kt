@@ -19,32 +19,41 @@ import kotlin.jvm.optionals.getOrNull
 
 /** Set preferences for a recipient */
 @NoAutoDetect
-class PreferenceSetRequest @JsonCreator private constructor(
-    @JsonProperty("categories") @ExcludeMissing private val categories: JsonField<Categories> = JsonMissing.of(),
-    @JsonProperty("channel_types") @ExcludeMissing private val channelTypes: JsonField<PreferenceSetChannelTypes> = JsonMissing.of(),
-    @JsonProperty("workflows") @ExcludeMissing private val workflows: JsonField<Workflows> = JsonMissing.of(),
+class PreferenceSetRequest
+@JsonCreator
+private constructor(
+    @JsonProperty("categories")
+    @ExcludeMissing
+    private val categories: JsonField<Categories> = JsonMissing.of(),
+    @JsonProperty("channel_types")
+    @ExcludeMissing
+    private val channelTypes: JsonField<PreferenceSetChannelTypes> = JsonMissing.of(),
+    @JsonProperty("workflows")
+    @ExcludeMissing
+    private val workflows: JsonField<Workflows> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
 ) {
 
     /**
-     * A setting for a preference set, where the key in the object is the category, and
-     * the values are the preference settings for that category.
+     * A setting for a preference set, where the key in the object is the category, and the values
+     * are the preference settings for that category.
      */
-    fun categories(): Optional<Categories> = Optional.ofNullable(categories.getNullable("categories"))
+    fun categories(): Optional<Categories> =
+        Optional.ofNullable(categories.getNullable("categories"))
 
     /** Channel type preferences */
-    fun channelTypes(): Optional<PreferenceSetChannelTypes> = Optional.ofNullable(channelTypes.getNullable("channel_types"))
+    fun channelTypes(): Optional<PreferenceSetChannelTypes> =
+        Optional.ofNullable(channelTypes.getNullable("channel_types"))
 
     /**
-     * A setting for a preference set, where the key in the object is the workflow key,
-     * and the values are the preference settings for that workflow.
+     * A setting for a preference set, where the key in the object is the workflow key, and the
+     * values are the preference settings for that workflow.
      */
     fun workflows(): Optional<Workflows> = Optional.ofNullable(workflows.getNullable("workflows"))
 
     /**
-     * A setting for a preference set, where the key in the object is the category, and
-     * the values are the preference settings for that category.
+     * A setting for a preference set, where the key in the object is the category, and the values
+     * are the preference settings for that category.
      */
     @JsonProperty("categories")
     @ExcludeMissing
@@ -56,12 +65,10 @@ class PreferenceSetRequest @JsonCreator private constructor(
     fun _channelTypes(): JsonField<PreferenceSetChannelTypes> = channelTypes
 
     /**
-     * A setting for a preference set, where the key in the object is the workflow key,
-     * and the values are the preference settings for that workflow.
+     * A setting for a preference set, where the key in the object is the workflow key, and the
+     * values are the preference settings for that workflow.
      */
-    @JsonProperty("workflows")
-    @ExcludeMissing
-    fun _workflows(): JsonField<Workflows> = workflows
+    @JsonProperty("workflows") @ExcludeMissing fun _workflows(): JsonField<Workflows> = workflows
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -69,28 +76,23 @@ class PreferenceSetRequest @JsonCreator private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): PreferenceSetRequest =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            categories().ifPresent { it.validate() }
-            channelTypes().ifPresent { it.validate() }
-            workflows().ifPresent { it.validate() }
-            validated = true
+    fun validate(): PreferenceSetRequest = apply {
+        if (validated) {
+            return@apply
         }
+
+        categories().ifPresent { it.validate() }
+        channelTypes().ifPresent { it.validate() }
+        workflows().ifPresent { it.validate() }
+        validated = true
+    }
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of
-         * [PreferenceSetRequest].
-         */
-        @JvmStatic
-        fun builder() = Builder()
+        /** Returns a mutable builder for constructing an instance of [PreferenceSetRequest]. */
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [PreferenceSetRequest]. */
@@ -102,111 +104,100 @@ class PreferenceSetRequest @JsonCreator private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(preferenceSetRequest: PreferenceSetRequest) =
-            apply {
-                categories = preferenceSetRequest.categories
-                channelTypes = preferenceSetRequest.channelTypes
-                workflows = preferenceSetRequest.workflows
-                additionalProperties = preferenceSetRequest.additionalProperties.toMutableMap()
-            }
+        internal fun from(preferenceSetRequest: PreferenceSetRequest) = apply {
+            categories = preferenceSetRequest.categories
+            channelTypes = preferenceSetRequest.channelTypes
+            workflows = preferenceSetRequest.workflows
+            additionalProperties = preferenceSetRequest.additionalProperties.toMutableMap()
+        }
 
         /**
-         * A setting for a preference set, where the key in the object is the category, and
-         * the values are the preference settings for that category.
+         * A setting for a preference set, where the key in the object is the category, and the
+         * values are the preference settings for that category.
          */
         fun categories(categories: Categories?) = categories(JsonField.ofNullable(categories))
 
         /**
-         * A setting for a preference set, where the key in the object is the category, and
-         * the values are the preference settings for that category.
+         * A setting for a preference set, where the key in the object is the category, and the
+         * values are the preference settings for that category.
          */
         fun categories(categories: Optional<Categories>) = categories(categories.getOrNull())
 
         /**
-         * A setting for a preference set, where the key in the object is the category, and
-         * the values are the preference settings for that category.
+         * A setting for a preference set, where the key in the object is the category, and the
+         * values are the preference settings for that category.
          */
-        fun categories(categories: JsonField<Categories>) =
-            apply {
-                this.categories = categories
-            }
+        fun categories(categories: JsonField<Categories>) = apply { this.categories = categories }
 
         /** Channel type preferences */
-        fun channelTypes(channelTypes: PreferenceSetChannelTypes?) = channelTypes(JsonField.ofNullable(channelTypes))
+        fun channelTypes(channelTypes: PreferenceSetChannelTypes?) =
+            channelTypes(JsonField.ofNullable(channelTypes))
 
         /** Channel type preferences */
-        fun channelTypes(channelTypes: Optional<PreferenceSetChannelTypes>) = channelTypes(channelTypes.getOrNull())
+        fun channelTypes(channelTypes: Optional<PreferenceSetChannelTypes>) =
+            channelTypes(channelTypes.getOrNull())
 
         /** Channel type preferences */
-        fun channelTypes(channelTypes: JsonField<PreferenceSetChannelTypes>) =
-            apply {
-                this.channelTypes = channelTypes
-            }
+        fun channelTypes(channelTypes: JsonField<PreferenceSetChannelTypes>) = apply {
+            this.channelTypes = channelTypes
+        }
 
         /**
-         * A setting for a preference set, where the key in the object is the workflow key,
-         * and the values are the preference settings for that workflow.
+         * A setting for a preference set, where the key in the object is the workflow key, and the
+         * values are the preference settings for that workflow.
          */
         fun workflows(workflows: Workflows?) = workflows(JsonField.ofNullable(workflows))
 
         /**
-         * A setting for a preference set, where the key in the object is the workflow key,
-         * and the values are the preference settings for that workflow.
+         * A setting for a preference set, where the key in the object is the workflow key, and the
+         * values are the preference settings for that workflow.
          */
         fun workflows(workflows: Optional<Workflows>) = workflows(workflows.getOrNull())
 
         /**
-         * A setting for a preference set, where the key in the object is the workflow key,
-         * and the values are the preference settings for that workflow.
+         * A setting for a preference set, where the key in the object is the workflow key, and the
+         * values are the preference settings for that workflow.
          */
-        fun workflows(workflows: JsonField<Workflows>) =
-            apply {
-                this.workflows = workflows
-            }
+        fun workflows(workflows: JsonField<Workflows>) = apply { this.workflows = workflows }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         fun build(): PreferenceSetRequest =
             PreferenceSetRequest(
-              categories,
-              channelTypes,
-              workflows,
-              additionalProperties.toImmutable(),
+                categories,
+                channelTypes,
+                workflows,
+                additionalProperties.toImmutable(),
             )
     }
 
     /**
-     * A setting for a preference set, where the key in the object is the category, and
-     * the values are the preference settings for that category.
+     * A setting for a preference set, where the key in the object is the category, and the values
+     * are the preference settings for that category.
      */
     @NoAutoDetect
-    class Categories @JsonCreator private constructor(
-        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
+    class Categories
+    @JsonCreator
+    private constructor(
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
     ) {
 
         @JsonAnyGetter
@@ -215,22 +206,20 @@ class PreferenceSetRequest @JsonCreator private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Categories =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                validated = true
+        fun validate(): Categories = apply {
+            if (validated) {
+                return@apply
             }
+
+            validated = true
+        }
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [Categories]. */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Categories]. */
@@ -239,46 +228,38 @@ class PreferenceSetRequest @JsonCreator private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(categories: Categories) =
-                apply {
-                    additionalProperties = categories.additionalProperties.toMutableMap()
-                }
+            internal fun from(categories: Categories) = apply {
+                additionalProperties = categories.additionalProperties.toMutableMap()
+            }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             fun build(): Categories = Categories(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return /* spotless:off */ other is Categories && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Categories && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -291,13 +272,15 @@ class PreferenceSetRequest @JsonCreator private constructor(
     }
 
     /**
-     * A setting for a preference set, where the key in the object is the workflow key,
-     * and the values are the preference settings for that workflow.
+     * A setting for a preference set, where the key in the object is the workflow key, and the
+     * values are the preference settings for that workflow.
      */
     @NoAutoDetect
-    class Workflows @JsonCreator private constructor(
-        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
+    class Workflows
+    @JsonCreator
+    private constructor(
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
     ) {
 
         @JsonAnyGetter
@@ -306,22 +289,20 @@ class PreferenceSetRequest @JsonCreator private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Workflows =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                validated = true
+        fun validate(): Workflows = apply {
+            if (validated) {
+                return@apply
             }
+
+            validated = true
+        }
 
         fun toBuilder() = Builder().from(this)
 
         companion object {
 
             /** Returns a mutable builder for constructing an instance of [Workflows]. */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Workflows]. */
@@ -330,46 +311,38 @@ class PreferenceSetRequest @JsonCreator private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(workflows: Workflows) =
-                apply {
-                    additionalProperties = workflows.additionalProperties.toMutableMap()
-                }
+            internal fun from(workflows: Workflows) = apply {
+                additionalProperties = workflows.additionalProperties.toMutableMap()
+            }
 
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
 
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                apply {
-                    this.additionalProperties.putAll(additionalProperties)
-                }
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
 
-            fun removeAdditionalProperty(key: String) =
-                apply {
-                    additionalProperties.remove(key)
-                }
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-            fun removeAllAdditionalProperties(keys: Set<String>) =
-                apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
 
             fun build(): Workflows = Workflows(additionalProperties.toImmutable())
         }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return /* spotless:off */ other is Workflows && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Workflows && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
@@ -382,11 +355,11 @@ class PreferenceSetRequest @JsonCreator private constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is PreferenceSetRequest && categories == other.categories && channelTypes == other.channelTypes && workflows == other.workflows && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is PreferenceSetRequest && categories == other.categories && channelTypes == other.channelTypes && workflows == other.workflows && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -395,5 +368,6 @@ class PreferenceSetRequest @JsonCreator private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "PreferenceSetRequest{categories=$categories, channelTypes=$channelTypes, workflows=$workflows, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "PreferenceSetRequest{categories=$categories, channelTypes=$channelTypes, workflows=$workflows, additionalProperties=$additionalProperties}"
 }

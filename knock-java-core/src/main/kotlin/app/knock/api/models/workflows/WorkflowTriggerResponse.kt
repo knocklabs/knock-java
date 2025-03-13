@@ -18,21 +18,24 @@ import java.util.Objects
 
 /** The response from triggering a workflow */
 @NoAutoDetect
-class WorkflowTriggerResponse @JsonCreator private constructor(
-    @JsonProperty("workflow_run_id") @ExcludeMissing private val workflowRunId: JsonField<String> = JsonMissing.of(),
+class WorkflowTriggerResponse
+@JsonCreator
+private constructor(
+    @JsonProperty("workflow_run_id")
+    @ExcludeMissing
+    private val workflowRunId: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
 ) {
 
     /**
-     * The ID of the workflow trigger. This value allows you to track individual
-     * workflow runs associated with this trigger request.
+     * The ID of the workflow trigger. This value allows you to track individual workflow runs
+     * associated with this trigger request.
      */
     fun workflowRunId(): String = workflowRunId.getRequired("workflow_run_id")
 
     /**
-     * The ID of the workflow trigger. This value allows you to track individual
-     * workflow runs associated with this trigger request.
+     * The ID of the workflow trigger. This value allows you to track individual workflow runs
+     * associated with this trigger request.
      */
     @JsonProperty("workflow_run_id")
     @ExcludeMissing
@@ -44,32 +47,28 @@ class WorkflowTriggerResponse @JsonCreator private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): WorkflowTriggerResponse =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            workflowRunId()
-            validated = true
+    fun validate(): WorkflowTriggerResponse = apply {
+        if (validated) {
+            return@apply
         }
+
+        workflowRunId()
+        validated = true
+    }
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [WorkflowTriggerResponse].
+         * Returns a mutable builder for constructing an instance of [WorkflowTriggerResponse].
          *
          * The following fields are required:
-         *
          * ```java
          * .workflowRunId()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [WorkflowTriggerResponse]. */
@@ -79,67 +78,57 @@ class WorkflowTriggerResponse @JsonCreator private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(workflowTriggerResponse: WorkflowTriggerResponse) =
-            apply {
-                workflowRunId = workflowTriggerResponse.workflowRunId
-                additionalProperties = workflowTriggerResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(workflowTriggerResponse: WorkflowTriggerResponse) = apply {
+            workflowRunId = workflowTriggerResponse.workflowRunId
+            additionalProperties = workflowTriggerResponse.additionalProperties.toMutableMap()
+        }
 
         /**
-         * The ID of the workflow trigger. This value allows you to track individual
-         * workflow runs associated with this trigger request.
+         * The ID of the workflow trigger. This value allows you to track individual workflow runs
+         * associated with this trigger request.
          */
         fun workflowRunId(workflowRunId: String) = workflowRunId(JsonField.of(workflowRunId))
 
         /**
-         * The ID of the workflow trigger. This value allows you to track individual
-         * workflow runs associated with this trigger request.
+         * The ID of the workflow trigger. This value allows you to track individual workflow runs
+         * associated with this trigger request.
          */
-        fun workflowRunId(workflowRunId: JsonField<String>) =
-            apply {
-                this.workflowRunId = workflowRunId
-            }
+        fun workflowRunId(workflowRunId: JsonField<String>) = apply {
+            this.workflowRunId = workflowRunId
+        }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         fun build(): WorkflowTriggerResponse =
             WorkflowTriggerResponse(
-              checkRequired(
-                "workflowRunId", workflowRunId
-              ), additionalProperties.toImmutable()
+                checkRequired("workflowRunId", workflowRunId),
+                additionalProperties.toImmutable(),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is WorkflowTriggerResponse && workflowRunId == other.workflowRunId && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is WorkflowTriggerResponse && workflowRunId == other.workflowRunId && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -148,5 +137,6 @@ class WorkflowTriggerResponse @JsonCreator private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "WorkflowTriggerResponse{workflowRunId=$workflowRunId, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "WorkflowTriggerResponse{workflowRunId=$workflowRunId, additionalProperties=$additionalProperties}"
 }

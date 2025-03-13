@@ -10,28 +10,22 @@ class BulkDeleteParamsTest {
 
     @Test
     fun create() {
-      BulkDeleteParams.builder()
-          .addTenantId("string")
-          .build()
+        BulkDeleteParams.builder().addTenantId("string").build()
     }
 
     @Test
     fun queryParams() {
-      val params = BulkDeleteParams.builder()
-          .addTenantId("string")
-          .build()
-      val expected = QueryParams.builder()
-      expected.put("tenant_ids[]", "string")
-      assertThat(params._queryParams()).isEqualTo(expected.build())
+        val params = BulkDeleteParams.builder().addTenantId("string").build()
+        val expected = QueryParams.builder()
+        expected.put("tenant_ids[]", "string")
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-      val params = BulkDeleteParams.builder()
-          .addTenantId("string")
-          .build()
-      val expected = QueryParams.builder()
-      expected.put("tenant_ids[]", "string")
-      assertThat(params._queryParams()).isEqualTo(expected.build())
+        val params = BulkDeleteParams.builder().addTenantId("string").build()
+        val expected = QueryParams.builder()
+        expected.put("tenant_ids[]", "string")
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 }

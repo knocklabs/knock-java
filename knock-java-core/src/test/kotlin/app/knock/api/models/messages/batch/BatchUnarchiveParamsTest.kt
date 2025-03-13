@@ -8,6 +8,6 @@ class BatchUnarchiveParamsTest {
 
     @Test
     fun create() {
-      BatchUnarchiveParams.builder().build()
+        BatchUnarchiveParams.builder().build()
     }
 }

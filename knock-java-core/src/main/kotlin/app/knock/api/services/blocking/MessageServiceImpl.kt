@@ -37,12 +37,12 @@ import app.knock.api.models.messages.MessageUnarchiveParams
 import app.knock.api.services.blocking.messages.BatchService
 import app.knock.api.services.blocking.messages.BatchServiceImpl
 
-class MessageServiceImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class MessageServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    MessageService {
 
-) : MessageService {
-
-    private val withRawResponse: MessageService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: MessageService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     private val batch: BatchService by lazy { BatchServiceImpl(clientOptions) }
 
@@ -62,399 +62,447 @@ class MessageServiceImpl internal constructor(
         // get /v1/messages/{message_id}
         withRawResponse().get(params, requestOptions).parse()
 
-    override fun getContent(params: MessageGetContentParams, requestOptions: RequestOptions): MessageGetContentResponse =
+    override fun getContent(
+        params: MessageGetContentParams,
+        requestOptions: RequestOptions,
+    ): MessageGetContentResponse =
         // get /v1/messages/{message_id}/content
         withRawResponse().getContent(params, requestOptions).parse()
 
-    override fun listActivities(params: MessageListActivitiesParams, requestOptions: RequestOptions): MessageListActivitiesPage =
+    override fun listActivities(
+        params: MessageListActivitiesParams,
+        requestOptions: RequestOptions,
+    ): MessageListActivitiesPage =
         // get /v1/messages/{message_id}/activities
         withRawResponse().listActivities(params, requestOptions).parse()
 
-    override fun listDeliveryLogs(params: MessageListDeliveryLogsParams, requestOptions: RequestOptions): MessageListDeliveryLogsPage =
+    override fun listDeliveryLogs(
+        params: MessageListDeliveryLogsParams,
+        requestOptions: RequestOptions,
+    ): MessageListDeliveryLogsPage =
         // get /v1/messages/{message_id}/delivery_logs
         withRawResponse().listDeliveryLogs(params, requestOptions).parse()
 
-    override fun listEvents(params: MessageListEventsParams, requestOptions: RequestOptions): MessageListEventsPage =
+    override fun listEvents(
+        params: MessageListEventsParams,
+        requestOptions: RequestOptions,
+    ): MessageListEventsPage =
         // get /v1/messages/{message_id}/events
         withRawResponse().listEvents(params, requestOptions).parse()
 
-    override fun markAsInteracted(params: MessageMarkAsInteractedParams, requestOptions: RequestOptions): Message =
+    override fun markAsInteracted(
+        params: MessageMarkAsInteractedParams,
+        requestOptions: RequestOptions,
+    ): Message =
         // put /v1/messages/{message_id}/interacted
         withRawResponse().markAsInteracted(params, requestOptions).parse()
 
-    override fun markAsRead(params: MessageMarkAsReadParams, requestOptions: RequestOptions): Message =
+    override fun markAsRead(
+        params: MessageMarkAsReadParams,
+        requestOptions: RequestOptions,
+    ): Message =
         // put /v1/messages/{message_id}/read
         withRawResponse().markAsRead(params, requestOptions).parse()
 
-    override fun markAsSeen(params: MessageMarkAsSeenParams, requestOptions: RequestOptions): Message =
+    override fun markAsSeen(
+        params: MessageMarkAsSeenParams,
+        requestOptions: RequestOptions,
+    ): Message =
         // put /v1/messages/{message_id}/seen
         withRawResponse().markAsSeen(params, requestOptions).parse()
 
-    override fun markAsUnread(params: MessageMarkAsUnreadParams, requestOptions: RequestOptions): Message =
+    override fun markAsUnread(
+        params: MessageMarkAsUnreadParams,
+        requestOptions: RequestOptions,
+    ): Message =
         // delete /v1/messages/{message_id}/unread
         withRawResponse().markAsUnread(params, requestOptions).parse()
 
-    override fun markAsUnseen(params: MessageMarkAsUnseenParams, requestOptions: RequestOptions): Message =
+    override fun markAsUnseen(
+        params: MessageMarkAsUnseenParams,
+        requestOptions: RequestOptions,
+    ): Message =
         // delete /v1/messages/{message_id}/unseen
         withRawResponse().markAsUnseen(params, requestOptions).parse()
 
-    override fun unarchive(params: MessageUnarchiveParams, requestOptions: RequestOptions): Message =
+    override fun unarchive(
+        params: MessageUnarchiveParams,
+        requestOptions: RequestOptions,
+    ): Message =
         // delete /v1/messages/{message_id}/unarchived
         withRawResponse().unarchive(params, requestOptions).parse()
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : MessageService.WithRawResponse {
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        MessageService.WithRawResponse {
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val batch: BatchService.WithRawResponse by lazy { BatchServiceImpl.WithRawResponseImpl(clientOptions) }
+        private val batch: BatchService.WithRawResponse by lazy {
+            BatchServiceImpl.WithRawResponseImpl(clientOptions)
+        }
 
         override fun batch(): BatchService.WithRawResponse = batch
 
-        private val listHandler: Handler<MessageListPage.Response> = jsonHandler<MessageListPage.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listHandler: Handler<MessageListPage.Response> =
+            jsonHandler<MessageListPage.Response>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun list(params: MessageListParams, requestOptions: RequestOptions): HttpResponseFor<MessageListPage> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "messages")
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  listHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  MessageListPage.of(MessageServiceImpl(clientOptions), params, it)
-              }
-          }
+        override fun list(
+            params: MessageListParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<MessageListPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("v1", "messages")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { listHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let { MessageListPage.of(MessageServiceImpl(clientOptions), params, it) }
+            }
         }
 
-        private val archiveHandler: Handler<Message> = jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val archiveHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun archive(params: MessageArchiveParams, requestOptions: RequestOptions): HttpResponseFor<Message> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.PUT)
-            .addPathSegments("v1", "messages", params.getPathParam(0), "archived")
-            .apply { params._body().ifPresent{ body(json(clientOptions.jsonMapper, it)) } }
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  archiveHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun archive(
+            params: MessageArchiveParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Message> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments("v1", "messages", params.getPathParam(0), "archived")
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { archiveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val getHandler: Handler<Message> = jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val getHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun get(params: MessageGetParams, requestOptions: RequestOptions): HttpResponseFor<Message> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "messages", params.getPathParam(0))
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  getHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun get(
+            params: MessageGetParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Message> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("v1", "messages", params.getPathParam(0))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { getHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val getContentHandler: Handler<MessageGetContentResponse> = jsonHandler<MessageGetContentResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val getContentHandler: Handler<MessageGetContentResponse> =
+            jsonHandler<MessageGetContentResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun getContent(params: MessageGetContentParams, requestOptions: RequestOptions): HttpResponseFor<MessageGetContentResponse> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "messages", params.getPathParam(0), "content")
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  getContentHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun getContent(
+            params: MessageGetContentParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<MessageGetContentResponse> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("v1", "messages", params.getPathParam(0), "content")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { getContentHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val listActivitiesHandler: Handler<MessageListActivitiesPage.Response> = jsonHandler<MessageListActivitiesPage.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listActivitiesHandler: Handler<MessageListActivitiesPage.Response> =
+            jsonHandler<MessageListActivitiesPage.Response>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun listActivities(params: MessageListActivitiesParams, requestOptions: RequestOptions): HttpResponseFor<MessageListActivitiesPage> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "messages", params.getPathParam(0), "activities")
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  listActivitiesHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  MessageListActivitiesPage.of(MessageServiceImpl(clientOptions), params, it)
-              }
-          }
+        override fun listActivities(
+            params: MessageListActivitiesParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<MessageListActivitiesPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("v1", "messages", params.getPathParam(0), "activities")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { listActivitiesHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        MessageListActivitiesPage.of(MessageServiceImpl(clientOptions), params, it)
+                    }
+            }
         }
 
-        private val listDeliveryLogsHandler: Handler<MessageListDeliveryLogsPage.Response> = jsonHandler<MessageListDeliveryLogsPage.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listDeliveryLogsHandler: Handler<MessageListDeliveryLogsPage.Response> =
+            jsonHandler<MessageListDeliveryLogsPage.Response>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun listDeliveryLogs(params: MessageListDeliveryLogsParams, requestOptions: RequestOptions): HttpResponseFor<MessageListDeliveryLogsPage> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "messages", params.getPathParam(0), "delivery_logs")
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  listDeliveryLogsHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  MessageListDeliveryLogsPage.of(MessageServiceImpl(clientOptions), params, it)
-              }
-          }
+        override fun listDeliveryLogs(
+            params: MessageListDeliveryLogsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<MessageListDeliveryLogsPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("v1", "messages", params.getPathParam(0), "delivery_logs")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { listDeliveryLogsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let {
+                        MessageListDeliveryLogsPage.of(
+                            MessageServiceImpl(clientOptions),
+                            params,
+                            it,
+                        )
+                    }
+            }
         }
 
-        private val listEventsHandler: Handler<MessageListEventsPage.Response> = jsonHandler<MessageListEventsPage.Response>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val listEventsHandler: Handler<MessageListEventsPage.Response> =
+            jsonHandler<MessageListEventsPage.Response>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
-        override fun listEvents(params: MessageListEventsParams, requestOptions: RequestOptions): HttpResponseFor<MessageListEventsPage> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.GET)
-            .addPathSegments("v1", "messages", params.getPathParam(0), "events")
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  listEventsHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-              .let {
-                  MessageListEventsPage.of(MessageServiceImpl(clientOptions), params, it)
-              }
-          }
+        override fun listEvents(
+            params: MessageListEventsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<MessageListEventsPage> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments("v1", "messages", params.getPathParam(0), "events")
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { listEventsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+                    .let { MessageListEventsPage.of(MessageServiceImpl(clientOptions), params, it) }
+            }
         }
 
-        private val markAsInteractedHandler: Handler<Message> = jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val markAsInteractedHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun markAsInteracted(params: MessageMarkAsInteractedParams, requestOptions: RequestOptions): HttpResponseFor<Message> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.PUT)
-            .addPathSegments("v1", "messages", params.getPathParam(0), "interacted")
-            .body(json(clientOptions.jsonMapper, params._body()))
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  markAsInteractedHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun markAsInteracted(
+            params: MessageMarkAsInteractedParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Message> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments("v1", "messages", params.getPathParam(0), "interacted")
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { markAsInteractedHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val markAsReadHandler: Handler<Message> = jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val markAsReadHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun markAsRead(params: MessageMarkAsReadParams, requestOptions: RequestOptions): HttpResponseFor<Message> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.PUT)
-            .addPathSegments("v1", "messages", params.getPathParam(0), "read")
-            .apply { params._body().ifPresent{ body(json(clientOptions.jsonMapper, it)) } }
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  markAsReadHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun markAsRead(
+            params: MessageMarkAsReadParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Message> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments("v1", "messages", params.getPathParam(0), "read")
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { markAsReadHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val markAsSeenHandler: Handler<Message> = jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val markAsSeenHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun markAsSeen(params: MessageMarkAsSeenParams, requestOptions: RequestOptions): HttpResponseFor<Message> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.PUT)
-            .addPathSegments("v1", "messages", params.getPathParam(0), "seen")
-            .apply { params._body().ifPresent{ body(json(clientOptions.jsonMapper, it)) } }
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  markAsSeenHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun markAsSeen(
+            params: MessageMarkAsSeenParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Message> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments("v1", "messages", params.getPathParam(0), "seen")
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { markAsSeenHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val markAsUnreadHandler: Handler<Message> = jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val markAsUnreadHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun markAsUnread(params: MessageMarkAsUnreadParams, requestOptions: RequestOptions): HttpResponseFor<Message> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.DELETE)
-            .addPathSegments("v1", "messages", params.getPathParam(0), "unread")
-            .apply { params._body().ifPresent{ body(json(clientOptions.jsonMapper, it)) } }
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  markAsUnreadHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun markAsUnread(
+            params: MessageMarkAsUnreadParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Message> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments("v1", "messages", params.getPathParam(0), "unread")
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { markAsUnreadHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val markAsUnseenHandler: Handler<Message> = jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val markAsUnseenHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun markAsUnseen(params: MessageMarkAsUnseenParams, requestOptions: RequestOptions): HttpResponseFor<Message> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.DELETE)
-            .addPathSegments("v1", "messages", params.getPathParam(0), "unseen")
-            .apply { params._body().ifPresent{ body(json(clientOptions.jsonMapper, it)) } }
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  markAsUnseenHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun markAsUnseen(
+            params: MessageMarkAsUnseenParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Message> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments("v1", "messages", params.getPathParam(0), "unseen")
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { markAsUnseenHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
 
-        private val unarchiveHandler: Handler<Message> = jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val unarchiveHandler: Handler<Message> =
+            jsonHandler<Message>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun unarchive(params: MessageUnarchiveParams, requestOptions: RequestOptions): HttpResponseFor<Message> {
-          val request = HttpRequest.builder()
-            .method(HttpMethod.DELETE)
-            .addPathSegments("v1", "messages", params.getPathParam(0), "unarchived")
-            .apply { params._body().ifPresent{ body(json(clientOptions.jsonMapper, it)) } }
-            .build()
-            .prepare(clientOptions, params)
-          val requestOptions = requestOptions
-              .applyDefaults(RequestOptions.from(clientOptions))
-          val response = clientOptions.httpClient.execute(
-            request, requestOptions
-          )
-          return response.parseable {
-              response.use {
-                  unarchiveHandler.handle(it)
-              }
-              .also {
-                  if (requestOptions.responseValidation!!) {
-                    it.validate()
-                  }
-              }
-          }
+        override fun unarchive(
+            params: MessageUnarchiveParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<Message> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments("v1", "messages", params.getPathParam(0), "unarchived")
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { unarchiveHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
     }
 }

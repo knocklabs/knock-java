@@ -2,6 +2,8 @@
 
 package app.knock.api.core
 
+import app.knock.api.errors.KnockException
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.core.JsonGenerator
 import com.fasterxml.jackson.databind.DeserializationFeature
@@ -16,8 +18,6 @@ import com.fasterxml.jackson.databind.module.SimpleModule
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule
 import com.fasterxml.jackson.module.kotlin.jacksonMapperBuilder
-import app.knock.api.errors.KnockException
-import app.knock.api.errors.KnockInvalidDataException
 import java.io.InputStream
 
 fun jsonMapper(): JsonMapper =

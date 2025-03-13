@@ -22,12 +22,19 @@ import kotlin.jvm.optionals.getOrNull
 
 /** A condition to be evaluated */
 @NoAutoDetect
-class Condition @JsonCreator private constructor(
-    @JsonProperty("argument") @ExcludeMissing private val argument: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("operator") @ExcludeMissing private val operator: JsonField<Operator> = JsonMissing.of(),
-    @JsonProperty("variable") @ExcludeMissing private val variable: JsonField<String> = JsonMissing.of(),
+class Condition
+@JsonCreator
+private constructor(
+    @JsonProperty("argument")
+    @ExcludeMissing
+    private val argument: JsonField<String> = JsonMissing.of(),
+    @JsonProperty("operator")
+    @ExcludeMissing
+    private val operator: JsonField<Operator> = JsonMissing.of(),
+    @JsonProperty("variable")
+    @ExcludeMissing
+    private val variable: JsonField<String> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
 ) {
 
     fun argument(): Optional<String> = Optional.ofNullable(argument.getNullable("argument"))
@@ -36,17 +43,11 @@ class Condition @JsonCreator private constructor(
 
     fun variable(): String = variable.getRequired("variable")
 
-    @JsonProperty("argument")
-    @ExcludeMissing
-    fun _argument(): JsonField<String> = argument
+    @JsonProperty("argument") @ExcludeMissing fun _argument(): JsonField<String> = argument
 
-    @JsonProperty("operator")
-    @ExcludeMissing
-    fun _operator(): JsonField<Operator> = operator
+    @JsonProperty("operator") @ExcludeMissing fun _operator(): JsonField<Operator> = operator
 
-    @JsonProperty("variable")
-    @ExcludeMissing
-    fun _variable(): JsonField<String> = variable
+    @JsonProperty("variable") @ExcludeMissing fun _variable(): JsonField<String> = variable
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -54,17 +55,16 @@ class Condition @JsonCreator private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): Condition =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            argument()
-            operator()
-            variable()
-            validated = true
+    fun validate(): Condition = apply {
+        if (validated) {
+            return@apply
         }
+
+        argument()
+        operator()
+        variable()
+        validated = true
+    }
 
     fun toBuilder() = Builder().from(this)
 
@@ -74,15 +74,13 @@ class Condition @JsonCreator private constructor(
          * Returns a mutable builder for constructing an instance of [Condition].
          *
          * The following fields are required:
-         *
          * ```java
          * .argument()
          * .operator()
          * .variable()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [Condition]. */
@@ -94,93 +92,66 @@ class Condition @JsonCreator private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(condition: Condition) =
-            apply {
-                argument = condition.argument
-                operator = condition.operator
-                variable = condition.variable
-                additionalProperties = condition.additionalProperties.toMutableMap()
-            }
+        internal fun from(condition: Condition) = apply {
+            argument = condition.argument
+            operator = condition.operator
+            variable = condition.variable
+            additionalProperties = condition.additionalProperties.toMutableMap()
+        }
 
         fun argument(argument: String?) = argument(JsonField.ofNullable(argument))
 
         fun argument(argument: Optional<String>) = argument(argument.getOrNull())
 
-        fun argument(argument: JsonField<String>) =
-            apply {
-                this.argument = argument
-            }
+        fun argument(argument: JsonField<String>) = apply { this.argument = argument }
 
         fun operator(operator: Operator) = operator(JsonField.of(operator))
 
-        fun operator(operator: JsonField<Operator>) =
-            apply {
-                this.operator = operator
-            }
+        fun operator(operator: JsonField<Operator>) = apply { this.operator = operator }
 
         fun variable(variable: String) = variable(JsonField.of(variable))
 
-        fun variable(variable: JsonField<String>) =
-            apply {
-                this.variable = variable
-            }
+        fun variable(variable: JsonField<String>) = apply { this.variable = variable }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         fun build(): Condition =
             Condition(
-              checkRequired(
-                "argument", argument
-              ),
-              checkRequired(
-                "operator", operator
-              ),
-              checkRequired(
-                "variable", variable
-              ),
-              additionalProperties.toImmutable(),
+                checkRequired("argument", argument),
+                checkRequired("operator", operator),
+                checkRequired("variable", variable),
+                additionalProperties.toImmutable(),
             )
     }
 
-    class Operator @JsonCreator private constructor(
-        private val value: JsonField<String>,
-
-    ) : Enum {
+    class Operator @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that
-         * doesn't match any known member, and you want to know that value. For example, if
-         * the SDK is on an older version than the API, then the API may respond with new
-         * members that the SDK is unaware of.
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue
-        fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -246,11 +217,9 @@ class Condition @JsonCreator private constructor(
          * An enum containing [Operator]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [Operator] can contain an unknown value in a couple of cases:
-         *
-         * - It was deserialized from data that doesn't match any known member. For
-         *   example, if the SDK is on an older version than the API, then the API may
-         *   respond with new members that the SDK is unaware of.
-         *
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -271,19 +240,16 @@ class Condition @JsonCreator private constructor(
             IS_TIMESTAMP_BEFORE,
             IS_TIMESTAMP_BETWEEN,
             IS_AUDIENCE_MEMBER,
-            /**
-             * An enum member indicating that [Operator] was instantiated with an unknown
-             * value.
-             */
+            /** An enum member indicating that [Operator] was instantiated with an unknown value. */
             _UNKNOWN,
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or
-         * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if
-         * you want to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -310,11 +276,10 @@ class Condition @JsonCreator private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and
-         * don't want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
          *
-         * @throws KnockInvalidDataException if this class instance's value is a not a
-         * known member.
+         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
          */
         fun known(): Known =
             when (this) {
@@ -341,20 +306,21 @@ class Condition @JsonCreator private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for
-         * debugging and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
          *
-         * @throws KnockInvalidDataException if this class instance's value does not have
-         * the expected primitive type.
+         * @throws KnockInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
          */
-        fun asString(): String = _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+        fun asString(): String =
+            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return /* spotless:off */ other is Operator && value == other.value /* spotless:on */
+            return /* spotless:off */ other is Operator && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -363,11 +329,11 @@ class Condition @JsonCreator private constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is Condition && argument == other.argument && operator == other.operator && variable == other.variable && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Condition && argument == other.argument && operator == other.operator && variable == other.variable && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -376,5 +342,6 @@ class Condition @JsonCreator private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "Condition{argument=$argument, operator=$operator, variable=$variable, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "Condition{argument=$argument, operator=$operator, variable=$variable, additionalProperties=$additionalProperties}"
 }

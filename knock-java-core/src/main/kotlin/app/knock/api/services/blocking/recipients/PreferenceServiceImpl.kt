@@ -4,17 +4,15 @@ package app.knock.api.services.blocking.recipients
 
 import app.knock.api.core.ClientOptions
 
-class PreferenceServiceImpl internal constructor(
-    private val clientOptions: ClientOptions,
+class PreferenceServiceImpl internal constructor(private val clientOptions: ClientOptions) :
+    PreferenceService {
 
-) : PreferenceService {
-
-    private val withRawResponse: PreferenceService.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
+    private val withRawResponse: PreferenceService.WithRawResponse by lazy {
+        WithRawResponseImpl(clientOptions)
+    }
 
     override fun withRawResponse(): PreferenceService.WithRawResponse = withRawResponse
 
-    class WithRawResponseImpl internal constructor(
-        private val clientOptions: ClientOptions,
-
-    ) : PreferenceService.WithRawResponse
+    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
+        PreferenceService.WithRawResponse
 }

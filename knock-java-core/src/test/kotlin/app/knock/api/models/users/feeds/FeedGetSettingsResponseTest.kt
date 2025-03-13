@@ -9,14 +9,12 @@ class FeedGetSettingsResponseTest {
 
     @Test
     fun createFeedGetSettingsResponse() {
-      val feedGetSettingsResponse = FeedGetSettingsResponse.builder()
-          .features(FeedGetSettingsResponse.Features.builder()
-              .brandingRequired(true)
-              .build())
-          .build()
-      assertThat(feedGetSettingsResponse).isNotNull
-      assertThat(feedGetSettingsResponse.features()).isEqualTo(FeedGetSettingsResponse.Features.builder()
-          .brandingRequired(true)
-          .build())
+        val feedGetSettingsResponse =
+            FeedGetSettingsResponse.builder()
+                .features(FeedGetSettingsResponse.Features.builder().brandingRequired(true).build())
+                .build()
+        assertThat(feedGetSettingsResponse).isNotNull
+        assertThat(feedGetSettingsResponse.features())
+            .isEqualTo(FeedGetSettingsResponse.Features.builder().brandingRequired(true).build())
     }
 }

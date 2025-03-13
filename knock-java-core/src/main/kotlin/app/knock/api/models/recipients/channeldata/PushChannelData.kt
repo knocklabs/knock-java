@@ -19,17 +19,18 @@ import java.util.Objects
 
 /** Channel data for push providers */
 @NoAutoDetect
-class PushChannelData @JsonCreator private constructor(
-    @JsonProperty("tokens") @ExcludeMissing private val tokens: JsonField<List<String>> = JsonMissing.of(),
+class PushChannelData
+@JsonCreator
+private constructor(
+    @JsonProperty("tokens")
+    @ExcludeMissing
+    private val tokens: JsonField<List<String>> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
 ) {
 
     fun tokens(): List<String> = tokens.getRequired("tokens")
 
-    @JsonProperty("tokens")
-    @ExcludeMissing
-    fun _tokens(): JsonField<List<String>> = tokens
+    @JsonProperty("tokens") @ExcludeMissing fun _tokens(): JsonField<List<String>> = tokens
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -37,15 +38,14 @@ class PushChannelData @JsonCreator private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): PushChannelData =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            tokens()
-            validated = true
+    fun validate(): PushChannelData = apply {
+        if (validated) {
+            return@apply
         }
+
+        tokens()
+        validated = true
+    }
 
     fun toBuilder() = Builder().from(this)
 
@@ -55,13 +55,11 @@ class PushChannelData @JsonCreator private constructor(
          * Returns a mutable builder for constructing an instance of [PushChannelData].
          *
          * The following fields are required:
-         *
          * ```java
          * .tokens()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [PushChannelData]. */
@@ -71,66 +69,56 @@ class PushChannelData @JsonCreator private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(pushChannelData: PushChannelData) =
-            apply {
-                tokens = pushChannelData.tokens.map { it.toMutableList() }
-                additionalProperties = pushChannelData.additionalProperties.toMutableMap()
-            }
+        internal fun from(pushChannelData: PushChannelData) = apply {
+            tokens = pushChannelData.tokens.map { it.toMutableList() }
+            additionalProperties = pushChannelData.additionalProperties.toMutableMap()
+        }
 
         fun tokens(tokens: List<String>) = tokens(JsonField.of(tokens))
 
-        fun tokens(tokens: JsonField<List<String>>) =
-            apply {
-                this.tokens = tokens.map { it.toMutableList() }
-            }
+        fun tokens(tokens: JsonField<List<String>>) = apply {
+            this.tokens = tokens.map { it.toMutableList() }
+        }
 
-        fun addToken(token: String) =
-            apply {
-                tokens = (tokens ?: JsonField.of(mutableListOf())).also {
+        fun addToken(token: String) = apply {
+            tokens =
+                (tokens ?: JsonField.of(mutableListOf())).also {
                     checkKnown("tokens", it).add(token)
                 }
-            }
+        }
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         fun build(): PushChannelData =
             PushChannelData(
-              checkRequired(
-                "tokens", tokens
-              ).map { it.toImmutable() }, additionalProperties.toImmutable()
+                checkRequired("tokens", tokens).map { it.toImmutable() },
+                additionalProperties.toImmutable(),
             )
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is PushChannelData && tokens == other.tokens && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is PushChannelData && tokens == other.tokens && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -139,5 +127,6 @@ class PushChannelData @JsonCreator private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "PushChannelData{tokens=$tokens, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "PushChannelData{tokens=$tokens, additionalProperties=$additionalProperties}"
 }

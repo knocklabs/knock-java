@@ -30,19 +30,18 @@ import java.util.Optional
 
 /** Set channel data for a type of channel */
 @NoAutoDetect
-class ChannelDataRequest @JsonCreator private constructor(
+class ChannelDataRequest
+@JsonCreator
+private constructor(
     @JsonProperty("data") @ExcludeMissing private val data: JsonField<Data> = JsonMissing.of(),
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
 ) {
 
     /** Channel data for push providers */
     fun data(): Data = data.getRequired("data")
 
     /** Channel data for push providers */
-    @JsonProperty("data")
-    @ExcludeMissing
-    fun _data(): JsonField<Data> = data
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     @JsonAnyGetter
     @ExcludeMissing
@@ -50,15 +49,14 @@ class ChannelDataRequest @JsonCreator private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): ChannelDataRequest =
-        apply {
-            if (validated) {
-              return@apply
-            }
-
-            data().validate()
-            validated = true
+    fun validate(): ChannelDataRequest = apply {
+        if (validated) {
+            return@apply
         }
+
+        data().validate()
+        validated = true
+    }
 
     fun toBuilder() = Builder().from(this)
 
@@ -68,13 +66,11 @@ class ChannelDataRequest @JsonCreator private constructor(
          * Returns a mutable builder for constructing an instance of [ChannelDataRequest].
          *
          * The following fields are required:
-         *
          * ```java
          * .data()
          * ```
          */
-        @JvmStatic
-        fun builder() = Builder()
+        @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [ChannelDataRequest]. */
@@ -84,26 +80,23 @@ class ChannelDataRequest @JsonCreator private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(channelDataRequest: ChannelDataRequest) =
-            apply {
-                data = channelDataRequest.data
-                additionalProperties = channelDataRequest.additionalProperties.toMutableMap()
-            }
+        internal fun from(channelDataRequest: ChannelDataRequest) = apply {
+            data = channelDataRequest.data
+            additionalProperties = channelDataRequest.additionalProperties.toMutableMap()
+        }
 
         /** Channel data for push providers */
         fun data(data: Data) = data(JsonField.of(data))
 
         /** Channel data for push providers */
-        fun data(data: JsonField<Data>) =
-            apply {
-                this.data = data
-            }
+        fun data(data: JsonField<Data>) = apply { this.data = data }
 
         /** Channel data for push providers */
         fun data(pushChannel: PushChannelData) = data(Data.ofPushChannel(pushChannel))
 
         /** OneSignal channel data */
-        fun data(oneSignalChannel: OneSignalChannelData) = data(Data.ofOneSignalChannel(oneSignalChannel))
+        fun data(oneSignalChannel: OneSignalChannelData) =
+            data(Data.ofOneSignalChannel(oneSignalChannel))
 
         /** Slack channel data */
         fun data(slackChannel: SlackChannelData) = data(Data.ofSlackChannel(slackChannel))
@@ -114,58 +107,48 @@ class ChannelDataRequest @JsonCreator private constructor(
         /** Discord channel data */
         fun data(discordChannel: DiscordChannelData) = data(Data.ofDiscordChannel(discordChannel))
 
-        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
+        fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.clear()
+            putAllAdditionalProperties(additionalProperties)
+        }
 
-        fun putAdditionalProperty(key: String, value: JsonValue) =
-            apply {
-                additionalProperties.put(key, value)
-            }
+        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+            additionalProperties.put(key, value)
+        }
 
-        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
+        fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+            this.additionalProperties.putAll(additionalProperties)
+        }
 
-        fun removeAdditionalProperty(key: String) =
-            apply {
-                additionalProperties.remove(key)
-            }
+        fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
 
-        fun removeAllAdditionalProperties(keys: Set<String>) =
-            apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
+        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalProperty)
+        }
 
         fun build(): ChannelDataRequest =
-            ChannelDataRequest(
-              checkRequired(
-                "data", data
-              ), additionalProperties.toImmutable()
-            )
+            ChannelDataRequest(checkRequired("data", data), additionalProperties.toImmutable())
     }
 
     /** Channel data for push providers */
     @JsonDeserialize(using = Data.Deserializer::class)
     @JsonSerialize(using = Data.Serializer::class)
-    class Data private constructor(
+    class Data
+    private constructor(
         private val pushChannel: PushChannelData? = null,
         private val oneSignalChannel: OneSignalChannelData? = null,
         private val slackChannel: SlackChannelData? = null,
         private val msTeamsChannel: MsTeamsChannelData? = null,
         private val discordChannel: DiscordChannelData? = null,
         private val _json: JsonValue? = null,
-
     ) {
 
         /** Channel data for push providers */
         fun pushChannel(): Optional<PushChannelData> = Optional.ofNullable(pushChannel)
 
         /** OneSignal channel data */
-        fun oneSignalChannel(): Optional<OneSignalChannelData> = Optional.ofNullable(oneSignalChannel)
+        fun oneSignalChannel(): Optional<OneSignalChannelData> =
+            Optional.ofNullable(oneSignalChannel)
 
         /** Slack channel data */
         fun slackChannel(): Optional<SlackChannelData> = Optional.ofNullable(slackChannel)
@@ -190,7 +173,8 @@ class ChannelDataRequest @JsonCreator private constructor(
         fun asPushChannel(): PushChannelData = pushChannel.getOrThrow("pushChannel")
 
         /** OneSignal channel data */
-        fun asOneSignalChannel(): OneSignalChannelData = oneSignalChannel.getOrThrow("oneSignalChannel")
+        fun asOneSignalChannel(): OneSignalChannelData =
+            oneSignalChannel.getOrThrow("oneSignalChannel")
 
         /** Slack channel data */
         fun asSlackChannel(): SlackChannelData = slackChannel.getOrThrow("slackChannel")
@@ -204,54 +188,55 @@ class ChannelDataRequest @JsonCreator private constructor(
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T {
-          return when {
-              pushChannel != null -> visitor.visitPushChannel(pushChannel)
-              oneSignalChannel != null -> visitor.visitOneSignalChannel(oneSignalChannel)
-              slackChannel != null -> visitor.visitSlackChannel(slackChannel)
-              msTeamsChannel != null -> visitor.visitMsTeamsChannel(msTeamsChannel)
-              discordChannel != null -> visitor.visitDiscordChannel(discordChannel)
-              else -> visitor.unknown(_json)
-          }
+            return when {
+                pushChannel != null -> visitor.visitPushChannel(pushChannel)
+                oneSignalChannel != null -> visitor.visitOneSignalChannel(oneSignalChannel)
+                slackChannel != null -> visitor.visitSlackChannel(slackChannel)
+                msTeamsChannel != null -> visitor.visitMsTeamsChannel(msTeamsChannel)
+                discordChannel != null -> visitor.visitDiscordChannel(discordChannel)
+                else -> visitor.unknown(_json)
+            }
         }
 
         private var validated: Boolean = false
 
-        fun validate(): Data =
-            apply {
-                if (validated) {
-                  return@apply
-                }
+        fun validate(): Data = apply {
+            if (validated) {
+                return@apply
+            }
 
-                accept(object : Visitor<Unit> {
+            accept(
+                object : Visitor<Unit> {
                     override fun visitPushChannel(pushChannel: PushChannelData) {
-                      pushChannel.validate()
+                        pushChannel.validate()
                     }
 
                     override fun visitOneSignalChannel(oneSignalChannel: OneSignalChannelData) {
-                      oneSignalChannel.validate()
+                        oneSignalChannel.validate()
                     }
 
                     override fun visitSlackChannel(slackChannel: SlackChannelData) {
-                      slackChannel.validate()
+                        slackChannel.validate()
                     }
 
                     override fun visitMsTeamsChannel(msTeamsChannel: MsTeamsChannelData) {
-                      msTeamsChannel.validate()
+                        msTeamsChannel.validate()
                     }
 
                     override fun visitDiscordChannel(discordChannel: DiscordChannelData) {
-                      discordChannel.validate()
+                        discordChannel.validate()
                     }
-                })
-                validated = true
-            }
+                }
+            )
+            validated = true
+        }
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return /* spotless:off */ other is Data && pushChannel == other.pushChannel && oneSignalChannel == other.oneSignalChannel && slackChannel == other.slackChannel && msTeamsChannel == other.msTeamsChannel && discordChannel == other.discordChannel /* spotless:on */
+            return /* spotless:off */ other is Data && pushChannel == other.pushChannel && oneSignalChannel == other.oneSignalChannel && slackChannel == other.slackChannel && msTeamsChannel == other.msTeamsChannel && discordChannel == other.discordChannel /* spotless:on */
         }
 
         override fun hashCode(): Int = /* spotless:off */ Objects.hash(pushChannel, oneSignalChannel, slackChannel, msTeamsChannel, discordChannel) /* spotless:on */
@@ -275,7 +260,8 @@ class ChannelDataRequest @JsonCreator private constructor(
 
             /** OneSignal channel data */
             @JvmStatic
-            fun ofOneSignalChannel(oneSignalChannel: OneSignalChannelData) = Data(oneSignalChannel = oneSignalChannel)
+            fun ofOneSignalChannel(oneSignalChannel: OneSignalChannelData) =
+                Data(oneSignalChannel = oneSignalChannel)
 
             /** Slack channel data */
             @JvmStatic
@@ -283,17 +269,16 @@ class ChannelDataRequest @JsonCreator private constructor(
 
             /** Microsoft Teams channel data */
             @JvmStatic
-            fun ofMsTeamsChannel(msTeamsChannel: MsTeamsChannelData) = Data(msTeamsChannel = msTeamsChannel)
+            fun ofMsTeamsChannel(msTeamsChannel: MsTeamsChannelData) =
+                Data(msTeamsChannel = msTeamsChannel)
 
             /** Discord channel data */
             @JvmStatic
-            fun ofDiscordChannel(discordChannel: DiscordChannelData) = Data(discordChannel = discordChannel)
+            fun ofDiscordChannel(discordChannel: DiscordChannelData) =
+                Data(discordChannel = discordChannel)
         }
 
-        /**
-         * An interface that defines how to map each variant of [Data] to a value of type
-         * [T].
-         */
+        /** An interface that defines how to map each variant of [Data] to a value of type [T]. */
         interface Visitor<out T> {
 
             /** Channel data for push providers */
@@ -314,65 +299,73 @@ class ChannelDataRequest @JsonCreator private constructor(
             /**
              * Maps an unknown variant of [Data] to a value of type [T].
              *
-             * An instance of [Data] can contain an unknown variant if it was deserialized from
-             * data that doesn't match any known variant. For example, if the SDK is on an
-             * older version than the API, then the API may respond with new variants that the
-             * SDK is unaware of.
+             * An instance of [Data] can contain an unknown variant if it was deserialized from data
+             * that doesn't match any known variant. For example, if the SDK is on an older version
+             * than the API, then the API may respond with new variants that the SDK is unaware of.
              *
              * @throws KnockInvalidDataException in the default implementation.
              */
             fun unknown(json: JsonValue?): T {
-              throw KnockInvalidDataException("Unknown Data: $json")
+                throw KnockInvalidDataException("Unknown Data: $json")
             }
         }
 
         internal class Deserializer : BaseDeserializer<Data>(Data::class) {
 
             override fun ObjectCodec.deserialize(node: JsonNode): Data {
-              val json = JsonValue.fromJsonNode(node)
+                val json = JsonValue.fromJsonNode(node)
 
-              tryDeserialize(node, jacksonTypeRef<PushChannelData>()){ it.validate() }?.let {
-                  return Data(pushChannel = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<OneSignalChannelData>()){ it.validate() }?.let {
-                  return Data(oneSignalChannel = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<SlackChannelData>()){ it.validate() }?.let {
-                  return Data(slackChannel = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<MsTeamsChannelData>()){ it.validate() }?.let {
-                  return Data(msTeamsChannel = it, _json = json)
-              }
-              tryDeserialize(node, jacksonTypeRef<DiscordChannelData>()){ it.validate() }?.let {
-                  return Data(discordChannel = it, _json = json)
-              }
+                tryDeserialize(node, jacksonTypeRef<PushChannelData>()) { it.validate() }
+                    ?.let {
+                        return Data(pushChannel = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<OneSignalChannelData>()) { it.validate() }
+                    ?.let {
+                        return Data(oneSignalChannel = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<SlackChannelData>()) { it.validate() }
+                    ?.let {
+                        return Data(slackChannel = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<MsTeamsChannelData>()) { it.validate() }
+                    ?.let {
+                        return Data(msTeamsChannel = it, _json = json)
+                    }
+                tryDeserialize(node, jacksonTypeRef<DiscordChannelData>()) { it.validate() }
+                    ?.let {
+                        return Data(discordChannel = it, _json = json)
+                    }
 
-              return Data(_json = json)
+                return Data(_json = json)
             }
         }
 
         internal class Serializer : BaseSerializer<Data>(Data::class) {
 
-            override fun serialize(value: Data, generator: JsonGenerator, provider: SerializerProvider) {
-              when {
-                  value.pushChannel != null -> generator.writeObject(value.pushChannel)
-                  value.oneSignalChannel != null -> generator.writeObject(value.oneSignalChannel)
-                  value.slackChannel != null -> generator.writeObject(value.slackChannel)
-                  value.msTeamsChannel != null -> generator.writeObject(value.msTeamsChannel)
-                  value.discordChannel != null -> generator.writeObject(value.discordChannel)
-                  value._json != null -> generator.writeObject(value._json)
-                  else -> throw IllegalStateException("Invalid Data")
-              }
+            override fun serialize(
+                value: Data,
+                generator: JsonGenerator,
+                provider: SerializerProvider,
+            ) {
+                when {
+                    value.pushChannel != null -> generator.writeObject(value.pushChannel)
+                    value.oneSignalChannel != null -> generator.writeObject(value.oneSignalChannel)
+                    value.slackChannel != null -> generator.writeObject(value.slackChannel)
+                    value.msTeamsChannel != null -> generator.writeObject(value.msTeamsChannel)
+                    value.discordChannel != null -> generator.writeObject(value.discordChannel)
+                    value._json != null -> generator.writeObject(value._json)
+                    else -> throw IllegalStateException("Invalid Data")
+                }
             }
         }
     }
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is ChannelDataRequest && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ChannelDataRequest && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -381,5 +374,6 @@ class ChannelDataRequest @JsonCreator private constructor(
 
     override fun hashCode(): Int = hashCode
 
-    override fun toString() = "ChannelDataRequest{data=$data, additionalProperties=$additionalProperties}"
+    override fun toString() =
+        "ChannelDataRequest{data=$data, additionalProperties=$additionalProperties}"
 }

@@ -10,44 +10,47 @@ class MsTeamCheckAuthParamsTest {
 
     @Test
     fun create() {
-      MsTeamCheckAuthParams.builder()
-          .channelId("channel_id")
-          .msTeamsTenantObject("ms_teams_tenant_object")
-          .build()
+        MsTeamCheckAuthParams.builder()
+            .channelId("channel_id")
+            .msTeamsTenantObject("ms_teams_tenant_object")
+            .build()
     }
 
     @Test
     fun queryParams() {
-      val params = MsTeamCheckAuthParams.builder()
-          .channelId("channel_id")
-          .msTeamsTenantObject("ms_teams_tenant_object")
-          .build()
-      val expected = QueryParams.builder()
-      expected.put("ms_teams_tenant_object", "ms_teams_tenant_object")
-      assertThat(params._queryParams()).isEqualTo(expected.build())
+        val params =
+            MsTeamCheckAuthParams.builder()
+                .channelId("channel_id")
+                .msTeamsTenantObject("ms_teams_tenant_object")
+                .build()
+        val expected = QueryParams.builder()
+        expected.put("ms_teams_tenant_object", "ms_teams_tenant_object")
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-      val params = MsTeamCheckAuthParams.builder()
-          .channelId("channel_id")
-          .msTeamsTenantObject("ms_teams_tenant_object")
-          .build()
-      val expected = QueryParams.builder()
-      expected.put("ms_teams_tenant_object", "ms_teams_tenant_object")
-      assertThat(params._queryParams()).isEqualTo(expected.build())
+        val params =
+            MsTeamCheckAuthParams.builder()
+                .channelId("channel_id")
+                .msTeamsTenantObject("ms_teams_tenant_object")
+                .build()
+        val expected = QueryParams.builder()
+        expected.put("ms_teams_tenant_object", "ms_teams_tenant_object")
+        assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
     fun getPathParam() {
-      val params = MsTeamCheckAuthParams.builder()
-          .channelId("channel_id")
-          .msTeamsTenantObject("ms_teams_tenant_object")
-          .build()
-      assertThat(params).isNotNull
-      // path param "channelId"
-      assertThat(params.getPathParam(0)).isEqualTo("channel_id")
-      // out-of-bound path param
-      assertThat(params.getPathParam(1)).isEqualTo("")
+        val params =
+            MsTeamCheckAuthParams.builder()
+                .channelId("channel_id")
+                .msTeamsTenantObject("ms_teams_tenant_object")
+                .build()
+        assertThat(params).isNotNull
+        // path param "channelId"
+        assertThat(params.getPathParam(0)).isEqualTo("channel_id")
+        // out-of-bound path param
+        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

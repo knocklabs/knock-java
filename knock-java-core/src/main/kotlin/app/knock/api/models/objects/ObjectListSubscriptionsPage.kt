@@ -9,7 +9,6 @@ import app.knock.api.core.JsonValue
 import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
-import app.knock.api.models
 import app.knock.api.models.recipients.subscriptions.Subscription
 import app.knock.api.services.blocking.ObjectService
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -23,15 +22,14 @@ import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * List subscriptions for an object. Either list all subscriptions that belong to
- * the object, or all subscriptions that this object has. Determined by the `mode`
- * query parameter.
+ * List subscriptions for an object. Either list all subscriptions that belong to the object, or all
+ * subscriptions that this object has. Determined by the `mode` query parameter.
  */
-class ObjectListSubscriptionsPage private constructor(
+class ObjectListSubscriptionsPage
+private constructor(
     private val objectsService: ObjectService,
     private val params: ObjectListSubscriptionsParams,
     private val response: Response,
-
 ) {
 
     fun response(): Response = response
@@ -41,35 +39,41 @@ class ObjectListSubscriptionsPage private constructor(
     fun pageInfo(): Optional<PageInfo> = response().pageInfo()
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is ObjectListSubscriptionsPage && objectsService == other.objectsService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is ObjectListSubscriptionsPage && objectsService == other.objectsService && params == other.params && response == other.response /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(objectsService, params, response) /* spotless:on */
 
-    override fun toString() = "ObjectListSubscriptionsPage{objectsService=$objectsService, params=$params, response=$response}"
+    override fun toString() =
+        "ObjectListSubscriptionsPage{objectsService=$objectsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean {
-      if (entries().isEmpty()) {
-        return false;
-      }
+        if (entries().isEmpty()) {
+            return false
+        }
 
-      return pageInfo().flatMap { it.after()}.isPresent
+        return pageInfo().flatMap { it.after() }.isPresent
     }
 
     fun getNextPageParams(): Optional<ObjectListSubscriptionsParams> {
-      if (!hasNextPage()) {
-        return Optional.empty()
-      }
+        if (!hasNextPage()) {
+            return Optional.empty()
+        }
 
-      return Optional.of(ObjectListSubscriptionsParams.builder().from(params).apply {pageInfo().flatMap { it.after()}.ifPresent{ this.after(it) } }.build())
+        return Optional.of(
+            ObjectListSubscriptionsParams.builder()
+                .from(params)
+                .apply { pageInfo().flatMap { it.after() }.ifPresent { this.after(it) } }
+                .build()
+        )
     }
 
     fun getNextPage(): Optional<ObjectListSubscriptionsPage> {
-      return getNextPageParams().map { objectsService.listSubscriptions(it) }
+        return getNextPageParams().map { objectsService.listSubscriptions(it) }
     }
 
     fun autoPager(): AutoPager = AutoPager(this)
@@ -77,20 +81,22 @@ class ObjectListSubscriptionsPage private constructor(
     companion object {
 
         @JvmStatic
-        fun of(objectsService: ObjectService, params: ObjectListSubscriptionsParams, response: Response) =
-            ObjectListSubscriptionsPage(
-              objectsService,
-              params,
-              response,
-            )
+        fun of(
+            objectsService: ObjectService,
+            params: ObjectListSubscriptionsParams,
+            response: Response,
+        ) = ObjectListSubscriptionsPage(objectsService, params, response)
     }
 
     @NoAutoDetect
-    class Response @JsonCreator constructor(
-        @JsonProperty("entries") private val entries: JsonField<List<Subscription>> = JsonMissing.of(),
+    class Response
+    @JsonCreator
+    constructor(
+        @JsonProperty("entries")
+        private val entries: JsonField<List<Subscription>> = JsonMissing.of(),
         @JsonProperty("page_info") private val pageInfo: JsonField<PageInfo> = JsonMissing.of(),
-        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun entries(): List<Subscription> = entries.getNullable("entries") ?: listOf()
@@ -109,30 +115,30 @@ class ObjectListSubscriptionsPage private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Response =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                entries().map { it.validate() }
-                pageInfo().ifPresent { it.validate() }
-                validated = true
+        fun validate(): Response = apply {
+            if (validated) {
+                return@apply
             }
+
+            entries().map { it.validate() }
+            pageInfo().ifPresent { it.validate() }
+            validated = true
+        }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return /* spotless:off */ other is Response && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Response && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         override fun hashCode(): Int = /* spotless:off */ Objects.hash(entries, pageInfo, additionalProperties) /* spotless:on */
 
-        override fun toString() = "Response{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Response{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -140,8 +146,7 @@ class ObjectListSubscriptionsPage private constructor(
              * Returns a mutable builder for constructing an instance of
              * [ObjectListSubscriptionsPage].
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         class Builder {
@@ -151,12 +156,11 @@ class ObjectListSubscriptionsPage private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(page: Response) =
-                apply {
-                    this.entries = page.entries
-                    this.pageInfo = page.pageInfo
-                    this.additionalProperties.putAll(page.additionalProperties)
-                }
+            internal fun from(page: Response) = apply {
+                this.entries = page.entries
+                this.pageInfo = page.pageInfo
+                this.additionalProperties.putAll(page.additionalProperties)
+            }
 
             fun entries(entries: List<Subscription>) = entries(JsonField.of(entries))
 
@@ -166,40 +170,30 @@ class ObjectListSubscriptionsPage private constructor(
 
             fun pageInfo(pageInfo: JsonField<PageInfo>) = apply { this.pageInfo = pageInfo }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    this.additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
 
-            fun build() =
-                Response(
-                  entries,
-                  pageInfo,
-                  additionalProperties.toImmutable(),
-                )
+            fun build() = Response(entries, pageInfo, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: ObjectListSubscriptionsPage,
+    class AutoPager(private val firstPage: ObjectListSubscriptionsPage) : Iterable<Subscription> {
 
-    ) : Iterable<Subscription> {
-
-        override fun iterator(): Iterator<Subscription> =
-            iterator {
-                var page = firstPage
-                var index = 0
-                while (true) {
-                  while (index < page.entries().size) {
+        override fun iterator(): Iterator<Subscription> = iterator {
+            var page = firstPage
+            var index = 0
+            while (true) {
+                while (index < page.entries().size) {
                     yield(page.entries()[index++])
-                  }
-                  page = page.getNextPage().getOrNull() ?: break
-                  index = 0
                 }
+                page = page.getNextPage().getOrNull() ?: break
+                index = 0
             }
+        }
 
         fun stream(): Stream<Subscription> {
-          return StreamSupport.stream(spliterator(), false)
+            return StreamSupport.stream(spliterator(), false)
         }
     }
 }

@@ -9,7 +9,6 @@ import app.knock.api.core.JsonValue
 import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
-import app.knock.api.models
 import app.knock.api.services.async.MessageServiceAsync
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -20,16 +19,13 @@ import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
-import kotlin.jvm.optionals.getOrNull
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.FlowCollector
 
 /** List activities */
-class MessageListActivitiesPageAsync private constructor(
+class MessageListActivitiesPageAsync
+private constructor(
     private val messagesService: MessageServiceAsync,
     private val params: MessageListActivitiesParams,
     private val response: Response,
-
 ) {
 
     fun response(): Response = response
@@ -39,39 +35,43 @@ class MessageListActivitiesPageAsync private constructor(
     fun pageInfo(): Optional<PageInfo> = response().pageInfo()
 
     override fun equals(other: Any?): Boolean {
-      if (this === other) {
-          return true
-      }
+        if (this === other) {
+            return true
+        }
 
-      return /* spotless:off */ other is MessageListActivitiesPageAsync && messagesService == other.messagesService && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is MessageListActivitiesPageAsync && messagesService == other.messagesService && params == other.params && response == other.response /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(messagesService, params, response) /* spotless:on */
 
-    override fun toString() = "MessageListActivitiesPageAsync{messagesService=$messagesService, params=$params, response=$response}"
+    override fun toString() =
+        "MessageListActivitiesPageAsync{messagesService=$messagesService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean {
-      if (items().isEmpty()) {
-        return false;
-      }
+        if (items().isEmpty()) {
+            return false
+        }
 
-      return pageInfo().flatMap { it.after()}.isPresent
+        return pageInfo().flatMap { it.after() }.isPresent
     }
 
     fun getNextPageParams(): Optional<MessageListActivitiesParams> {
-      if (!hasNextPage()) {
-        return Optional.empty()
-      }
+        if (!hasNextPage()) {
+            return Optional.empty()
+        }
 
-      return Optional.of(MessageListActivitiesParams.builder().from(params).apply {pageInfo().flatMap { it.after()}.ifPresent{ this.after(it) } }.build())
+        return Optional.of(
+            MessageListActivitiesParams.builder()
+                .from(params)
+                .apply { pageInfo().flatMap { it.after() }.ifPresent { this.after(it) } }
+                .build()
+        )
     }
 
     fun getNextPage(): CompletableFuture<Optional<MessageListActivitiesPageAsync>> {
-      return getNextPageParams().map {
-        messagesService.listActivities(it).thenApply { Optional.of(it) }
-      }.orElseGet {
-          CompletableFuture.completedFuture(Optional.empty())
-      }
+        return getNextPageParams()
+            .map { messagesService.listActivities(it).thenApply { Optional.of(it) } }
+            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
     }
 
     fun autoPager(): AutoPager = AutoPager(this)
@@ -79,20 +79,21 @@ class MessageListActivitiesPageAsync private constructor(
     companion object {
 
         @JvmStatic
-        fun of(messagesService: MessageServiceAsync, params: MessageListActivitiesParams, response: Response) =
-            MessageListActivitiesPageAsync(
-              messagesService,
-              params,
-              response,
-            )
+        fun of(
+            messagesService: MessageServiceAsync,
+            params: MessageListActivitiesParams,
+            response: Response,
+        ) = MessageListActivitiesPageAsync(messagesService, params, response)
     }
 
     @NoAutoDetect
-    class Response @JsonCreator constructor(
+    class Response
+    @JsonCreator
+    constructor(
         @JsonProperty("items") private val items: JsonField<List<Activity>> = JsonMissing.of(),
         @JsonProperty("page_info") private val pageInfo: JsonField<PageInfo> = JsonMissing.of(),
-        @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-
+        @JsonAnySetter
+        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
         fun items(): List<Activity> = items.getNullable("items") ?: listOf()
@@ -111,30 +112,30 @@ class MessageListActivitiesPageAsync private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Response =
-            apply {
-                if (validated) {
-                  return@apply
-                }
-
-                items().map { it.validate() }
-                pageInfo().ifPresent { it.validate() }
-                validated = true
+        fun validate(): Response = apply {
+            if (validated) {
+                return@apply
             }
+
+            items().map { it.validate() }
+            pageInfo().ifPresent { it.validate() }
+            validated = true
+        }
 
         fun toBuilder() = Builder().from(this)
 
         override fun equals(other: Any?): Boolean {
-          if (this === other) {
-              return true
-          }
+            if (this === other) {
+                return true
+            }
 
-          return /* spotless:off */ other is Response && items == other.items && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Response && items == other.items && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         override fun hashCode(): Int = /* spotless:off */ Objects.hash(items, pageInfo, additionalProperties) /* spotless:on */
 
-        override fun toString() = "Response{items=$items, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
+        override fun toString() =
+            "Response{items=$items, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
 
         companion object {
 
@@ -142,8 +143,7 @@ class MessageListActivitiesPageAsync private constructor(
              * Returns a mutable builder for constructing an instance of
              * [MessageListActivitiesPageAsync].
              */
-            @JvmStatic
-            fun builder() = Builder()
+            @JvmStatic fun builder() = Builder()
         }
 
         class Builder {
@@ -153,12 +153,11 @@ class MessageListActivitiesPageAsync private constructor(
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
-            internal fun from(page: Response) =
-                apply {
-                    this.items = page.items
-                    this.pageInfo = page.pageInfo
-                    this.additionalProperties.putAll(page.additionalProperties)
-                }
+            internal fun from(page: Response) = apply {
+                this.items = page.items
+                this.pageInfo = page.pageInfo
+                this.additionalProperties.putAll(page.additionalProperties)
+            }
 
             fun items(items: List<Activity>) = items(JsonField.of(items))
 
@@ -168,55 +167,37 @@ class MessageListActivitiesPageAsync private constructor(
 
             fun pageInfo(pageInfo: JsonField<PageInfo>) = apply { this.pageInfo = pageInfo }
 
-            fun putAdditionalProperty(key: String, value: JsonValue) =
-                apply {
-                    this.additionalProperties.put(key, value)
-                }
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                this.additionalProperties.put(key, value)
+            }
 
-            fun build() =
-                Response(
-                  items,
-                  pageInfo,
-                  additionalProperties.toImmutable(),
-                )
+            fun build() = Response(items, pageInfo, additionalProperties.toImmutable())
         }
     }
 
-    class AutoPager(
-        private val firstPage: MessageListActivitiesPageAsync,
-
-    ) {
+    class AutoPager(private val firstPage: MessageListActivitiesPageAsync) {
 
         fun forEach(action: Predicate<Activity>, executor: Executor): CompletableFuture<Void> {
-          fun CompletableFuture<Optional<MessageListActivitiesPageAsync>>.forEach(action: (Activity) -> Boolean, executor: Executor): CompletableFuture<Void> =
-              thenComposeAsync(
-                { page ->
-                    page
-                    .filter {
-                        it.items().all(action)
-                    }
-                    .map {
-                        it.getNextPage().forEach(action, executor)
-                    }
-                    .orElseGet {
-                        CompletableFuture.completedFuture(null)
-                    }
-                }, executor
-              )
-          return CompletableFuture.completedFuture(Optional.of(firstPage))
-          .forEach(
-            action::test, executor
-          )
+            fun CompletableFuture<Optional<MessageListActivitiesPageAsync>>.forEach(
+                action: (Activity) -> Boolean,
+                executor: Executor,
+            ): CompletableFuture<Void> =
+                thenComposeAsync(
+                    { page ->
+                        page
+                            .filter { it.items().all(action) }
+                            .map { it.getNextPage().forEach(action, executor) }
+                            .orElseGet { CompletableFuture.completedFuture(null) }
+                    },
+                    executor,
+                )
+            return CompletableFuture.completedFuture(Optional.of(firstPage))
+                .forEach(action::test, executor)
         }
 
         fun toList(executor: Executor): CompletableFuture<List<Activity>> {
-          val values = mutableListOf<Activity>()
-          return forEach(
-            values::add, executor
-          )
-          .thenApply {
-              values
-          }
+            val values = mutableListOf<Activity>()
+            return forEach(values::add, executor).thenApply { values }
         }
     }
 }

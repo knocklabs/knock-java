@@ -15,85 +15,113 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(TestServerExtension::class)
 class MsTeamServiceAsyncTest {
 
-    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
     @Test
     fun checkAuth() {
-      val client = KnockOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val msTeamServiceAsync = client.providers().msTeams()
+        val client =
+            KnockOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val msTeamServiceAsync = client.providers().msTeams()
 
-      val responseFuture = msTeamServiceAsync.checkAuth(MsTeamCheckAuthParams.builder()
-          .channelId("channel_id")
-          .msTeamsTenantObject("ms_teams_tenant_object")
-          .build())
+        val responseFuture =
+            msTeamServiceAsync.checkAuth(
+                MsTeamCheckAuthParams.builder()
+                    .channelId("channel_id")
+                    .msTeamsTenantObject("ms_teams_tenant_object")
+                    .build()
+            )
 
-      val response = responseFuture.get()
-      response.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
-    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
     @Test
     fun listChannels() {
-      val client = KnockOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val msTeamServiceAsync = client.providers().msTeams()
+        val client =
+            KnockOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val msTeamServiceAsync = client.providers().msTeams()
 
-      val responseFuture = msTeamServiceAsync.listChannels(MsTeamListChannelsParams.builder()
-          .channelId("channel_id")
-          .msTeamsTenantObject("ms_teams_tenant_object")
-          .teamId("team_id")
-          .queryOptions(MsTeamListChannelsParams.QueryOptions.builder()
-              .filter("\$filter")
-              .select("\$select")
-              .build())
-          .build())
+        val responseFuture =
+            msTeamServiceAsync.listChannels(
+                MsTeamListChannelsParams.builder()
+                    .channelId("channel_id")
+                    .msTeamsTenantObject("ms_teams_tenant_object")
+                    .teamId("team_id")
+                    .queryOptions(
+                        MsTeamListChannelsParams.QueryOptions.builder()
+                            .filter("\$filter")
+                            .select("\$select")
+                            .build()
+                    )
+                    .build()
+            )
 
-      val response = responseFuture.get()
-      response.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
-    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
     @Test
     fun listTeams() {
-      val client = KnockOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val msTeamServiceAsync = client.providers().msTeams()
+        val client =
+            KnockOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val msTeamServiceAsync = client.providers().msTeams()
 
-      val responseFuture = msTeamServiceAsync.listTeams(MsTeamListTeamsParams.builder()
-          .channelId("channel_id")
-          .msTeamsTenantObject("ms_teams_tenant_object")
-          .queryOptions(MsTeamListTeamsParams.QueryOptions.builder()
-              .filter("\$filter")
-              .select("\$select")
-              .skiptoken("\$skiptoken")
-              .top(0L)
-              .build())
-          .build())
+        val responseFuture =
+            msTeamServiceAsync.listTeams(
+                MsTeamListTeamsParams.builder()
+                    .channelId("channel_id")
+                    .msTeamsTenantObject("ms_teams_tenant_object")
+                    .queryOptions(
+                        MsTeamListTeamsParams.QueryOptions.builder()
+                            .filter("\$filter")
+                            .select("\$select")
+                            .skiptoken("\$skiptoken")
+                            .top(0L)
+                            .build()
+                    )
+                    .build()
+            )
 
-      val response = responseFuture.get()
-      response.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
-    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
     @Test
     fun revokeAccess() {
-      val client = KnockOkHttpClientAsync.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val msTeamServiceAsync = client.providers().msTeams()
+        val client =
+            KnockOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val msTeamServiceAsync = client.providers().msTeams()
 
-      val responseFuture = msTeamServiceAsync.revokeAccess(MsTeamRevokeAccessParams.builder()
-          .channelId("channel_id")
-          .msTeamsTenantObject("ms_teams_tenant_object")
-          .build())
+        val responseFuture =
+            msTeamServiceAsync.revokeAccess(
+                MsTeamRevokeAccessParams.builder()
+                    .channelId("channel_id")
+                    .msTeamsTenantObject("ms_teams_tenant_object")
+                    .build()
+            )
 
-      val response = responseFuture.get()
+        val response = responseFuture.get()
     }
 }

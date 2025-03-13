@@ -14,52 +14,69 @@ import org.junit.jupiter.api.extension.ExtendWith
 @ExtendWith(TestServerExtension::class)
 class SlackServiceTest {
 
-    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
     @Test
     fun checkAuth() {
-      val client = KnockOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val slackService = client.providers().slack()
+        val client =
+            KnockOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val slackService = client.providers().slack()
 
-      val response = slackService.checkAuth(SlackCheckAuthParams.builder()
-          .channelId("channel_id")
-          .accessTokenObject("access_token_object")
-          .build())
+        val response =
+            slackService.checkAuth(
+                SlackCheckAuthParams.builder()
+                    .channelId("channel_id")
+                    .accessTokenObject("access_token_object")
+                    .build()
+            )
 
-      response.validate()
+        response.validate()
     }
 
-    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
     @Test
     fun listChannels() {
-      val client = KnockOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val slackService = client.providers().slack()
+        val client =
+            KnockOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val slackService = client.providers().slack()
 
-      val page = slackService.listChannels(SlackListChannelsParams.builder()
-          .channelId("channel_id")
-          .accessTokenObject("access_token_object")
-          .build())
+        val page =
+            slackService.listChannels(
+                SlackListChannelsParams.builder()
+                    .channelId("channel_id")
+                    .accessTokenObject("access_token_object")
+                    .build()
+            )
 
-      page.response().validate()
+        page.response().validate()
     }
 
-    @Disabled("skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url")
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
     @Test
     fun revokeAccess() {
-      val client = KnockOkHttpClient.builder()
-          .baseUrl(TestServerExtension.BASE_URL)
-          .bearerToken("My Bearer Token")
-          .build()
-      val slackService = client.providers().slack()
+        val client =
+            KnockOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val slackService = client.providers().slack()
 
-      slackService.revokeAccess(SlackRevokeAccessParams.builder()
-          .channelId("channel_id")
-          .accessTokenObject("access_token_object")
-          .build())
+        slackService.revokeAccess(
+            SlackRevokeAccessParams.builder()
+                .channelId("channel_id")
+                .accessTokenObject("access_token_object")
+                .build()
+        )
     }
 }

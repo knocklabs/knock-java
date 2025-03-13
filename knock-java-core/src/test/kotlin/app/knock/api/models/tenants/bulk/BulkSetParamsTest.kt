@@ -11,32 +11,26 @@ class BulkSetParamsTest {
 
     @Test
     fun create() {
-      BulkSetParams.builder()
-          .addTenant("string")
-          .build()
+        BulkSetParams.builder().addTenant("string").build()
     }
 
     @Test
     fun body() {
-      val params = BulkSetParams.builder()
-          .addTenant("string")
-          .build()
+        val params = BulkSetParams.builder().addTenant("string").build()
 
-      val body = params._body()
+        val body = params._body()
 
-      assertNotNull(body)
-      assertThat(body.tenants()).isEqualTo(listOf(InlineTenantRequest.ofString("string")))
+        assertNotNull(body)
+        assertThat(body.tenants()).isEqualTo(listOf(InlineTenantRequest.ofString("string")))
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-      val params = BulkSetParams.builder()
-          .addTenant("string")
-          .build()
+        val params = BulkSetParams.builder().addTenant("string").build()
 
-      val body = params._body()
+        val body = params._body()
 
-      assertNotNull(body)
-      assertThat(body.tenants()).isEqualTo(listOf(InlineTenantRequest.ofString("string")))
+        assertNotNull(body)
+        assertThat(body.tenants()).isEqualTo(listOf(InlineTenantRequest.ofString("string")))
     }
 }
