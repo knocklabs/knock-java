@@ -9,16 +9,16 @@ class SlackCheckAuthResponseTest {
 
     @Test
     fun createSlackCheckAuthResponse() {
-        val slackCheckAuthResponse =
-            SlackCheckAuthResponse.builder()
-                .connection(
-                    SlackCheckAuthResponse.Connection.builder().ok(true).reason("reason").build()
-                )
-                .build()
-        assertThat(slackCheckAuthResponse).isNotNull
-        assertThat(slackCheckAuthResponse.connection())
-            .isEqualTo(
-                SlackCheckAuthResponse.Connection.builder().ok(true).reason("reason").build()
-            )
+      val slackCheckAuthResponse = SlackCheckAuthResponse.builder()
+          .connection(SlackCheckAuthResponse.Connection.builder()
+              .ok(true)
+              .reason("reason")
+              .build())
+          .build()
+      assertThat(slackCheckAuthResponse).isNotNull
+      assertThat(slackCheckAuthResponse.connection()).isEqualTo(SlackCheckAuthResponse.Connection.builder()
+          .ok(true)
+          .reason("reason")
+          .build())
     }
 }

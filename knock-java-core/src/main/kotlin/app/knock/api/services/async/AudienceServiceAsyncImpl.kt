@@ -22,113 +22,96 @@ import app.knock.api.models.audiences.AudienceListMembersResponse
 import app.knock.api.models.audiences.AudienceRemoveMembersParams
 import java.util.concurrent.CompletableFuture
 
-class AudienceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
-    AudienceServiceAsync {
+class AudienceServiceAsyncImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: AudienceServiceAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : AudienceServiceAsync {
+
+    private val withRawResponse: AudienceServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): AudienceServiceAsync.WithRawResponse = withRawResponse
 
-    override fun addMembers(
-        params: AudienceAddMembersParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
+    override fun addMembers(params: AudienceAddMembersParams, requestOptions: RequestOptions): CompletableFuture<String> =
         // post /v1/audiences/{key}/members
         withRawResponse().addMembers(params, requestOptions).thenApply { it.parse() }
 
-    override fun listMembers(
-        params: AudienceListMembersParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<AudienceListMembersResponse> =
+    override fun listMembers(params: AudienceListMembersParams, requestOptions: RequestOptions): CompletableFuture<AudienceListMembersResponse> =
         // get /v1/audiences/{key}/members
         withRawResponse().listMembers(params, requestOptions).thenApply { it.parse() }
 
-    override fun removeMembers(
-        params: AudienceRemoveMembersParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
+    override fun removeMembers(params: AudienceRemoveMembersParams, requestOptions: RequestOptions): CompletableFuture<String> =
         // delete /v1/audiences/{key}/members
         withRawResponse().removeMembers(params, requestOptions).thenApply { it.parse() }
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        AudienceServiceAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : AudienceServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
 
-        private val addMembersHandler: Handler<String> =
-            stringHandler().withErrorHandler(errorHandler)
+        private val addMembersHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
 
-        override fun addMembers(
-            params: AudienceAddMembersParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .addPathSegments("v1", "audiences", params.getPathParam(0), "members")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable { response.use { addMembersHandler.handle(it) } }
-                }
+        override fun addMembers(params: AudienceAddMembersParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<String>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.POST)
+            .addPathSegments("v1", "audiences", params.getPathParam(0), "members")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepareAsync(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> response.parseable {
+              response.use {
+                  addMembersHandler.handle(it)
+              }
+          } }
         }
 
-        private val listMembersHandler: Handler<AudienceListMembersResponse> =
-            jsonHandler<AudienceListMembersResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val listMembersHandler: Handler<AudienceListMembersResponse> = jsonHandler<AudienceListMembersResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
-        override fun listMembers(
-            params: AudienceListMembersParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<AudienceListMembersResponse>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments("v1", "audiences", params.getPathParam(0), "members")
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { listMembersHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
+        override fun listMembers(params: AudienceListMembersParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<AudienceListMembersResponse>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.GET)
+            .addPathSegments("v1", "audiences", params.getPathParam(0), "members")
+            .build()
+            .prepareAsync(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> response.parseable {
+              response.use {
+                  listMembersHandler.handle(it)
+              }
+              .also {
+                  if (requestOptions.responseValidation!!) {
+                    it.validate()
+                  }
+              }
+          } }
         }
 
-        private val removeMembersHandler: Handler<String> =
-            stringHandler().withErrorHandler(errorHandler)
+        private val removeMembersHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
 
-        override fun removeMembers(
-            params: AudienceRemoveMembersParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.DELETE)
-                    .addPathSegments("v1", "audiences", params.getPathParam(0), "members")
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable { response.use { removeMembersHandler.handle(it) } }
-                }
+        override fun removeMembers(params: AudienceRemoveMembersParams, requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<String>> {
+          val request = HttpRequest.builder()
+            .method(HttpMethod.DELETE)
+            .addPathSegments("v1", "audiences", params.getPathParam(0), "members")
+            .body(json(clientOptions.jsonMapper, params._body()))
+            .build()
+            .prepareAsync(clientOptions, params)
+          val requestOptions = requestOptions
+              .applyDefaults(RequestOptions.from(clientOptions))
+          return request.thenComposeAsync { clientOptions.httpClient.executeAsync(
+            it, requestOptions
+          ) }.thenApply { response -> response.parseable {
+              response.use {
+                  removeMembersHandler.handle(it)
+              }
+          } }
         }
     }
 }

@@ -27,64 +27,43 @@ import app.knock.api.services.async.UserServiceAsyncImpl
 import app.knock.api.services.async.WorkflowServiceAsync
 import app.knock.api.services.async.WorkflowServiceAsyncImpl
 
-class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClientAsync {
+class KnockClientAsyncImpl(
+    private val clientOptions: ClientOptions,
+
+) : KnockClientAsync {
 
     private val clientOptionsWithUserAgent =
-        if (clientOptions.headers.names().contains("User-Agent")) clientOptions
-        else
-            clientOptions
-                .toBuilder()
-                .putHeader("User-Agent", "${javaClass.simpleName}/Java ${getPackageVersion()}")
-                .build()
+
+      if (clientOptions.headers.names().contains("User-Agent")) clientOptions
+
+      else clientOptions.toBuilder().putHeader("User-Agent", "${javaClass.simpleName}/Java ${getPackageVersion()}").build()
 
     // Pass the original clientOptions so that this client sets its own User-Agent.
     private val sync: KnockClient by lazy { KnockClientImpl(clientOptions) }
 
-    private val withRawResponse: KnockClientAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+    private val withRawResponse: KnockClientAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
-    private val recipients: RecipientServiceAsync by lazy {
-        RecipientServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val recipients: RecipientServiceAsync by lazy { RecipientServiceAsyncImpl(clientOptionsWithUserAgent) }
 
     private val users: UserServiceAsync by lazy { UserServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val objects: ObjectServiceAsync by lazy {
-        ObjectServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val objects: ObjectServiceAsync by lazy { ObjectServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val tenants: TenantServiceAsync by lazy {
-        TenantServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val tenants: TenantServiceAsync by lazy { TenantServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val bulkOperations: BulkOperationServiceAsync by lazy {
-        BulkOperationServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val bulkOperations: BulkOperationServiceAsync by lazy { BulkOperationServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val messages: MessageServiceAsync by lazy {
-        MessageServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val messages: MessageServiceAsync by lazy { MessageServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val providers: ProviderServiceAsync by lazy {
-        ProviderServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val providers: ProviderServiceAsync by lazy { ProviderServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val workflows: WorkflowServiceAsync by lazy {
-        WorkflowServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val workflows: WorkflowServiceAsync by lazy { WorkflowServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val schedules: ScheduleServiceAsync by lazy {
-        ScheduleServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val schedules: ScheduleServiceAsync by lazy { ScheduleServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val channels: ChannelServiceAsync by lazy {
-        ChannelServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val channels: ChannelServiceAsync by lazy { ChannelServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val audiences: AudienceServiceAsync by lazy {
-        AudienceServiceAsyncImpl(clientOptionsWithUserAgent)
-    }
+    private val audiences: AudienceServiceAsync by lazy { AudienceServiceAsyncImpl(clientOptionsWithUserAgent) }
 
     override fun sync(): KnockClient = sync
 
@@ -114,52 +93,32 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
 
     override fun close() = clientOptions.httpClient.close()
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        KnockClientAsync.WithRawResponse {
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
 
-        private val recipients: RecipientServiceAsync.WithRawResponse by lazy {
-            RecipientServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+    ) : KnockClientAsync.WithRawResponse {
 
-        private val users: UserServiceAsync.WithRawResponse by lazy {
-            UserServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val recipients: RecipientServiceAsync.WithRawResponse by lazy { RecipientServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val objects: ObjectServiceAsync.WithRawResponse by lazy {
-            ObjectServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val users: UserServiceAsync.WithRawResponse by lazy { UserServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val tenants: TenantServiceAsync.WithRawResponse by lazy {
-            TenantServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val objects: ObjectServiceAsync.WithRawResponse by lazy { ObjectServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val bulkOperations: BulkOperationServiceAsync.WithRawResponse by lazy {
-            BulkOperationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val tenants: TenantServiceAsync.WithRawResponse by lazy { TenantServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val messages: MessageServiceAsync.WithRawResponse by lazy {
-            MessageServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val bulkOperations: BulkOperationServiceAsync.WithRawResponse by lazy { BulkOperationServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val providers: ProviderServiceAsync.WithRawResponse by lazy {
-            ProviderServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val messages: MessageServiceAsync.WithRawResponse by lazy { MessageServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val workflows: WorkflowServiceAsync.WithRawResponse by lazy {
-            WorkflowServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val providers: ProviderServiceAsync.WithRawResponse by lazy { ProviderServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val schedules: ScheduleServiceAsync.WithRawResponse by lazy {
-            ScheduleServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val workflows: WorkflowServiceAsync.WithRawResponse by lazy { WorkflowServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val channels: ChannelServiceAsync.WithRawResponse by lazy {
-            ChannelServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val schedules: ScheduleServiceAsync.WithRawResponse by lazy { ScheduleServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
-        private val audiences: AudienceServiceAsync.WithRawResponse by lazy {
-            AudienceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
+        private val channels: ChannelServiceAsync.WithRawResponse by lazy { ChannelServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
+
+        private val audiences: AudienceServiceAsync.WithRawResponse by lazy { AudienceServiceAsyncImpl.WithRawResponseImpl(clientOptions) }
 
         override fun recipients(): RecipientServiceAsync.WithRawResponse = recipients
 

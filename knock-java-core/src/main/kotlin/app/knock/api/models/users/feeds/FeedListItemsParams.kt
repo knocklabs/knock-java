@@ -16,9 +16,11 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Returns a paginated list of feed items for a user, including metadata about the feed. */
-class FeedListItemsParams
-private constructor(
+/**
+ * Returns a paginated list of feed items for a user, including metadata about the
+ * feed.
+ */
+class FeedListItemsParams private constructor(
     private val userId: String,
     private val channelId: String,
     private val after: String?,
@@ -33,6 +35,7 @@ private constructor(
     private val workflowCategories: List<String>?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
+
 ) : Params {
 
     fun userId(): String = userId
@@ -76,29 +79,67 @@ private constructor(
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.after?.let { queryParams.put("after", listOf(it.toString())) }
-        this.archived?.let { queryParams.put("archived", listOf(it.toString())) }
-        this.before?.let { queryParams.put("before", listOf(it.toString())) }
-        this.hasTenant?.let { queryParams.put("has_tenant", listOf(it.toString())) }
-        this.pageSize?.let { queryParams.put("page_size", listOf(it.toString())) }
-        this.source?.let { queryParams.put("source", listOf(it.toString())) }
-        this.status?.let { queryParams.put("status", listOf(it.toString())) }
-        this.tenant?.let { queryParams.put("tenant", listOf(it.toString())) }
-        this.triggerData?.let { queryParams.put("trigger_data", listOf(it.toString())) }
-        this.workflowCategories?.let {
-            queryParams.put("workflow_categories[]", it.map(Any::toString))
-        }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
+      val queryParams = QueryParams.builder()
+      this.after?.let {
+          queryParams.put(
+            "after", listOf(it.toString())
+          )
+      }
+      this.archived?.let {
+          queryParams.put(
+            "archived", listOf(it.toString())
+          )
+      }
+      this.before?.let {
+          queryParams.put(
+            "before", listOf(it.toString())
+          )
+      }
+      this.hasTenant?.let {
+          queryParams.put(
+            "has_tenant", listOf(it.toString())
+          )
+      }
+      this.pageSize?.let {
+          queryParams.put(
+            "page_size", listOf(it.toString())
+          )
+      }
+      this.source?.let {
+          queryParams.put(
+            "source", listOf(it.toString())
+          )
+      }
+      this.status?.let {
+          queryParams.put(
+            "status", listOf(it.toString())
+          )
+      }
+      this.tenant?.let {
+          queryParams.put(
+            "tenant", listOf(it.toString())
+          )
+      }
+      this.triggerData?.let {
+          queryParams.put(
+            "trigger_data", listOf(it.toString())
+          )
+      }
+      this.workflowCategories?.let {
+          queryParams.put(
+            "workflow_categories[]", it.map(Any::toString)
+          )
+      }
+      queryParams.putAll(additionalQueryParams)
+      return queryParams.build()
     }
 
     fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> userId
-            1 -> channelId
-            else -> ""
-        }
+      return when (index) {
+          0 -> userId
+          1 -> channelId
+          else -> ""
+      }
     }
 
     fun toBuilder() = Builder().from(this)
@@ -109,12 +150,14 @@ private constructor(
          * Returns a mutable builder for constructing an instance of [FeedListItemsParams].
          *
          * The following fields are required:
+         *
          * ```java
          * .userId()
          * .channelId()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [FeedListItemsParams]. */
@@ -137,47 +180,66 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(feedListItemsParams: FeedListItemsParams) = apply {
-            userId = feedListItemsParams.userId
-            channelId = feedListItemsParams.channelId
-            after = feedListItemsParams.after
-            archived = feedListItemsParams.archived
-            before = feedListItemsParams.before
-            hasTenant = feedListItemsParams.hasTenant
-            pageSize = feedListItemsParams.pageSize
-            source = feedListItemsParams.source
-            status = feedListItemsParams.status
-            tenant = feedListItemsParams.tenant
-            triggerData = feedListItemsParams.triggerData
-            workflowCategories = feedListItemsParams.workflowCategories?.toMutableList()
-            additionalHeaders = feedListItemsParams.additionalHeaders.toBuilder()
-            additionalQueryParams = feedListItemsParams.additionalQueryParams.toBuilder()
-        }
+        internal fun from(feedListItemsParams: FeedListItemsParams) =
+            apply {
+                userId = feedListItemsParams.userId
+                channelId = feedListItemsParams.channelId
+                after = feedListItemsParams.after
+                archived = feedListItemsParams.archived
+                before = feedListItemsParams.before
+                hasTenant = feedListItemsParams.hasTenant
+                pageSize = feedListItemsParams.pageSize
+                source = feedListItemsParams.source
+                status = feedListItemsParams.status
+                tenant = feedListItemsParams.tenant
+                triggerData = feedListItemsParams.triggerData
+                workflowCategories = feedListItemsParams.workflowCategories?.toMutableList()
+                additionalHeaders = feedListItemsParams.additionalHeaders.toBuilder()
+                additionalQueryParams = feedListItemsParams.additionalQueryParams.toBuilder()
+            }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun userId(userId: String) =
+            apply {
+                this.userId = userId
+            }
 
-        fun channelId(channelId: String) = apply { this.channelId = channelId }
+        fun channelId(channelId: String) =
+            apply {
+                this.channelId = channelId
+            }
 
         /** The cursor to fetch entries after */
-        fun after(after: String?) = apply { this.after = after }
+        fun after(after: String?) =
+            apply {
+                this.after = after
+            }
 
         /** The cursor to fetch entries after */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
         /** The archived status of the feed items to return */
-        fun archived(archived: Archived?) = apply { this.archived = archived }
+        fun archived(archived: Archived?) =
+            apply {
+                this.archived = archived
+            }
 
         /** The archived status of the feed items to return */
         fun archived(archived: Optional<Archived>) = archived(archived.getOrNull())
 
         /** The cursor to fetch entries before */
-        fun before(before: String?) = apply { this.before = before }
+        fun before(before: String?) =
+            apply {
+                this.before = before
+            }
 
         /** The cursor to fetch entries before */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
         /** Whether the feed items have a tenant */
-        fun hasTenant(hasTenant: Boolean?) = apply { this.hasTenant = hasTenant }
+        fun hasTenant(hasTenant: Boolean?) =
+            apply {
+                this.hasTenant = hasTenant
+            }
 
         /** Whether the feed items have a tenant */
         fun hasTenant(hasTenant: Boolean) = hasTenant(hasTenant as Boolean?)
@@ -186,7 +248,10 @@ private constructor(
         fun hasTenant(hasTenant: Optional<Boolean>) = hasTenant(hasTenant.getOrNull())
 
         /** The page size to fetch */
-        fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
+        fun pageSize(pageSize: Long?) =
+            apply {
+                this.pageSize = pageSize
+            }
 
         /** The page size to fetch */
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
@@ -195,173 +260,219 @@ private constructor(
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
         /** The source of the feed items to return */
-        fun source(source: String?) = apply { this.source = source }
+        fun source(source: String?) =
+            apply {
+                this.source = source
+            }
 
         /** The source of the feed items to return */
         fun source(source: Optional<String>) = source(source.getOrNull())
 
         /** The status of the feed items to return */
-        fun status(status: Status?) = apply { this.status = status }
+        fun status(status: Status?) =
+            apply {
+                this.status = status
+            }
 
         /** The status of the feed items to return */
         fun status(status: Optional<Status>) = status(status.getOrNull())
 
         /** The tenant of the feed items to return */
-        fun tenant(tenant: String?) = apply { this.tenant = tenant }
+        fun tenant(tenant: String?) =
+            apply {
+                this.tenant = tenant
+            }
 
         /** The tenant of the feed items to return */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         /** The trigger data of the feed items to return (as a JSON string) */
-        fun triggerData(triggerData: String?) = apply { this.triggerData = triggerData }
+        fun triggerData(triggerData: String?) =
+            apply {
+                this.triggerData = triggerData
+            }
 
         /** The trigger data of the feed items to return (as a JSON string) */
         fun triggerData(triggerData: Optional<String>) = triggerData(triggerData.getOrNull())
 
         /** The workflow categories of the feed items to return */
-        fun workflowCategories(workflowCategories: List<String>?) = apply {
-            this.workflowCategories = workflowCategories?.toMutableList()
-        }
+        fun workflowCategories(workflowCategories: List<String>?) =
+            apply {
+                this.workflowCategories = workflowCategories?.toMutableList()
+            }
 
         /** The workflow categories of the feed items to return */
-        fun workflowCategories(workflowCategories: Optional<List<String>>) =
-            workflowCategories(workflowCategories.getOrNull())
+        fun workflowCategories(workflowCategories: Optional<List<String>>) = workflowCategories(workflowCategories.getOrNull())
 
         /** The workflow categories of the feed items to return */
-        fun addWorkflowCategory(workflowCategory: String) = apply {
-            workflowCategories =
-                (workflowCategories ?: mutableListOf()).apply { add(workflowCategory) }
-        }
+        fun addWorkflowCategory(workflowCategory: String) =
+            apply {
+                workflowCategories = (workflowCategories ?: mutableListOf()).apply { add(workflowCategory) }
+            }
 
-        fun additionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun putAdditionalHeader(name: String, value: String) = apply {
-            additionalHeaders.put(name, value)
-        }
+        fun putAdditionalHeader(name: String, value: String) =
+            apply {
+                additionalHeaders.put(name, value)
+            }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.put(name, values)
-        }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.put(name, values)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun replaceAdditionalHeaders(name: String, value: String) = apply {
-            additionalHeaders.replace(name, value)
-        }
+        fun replaceAdditionalHeaders(name: String, value: String) =
+            apply {
+                additionalHeaders.replace(name, value)
+            }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.replace(name, values)
-        }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.replace(name, values)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
+        fun removeAdditionalHeaders(name: String) =
+            apply {
+                additionalHeaders.remove(name)
+            }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
-            additionalHeaders.removeAll(names)
-        }
+        fun removeAllAdditionalHeaders(names: Set<String>) =
+            apply {
+                additionalHeaders.removeAll(names)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun putAdditionalQueryParam(key: String, value: String) = apply {
-            additionalQueryParams.put(key, value)
-        }
+        fun putAdditionalQueryParam(key: String, value: String) =
+            apply {
+                additionalQueryParams.put(key, value)
+            }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.put(key, values)
-        }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.put(key, values)
+            }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.putAll(additionalQueryParams)
-        }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.putAll(additionalQueryParams)
+            }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
-            additionalQueryParams.replace(key, value)
-        }
+        fun replaceAdditionalQueryParams(key: String, value: String) =
+            apply {
+                additionalQueryParams.replace(key, value)
+            }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.replace(key, values)
-        }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.replace(key, values)
+            }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.replaceAll(additionalQueryParams)
-        }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.replaceAll(additionalQueryParams)
+            }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
+        fun removeAdditionalQueryParams(key: String) =
+            apply {
+                additionalQueryParams.remove(key)
+            }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
-            additionalQueryParams.removeAll(keys)
-        }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) =
+            apply {
+                additionalQueryParams.removeAll(keys)
+            }
 
         fun build(): FeedListItemsParams =
             FeedListItemsParams(
-                checkRequired("userId", userId),
-                checkRequired("channelId", channelId),
-                after,
-                archived,
-                before,
-                hasTenant,
-                pageSize,
-                source,
-                status,
-                tenant,
-                triggerData,
-                workflowCategories?.toImmutable(),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
+              checkRequired(
+                "userId", userId
+              ),
+              checkRequired(
+                "channelId", channelId
+              ),
+              after,
+              archived,
+              before,
+              hasTenant,
+              pageSize,
+              source,
+              status,
+              tenant,
+              triggerData,
+              workflowCategories?.toImmutable(),
+              additionalHeaders.build(),
+              additionalQueryParams.build(),
             )
     }
 
     /** The archived status of the feed items to return */
-    class Archived @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+    class Archived @JsonCreator private constructor(
+        private val value: JsonField<String>,
+
+    ) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
+         * This is usually only useful if this instance was deserialized from data that
+         * doesn't match any known member, and you want to know that value. For example, if
+         * the SDK is on an older version than the API, then the API may respond with new
+         * members that the SDK is unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -385,25 +496,30 @@ private constructor(
          * An enum containing [Archived]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [Archived] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
+         *
+         * - It was deserialized from data that doesn't match any known member. For
+         *   example, if the SDK is on an older version than the API, then the API may
+         *   respond with new members that the SDK is unaware of.
+         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
             EXCLUDE,
             INCLUDE,
             ONLY,
-            /** An enum member indicating that [Archived] was instantiated with an unknown value. */
+            /**
+             * An enum member indicating that [Archived] was instantiated with an unknown
+             * value.
+             */
             _UNKNOWN,
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or
+         * [Value._UNKNOWN] if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if
+         * you want to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -416,10 +532,11 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and
+         * don't want to throw for the unknown case.
          *
-         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
+         * @throws KnockInvalidDataException if this class instance's value is a not a
+         * known member.
          */
         fun known(): Known =
             when (this) {
@@ -432,21 +549,20 @@ private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for
+         * debugging and generally doesn't throw.
          *
-         * @throws KnockInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
+         * @throws KnockInvalidDataException if this class instance's value does not have
+         * the expected primitive type.
          */
-        fun asString(): String =
-            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+        fun asString(): String = _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Archived && value == other.value /* spotless:on */
+          return /* spotless:off */ other is Archived && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -455,17 +571,21 @@ private constructor(
     }
 
     /** The status of the feed items to return */
-    class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+    class Status @JsonCreator private constructor(
+        private val value: JsonField<String>,
+
+    ) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
+         * This is usually only useful if this instance was deserialized from data that
+         * doesn't match any known member, and you want to know that value. For example, if
+         * the SDK is on an older version than the API, then the API may respond with new
+         * members that the SDK is unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -495,9 +615,11 @@ private constructor(
          * An enum containing [Status]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [Status] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
+         *
+         * - It was deserialized from data that doesn't match any known member. For
+         *   example, if the SDK is on an older version than the API, then the API may
+         *   respond with new members that the SDK is unaware of.
+         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -511,11 +633,11 @@ private constructor(
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or
+         * [Value._UNKNOWN] if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if
+         * you want to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -530,10 +652,11 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and
+         * don't want to throw for the unknown case.
          *
-         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
+         * @throws KnockInvalidDataException if this class instance's value is a not a
+         * known member.
          */
         fun known(): Known =
             when (this) {
@@ -548,21 +671,20 @@ private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for
+         * debugging and generally doesn't throw.
          *
-         * @throws KnockInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
+         * @throws KnockInvalidDataException if this class instance's value does not have
+         * the expected primitive type.
          */
-        fun asString(): String =
-            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+        fun asString(): String = _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+          return /* spotless:off */ other is Status && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -571,15 +693,14 @@ private constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is FeedListItemsParams && userId == other.userId && channelId == other.channelId && after == other.after && archived == other.archived && before == other.before && hasTenant == other.hasTenant && pageSize == other.pageSize && source == other.source && status == other.status && tenant == other.tenant && triggerData == other.triggerData && workflowCategories == other.workflowCategories && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+      return /* spotless:off */ other is FeedListItemsParams && userId == other.userId && channelId == other.channelId && after == other.after && archived == other.archived && before == other.before && hasTenant == other.hasTenant && pageSize == other.pageSize && source == other.source && status == other.status && tenant == other.tenant && triggerData == other.triggerData && workflowCategories == other.workflowCategories && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, channelId, after, archived, before, hasTenant, pageSize, source, status, tenant, triggerData, workflowCategories, additionalHeaders, additionalQueryParams) /* spotless:on */
 
-    override fun toString() =
-        "FeedListItemsParams{userId=$userId, channelId=$channelId, after=$after, archived=$archived, before=$before, hasTenant=$hasTenant, pageSize=$pageSize, source=$source, status=$status, tenant=$tenant, triggerData=$triggerData, workflowCategories=$workflowCategories, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() = "FeedListItemsParams{userId=$userId, channelId=$channelId, after=$after, archived=$archived, before=$before, hasTenant=$hasTenant, pageSize=$pageSize, source=$source, status=$status, tenant=$tenant, triggerData=$triggerData, workflowCategories=$workflowCategories, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

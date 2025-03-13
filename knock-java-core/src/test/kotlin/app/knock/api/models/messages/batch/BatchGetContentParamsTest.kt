@@ -10,22 +10,28 @@ class BatchGetContentParamsTest {
 
     @Test
     fun create() {
-        BatchGetContentParams.builder().addMessageId("string").build()
+      BatchGetContentParams.builder()
+          .addMessageId("string")
+          .build()
     }
 
     @Test
     fun queryParams() {
-        val params = BatchGetContentParams.builder().addMessageId("string").build()
-        val expected = QueryParams.builder()
-        expected.put("message_ids[]", "string")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+      val params = BatchGetContentParams.builder()
+          .addMessageId("string")
+          .build()
+      val expected = QueryParams.builder()
+      expected.put("message_ids[]", "string")
+      assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
-        val params = BatchGetContentParams.builder().addMessageId("string").build()
-        val expected = QueryParams.builder()
-        expected.put("message_ids[]", "string")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+      val params = BatchGetContentParams.builder()
+          .addMessageId("string")
+          .build()
+      val expected = QueryParams.builder()
+      expected.put("message_ids[]", "string")
+      assertThat(params._queryParams()).isEqualTo(expected.build())
     }
 }

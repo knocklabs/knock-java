@@ -4,15 +4,17 @@ package app.knock.api.services.async.recipients
 
 import app.knock.api.core.ClientOptions
 
-class PreferenceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
-    PreferenceServiceAsync {
+class PreferenceServiceAsyncImpl internal constructor(
+    private val clientOptions: ClientOptions,
 
-    private val withRawResponse: PreferenceServiceAsync.WithRawResponse by lazy {
-        WithRawResponseImpl(clientOptions)
-    }
+) : PreferenceServiceAsync {
+
+    private val withRawResponse: PreferenceServiceAsync.WithRawResponse by lazy { WithRawResponseImpl(clientOptions) }
 
     override fun withRawResponse(): PreferenceServiceAsync.WithRawResponse = withRawResponse
 
-    class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        PreferenceServiceAsync.WithRawResponse
+    class WithRawResponseImpl internal constructor(
+        private val clientOptions: ClientOptions,
+
+    ) : PreferenceServiceAsync.WithRawResponse
 }

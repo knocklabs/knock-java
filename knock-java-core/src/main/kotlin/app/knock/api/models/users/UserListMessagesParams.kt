@@ -17,8 +17,7 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** List messages */
-class UserListMessagesParams
-private constructor(
+class UserListMessagesParams private constructor(
     private val userId: String,
     private val after: String?,
     private val before: String?,
@@ -35,6 +34,7 @@ private constructor(
     private val workflowRunId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
+
 ) : Params {
 
     fun userId(): String = userId
@@ -85,33 +85,81 @@ private constructor(
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.after?.let { queryParams.put("after", listOf(it.toString())) }
-        this.before?.let { queryParams.put("before", listOf(it.toString())) }
-        this.channelId?.let { queryParams.put("channel_id", listOf(it.toString())) }
-        this.engagementStatus?.let { queryParams.put("engagement_status[]", it.map(Any::toString)) }
-        this.messageIds?.let { queryParams.put("message_ids[]", it.map(Any::toString)) }
-        this.pageSize?.let { queryParams.put("page_size", listOf(it.toString())) }
-        this.source?.let { queryParams.put("source", listOf(it.toString())) }
-        this.status?.let { queryParams.put("status[]", it.map(Any::toString)) }
-        this.tenant?.let { queryParams.put("tenant", listOf(it.toString())) }
-        this.triggerData?.let { queryParams.put("trigger_data", listOf(it.toString())) }
-        this.workflowCategories?.let {
-            queryParams.put("workflow_categories[]", it.map(Any::toString))
-        }
-        this.workflowRecipientRunId?.let {
-            queryParams.put("workflow_recipient_run_id", listOf(it.toString()))
-        }
-        this.workflowRunId?.let { queryParams.put("workflow_run_id", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
+      val queryParams = QueryParams.builder()
+      this.after?.let {
+          queryParams.put(
+            "after", listOf(it.toString())
+          )
+      }
+      this.before?.let {
+          queryParams.put(
+            "before", listOf(it.toString())
+          )
+      }
+      this.channelId?.let {
+          queryParams.put(
+            "channel_id", listOf(it.toString())
+          )
+      }
+      this.engagementStatus?.let {
+          queryParams.put(
+            "engagement_status[]", it.map(Any::toString)
+          )
+      }
+      this.messageIds?.let {
+          queryParams.put(
+            "message_ids[]", it.map(Any::toString)
+          )
+      }
+      this.pageSize?.let {
+          queryParams.put(
+            "page_size", listOf(it.toString())
+          )
+      }
+      this.source?.let {
+          queryParams.put(
+            "source", listOf(it.toString())
+          )
+      }
+      this.status?.let {
+          queryParams.put(
+            "status[]", it.map(Any::toString)
+          )
+      }
+      this.tenant?.let {
+          queryParams.put(
+            "tenant", listOf(it.toString())
+          )
+      }
+      this.triggerData?.let {
+          queryParams.put(
+            "trigger_data", listOf(it.toString())
+          )
+      }
+      this.workflowCategories?.let {
+          queryParams.put(
+            "workflow_categories[]", it.map(Any::toString)
+          )
+      }
+      this.workflowRecipientRunId?.let {
+          queryParams.put(
+            "workflow_recipient_run_id", listOf(it.toString())
+          )
+      }
+      this.workflowRunId?.let {
+          queryParams.put(
+            "workflow_run_id", listOf(it.toString())
+          )
+      }
+      queryParams.putAll(additionalQueryParams)
+      return queryParams.build()
     }
 
     fun getPathParam(index: Int): String {
-        return when (index) {
-            0 -> userId
-            else -> ""
-        }
+      return when (index) {
+          0 -> userId
+          else -> ""
+      }
     }
 
     fun toBuilder() = Builder().from(this)
@@ -119,14 +167,17 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [UserListMessagesParams].
+         * Returns a mutable builder for constructing an instance of
+         * [UserListMessagesParams].
          *
          * The following fields are required:
+         *
          * ```java
          * .userId()
          * ```
          */
-        @JvmStatic fun builder() = Builder()
+        @JvmStatic
+        fun builder() = Builder()
     }
 
     /** A builder for [UserListMessagesParams]. */
@@ -151,75 +202,93 @@ private constructor(
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(userListMessagesParams: UserListMessagesParams) = apply {
-            userId = userListMessagesParams.userId
-            after = userListMessagesParams.after
-            before = userListMessagesParams.before
-            channelId = userListMessagesParams.channelId
-            engagementStatus = userListMessagesParams.engagementStatus?.toMutableList()
-            messageIds = userListMessagesParams.messageIds?.toMutableList()
-            pageSize = userListMessagesParams.pageSize
-            source = userListMessagesParams.source
-            status = userListMessagesParams.status?.toMutableList()
-            tenant = userListMessagesParams.tenant
-            triggerData = userListMessagesParams.triggerData
-            workflowCategories = userListMessagesParams.workflowCategories?.toMutableList()
-            workflowRecipientRunId = userListMessagesParams.workflowRecipientRunId
-            workflowRunId = userListMessagesParams.workflowRunId
-            additionalHeaders = userListMessagesParams.additionalHeaders.toBuilder()
-            additionalQueryParams = userListMessagesParams.additionalQueryParams.toBuilder()
-        }
+        internal fun from(userListMessagesParams: UserListMessagesParams) =
+            apply {
+                userId = userListMessagesParams.userId
+                after = userListMessagesParams.after
+                before = userListMessagesParams.before
+                channelId = userListMessagesParams.channelId
+                engagementStatus = userListMessagesParams.engagementStatus?.toMutableList()
+                messageIds = userListMessagesParams.messageIds?.toMutableList()
+                pageSize = userListMessagesParams.pageSize
+                source = userListMessagesParams.source
+                status = userListMessagesParams.status?.toMutableList()
+                tenant = userListMessagesParams.tenant
+                triggerData = userListMessagesParams.triggerData
+                workflowCategories = userListMessagesParams.workflowCategories?.toMutableList()
+                workflowRecipientRunId = userListMessagesParams.workflowRecipientRunId
+                workflowRunId = userListMessagesParams.workflowRunId
+                additionalHeaders = userListMessagesParams.additionalHeaders.toBuilder()
+                additionalQueryParams = userListMessagesParams.additionalQueryParams.toBuilder()
+            }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun userId(userId: String) =
+            apply {
+                this.userId = userId
+            }
 
         /** The cursor to fetch entries after */
-        fun after(after: String?) = apply { this.after = after }
+        fun after(after: String?) =
+            apply {
+                this.after = after
+            }
 
         /** The cursor to fetch entries after */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
         /** The cursor to fetch entries before */
-        fun before(before: String?) = apply { this.before = before }
+        fun before(before: String?) =
+            apply {
+                this.before = before
+            }
 
         /** The cursor to fetch entries before */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
         /** The channel ID */
-        fun channelId(channelId: String?) = apply { this.channelId = channelId }
+        fun channelId(channelId: String?) =
+            apply {
+                this.channelId = channelId
+            }
 
         /** The channel ID */
         fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
         /** The engagement status of the message */
-        fun engagementStatus(engagementStatus: List<EngagementStatus>?) = apply {
-            this.engagementStatus = engagementStatus?.toMutableList()
-        }
+        fun engagementStatus(engagementStatus: List<EngagementStatus>?) =
+            apply {
+                this.engagementStatus = engagementStatus?.toMutableList()
+            }
 
         /** The engagement status of the message */
-        fun engagementStatus(engagementStatus: Optional<List<EngagementStatus>>) =
-            engagementStatus(engagementStatus.getOrNull())
+        fun engagementStatus(engagementStatus: Optional<List<EngagementStatus>>) = engagementStatus(engagementStatus.getOrNull())
 
         /** The engagement status of the message */
-        fun addEngagementStatus(engagementStatus: EngagementStatus) = apply {
-            this.engagementStatus =
-                (this.engagementStatus ?: mutableListOf()).apply { add(engagementStatus) }
-        }
+        fun addEngagementStatus(engagementStatus: EngagementStatus) =
+            apply {
+                this.engagementStatus = (this.engagementStatus ?: mutableListOf()).apply { add(engagementStatus) }
+            }
 
         /** The message IDs to filter messages by */
-        fun messageIds(messageIds: List<String>?) = apply {
-            this.messageIds = messageIds?.toMutableList()
-        }
+        fun messageIds(messageIds: List<String>?) =
+            apply {
+                this.messageIds = messageIds?.toMutableList()
+            }
 
         /** The message IDs to filter messages by */
         fun messageIds(messageIds: Optional<List<String>>) = messageIds(messageIds.getOrNull())
 
         /** The message IDs to filter messages by */
-        fun addMessageId(messageId: String) = apply {
-            messageIds = (messageIds ?: mutableListOf()).apply { add(messageId) }
-        }
+        fun addMessageId(messageId: String) =
+            apply {
+                messageIds = (messageIds ?: mutableListOf()).apply { add(messageId) }
+            }
 
         /** The page size to fetch */
-        fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
+        fun pageSize(pageSize: Long?) =
+            apply {
+                this.pageSize = pageSize
+            }
 
         /** The page size to fetch */
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
@@ -228,196 +297,242 @@ private constructor(
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
         /** The source of the message (workflow key) */
-        fun source(source: String?) = apply { this.source = source }
+        fun source(source: String?) =
+            apply {
+                this.source = source
+            }
 
         /** The source of the message (workflow key) */
         fun source(source: Optional<String>) = source(source.getOrNull())
 
         /** The status of the message */
-        fun status(status: List<Status>?) = apply { this.status = status?.toMutableList() }
+        fun status(status: List<Status>?) =
+            apply {
+                this.status = status?.toMutableList()
+            }
 
         /** The status of the message */
         fun status(status: Optional<List<Status>>) = status(status.getOrNull())
 
         /** The status of the message */
-        fun addStatus(status: Status) = apply {
-            this.status = (this.status ?: mutableListOf()).apply { add(status) }
-        }
+        fun addStatus(status: Status) =
+            apply {
+                this.status = (this.status ?: mutableListOf()).apply { add(status) }
+            }
 
         /** The tenant ID */
-        fun tenant(tenant: String?) = apply { this.tenant = tenant }
+        fun tenant(tenant: String?) =
+            apply {
+                this.tenant = tenant
+            }
 
         /** The tenant ID */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         /** The trigger data to filter messages by. Must be a valid JSON object. */
-        fun triggerData(triggerData: String?) = apply { this.triggerData = triggerData }
+        fun triggerData(triggerData: String?) =
+            apply {
+                this.triggerData = triggerData
+            }
 
         /** The trigger data to filter messages by. Must be a valid JSON object. */
         fun triggerData(triggerData: Optional<String>) = triggerData(triggerData.getOrNull())
 
         /** The workflow categories to filter messages by */
-        fun workflowCategories(workflowCategories: List<String>?) = apply {
-            this.workflowCategories = workflowCategories?.toMutableList()
-        }
+        fun workflowCategories(workflowCategories: List<String>?) =
+            apply {
+                this.workflowCategories = workflowCategories?.toMutableList()
+            }
 
         /** The workflow categories to filter messages by */
-        fun workflowCategories(workflowCategories: Optional<List<String>>) =
-            workflowCategories(workflowCategories.getOrNull())
+        fun workflowCategories(workflowCategories: Optional<List<String>>) = workflowCategories(workflowCategories.getOrNull())
 
         /** The workflow categories to filter messages by */
-        fun addWorkflowCategory(workflowCategory: String) = apply {
-            workflowCategories =
-                (workflowCategories ?: mutableListOf()).apply { add(workflowCategory) }
-        }
+        fun addWorkflowCategory(workflowCategory: String) =
+            apply {
+                workflowCategories = (workflowCategories ?: mutableListOf()).apply { add(workflowCategory) }
+            }
 
         /** The workflow recipient run ID to filter messages by */
-        fun workflowRecipientRunId(workflowRecipientRunId: String?) = apply {
-            this.workflowRecipientRunId = workflowRecipientRunId
-        }
+        fun workflowRecipientRunId(workflowRecipientRunId: String?) =
+            apply {
+                this.workflowRecipientRunId = workflowRecipientRunId
+            }
 
         /** The workflow recipient run ID to filter messages by */
-        fun workflowRecipientRunId(workflowRecipientRunId: Optional<String>) =
-            workflowRecipientRunId(workflowRecipientRunId.getOrNull())
+        fun workflowRecipientRunId(workflowRecipientRunId: Optional<String>) = workflowRecipientRunId(workflowRecipientRunId.getOrNull())
 
         /** The workflow run ID to filter messages by */
-        fun workflowRunId(workflowRunId: String?) = apply { this.workflowRunId = workflowRunId }
+        fun workflowRunId(workflowRunId: String?) =
+            apply {
+                this.workflowRunId = workflowRunId
+            }
 
         /** The workflow run ID to filter messages by */
-        fun workflowRunId(workflowRunId: Optional<String>) =
-            workflowRunId(workflowRunId.getOrNull())
+        fun workflowRunId(workflowRunId: Optional<String>) = workflowRunId(workflowRunId.getOrNull())
 
-        fun additionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.clear()
-            putAllAdditionalHeaders(additionalHeaders)
-        }
+        fun additionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.clear()
+                putAllAdditionalHeaders(additionalHeaders)
+            }
 
-        fun putAdditionalHeader(name: String, value: String) = apply {
-            additionalHeaders.put(name, value)
-        }
+        fun putAdditionalHeader(name: String, value: String) =
+            apply {
+                additionalHeaders.put(name, value)
+            }
 
-        fun putAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.put(name, values)
-        }
+        fun putAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.put(name, values)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.putAll(additionalHeaders)
-        }
+        fun putAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.putAll(additionalHeaders)
+            }
 
-        fun replaceAdditionalHeaders(name: String, value: String) = apply {
-            additionalHeaders.replace(name, value)
-        }
+        fun replaceAdditionalHeaders(name: String, value: String) =
+            apply {
+                additionalHeaders.replace(name, value)
+            }
 
-        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) = apply {
-            additionalHeaders.replace(name, values)
-        }
+        fun replaceAdditionalHeaders(name: String, values: Iterable<String>) =
+            apply {
+                additionalHeaders.replace(name, values)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Headers) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) = apply {
-            this.additionalHeaders.replaceAll(additionalHeaders)
-        }
+        fun replaceAllAdditionalHeaders(additionalHeaders: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalHeaders.replaceAll(additionalHeaders)
+            }
 
-        fun removeAdditionalHeaders(name: String) = apply { additionalHeaders.remove(name) }
+        fun removeAdditionalHeaders(name: String) =
+            apply {
+                additionalHeaders.remove(name)
+            }
 
-        fun removeAllAdditionalHeaders(names: Set<String>) = apply {
-            additionalHeaders.removeAll(names)
-        }
+        fun removeAllAdditionalHeaders(names: Set<String>) =
+            apply {
+                additionalHeaders.removeAll(names)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) = apply {
-            this.additionalQueryParams.clear()
-            putAllAdditionalQueryParams(additionalQueryParams)
-        }
+        fun additionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
+            apply {
+                this.additionalQueryParams.clear()
+                putAllAdditionalQueryParams(additionalQueryParams)
+            }
 
-        fun putAdditionalQueryParam(key: String, value: String) = apply {
-            additionalQueryParams.put(key, value)
-        }
+        fun putAdditionalQueryParam(key: String, value: String) =
+            apply {
+                additionalQueryParams.put(key, value)
+            }
 
-        fun putAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.put(key, values)
-        }
+        fun putAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.put(key, values)
+            }
 
-        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.putAll(additionalQueryParams)
-        }
+        fun putAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.putAll(additionalQueryParams)
+            }
 
         fun putAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.putAll(additionalQueryParams)
             }
 
-        fun replaceAdditionalQueryParams(key: String, value: String) = apply {
-            additionalQueryParams.replace(key, value)
-        }
+        fun replaceAdditionalQueryParams(key: String, value: String) =
+            apply {
+                additionalQueryParams.replace(key, value)
+            }
 
-        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) = apply {
-            additionalQueryParams.replace(key, values)
-        }
+        fun replaceAdditionalQueryParams(key: String, values: Iterable<String>) =
+            apply {
+                additionalQueryParams.replace(key, values)
+            }
 
-        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) = apply {
-            this.additionalQueryParams.replaceAll(additionalQueryParams)
-        }
+        fun replaceAllAdditionalQueryParams(additionalQueryParams: QueryParams) =
+            apply {
+                this.additionalQueryParams.replaceAll(additionalQueryParams)
+            }
 
         fun replaceAllAdditionalQueryParams(additionalQueryParams: Map<String, Iterable<String>>) =
             apply {
                 this.additionalQueryParams.replaceAll(additionalQueryParams)
             }
 
-        fun removeAdditionalQueryParams(key: String) = apply { additionalQueryParams.remove(key) }
+        fun removeAdditionalQueryParams(key: String) =
+            apply {
+                additionalQueryParams.remove(key)
+            }
 
-        fun removeAllAdditionalQueryParams(keys: Set<String>) = apply {
-            additionalQueryParams.removeAll(keys)
-        }
+        fun removeAllAdditionalQueryParams(keys: Set<String>) =
+            apply {
+                additionalQueryParams.removeAll(keys)
+            }
 
         fun build(): UserListMessagesParams =
             UserListMessagesParams(
-                checkRequired("userId", userId),
-                after,
-                before,
-                channelId,
-                engagementStatus?.toImmutable(),
-                messageIds?.toImmutable(),
-                pageSize,
-                source,
-                status?.toImmutable(),
-                tenant,
-                triggerData,
-                workflowCategories?.toImmutable(),
-                workflowRecipientRunId,
-                workflowRunId,
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
+              checkRequired(
+                "userId", userId
+              ),
+              after,
+              before,
+              channelId,
+              engagementStatus?.toImmutable(),
+              messageIds?.toImmutable(),
+              pageSize,
+              source,
+              status?.toImmutable(),
+              tenant,
+              triggerData,
+              workflowCategories?.toImmutable(),
+              workflowRecipientRunId,
+              workflowRunId,
+              additionalHeaders.build(),
+              additionalQueryParams.build(),
             )
     }
 
-    class EngagementStatus @JsonCreator private constructor(private val value: JsonField<String>) :
-        Enum {
+    class EngagementStatus @JsonCreator private constructor(
+        private val value: JsonField<String>,
+
+    ) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
+         * This is usually only useful if this instance was deserialized from data that
+         * doesn't match any known member, and you want to know that value. For example, if
+         * the SDK is on an older version than the API, then the API may respond with new
+         * members that the SDK is unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -444,12 +559,16 @@ private constructor(
         }
 
         /**
-         * An enum containing [EngagementStatus]'s known values, as well as an [_UNKNOWN] member.
+         * An enum containing [EngagementStatus]'s known values, as well as an [_UNKNOWN]
+         * member.
          *
-         * An instance of [EngagementStatus] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
+         * An instance of [EngagementStatus] can contain an unknown value in a couple of
+         * cases:
+         *
+         * - It was deserialized from data that doesn't match any known member. For
+         *   example, if the SDK is on an older version than the API, then the API may
+         *   respond with new members that the SDK is unaware of.
+         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -459,18 +578,18 @@ private constructor(
             LINK_CLICKED,
             ARCHIVED,
             /**
-             * An enum member indicating that [EngagementStatus] was instantiated with an unknown
-             * value.
+             * An enum member indicating that [EngagementStatus] was instantiated with an
+             * unknown value.
              */
             _UNKNOWN,
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or
+         * [Value._UNKNOWN] if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if
+         * you want to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -485,10 +604,11 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and
+         * don't want to throw for the unknown case.
          *
-         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
+         * @throws KnockInvalidDataException if this class instance's value is a not a
+         * known member.
          */
         fun known(): Known =
             when (this) {
@@ -503,21 +623,20 @@ private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for
+         * debugging and generally doesn't throw.
          *
-         * @throws KnockInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
+         * @throws KnockInvalidDataException if this class instance's value does not have
+         * the expected primitive type.
          */
-        fun asString(): String =
-            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+        fun asString(): String = _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is EngagementStatus && value == other.value /* spotless:on */
+          return /* spotless:off */ other is EngagementStatus && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -525,17 +644,21 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+    class Status @JsonCreator private constructor(
+        private val value: JsonField<String>,
+
+    ) : Enum {
 
         /**
          * Returns this class instance's raw value.
          *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
+         * This is usually only useful if this instance was deserialized from data that
+         * doesn't match any known member, and you want to know that value. For example, if
+         * the SDK is on an older version than the API, then the API may respond with new
+         * members that the SDK is unaware of.
          */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+        @com.fasterxml.jackson.annotation.JsonValue
+        fun _value(): JsonField<String> = value
 
         companion object {
 
@@ -571,9 +694,11 @@ private constructor(
          * An enum containing [Status]'s known values, as well as an [_UNKNOWN] member.
          *
          * An instance of [Status] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
+         *
+         * - It was deserialized from data that doesn't match any known member. For
+         *   example, if the SDK is on an older version than the API, then the API may
+         *   respond with new members that the SDK is unaware of.
+         *
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
@@ -589,11 +714,11 @@ private constructor(
         }
 
         /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
+         * Returns an enum member corresponding to this class instance's value, or
+         * [Value._UNKNOWN] if the class was instantiated with an unknown value.
          *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
+         * Use the [known] method instead if you're certain the value is always known or if
+         * you want to throw for the unknown case.
          */
         fun value(): Value =
             when (this) {
@@ -610,10 +735,11 @@ private constructor(
         /**
          * Returns an enum member corresponding to this class instance's value.
          *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
+         * Use the [value] method instead if you're uncertain the value is always known and
+         * don't want to throw for the unknown case.
          *
-         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
+         * @throws KnockInvalidDataException if this class instance's value is a not a
+         * known member.
          */
         fun known(): Known =
             when (this) {
@@ -630,21 +756,20 @@ private constructor(
         /**
          * Returns this class instance's primitive wire representation.
          *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
+         * This differs from the [toString] method because that method is primarily for
+         * debugging and generally doesn't throw.
          *
-         * @throws KnockInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
+         * @throws KnockInvalidDataException if this class instance's value does not have
+         * the expected primitive type.
          */
-        fun asString(): String =
-            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+        fun asString(): String = _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
 
         override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
+          if (this === other) {
+              return true
+          }
 
-            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+          return /* spotless:off */ other is Status && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -653,15 +778,14 @@ private constructor(
     }
 
     override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
+      if (this === other) {
+          return true
+      }
 
-        return /* spotless:off */ other is UserListMessagesParams && userId == other.userId && after == other.after && before == other.before && channelId == other.channelId && engagementStatus == other.engagementStatus && messageIds == other.messageIds && pageSize == other.pageSize && source == other.source && status == other.status && tenant == other.tenant && triggerData == other.triggerData && workflowCategories == other.workflowCategories && workflowRecipientRunId == other.workflowRecipientRunId && workflowRunId == other.workflowRunId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+      return /* spotless:off */ other is UserListMessagesParams && userId == other.userId && after == other.after && before == other.before && channelId == other.channelId && engagementStatus == other.engagementStatus && messageIds == other.messageIds && pageSize == other.pageSize && source == other.source && status == other.status && tenant == other.tenant && triggerData == other.triggerData && workflowCategories == other.workflowCategories && workflowRecipientRunId == other.workflowRecipientRunId && workflowRunId == other.workflowRunId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, after, before, channelId, engagementStatus, messageIds, pageSize, source, status, tenant, triggerData, workflowCategories, workflowRecipientRunId, workflowRunId, additionalHeaders, additionalQueryParams) /* spotless:on */
 
-    override fun toString() =
-        "UserListMessagesParams{userId=$userId, after=$after, before=$before, channelId=$channelId, engagementStatus=$engagementStatus, messageIds=$messageIds, pageSize=$pageSize, source=$source, status=$status, tenant=$tenant, triggerData=$triggerData, workflowCategories=$workflowCategories, workflowRecipientRunId=$workflowRecipientRunId, workflowRunId=$workflowRunId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+    override fun toString() = "UserListMessagesParams{userId=$userId, after=$after, before=$before, channelId=$channelId, engagementStatus=$engagementStatus, messageIds=$messageIds, pageSize=$pageSize, source=$source, status=$status, tenant=$tenant, triggerData=$triggerData, workflowCategories=$workflowCategories, workflowRecipientRunId=$workflowRecipientRunId, workflowRunId=$workflowRunId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
