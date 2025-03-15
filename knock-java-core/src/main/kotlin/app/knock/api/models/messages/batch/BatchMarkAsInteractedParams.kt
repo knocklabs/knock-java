@@ -14,6 +14,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -30,16 +31,34 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** The message IDs to update */
+    /**
+     * The message IDs to update
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun messageIds(): List<String> = body.messageIds()
 
-    /** Metadata about the interaction */
+    /**
+     * Metadata about the interaction
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun metadata(): Optional<Metadata> = body.metadata()
 
-    /** The message IDs to update */
+    /**
+     * Returns the raw JSON value of [messageIds].
+     *
+     * Unlike [messageIds], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _messageIds(): JsonField<List<String>> = body._messageIds()
 
-    /** Metadata about the interaction */
+    /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _metadata(): JsonField<Metadata> = body._metadata()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -69,18 +88,36 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** The message IDs to update */
+        /**
+         * The message IDs to update
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun messageIds(): List<String> = messageIds.getRequired("message_ids")
 
-        /** Metadata about the interaction */
+        /**
+         * Metadata about the interaction
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
 
-        /** The message IDs to update */
+        /**
+         * Returns the raw JSON value of [messageIds].
+         *
+         * Unlike [messageIds], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("message_ids")
         @ExcludeMissing
         fun _messageIds(): JsonField<List<String>> = messageIds
 
-        /** Metadata about the interaction */
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
         @JsonAnyGetter
@@ -131,12 +168,22 @@ private constructor(
             /** The message IDs to update */
             fun messageIds(messageIds: List<String>) = messageIds(JsonField.of(messageIds))
 
-            /** The message IDs to update */
+            /**
+             * Sets [Builder.messageIds] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.messageIds] with a well-typed `List<String>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun messageIds(messageIds: JsonField<List<String>>) = apply {
                 this.messageIds = messageIds.map { it.toMutableList() }
             }
 
-            /** The message IDs to update */
+            /**
+             * Adds a single [String] to [messageIds].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addMessageId(messageId: String) = apply {
                 messageIds =
                     (messageIds ?: JsonField.of(mutableListOf())).also {
@@ -147,10 +194,16 @@ private constructor(
             /** Metadata about the interaction */
             fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
 
-            /** Metadata about the interaction */
+            /** Alias for calling [Builder.metadata] with `metadata.orElse(null)`. */
             fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
-            /** Metadata about the interaction */
+            /**
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -231,19 +284,35 @@ private constructor(
         /** The message IDs to update */
         fun messageIds(messageIds: List<String>) = apply { body.messageIds(messageIds) }
 
-        /** The message IDs to update */
+        /**
+         * Sets [Builder.messageIds] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.messageIds] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun messageIds(messageIds: JsonField<List<String>>) = apply { body.messageIds(messageIds) }
 
-        /** The message IDs to update */
+        /**
+         * Adds a single [String] to [messageIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addMessageId(messageId: String) = apply { body.addMessageId(messageId) }
 
         /** Metadata about the interaction */
         fun metadata(metadata: Metadata?) = apply { body.metadata(metadata) }
 
-        /** Metadata about the interaction */
+        /** Alias for calling [Builder.metadata] with `metadata.orElse(null)`. */
         fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
-        /** Metadata about the interaction */
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {

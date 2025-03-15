@@ -11,6 +11,7 @@ import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -30,8 +31,17 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun msTeamsChannels(): List<MsTeamsChannel> = msTeamsChannels.getRequired("ms_teams_channels")
 
+    /**
+     * Returns the raw JSON value of [msTeamsChannels].
+     *
+     * Unlike [msTeamsChannels], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("ms_teams_channels")
     @ExcludeMissing
     fun _msTeamsChannels(): JsonField<List<MsTeamsChannel>> = msTeamsChannels
@@ -81,10 +91,22 @@ private constructor(
         fun msTeamsChannels(msTeamsChannels: List<MsTeamsChannel>) =
             msTeamsChannels(JsonField.of(msTeamsChannels))
 
+        /**
+         * Sets [Builder.msTeamsChannels] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.msTeamsChannels] with a well-typed
+         * `List<MsTeamsChannel>` value instead. This method is primarily for setting the field to
+         * an undocumented or not yet supported value.
+         */
         fun msTeamsChannels(msTeamsChannels: JsonField<List<MsTeamsChannel>>) = apply {
             this.msTeamsChannels = msTeamsChannels.map { it.toMutableList() }
         }
 
+        /**
+         * Adds a single [MsTeamsChannel] to [msTeamsChannels].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addMsTeamsChannel(msTeamsChannel: MsTeamsChannel) = apply {
             msTeamsChannels =
                 (msTeamsChannels ?: JsonField.of(mutableListOf())).also {
@@ -142,40 +164,96 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun displayName(): String = displayName.getRequired("displayName")
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun createdDateTime(): Optional<String> =
             Optional.ofNullable(createdDateTime.getNullable("createdDateTime"))
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun description(): Optional<String> =
             Optional.ofNullable(description.getNullable("description"))
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun isArchived(): Optional<Boolean> =
             Optional.ofNullable(isArchived.getNullable("isArchived"))
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun membershipType(): Optional<String> =
             Optional.ofNullable(membershipType.getNullable("membershipType"))
 
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+        /**
+         * Returns the raw JSON value of [displayName].
+         *
+         * Unlike [displayName], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("displayName")
         @ExcludeMissing
         fun _displayName(): JsonField<String> = displayName
 
+        /**
+         * Returns the raw JSON value of [createdDateTime].
+         *
+         * Unlike [createdDateTime], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("createdDateTime")
         @ExcludeMissing
         fun _createdDateTime(): JsonField<String> = createdDateTime
 
+        /**
+         * Returns the raw JSON value of [description].
+         *
+         * Unlike [description], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("description")
         @ExcludeMissing
         fun _description(): JsonField<String> = description
 
+        /**
+         * Returns the raw JSON value of [isArchived].
+         *
+         * Unlike [isArchived], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("isArchived")
         @ExcludeMissing
         fun _isArchived(): JsonField<Boolean> = isArchived
 
+        /**
+         * Returns the raw JSON value of [membershipType].
+         *
+         * Unlike [membershipType], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("membershipType")
         @ExcludeMissing
         fun _membershipType(): JsonField<String> = membershipType
@@ -240,10 +318,24 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun displayName(displayName: String) = displayName(JsonField.of(displayName))
 
+            /**
+             * Sets [Builder.displayName] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.displayName] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun displayName(displayName: JsonField<String>) = apply {
                 this.displayName = displayName
             }
@@ -251,25 +343,54 @@ private constructor(
             fun createdDateTime(createdDateTime: String) =
                 createdDateTime(JsonField.of(createdDateTime))
 
+            /**
+             * Sets [Builder.createdDateTime] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.createdDateTime] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun createdDateTime(createdDateTime: JsonField<String>) = apply {
                 this.createdDateTime = createdDateTime
             }
 
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
+            /** Alias for calling [Builder.description] with `description.orElse(null)`. */
             fun description(description: Optional<String>) = description(description.getOrNull())
 
+            /**
+             * Sets [Builder.description] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.description] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun description(description: JsonField<String>) = apply {
                 this.description = description
             }
 
             fun isArchived(isArchived: Boolean) = isArchived(JsonField.of(isArchived))
 
+            /**
+             * Sets [Builder.isArchived] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.isArchived] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun isArchived(isArchived: JsonField<Boolean>) = apply { this.isArchived = isArchived }
 
             fun membershipType(membershipType: String) =
                 membershipType(JsonField.of(membershipType))
 
+            /**
+             * Sets [Builder.membershipType] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.membershipType] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun membershipType(membershipType: JsonField<String>) = apply {
                 this.membershipType = membershipType
             }

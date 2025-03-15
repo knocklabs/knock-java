@@ -111,6 +111,7 @@ private constructor(
 
         fun queryOptions(queryOptions: QueryOptions?) = apply { this.queryOptions = queryOptions }
 
+        /** Alias for calling [Builder.queryOptions] with `queryOptions.orElse(null)`. */
         fun queryOptions(queryOptions: Optional<QueryOptions>) =
             queryOptions(queryOptions.getOrNull())
 
@@ -279,10 +280,7 @@ private constructor(
              */
             fun filter(filter: String?) = apply { this.filter = filter }
 
-            /**
-             * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-             * Microsoft Graph API to filter channels
-             */
+            /** Alias for calling [Builder.filter] with `filter.orElse(null)`. */
             fun filter(filter: Optional<String>) = filter(filter.getOrNull())
 
             /**
@@ -291,10 +289,7 @@ private constructor(
              */
             fun select(select: String?) = apply { this.select = select }
 
-            /**
-             * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-             * Microsoft Graph API to select fields on a channel
-             */
+            /** Alias for calling [Builder.select] with `select.orElse(null)`. */
             fun select(select: Optional<String>) = select(select.getOrNull())
 
             fun additionalProperties(additionalProperties: QueryParams) = apply {

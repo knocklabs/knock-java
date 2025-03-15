@@ -14,6 +14,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -28,8 +29,17 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun scheduleIds(): List<String> = body.scheduleIds()
 
+    /**
+     * Returns the raw JSON value of [scheduleIds].
+     *
+     * Unlike [scheduleIds], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _scheduleIds(): JsonField<List<String>> = body._scheduleIds()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -56,8 +66,17 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun scheduleIds(): List<String> = scheduleIds.getRequired("schedule_ids")
 
+        /**
+         * Returns the raw JSON value of [scheduleIds].
+         *
+         * Unlike [scheduleIds], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("schedule_ids")
         @ExcludeMissing
         fun _scheduleIds(): JsonField<List<String>> = scheduleIds
@@ -106,10 +125,22 @@ private constructor(
 
             fun scheduleIds(scheduleIds: List<String>) = scheduleIds(JsonField.of(scheduleIds))
 
+            /**
+             * Sets [Builder.scheduleIds] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.scheduleIds] with a well-typed `List<String>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun scheduleIds(scheduleIds: JsonField<List<String>>) = apply {
                 this.scheduleIds = scheduleIds.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [String] to [scheduleIds].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addScheduleId(scheduleId: String) = apply {
                 scheduleIds =
                     (scheduleIds ?: JsonField.of(mutableListOf())).also {
@@ -193,10 +224,22 @@ private constructor(
 
         fun scheduleIds(scheduleIds: List<String>) = apply { body.scheduleIds(scheduleIds) }
 
+        /**
+         * Sets [Builder.scheduleIds] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.scheduleIds] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun scheduleIds(scheduleIds: JsonField<List<String>>) = apply {
             body.scheduleIds(scheduleIds)
         }
 
+        /**
+         * Adds a single [String] to [scheduleIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addScheduleId(scheduleId: String) = apply { body.addScheduleId(scheduleId) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {

@@ -10,6 +10,7 @@ import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -30,12 +31,16 @@ private constructor(
     /**
      * The ID of the workflow trigger. This value allows you to track individual workflow runs
      * associated with this trigger request.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun workflowRunId(): String = workflowRunId.getRequired("workflow_run_id")
 
     /**
-     * The ID of the workflow trigger. This value allows you to track individual workflow runs
-     * associated with this trigger request.
+     * Returns the raw JSON value of [workflowRunId].
+     *
+     * Unlike [workflowRunId], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("workflow_run_id")
     @ExcludeMissing
@@ -90,8 +95,11 @@ private constructor(
         fun workflowRunId(workflowRunId: String) = workflowRunId(JsonField.of(workflowRunId))
 
         /**
-         * The ID of the workflow trigger. This value allows you to track individual workflow runs
-         * associated with this trigger request.
+         * Sets [Builder.workflowRunId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.workflowRunId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun workflowRunId(workflowRunId: JsonField<String>) = apply {
             this.workflowRunId = workflowRunId

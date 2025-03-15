@@ -11,6 +11,7 @@ import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -28,10 +29,19 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** The OneSignal player IDs */
+    /**
+     * The OneSignal player IDs
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun playerIds(): List<String> = playerIds.getRequired("player_ids")
 
-    /** The OneSignal player IDs */
+    /**
+     * Returns the raw JSON value of [playerIds].
+     *
+     * Unlike [playerIds], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("player_ids")
     @ExcludeMissing
     fun _playerIds(): JsonField<List<String>> = playerIds
@@ -81,12 +91,22 @@ private constructor(
         /** The OneSignal player IDs */
         fun playerIds(playerIds: List<String>) = playerIds(JsonField.of(playerIds))
 
-        /** The OneSignal player IDs */
+        /**
+         * Sets [Builder.playerIds] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.playerIds] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun playerIds(playerIds: JsonField<List<String>>) = apply {
             this.playerIds = playerIds.map { it.toMutableList() }
         }
 
-        /** The OneSignal player IDs */
+        /**
+         * Adds a single [String] to [playerIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addPlayerId(playerId: String) = apply {
             playerIds =
                 (playerIds ?: JsonField.of(mutableListOf())).also {

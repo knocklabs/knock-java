@@ -10,6 +10,7 @@ import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -29,8 +30,17 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun connection(): Connection = connection.getRequired("connection")
 
+    /**
+     * Returns the raw JSON value of [connection].
+     *
+     * Unlike [connection], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("connection")
     @ExcludeMissing
     fun _connection(): JsonField<Connection> = connection
@@ -79,6 +89,13 @@ private constructor(
 
         fun connection(connection: Connection) = connection(JsonField.of(connection))
 
+        /**
+         * Sets [Builder.connection] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.connection] with a well-typed [Connection] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun connection(connection: JsonField<Connection>) = apply { this.connection = connection }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -119,12 +136,30 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun ok(): Boolean = ok.getRequired("ok")
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun reason(): Optional<String> = Optional.ofNullable(reason.getNullable("reason"))
 
+        /**
+         * Returns the raw JSON value of [ok].
+         *
+         * Unlike [ok], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("ok") @ExcludeMissing fun _ok(): JsonField<Boolean> = ok
 
+        /**
+         * Returns the raw JSON value of [reason].
+         *
+         * Unlike [reason], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
         @JsonAnyGetter
@@ -174,12 +209,27 @@ private constructor(
 
             fun ok(ok: Boolean) = ok(JsonField.of(ok))
 
+            /**
+             * Sets [Builder.ok] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.ok] with a well-typed [Boolean] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun ok(ok: JsonField<Boolean>) = apply { this.ok = ok }
 
             fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
+            /** Alias for calling [Builder.reason] with `reason.orElse(null)`. */
             fun reason(reason: Optional<String>) = reason(reason.getOrNull())
 
+            /**
+             * Sets [Builder.reason] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.reason] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun reason(reason: JsonField<String>) = apply { this.reason = reason }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

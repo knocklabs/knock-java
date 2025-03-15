@@ -175,19 +175,19 @@ private constructor(
         /** The cursor to fetch entries after */
         fun after(after: String?) = apply { this.after = after }
 
-        /** The cursor to fetch entries after */
+        /** Alias for calling [Builder.after] with `after.orElse(null)`. */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
         /** The cursor to fetch entries before */
         fun before(before: String?) = apply { this.before = before }
 
-        /** The cursor to fetch entries before */
+        /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
         /** The channel ID */
         fun channelId(channelId: String?) = apply { this.channelId = channelId }
 
-        /** The channel ID */
+        /** Alias for calling [Builder.channelId] with `channelId.orElse(null)`. */
         fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
         /** The engagement status of the message */
@@ -195,11 +195,15 @@ private constructor(
             this.engagementStatus = engagementStatus?.toMutableList()
         }
 
-        /** The engagement status of the message */
+        /** Alias for calling [Builder.engagementStatus] with `engagementStatus.orElse(null)`. */
         fun engagementStatus(engagementStatus: Optional<List<EngagementStatus>>) =
             engagementStatus(engagementStatus.getOrNull())
 
-        /** The engagement status of the message */
+        /**
+         * Adds a single [EngagementStatus] to [Builder.engagementStatus].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addEngagementStatus(engagementStatus: EngagementStatus) = apply {
             this.engagementStatus =
                 (this.engagementStatus ?: mutableListOf()).apply { add(engagementStatus) }
@@ -210,10 +214,14 @@ private constructor(
             this.messageIds = messageIds?.toMutableList()
         }
 
-        /** The message IDs to filter messages by */
+        /** Alias for calling [Builder.messageIds] with `messageIds.orElse(null)`. */
         fun messageIds(messageIds: Optional<List<String>>) = messageIds(messageIds.getOrNull())
 
-        /** The message IDs to filter messages by */
+        /**
+         * Adds a single [String] to [messageIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addMessageId(messageId: String) = apply {
             messageIds = (messageIds ?: mutableListOf()).apply { add(messageId) }
         }
@@ -221,25 +229,33 @@ private constructor(
         /** The page size to fetch */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
-        /** The page size to fetch */
+        /**
+         * Alias for [Builder.pageSize].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
-        /** The page size to fetch */
+        /** Alias for calling [Builder.pageSize] with `pageSize.orElse(null)`. */
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
         /** The source of the message (workflow key) */
         fun source(source: String?) = apply { this.source = source }
 
-        /** The source of the message (workflow key) */
+        /** Alias for calling [Builder.source] with `source.orElse(null)`. */
         fun source(source: Optional<String>) = source(source.getOrNull())
 
         /** The status of the message */
         fun status(status: List<Status>?) = apply { this.status = status?.toMutableList() }
 
-        /** The status of the message */
+        /** Alias for calling [Builder.status] with `status.orElse(null)`. */
         fun status(status: Optional<List<Status>>) = status(status.getOrNull())
 
-        /** The status of the message */
+        /**
+         * Adds a single [Status] to [Builder.status].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addStatus(status: Status) = apply {
             this.status = (this.status ?: mutableListOf()).apply { add(status) }
         }
@@ -247,13 +263,13 @@ private constructor(
         /** The tenant ID */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
-        /** The tenant ID */
+        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         /** The trigger data to filter messages by. Must be a valid JSON object. */
         fun triggerData(triggerData: String?) = apply { this.triggerData = triggerData }
 
-        /** The trigger data to filter messages by. Must be a valid JSON object. */
+        /** Alias for calling [Builder.triggerData] with `triggerData.orElse(null)`. */
         fun triggerData(triggerData: Optional<String>) = triggerData(triggerData.getOrNull())
 
         /** The workflow categories to filter messages by */
@@ -261,11 +277,17 @@ private constructor(
             this.workflowCategories = workflowCategories?.toMutableList()
         }
 
-        /** The workflow categories to filter messages by */
+        /**
+         * Alias for calling [Builder.workflowCategories] with `workflowCategories.orElse(null)`.
+         */
         fun workflowCategories(workflowCategories: Optional<List<String>>) =
             workflowCategories(workflowCategories.getOrNull())
 
-        /** The workflow categories to filter messages by */
+        /**
+         * Adds a single [String] to [workflowCategories].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addWorkflowCategory(workflowCategory: String) = apply {
             workflowCategories =
                 (workflowCategories ?: mutableListOf()).apply { add(workflowCategory) }
@@ -276,14 +298,17 @@ private constructor(
             this.workflowRecipientRunId = workflowRecipientRunId
         }
 
-        /** The workflow recipient run ID to filter messages by */
+        /**
+         * Alias for calling [Builder.workflowRecipientRunId] with
+         * `workflowRecipientRunId.orElse(null)`.
+         */
         fun workflowRecipientRunId(workflowRecipientRunId: Optional<String>) =
             workflowRecipientRunId(workflowRecipientRunId.getOrNull())
 
         /** The workflow run ID to filter messages by */
         fun workflowRunId(workflowRunId: String?) = apply { this.workflowRunId = workflowRunId }
 
-        /** The workflow run ID to filter messages by */
+        /** Alias for calling [Builder.workflowRunId] with `workflowRunId.orElse(null)`. */
         fun workflowRunId(workflowRunId: Optional<String>) =
             workflowRunId(workflowRunId.getOrNull())
 

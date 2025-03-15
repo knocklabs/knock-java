@@ -161,61 +161,69 @@ private constructor(
         /** The cursor to fetch entries after */
         fun after(after: String?) = apply { this.after = after }
 
-        /** The cursor to fetch entries after */
+        /** Alias for calling [Builder.after] with `after.orElse(null)`. */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
         /** The archived status of the feed items to return */
         fun archived(archived: Archived?) = apply { this.archived = archived }
 
-        /** The archived status of the feed items to return */
+        /** Alias for calling [Builder.archived] with `archived.orElse(null)`. */
         fun archived(archived: Optional<Archived>) = archived(archived.getOrNull())
 
         /** The cursor to fetch entries before */
         fun before(before: String?) = apply { this.before = before }
 
-        /** The cursor to fetch entries before */
+        /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
         /** Whether the feed items have a tenant */
         fun hasTenant(hasTenant: Boolean?) = apply { this.hasTenant = hasTenant }
 
-        /** Whether the feed items have a tenant */
+        /**
+         * Alias for [Builder.hasTenant].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun hasTenant(hasTenant: Boolean) = hasTenant(hasTenant as Boolean?)
 
-        /** Whether the feed items have a tenant */
+        /** Alias for calling [Builder.hasTenant] with `hasTenant.orElse(null)`. */
         fun hasTenant(hasTenant: Optional<Boolean>) = hasTenant(hasTenant.getOrNull())
 
         /** The page size to fetch */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
-        /** The page size to fetch */
+        /**
+         * Alias for [Builder.pageSize].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
-        /** The page size to fetch */
+        /** Alias for calling [Builder.pageSize] with `pageSize.orElse(null)`. */
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
         /** The source of the feed items to return */
         fun source(source: String?) = apply { this.source = source }
 
-        /** The source of the feed items to return */
+        /** Alias for calling [Builder.source] with `source.orElse(null)`. */
         fun source(source: Optional<String>) = source(source.getOrNull())
 
         /** The status of the feed items to return */
         fun status(status: Status?) = apply { this.status = status }
 
-        /** The status of the feed items to return */
+        /** Alias for calling [Builder.status] with `status.orElse(null)`. */
         fun status(status: Optional<Status>) = status(status.getOrNull())
 
         /** The tenant of the feed items to return */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
-        /** The tenant of the feed items to return */
+        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         /** The trigger data of the feed items to return (as a JSON string) */
         fun triggerData(triggerData: String?) = apply { this.triggerData = triggerData }
 
-        /** The trigger data of the feed items to return (as a JSON string) */
+        /** Alias for calling [Builder.triggerData] with `triggerData.orElse(null)`. */
         fun triggerData(triggerData: Optional<String>) = triggerData(triggerData.getOrNull())
 
         /** The workflow categories of the feed items to return */
@@ -223,11 +231,17 @@ private constructor(
             this.workflowCategories = workflowCategories?.toMutableList()
         }
 
-        /** The workflow categories of the feed items to return */
+        /**
+         * Alias for calling [Builder.workflowCategories] with `workflowCategories.orElse(null)`.
+         */
         fun workflowCategories(workflowCategories: Optional<List<String>>) =
             workflowCategories(workflowCategories.getOrNull())
 
-        /** The workflow categories of the feed items to return */
+        /**
+         * Adds a single [String] to [workflowCategories].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addWorkflowCategory(workflowCategory: String) = apply {
             workflowCategories =
                 (workflowCategories ?: mutableListOf()).apply { add(workflowCategory) }

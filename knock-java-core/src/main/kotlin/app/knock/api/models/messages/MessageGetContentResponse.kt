@@ -50,24 +50,60 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun _typename(): String = _typename.getRequired("__typename")
 
-    /** The contents of an email message */
+    /**
+     * The contents of an email message
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): Data = data.getRequired("data")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun insertedAt(): OffsetDateTime = insertedAt.getRequired("inserted_at")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun messageId(): String = messageId.getRequired("message_id")
 
+    /**
+     * Returns the raw JSON value of [_typename].
+     *
+     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
-    /** The contents of an email message */
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
+    /**
+     * Returns the raw JSON value of [insertedAt].
+     *
+     * Unlike [insertedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("inserted_at")
     @ExcludeMissing
     fun _insertedAt(): JsonField<OffsetDateTime> = insertedAt
 
+    /**
+     * Returns the raw JSON value of [messageId].
+     *
+     * Unlike [messageId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("message_id") @ExcludeMissing fun _messageId(): JsonField<String> = messageId
 
     @JsonAnyGetter
@@ -126,42 +162,70 @@ private constructor(
 
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+        /**
+         * Sets [Builder._typename] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder._typename] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         /** The contents of an email message */
         fun data(data: Data) = data(JsonField.of(data))
 
-        /** The contents of an email message */
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
-        /** The contents of an email message */
+        /** Alias for calling [data] with `Data.ofMessageEmailContent(messageEmailContent)`. */
         fun data(messageEmailContent: Data.MessageEmailContent) =
             data(Data.ofMessageEmailContent(messageEmailContent))
 
-        /** The contents of an SMS message */
+        /** Alias for calling [data] with `Data.ofMessageSmsContent(messageSmsContent)`. */
         fun data(messageSmsContent: Data.MessageSmsContent) =
             data(Data.ofMessageSmsContent(messageSmsContent))
 
-        /** The contents of a push message */
+        /** Alias for calling [data] with `Data.ofMessagePushContent(messagePushContent)`. */
         fun data(messagePushContent: Data.MessagePushContent) =
             data(Data.ofMessagePushContent(messagePushContent))
 
-        /** The contents of a chat message */
+        /** Alias for calling [data] with `Data.ofMessageChatContent(messageChatContent)`. */
         fun data(messageChatContent: Data.MessageChatContent) =
             data(Data.ofMessageChatContent(messageChatContent))
 
-        /** The contents of a message in an app feed */
+        /**
+         * Alias for calling [data] with `Data.ofMessageInAppFeedContent(messageInAppFeedContent)`.
+         */
         fun data(messageInAppFeedContent: Data.MessageInAppFeedContent) =
             data(Data.ofMessageInAppFeedContent(messageInAppFeedContent))
 
         fun insertedAt(insertedAt: OffsetDateTime) = insertedAt(JsonField.of(insertedAt))
 
+        /**
+         * Sets [Builder.insertedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.insertedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun insertedAt(insertedAt: JsonField<OffsetDateTime>) = apply {
             this.insertedAt = insertedAt
         }
 
         fun messageId(messageId: String) = messageId(JsonField.of(messageId))
 
+        /**
+         * Sets [Builder.messageId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.messageId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun messageId(messageId: JsonField<String>) = apply { this.messageId = messageId }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -479,44 +543,135 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun _typename(): String = _typename.getRequired("__typename")
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun from(): String = from.getRequired("from")
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun htmlBody(): String = htmlBody.getRequired("html_body")
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun subjectLine(): String = subjectLine.getRequired("subject_line")
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun textBody(): String = textBody.getRequired("text_body")
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun to(): String = to.getRequired("to")
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun bcc(): Optional<String> = Optional.ofNullable(bcc.getNullable("bcc"))
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun cc(): Optional<String> = Optional.ofNullable(cc.getNullable("cc"))
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun replyTo(): Optional<String> = Optional.ofNullable(replyTo.getNullable("reply_to"))
 
+            /**
+             * Returns the raw JSON value of [_typename].
+             *
+             * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("__typename")
             @ExcludeMissing
             fun __typename(): JsonField<String> = _typename
 
+            /**
+             * Returns the raw JSON value of [from].
+             *
+             * Unlike [from], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("from") @ExcludeMissing fun _from(): JsonField<String> = from
 
+            /**
+             * Returns the raw JSON value of [htmlBody].
+             *
+             * Unlike [htmlBody], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("html_body") @ExcludeMissing fun _htmlBody(): JsonField<String> = htmlBody
 
+            /**
+             * Returns the raw JSON value of [subjectLine].
+             *
+             * Unlike [subjectLine], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("subject_line")
             @ExcludeMissing
             fun _subjectLine(): JsonField<String> = subjectLine
 
+            /**
+             * Returns the raw JSON value of [textBody].
+             *
+             * Unlike [textBody], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("text_body") @ExcludeMissing fun _textBody(): JsonField<String> = textBody
 
+            /**
+             * Returns the raw JSON value of [to].
+             *
+             * Unlike [to], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("to") @ExcludeMissing fun _to(): JsonField<String> = to
 
+            /**
+             * Returns the raw JSON value of [bcc].
+             *
+             * Unlike [bcc], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("bcc") @ExcludeMissing fun _bcc(): JsonField<String> = bcc
 
+            /**
+             * Returns the raw JSON value of [cc].
+             *
+             * Unlike [cc], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("cc") @ExcludeMissing fun _cc(): JsonField<String> = cc
 
+            /**
+             * Returns the raw JSON value of [replyTo].
+             *
+             * Unlike [replyTo], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("reply_to") @ExcludeMissing fun _replyTo(): JsonField<String> = replyTo
 
             @JsonAnyGetter
@@ -592,46 +747,112 @@ private constructor(
 
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+                /**
+                 * Sets [Builder._typename] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder._typename] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
                 fun from(from: String) = from(JsonField.of(from))
 
+                /**
+                 * Sets [Builder.from] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.from] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun from(from: JsonField<String>) = apply { this.from = from }
 
                 fun htmlBody(htmlBody: String) = htmlBody(JsonField.of(htmlBody))
 
+                /**
+                 * Sets [Builder.htmlBody] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.htmlBody] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun htmlBody(htmlBody: JsonField<String>) = apply { this.htmlBody = htmlBody }
 
                 fun subjectLine(subjectLine: String) = subjectLine(JsonField.of(subjectLine))
 
+                /**
+                 * Sets [Builder.subjectLine] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.subjectLine] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun subjectLine(subjectLine: JsonField<String>) = apply {
                     this.subjectLine = subjectLine
                 }
 
                 fun textBody(textBody: String) = textBody(JsonField.of(textBody))
 
+                /**
+                 * Sets [Builder.textBody] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.textBody] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun textBody(textBody: JsonField<String>) = apply { this.textBody = textBody }
 
                 fun to(to: String) = to(JsonField.of(to))
 
+                /**
+                 * Sets [Builder.to] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.to] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun to(to: JsonField<String>) = apply { this.to = to }
 
                 fun bcc(bcc: String?) = bcc(JsonField.ofNullable(bcc))
 
+                /** Alias for calling [Builder.bcc] with `bcc.orElse(null)`. */
                 fun bcc(bcc: Optional<String>) = bcc(bcc.getOrNull())
 
+                /**
+                 * Sets [Builder.bcc] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.bcc] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun bcc(bcc: JsonField<String>) = apply { this.bcc = bcc }
 
                 fun cc(cc: String?) = cc(JsonField.ofNullable(cc))
 
+                /** Alias for calling [Builder.cc] with `cc.orElse(null)`. */
                 fun cc(cc: Optional<String>) = cc(cc.getOrNull())
 
+                /**
+                 * Sets [Builder.cc] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.cc] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun cc(cc: JsonField<String>) = apply { this.cc = cc }
 
                 fun replyTo(replyTo: String?) = replyTo(JsonField.ofNullable(replyTo))
 
+                /** Alias for calling [Builder.replyTo] with `replyTo.orElse(null)`. */
                 fun replyTo(replyTo: Optional<String>) = replyTo(replyTo.getOrNull())
 
+                /**
+                 * Sets [Builder.replyTo] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.replyTo] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun replyTo(replyTo: JsonField<String>) = apply { this.replyTo = replyTo }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -707,18 +928,49 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun _typename(): String = _typename.getRequired("__typename")
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun body(): String = body.getRequired("body")
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun to(): String = to.getRequired("to")
 
+            /**
+             * Returns the raw JSON value of [_typename].
+             *
+             * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("__typename")
             @ExcludeMissing
             fun __typename(): JsonField<String> = _typename
 
+            /**
+             * Returns the raw JSON value of [body].
+             *
+             * Unlike [body], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("body") @ExcludeMissing fun _body(): JsonField<String> = body
 
+            /**
+             * Returns the raw JSON value of [to].
+             *
+             * Unlike [to], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("to") @ExcludeMissing fun _to(): JsonField<String> = to
 
             @JsonAnyGetter
@@ -773,14 +1025,35 @@ private constructor(
 
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+                /**
+                 * Sets [Builder._typename] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder._typename] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
                 fun body(body: String) = body(JsonField.of(body))
 
+                /**
+                 * Sets [Builder.body] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.body] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun body(body: JsonField<String>) = apply { this.body = body }
 
                 fun to(to: String) = to(JsonField.of(to))
 
+                /**
+                 * Sets [Builder.to] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.to] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun to(to: JsonField<String>) = apply { this.to = to }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -856,26 +1129,76 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun token(): String = token.getRequired("token")
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun _typename(): String = _typename.getRequired("__typename")
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun body(): String = body.getRequired("body")
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun title(): String = title.getRequired("title")
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun data(): Optional<InnerData> = Optional.ofNullable(data.getNullable("data"))
 
+            /**
+             * Returns the raw JSON value of [token].
+             *
+             * Unlike [token], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("token") @ExcludeMissing fun _token(): JsonField<String> = token
 
+            /**
+             * Returns the raw JSON value of [_typename].
+             *
+             * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("__typename")
             @ExcludeMissing
             fun __typename(): JsonField<String> = _typename
 
+            /**
+             * Returns the raw JSON value of [body].
+             *
+             * Unlike [body], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("body") @ExcludeMissing fun _body(): JsonField<String> = body
 
+            /**
+             * Returns the raw JSON value of [title].
+             *
+             * Unlike [title], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("title") @ExcludeMissing fun _title(): JsonField<String> = title
 
+            /**
+             * Returns the raw JSON value of [data].
+             *
+             * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<InnerData> = data
 
             @JsonAnyGetter
@@ -937,24 +1260,60 @@ private constructor(
 
                 fun token(token: String) = token(JsonField.of(token))
 
+                /**
+                 * Sets [Builder.token] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.token] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun token(token: JsonField<String>) = apply { this.token = token }
 
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+                /**
+                 * Sets [Builder._typename] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder._typename] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
                 fun body(body: String) = body(JsonField.of(body))
 
+                /**
+                 * Sets [Builder.body] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.body] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun body(body: JsonField<String>) = apply { this.body = body }
 
                 fun title(title: String) = title(JsonField.of(title))
 
+                /**
+                 * Sets [Builder.title] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.title] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun title(title: JsonField<String>) = apply { this.title = title }
 
                 fun data(data: InnerData?) = data(JsonField.ofNullable(data))
 
+                /** Alias for calling [Builder.data] with `data.orElse(null)`. */
                 fun data(data: Optional<InnerData>) = data(data.getOrNull())
 
+                /**
+                 * Sets [Builder.data] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.data] with a well-typed [InnerData] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun data(data: JsonField<InnerData>) = apply { this.data = data }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1111,29 +1470,72 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun _typename(): String = _typename.getRequired("__typename")
 
-            /** The channel data connection from the recipient to the underlying provider */
+            /**
+             * The channel data connection from the recipient to the underlying provider
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun connection(): Connection = connection.getRequired("connection")
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun template(): Template = template.getRequired("template")
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun metadata(): Optional<Metadata> =
                 Optional.ofNullable(metadata.getNullable("metadata"))
 
+            /**
+             * Returns the raw JSON value of [_typename].
+             *
+             * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("__typename")
             @ExcludeMissing
             fun __typename(): JsonField<String> = _typename
 
-            /** The channel data connection from the recipient to the underlying provider */
+            /**
+             * Returns the raw JSON value of [connection].
+             *
+             * Unlike [connection], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("connection")
             @ExcludeMissing
             fun _connection(): JsonField<Connection> = connection
 
+            /**
+             * Returns the raw JSON value of [template].
+             *
+             * Unlike [template], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("template")
             @ExcludeMissing
             fun _template(): JsonField<Template> = template
 
+            /**
+             * Returns the raw JSON value of [metadata].
+             *
+             * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("metadata")
             @ExcludeMissing
             fun _metadata(): JsonField<Metadata> = metadata
@@ -1193,24 +1595,52 @@ private constructor(
 
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+                /**
+                 * Sets [Builder._typename] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder._typename] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
                 /** The channel data connection from the recipient to the underlying provider */
                 fun connection(connection: Connection) = connection(JsonField.of(connection))
 
-                /** The channel data connection from the recipient to the underlying provider */
+                /**
+                 * Sets [Builder.connection] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.connection] with a well-typed [Connection] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun connection(connection: JsonField<Connection>) = apply {
                     this.connection = connection
                 }
 
                 fun template(template: Template) = template(JsonField.of(template))
 
+                /**
+                 * Sets [Builder.template] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.template] with a well-typed [Template] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun template(template: JsonField<Template>) = apply { this.template = template }
 
                 fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
 
+                /** Alias for calling [Builder.metadata] with `metadata.orElse(null)`. */
                 fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
+                /**
+                 * Sets [Builder.metadata] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1345,27 +1775,57 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /** The structured blocks of the message */
+                /**
+                 * The structured blocks of the message
+                 *
+                 * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g.
+                 *   if the server responded with an unexpected value).
+                 */
                 fun blocks(): Optional<List<Block>> =
                     Optional.ofNullable(blocks.getNullable("blocks"))
 
-                /** The JSON content of the message */
+                /**
+                 * The JSON content of the message
+                 *
+                 * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g.
+                 *   if the server responded with an unexpected value).
+                 */
                 fun jsonContent(): Optional<JsonContent> =
                     Optional.ofNullable(jsonContent.getNullable("json_content"))
 
+                /**
+                 * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g.
+                 *   if the server responded with an unexpected value).
+                 */
                 fun summary(): Optional<String> =
                     Optional.ofNullable(summary.getNullable("summary"))
 
-                /** The structured blocks of the message */
+                /**
+                 * Returns the raw JSON value of [blocks].
+                 *
+                 * Unlike [blocks], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("blocks")
                 @ExcludeMissing
                 fun _blocks(): JsonField<List<Block>> = blocks
 
-                /** The JSON content of the message */
+                /**
+                 * Returns the raw JSON value of [jsonContent].
+                 *
+                 * Unlike [jsonContent], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
                 @JsonProperty("json_content")
                 @ExcludeMissing
                 fun _jsonContent(): JsonField<JsonContent> = jsonContent
 
+                /**
+                 * Returns the raw JSON value of [summary].
+                 *
+                 * Unlike [summary], this method doesn't throw if the JSON field has an unexpected
+                 * type.
+                 */
                 @JsonProperty("summary") @ExcludeMissing fun _summary(): JsonField<String> = summary
 
                 @JsonAnyGetter
@@ -1412,15 +1872,25 @@ private constructor(
                     /** The structured blocks of the message */
                     fun blocks(blocks: List<Block>?) = blocks(JsonField.ofNullable(blocks))
 
-                    /** The structured blocks of the message */
+                    /** Alias for calling [Builder.blocks] with `blocks.orElse(null)`. */
                     fun blocks(blocks: Optional<List<Block>>) = blocks(blocks.getOrNull())
 
-                    /** The structured blocks of the message */
+                    /**
+                     * Sets [Builder.blocks] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.blocks] with a well-typed `List<Block>`
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
                     fun blocks(blocks: JsonField<List<Block>>) = apply {
                         this.blocks = blocks.map { it.toMutableList() }
                     }
 
-                    /** The structured blocks of the message */
+                    /**
+                     * Adds a single [Block] to [blocks].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
                     fun addBlock(block: Block) = apply {
                         blocks =
                             (blocks ?: JsonField.of(mutableListOf())).also {
@@ -1432,19 +1902,33 @@ private constructor(
                     fun jsonContent(jsonContent: JsonContent?) =
                         jsonContent(JsonField.ofNullable(jsonContent))
 
-                    /** The JSON content of the message */
+                    /** Alias for calling [Builder.jsonContent] with `jsonContent.orElse(null)`. */
                     fun jsonContent(jsonContent: Optional<JsonContent>) =
                         jsonContent(jsonContent.getOrNull())
 
-                    /** The JSON content of the message */
+                    /**
+                     * Sets [Builder.jsonContent] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.jsonContent] with a well-typed [JsonContent]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
                     fun jsonContent(jsonContent: JsonField<JsonContent>) = apply {
                         this.jsonContent = jsonContent
                     }
 
                     fun summary(summary: String?) = summary(JsonField.ofNullable(summary))
 
+                    /** Alias for calling [Builder.summary] with `summary.orElse(null)`. */
                     fun summary(summary: Optional<String>) = summary(summary.getOrNull())
 
+                    /**
+                     * Sets [Builder.summary] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.summary] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun summary(summary: JsonField<String>) = apply { this.summary = summary }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -1496,18 +1980,51 @@ private constructor(
                     private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
                 ) {
 
+                    /**
+                     * @throws KnockInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun content(): String = content.getRequired("content")
 
+                    /**
+                     * @throws KnockInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun name(): String = name.getRequired("name")
 
+                    /**
+                     * @throws KnockInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun type(): Type = type.getRequired("type")
 
+                    /**
+                     * Returns the raw JSON value of [content].
+                     *
+                     * Unlike [content], this method doesn't throw if the JSON field has an
+                     * unexpected type.
+                     */
                     @JsonProperty("content")
                     @ExcludeMissing
                     fun _content(): JsonField<String> = content
 
+                    /**
+                     * Returns the raw JSON value of [name].
+                     *
+                     * Unlike [name], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
                     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
+                    /**
+                     * Returns the raw JSON value of [type].
+                     *
+                     * Unlike [type], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
                     @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
                     @JsonAnyGetter
@@ -1563,14 +2080,35 @@ private constructor(
 
                         fun content(content: String) = content(JsonField.of(content))
 
+                        /**
+                         * Sets [Builder.content] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.content] with a well-typed [String]
+                         * value instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun content(content: JsonField<String>) = apply { this.content = content }
 
                         fun name(name: String) = name(JsonField.of(name))
 
+                        /**
+                         * Sets [Builder.name] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.name] with a well-typed [String] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun name(name: JsonField<String>) = apply { this.name = name }
 
                         fun type(type: Type) = type(JsonField.of(type))
 
+                        /**
+                         * Sets [Builder.type] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.type] with a well-typed [Type] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun type(type: JsonField<Type>) = apply { this.type = type }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -1949,16 +2487,37 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun _typename(): String = _typename.getRequired("__typename")
 
-            /** The blocks of the message */
+            /**
+             * The blocks of the message
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun blocks(): List<Block> = blocks.getRequired("blocks")
 
+            /**
+             * Returns the raw JSON value of [_typename].
+             *
+             * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("__typename")
             @ExcludeMissing
             fun __typename(): JsonField<String> = _typename
 
-            /** The blocks of the message */
+            /**
+             * Returns the raw JSON value of [blocks].
+             *
+             * Unlike [blocks], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("blocks") @ExcludeMissing fun _blocks(): JsonField<List<Block>> = blocks
 
             @JsonAnyGetter
@@ -2011,17 +2570,34 @@ private constructor(
 
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+                /**
+                 * Sets [Builder._typename] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder._typename] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
                 /** The blocks of the message */
                 fun blocks(blocks: List<Block>) = blocks(JsonField.of(blocks))
 
-                /** The blocks of the message */
+                /**
+                 * Sets [Builder.blocks] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.blocks] with a well-typed `List<Block>` value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun blocks(blocks: JsonField<List<Block>>) = apply {
                     this.blocks = blocks.map { it.toMutableList() }
                 }
 
-                /** The blocks of the message */
+                /**
+                 * Adds a single [Block] to [blocks].
+                 *
+                 * @throws IllegalStateException if the field was previously set to a non-list.
+                 */
                 fun addBlock(block: Block) = apply {
                     blocks =
                         (blocks ?: JsonField.of(mutableListOf())).also {
@@ -2029,11 +2605,17 @@ private constructor(
                         }
                 }
 
-                /** A content (text or markdown) block in a message in an app feed */
+                /**
+                 * Alias for calling [addBlock] with
+                 * `Block.ofMessageInAppFeedContent(messageInAppFeedContent)`.
+                 */
                 fun addBlock(messageInAppFeedContent: Block.MessageInAppFeedContentBlock) =
                     addBlock(Block.ofMessageInAppFeedContent(messageInAppFeedContent))
 
-                /** A set of buttons in a message in an app feed */
+                /**
+                 * Alias for calling [addBlock] with
+                 * `Block.ofMessageInAppFeedButtonSet(messageInAppFeedButtonSet)`.
+                 */
                 fun addBlock(messageInAppFeedButtonSet: Block.MessageInAppFeedButtonSetBlock) =
                     addBlock(Block.ofMessageInAppFeedButtonSet(messageInAppFeedButtonSet))
 
@@ -2261,24 +2843,68 @@ private constructor(
                     private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
                 ) {
 
+                    /**
+                     * @throws KnockInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun content(): String = content.getRequired("content")
 
+                    /**
+                     * @throws KnockInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun name(): String = name.getRequired("name")
 
+                    /**
+                     * @throws KnockInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun rendered(): String = rendered.getRequired("rendered")
 
+                    /**
+                     * @throws KnockInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun type(): Type = type.getRequired("type")
 
+                    /**
+                     * Returns the raw JSON value of [content].
+                     *
+                     * Unlike [content], this method doesn't throw if the JSON field has an
+                     * unexpected type.
+                     */
                     @JsonProperty("content")
                     @ExcludeMissing
                     fun _content(): JsonField<String> = content
 
+                    /**
+                     * Returns the raw JSON value of [name].
+                     *
+                     * Unlike [name], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
                     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
+                    /**
+                     * Returns the raw JSON value of [rendered].
+                     *
+                     * Unlike [rendered], this method doesn't throw if the JSON field has an
+                     * unexpected type.
+                     */
                     @JsonProperty("rendered")
                     @ExcludeMissing
                     fun _rendered(): JsonField<String> = rendered
 
+                    /**
+                     * Returns the raw JSON value of [type].
+                     *
+                     * Unlike [type], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
                     @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
                     @JsonAnyGetter
@@ -2342,20 +2968,48 @@ private constructor(
 
                         fun content(content: String) = content(JsonField.of(content))
 
+                        /**
+                         * Sets [Builder.content] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.content] with a well-typed [String]
+                         * value instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun content(content: JsonField<String>) = apply { this.content = content }
 
                         fun name(name: String) = name(JsonField.of(name))
 
+                        /**
+                         * Sets [Builder.name] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.name] with a well-typed [String] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun name(name: JsonField<String>) = apply { this.name = name }
 
                         fun rendered(rendered: String) = rendered(JsonField.of(rendered))
 
+                        /**
+                         * Sets [Builder.rendered] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.rendered] with a well-typed [String]
+                         * value instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun rendered(rendered: JsonField<String>) = apply {
                             this.rendered = rendered
                         }
 
                         fun type(type: Type) = type(JsonField.of(type))
 
+                        /**
+                         * Sets [Builder.type] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.type] with a well-typed [Type] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun type(type: JsonField<Type>) = apply { this.type = type }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -2533,18 +3187,51 @@ private constructor(
                     private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
                 ) {
 
+                    /**
+                     * @throws KnockInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun buttons(): List<Button> = buttons.getRequired("buttons")
 
+                    /**
+                     * @throws KnockInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun name(): String = name.getRequired("name")
 
+                    /**
+                     * @throws KnockInvalidDataException if the JSON field has an unexpected type or
+                     *   is unexpectedly missing or null (e.g. if the server responded with an
+                     *   unexpected value).
+                     */
                     fun type(): Type = type.getRequired("type")
 
+                    /**
+                     * Returns the raw JSON value of [buttons].
+                     *
+                     * Unlike [buttons], this method doesn't throw if the JSON field has an
+                     * unexpected type.
+                     */
                     @JsonProperty("buttons")
                     @ExcludeMissing
                     fun _buttons(): JsonField<List<Button>> = buttons
 
+                    /**
+                     * Returns the raw JSON value of [name].
+                     *
+                     * Unlike [name], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
                     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
+                    /**
+                     * Returns the raw JSON value of [type].
+                     *
+                     * Unlike [type], this method doesn't throw if the JSON field has an unexpected
+                     * type.
+                     */
                     @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
                     @JsonAnyGetter
@@ -2605,10 +3292,23 @@ private constructor(
 
                         fun buttons(buttons: List<Button>) = buttons(JsonField.of(buttons))
 
+                        /**
+                         * Sets [Builder.buttons] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.buttons] with a well-typed
+                         * `List<Button>` value instead. This method is primarily for setting the
+                         * field to an undocumented or not yet supported value.
+                         */
                         fun buttons(buttons: JsonField<List<Button>>) = apply {
                             this.buttons = buttons.map { it.toMutableList() }
                         }
 
+                        /**
+                         * Adds a single [Button] to [buttons].
+                         *
+                         * @throws IllegalStateException if the field was previously set to a
+                         *   non-list.
+                         */
                         fun addButton(button: Button) = apply {
                             buttons =
                                 (buttons ?: JsonField.of(mutableListOf())).also {
@@ -2618,10 +3318,24 @@ private constructor(
 
                         fun name(name: String) = name(JsonField.of(name))
 
+                        /**
+                         * Sets [Builder.name] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.name] with a well-typed [String] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun name(name: JsonField<String>) = apply { this.name = name }
 
                         fun type(type: Type) = type(JsonField.of(type))
 
+                        /**
+                         * Sets [Builder.type] to an arbitrary JSON value.
+                         *
+                         * You should usually call [Builder.type] with a well-typed [Type] value
+                         * instead. This method is primarily for setting the field to an
+                         * undocumented or not yet supported value.
+                         */
                         fun type(type: JsonField<Type>) = apply { this.type = type }
 
                         fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
@@ -2674,20 +3388,53 @@ private constructor(
                             immutableEmptyMap(),
                     ) {
 
+                        /**
+                         * @throws KnockInvalidDataException if the JSON field has an unexpected
+                         *   type or is unexpectedly missing or null (e.g. if the server responded
+                         *   with an unexpected value).
+                         */
                         fun action(): String = action.getRequired("action")
 
+                        /**
+                         * @throws KnockInvalidDataException if the JSON field has an unexpected
+                         *   type or is unexpectedly missing or null (e.g. if the server responded
+                         *   with an unexpected value).
+                         */
                         fun label(): String = label.getRequired("label")
 
+                        /**
+                         * @throws KnockInvalidDataException if the JSON field has an unexpected
+                         *   type or is unexpectedly missing or null (e.g. if the server responded
+                         *   with an unexpected value).
+                         */
                         fun name(): String = name.getRequired("name")
 
+                        /**
+                         * Returns the raw JSON value of [action].
+                         *
+                         * Unlike [action], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
                         @JsonProperty("action")
                         @ExcludeMissing
                         fun _action(): JsonField<String> = action
 
+                        /**
+                         * Returns the raw JSON value of [label].
+                         *
+                         * Unlike [label], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
                         @JsonProperty("label")
                         @ExcludeMissing
                         fun _label(): JsonField<String> = label
 
+                        /**
+                         * Returns the raw JSON value of [name].
+                         *
+                         * Unlike [name], this method doesn't throw if the JSON field has an
+                         * unexpected type.
+                         */
                         @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
                         @JsonAnyGetter
@@ -2743,14 +3490,35 @@ private constructor(
 
                             fun action(action: String) = action(JsonField.of(action))
 
+                            /**
+                             * Sets [Builder.action] to an arbitrary JSON value.
+                             *
+                             * You should usually call [Builder.action] with a well-typed [String]
+                             * value instead. This method is primarily for setting the field to an
+                             * undocumented or not yet supported value.
+                             */
                             fun action(action: JsonField<String>) = apply { this.action = action }
 
                             fun label(label: String) = label(JsonField.of(label))
 
+                            /**
+                             * Sets [Builder.label] to an arbitrary JSON value.
+                             *
+                             * You should usually call [Builder.label] with a well-typed [String]
+                             * value instead. This method is primarily for setting the field to an
+                             * undocumented or not yet supported value.
+                             */
                             fun label(label: JsonField<String>) = apply { this.label = label }
 
                             fun name(name: String) = name(JsonField.of(name))
 
+                            /**
+                             * Sets [Builder.name] to an arbitrary JSON value.
+                             *
+                             * You should usually call [Builder.name] with a well-typed [String]
+                             * value instead. This method is primarily for setting the field to an
+                             * undocumented or not yet supported value.
+                             */
                             fun name(name: JsonField<String>) = apply { this.name = name }
 
                             fun additionalProperties(additionalProperties: Map<String, JsonValue>) =

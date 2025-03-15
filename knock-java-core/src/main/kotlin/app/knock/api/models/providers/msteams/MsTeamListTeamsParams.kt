@@ -100,6 +100,7 @@ private constructor(
 
         fun queryOptions(queryOptions: QueryOptions?) = apply { this.queryOptions = queryOptions }
 
+        /** Alias for calling [Builder.queryOptions] with `queryOptions.orElse(null)`. */
         fun queryOptions(queryOptions: Optional<QueryOptions>) =
             queryOptions(queryOptions.getOrNull())
 
@@ -287,10 +288,7 @@ private constructor(
              */
             fun filter(filter: String?) = apply { this.filter = filter }
 
-            /**
-             * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-             * Microsoft Graph API to filter teams
-             */
+            /** Alias for calling [Builder.filter] with `filter.orElse(null)`. */
             fun filter(filter: Optional<String>) = filter(filter.getOrNull())
 
             /**
@@ -299,10 +297,7 @@ private constructor(
              */
             fun select(select: String?) = apply { this.select = select }
 
-            /**
-             * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-             * Microsoft Graph API to select fields on a team
-             */
+            /** Alias for calling [Builder.select] with `select.orElse(null)`. */
             fun select(select: Optional<String>) = select(select.getOrNull())
 
             /**
@@ -311,10 +306,7 @@ private constructor(
              */
             fun skiptoken(skiptoken: String?) = apply { this.skiptoken = skiptoken }
 
-            /**
-             * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-             * Microsoft Graph API to retrieve the next page of results
-             */
+            /** Alias for calling [Builder.skiptoken] with `skiptoken.orElse(null)`. */
             fun skiptoken(skiptoken: Optional<String>) = skiptoken(skiptoken.getOrNull())
 
             /**
@@ -324,15 +316,13 @@ private constructor(
             fun top(top: Long?) = apply { this.top = top }
 
             /**
-             * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-             * Microsoft Graph API to limit the number of teams returned
+             * Alias for [Builder.top].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
              */
             fun top(top: Long) = top(top as Long?)
 
-            /**
-             * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-             * Microsoft Graph API to limit the number of teams returned
-             */
+            /** Alias for calling [Builder.top] with `top.orElse(null)`. */
             fun top(top: Optional<Long>) = top(top.getOrNull())
 
             fun additionalProperties(additionalProperties: QueryParams) = apply {

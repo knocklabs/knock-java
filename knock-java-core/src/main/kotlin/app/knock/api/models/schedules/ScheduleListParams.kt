@@ -119,22 +119,26 @@ private constructor(
         /** The cursor to fetch entries after */
         fun after(after: String?) = apply { this.after = after }
 
-        /** The cursor to fetch entries after */
+        /** Alias for calling [Builder.after] with `after.orElse(null)`. */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
         /** The cursor to fetch entries before */
         fun before(before: String?) = apply { this.before = before }
 
-        /** The cursor to fetch entries before */
+        /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
         /** The page size to fetch */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
-        /** The page size to fetch */
+        /**
+         * Alias for [Builder.pageSize].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
-        /** The page size to fetch */
+        /** Alias for calling [Builder.pageSize] with `pageSize.orElse(null)`. */
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
         /** Filter by recipient */
@@ -142,25 +146,29 @@ private constructor(
             this.recipients = recipients?.toMutableList()
         }
 
-        /** Filter by recipient */
+        /** Alias for calling [Builder.recipients] with `recipients.orElse(null)`. */
         fun recipients(recipients: Optional<List<Recipient>>) = recipients(recipients.getOrNull())
 
-        /** Filter by recipient */
+        /**
+         * Adds a single [Recipient] to [recipients].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addRecipient(recipient: Recipient) = apply {
             recipients = (recipients ?: mutableListOf()).apply { add(recipient) }
         }
 
-        /** A user identifier */
+        /** Alias for calling [addRecipient] with `Recipient.ofString(string)`. */
         fun addRecipient(string: String) = addRecipient(Recipient.ofString(string))
 
-        /** An object reference to a recipient */
+        /** Alias for calling [addRecipient] with `Recipient.ofObjectReference(objectReference)`. */
         fun addRecipient(objectReference: Recipient.ObjectReference) =
             addRecipient(Recipient.ofObjectReference(objectReference))
 
         /** Filter by tenant */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
-        /** Filter by tenant */
+        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {

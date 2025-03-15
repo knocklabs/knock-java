@@ -11,6 +11,7 @@ import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -33,16 +34,34 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun entries(): List<AudienceMember> = entries.getRequired("entries")
 
-    /** The information about a paginated result */
+    /**
+     * The information about a paginated result
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun pageInfo(): PageInfo = pageInfo.getRequired("page_info")
 
+    /**
+     * Returns the raw JSON value of [entries].
+     *
+     * Unlike [entries], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("entries")
     @ExcludeMissing
     fun _entries(): JsonField<List<AudienceMember>> = entries
 
-    /** The information about a paginated result */
+    /**
+     * Returns the raw JSON value of [pageInfo].
+     *
+     * Unlike [pageInfo], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("page_info") @ExcludeMissing fun _pageInfo(): JsonField<PageInfo> = pageInfo
 
     @JsonAnyGetter
@@ -93,10 +112,22 @@ private constructor(
 
         fun entries(entries: List<AudienceMember>) = entries(JsonField.of(entries))
 
+        /**
+         * Sets [Builder.entries] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.entries] with a well-typed `List<AudienceMember>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun entries(entries: JsonField<List<AudienceMember>>) = apply {
             this.entries = entries.map { it.toMutableList() }
         }
 
+        /**
+         * Adds a single [AudienceMember] to [entries].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addEntry(entry: AudienceMember) = apply {
             entries =
                 (entries ?: JsonField.of(mutableListOf())).also {
@@ -107,7 +138,13 @@ private constructor(
         /** The information about a paginated result */
         fun pageInfo(pageInfo: PageInfo) = pageInfo(JsonField.of(pageInfo))
 
-        /** The information about a paginated result */
+        /**
+         * Sets [Builder.pageInfo] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.pageInfo] with a well-typed [PageInfo] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun pageInfo(pageInfo: JsonField<PageInfo>) = apply { this.pageInfo = pageInfo }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -158,20 +195,56 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun _typename(): String = _typename.getRequired("__typename")
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun pageSize(): Long = pageSize.getRequired("page_size")
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun after(): Optional<String> = Optional.ofNullable(after.getNullable("after"))
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun before(): Optional<String> = Optional.ofNullable(before.getNullable("before"))
 
+        /**
+         * Returns the raw JSON value of [_typename].
+         *
+         * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
+        /**
+         * Returns the raw JSON value of [pageSize].
+         *
+         * Unlike [pageSize], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("page_size") @ExcludeMissing fun _pageSize(): JsonField<Long> = pageSize
 
+        /**
+         * Returns the raw JSON value of [after].
+         *
+         * Unlike [after], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("after") @ExcludeMissing fun _after(): JsonField<String> = after
 
+        /**
+         * Returns the raw JSON value of [before].
+         *
+         * Unlike [before], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("before") @ExcludeMissing fun _before(): JsonField<String> = before
 
         @JsonAnyGetter
@@ -228,22 +301,52 @@ private constructor(
 
             fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+            /**
+             * Sets [Builder._typename] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder._typename] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
             fun pageSize(pageSize: Long) = pageSize(JsonField.of(pageSize))
 
+            /**
+             * Sets [Builder.pageSize] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.pageSize] with a well-typed [Long] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun pageSize(pageSize: JsonField<Long>) = apply { this.pageSize = pageSize }
 
             fun after(after: String?) = after(JsonField.ofNullable(after))
 
+            /** Alias for calling [Builder.after] with `after.orElse(null)`. */
             fun after(after: Optional<String>) = after(after.getOrNull())
 
+            /**
+             * Sets [Builder.after] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.after] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun after(after: JsonField<String>) = apply { this.after = after }
 
             fun before(before: String?) = before(JsonField.ofNullable(before))
 
+            /** Alias for calling [Builder.before] with `before.orElse(null)`. */
             fun before(before: Optional<String>) = before(before.getOrNull())
 
+            /**
+             * Sets [Builder.before] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.before] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun before(before: JsonField<String>) = apply { this.before = before }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

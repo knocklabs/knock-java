@@ -10,6 +10,7 @@ import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -27,8 +28,17 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun features(): Features = features.getRequired("features")
 
+    /**
+     * Returns the raw JSON value of [features].
+     *
+     * Unlike [features], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("features") @ExcludeMissing fun _features(): JsonField<Features> = features
 
     @JsonAnyGetter
@@ -75,6 +85,13 @@ private constructor(
 
         fun features(features: Features) = features(JsonField.of(features))
 
+        /**
+         * Sets [Builder.features] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.features] with a well-typed [Features] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun features(features: JsonField<Features>) = apply { this.features = features }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -114,8 +131,18 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun brandingRequired(): Boolean = brandingRequired.getRequired("branding_required")
 
+        /**
+         * Returns the raw JSON value of [brandingRequired].
+         *
+         * Unlike [brandingRequired], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("branding_required")
         @ExcludeMissing
         fun _brandingRequired(): JsonField<Boolean> = brandingRequired
@@ -165,6 +192,13 @@ private constructor(
             fun brandingRequired(brandingRequired: Boolean) =
                 brandingRequired(JsonField.of(brandingRequired))
 
+            /**
+             * Sets [Builder.brandingRequired] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.brandingRequired] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun brandingRequired(brandingRequired: JsonField<Boolean>) = apply {
                 this.brandingRequired = brandingRequired
             }

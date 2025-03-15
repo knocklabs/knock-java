@@ -13,6 +13,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -33,10 +34,19 @@ private constructor(
 
     fun userId(): String = userId
 
-    /** The user ID to merge from */
+    /**
+     * The user ID to merge from
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun fromUserId(): String = body.fromUserId()
 
-    /** The user ID to merge from */
+    /**
+     * Returns the raw JSON value of [fromUserId].
+     *
+     * Unlike [fromUserId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _fromUserId(): JsonField<String> = body._fromUserId()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -70,10 +80,19 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** The user ID to merge from */
+        /**
+         * The user ID to merge from
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun fromUserId(): String = fromUserId.getRequired("from_user_id")
 
-        /** The user ID to merge from */
+        /**
+         * Returns the raw JSON value of [fromUserId].
+         *
+         * Unlike [fromUserId], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("from_user_id")
         @ExcludeMissing
         fun _fromUserId(): JsonField<String> = fromUserId
@@ -123,7 +142,13 @@ private constructor(
             /** The user ID to merge from */
             fun fromUserId(fromUserId: String) = fromUserId(JsonField.of(fromUserId))
 
-            /** The user ID to merge from */
+            /**
+             * Sets [Builder.fromUserId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.fromUserId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun fromUserId(fromUserId: JsonField<String>) = apply { this.fromUserId = fromUserId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -205,7 +230,13 @@ private constructor(
         /** The user ID to merge from */
         fun fromUserId(fromUserId: String) = apply { body.fromUserId(fromUserId) }
 
-        /** The user ID to merge from */
+        /**
+         * Sets [Builder.fromUserId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.fromUserId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun fromUserId(fromUserId: JsonField<String>) = apply { body.fromUserId(fromUserId) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {

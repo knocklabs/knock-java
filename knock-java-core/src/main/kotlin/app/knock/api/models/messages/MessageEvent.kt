@@ -51,40 +51,89 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun _typename(): String = _typename.getRequired("__typename")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun insertedAt(): OffsetDateTime = insertedAt.getRequired("inserted_at")
 
     /**
      * A reference to a recipient, either a user identifier (string) or an object reference (id,
      * collection).
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun recipient(): Recipient = recipient.getRequired("recipient")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun type(): Type = type.getRequired("type")
 
-    /** The data associated with the event. Only present for some event types */
+    /**
+     * The data associated with the event. Only present for some event types
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun data(): Optional<Data> = Optional.ofNullable(data.getNullable("data"))
 
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+    /**
+     * Returns the raw JSON value of [_typename].
+     *
+     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
+    /**
+     * Returns the raw JSON value of [insertedAt].
+     *
+     * Unlike [insertedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("inserted_at")
     @ExcludeMissing
     fun _insertedAt(): JsonField<OffsetDateTime> = insertedAt
 
     /**
-     * A reference to a recipient, either a user identifier (string) or an object reference (id,
-     * collection).
+     * Returns the raw JSON value of [recipient].
+     *
+     * Unlike [recipient], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("recipient") @ExcludeMissing fun _recipient(): JsonField<Recipient> = recipient
 
+    /**
+     * Returns the raw JSON value of [type].
+     *
+     * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
-    /** The data associated with the event. Only present for some event types */
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     @JsonAnyGetter
@@ -150,14 +199,34 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+        /**
+         * Sets [Builder._typename] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder._typename] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         fun insertedAt(insertedAt: OffsetDateTime) = insertedAt(JsonField.of(insertedAt))
 
+        /**
+         * Sets [Builder.insertedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.insertedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun insertedAt(insertedAt: JsonField<OffsetDateTime>) = apply {
             this.insertedAt = insertedAt
         }
@@ -169,29 +238,43 @@ private constructor(
         fun recipient(recipient: Recipient) = recipient(JsonField.of(recipient))
 
         /**
-         * A reference to a recipient, either a user identifier (string) or an object reference (id,
-         * collection).
+         * Sets [Builder.recipient] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.recipient] with a well-typed [Recipient] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun recipient(recipient: JsonField<Recipient>) = apply { this.recipient = recipient }
 
-        /** A user identifier */
+        /** Alias for calling [recipient] with `Recipient.ofString(string)`. */
         fun recipient(string: String) = recipient(Recipient.ofString(string))
 
-        /** An object reference to a recipient */
+        /** Alias for calling [recipient] with `Recipient.ofObjectReference(objectReference)`. */
         fun recipient(objectReference: Recipient.ObjectReference) =
             recipient(Recipient.ofObjectReference(objectReference))
 
         fun type(type: Type) = type(JsonField.of(type))
 
+        /**
+         * Sets [Builder.type] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun type(type: JsonField<Type>) = apply { this.type = type }
 
         /** The data associated with the event. Only present for some event types */
         fun data(data: Data?) = data(JsonField.ofNullable(data))
 
-        /** The data associated with the event. Only present for some event types */
+        /** Alias for calling [Builder.data] with `data.orElse(null)`. */
         fun data(data: Optional<Data>) = data(data.getOrNull())
 
-        /** The data associated with the event. Only present for some event types */
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -386,16 +469,37 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            /** An object identifier */
+            /**
+             * An object identifier
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            /** The collection the object belongs to */
+            /**
+             * The collection the object belongs to
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun collection(): String = collection.getRequired("collection")
 
-            /** An object identifier */
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-            /** The collection the object belongs to */
+            /**
+             * Returns the raw JSON value of [collection].
+             *
+             * Unlike [collection], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("collection")
             @ExcludeMissing
             fun _collection(): JsonField<String> = collection
@@ -449,13 +553,25 @@ private constructor(
                 /** An object identifier */
                 fun id(id: String) = id(JsonField.of(id))
 
-                /** An object identifier */
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
                 /** The collection the object belongs to */
                 fun collection(collection: String) = collection(JsonField.of(collection))
 
-                /** The collection the object belongs to */
+                /**
+                 * Sets [Builder.collection] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.collection] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun collection(collection: JsonField<String>) = apply {
                     this.collection = collection
                 }

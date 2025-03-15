@@ -14,6 +14,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.objects.InlineObjectRequest
 import app.knock.api.models.recipients.RecipientRequest
 import app.knock.api.models.users.InlineIdentifyUserRequest
@@ -39,8 +40,17 @@ private constructor(
 
     fun collection(): String = collection
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun subscriptions(): List<Subscription> = body.subscriptions()
 
+    /**
+     * Returns the raw JSON value of [subscriptions].
+     *
+     * Unlike [subscriptions], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _subscriptions(): JsonField<List<Subscription>> = body._subscriptions()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -74,8 +84,18 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun subscriptions(): List<Subscription> = subscriptions.getRequired("subscriptions")
 
+        /**
+         * Returns the raw JSON value of [subscriptions].
+         *
+         * Unlike [subscriptions], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("subscriptions")
         @ExcludeMissing
         fun _subscriptions(): JsonField<List<Subscription>> = subscriptions
@@ -125,10 +145,22 @@ private constructor(
             fun subscriptions(subscriptions: List<Subscription>) =
                 subscriptions(JsonField.of(subscriptions))
 
+            /**
+             * Sets [Builder.subscriptions] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subscriptions] with a well-typed
+             * `List<Subscription>` value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
+             */
             fun subscriptions(subscriptions: JsonField<List<Subscription>>) = apply {
                 this.subscriptions = subscriptions.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [Subscription] to [subscriptions].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addSubscription(subscription: Subscription) = apply {
                 subscriptions =
                     (subscriptions ?: JsonField.of(mutableListOf())).also {
@@ -219,10 +251,22 @@ private constructor(
             body.subscriptions(subscriptions)
         }
 
+        /**
+         * Sets [Builder.subscriptions] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.subscriptions] with a well-typed `List<Subscription>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
         fun subscriptions(subscriptions: JsonField<List<Subscription>>) = apply {
             body.subscriptions(subscriptions)
         }
 
+        /**
+         * Adds a single [Subscription] to [subscriptions].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addSubscription(subscription: Subscription) = apply {
             body.addSubscription(subscription)
         }
@@ -368,19 +412,46 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun recipients(): List<RecipientRequest> = recipients.getRequired("recipients")
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun properties(): Optional<Properties> =
             Optional.ofNullable(properties.getNullable("properties"))
 
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+        /**
+         * Returns the raw JSON value of [recipients].
+         *
+         * Unlike [recipients], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("recipients")
         @ExcludeMissing
         fun _recipients(): JsonField<List<RecipientRequest>> = recipients
 
+        /**
+         * Returns the raw JSON value of [properties].
+         *
+         * Unlike [properties], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("properties")
         @ExcludeMissing
         fun _properties(): JsonField<Properties> = properties
@@ -436,15 +507,34 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun recipients(recipients: List<RecipientRequest>) =
                 recipients(JsonField.of(recipients))
 
+            /**
+             * Sets [Builder.recipients] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.recipients] with a well-typed
+             * `List<RecipientRequest>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
             fun recipients(recipients: JsonField<List<RecipientRequest>>) = apply {
                 this.recipients = recipients.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [RecipientRequest] to [recipients].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addRecipient(recipient: RecipientRequest) = apply {
                 recipients =
                     (recipients ?: JsonField.of(mutableListOf())).also {
@@ -452,26 +542,35 @@ private constructor(
                     }
             }
 
-            /** A user identifier */
+            /** Alias for calling [addRecipient] with `RecipientRequest.ofString(string)`. */
             fun addRecipient(string: String) = addRecipient(RecipientRequest.ofString(string))
 
             /**
-             * A set of parameters to inline-identify a user with. Inline identifying the user will
-             * ensure that the user is available before the request is executed in Knock. It will
-             * perform an upsert against the user you're supplying, replacing any properties
-             * specified.
+             * Alias for calling [addRecipient] with
+             * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
              */
             fun addRecipient(inlineIdentifyUser: InlineIdentifyUserRequest) =
                 addRecipient(RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser))
 
-            /** Inline identifies a custom object belonging to a collection */
+            /**
+             * Alias for calling [addRecipient] with
+             * `RecipientRequest.ofInlineObject(inlineObject)`.
+             */
             fun addRecipient(inlineObject: InlineObjectRequest) =
                 addRecipient(RecipientRequest.ofInlineObject(inlineObject))
 
             fun properties(properties: Properties?) = properties(JsonField.ofNullable(properties))
 
+            /** Alias for calling [Builder.properties] with `properties.orElse(null)`. */
             fun properties(properties: Optional<Properties>) = properties(properties.getOrNull())
 
+            /**
+             * Sets [Builder.properties] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.properties] with a well-typed [Properties] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun properties(properties: JsonField<Properties>) = apply {
                 this.properties = properties
             }

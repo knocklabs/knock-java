@@ -44,17 +44,35 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun connections(): List<Connection> = connections.getRequired("connections")
 
-    /** The Microsoft Teams tenant ID */
+    /**
+     * The Microsoft Teams tenant ID
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun msTeamsTenantId(): Optional<String> =
         Optional.ofNullable(msTeamsTenantId.getNullable("ms_teams_tenant_id"))
 
+    /**
+     * Returns the raw JSON value of [connections].
+     *
+     * Unlike [connections], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("connections")
     @ExcludeMissing
     fun _connections(): JsonField<List<Connection>> = connections
 
-    /** The Microsoft Teams tenant ID */
+    /**
+     * Returns the raw JSON value of [msTeamsTenantId].
+     *
+     * Unlike [msTeamsTenantId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("ms_teams_tenant_id")
     @ExcludeMissing
     fun _msTeamsTenantId(): JsonField<String> = msTeamsTenantId
@@ -106,10 +124,22 @@ private constructor(
 
         fun connections(connections: List<Connection>) = connections(JsonField.of(connections))
 
+        /**
+         * Sets [Builder.connections] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.connections] with a well-typed `List<Connection>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun connections(connections: JsonField<List<Connection>>) = apply {
             this.connections = connections.map { it.toMutableList() }
         }
 
+        /**
+         * Adds a single [Connection] to [connections].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addConnection(connection: Connection) = apply {
             connections =
                 (connections ?: JsonField.of(mutableListOf())).also {
@@ -117,11 +147,14 @@ private constructor(
                 }
         }
 
-        /** Microsoft Teams token connection */
+        /** Alias for calling [addConnection] with `Connection.ofMsTeamsToken(msTeamsToken)`. */
         fun addConnection(msTeamsToken: Connection.MsTeamsTokenConnection) =
             addConnection(Connection.ofMsTeamsToken(msTeamsToken))
 
-        /** Microsoft Teams incoming webhook connection */
+        /**
+         * Alias for calling [addConnection] with
+         * `Connection.ofMsTeamsIncomingWebhook(msTeamsIncomingWebhook)`.
+         */
         fun addConnection(msTeamsIncomingWebhook: Connection.MsTeamsIncomingWebhookConnection) =
             addConnection(Connection.ofMsTeamsIncomingWebhook(msTeamsIncomingWebhook))
 
@@ -129,11 +162,17 @@ private constructor(
         fun msTeamsTenantId(msTeamsTenantId: String?) =
             msTeamsTenantId(JsonField.ofNullable(msTeamsTenantId))
 
-        /** The Microsoft Teams tenant ID */
+        /** Alias for calling [Builder.msTeamsTenantId] with `msTeamsTenantId.orElse(null)`. */
         fun msTeamsTenantId(msTeamsTenantId: Optional<String>) =
             msTeamsTenantId(msTeamsTenantId.getOrNull())
 
-        /** The Microsoft Teams tenant ID */
+        /**
+         * Sets [Builder.msTeamsTenantId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.msTeamsTenantId] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun msTeamsTenantId(msTeamsTenantId: JsonField<String>) = apply {
             this.msTeamsTenantId = msTeamsTenantId
         }
@@ -345,38 +384,78 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            /** The Microsoft Teams channel ID */
+            /**
+             * The Microsoft Teams channel ID
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun msTeamsChannelId(): Optional<String> =
                 Optional.ofNullable(msTeamsChannelId.getNullable("ms_teams_channel_id"))
 
-            /** The Microsoft Teams team ID */
+            /**
+             * The Microsoft Teams team ID
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun msTeamsTeamId(): Optional<String> =
                 Optional.ofNullable(msTeamsTeamId.getNullable("ms_teams_team_id"))
 
-            /** The Microsoft Teams tenant ID */
+            /**
+             * The Microsoft Teams tenant ID
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun msTeamsTenantId(): Optional<String> =
                 Optional.ofNullable(msTeamsTenantId.getNullable("ms_teams_tenant_id"))
 
-            /** The Microsoft Teams user ID */
+            /**
+             * The Microsoft Teams user ID
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun msTeamsUserId(): Optional<String> =
                 Optional.ofNullable(msTeamsUserId.getNullable("ms_teams_user_id"))
 
-            /** The Microsoft Teams channel ID */
+            /**
+             * Returns the raw JSON value of [msTeamsChannelId].
+             *
+             * Unlike [msTeamsChannelId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("ms_teams_channel_id")
             @ExcludeMissing
             fun _msTeamsChannelId(): JsonField<String> = msTeamsChannelId
 
-            /** The Microsoft Teams team ID */
+            /**
+             * Returns the raw JSON value of [msTeamsTeamId].
+             *
+             * Unlike [msTeamsTeamId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("ms_teams_team_id")
             @ExcludeMissing
             fun _msTeamsTeamId(): JsonField<String> = msTeamsTeamId
 
-            /** The Microsoft Teams tenant ID */
+            /**
+             * Returns the raw JSON value of [msTeamsTenantId].
+             *
+             * Unlike [msTeamsTenantId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("ms_teams_tenant_id")
             @ExcludeMissing
             fun _msTeamsTenantId(): JsonField<String> = msTeamsTenantId
 
-            /** The Microsoft Teams user ID */
+            /**
+             * Returns the raw JSON value of [msTeamsUserId].
+             *
+             * Unlike [msTeamsUserId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("ms_teams_user_id")
             @ExcludeMissing
             fun _msTeamsUserId(): JsonField<String> = msTeamsUserId
@@ -433,11 +512,20 @@ private constructor(
                 fun msTeamsChannelId(msTeamsChannelId: String?) =
                     msTeamsChannelId(JsonField.ofNullable(msTeamsChannelId))
 
-                /** The Microsoft Teams channel ID */
+                /**
+                 * Alias for calling [Builder.msTeamsChannelId] with
+                 * `msTeamsChannelId.orElse(null)`.
+                 */
                 fun msTeamsChannelId(msTeamsChannelId: Optional<String>) =
                     msTeamsChannelId(msTeamsChannelId.getOrNull())
 
-                /** The Microsoft Teams channel ID */
+                /**
+                 * Sets [Builder.msTeamsChannelId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.msTeamsChannelId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun msTeamsChannelId(msTeamsChannelId: JsonField<String>) = apply {
                     this.msTeamsChannelId = msTeamsChannelId
                 }
@@ -446,11 +534,17 @@ private constructor(
                 fun msTeamsTeamId(msTeamsTeamId: String?) =
                     msTeamsTeamId(JsonField.ofNullable(msTeamsTeamId))
 
-                /** The Microsoft Teams team ID */
+                /** Alias for calling [Builder.msTeamsTeamId] with `msTeamsTeamId.orElse(null)`. */
                 fun msTeamsTeamId(msTeamsTeamId: Optional<String>) =
                     msTeamsTeamId(msTeamsTeamId.getOrNull())
 
-                /** The Microsoft Teams team ID */
+                /**
+                 * Sets [Builder.msTeamsTeamId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.msTeamsTeamId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun msTeamsTeamId(msTeamsTeamId: JsonField<String>) = apply {
                     this.msTeamsTeamId = msTeamsTeamId
                 }
@@ -459,11 +553,19 @@ private constructor(
                 fun msTeamsTenantId(msTeamsTenantId: String?) =
                     msTeamsTenantId(JsonField.ofNullable(msTeamsTenantId))
 
-                /** The Microsoft Teams tenant ID */
+                /**
+                 * Alias for calling [Builder.msTeamsTenantId] with `msTeamsTenantId.orElse(null)`.
+                 */
                 fun msTeamsTenantId(msTeamsTenantId: Optional<String>) =
                     msTeamsTenantId(msTeamsTenantId.getOrNull())
 
-                /** The Microsoft Teams tenant ID */
+                /**
+                 * Sets [Builder.msTeamsTenantId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.msTeamsTenantId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun msTeamsTenantId(msTeamsTenantId: JsonField<String>) = apply {
                     this.msTeamsTenantId = msTeamsTenantId
                 }
@@ -472,11 +574,17 @@ private constructor(
                 fun msTeamsUserId(msTeamsUserId: String?) =
                     msTeamsUserId(JsonField.ofNullable(msTeamsUserId))
 
-                /** The Microsoft Teams user ID */
+                /** Alias for calling [Builder.msTeamsUserId] with `msTeamsUserId.orElse(null)`. */
                 fun msTeamsUserId(msTeamsUserId: Optional<String>) =
                     msTeamsUserId(msTeamsUserId.getOrNull())
 
-                /** The Microsoft Teams user ID */
+                /**
+                 * Sets [Builder.msTeamsUserId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.msTeamsUserId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun msTeamsUserId(msTeamsUserId: JsonField<String>) = apply {
                     this.msTeamsUserId = msTeamsUserId
                 }
@@ -543,10 +651,21 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            /** The incoming webhook */
+            /**
+             * The incoming webhook
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun incomingWebhook(): IncomingWebhook = incomingWebhook.getRequired("incoming_webhook")
 
-            /** The incoming webhook */
+            /**
+             * Returns the raw JSON value of [incomingWebhook].
+             *
+             * Unlike [incomingWebhook], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("incoming_webhook")
             @ExcludeMissing
             fun _incomingWebhook(): JsonField<IncomingWebhook> = incomingWebhook
@@ -601,7 +720,13 @@ private constructor(
                 fun incomingWebhook(incomingWebhook: IncomingWebhook) =
                     incomingWebhook(JsonField.of(incomingWebhook))
 
-                /** The incoming webhook */
+                /**
+                 * Sets [Builder.incomingWebhook] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.incomingWebhook] with a well-typed
+                 * [IncomingWebhook] value instead. This method is primarily for setting the field
+                 * to an undocumented or not yet supported value.
+                 */
                 fun incomingWebhook(incomingWebhook: JsonField<IncomingWebhook>) = apply {
                     this.incomingWebhook = incomingWebhook
                 }
@@ -647,10 +772,20 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /** The URL of the incoming webhook */
+                /**
+                 * The URL of the incoming webhook
+                 *
+                 * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun url(): String = url.getRequired("url")
 
-                /** The URL of the incoming webhook */
+                /**
+                 * Returns the raw JSON value of [url].
+                 *
+                 * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+                 */
                 @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
 
                 @JsonAnyGetter
@@ -698,7 +833,13 @@ private constructor(
                     /** The URL of the incoming webhook */
                     fun url(url: String) = url(JsonField.of(url))
 
-                    /** The URL of the incoming webhook */
+                    /**
+                     * Sets [Builder.url] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.url] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun url(url: JsonField<String>) = apply { this.url = url }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

@@ -42,16 +42,34 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun connections(): List<Connection> = connections.getRequired("connections")
 
-    /** A token that's used to store the access token for a Slack workspace. */
+    /**
+     * A token that's used to store the access token for a Slack workspace.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun token(): Optional<Token> = Optional.ofNullable(token.getNullable("token"))
 
+    /**
+     * Returns the raw JSON value of [connections].
+     *
+     * Unlike [connections], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("connections")
     @ExcludeMissing
     fun _connections(): JsonField<List<Connection>> = connections
 
-    /** A token that's used to store the access token for a Slack workspace. */
+    /**
+     * Returns the raw JSON value of [token].
+     *
+     * Unlike [token], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("token") @ExcludeMissing fun _token(): JsonField<Token> = token
 
     @JsonAnyGetter
@@ -101,10 +119,22 @@ private constructor(
 
         fun connections(connections: List<Connection>) = connections(JsonField.of(connections))
 
+        /**
+         * Sets [Builder.connections] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.connections] with a well-typed `List<Connection>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun connections(connections: JsonField<List<Connection>>) = apply {
             this.connections = connections.map { it.toMutableList() }
         }
 
+        /**
+         * Adds a single [Connection] to [connections].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addConnection(connection: Connection) = apply {
             connections =
                 (connections ?: JsonField.of(mutableListOf())).also {
@@ -112,21 +142,29 @@ private constructor(
                 }
         }
 
-        /** A Slack connection, which either includes a channel_id or a user_id */
+        /** Alias for calling [addConnection] with `Connection.ofSlackToken(slackToken)`. */
         fun addConnection(slackToken: Connection.SlackTokenConnection) =
             addConnection(Connection.ofSlackToken(slackToken))
 
-        /** An incoming webhook Slack connection */
+        /**
+         * Alias for calling [addConnection] with
+         * `Connection.ofSlackIncomingWebhook(slackIncomingWebhook)`.
+         */
         fun addConnection(slackIncomingWebhook: Connection.SlackIncomingWebhookConnection) =
             addConnection(Connection.ofSlackIncomingWebhook(slackIncomingWebhook))
 
         /** A token that's used to store the access token for a Slack workspace. */
         fun token(token: Token?) = token(JsonField.ofNullable(token))
 
-        /** A token that's used to store the access token for a Slack workspace. */
+        /** Alias for calling [Builder.token] with `token.orElse(null)`. */
         fun token(token: Optional<Token>) = token(token.getOrNull())
 
-        /** A token that's used to store the access token for a Slack workspace. */
+        /**
+         * Sets [Builder.token] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.token] with a well-typed [Token] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun token(token: JsonField<Token>) = apply { this.token = token }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -330,22 +368,51 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun accessToken(): Optional<String> =
                 Optional.ofNullable(accessToken.getNullable("access_token"))
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun channelId(): Optional<String> =
                 Optional.ofNullable(channelId.getNullable("channel_id"))
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun userId(): Optional<String> = Optional.ofNullable(userId.getNullable("user_id"))
 
+            /**
+             * Returns the raw JSON value of [accessToken].
+             *
+             * Unlike [accessToken], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("access_token")
             @ExcludeMissing
             fun _accessToken(): JsonField<String> = accessToken
 
+            /**
+             * Returns the raw JSON value of [channelId].
+             *
+             * Unlike [channelId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("channel_id")
             @ExcludeMissing
             fun _channelId(): JsonField<String> = channelId
 
+            /**
+             * Returns the raw JSON value of [userId].
+             *
+             * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("user_id") @ExcludeMissing fun _userId(): JsonField<String> = userId
 
             @JsonAnyGetter
@@ -394,23 +461,47 @@ private constructor(
                 fun accessToken(accessToken: String?) =
                     accessToken(JsonField.ofNullable(accessToken))
 
+                /** Alias for calling [Builder.accessToken] with `accessToken.orElse(null)`. */
                 fun accessToken(accessToken: Optional<String>) =
                     accessToken(accessToken.getOrNull())
 
+                /**
+                 * Sets [Builder.accessToken] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.accessToken] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun accessToken(accessToken: JsonField<String>) = apply {
                     this.accessToken = accessToken
                 }
 
                 fun channelId(channelId: String?) = channelId(JsonField.ofNullable(channelId))
 
+                /** Alias for calling [Builder.channelId] with `channelId.orElse(null)`. */
                 fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
+                /**
+                 * Sets [Builder.channelId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.channelId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun channelId(channelId: JsonField<String>) = apply { this.channelId = channelId }
 
                 fun userId(userId: String?) = userId(JsonField.ofNullable(userId))
 
+                /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
                 fun userId(userId: Optional<String>) = userId(userId.getOrNull())
 
+                /**
+                 * Sets [Builder.userId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.userId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun userId(userId: JsonField<String>) = apply { this.userId = userId }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -474,8 +565,18 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun url(): String = url.getRequired("url")
 
+            /**
+             * Returns the raw JSON value of [url].
+             *
+             * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
 
             @JsonAnyGetter
@@ -525,6 +626,13 @@ private constructor(
 
                 fun url(url: String) = url(JsonField.of(url))
 
+                /**
+                 * Sets [Builder.url] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.url] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun url(url: JsonField<String>) = apply { this.url = url }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -587,9 +695,18 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun accessToken(): Optional<String> =
             Optional.ofNullable(accessToken.getNullable("access_token"))
 
+        /**
+         * Returns the raw JSON value of [accessToken].
+         *
+         * Unlike [accessToken], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("access_token")
         @ExcludeMissing
         fun _accessToken(): JsonField<String> = accessToken
@@ -638,8 +755,16 @@ private constructor(
 
             fun accessToken(accessToken: String?) = accessToken(JsonField.ofNullable(accessToken))
 
+            /** Alias for calling [Builder.accessToken] with `accessToken.orElse(null)`. */
             fun accessToken(accessToken: Optional<String>) = accessToken(accessToken.getOrNull())
 
+            /**
+             * Sets [Builder.accessToken] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.accessToken] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun accessToken(accessToken: JsonField<String>) = apply {
                 this.accessToken = accessToken
             }

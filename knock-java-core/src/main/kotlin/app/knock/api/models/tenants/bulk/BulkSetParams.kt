@@ -14,6 +14,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.tenants.InlineTenantRequest
 import app.knock.api.models.tenants.TenantRequest
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -30,8 +31,17 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun tenants(): List<InlineTenantRequest> = body.tenants()
 
+    /**
+     * Returns the raw JSON value of [tenants].
+     *
+     * Unlike [tenants], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _tenants(): JsonField<List<InlineTenantRequest>> = body._tenants()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -58,8 +68,17 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun tenants(): List<InlineTenantRequest> = tenants.getRequired("tenants")
 
+        /**
+         * Returns the raw JSON value of [tenants].
+         *
+         * Unlike [tenants], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("tenants")
         @ExcludeMissing
         fun _tenants(): JsonField<List<InlineTenantRequest>> = tenants
@@ -108,10 +127,22 @@ private constructor(
 
             fun tenants(tenants: List<InlineTenantRequest>) = tenants(JsonField.of(tenants))
 
+            /**
+             * Sets [Builder.tenants] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.tenants] with a well-typed
+             * `List<InlineTenantRequest>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
             fun tenants(tenants: JsonField<List<InlineTenantRequest>>) = apply {
                 this.tenants = tenants.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [InlineTenantRequest] to [tenants].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addTenant(tenant: InlineTenantRequest) = apply {
                 tenants =
                     (tenants ?: JsonField.of(mutableListOf())).also {
@@ -119,10 +150,13 @@ private constructor(
                     }
             }
 
-            /** A tenant identifier */
+            /** Alias for calling [addTenant] with `InlineTenantRequest.ofString(string)`. */
             fun addTenant(string: String) = addTenant(InlineTenantRequest.ofString(string))
 
-            /** A tenant to be set in the system */
+            /**
+             * Alias for calling [addTenant] with
+             * `InlineTenantRequest.ofTenantRequest(tenantRequest)`.
+             */
             fun addTenant(tenantRequest: TenantRequest) =
                 addTenant(InlineTenantRequest.ofTenantRequest(tenantRequest))
 
@@ -202,14 +236,28 @@ private constructor(
 
         fun tenants(tenants: List<InlineTenantRequest>) = apply { body.tenants(tenants) }
 
+        /**
+         * Sets [Builder.tenants] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.tenants] with a well-typed `List<InlineTenantRequest>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
         fun tenants(tenants: JsonField<List<InlineTenantRequest>>) = apply { body.tenants(tenants) }
 
+        /**
+         * Adds a single [InlineTenantRequest] to [tenants].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addTenant(tenant: InlineTenantRequest) = apply { body.addTenant(tenant) }
 
-        /** A tenant identifier */
+        /** Alias for calling [addTenant] with `InlineTenantRequest.ofString(string)`. */
         fun addTenant(string: String) = apply { body.addTenant(string) }
 
-        /** A tenant to be set in the system */
+        /**
+         * Alias for calling [addTenant] with `InlineTenantRequest.ofTenantRequest(tenantRequest)`.
+         */
         fun addTenant(tenantRequest: TenantRequest) = apply { body.addTenant(tenantRequest) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {

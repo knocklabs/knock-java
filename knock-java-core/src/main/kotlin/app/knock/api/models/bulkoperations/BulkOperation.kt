@@ -68,80 +68,207 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun _typename(): String = _typename.getRequired("__typename")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun estimatedTotalRows(): Long = estimatedTotalRows.getRequired("estimated_total_rows")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun insertedAt(): OffsetDateTime = insertedAt.getRequired("inserted_at")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun name(): String = name.getRequired("name")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun processedRows(): Long = processedRows.getRequired("processed_rows")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun status(): Status = status.getRequired("status")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun successCount(): Long = successCount.getRequired("success_count")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun completedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(completedAt.getNullable("completed_at"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun errorCount(): Optional<Long> = Optional.ofNullable(errorCount.getNullable("error_count"))
 
-    /** A list of items that failed to be processed */
+    /**
+     * A list of items that failed to be processed
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun errorItems(): Optional<List<ErrorItem>> =
         Optional.ofNullable(errorItems.getNullable("error_items"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun failedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(failedAt.getNullable("failed_at"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun startedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(startedAt.getNullable("started_at"))
 
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+    /**
+     * Returns the raw JSON value of [_typename].
+     *
+     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
+    /**
+     * Returns the raw JSON value of [estimatedTotalRows].
+     *
+     * Unlike [estimatedTotalRows], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
     @JsonProperty("estimated_total_rows")
     @ExcludeMissing
     fun _estimatedTotalRows(): JsonField<Long> = estimatedTotalRows
 
+    /**
+     * Returns the raw JSON value of [insertedAt].
+     *
+     * Unlike [insertedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("inserted_at")
     @ExcludeMissing
     fun _insertedAt(): JsonField<OffsetDateTime> = insertedAt
 
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
+    /**
+     * Returns the raw JSON value of [processedRows].
+     *
+     * Unlike [processedRows], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("processed_rows")
     @ExcludeMissing
     fun _processedRows(): JsonField<Long> = processedRows
 
+    /**
+     * Returns the raw JSON value of [status].
+     *
+     * Unlike [status], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<Status> = status
 
+    /**
+     * Returns the raw JSON value of [successCount].
+     *
+     * Unlike [successCount], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("success_count")
     @ExcludeMissing
     fun _successCount(): JsonField<Long> = successCount
 
+    /**
+     * Returns the raw JSON value of [updatedAt].
+     *
+     * Unlike [updatedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("updated_at")
     @ExcludeMissing
     fun _updatedAt(): JsonField<OffsetDateTime> = updatedAt
 
+    /**
+     * Returns the raw JSON value of [completedAt].
+     *
+     * Unlike [completedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("completed_at")
     @ExcludeMissing
     fun _completedAt(): JsonField<OffsetDateTime> = completedAt
 
+    /**
+     * Returns the raw JSON value of [errorCount].
+     *
+     * Unlike [errorCount], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("error_count") @ExcludeMissing fun _errorCount(): JsonField<Long> = errorCount
 
-    /** A list of items that failed to be processed */
+    /**
+     * Returns the raw JSON value of [errorItems].
+     *
+     * Unlike [errorItems], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("error_items")
     @ExcludeMissing
     fun _errorItems(): JsonField<List<ErrorItem>> = errorItems
 
+    /**
+     * Returns the raw JSON value of [failedAt].
+     *
+     * Unlike [failedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("failed_at") @ExcludeMissing fun _failedAt(): JsonField<OffsetDateTime> = failedAt
 
+    /**
+     * Returns the raw JSON value of [startedAt].
+     *
+     * Unlike [startedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("started_at")
     @ExcludeMissing
     fun _startedAt(): JsonField<OffsetDateTime> = startedAt
@@ -237,70 +364,154 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+        /**
+         * Sets [Builder._typename] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder._typename] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         fun estimatedTotalRows(estimatedTotalRows: Long) =
             estimatedTotalRows(JsonField.of(estimatedTotalRows))
 
+        /**
+         * Sets [Builder.estimatedTotalRows] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.estimatedTotalRows] with a well-typed [Long] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun estimatedTotalRows(estimatedTotalRows: JsonField<Long>) = apply {
             this.estimatedTotalRows = estimatedTotalRows
         }
 
         fun insertedAt(insertedAt: OffsetDateTime) = insertedAt(JsonField.of(insertedAt))
 
+        /**
+         * Sets [Builder.insertedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.insertedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun insertedAt(insertedAt: JsonField<OffsetDateTime>) = apply {
             this.insertedAt = insertedAt
         }
 
         fun name(name: String) = name(JsonField.of(name))
 
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun processedRows(processedRows: Long) = processedRows(JsonField.of(processedRows))
 
+        /**
+         * Sets [Builder.processedRows] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.processedRows] with a well-typed [Long] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun processedRows(processedRows: JsonField<Long>) = apply {
             this.processedRows = processedRows
         }
 
         fun status(status: Status) = status(JsonField.of(status))
 
+        /**
+         * Sets [Builder.status] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.status] with a well-typed [Status] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun status(status: JsonField<Status>) = apply { this.status = status }
 
         fun successCount(successCount: Long) = successCount(JsonField.of(successCount))
 
+        /**
+         * Sets [Builder.successCount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.successCount] with a well-typed [Long] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun successCount(successCount: JsonField<Long>) = apply { this.successCount = successCount }
 
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
+        /**
+         * Sets [Builder.updatedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.updatedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
         fun completedAt(completedAt: OffsetDateTime?) =
             completedAt(JsonField.ofNullable(completedAt))
 
+        /** Alias for calling [Builder.completedAt] with `completedAt.orElse(null)`. */
         fun completedAt(completedAt: Optional<OffsetDateTime>) =
             completedAt(completedAt.getOrNull())
 
+        /**
+         * Sets [Builder.completedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.completedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun completedAt(completedAt: JsonField<OffsetDateTime>) = apply {
             this.completedAt = completedAt
         }
 
         fun errorCount(errorCount: Long) = errorCount(JsonField.of(errorCount))
 
+        /**
+         * Sets [Builder.errorCount] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.errorCount] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun errorCount(errorCount: JsonField<Long>) = apply { this.errorCount = errorCount }
 
         /** A list of items that failed to be processed */
         fun errorItems(errorItems: List<ErrorItem>) = errorItems(JsonField.of(errorItems))
 
-        /** A list of items that failed to be processed */
+        /**
+         * Sets [Builder.errorItems] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.errorItems] with a well-typed `List<ErrorItem>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun errorItems(errorItems: JsonField<List<ErrorItem>>) = apply {
             this.errorItems = errorItems.map { it.toMutableList() }
         }
 
-        /** A list of items that failed to be processed */
+        /**
+         * Adds a single [ErrorItem] to [errorItems].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addErrorItem(errorItem: ErrorItem) = apply {
             errorItems =
                 (errorItems ?: JsonField.of(mutableListOf())).also {
@@ -310,14 +521,30 @@ private constructor(
 
         fun failedAt(failedAt: OffsetDateTime?) = failedAt(JsonField.ofNullable(failedAt))
 
+        /** Alias for calling [Builder.failedAt] with `failedAt.orElse(null)`. */
         fun failedAt(failedAt: Optional<OffsetDateTime>) = failedAt(failedAt.getOrNull())
 
+        /**
+         * Sets [Builder.failedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.failedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun failedAt(failedAt: JsonField<OffsetDateTime>) = apply { this.failedAt = failedAt }
 
         fun startedAt(startedAt: OffsetDateTime?) = startedAt(JsonField.ofNullable(startedAt))
 
+        /** Alias for calling [Builder.startedAt] with `startedAt.orElse(null)`. */
         fun startedAt(startedAt: Optional<OffsetDateTime>) = startedAt(startedAt.getOrNull())
 
+        /**
+         * Sets [Builder.startedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.startedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun startedAt(startedAt: JsonField<OffsetDateTime>) = apply { this.startedAt = startedAt }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -480,13 +707,31 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun id(): String = id.getRequired("id")
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun collection(): Optional<String> =
             Optional.ofNullable(collection.getNullable("collection"))
 
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+        /**
+         * Returns the raw JSON value of [collection].
+         *
+         * Unlike [collection], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("collection")
         @ExcludeMissing
         fun _collection(): JsonField<String> = collection
@@ -538,12 +783,27 @@ private constructor(
 
             fun id(id: String) = id(JsonField.of(id))
 
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
             fun collection(collection: String?) = collection(JsonField.ofNullable(collection))
 
+            /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
             fun collection(collection: Optional<String>) = collection(collection.getOrNull())
 
+            /**
+             * Sets [Builder.collection] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.collection] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun collection(collection: JsonField<String>) = apply { this.collection = collection }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

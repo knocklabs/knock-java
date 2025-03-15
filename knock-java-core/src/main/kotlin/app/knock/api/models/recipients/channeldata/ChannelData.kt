@@ -43,18 +43,45 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun _typename(): String = _typename.getRequired("__typename")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun channelId(): String = channelId.getRequired("channel_id")
 
-    /** Channel data for push providers */
+    /**
+     * Channel data for push providers
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun data(): Data = data.getRequired("data")
 
+    /**
+     * Returns the raw JSON value of [_typename].
+     *
+     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
+    /**
+     * Returns the raw JSON value of [channelId].
+     *
+     * Unlike [channelId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("channel_id") @ExcludeMissing fun _channelId(): JsonField<String> = channelId
 
-    /** Channel data for push providers */
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     @JsonAnyGetter
@@ -109,31 +136,50 @@ private constructor(
 
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+        /**
+         * Sets [Builder._typename] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder._typename] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         fun channelId(channelId: String) = channelId(JsonField.of(channelId))
 
+        /**
+         * Sets [Builder.channelId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.channelId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun channelId(channelId: JsonField<String>) = apply { this.channelId = channelId }
 
         /** Channel data for push providers */
         fun data(data: Data) = data(JsonField.of(data))
 
-        /** Channel data for push providers */
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
-        /** Channel data for push providers */
+        /** Alias for calling [data] with `Data.ofPushChannel(pushChannel)`. */
         fun data(pushChannel: PushChannelData) = data(Data.ofPushChannel(pushChannel))
 
-        /** Slack channel data */
+        /** Alias for calling [data] with `Data.ofSlackChannel(slackChannel)`. */
         fun data(slackChannel: SlackChannelData) = data(Data.ofSlackChannel(slackChannel))
 
-        /** Microsoft Teams channel data */
+        /** Alias for calling [data] with `Data.ofMsTeamsChannel(msTeamsChannel)`. */
         fun data(msTeamsChannel: MsTeamsChannelData) = data(Data.ofMsTeamsChannel(msTeamsChannel))
 
-        /** Discord channel data */
+        /** Alias for calling [data] with `Data.ofDiscordChannel(discordChannel)`. */
         fun data(discordChannel: DiscordChannelData) = data(Data.ofDiscordChannel(discordChannel))
 
-        /** OneSignal channel data */
+        /** Alias for calling [data] with `Data.ofOneSignalChannel(oneSignalChannel)`. */
         fun data(oneSignalChannel: OneSignalChannelData) =
             data(Data.ofOneSignalChannel(oneSignalChannel))
 

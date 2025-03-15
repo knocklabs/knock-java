@@ -14,6 +14,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.objects.InlineObjectRequest
 import app.knock.api.models.recipients.RecipientRequest
 import app.knock.api.models.tenants.InlineTenantRequest
@@ -46,56 +47,80 @@ private constructor(
      * Specifies a recipient in a request. This can either be a user identifier (string), an inline
      * user request (object), or an inline object request, which is determined by the presence of a
      * `collection` property.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun actor(): Optional<RecipientRequest> = body.actor()
 
     /**
      * An optional key that is used in the workflow cancellation endpoint to target a cancellation
      * of any workflow runs associated with this trigger.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun cancellationKey(): Optional<String> = body.cancellationKey()
 
     /**
      * An optional map of data to be used in the workflow. This data will be available to the
      * workflow as a map in the `data` field.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun data(): Optional<Data> = body.data()
 
     /**
      * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
      * trigger.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun recipients(): Optional<List<RecipientRequest>> = body.recipients()
 
-    /** An inline tenant request */
+    /**
+     * An inline tenant request
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun tenant(): Optional<InlineTenantRequest> = body.tenant()
 
     /**
-     * Specifies a recipient in a request. This can either be a user identifier (string), an inline
-     * user request (object), or an inline object request, which is determined by the presence of a
-     * `collection` property.
+     * Returns the raw JSON value of [actor].
+     *
+     * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _actor(): JsonField<RecipientRequest> = body._actor()
 
     /**
-     * An optional key that is used in the workflow cancellation endpoint to target a cancellation
-     * of any workflow runs associated with this trigger.
+     * Returns the raw JSON value of [cancellationKey].
+     *
+     * Unlike [cancellationKey], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _cancellationKey(): JsonField<String> = body._cancellationKey()
 
     /**
-     * An optional map of data to be used in the workflow. This data will be available to the
-     * workflow as a map in the `data` field.
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _data(): JsonField<Data> = body._data()
 
     /**
-     * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-     * trigger.
+     * Returns the raw JSON value of [recipients].
+     *
+     * Unlike [recipients], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _recipients(): JsonField<List<RecipientRequest>> = body._recipients()
 
-    /** An inline tenant request */
+    /**
+     * Returns the raw JSON value of [tenant].
+     *
+     * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _tenant(): JsonField<InlineTenantRequest> = body._tenant()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -143,12 +168,18 @@ private constructor(
          * Specifies a recipient in a request. This can either be a user identifier (string), an
          * inline user request (object), or an inline object request, which is determined by the
          * presence of a `collection` property.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun actor(): Optional<RecipientRequest> = Optional.ofNullable(actor.getNullable("actor"))
 
         /**
          * An optional key that is used in the workflow cancellation endpoint to target a
          * cancellation of any workflow runs associated with this trigger.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun cancellationKey(): Optional<String> =
             Optional.ofNullable(cancellationKey.getNullable("cancellation_key"))
@@ -156,50 +187,69 @@ private constructor(
         /**
          * An optional map of data to be used in the workflow. This data will be available to the
          * workflow as a map in the `data` field.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun data(): Optional<Data> = Optional.ofNullable(data.getNullable("data"))
 
         /**
          * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
          * trigger.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
         fun recipients(): Optional<List<RecipientRequest>> =
             Optional.ofNullable(recipients.getNullable("recipients"))
 
-        /** An inline tenant request */
+        /**
+         * An inline tenant request
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun tenant(): Optional<InlineTenantRequest> =
             Optional.ofNullable(tenant.getNullable("tenant"))
 
         /**
-         * Specifies a recipient in a request. This can either be a user identifier (string), an
-         * inline user request (object), or an inline object request, which is determined by the
-         * presence of a `collection` property.
+         * Returns the raw JSON value of [actor].
+         *
+         * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("actor") @ExcludeMissing fun _actor(): JsonField<RecipientRequest> = actor
 
         /**
-         * An optional key that is used in the workflow cancellation endpoint to target a
-         * cancellation of any workflow runs associated with this trigger.
+         * Returns the raw JSON value of [cancellationKey].
+         *
+         * Unlike [cancellationKey], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("cancellation_key")
         @ExcludeMissing
         fun _cancellationKey(): JsonField<String> = cancellationKey
 
         /**
-         * An optional map of data to be used in the workflow. This data will be available to the
-         * workflow as a map in the `data` field.
+         * Returns the raw JSON value of [data].
+         *
+         * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
         /**
-         * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-         * trigger.
+         * Returns the raw JSON value of [recipients].
+         *
+         * Unlike [recipients], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("recipients")
         @ExcludeMissing
         fun _recipients(): JsonField<List<RecipientRequest>> = recipients
 
-        /** An inline tenant request */
+        /**
+         * Returns the raw JSON value of [tenant].
+         *
+         * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("tenant")
         @ExcludeMissing
         fun _tenant(): JsonField<InlineTenantRequest> = tenant
@@ -258,33 +308,29 @@ private constructor(
              */
             fun actor(actor: RecipientRequest?) = actor(JsonField.ofNullable(actor))
 
-            /**
-             * Specifies a recipient in a request. This can either be a user identifier (string), an
-             * inline user request (object), or an inline object request, which is determined by the
-             * presence of a `collection` property.
-             */
+            /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
             fun actor(actor: Optional<RecipientRequest>) = actor(actor.getOrNull())
 
             /**
-             * Specifies a recipient in a request. This can either be a user identifier (string), an
-             * inline user request (object), or an inline object request, which is determined by the
-             * presence of a `collection` property.
+             * Sets [Builder.actor] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.actor] with a well-typed [RecipientRequest] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun actor(actor: JsonField<RecipientRequest>) = apply { this.actor = actor }
 
-            /** A user identifier */
+            /** Alias for calling [actor] with `RecipientRequest.ofString(string)`. */
             fun actor(string: String) = actor(RecipientRequest.ofString(string))
 
             /**
-             * A set of parameters to inline-identify a user with. Inline identifying the user will
-             * ensure that the user is available before the request is executed in Knock. It will
-             * perform an upsert against the user you're supplying, replacing any properties
-             * specified.
+             * Alias for calling [actor] with
+             * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
              */
             fun actor(inlineIdentifyUser: InlineIdentifyUserRequest) =
                 actor(RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser))
 
-            /** Inline identifies a custom object belonging to a collection */
+            /** Alias for calling [actor] with `RecipientRequest.ofInlineObject(inlineObject)`. */
             fun actor(inlineObject: InlineObjectRequest) =
                 actor(RecipientRequest.ofInlineObject(inlineObject))
 
@@ -295,16 +341,16 @@ private constructor(
             fun cancellationKey(cancellationKey: String?) =
                 cancellationKey(JsonField.ofNullable(cancellationKey))
 
-            /**
-             * An optional key that is used in the workflow cancellation endpoint to target a
-             * cancellation of any workflow runs associated with this trigger.
-             */
+            /** Alias for calling [Builder.cancellationKey] with `cancellationKey.orElse(null)`. */
             fun cancellationKey(cancellationKey: Optional<String>) =
                 cancellationKey(cancellationKey.getOrNull())
 
             /**
-             * An optional key that is used in the workflow cancellation endpoint to target a
-             * cancellation of any workflow runs associated with this trigger.
+             * Sets [Builder.cancellationKey] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cancellationKey] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun cancellationKey(cancellationKey: JsonField<String>) = apply {
                 this.cancellationKey = cancellationKey
@@ -316,15 +362,15 @@ private constructor(
              */
             fun data(data: Data?) = data(JsonField.ofNullable(data))
 
-            /**
-             * An optional map of data to be used in the workflow. This data will be available to
-             * the workflow as a map in the `data` field.
-             */
+            /** Alias for calling [Builder.data] with `data.orElse(null)`. */
             fun data(data: Optional<Data>) = data(data.getOrNull())
 
             /**
-             * An optional map of data to be used in the workflow. This data will be available to
-             * the workflow as a map in the `data` field.
+             * Sets [Builder.data] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
             fun data(data: JsonField<Data>) = apply { this.data = data }
 
@@ -336,16 +382,20 @@ private constructor(
                 recipients(JsonField.of(recipients))
 
             /**
-             * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-             * trigger.
+             * Sets [Builder.recipients] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.recipients] with a well-typed
+             * `List<RecipientRequest>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
              */
             fun recipients(recipients: JsonField<List<RecipientRequest>>) = apply {
                 this.recipients = recipients.map { it.toMutableList() }
             }
 
             /**
-             * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-             * trigger.
+             * Adds a single [RecipientRequest] to [recipients].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
              */
             fun addRecipient(recipient: RecipientRequest) = apply {
                 recipients =
@@ -354,35 +404,44 @@ private constructor(
                     }
             }
 
-            /** A user identifier */
+            /** Alias for calling [addRecipient] with `RecipientRequest.ofString(string)`. */
             fun addRecipient(string: String) = addRecipient(RecipientRequest.ofString(string))
 
             /**
-             * A set of parameters to inline-identify a user with. Inline identifying the user will
-             * ensure that the user is available before the request is executed in Knock. It will
-             * perform an upsert against the user you're supplying, replacing any properties
-             * specified.
+             * Alias for calling [addRecipient] with
+             * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
              */
             fun addRecipient(inlineIdentifyUser: InlineIdentifyUserRequest) =
                 addRecipient(RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser))
 
-            /** Inline identifies a custom object belonging to a collection */
+            /**
+             * Alias for calling [addRecipient] with
+             * `RecipientRequest.ofInlineObject(inlineObject)`.
+             */
             fun addRecipient(inlineObject: InlineObjectRequest) =
                 addRecipient(RecipientRequest.ofInlineObject(inlineObject))
 
             /** An inline tenant request */
             fun tenant(tenant: InlineTenantRequest?) = tenant(JsonField.ofNullable(tenant))
 
-            /** An inline tenant request */
+            /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
             fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.getOrNull())
 
-            /** An inline tenant request */
+            /**
+             * Sets [Builder.tenant] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.tenant] with a well-typed [InlineTenantRequest]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
             fun tenant(tenant: JsonField<InlineTenantRequest>) = apply { this.tenant = tenant }
 
-            /** A tenant identifier */
+            /** Alias for calling [tenant] with `InlineTenantRequest.ofString(string)`. */
             fun tenant(string: String) = tenant(InlineTenantRequest.ofString(string))
 
-            /** A tenant to be set in the system */
+            /**
+             * Alias for calling [tenant] with `InlineTenantRequest.ofTenantRequest(tenantRequest)`.
+             */
             fun tenant(tenantRequest: TenantRequest) =
                 tenant(InlineTenantRequest.ofTenantRequest(tenantRequest))
 
@@ -475,33 +534,30 @@ private constructor(
          */
         fun actor(actor: RecipientRequest?) = apply { body.actor(actor) }
 
-        /**
-         * Specifies a recipient in a request. This can either be a user identifier (string), an
-         * inline user request (object), or an inline object request, which is determined by the
-         * presence of a `collection` property.
-         */
+        /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
         fun actor(actor: Optional<RecipientRequest>) = actor(actor.getOrNull())
 
         /**
-         * Specifies a recipient in a request. This can either be a user identifier (string), an
-         * inline user request (object), or an inline object request, which is determined by the
-         * presence of a `collection` property.
+         * Sets [Builder.actor] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.actor] with a well-typed [RecipientRequest] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun actor(actor: JsonField<RecipientRequest>) = apply { body.actor(actor) }
 
-        /** A user identifier */
+        /** Alias for calling [actor] with `RecipientRequest.ofString(string)`. */
         fun actor(string: String) = apply { body.actor(string) }
 
         /**
-         * A set of parameters to inline-identify a user with. Inline identifying the user will
-         * ensure that the user is available before the request is executed in Knock. It will
-         * perform an upsert against the user you're supplying, replacing any properties specified.
+         * Alias for calling [actor] with
+         * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
          */
         fun actor(inlineIdentifyUser: InlineIdentifyUserRequest) = apply {
             body.actor(inlineIdentifyUser)
         }
 
-        /** Inline identifies a custom object belonging to a collection */
+        /** Alias for calling [actor] with `RecipientRequest.ofInlineObject(inlineObject)`. */
         fun actor(inlineObject: InlineObjectRequest) = apply { body.actor(inlineObject) }
 
         /**
@@ -512,16 +568,16 @@ private constructor(
             body.cancellationKey(cancellationKey)
         }
 
-        /**
-         * An optional key that is used in the workflow cancellation endpoint to target a
-         * cancellation of any workflow runs associated with this trigger.
-         */
+        /** Alias for calling [Builder.cancellationKey] with `cancellationKey.orElse(null)`. */
         fun cancellationKey(cancellationKey: Optional<String>) =
             cancellationKey(cancellationKey.getOrNull())
 
         /**
-         * An optional key that is used in the workflow cancellation endpoint to target a
-         * cancellation of any workflow runs associated with this trigger.
+         * Sets [Builder.cancellationKey] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cancellationKey] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun cancellationKey(cancellationKey: JsonField<String>) = apply {
             body.cancellationKey(cancellationKey)
@@ -533,15 +589,14 @@ private constructor(
          */
         fun data(data: Data?) = apply { body.data(data) }
 
-        /**
-         * An optional map of data to be used in the workflow. This data will be available to the
-         * workflow as a map in the `data` field.
-         */
+        /** Alias for calling [Builder.data] with `data.orElse(null)`. */
         fun data(data: Optional<Data>) = data(data.getOrNull())
 
         /**
-         * An optional map of data to be used in the workflow. This data will be available to the
-         * workflow as a map in the `data` field.
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun data(data: JsonField<Data>) = apply { body.data(data) }
 
@@ -552,32 +607,37 @@ private constructor(
         fun recipients(recipients: List<RecipientRequest>) = apply { body.recipients(recipients) }
 
         /**
-         * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-         * trigger.
+         * Sets [Builder.recipients] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.recipients] with a well-typed `List<RecipientRequest>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
          */
         fun recipients(recipients: JsonField<List<RecipientRequest>>) = apply {
             body.recipients(recipients)
         }
 
         /**
-         * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-         * trigger.
+         * Adds a single [RecipientRequest] to [recipients].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addRecipient(recipient: RecipientRequest) = apply { body.addRecipient(recipient) }
 
-        /** A user identifier */
+        /** Alias for calling [addRecipient] with `RecipientRequest.ofString(string)`. */
         fun addRecipient(string: String) = apply { body.addRecipient(string) }
 
         /**
-         * A set of parameters to inline-identify a user with. Inline identifying the user will
-         * ensure that the user is available before the request is executed in Knock. It will
-         * perform an upsert against the user you're supplying, replacing any properties specified.
+         * Alias for calling [addRecipient] with
+         * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
          */
         fun addRecipient(inlineIdentifyUser: InlineIdentifyUserRequest) = apply {
             body.addRecipient(inlineIdentifyUser)
         }
 
-        /** Inline identifies a custom object belonging to a collection */
+        /**
+         * Alias for calling [addRecipient] with `RecipientRequest.ofInlineObject(inlineObject)`.
+         */
         fun addRecipient(inlineObject: InlineObjectRequest) = apply {
             body.addRecipient(inlineObject)
         }
@@ -585,16 +645,22 @@ private constructor(
         /** An inline tenant request */
         fun tenant(tenant: InlineTenantRequest?) = apply { body.tenant(tenant) }
 
-        /** An inline tenant request */
+        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.getOrNull())
 
-        /** An inline tenant request */
+        /**
+         * Sets [Builder.tenant] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.tenant] with a well-typed [InlineTenantRequest] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun tenant(tenant: JsonField<InlineTenantRequest>) = apply { body.tenant(tenant) }
 
-        /** A tenant identifier */
+        /** Alias for calling [tenant] with `InlineTenantRequest.ofString(string)`. */
         fun tenant(string: String) = apply { body.tenant(string) }
 
-        /** A tenant to be set in the system */
+        /** Alias for calling [tenant] with `InlineTenantRequest.ofTenantRequest(tenantRequest)`. */
         fun tenant(tenantRequest: TenantRequest) = apply { body.tenant(tenantRequest) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {

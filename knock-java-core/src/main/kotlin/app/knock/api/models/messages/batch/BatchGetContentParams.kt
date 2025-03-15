@@ -69,7 +69,11 @@ private constructor(
             this.messageIds = messageIds.toMutableList()
         }
 
-        /** The IDs of the messages to fetch contents of */
+        /**
+         * Adds a single [String] to [messageIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addMessageId(messageId: String) = apply {
             messageIds = (messageIds ?: mutableListOf()).apply { add(messageId) }
         }

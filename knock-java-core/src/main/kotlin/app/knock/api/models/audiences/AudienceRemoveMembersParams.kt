@@ -14,6 +14,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.users.InlineIdentifyUserRequest
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -34,8 +35,17 @@ private constructor(
 
     fun key(): String = key
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun members(): List<Member> = body.members()
 
+    /**
+     * Returns the raw JSON value of [members].
+     *
+     * Unlike [members], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _members(): JsonField<List<Member>> = body._members()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -69,8 +79,17 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun members(): List<Member> = members.getRequired("members")
 
+        /**
+         * Returns the raw JSON value of [members].
+         *
+         * Unlike [members], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("members") @ExcludeMissing fun _members(): JsonField<List<Member>> = members
 
         @JsonAnyGetter
@@ -117,10 +136,22 @@ private constructor(
 
             fun members(members: List<Member>) = members(JsonField.of(members))
 
+            /**
+             * Sets [Builder.members] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.members] with a well-typed `List<Member>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun members(members: JsonField<List<Member>>) = apply {
                 this.members = members.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [Member] to [members].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addMember(member: Member) = apply {
                 members =
                     (members ?: JsonField.of(mutableListOf())).also {
@@ -209,8 +240,20 @@ private constructor(
 
         fun members(members: List<Member>) = apply { body.members(members) }
 
+        /**
+         * Sets [Builder.members] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.members] with a well-typed `List<Member>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun members(members: JsonField<List<Member>>) = apply { body.members(members) }
 
+        /**
+         * Adds a single [Member] to [members].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addMember(member: Member) = apply { body.addMember(member) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
@@ -358,20 +401,32 @@ private constructor(
          * A set of parameters to inline-identify a user with. Inline identifying the user will
          * ensure that the user is available before the request is executed in Knock. It will
          * perform an upsert against the user you're supplying, replacing any properties specified.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun user(): InlineIdentifyUserRequest = user.getRequired("user")
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun tenant(): Optional<String> = Optional.ofNullable(tenant.getNullable("tenant"))
 
         /**
-         * A set of parameters to inline-identify a user with. Inline identifying the user will
-         * ensure that the user is available before the request is executed in Knock. It will
-         * perform an upsert against the user you're supplying, replacing any properties specified.
+         * Returns the raw JSON value of [user].
+         *
+         * Unlike [user], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("user")
         @ExcludeMissing
         fun _user(): JsonField<InlineIdentifyUserRequest> = user
 
+        /**
+         * Returns the raw JSON value of [tenant].
+         *
+         * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("tenant") @ExcludeMissing fun _tenant(): JsonField<String> = tenant
 
         @JsonAnyGetter
@@ -428,17 +483,26 @@ private constructor(
             fun user(user: InlineIdentifyUserRequest) = user(JsonField.of(user))
 
             /**
-             * A set of parameters to inline-identify a user with. Inline identifying the user will
-             * ensure that the user is available before the request is executed in Knock. It will
-             * perform an upsert against the user you're supplying, replacing any properties
-             * specified.
+             * Sets [Builder.user] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.user] with a well-typed [InlineIdentifyUserRequest]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
             fun user(user: JsonField<InlineIdentifyUserRequest>) = apply { this.user = user }
 
             fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
 
+            /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
             fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
+            /**
+             * Sets [Builder.tenant] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.tenant] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun tenant(tenant: JsonField<String>) = apply { this.tenant = tenant }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

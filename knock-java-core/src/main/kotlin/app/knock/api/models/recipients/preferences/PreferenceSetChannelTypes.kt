@@ -46,72 +46,96 @@ private constructor(
     /**
      * A set of settings for a channel type. Currently, this can only be a list of conditions to
      * apply.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun chat(): Optional<Chat> = Optional.ofNullable(chat.getNullable("chat"))
 
     /**
      * A set of settings for a channel type. Currently, this can only be a list of conditions to
      * apply.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun email(): Optional<Email> = Optional.ofNullable(email.getNullable("email"))
 
     /**
      * A set of settings for a channel type. Currently, this can only be a list of conditions to
      * apply.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun http(): Optional<Http> = Optional.ofNullable(http.getNullable("http"))
 
     /**
      * A set of settings for a channel type. Currently, this can only be a list of conditions to
      * apply.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun inAppFeed(): Optional<InAppFeed> = Optional.ofNullable(inAppFeed.getNullable("in_app_feed"))
 
     /**
      * A set of settings for a channel type. Currently, this can only be a list of conditions to
      * apply.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun push(): Optional<Push> = Optional.ofNullable(push.getNullable("push"))
 
     /**
      * A set of settings for a channel type. Currently, this can only be a list of conditions to
      * apply.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun sms(): Optional<Sms> = Optional.ofNullable(sms.getNullable("sms"))
 
     /**
-     * A set of settings for a channel type. Currently, this can only be a list of conditions to
-     * apply.
+     * Returns the raw JSON value of [chat].
+     *
+     * Unlike [chat], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("chat") @ExcludeMissing fun _chat(): JsonField<Chat> = chat
 
     /**
-     * A set of settings for a channel type. Currently, this can only be a list of conditions to
-     * apply.
+     * Returns the raw JSON value of [email].
+     *
+     * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<Email> = email
 
     /**
-     * A set of settings for a channel type. Currently, this can only be a list of conditions to
-     * apply.
+     * Returns the raw JSON value of [http].
+     *
+     * Unlike [http], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("http") @ExcludeMissing fun _http(): JsonField<Http> = http
 
     /**
-     * A set of settings for a channel type. Currently, this can only be a list of conditions to
-     * apply.
+     * Returns the raw JSON value of [inAppFeed].
+     *
+     * Unlike [inAppFeed], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("in_app_feed") @ExcludeMissing fun _inAppFeed(): JsonField<InAppFeed> = inAppFeed
 
     /**
-     * A set of settings for a channel type. Currently, this can only be a list of conditions to
-     * apply.
+     * Returns the raw JSON value of [push].
+     *
+     * Unlike [push], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("push") @ExcludeMissing fun _push(): JsonField<Push> = push
 
     /**
-     * A set of settings for a channel type. Currently, this can only be a list of conditions to
-     * apply.
+     * Returns the raw JSON value of [sms].
+     *
+     * Unlike [sms], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("sms") @ExcludeMissing fun _sms(): JsonField<Sms> = sms
 
@@ -174,20 +198,19 @@ private constructor(
         fun chat(chat: Chat) = chat(JsonField.of(chat))
 
         /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
+         * Sets [Builder.chat] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.chat] with a well-typed [Chat] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun chat(chat: JsonField<Chat>) = apply { this.chat = chat }
 
-        /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
-         */
+        /** Alias for calling [chat] with `Chat.ofBool(bool)`. */
         fun chat(bool: Boolean) = chat(Chat.ofBool(bool))
 
         /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
+         * Alias for calling [chat] with
+         * `Chat.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)`.
          */
         fun chat(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
             chat(Chat.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
@@ -199,20 +222,19 @@ private constructor(
         fun email(email: Email) = email(JsonField.of(email))
 
         /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
+         * Sets [Builder.email] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.email] with a well-typed [Email] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun email(email: JsonField<Email>) = apply { this.email = email }
 
-        /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
-         */
+        /** Alias for calling [email] with `Email.ofBool(bool)`. */
         fun email(bool: Boolean) = email(Email.ofBool(bool))
 
         /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
+         * Alias for calling [email] with
+         * `Email.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)`.
          */
         fun email(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
             email(Email.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
@@ -224,20 +246,19 @@ private constructor(
         fun http(http: Http) = http(JsonField.of(http))
 
         /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
+         * Sets [Builder.http] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.http] with a well-typed [Http] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun http(http: JsonField<Http>) = apply { this.http = http }
 
-        /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
-         */
+        /** Alias for calling [http] with `Http.ofBool(bool)`. */
         fun http(bool: Boolean) = http(Http.ofBool(bool))
 
         /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
+         * Alias for calling [http] with
+         * `Http.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)`.
          */
         fun http(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
             http(Http.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
@@ -249,20 +270,20 @@ private constructor(
         fun inAppFeed(inAppFeed: InAppFeed) = inAppFeed(JsonField.of(inAppFeed))
 
         /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
+         * Sets [Builder.inAppFeed] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.inAppFeed] with a well-typed [InAppFeed] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun inAppFeed(inAppFeed: JsonField<InAppFeed>) = apply { this.inAppFeed = inAppFeed }
 
-        /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
-         */
+        /** Alias for calling [inAppFeed] with `InAppFeed.ofBool(bool)`. */
         fun inAppFeed(bool: Boolean) = inAppFeed(InAppFeed.ofBool(bool))
 
         /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
+         * Alias for calling [inAppFeed] with
+         * `InAppFeed.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)`.
          */
         fun inAppFeed(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
             inAppFeed(InAppFeed.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
@@ -274,20 +295,19 @@ private constructor(
         fun push(push: Push) = push(JsonField.of(push))
 
         /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
+         * Sets [Builder.push] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.push] with a well-typed [Push] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun push(push: JsonField<Push>) = apply { this.push = push }
 
-        /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
-         */
+        /** Alias for calling [push] with `Push.ofBool(bool)`. */
         fun push(bool: Boolean) = push(Push.ofBool(bool))
 
         /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
+         * Alias for calling [push] with
+         * `Push.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)`.
          */
         fun push(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
             push(Push.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
@@ -299,20 +319,19 @@ private constructor(
         fun sms(sms: Sms) = sms(JsonField.of(sms))
 
         /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
+         * Sets [Builder.sms] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.sms] with a well-typed [Sms] value instead. This method
+         * is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun sms(sms: JsonField<Sms>) = apply { this.sms = sms }
 
-        /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
-         */
+        /** Alias for calling [sms] with `Sms.ofBool(bool)`. */
         fun sms(bool: Boolean) = sms(Sms.ofBool(bool))
 
         /**
-         * A set of settings for a channel type. Currently, this can only be a list of conditions to
-         * apply.
+         * Alias for calling [sms] with
+         * `Sms.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)`.
          */
         fun sms(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
             sms(Sms.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))

@@ -146,45 +146,53 @@ private constructor(
         /** The cursor to fetch entries after */
         fun after(after: String?) = apply { this.after = after }
 
-        /** The cursor to fetch entries after */
+        /** Alias for calling [Builder.after] with `after.orElse(null)`. */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
         /** The cursor to fetch entries before */
         fun before(before: String?) = apply { this.before = before }
 
-        /** The cursor to fetch entries before */
+        /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
         /** Mode of the request */
         fun mode(mode: Mode?) = apply { this.mode = mode }
 
-        /** Mode of the request */
+        /** Alias for calling [Builder.mode] with `mode.orElse(null)`. */
         fun mode(mode: Optional<Mode>) = mode(mode.getOrNull())
 
         /** Objects to filter by (only used if mode is `recipient`) */
         fun objects(objects: List<Object>?) = apply { this.objects = objects?.toMutableList() }
 
-        /** Objects to filter by (only used if mode is `recipient`) */
+        /** Alias for calling [Builder.objects] with `objects.orElse(null)`. */
         fun objects(objects: Optional<List<Object>>) = objects(objects.getOrNull())
 
-        /** Objects to filter by (only used if mode is `recipient`) */
+        /**
+         * Adds a single [Object] to [objects].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addObject(object_: Object) = apply {
             objects = (objects ?: mutableListOf()).apply { add(object_) }
         }
 
-        /** A user identifier */
+        /** Alias for calling [addObject] with `Object.ofString(string)`. */
         fun addObject(string: String) = addObject(Object.ofString(string))
 
-        /** An object reference to a recipient */
+        /** Alias for calling [addObject] with `Object.ofReference(reference)`. */
         fun addObject(reference: Object.ObjectReference) = addObject(Object.ofReference(reference))
 
         /** The page size to fetch */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
-        /** The page size to fetch */
+        /**
+         * Alias for [Builder.pageSize].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
-        /** The page size to fetch */
+        /** Alias for calling [Builder.pageSize] with `pageSize.orElse(null)`. */
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
         /** Recipients to filter by (only used if mode is `object`) */
@@ -192,18 +200,22 @@ private constructor(
             this.recipients = recipients?.toMutableList()
         }
 
-        /** Recipients to filter by (only used if mode is `object`) */
+        /** Alias for calling [Builder.recipients] with `recipients.orElse(null)`. */
         fun recipients(recipients: Optional<List<Recipient>>) = recipients(recipients.getOrNull())
 
-        /** Recipients to filter by (only used if mode is `object`) */
+        /**
+         * Adds a single [Recipient] to [recipients].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addRecipient(recipient: Recipient) = apply {
             recipients = (recipients ?: mutableListOf()).apply { add(recipient) }
         }
 
-        /** A user identifier */
+        /** Alias for calling [addRecipient] with `Recipient.ofString(string)`. */
         fun addRecipient(string: String) = addRecipient(Recipient.ofString(string))
 
-        /** An object reference to a recipient */
+        /** Alias for calling [addRecipient] with `Recipient.ofObjectReference(objectReference)`. */
         fun addRecipient(objectReference: Recipient.ObjectReference) =
             addRecipient(Recipient.ofObjectReference(objectReference))
 

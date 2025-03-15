@@ -11,6 +11,7 @@ import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.Condition
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -31,8 +32,17 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun conditions(): List<Condition> = conditions.getRequired("conditions")
 
+    /**
+     * Returns the raw JSON value of [conditions].
+     *
+     * Unlike [conditions], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("conditions")
     @ExcludeMissing
     fun _conditions(): JsonField<List<Condition>> = conditions
@@ -84,10 +94,22 @@ private constructor(
 
         fun conditions(conditions: List<Condition>) = conditions(JsonField.of(conditions))
 
+        /**
+         * Sets [Builder.conditions] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.conditions] with a well-typed `List<Condition>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun conditions(conditions: JsonField<List<Condition>>) = apply {
             this.conditions = conditions.map { it.toMutableList() }
         }
 
+        /**
+         * Adds a single [Condition] to [conditions].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addCondition(condition: Condition) = apply {
             conditions =
                 (conditions ?: JsonField.of(mutableListOf())).also {

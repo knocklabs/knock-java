@@ -14,6 +14,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.users.InlineIdentifyUserRequest
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -29,8 +30,17 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun users(): List<InlineIdentifyUserRequest> = body.users()
 
+    /**
+     * Returns the raw JSON value of [users].
+     *
+     * Unlike [users], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _users(): JsonField<List<InlineIdentifyUserRequest>> = body._users()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -57,8 +67,17 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun users(): List<InlineIdentifyUserRequest> = users.getRequired("users")
 
+        /**
+         * Returns the raw JSON value of [users].
+         *
+         * Unlike [users], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("users")
         @ExcludeMissing
         fun _users(): JsonField<List<InlineIdentifyUserRequest>> = users
@@ -107,10 +126,22 @@ private constructor(
 
             fun users(users: List<InlineIdentifyUserRequest>) = users(JsonField.of(users))
 
+            /**
+             * Sets [Builder.users] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.users] with a well-typed
+             * `List<InlineIdentifyUserRequest>` value instead. This method is primarily for setting
+             * the field to an undocumented or not yet supported value.
+             */
             fun users(users: JsonField<List<InlineIdentifyUserRequest>>) = apply {
                 this.users = users.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [InlineIdentifyUserRequest] to [users].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addUser(user: InlineIdentifyUserRequest) = apply {
                 users =
                     (users ?: JsonField.of(mutableListOf())).also {
@@ -193,8 +224,20 @@ private constructor(
 
         fun users(users: List<InlineIdentifyUserRequest>) = apply { body.users(users) }
 
+        /**
+         * Sets [Builder.users] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.users] with a well-typed
+         * `List<InlineIdentifyUserRequest>` value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
+         */
         fun users(users: JsonField<List<InlineIdentifyUserRequest>>) = apply { body.users(users) }
 
+        /**
+         * Adds a single [InlineIdentifyUserRequest] to [users].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addUser(user: InlineIdentifyUserRequest) = apply { body.addUser(user) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {

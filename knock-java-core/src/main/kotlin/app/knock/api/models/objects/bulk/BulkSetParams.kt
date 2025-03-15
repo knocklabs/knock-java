@@ -14,6 +14,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.objects.InlineObjectRequest
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -32,8 +33,17 @@ private constructor(
 
     fun collection(): String = collection
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun objects(): List<InlineObjectRequest> = body.objects()
 
+    /**
+     * Returns the raw JSON value of [objects].
+     *
+     * Unlike [objects], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _objects(): JsonField<List<InlineObjectRequest>> = body._objects()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -67,8 +77,17 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun objects(): List<InlineObjectRequest> = objects.getRequired("objects")
 
+        /**
+         * Returns the raw JSON value of [objects].
+         *
+         * Unlike [objects], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("objects")
         @ExcludeMissing
         fun _objects(): JsonField<List<InlineObjectRequest>> = objects
@@ -117,10 +136,22 @@ private constructor(
 
             fun objects(objects: List<InlineObjectRequest>) = objects(JsonField.of(objects))
 
+            /**
+             * Sets [Builder.objects] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.objects] with a well-typed
+             * `List<InlineObjectRequest>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
             fun objects(objects: JsonField<List<InlineObjectRequest>>) = apply {
                 this.objects = objects.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [InlineObjectRequest] to [objects].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addObject(object_: InlineObjectRequest) = apply {
                 objects =
                     (objects ?: JsonField.of(mutableListOf())).also {
@@ -209,8 +240,20 @@ private constructor(
 
         fun objects(objects: List<InlineObjectRequest>) = apply { body.objects(objects) }
 
+        /**
+         * Sets [Builder.objects] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.objects] with a well-typed `List<InlineObjectRequest>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
         fun objects(objects: JsonField<List<InlineObjectRequest>>) = apply { body.objects(objects) }
 
+        /**
+         * Adds a single [InlineObjectRequest] to [objects].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addObject(object_: InlineObjectRequest) = apply { body.addObject(object_) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {

@@ -10,6 +10,7 @@ import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
@@ -39,30 +40,66 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
-    /** Allows inline setting channel data for a recipient */
+    /**
+     * Allows inline setting channel data for a recipient
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun channelData(): Optional<InlineChannelDataRequest> =
         Optional.ofNullable(channelData.getNullable("channel_data"))
 
-    /** Inline set preferences for a recipient, where the key is the preference set name */
+    /**
+     * Inline set preferences for a recipient, where the key is the preference set name
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun preferences(): Optional<InlinePreferenceSetRequest> =
         Optional.ofNullable(preferences.getNullable("preferences"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun settings(): Optional<Settings> = Optional.ofNullable(settings.getNullable("settings"))
 
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-    /** Allows inline setting channel data for a recipient */
+    /**
+     * Returns the raw JSON value of [channelData].
+     *
+     * Unlike [channelData], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("channel_data")
     @ExcludeMissing
     fun _channelData(): JsonField<InlineChannelDataRequest> = channelData
 
-    /** Inline set preferences for a recipient, where the key is the preference set name */
+    /**
+     * Returns the raw JSON value of [preferences].
+     *
+     * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("preferences")
     @ExcludeMissing
     fun _preferences(): JsonField<InlinePreferenceSetRequest> = preferences
 
+    /**
+     * Returns the raw JSON value of [settings].
+     *
+     * Unlike [settings], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("settings") @ExcludeMissing fun _settings(): JsonField<Settings> = settings
 
     @JsonAnyGetter
@@ -118,17 +155,29 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         /** Allows inline setting channel data for a recipient */
         fun channelData(channelData: InlineChannelDataRequest?) =
             channelData(JsonField.ofNullable(channelData))
 
-        /** Allows inline setting channel data for a recipient */
+        /** Alias for calling [Builder.channelData] with `channelData.orElse(null)`. */
         fun channelData(channelData: Optional<InlineChannelDataRequest>) =
             channelData(channelData.getOrNull())
 
-        /** Allows inline setting channel data for a recipient */
+        /**
+         * Sets [Builder.channelData] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.channelData] with a well-typed
+         * [InlineChannelDataRequest] value instead. This method is primarily for setting the field
+         * to an undocumented or not yet supported value.
+         */
         fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
             this.channelData = channelData
         }
@@ -137,17 +186,30 @@ private constructor(
         fun preferences(preferences: InlinePreferenceSetRequest?) =
             preferences(JsonField.ofNullable(preferences))
 
-        /** Inline set preferences for a recipient, where the key is the preference set name */
+        /** Alias for calling [Builder.preferences] with `preferences.orElse(null)`. */
         fun preferences(preferences: Optional<InlinePreferenceSetRequest>) =
             preferences(preferences.getOrNull())
 
-        /** Inline set preferences for a recipient, where the key is the preference set name */
+        /**
+         * Sets [Builder.preferences] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.preferences] with a well-typed
+         * [InlinePreferenceSetRequest] value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
+         */
         fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {
             this.preferences = preferences
         }
 
         fun settings(settings: Settings) = settings(JsonField.of(settings))
 
+        /**
+         * Sets [Builder.settings] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.settings] with a well-typed [Settings] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun settings(settings: JsonField<Settings>) = apply { this.settings = settings }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -193,15 +255,34 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun branding(): Optional<Branding> = Optional.ofNullable(branding.getNullable("branding"))
 
-        /** Set preferences for a recipient */
+        /**
+         * Set preferences for a recipient
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun preferenceSet(): Optional<PreferenceSetRequest> =
             Optional.ofNullable(preferenceSet.getNullable("preference_set"))
 
+        /**
+         * Returns the raw JSON value of [branding].
+         *
+         * Unlike [branding], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("branding") @ExcludeMissing fun _branding(): JsonField<Branding> = branding
 
-        /** Set preferences for a recipient */
+        /**
+         * Returns the raw JSON value of [preferenceSet].
+         *
+         * Unlike [preferenceSet], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
         @JsonProperty("preference_set")
         @ExcludeMissing
         fun _preferenceSet(): JsonField<PreferenceSetRequest> = preferenceSet
@@ -246,17 +327,30 @@ private constructor(
 
             fun branding(branding: Branding) = branding(JsonField.of(branding))
 
+            /**
+             * Sets [Builder.branding] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.branding] with a well-typed [Branding] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun branding(branding: JsonField<Branding>) = apply { this.branding = branding }
 
             /** Set preferences for a recipient */
             fun preferenceSet(preferenceSet: PreferenceSetRequest?) =
                 preferenceSet(JsonField.ofNullable(preferenceSet))
 
-            /** Set preferences for a recipient */
+            /** Alias for calling [Builder.preferenceSet] with `preferenceSet.orElse(null)`. */
             fun preferenceSet(preferenceSet: Optional<PreferenceSetRequest>) =
                 preferenceSet(preferenceSet.getOrNull())
 
-            /** Set preferences for a recipient */
+            /**
+             * Sets [Builder.preferenceSet] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.preferenceSet] with a well-typed
+             * [PreferenceSetRequest] value instead. This method is primarily for setting the field
+             * to an undocumented or not yet supported value.
+             */
             fun preferenceSet(preferenceSet: JsonField<PreferenceSetRequest>) = apply {
                 this.preferenceSet = preferenceSet
             }
@@ -304,24 +398,62 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun iconUrl(): Optional<String> = Optional.ofNullable(iconUrl.getNullable("icon_url"))
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun logoUrl(): Optional<String> = Optional.ofNullable(logoUrl.getNullable("logo_url"))
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun primaryColor(): Optional<String> =
                 Optional.ofNullable(primaryColor.getNullable("primary_color"))
 
+            /**
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
             fun primaryColorContrast(): Optional<String> =
                 Optional.ofNullable(primaryColorContrast.getNullable("primary_color_contrast"))
 
+            /**
+             * Returns the raw JSON value of [iconUrl].
+             *
+             * Unlike [iconUrl], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("icon_url") @ExcludeMissing fun _iconUrl(): JsonField<String> = iconUrl
 
+            /**
+             * Returns the raw JSON value of [logoUrl].
+             *
+             * Unlike [logoUrl], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("logo_url") @ExcludeMissing fun _logoUrl(): JsonField<String> = logoUrl
 
+            /**
+             * Returns the raw JSON value of [primaryColor].
+             *
+             * Unlike [primaryColor], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("primary_color")
             @ExcludeMissing
             fun _primaryColor(): JsonField<String> = primaryColor
 
+            /**
+             * Returns the raw JSON value of [primaryColorContrast].
+             *
+             * Unlike [primaryColorContrast], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("primary_color_contrast")
             @ExcludeMissing
             fun _primaryColorContrast(): JsonField<String> = primaryColorContrast
@@ -372,22 +504,46 @@ private constructor(
 
                 fun iconUrl(iconUrl: String?) = iconUrl(JsonField.ofNullable(iconUrl))
 
+                /** Alias for calling [Builder.iconUrl] with `iconUrl.orElse(null)`. */
                 fun iconUrl(iconUrl: Optional<String>) = iconUrl(iconUrl.getOrNull())
 
+                /**
+                 * Sets [Builder.iconUrl] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.iconUrl] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun iconUrl(iconUrl: JsonField<String>) = apply { this.iconUrl = iconUrl }
 
                 fun logoUrl(logoUrl: String?) = logoUrl(JsonField.ofNullable(logoUrl))
 
+                /** Alias for calling [Builder.logoUrl] with `logoUrl.orElse(null)`. */
                 fun logoUrl(logoUrl: Optional<String>) = logoUrl(logoUrl.getOrNull())
 
+                /**
+                 * Sets [Builder.logoUrl] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.logoUrl] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun logoUrl(logoUrl: JsonField<String>) = apply { this.logoUrl = logoUrl }
 
                 fun primaryColor(primaryColor: String?) =
                     primaryColor(JsonField.ofNullable(primaryColor))
 
+                /** Alias for calling [Builder.primaryColor] with `primaryColor.orElse(null)`. */
                 fun primaryColor(primaryColor: Optional<String>) =
                     primaryColor(primaryColor.getOrNull())
 
+                /**
+                 * Sets [Builder.primaryColor] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.primaryColor] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun primaryColor(primaryColor: JsonField<String>) = apply {
                     this.primaryColor = primaryColor
                 }
@@ -395,9 +551,20 @@ private constructor(
                 fun primaryColorContrast(primaryColorContrast: String?) =
                     primaryColorContrast(JsonField.ofNullable(primaryColorContrast))
 
+                /**
+                 * Alias for calling [Builder.primaryColorContrast] with
+                 * `primaryColorContrast.orElse(null)`.
+                 */
                 fun primaryColorContrast(primaryColorContrast: Optional<String>) =
                     primaryColorContrast(primaryColorContrast.getOrNull())
 
+                /**
+                 * Sets [Builder.primaryColorContrast] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.primaryColorContrast] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
                 fun primaryColorContrast(primaryColorContrast: JsonField<String>) = apply {
                     this.primaryColorContrast = primaryColorContrast
                 }

@@ -37,16 +37,43 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun argument(): Optional<String> = Optional.ofNullable(argument.getNullable("argument"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun operator(): Operator = operator.getRequired("operator")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun variable(): String = variable.getRequired("variable")
 
+    /**
+     * Returns the raw JSON value of [argument].
+     *
+     * Unlike [argument], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("argument") @ExcludeMissing fun _argument(): JsonField<String> = argument
 
+    /**
+     * Returns the raw JSON value of [operator].
+     *
+     * Unlike [operator], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("operator") @ExcludeMissing fun _operator(): JsonField<Operator> = operator
 
+    /**
+     * Returns the raw JSON value of [variable].
+     *
+     * Unlike [variable], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("variable") @ExcludeMissing fun _variable(): JsonField<String> = variable
 
     @JsonAnyGetter
@@ -101,16 +128,36 @@ private constructor(
 
         fun argument(argument: String?) = argument(JsonField.ofNullable(argument))
 
+        /** Alias for calling [Builder.argument] with `argument.orElse(null)`. */
         fun argument(argument: Optional<String>) = argument(argument.getOrNull())
 
+        /**
+         * Sets [Builder.argument] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.argument] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun argument(argument: JsonField<String>) = apply { this.argument = argument }
 
         fun operator(operator: Operator) = operator(JsonField.of(operator))
 
+        /**
+         * Sets [Builder.operator] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.operator] with a well-typed [Operator] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun operator(operator: JsonField<Operator>) = apply { this.operator = operator }
 
         fun variable(variable: String) = variable(JsonField.of(variable))
 
+        /**
+         * Sets [Builder.variable] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.variable] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun variable(variable: JsonField<String>) = apply { this.variable = variable }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

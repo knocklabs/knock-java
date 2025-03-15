@@ -11,6 +11,7 @@ import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.objects.Object
 import app.knock.api.models.recipients.Recipient
 import app.knock.api.models.users.User
@@ -63,68 +64,178 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun insertedAt(): OffsetDateTime = insertedAt.getRequired("inserted_at")
 
-    /** A recipient, which is either a user or an object */
+    /**
+     * A recipient, which is either a user or an object
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun recipient(): Recipient = recipient.getRequired("recipient")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun repeats(): List<ScheduleRepeatRule> = repeats.getRequired("repeats")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun workflow(): String = workflow.getRequired("workflow")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun _typename(): Optional<String> = Optional.ofNullable(_typename.getNullable("__typename"))
 
-    /** A recipient, which is either a user or an object */
+    /**
+     * A recipient, which is either a user or an object
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun actor(): Optional<Recipient> = Optional.ofNullable(actor.getNullable("actor"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun data(): Optional<Data> = Optional.ofNullable(data.getNullable("data"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun lastOccurrenceAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(lastOccurrenceAt.getNullable("last_occurrence_at"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun nextOccurrenceAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(nextOccurrenceAt.getNullable("next_occurrence_at"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun tenant(): Optional<String> = Optional.ofNullable(tenant.getNullable("tenant"))
 
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+    /**
+     * Returns the raw JSON value of [insertedAt].
+     *
+     * Unlike [insertedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("inserted_at")
     @ExcludeMissing
     fun _insertedAt(): JsonField<OffsetDateTime> = insertedAt
 
-    /** A recipient, which is either a user or an object */
+    /**
+     * Returns the raw JSON value of [recipient].
+     *
+     * Unlike [recipient], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("recipient") @ExcludeMissing fun _recipient(): JsonField<Recipient> = recipient
 
+    /**
+     * Returns the raw JSON value of [repeats].
+     *
+     * Unlike [repeats], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("repeats")
     @ExcludeMissing
     fun _repeats(): JsonField<List<ScheduleRepeatRule>> = repeats
 
+    /**
+     * Returns the raw JSON value of [updatedAt].
+     *
+     * Unlike [updatedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("updated_at")
     @ExcludeMissing
     fun _updatedAt(): JsonField<OffsetDateTime> = updatedAt
 
+    /**
+     * Returns the raw JSON value of [workflow].
+     *
+     * Unlike [workflow], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("workflow") @ExcludeMissing fun _workflow(): JsonField<String> = workflow
 
+    /**
+     * Returns the raw JSON value of [_typename].
+     *
+     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
-    /** A recipient, which is either a user or an object */
+    /**
+     * Returns the raw JSON value of [actor].
+     *
+     * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("actor") @ExcludeMissing fun _actor(): JsonField<Recipient> = actor
 
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
+    /**
+     * Returns the raw JSON value of [lastOccurrenceAt].
+     *
+     * Unlike [lastOccurrenceAt], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
     @JsonProperty("last_occurrence_at")
     @ExcludeMissing
     fun _lastOccurrenceAt(): JsonField<OffsetDateTime> = lastOccurrenceAt
 
+    /**
+     * Returns the raw JSON value of [nextOccurrenceAt].
+     *
+     * Unlike [nextOccurrenceAt], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
     @JsonProperty("next_occurrence_at")
     @ExcludeMissing
     fun _nextOccurrenceAt(): JsonField<OffsetDateTime> = nextOccurrenceAt
 
+    /**
+     * Returns the raw JSON value of [tenant].
+     *
+     * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("tenant") @ExcludeMissing fun _tenant(): JsonField<String> = tenant
 
     @JsonAnyGetter
@@ -209,10 +320,23 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun insertedAt(insertedAt: OffsetDateTime) = insertedAt(JsonField.of(insertedAt))
 
+        /**
+         * Sets [Builder.insertedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.insertedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun insertedAt(insertedAt: JsonField<OffsetDateTime>) = apply {
             this.insertedAt = insertedAt
         }
@@ -220,21 +344,39 @@ private constructor(
         /** A recipient, which is either a user or an object */
         fun recipient(recipient: Recipient) = recipient(JsonField.of(recipient))
 
-        /** A recipient, which is either a user or an object */
+        /**
+         * Sets [Builder.recipient] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.recipient] with a well-typed [Recipient] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun recipient(recipient: JsonField<Recipient>) = apply { this.recipient = recipient }
 
-        /** A user object */
+        /** Alias for calling [recipient] with `Recipient.ofUser(user)`. */
         fun recipient(user: User) = recipient(Recipient.ofUser(user))
 
-        /** A custom-object entity which belongs to a collection. */
+        /** Alias for calling [recipient] with `Recipient.ofObject(object_)`. */
         fun recipient(object_: Object) = recipient(Recipient.ofObject(object_))
 
         fun repeats(repeats: List<ScheduleRepeatRule>) = repeats(JsonField.of(repeats))
 
+        /**
+         * Sets [Builder.repeats] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.repeats] with a well-typed `List<ScheduleRepeatRule>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
         fun repeats(repeats: JsonField<List<ScheduleRepeatRule>>) = apply {
             this.repeats = repeats.map { it.toMutableList() }
         }
 
+        /**
+         * Adds a single [ScheduleRepeatRule] to [repeats].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addRepeat(repeat: ScheduleRepeatRule) = apply {
             repeats =
                 (repeats ?: JsonField.of(mutableListOf())).also {
@@ -244,43 +386,83 @@ private constructor(
 
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
+        /**
+         * Sets [Builder.updatedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.updatedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
         fun workflow(workflow: String) = workflow(JsonField.of(workflow))
 
+        /**
+         * Sets [Builder.workflow] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.workflow] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun workflow(workflow: JsonField<String>) = apply { this.workflow = workflow }
 
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+        /**
+         * Sets [Builder._typename] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder._typename] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         /** A recipient, which is either a user or an object */
         fun actor(actor: Recipient?) = actor(JsonField.ofNullable(actor))
 
-        /** A recipient, which is either a user or an object */
+        /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
         fun actor(actor: Optional<Recipient>) = actor(actor.getOrNull())
 
-        /** A recipient, which is either a user or an object */
+        /**
+         * Sets [Builder.actor] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.actor] with a well-typed [Recipient] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun actor(actor: JsonField<Recipient>) = apply { this.actor = actor }
 
-        /** A user object */
+        /** Alias for calling [actor] with `Recipient.ofUser(user)`. */
         fun actor(user: User) = actor(Recipient.ofUser(user))
 
-        /** A custom-object entity which belongs to a collection. */
+        /** Alias for calling [actor] with `Recipient.ofObject(object_)`. */
         fun actor(object_: Object) = actor(Recipient.ofObject(object_))
 
         fun data(data: Data?) = data(JsonField.ofNullable(data))
 
+        /** Alias for calling [Builder.data] with `data.orElse(null)`. */
         fun data(data: Optional<Data>) = data(data.getOrNull())
 
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
         fun lastOccurrenceAt(lastOccurrenceAt: OffsetDateTime?) =
             lastOccurrenceAt(JsonField.ofNullable(lastOccurrenceAt))
 
+        /** Alias for calling [Builder.lastOccurrenceAt] with `lastOccurrenceAt.orElse(null)`. */
         fun lastOccurrenceAt(lastOccurrenceAt: Optional<OffsetDateTime>) =
             lastOccurrenceAt(lastOccurrenceAt.getOrNull())
 
+        /**
+         * Sets [Builder.lastOccurrenceAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.lastOccurrenceAt] with a well-typed [OffsetDateTime]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
         fun lastOccurrenceAt(lastOccurrenceAt: JsonField<OffsetDateTime>) = apply {
             this.lastOccurrenceAt = lastOccurrenceAt
         }
@@ -288,17 +470,32 @@ private constructor(
         fun nextOccurrenceAt(nextOccurrenceAt: OffsetDateTime?) =
             nextOccurrenceAt(JsonField.ofNullable(nextOccurrenceAt))
 
+        /** Alias for calling [Builder.nextOccurrenceAt] with `nextOccurrenceAt.orElse(null)`. */
         fun nextOccurrenceAt(nextOccurrenceAt: Optional<OffsetDateTime>) =
             nextOccurrenceAt(nextOccurrenceAt.getOrNull())
 
+        /**
+         * Sets [Builder.nextOccurrenceAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.nextOccurrenceAt] with a well-typed [OffsetDateTime]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
         fun nextOccurrenceAt(nextOccurrenceAt: JsonField<OffsetDateTime>) = apply {
             this.nextOccurrenceAt = nextOccurrenceAt
         }
 
         fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
 
+        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
+        /**
+         * Sets [Builder.tenant] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.tenant] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun tenant(tenant: JsonField<String>) = apply { this.tenant = tenant }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

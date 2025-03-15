@@ -9,6 +9,7 @@ import app.knock.api.core.JsonValue
 import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -37,36 +38,53 @@ private constructor(
     /**
      * A setting for a preference set, where the key in the object is the category, and the values
      * are the preference settings for that category.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun categories(): Optional<Categories> =
         Optional.ofNullable(categories.getNullable("categories"))
 
-    /** Channel type preferences */
+    /**
+     * Channel type preferences
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun channelTypes(): Optional<PreferenceSetChannelTypes> =
         Optional.ofNullable(channelTypes.getNullable("channel_types"))
 
     /**
      * A setting for a preference set, where the key in the object is the workflow key, and the
      * values are the preference settings for that workflow.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun workflows(): Optional<Workflows> = Optional.ofNullable(workflows.getNullable("workflows"))
 
     /**
-     * A setting for a preference set, where the key in the object is the category, and the values
-     * are the preference settings for that category.
+     * Returns the raw JSON value of [categories].
+     *
+     * Unlike [categories], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("categories")
     @ExcludeMissing
     fun _categories(): JsonField<Categories> = categories
 
-    /** Channel type preferences */
+    /**
+     * Returns the raw JSON value of [channelTypes].
+     *
+     * Unlike [channelTypes], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("channel_types")
     @ExcludeMissing
     fun _channelTypes(): JsonField<PreferenceSetChannelTypes> = channelTypes
 
     /**
-     * A setting for a preference set, where the key in the object is the workflow key, and the
-     * values are the preference settings for that workflow.
+     * Returns the raw JSON value of [workflows].
+     *
+     * Unlike [workflows], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("workflows") @ExcludeMissing fun _workflows(): JsonField<Workflows> = workflows
 
@@ -117,15 +135,15 @@ private constructor(
          */
         fun categories(categories: Categories?) = categories(JsonField.ofNullable(categories))
 
-        /**
-         * A setting for a preference set, where the key in the object is the category, and the
-         * values are the preference settings for that category.
-         */
+        /** Alias for calling [Builder.categories] with `categories.orElse(null)`. */
         fun categories(categories: Optional<Categories>) = categories(categories.getOrNull())
 
         /**
-         * A setting for a preference set, where the key in the object is the category, and the
-         * values are the preference settings for that category.
+         * Sets [Builder.categories] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.categories] with a well-typed [Categories] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun categories(categories: JsonField<Categories>) = apply { this.categories = categories }
 
@@ -133,11 +151,17 @@ private constructor(
         fun channelTypes(channelTypes: PreferenceSetChannelTypes?) =
             channelTypes(JsonField.ofNullable(channelTypes))
 
-        /** Channel type preferences */
+        /** Alias for calling [Builder.channelTypes] with `channelTypes.orElse(null)`. */
         fun channelTypes(channelTypes: Optional<PreferenceSetChannelTypes>) =
             channelTypes(channelTypes.getOrNull())
 
-        /** Channel type preferences */
+        /**
+         * Sets [Builder.channelTypes] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.channelTypes] with a well-typed
+         * [PreferenceSetChannelTypes] value instead. This method is primarily for setting the field
+         * to an undocumented or not yet supported value.
+         */
         fun channelTypes(channelTypes: JsonField<PreferenceSetChannelTypes>) = apply {
             this.channelTypes = channelTypes
         }
@@ -148,15 +172,15 @@ private constructor(
          */
         fun workflows(workflows: Workflows?) = workflows(JsonField.ofNullable(workflows))
 
-        /**
-         * A setting for a preference set, where the key in the object is the workflow key, and the
-         * values are the preference settings for that workflow.
-         */
+        /** Alias for calling [Builder.workflows] with `workflows.orElse(null)`. */
         fun workflows(workflows: Optional<Workflows>) = workflows(workflows.getOrNull())
 
         /**
-         * A setting for a preference set, where the key in the object is the workflow key, and the
-         * values are the preference settings for that workflow.
+         * Sets [Builder.workflows] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.workflows] with a well-typed [Workflows] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun workflows(workflows: JsonField<Workflows>) = apply { this.workflows = workflows }
 

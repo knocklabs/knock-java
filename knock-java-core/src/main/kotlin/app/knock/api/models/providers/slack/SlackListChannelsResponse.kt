@@ -10,6 +10,7 @@ import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -32,26 +33,71 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun contextTeamId(): String = contextTeamId.getRequired("context_team_id")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun isIm(): Boolean = isIm.getRequired("is_im")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun isPrivate(): Boolean = isPrivate.getRequired("is_private")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun name(): String = name.getRequired("name")
 
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+    /**
+     * Returns the raw JSON value of [contextTeamId].
+     *
+     * Unlike [contextTeamId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("context_team_id")
     @ExcludeMissing
     fun _contextTeamId(): JsonField<String> = contextTeamId
 
+    /**
+     * Returns the raw JSON value of [isIm].
+     *
+     * Unlike [isIm], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("is_im") @ExcludeMissing fun _isIm(): JsonField<Boolean> = isIm
 
+    /**
+     * Returns the raw JSON value of [isPrivate].
+     *
+     * Unlike [isPrivate], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("is_private") @ExcludeMissing fun _isPrivate(): JsonField<Boolean> = isPrivate
 
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     @JsonAnyGetter
@@ -114,24 +160,56 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun contextTeamId(contextTeamId: String) = contextTeamId(JsonField.of(contextTeamId))
 
+        /**
+         * Sets [Builder.contextTeamId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.contextTeamId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun contextTeamId(contextTeamId: JsonField<String>) = apply {
             this.contextTeamId = contextTeamId
         }
 
         fun isIm(isIm: Boolean) = isIm(JsonField.of(isIm))
 
+        /**
+         * Sets [Builder.isIm] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.isIm] with a well-typed [Boolean] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun isIm(isIm: JsonField<Boolean>) = apply { this.isIm = isIm }
 
         fun isPrivate(isPrivate: Boolean) = isPrivate(JsonField.of(isPrivate))
 
+        /**
+         * Sets [Builder.isPrivate] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.isPrivate] with a well-typed [Boolean] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun isPrivate(isPrivate: JsonField<Boolean>) = apply { this.isPrivate = isPrivate }
 
         fun name(name: String) = name(JsonField.of(name))
 
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

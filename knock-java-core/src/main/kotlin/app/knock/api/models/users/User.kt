@@ -10,6 +10,7 @@ import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -48,48 +49,129 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun _typename(): String = _typename.getRequired("__typename")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun avatar(): Optional<String> = Optional.ofNullable(avatar.getNullable("avatar"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun createdAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(createdAt.getNullable("created_at"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun email(): Optional<String> = Optional.ofNullable(email.getNullable("email"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun phoneNumber(): Optional<String> =
         Optional.ofNullable(phoneNumber.getNullable("phone_number"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun timezone(): Optional<String> = Optional.ofNullable(timezone.getNullable("timezone"))
 
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+    /**
+     * Returns the raw JSON value of [_typename].
+     *
+     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
+    /**
+     * Returns the raw JSON value of [updatedAt].
+     *
+     * Unlike [updatedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("updated_at")
     @ExcludeMissing
     fun _updatedAt(): JsonField<OffsetDateTime> = updatedAt
 
+    /**
+     * Returns the raw JSON value of [avatar].
+     *
+     * Unlike [avatar], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("avatar") @ExcludeMissing fun _avatar(): JsonField<String> = avatar
 
+    /**
+     * Returns the raw JSON value of [createdAt].
+     *
+     * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("created_at")
     @ExcludeMissing
     fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
+    /**
+     * Returns the raw JSON value of [email].
+     *
+     * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
 
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
+    /**
+     * Returns the raw JSON value of [phoneNumber].
+     *
+     * Unlike [phoneNumber], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("phone_number")
     @ExcludeMissing
     fun _phoneNumber(): JsonField<String> = phoneNumber
 
+    /**
+     * Returns the raw JSON value of [timezone].
+     *
+     * Unlike [timezone], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("timezone") @ExcludeMissing fun _timezone(): JsonField<String> = timezone
 
     @JsonAnyGetter
@@ -162,50 +244,114 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+        /**
+         * Sets [Builder._typename] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder._typename] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
+        /**
+         * Sets [Builder.updatedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.updatedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
         fun avatar(avatar: String?) = avatar(JsonField.ofNullable(avatar))
 
+        /** Alias for calling [Builder.avatar] with `avatar.orElse(null)`. */
         fun avatar(avatar: Optional<String>) = avatar(avatar.getOrNull())
 
+        /**
+         * Sets [Builder.avatar] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.avatar] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun avatar(avatar: JsonField<String>) = apply { this.avatar = avatar }
 
         fun createdAt(createdAt: OffsetDateTime?) = createdAt(JsonField.ofNullable(createdAt))
 
+        /** Alias for calling [Builder.createdAt] with `createdAt.orElse(null)`. */
         fun createdAt(createdAt: Optional<OffsetDateTime>) = createdAt(createdAt.getOrNull())
 
+        /**
+         * Sets [Builder.createdAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         fun email(email: String?) = email(JsonField.ofNullable(email))
 
+        /** Alias for calling [Builder.email] with `email.orElse(null)`. */
         fun email(email: Optional<String>) = email(email.getOrNull())
 
+        /**
+         * Sets [Builder.email] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.email] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun email(email: JsonField<String>) = apply { this.email = email }
 
         fun name(name: String?) = name(JsonField.ofNullable(name))
 
+        /** Alias for calling [Builder.name] with `name.orElse(null)`. */
         fun name(name: Optional<String>) = name(name.getOrNull())
 
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         fun phoneNumber(phoneNumber: String?) = phoneNumber(JsonField.ofNullable(phoneNumber))
 
+        /** Alias for calling [Builder.phoneNumber] with `phoneNumber.orElse(null)`. */
         fun phoneNumber(phoneNumber: Optional<String>) = phoneNumber(phoneNumber.getOrNull())
 
+        /**
+         * Sets [Builder.phoneNumber] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.phoneNumber] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun phoneNumber(phoneNumber: JsonField<String>) = apply { this.phoneNumber = phoneNumber }
 
         fun timezone(timezone: String?) = timezone(JsonField.ofNullable(timezone))
 
+        /** Alias for calling [Builder.timezone] with `timezone.orElse(null)`. */
         fun timezone(timezone: Optional<String>) = timezone(timezone.getOrNull())
 
+        /**
+         * Sets [Builder.timezone] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.timezone] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun timezone(timezone: JsonField<String>) = apply { this.timezone = timezone }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

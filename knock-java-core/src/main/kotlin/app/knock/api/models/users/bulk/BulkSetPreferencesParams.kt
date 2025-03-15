@@ -14,6 +14,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -29,14 +30,32 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** Set preferences for a recipient */
+    /**
+     * Set preferences for a recipient
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun preferences(): PreferenceSetRequest = body.preferences()
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun userIds(): List<String> = body.userIds()
 
-    /** Set preferences for a recipient */
+    /**
+     * Returns the raw JSON value of [preferences].
+     *
+     * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _preferences(): JsonField<PreferenceSetRequest> = body._preferences()
 
+    /**
+     * Returns the raw JSON value of [userIds].
+     *
+     * Unlike [userIds], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _userIds(): JsonField<List<String>> = body._userIds()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -66,16 +85,34 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Set preferences for a recipient */
+        /**
+         * Set preferences for a recipient
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun preferences(): PreferenceSetRequest = preferences.getRequired("preferences")
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun userIds(): List<String> = userIds.getRequired("user_ids")
 
-        /** Set preferences for a recipient */
+        /**
+         * Returns the raw JSON value of [preferences].
+         *
+         * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("preferences")
         @ExcludeMissing
         fun _preferences(): JsonField<PreferenceSetRequest> = preferences
 
+        /**
+         * Returns the raw JSON value of [userIds].
+         *
+         * Unlike [userIds], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("user_ids") @ExcludeMissing fun _userIds(): JsonField<List<String>> = userIds
 
         @JsonAnyGetter
@@ -128,17 +165,35 @@ private constructor(
             fun preferences(preferences: PreferenceSetRequest) =
                 preferences(JsonField.of(preferences))
 
-            /** Set preferences for a recipient */
+            /**
+             * Sets [Builder.preferences] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.preferences] with a well-typed
+             * [PreferenceSetRequest] value instead. This method is primarily for setting the field
+             * to an undocumented or not yet supported value.
+             */
             fun preferences(preferences: JsonField<PreferenceSetRequest>) = apply {
                 this.preferences = preferences
             }
 
             fun userIds(userIds: List<String>) = userIds(JsonField.of(userIds))
 
+            /**
+             * Sets [Builder.userIds] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.userIds] with a well-typed `List<String>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun userIds(userIds: JsonField<List<String>>) = apply {
                 this.userIds = userIds.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [String] to [userIds].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addUserId(userId: String) = apply {
                 userIds =
                     (userIds ?: JsonField.of(mutableListOf())).also {
@@ -225,15 +280,33 @@ private constructor(
         /** Set preferences for a recipient */
         fun preferences(preferences: PreferenceSetRequest) = apply { body.preferences(preferences) }
 
-        /** Set preferences for a recipient */
+        /**
+         * Sets [Builder.preferences] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.preferences] with a well-typed [PreferenceSetRequest]
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
         fun preferences(preferences: JsonField<PreferenceSetRequest>) = apply {
             body.preferences(preferences)
         }
 
         fun userIds(userIds: List<String>) = apply { body.userIds(userIds) }
 
+        /**
+         * Sets [Builder.userIds] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.userIds] with a well-typed `List<String>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun userIds(userIds: JsonField<List<String>>) = apply { body.userIds(userIds) }
 
+        /**
+         * Adds a single [String] to [userIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addUserId(userId: String) = apply { body.addUserId(userId) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {

@@ -10,6 +10,7 @@ import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -42,35 +43,80 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun id(): String = id.getRequired("id")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun collection(): String = collection.getRequired("collection")
 
-    /** Allows inline setting channel data for a recipient */
+    /**
+     * Allows inline setting channel data for a recipient
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun channelData(): Optional<InlineChannelDataRequest> =
         Optional.ofNullable(channelData.getNullable("channel_data"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun createdAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(createdAt.getNullable("created_at"))
 
-    /** Inline set preferences for a recipient, where the key is the preference set name */
+    /**
+     * Inline set preferences for a recipient, where the key is the preference set name
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun preferences(): Optional<InlinePreferenceSetRequest> =
         Optional.ofNullable(preferences.getNullable("preferences"))
 
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+    /**
+     * Returns the raw JSON value of [collection].
+     *
+     * Unlike [collection], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("collection") @ExcludeMissing fun _collection(): JsonField<String> = collection
 
-    /** Allows inline setting channel data for a recipient */
+    /**
+     * Returns the raw JSON value of [channelData].
+     *
+     * Unlike [channelData], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("channel_data")
     @ExcludeMissing
     fun _channelData(): JsonField<InlineChannelDataRequest> = channelData
 
+    /**
+     * Returns the raw JSON value of [createdAt].
+     *
+     * Unlike [createdAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("created_at")
     @ExcludeMissing
     fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
-    /** Inline set preferences for a recipient, where the key is the preference set name */
+    /**
+     * Returns the raw JSON value of [preferences].
+     *
+     * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("preferences")
     @ExcludeMissing
     fun _preferences(): JsonField<InlinePreferenceSetRequest> = preferences
@@ -132,40 +178,73 @@ private constructor(
 
         fun id(id: String) = id(JsonField.of(id))
 
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun collection(collection: String) = collection(JsonField.of(collection))
 
+        /**
+         * Sets [Builder.collection] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.collection] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun collection(collection: JsonField<String>) = apply { this.collection = collection }
 
         /** Allows inline setting channel data for a recipient */
         fun channelData(channelData: InlineChannelDataRequest?) =
             channelData(JsonField.ofNullable(channelData))
 
-        /** Allows inline setting channel data for a recipient */
+        /** Alias for calling [Builder.channelData] with `channelData.orElse(null)`. */
         fun channelData(channelData: Optional<InlineChannelDataRequest>) =
             channelData(channelData.getOrNull())
 
-        /** Allows inline setting channel data for a recipient */
+        /**
+         * Sets [Builder.channelData] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.channelData] with a well-typed
+         * [InlineChannelDataRequest] value instead. This method is primarily for setting the field
+         * to an undocumented or not yet supported value.
+         */
         fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
             this.channelData = channelData
         }
 
         fun createdAt(createdAt: OffsetDateTime?) = createdAt(JsonField.ofNullable(createdAt))
 
+        /** Alias for calling [Builder.createdAt] with `createdAt.orElse(null)`. */
         fun createdAt(createdAt: Optional<OffsetDateTime>) = createdAt(createdAt.getOrNull())
 
+        /**
+         * Sets [Builder.createdAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.createdAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
         /** Inline set preferences for a recipient, where the key is the preference set name */
         fun preferences(preferences: InlinePreferenceSetRequest?) =
             preferences(JsonField.ofNullable(preferences))
 
-        /** Inline set preferences for a recipient, where the key is the preference set name */
+        /** Alias for calling [Builder.preferences] with `preferences.orElse(null)`. */
         fun preferences(preferences: Optional<InlinePreferenceSetRequest>) =
             preferences(preferences.getOrNull())
 
-        /** Inline set preferences for a recipient, where the key is the preference set name */
+        /**
+         * Sets [Builder.preferences] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.preferences] with a well-typed
+         * [InlinePreferenceSetRequest] value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
+         */
         fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {
             this.preferences = preferences
         }

@@ -40,8 +40,17 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun connections(): List<Connection> = connections.getRequired("connections")
 
+    /**
+     * Returns the raw JSON value of [connections].
+     *
+     * Unlike [connections], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("connections")
     @ExcludeMissing
     fun _connections(): JsonField<List<Connection>> = connections
@@ -90,10 +99,22 @@ private constructor(
 
         fun connections(connections: List<Connection>) = connections(JsonField.of(connections))
 
+        /**
+         * Sets [Builder.connections] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.connections] with a well-typed `List<Connection>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun connections(connections: JsonField<List<Connection>>) = apply {
             this.connections = connections.map { it.toMutableList() }
         }
 
+        /**
+         * Adds a single [Connection] to [connections].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addConnection(connection: Connection) = apply {
             connections =
                 (connections ?: JsonField.of(mutableListOf())).also {
@@ -101,11 +122,14 @@ private constructor(
                 }
         }
 
-        /** Discord channel connection */
+        /** Alias for calling [addConnection] with `Connection.ofDiscordChannel(discordChannel)`. */
         fun addConnection(discordChannel: Connection.DiscordChannelConnection) =
             addConnection(Connection.ofDiscordChannel(discordChannel))
 
-        /** Discord incoming webhook connection */
+        /**
+         * Alias for calling [addConnection] with
+         * `Connection.ofDiscordIncomingWebhook(discordIncomingWebhook)`.
+         */
         fun addConnection(discordIncomingWebhook: Connection.DiscordIncomingWebhookConnection) =
             addConnection(Connection.ofDiscordIncomingWebhook(discordIncomingWebhook))
 
@@ -308,10 +332,21 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            /** The Discord channel ID */
+            /**
+             * The Discord channel ID
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun channelId(): String = channelId.getRequired("channel_id")
 
-            /** The Discord channel ID */
+            /**
+             * Returns the raw JSON value of [channelId].
+             *
+             * Unlike [channelId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("channel_id")
             @ExcludeMissing
             fun _channelId(): JsonField<String> = channelId
@@ -363,7 +398,13 @@ private constructor(
                 /** The Discord channel ID */
                 fun channelId(channelId: String) = channelId(JsonField.of(channelId))
 
-                /** The Discord channel ID */
+                /**
+                 * Sets [Builder.channelId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.channelId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun channelId(channelId: JsonField<String>) = apply { this.channelId = channelId }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -425,10 +466,21 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            /** The incoming webhook */
+            /**
+             * The incoming webhook
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun incomingWebhook(): IncomingWebhook = incomingWebhook.getRequired("incoming_webhook")
 
-            /** The incoming webhook */
+            /**
+             * Returns the raw JSON value of [incomingWebhook].
+             *
+             * Unlike [incomingWebhook], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
             @JsonProperty("incoming_webhook")
             @ExcludeMissing
             fun _incomingWebhook(): JsonField<IncomingWebhook> = incomingWebhook
@@ -483,7 +535,13 @@ private constructor(
                 fun incomingWebhook(incomingWebhook: IncomingWebhook) =
                     incomingWebhook(JsonField.of(incomingWebhook))
 
-                /** The incoming webhook */
+                /**
+                 * Sets [Builder.incomingWebhook] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.incomingWebhook] with a well-typed
+                 * [IncomingWebhook] value instead. This method is primarily for setting the field
+                 * to an undocumented or not yet supported value.
+                 */
                 fun incomingWebhook(incomingWebhook: JsonField<IncomingWebhook>) = apply {
                     this.incomingWebhook = incomingWebhook
                 }
@@ -529,10 +587,20 @@ private constructor(
                 private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
             ) {
 
-                /** The URL of the incoming webhook */
+                /**
+                 * The URL of the incoming webhook
+                 *
+                 * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
                 fun url(): String = url.getRequired("url")
 
-                /** The URL of the incoming webhook */
+                /**
+                 * Returns the raw JSON value of [url].
+                 *
+                 * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+                 */
                 @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
 
                 @JsonAnyGetter
@@ -580,7 +648,13 @@ private constructor(
                     /** The URL of the incoming webhook */
                     fun url(url: String) = url(JsonField.of(url))
 
-                    /** The URL of the incoming webhook */
+                    /**
+                     * Sets [Builder.url] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.url] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
                     fun url(url: JsonField<String>) = apply { this.url = url }
 
                     fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

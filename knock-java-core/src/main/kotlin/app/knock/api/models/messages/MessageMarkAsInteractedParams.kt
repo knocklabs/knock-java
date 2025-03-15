@@ -13,6 +13,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -31,10 +32,19 @@ private constructor(
 
     fun messageId(): String = messageId
 
-    /** Metadata about the interaction */
+    /**
+     * Metadata about the interaction
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun metadata(): Optional<Metadata> = body.metadata()
 
-    /** Metadata about the interaction */
+    /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _metadata(): JsonField<Metadata> = body._metadata()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -68,10 +78,19 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Metadata about the interaction */
+        /**
+         * Metadata about the interaction
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
 
-        /** Metadata about the interaction */
+        /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
         @JsonAnyGetter
@@ -112,7 +131,13 @@ private constructor(
             /** Metadata about the interaction */
             fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
-            /** Metadata about the interaction */
+            /**
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -193,7 +218,13 @@ private constructor(
         /** Metadata about the interaction */
         fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
 
-        /** Metadata about the interaction */
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {

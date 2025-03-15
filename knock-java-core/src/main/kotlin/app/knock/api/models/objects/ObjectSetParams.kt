@@ -13,6 +13,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -37,16 +38,34 @@ private constructor(
 
     fun objectId(): String = objectId
 
-    /** Allows inline setting channel data for a recipient */
+    /**
+     * Allows inline setting channel data for a recipient
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun channelData(): Optional<InlineChannelDataRequest> = body.channelData()
 
-    /** Inline set preferences for a recipient, where the key is the preference set name */
+    /**
+     * Inline set preferences for a recipient, where the key is the preference set name
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun preferences(): Optional<InlinePreferenceSetRequest> = body.preferences()
 
-    /** Allows inline setting channel data for a recipient */
+    /**
+     * Returns the raw JSON value of [channelData].
+     *
+     * Unlike [channelData], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _channelData(): JsonField<InlineChannelDataRequest> = body._channelData()
 
-    /** Inline set preferences for a recipient, where the key is the preference set name */
+    /**
+     * Returns the raw JSON value of [preferences].
+     *
+     * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _preferences(): JsonField<InlinePreferenceSetRequest> = body._preferences()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -84,20 +103,38 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
-        /** Allows inline setting channel data for a recipient */
+        /**
+         * Allows inline setting channel data for a recipient
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun channelData(): Optional<InlineChannelDataRequest> =
             Optional.ofNullable(channelData.getNullable("channel_data"))
 
-        /** Inline set preferences for a recipient, where the key is the preference set name */
+        /**
+         * Inline set preferences for a recipient, where the key is the preference set name
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun preferences(): Optional<InlinePreferenceSetRequest> =
             Optional.ofNullable(preferences.getNullable("preferences"))
 
-        /** Allows inline setting channel data for a recipient */
+        /**
+         * Returns the raw JSON value of [channelData].
+         *
+         * Unlike [channelData], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("channel_data")
         @ExcludeMissing
         fun _channelData(): JsonField<InlineChannelDataRequest> = channelData
 
-        /** Inline set preferences for a recipient, where the key is the preference set name */
+        /**
+         * Returns the raw JSON value of [preferences].
+         *
+         * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("preferences")
         @ExcludeMissing
         fun _preferences(): JsonField<InlinePreferenceSetRequest> = preferences
@@ -144,11 +181,17 @@ private constructor(
             fun channelData(channelData: InlineChannelDataRequest?) =
                 channelData(JsonField.ofNullable(channelData))
 
-            /** Allows inline setting channel data for a recipient */
+            /** Alias for calling [Builder.channelData] with `channelData.orElse(null)`. */
             fun channelData(channelData: Optional<InlineChannelDataRequest>) =
                 channelData(channelData.getOrNull())
 
-            /** Allows inline setting channel data for a recipient */
+            /**
+             * Sets [Builder.channelData] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.channelData] with a well-typed
+             * [InlineChannelDataRequest] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
             fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
                 this.channelData = channelData
             }
@@ -157,11 +200,17 @@ private constructor(
             fun preferences(preferences: InlinePreferenceSetRequest?) =
                 preferences(JsonField.ofNullable(preferences))
 
-            /** Inline set preferences for a recipient, where the key is the preference set name */
+            /** Alias for calling [Builder.preferences] with `preferences.orElse(null)`. */
             fun preferences(preferences: Optional<InlinePreferenceSetRequest>) =
                 preferences(preferences.getOrNull())
 
-            /** Inline set preferences for a recipient, where the key is the preference set name */
+            /**
+             * Sets [Builder.preferences] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.preferences] with a well-typed
+             * [InlinePreferenceSetRequest] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
             fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {
                 this.preferences = preferences
             }
@@ -250,11 +299,17 @@ private constructor(
             body.channelData(channelData)
         }
 
-        /** Allows inline setting channel data for a recipient */
+        /** Alias for calling [Builder.channelData] with `channelData.orElse(null)`. */
         fun channelData(channelData: Optional<InlineChannelDataRequest>) =
             channelData(channelData.getOrNull())
 
-        /** Allows inline setting channel data for a recipient */
+        /**
+         * Sets [Builder.channelData] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.channelData] with a well-typed
+         * [InlineChannelDataRequest] value instead. This method is primarily for setting the field
+         * to an undocumented or not yet supported value.
+         */
         fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
             body.channelData(channelData)
         }
@@ -264,11 +319,17 @@ private constructor(
             body.preferences(preferences)
         }
 
-        /** Inline set preferences for a recipient, where the key is the preference set name */
+        /** Alias for calling [Builder.preferences] with `preferences.orElse(null)`. */
         fun preferences(preferences: Optional<InlinePreferenceSetRequest>) =
             preferences(preferences.getOrNull())
 
-        /** Inline set preferences for a recipient, where the key is the preference set name */
+        /**
+         * Sets [Builder.preferences] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.preferences] with a well-typed
+         * [InlinePreferenceSetRequest] value instead. This method is primarily for setting the
+         * field to an undocumented or not yet supported value.
+         */
         fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {
             body.preferences(preferences)
         }

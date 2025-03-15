@@ -110,34 +110,38 @@ private constructor(
         /** The cursor to fetch entries after */
         fun after(after: String?) = apply { this.after = after }
 
-        /** The cursor to fetch entries after */
+        /** Alias for calling [Builder.after] with `after.orElse(null)`. */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
         /** The cursor to fetch entries before */
         fun before(before: String?) = apply { this.before = before }
 
-        /** The cursor to fetch entries before */
+        /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
         /** The page size to fetch */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
-        /** The page size to fetch */
+        /**
+         * Alias for [Builder.pageSize].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun pageSize(pageSize: Long) = pageSize(pageSize as Long?)
 
-        /** The page size to fetch */
+        /** Alias for calling [Builder.pageSize] with `pageSize.orElse(null)`. */
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
         /** The ID of the tenant to list schedules for */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
-        /** The ID of the tenant to list schedules for */
+        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         /** The ID of the workflow to list schedules for */
         fun workflow(workflow: String?) = apply { this.workflow = workflow }
 
-        /** The ID of the workflow to list schedules for */
+        /** Alias for calling [Builder.workflow] with `workflow.orElse(null)`. */
         fun workflow(workflow: Optional<String>) = workflow(workflow.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {

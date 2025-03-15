@@ -80,7 +80,11 @@ private constructor(
             this.tenantIds = tenantIds.toMutableList()
         }
 
-        /** The IDs of the tenants to delete */
+        /**
+         * Adds a single [String] to [tenantIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addTenantId(tenantId: String) = apply {
             tenantIds = (tenantIds ?: mutableListOf()).apply { add(tenantId) }
         }

@@ -95,6 +95,7 @@ private constructor(
 
         fun queryOptions(queryOptions: QueryOptions?) = apply { this.queryOptions = queryOptions }
 
+        /** Alias for calling [Builder.queryOptions] with `queryOptions.orElse(null)`. */
         fun queryOptions(queryOptions: Optional<QueryOptions>) =
             queryOptions(queryOptions.getOrNull())
 
@@ -274,7 +275,7 @@ private constructor(
             /** A cursor to paginate through the channels */
             fun cursor(cursor: String?) = apply { this.cursor = cursor }
 
-            /** A cursor to paginate through the channels */
+            /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
             fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
             /** Whether to exclude archived channels */
@@ -282,33 +283,41 @@ private constructor(
                 this.excludeArchived = excludeArchived
             }
 
-            /** Whether to exclude archived channels */
+            /**
+             * Alias for [Builder.excludeArchived].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
             fun excludeArchived(excludeArchived: Boolean) =
                 excludeArchived(excludeArchived as Boolean?)
 
-            /** Whether to exclude archived channels */
+            /** Alias for calling [Builder.excludeArchived] with `excludeArchived.orElse(null)`. */
             fun excludeArchived(excludeArchived: Optional<Boolean>) =
                 excludeArchived(excludeArchived.getOrNull())
 
             /** The number of channels to return */
             fun limit(limit: Long?) = apply { this.limit = limit }
 
-            /** The number of channels to return */
+            /**
+             * Alias for [Builder.limit].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
             fun limit(limit: Long) = limit(limit as Long?)
 
-            /** The number of channels to return */
+            /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
             fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
 
             /** The ID of the Slack team to get channels for */
             fun teamId(teamId: String?) = apply { this.teamId = teamId }
 
-            /** The ID of the Slack team to get channels for */
+            /** Alias for calling [Builder.teamId] with `teamId.orElse(null)`. */
             fun teamId(teamId: Optional<String>) = teamId(teamId.getOrNull())
 
             /** The types of channels to return (comma separated list) */
             fun types(types: String?) = apply { this.types = types }
 
-            /** The types of channels to return (comma separated list) */
+            /** Alias for calling [Builder.types] with `types.orElse(null)`. */
             fun types(types: Optional<String>) = types(types.getOrNull())
 
             fun additionalProperties(additionalProperties: QueryParams) = apply {

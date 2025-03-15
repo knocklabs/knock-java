@@ -46,32 +46,95 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun _typename(): String = _typename.getRequired("__typename")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun frequency(): Frequency = frequency.getRequired("frequency")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun dayOfMonth(): Optional<Long> = Optional.ofNullable(dayOfMonth.getNullable("day_of_month"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun days(): Optional<List<Day>> = Optional.ofNullable(days.getNullable("days"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun hours(): Optional<Long> = Optional.ofNullable(hours.getNullable("hours"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun interval(): Optional<Long> = Optional.ofNullable(interval.getNullable("interval"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun minutes(): Optional<Long> = Optional.ofNullable(minutes.getNullable("minutes"))
 
+    /**
+     * Returns the raw JSON value of [_typename].
+     *
+     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
+    /**
+     * Returns the raw JSON value of [frequency].
+     *
+     * Unlike [frequency], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("frequency") @ExcludeMissing fun _frequency(): JsonField<Frequency> = frequency
 
+    /**
+     * Returns the raw JSON value of [dayOfMonth].
+     *
+     * Unlike [dayOfMonth], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("day_of_month") @ExcludeMissing fun _dayOfMonth(): JsonField<Long> = dayOfMonth
 
+    /**
+     * Returns the raw JSON value of [days].
+     *
+     * Unlike [days], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("days") @ExcludeMissing fun _days(): JsonField<List<Day>> = days
 
+    /**
+     * Returns the raw JSON value of [hours].
+     *
+     * Unlike [hours], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("hours") @ExcludeMissing fun _hours(): JsonField<Long> = hours
 
+    /**
+     * Returns the raw JSON value of [interval].
+     *
+     * Unlike [interval], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("interval") @ExcludeMissing fun _interval(): JsonField<Long> = interval
 
+    /**
+     * Returns the raw JSON value of [minutes].
+     *
+     * Unlike [minutes], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("minutes") @ExcludeMissing fun _minutes(): JsonField<Long> = minutes
 
     @JsonAnyGetter
@@ -137,48 +200,116 @@ private constructor(
 
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+        /**
+         * Sets [Builder._typename] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder._typename] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         fun frequency(frequency: Frequency) = frequency(JsonField.of(frequency))
 
+        /**
+         * Sets [Builder.frequency] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.frequency] with a well-typed [Frequency] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun frequency(frequency: JsonField<Frequency>) = apply { this.frequency = frequency }
 
         fun dayOfMonth(dayOfMonth: Long?) = dayOfMonth(JsonField.ofNullable(dayOfMonth))
 
+        /**
+         * Alias for [Builder.dayOfMonth].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun dayOfMonth(dayOfMonth: Long) = dayOfMonth(dayOfMonth as Long?)
 
+        /** Alias for calling [Builder.dayOfMonth] with `dayOfMonth.orElse(null)`. */
         fun dayOfMonth(dayOfMonth: Optional<Long>) = dayOfMonth(dayOfMonth.getOrNull())
 
+        /**
+         * Sets [Builder.dayOfMonth] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.dayOfMonth] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun dayOfMonth(dayOfMonth: JsonField<Long>) = apply { this.dayOfMonth = dayOfMonth }
 
         fun days(days: List<Day>?) = days(JsonField.ofNullable(days))
 
+        /** Alias for calling [Builder.days] with `days.orElse(null)`. */
         fun days(days: Optional<List<Day>>) = days(days.getOrNull())
 
+        /**
+         * Sets [Builder.days] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.days] with a well-typed `List<Day>` value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun days(days: JsonField<List<Day>>) = apply { this.days = days.map { it.toMutableList() } }
 
+        /**
+         * Adds a single [Day] to [days].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addDay(day: Day) = apply {
             days = (days ?: JsonField.of(mutableListOf())).also { checkKnown("days", it).add(day) }
         }
 
         fun hours(hours: Long?) = hours(JsonField.ofNullable(hours))
 
+        /**
+         * Alias for [Builder.hours].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun hours(hours: Long) = hours(hours as Long?)
 
+        /** Alias for calling [Builder.hours] with `hours.orElse(null)`. */
         fun hours(hours: Optional<Long>) = hours(hours.getOrNull())
 
+        /**
+         * Sets [Builder.hours] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.hours] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun hours(hours: JsonField<Long>) = apply { this.hours = hours }
 
         fun interval(interval: Long) = interval(JsonField.of(interval))
 
+        /**
+         * Sets [Builder.interval] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.interval] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun interval(interval: JsonField<Long>) = apply { this.interval = interval }
 
         fun minutes(minutes: Long?) = minutes(JsonField.ofNullable(minutes))
 
+        /**
+         * Alias for [Builder.minutes].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
         fun minutes(minutes: Long) = minutes(minutes as Long?)
 
+        /** Alias for calling [Builder.minutes] with `minutes.orElse(null)`. */
         fun minutes(minutes: Optional<Long>) = minutes(minutes.getOrNull())
 
+        /**
+         * Sets [Builder.minutes] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.minutes] with a well-typed [Long] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun minutes(minutes: JsonField<Long>) = apply { this.minutes = minutes }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

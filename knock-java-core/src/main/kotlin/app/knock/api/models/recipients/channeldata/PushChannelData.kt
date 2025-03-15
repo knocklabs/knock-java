@@ -11,6 +11,7 @@ import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -28,8 +29,17 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun tokens(): List<String> = tokens.getRequired("tokens")
 
+    /**
+     * Returns the raw JSON value of [tokens].
+     *
+     * Unlike [tokens], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("tokens") @ExcludeMissing fun _tokens(): JsonField<List<String>> = tokens
 
     @JsonAnyGetter
@@ -76,10 +86,22 @@ private constructor(
 
         fun tokens(tokens: List<String>) = tokens(JsonField.of(tokens))
 
+        /**
+         * Sets [Builder.tokens] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.tokens] with a well-typed `List<String>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun tokens(tokens: JsonField<List<String>>) = apply {
             this.tokens = tokens.map { it.toMutableList() }
         }
 
+        /**
+         * Adds a single [String] to [tokens].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addToken(token: String) = apply {
             tokens =
                 (tokens ?: JsonField.of(mutableListOf())).also {

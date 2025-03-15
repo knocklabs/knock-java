@@ -95,7 +95,11 @@ private constructor(
             this.objectIds = objectIds.toMutableList()
         }
 
-        /** The IDs of the objects to delete */
+        /**
+         * Adds a single [String] to [objectIds].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addObjectId(objectId: String) = apply {
             objectIds = (objectIds ?: mutableListOf()).apply { add(objectId) }
         }

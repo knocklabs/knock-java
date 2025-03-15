@@ -10,6 +10,7 @@ import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.objects.Object
 import app.knock.api.models.recipients.Recipient
 import app.knock.api.models.users.User
@@ -48,39 +49,93 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun _typename(): String = _typename.getRequired("__typename")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun insertedAt(): OffsetDateTime = insertedAt.getRequired("inserted_at")
 
-    /** A custom-object entity which belongs to a collection. */
+    /**
+     * A custom-object entity which belongs to a collection.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun object_(): Object = object_.getRequired("object")
 
-    /** A recipient, which is either a user or an object */
+    /**
+     * A recipient, which is either a user or an object
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun recipient(): Recipient = recipient.getRequired("recipient")
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
-    /** The custom properties associated with the subscription */
+    /**
+     * The custom properties associated with the subscription
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun properties(): Optional<Properties> =
         Optional.ofNullable(properties.getNullable("properties"))
 
+    /**
+     * Returns the raw JSON value of [_typename].
+     *
+     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
+    /**
+     * Returns the raw JSON value of [insertedAt].
+     *
+     * Unlike [insertedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("inserted_at")
     @ExcludeMissing
     fun _insertedAt(): JsonField<OffsetDateTime> = insertedAt
 
-    /** A custom-object entity which belongs to a collection. */
+    /**
+     * Returns the raw JSON value of [object_].
+     *
+     * Unlike [object_], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("object") @ExcludeMissing fun _object_(): JsonField<Object> = object_
 
-    /** A recipient, which is either a user or an object */
+    /**
+     * Returns the raw JSON value of [recipient].
+     *
+     * Unlike [recipient], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("recipient") @ExcludeMissing fun _recipient(): JsonField<Recipient> = recipient
 
+    /**
+     * Returns the raw JSON value of [updatedAt].
+     *
+     * Unlike [updatedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("updated_at")
     @ExcludeMissing
     fun _updatedAt(): JsonField<OffsetDateTime> = updatedAt
 
-    /** The custom properties associated with the subscription */
+    /**
+     * Returns the raw JSON value of [properties].
+     *
+     * Unlike [properties], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("properties")
     @ExcludeMissing
     fun _properties(): JsonField<Properties> = properties
@@ -148,10 +203,24 @@ private constructor(
 
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+        /**
+         * Sets [Builder._typename] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder._typename] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         fun insertedAt(insertedAt: OffsetDateTime) = insertedAt(JsonField.of(insertedAt))
 
+        /**
+         * Sets [Builder.insertedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.insertedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun insertedAt(insertedAt: JsonField<OffsetDateTime>) = apply {
             this.insertedAt = insertedAt
         }
@@ -159,32 +228,56 @@ private constructor(
         /** A custom-object entity which belongs to a collection. */
         fun object_(object_: Object) = object_(JsonField.of(object_))
 
-        /** A custom-object entity which belongs to a collection. */
+        /**
+         * Sets [Builder.object_] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.object_] with a well-typed [Object] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun object_(object_: JsonField<Object>) = apply { this.object_ = object_ }
 
         /** A recipient, which is either a user or an object */
         fun recipient(recipient: Recipient) = recipient(JsonField.of(recipient))
 
-        /** A recipient, which is either a user or an object */
+        /**
+         * Sets [Builder.recipient] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.recipient] with a well-typed [Recipient] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun recipient(recipient: JsonField<Recipient>) = apply { this.recipient = recipient }
 
-        /** A user object */
+        /** Alias for calling [recipient] with `Recipient.ofUser(user)`. */
         fun recipient(user: User) = recipient(Recipient.ofUser(user))
 
-        /** A custom-object entity which belongs to a collection. */
+        /** Alias for calling [recipient] with `Recipient.ofObject(object_)`. */
         fun recipient(object_: Object) = recipient(Recipient.ofObject(object_))
 
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
+        /**
+         * Sets [Builder.updatedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.updatedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
         /** The custom properties associated with the subscription */
         fun properties(properties: Properties?) = properties(JsonField.ofNullable(properties))
 
-        /** The custom properties associated with the subscription */
+        /** Alias for calling [Builder.properties] with `properties.orElse(null)`. */
         fun properties(properties: Optional<Properties>) = properties(properties.getOrNull())
 
-        /** The custom properties associated with the subscription */
+        /**
+         * Sets [Builder.properties] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.properties] with a well-typed [Properties] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun properties(properties: JsonField<Properties>) = apply { this.properties = properties }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

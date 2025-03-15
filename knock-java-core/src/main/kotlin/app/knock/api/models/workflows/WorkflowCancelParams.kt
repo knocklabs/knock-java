@@ -14,6 +14,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -40,23 +41,45 @@ private constructor(
     /**
      * The cancellation key supplied to the workflow trigger endpoint to use for cancelling one or
      * more workflow runs.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun cancellationKey(): String = body.cancellationKey()
 
-    /** An optional list of recipients to cancel the workflow for using the cancellation key. */
+    /**
+     * An optional list of recipients to cancel the workflow for using the cancellation key.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun recipients(): Optional<List<String>> = body.recipients()
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun tenant(): Optional<String> = body.tenant()
 
     /**
-     * The cancellation key supplied to the workflow trigger endpoint to use for cancelling one or
-     * more workflow runs.
+     * Returns the raw JSON value of [cancellationKey].
+     *
+     * Unlike [cancellationKey], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _cancellationKey(): JsonField<String> = body._cancellationKey()
 
-    /** An optional list of recipients to cancel the workflow for using the cancellation key. */
+    /**
+     * Returns the raw JSON value of [recipients].
+     *
+     * Unlike [recipients], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _recipients(): JsonField<List<String>> = body._recipients()
 
+    /**
+     * Returns the raw JSON value of [tenant].
+     *
+     * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _tenant(): JsonField<String> = body._tenant()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -99,28 +122,51 @@ private constructor(
         /**
          * The cancellation key supplied to the workflow trigger endpoint to use for cancelling one
          * or more workflow runs.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun cancellationKey(): String = cancellationKey.getRequired("cancellation_key")
 
-        /** An optional list of recipients to cancel the workflow for using the cancellation key. */
+        /**
+         * An optional list of recipients to cancel the workflow for using the cancellation key.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun recipients(): Optional<List<String>> =
             Optional.ofNullable(recipients.getNullable("recipients"))
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun tenant(): Optional<String> = Optional.ofNullable(tenant.getNullable("tenant"))
 
         /**
-         * The cancellation key supplied to the workflow trigger endpoint to use for cancelling one
-         * or more workflow runs.
+         * Returns the raw JSON value of [cancellationKey].
+         *
+         * Unlike [cancellationKey], this method doesn't throw if the JSON field has an unexpected
+         * type.
          */
         @JsonProperty("cancellation_key")
         @ExcludeMissing
         fun _cancellationKey(): JsonField<String> = cancellationKey
 
-        /** An optional list of recipients to cancel the workflow for using the cancellation key. */
+        /**
+         * Returns the raw JSON value of [recipients].
+         *
+         * Unlike [recipients], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("recipients")
         @ExcludeMissing
         fun _recipients(): JsonField<List<String>> = recipients
 
+        /**
+         * Returns the raw JSON value of [tenant].
+         *
+         * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("tenant") @ExcludeMissing fun _tenant(): JsonField<String> = tenant
 
         @JsonAnyGetter
@@ -179,8 +225,11 @@ private constructor(
                 cancellationKey(JsonField.of(cancellationKey))
 
             /**
-             * The cancellation key supplied to the workflow trigger endpoint to use for cancelling
-             * one or more workflow runs.
+             * Sets [Builder.cancellationKey] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cancellationKey] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun cancellationKey(cancellationKey: JsonField<String>) = apply {
                 this.cancellationKey = cancellationKey
@@ -191,20 +240,24 @@ private constructor(
              */
             fun recipients(recipients: List<String>?) = recipients(JsonField.ofNullable(recipients))
 
-            /**
-             * An optional list of recipients to cancel the workflow for using the cancellation key.
-             */
+            /** Alias for calling [Builder.recipients] with `recipients.orElse(null)`. */
             fun recipients(recipients: Optional<List<String>>) = recipients(recipients.getOrNull())
 
             /**
-             * An optional list of recipients to cancel the workflow for using the cancellation key.
+             * Sets [Builder.recipients] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.recipients] with a well-typed `List<String>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
             fun recipients(recipients: JsonField<List<String>>) = apply {
                 this.recipients = recipients.map { it.toMutableList() }
             }
 
             /**
-             * An optional list of recipients to cancel the workflow for using the cancellation key.
+             * Adds a single [String] to [recipients].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
              */
             fun addRecipient(recipient: String) = apply {
                 recipients =
@@ -215,8 +268,16 @@ private constructor(
 
             fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
 
+            /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
             fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
+            /**
+             * Sets [Builder.tenant] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.tenant] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun tenant(tenant: JsonField<String>) = apply { this.tenant = tenant }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -309,8 +370,11 @@ private constructor(
         }
 
         /**
-         * The cancellation key supplied to the workflow trigger endpoint to use for cancelling one
-         * or more workflow runs.
+         * Sets [Builder.cancellationKey] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.cancellationKey] with a well-typed [String] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
         fun cancellationKey(cancellationKey: JsonField<String>) = apply {
             body.cancellationKey(cancellationKey)
@@ -319,19 +383,36 @@ private constructor(
         /** An optional list of recipients to cancel the workflow for using the cancellation key. */
         fun recipients(recipients: List<String>?) = apply { body.recipients(recipients) }
 
-        /** An optional list of recipients to cancel the workflow for using the cancellation key. */
+        /** Alias for calling [Builder.recipients] with `recipients.orElse(null)`. */
         fun recipients(recipients: Optional<List<String>>) = recipients(recipients.getOrNull())
 
-        /** An optional list of recipients to cancel the workflow for using the cancellation key. */
+        /**
+         * Sets [Builder.recipients] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.recipients] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun recipients(recipients: JsonField<List<String>>) = apply { body.recipients(recipients) }
 
-        /** An optional list of recipients to cancel the workflow for using the cancellation key. */
+        /**
+         * Adds a single [String] to [recipients].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addRecipient(recipient: String) = apply { body.addRecipient(recipient) }
 
         fun tenant(tenant: String?) = apply { body.tenant(tenant) }
 
+        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
+        /**
+         * Sets [Builder.tenant] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.tenant] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun tenant(tenant: JsonField<String>) = apply { body.tenant(tenant) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {

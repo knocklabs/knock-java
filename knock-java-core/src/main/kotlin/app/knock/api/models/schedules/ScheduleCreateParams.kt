@@ -44,34 +44,97 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun recipients(): List<Recipient> = body.recipients()
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun repeats(): List<ScheduleRepeatRule> = body.repeats()
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
     fun workflow(): String = body.workflow()
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun data(): Optional<Data> = body.data()
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun endingAt(): Optional<OffsetDateTime> = body.endingAt()
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun scheduledAt(): Optional<OffsetDateTime> = body.scheduledAt()
 
-    /** An inline tenant request */
+    /**
+     * An inline tenant request
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun tenant(): Optional<InlineTenantRequest> = body.tenant()
 
+    /**
+     * Returns the raw JSON value of [recipients].
+     *
+     * Unlike [recipients], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _recipients(): JsonField<List<Recipient>> = body._recipients()
 
+    /**
+     * Returns the raw JSON value of [repeats].
+     *
+     * Unlike [repeats], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _repeats(): JsonField<List<ScheduleRepeatRule>> = body._repeats()
 
+    /**
+     * Returns the raw JSON value of [workflow].
+     *
+     * Unlike [workflow], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _workflow(): JsonField<String> = body._workflow()
 
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _data(): JsonField<Data> = body._data()
 
+    /**
+     * Returns the raw JSON value of [endingAt].
+     *
+     * Unlike [endingAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _endingAt(): JsonField<OffsetDateTime> = body._endingAt()
 
+    /**
+     * Returns the raw JSON value of [scheduledAt].
+     *
+     * Unlike [scheduledAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _scheduledAt(): JsonField<OffsetDateTime> = body._scheduledAt()
 
-    /** An inline tenant request */
+    /**
+     * Returns the raw JSON value of [tenant].
+     *
+     * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
+     */
     fun _tenant(): JsonField<InlineTenantRequest> = body._tenant()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
@@ -114,45 +177,108 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun recipients(): List<Recipient> = recipients.getRequired("recipients")
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun repeats(): List<ScheduleRepeatRule> = repeats.getRequired("repeats")
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun workflow(): String = workflow.getRequired("workflow")
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun data(): Optional<Data> = Optional.ofNullable(data.getNullable("data"))
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun endingAt(): Optional<OffsetDateTime> =
             Optional.ofNullable(endingAt.getNullable("ending_at"))
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun scheduledAt(): Optional<OffsetDateTime> =
             Optional.ofNullable(scheduledAt.getNullable("scheduled_at"))
 
-        /** An inline tenant request */
+        /**
+         * An inline tenant request
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
         fun tenant(): Optional<InlineTenantRequest> =
             Optional.ofNullable(tenant.getNullable("tenant"))
 
+        /**
+         * Returns the raw JSON value of [recipients].
+         *
+         * Unlike [recipients], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("recipients")
         @ExcludeMissing
         fun _recipients(): JsonField<List<Recipient>> = recipients
 
+        /**
+         * Returns the raw JSON value of [repeats].
+         *
+         * Unlike [repeats], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("repeats")
         @ExcludeMissing
         fun _repeats(): JsonField<List<ScheduleRepeatRule>> = repeats
 
+        /**
+         * Returns the raw JSON value of [workflow].
+         *
+         * Unlike [workflow], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("workflow") @ExcludeMissing fun _workflow(): JsonField<String> = workflow
 
+        /**
+         * Returns the raw JSON value of [data].
+         *
+         * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
+        /**
+         * Returns the raw JSON value of [endingAt].
+         *
+         * Unlike [endingAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("ending_at")
         @ExcludeMissing
         fun _endingAt(): JsonField<OffsetDateTime> = endingAt
 
+        /**
+         * Returns the raw JSON value of [scheduledAt].
+         *
+         * Unlike [scheduledAt], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("scheduled_at")
         @ExcludeMissing
         fun _scheduledAt(): JsonField<OffsetDateTime> = scheduledAt
 
-        /** An inline tenant request */
+        /**
+         * Returns the raw JSON value of [tenant].
+         *
+         * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("tenant")
         @ExcludeMissing
         fun _tenant(): JsonField<InlineTenantRequest> = tenant
@@ -221,10 +347,22 @@ private constructor(
 
             fun recipients(recipients: List<Recipient>) = recipients(JsonField.of(recipients))
 
+            /**
+             * Sets [Builder.recipients] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.recipients] with a well-typed `List<Recipient>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
             fun recipients(recipients: JsonField<List<Recipient>>) = apply {
                 this.recipients = recipients.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [Recipient] to [recipients].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addRecipient(recipient: Recipient) = apply {
                 recipients =
                     (recipients ?: JsonField.of(mutableListOf())).also {
@@ -232,19 +370,33 @@ private constructor(
                     }
             }
 
-            /** A user identifier */
+            /** Alias for calling [addRecipient] with `Recipient.ofString(string)`. */
             fun addRecipient(string: String) = addRecipient(Recipient.ofString(string))
 
-            /** An object reference to a recipient */
+            /**
+             * Alias for calling [addRecipient] with `Recipient.ofObjectReference(objectReference)`.
+             */
             fun addRecipient(objectReference: Recipient.ObjectReference) =
                 addRecipient(Recipient.ofObjectReference(objectReference))
 
             fun repeats(repeats: List<ScheduleRepeatRule>) = repeats(JsonField.of(repeats))
 
+            /**
+             * Sets [Builder.repeats] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.repeats] with a well-typed
+             * `List<ScheduleRepeatRule>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
             fun repeats(repeats: JsonField<List<ScheduleRepeatRule>>) = apply {
                 this.repeats = repeats.map { it.toMutableList() }
             }
 
+            /**
+             * Adds a single [ScheduleRepeatRule] to [repeats].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addRepeat(repeat: ScheduleRepeatRule) = apply {
                 repeats =
                     (repeats ?: JsonField.of(mutableListOf())).also {
@@ -254,26 +406,57 @@ private constructor(
 
             fun workflow(workflow: String) = workflow(JsonField.of(workflow))
 
+            /**
+             * Sets [Builder.workflow] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.workflow] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun workflow(workflow: JsonField<String>) = apply { this.workflow = workflow }
 
             fun data(data: Data?) = data(JsonField.ofNullable(data))
 
+            /** Alias for calling [Builder.data] with `data.orElse(null)`. */
             fun data(data: Optional<Data>) = data(data.getOrNull())
 
+            /**
+             * Sets [Builder.data] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun data(data: JsonField<Data>) = apply { this.data = data }
 
             fun endingAt(endingAt: OffsetDateTime?) = endingAt(JsonField.ofNullable(endingAt))
 
+            /** Alias for calling [Builder.endingAt] with `endingAt.orElse(null)`. */
             fun endingAt(endingAt: Optional<OffsetDateTime>) = endingAt(endingAt.getOrNull())
 
+            /**
+             * Sets [Builder.endingAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.endingAt] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun endingAt(endingAt: JsonField<OffsetDateTime>) = apply { this.endingAt = endingAt }
 
             fun scheduledAt(scheduledAt: OffsetDateTime?) =
                 scheduledAt(JsonField.ofNullable(scheduledAt))
 
+            /** Alias for calling [Builder.scheduledAt] with `scheduledAt.orElse(null)`. */
             fun scheduledAt(scheduledAt: Optional<OffsetDateTime>) =
                 scheduledAt(scheduledAt.getOrNull())
 
+            /**
+             * Sets [Builder.scheduledAt] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.scheduledAt] with a well-typed [OffsetDateTime]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
             fun scheduledAt(scheduledAt: JsonField<OffsetDateTime>) = apply {
                 this.scheduledAt = scheduledAt
             }
@@ -281,16 +464,24 @@ private constructor(
             /** An inline tenant request */
             fun tenant(tenant: InlineTenantRequest?) = tenant(JsonField.ofNullable(tenant))
 
-            /** An inline tenant request */
+            /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
             fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.getOrNull())
 
-            /** An inline tenant request */
+            /**
+             * Sets [Builder.tenant] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.tenant] with a well-typed [InlineTenantRequest]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
             fun tenant(tenant: JsonField<InlineTenantRequest>) = apply { this.tenant = tenant }
 
-            /** A tenant identifier */
+            /** Alias for calling [tenant] with `InlineTenantRequest.ofString(string)`. */
             fun tenant(string: String) = tenant(InlineTenantRequest.ofString(string))
 
-            /** A tenant to be set in the system */
+            /**
+             * Alias for calling [tenant] with `InlineTenantRequest.ofTenantRequest(tenantRequest)`.
+             */
             fun tenant(tenantRequest: TenantRequest) =
                 tenant(InlineTenantRequest.ofTenantRequest(tenantRequest))
 
@@ -378,47 +569,100 @@ private constructor(
 
         fun recipients(recipients: List<Recipient>) = apply { body.recipients(recipients) }
 
+        /**
+         * Sets [Builder.recipients] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.recipients] with a well-typed `List<Recipient>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun recipients(recipients: JsonField<List<Recipient>>) = apply {
             body.recipients(recipients)
         }
 
+        /**
+         * Adds a single [Recipient] to [recipients].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addRecipient(recipient: Recipient) = apply { body.addRecipient(recipient) }
 
-        /** A user identifier */
+        /** Alias for calling [addRecipient] with `Recipient.ofString(string)`. */
         fun addRecipient(string: String) = apply { body.addRecipient(string) }
 
-        /** An object reference to a recipient */
+        /** Alias for calling [addRecipient] with `Recipient.ofObjectReference(objectReference)`. */
         fun addRecipient(objectReference: Recipient.ObjectReference) = apply {
             body.addRecipient(objectReference)
         }
 
         fun repeats(repeats: List<ScheduleRepeatRule>) = apply { body.repeats(repeats) }
 
+        /**
+         * Sets [Builder.repeats] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.repeats] with a well-typed `List<ScheduleRepeatRule>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
         fun repeats(repeats: JsonField<List<ScheduleRepeatRule>>) = apply { body.repeats(repeats) }
 
+        /**
+         * Adds a single [ScheduleRepeatRule] to [repeats].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addRepeat(repeat: ScheduleRepeatRule) = apply { body.addRepeat(repeat) }
 
         fun workflow(workflow: String) = apply { body.workflow(workflow) }
 
+        /**
+         * Sets [Builder.workflow] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.workflow] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun workflow(workflow: JsonField<String>) = apply { body.workflow(workflow) }
 
         fun data(data: Data?) = apply { body.data(data) }
 
+        /** Alias for calling [Builder.data] with `data.orElse(null)`. */
         fun data(data: Optional<Data>) = data(data.getOrNull())
 
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun data(data: JsonField<Data>) = apply { body.data(data) }
 
         fun endingAt(endingAt: OffsetDateTime?) = apply { body.endingAt(endingAt) }
 
+        /** Alias for calling [Builder.endingAt] with `endingAt.orElse(null)`. */
         fun endingAt(endingAt: Optional<OffsetDateTime>) = endingAt(endingAt.getOrNull())
 
+        /**
+         * Sets [Builder.endingAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.endingAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun endingAt(endingAt: JsonField<OffsetDateTime>) = apply { body.endingAt(endingAt) }
 
         fun scheduledAt(scheduledAt: OffsetDateTime?) = apply { body.scheduledAt(scheduledAt) }
 
+        /** Alias for calling [Builder.scheduledAt] with `scheduledAt.orElse(null)`. */
         fun scheduledAt(scheduledAt: Optional<OffsetDateTime>) =
             scheduledAt(scheduledAt.getOrNull())
 
+        /**
+         * Sets [Builder.scheduledAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.scheduledAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun scheduledAt(scheduledAt: JsonField<OffsetDateTime>) = apply {
             body.scheduledAt(scheduledAt)
         }
@@ -426,16 +670,22 @@ private constructor(
         /** An inline tenant request */
         fun tenant(tenant: InlineTenantRequest?) = apply { body.tenant(tenant) }
 
-        /** An inline tenant request */
+        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.getOrNull())
 
-        /** An inline tenant request */
+        /**
+         * Sets [Builder.tenant] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.tenant] with a well-typed [InlineTenantRequest] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun tenant(tenant: JsonField<InlineTenantRequest>) = apply { body.tenant(tenant) }
 
-        /** A tenant identifier */
+        /** Alias for calling [tenant] with `InlineTenantRequest.ofString(string)`. */
         fun tenant(string: String) = apply { body.tenant(string) }
 
-        /** A tenant to be set in the system */
+        /** Alias for calling [tenant] with `InlineTenantRequest.ofTenantRequest(tenantRequest)`. */
         fun tenant(tenantRequest: TenantRequest) = apply { body.tenant(tenantRequest) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
@@ -724,16 +974,37 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            /** An object identifier */
+            /**
+             * An object identifier
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            /** The collection the object belongs to */
+            /**
+             * The collection the object belongs to
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun collection(): String = collection.getRequired("collection")
 
-            /** An object identifier */
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-            /** The collection the object belongs to */
+            /**
+             * Returns the raw JSON value of [collection].
+             *
+             * Unlike [collection], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("collection")
             @ExcludeMissing
             fun _collection(): JsonField<String> = collection
@@ -787,13 +1058,25 @@ private constructor(
                 /** An object identifier */
                 fun id(id: String) = id(JsonField.of(id))
 
-                /** An object identifier */
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
                 /** The collection the object belongs to */
                 fun collection(collection: String) = collection(JsonField.of(collection))
 
-                /** The collection the object belongs to */
+                /**
+                 * Sets [Builder.collection] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.collection] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun collection(collection: JsonField<String>) = apply {
                     this.collection = collection
                 }

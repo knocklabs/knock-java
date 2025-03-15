@@ -99,159 +99,344 @@ private constructor(
     @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
 ) {
 
-    /** The message ID */
+    /**
+     * The message ID
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun id(): Optional<String> = Optional.ofNullable(id.getNullable("id"))
 
+    /**
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun _typename(): Optional<String> = Optional.ofNullable(_typename.getNullable("__typename"))
 
-    /** A list of actor representations associated with the message (up to 10) */
+    /**
+     * A list of actor representations associated with the message (up to 10)
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun actors(): Optional<List<Actor>> = Optional.ofNullable(actors.getNullable("actors"))
 
-    /** Timestamp when message was archived */
+    /**
+     * Timestamp when message was archived
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun archivedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(archivedAt.getNullable("archived_at"))
 
-    /** Channel ID associated with the message */
+    /**
+     * Channel ID associated with the message
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun channelId(): Optional<String> = Optional.ofNullable(channelId.getNullable("channel_id"))
 
-    /** Timestamp when message was clicked */
+    /**
+     * Timestamp when message was clicked
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun clickedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(clickedAt.getNullable("clicked_at"))
 
-    /** Additional message data */
+    /**
+     * Additional message data
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun data(): Optional<Data> = Optional.ofNullable(data.getNullable("data"))
 
-    /** List of engagement statuses */
+    /**
+     * List of engagement statuses
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun engagementStatuses(): Optional<List<EngagementStatus>> =
         Optional.ofNullable(engagementStatuses.getNullable("engagement_statuses"))
 
-    /** Timestamp of creation */
+    /**
+     * Timestamp of creation
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun insertedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(insertedAt.getNullable("inserted_at"))
 
-    /** Timestamp when message was interacted with */
+    /**
+     * Timestamp when message was interacted with
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun interactedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(interactedAt.getNullable("interacted_at"))
 
-    /** Timestamp when a link in the message was clicked */
+    /**
+     * Timestamp when a link in the message was clicked
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun linkClickedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(linkClickedAt.getNullable("link_clicked_at"))
 
-    /** Message metadata */
+    /**
+     * Message metadata
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun metadata(): Optional<Metadata> = Optional.ofNullable(metadata.getNullable("metadata"))
 
-    /** Timestamp when message was read */
+    /**
+     * Timestamp when message was read
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun readAt(): Optional<OffsetDateTime> = Optional.ofNullable(readAt.getNullable("read_at"))
 
     /**
      * A reference to a recipient, either a user identifier (string) or an object reference (id,
      * collection).
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
     fun recipient(): Optional<Recipient> = Optional.ofNullable(recipient.getNullable("recipient"))
 
-    /** Timestamp when message was scheduled for */
+    /**
+     * Timestamp when message was scheduled for
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun scheduledAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(scheduledAt.getNullable("scheduled_at"))
 
-    /** Timestamp when message was seen */
+    /**
+     * Timestamp when message was seen
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun seenAt(): Optional<OffsetDateTime> = Optional.ofNullable(seenAt.getNullable("seen_at"))
 
-    /** Source information */
+    /**
+     * Source information
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun source(): Optional<Source> = Optional.ofNullable(source.getNullable("source"))
 
-    /** Message delivery status */
+    /**
+     * Message delivery status
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun status(): Optional<Status> = Optional.ofNullable(status.getNullable("status"))
 
-    /** Tenant ID that the message belongs to */
+    /**
+     * Tenant ID that the message belongs to
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun tenant(): Optional<String> = Optional.ofNullable(tenant.getNullable("tenant"))
 
-    /** Timestamp of last update */
+    /**
+     * Timestamp of last update
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     fun updatedAt(): Optional<OffsetDateTime> =
         Optional.ofNullable(updatedAt.getNullable("updated_at"))
 
-    /** Workflow key used to create the message */
+    /**
+     * Workflow key used to create the message
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
     @Deprecated("deprecated")
     fun workflow(): Optional<String> = Optional.ofNullable(workflow.getNullable("workflow"))
 
-    /** The message ID */
+    /**
+     * Returns the raw JSON value of [id].
+     *
+     * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
+    /**
+     * Returns the raw JSON value of [_typename].
+     *
+     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
-    /** A list of actor representations associated with the message (up to 10) */
+    /**
+     * Returns the raw JSON value of [actors].
+     *
+     * Unlike [actors], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("actors") @ExcludeMissing fun _actors(): JsonField<List<Actor>> = actors
 
-    /** Timestamp when message was archived */
+    /**
+     * Returns the raw JSON value of [archivedAt].
+     *
+     * Unlike [archivedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("archived_at")
     @ExcludeMissing
     fun _archivedAt(): JsonField<OffsetDateTime> = archivedAt
 
-    /** Channel ID associated with the message */
+    /**
+     * Returns the raw JSON value of [channelId].
+     *
+     * Unlike [channelId], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("channel_id") @ExcludeMissing fun _channelId(): JsonField<String> = channelId
 
-    /** Timestamp when message was clicked */
+    /**
+     * Returns the raw JSON value of [clickedAt].
+     *
+     * Unlike [clickedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("clicked_at")
     @ExcludeMissing
     fun _clickedAt(): JsonField<OffsetDateTime> = clickedAt
 
-    /** Additional message data */
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
-    /** List of engagement statuses */
+    /**
+     * Returns the raw JSON value of [engagementStatuses].
+     *
+     * Unlike [engagementStatuses], this method doesn't throw if the JSON field has an unexpected
+     * type.
+     */
     @JsonProperty("engagement_statuses")
     @ExcludeMissing
     fun _engagementStatuses(): JsonField<List<EngagementStatus>> = engagementStatuses
 
-    /** Timestamp of creation */
+    /**
+     * Returns the raw JSON value of [insertedAt].
+     *
+     * Unlike [insertedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("inserted_at")
     @ExcludeMissing
     fun _insertedAt(): JsonField<OffsetDateTime> = insertedAt
 
-    /** Timestamp when message was interacted with */
+    /**
+     * Returns the raw JSON value of [interactedAt].
+     *
+     * Unlike [interactedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("interacted_at")
     @ExcludeMissing
     fun _interactedAt(): JsonField<OffsetDateTime> = interactedAt
 
-    /** Timestamp when a link in the message was clicked */
+    /**
+     * Returns the raw JSON value of [linkClickedAt].
+     *
+     * Unlike [linkClickedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("link_clicked_at")
     @ExcludeMissing
     fun _linkClickedAt(): JsonField<OffsetDateTime> = linkClickedAt
 
-    /** Message metadata */
+    /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
 
-    /** Timestamp when message was read */
+    /**
+     * Returns the raw JSON value of [readAt].
+     *
+     * Unlike [readAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("read_at") @ExcludeMissing fun _readAt(): JsonField<OffsetDateTime> = readAt
 
     /**
-     * A reference to a recipient, either a user identifier (string) or an object reference (id,
-     * collection).
+     * Returns the raw JSON value of [recipient].
+     *
+     * Unlike [recipient], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("recipient") @ExcludeMissing fun _recipient(): JsonField<Recipient> = recipient
 
-    /** Timestamp when message was scheduled for */
+    /**
+     * Returns the raw JSON value of [scheduledAt].
+     *
+     * Unlike [scheduledAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("scheduled_at")
     @ExcludeMissing
     fun _scheduledAt(): JsonField<OffsetDateTime> = scheduledAt
 
-    /** Timestamp when message was seen */
+    /**
+     * Returns the raw JSON value of [seenAt].
+     *
+     * Unlike [seenAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("seen_at") @ExcludeMissing fun _seenAt(): JsonField<OffsetDateTime> = seenAt
 
-    /** Source information */
+    /**
+     * Returns the raw JSON value of [source].
+     *
+     * Unlike [source], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("source") @ExcludeMissing fun _source(): JsonField<Source> = source
 
-    /** Message delivery status */
+    /**
+     * Returns the raw JSON value of [status].
+     *
+     * Unlike [status], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<Status> = status
 
-    /** Tenant ID that the message belongs to */
+    /**
+     * Returns the raw JSON value of [tenant].
+     *
+     * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("tenant") @ExcludeMissing fun _tenant(): JsonField<String> = tenant
 
-    /** Timestamp of last update */
+    /**
+     * Returns the raw JSON value of [updatedAt].
+     *
+     * Unlike [updatedAt], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @JsonProperty("updated_at")
     @ExcludeMissing
     fun _updatedAt(): JsonField<OffsetDateTime> = updatedAt
 
-    /** Workflow key used to create the message */
+    /**
+     * Returns the raw JSON value of [workflow].
+     *
+     * Unlike [workflow], this method doesn't throw if the JSON field has an unexpected type.
+     */
     @Deprecated("deprecated")
     @JsonProperty("workflow")
     @ExcludeMissing
@@ -355,22 +540,44 @@ private constructor(
         /** The message ID */
         fun id(id: String) = id(JsonField.of(id))
 
-        /** The message ID */
+        /**
+         * Sets [Builder.id] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.id] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+        /**
+         * Sets [Builder._typename] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder._typename] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         /** A list of actor representations associated with the message (up to 10) */
         fun actors(actors: List<Actor>) = actors(JsonField.of(actors))
 
-        /** A list of actor representations associated with the message (up to 10) */
+        /**
+         * Sets [Builder.actors] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.actors] with a well-typed `List<Actor>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun actors(actors: JsonField<List<Actor>>) = apply {
             this.actors = actors.map { it.toMutableList() }
         }
 
-        /** A list of actor representations associated with the message (up to 10) */
+        /**
+         * Adds a single [Actor] to [actors].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addActor(actor: Actor) = apply {
             actors =
                 (actors ?: JsonField.of(mutableListOf())).also {
@@ -378,20 +585,26 @@ private constructor(
                 }
         }
 
-        /** A user identifier */
+        /** Alias for calling [addActor] with `Actor.ofString(string)`. */
         fun addActor(string: String) = addActor(Actor.ofString(string))
 
-        /** An object reference to a recipient */
+        /** Alias for calling [addActor] with `Actor.ofObjectReference(objectReference)`. */
         fun addActor(objectReference: Actor.ObjectReference) =
             addActor(Actor.ofObjectReference(objectReference))
 
         /** Timestamp when message was archived */
         fun archivedAt(archivedAt: OffsetDateTime?) = archivedAt(JsonField.ofNullable(archivedAt))
 
-        /** Timestamp when message was archived */
+        /** Alias for calling [Builder.archivedAt] with `archivedAt.orElse(null)`. */
         fun archivedAt(archivedAt: Optional<OffsetDateTime>) = archivedAt(archivedAt.getOrNull())
 
-        /** Timestamp when message was archived */
+        /**
+         * Sets [Builder.archivedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.archivedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun archivedAt(archivedAt: JsonField<OffsetDateTime>) = apply {
             this.archivedAt = archivedAt
         }
@@ -399,37 +612,64 @@ private constructor(
         /** Channel ID associated with the message */
         fun channelId(channelId: String) = channelId(JsonField.of(channelId))
 
-        /** Channel ID associated with the message */
+        /**
+         * Sets [Builder.channelId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.channelId] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun channelId(channelId: JsonField<String>) = apply { this.channelId = channelId }
 
         /** Timestamp when message was clicked */
         fun clickedAt(clickedAt: OffsetDateTime?) = clickedAt(JsonField.ofNullable(clickedAt))
 
-        /** Timestamp when message was clicked */
+        /** Alias for calling [Builder.clickedAt] with `clickedAt.orElse(null)`. */
         fun clickedAt(clickedAt: Optional<OffsetDateTime>) = clickedAt(clickedAt.getOrNull())
 
-        /** Timestamp when message was clicked */
+        /**
+         * Sets [Builder.clickedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.clickedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun clickedAt(clickedAt: JsonField<OffsetDateTime>) = apply { this.clickedAt = clickedAt }
 
         /** Additional message data */
         fun data(data: Data?) = data(JsonField.ofNullable(data))
 
-        /** Additional message data */
+        /** Alias for calling [Builder.data] with `data.orElse(null)`. */
         fun data(data: Optional<Data>) = data(data.getOrNull())
 
-        /** Additional message data */
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
         /** List of engagement statuses */
         fun engagementStatuses(engagementStatuses: List<EngagementStatus>) =
             engagementStatuses(JsonField.of(engagementStatuses))
 
-        /** List of engagement statuses */
+        /**
+         * Sets [Builder.engagementStatuses] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.engagementStatuses] with a well-typed
+         * `List<EngagementStatus>` value instead. This method is primarily for setting the field to
+         * an undocumented or not yet supported value.
+         */
         fun engagementStatuses(engagementStatuses: JsonField<List<EngagementStatus>>) = apply {
             this.engagementStatuses = engagementStatuses.map { it.toMutableList() }
         }
 
-        /** List of engagement statuses */
+        /**
+         * Adds a single [EngagementStatus] to [engagementStatuses].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
         fun addEngagementStatus(engagementStatus: EngagementStatus) = apply {
             engagementStatuses =
                 (engagementStatuses ?: JsonField.of(mutableListOf())).also {
@@ -440,7 +680,13 @@ private constructor(
         /** Timestamp of creation */
         fun insertedAt(insertedAt: OffsetDateTime) = insertedAt(JsonField.of(insertedAt))
 
-        /** Timestamp of creation */
+        /**
+         * Sets [Builder.insertedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.insertedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun insertedAt(insertedAt: JsonField<OffsetDateTime>) = apply {
             this.insertedAt = insertedAt
         }
@@ -449,11 +695,17 @@ private constructor(
         fun interactedAt(interactedAt: OffsetDateTime?) =
             interactedAt(JsonField.ofNullable(interactedAt))
 
-        /** Timestamp when message was interacted with */
+        /** Alias for calling [Builder.interactedAt] with `interactedAt.orElse(null)`. */
         fun interactedAt(interactedAt: Optional<OffsetDateTime>) =
             interactedAt(interactedAt.getOrNull())
 
-        /** Timestamp when message was interacted with */
+        /**
+         * Sets [Builder.interactedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.interactedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun interactedAt(interactedAt: JsonField<OffsetDateTime>) = apply {
             this.interactedAt = interactedAt
         }
@@ -462,11 +714,17 @@ private constructor(
         fun linkClickedAt(linkClickedAt: OffsetDateTime?) =
             linkClickedAt(JsonField.ofNullable(linkClickedAt))
 
-        /** Timestamp when a link in the message was clicked */
+        /** Alias for calling [Builder.linkClickedAt] with `linkClickedAt.orElse(null)`. */
         fun linkClickedAt(linkClickedAt: Optional<OffsetDateTime>) =
             linkClickedAt(linkClickedAt.getOrNull())
 
-        /** Timestamp when a link in the message was clicked */
+        /**
+         * Sets [Builder.linkClickedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.linkClickedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun linkClickedAt(linkClickedAt: JsonField<OffsetDateTime>) = apply {
             this.linkClickedAt = linkClickedAt
         }
@@ -474,19 +732,31 @@ private constructor(
         /** Message metadata */
         fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
 
-        /** Message metadata */
+        /** Alias for calling [Builder.metadata] with `metadata.orElse(null)`. */
         fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
 
-        /** Message metadata */
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
         fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
         /** Timestamp when message was read */
         fun readAt(readAt: OffsetDateTime?) = readAt(JsonField.ofNullable(readAt))
 
-        /** Timestamp when message was read */
+        /** Alias for calling [Builder.readAt] with `readAt.orElse(null)`. */
         fun readAt(readAt: Optional<OffsetDateTime>) = readAt(readAt.getOrNull())
 
-        /** Timestamp when message was read */
+        /**
+         * Sets [Builder.readAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.readAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun readAt(readAt: JsonField<OffsetDateTime>) = apply { this.readAt = readAt }
 
         /**
@@ -496,15 +766,18 @@ private constructor(
         fun recipient(recipient: Recipient) = recipient(JsonField.of(recipient))
 
         /**
-         * A reference to a recipient, either a user identifier (string) or an object reference (id,
-         * collection).
+         * Sets [Builder.recipient] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.recipient] with a well-typed [Recipient] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun recipient(recipient: JsonField<Recipient>) = apply { this.recipient = recipient }
 
-        /** A user identifier */
+        /** Alias for calling [recipient] with `Recipient.ofString(string)`. */
         fun recipient(string: String) = recipient(Recipient.ofString(string))
 
-        /** An object reference to a recipient */
+        /** Alias for calling [recipient] with `Recipient.ofObjectReference(objectReference)`. */
         fun recipient(objectReference: Recipient.ObjectReference) =
             recipient(Recipient.ofObjectReference(objectReference))
 
@@ -512,11 +785,17 @@ private constructor(
         fun scheduledAt(scheduledAt: OffsetDateTime?) =
             scheduledAt(JsonField.ofNullable(scheduledAt))
 
-        /** Timestamp when message was scheduled for */
+        /** Alias for calling [Builder.scheduledAt] with `scheduledAt.orElse(null)`. */
         fun scheduledAt(scheduledAt: Optional<OffsetDateTime>) =
             scheduledAt(scheduledAt.getOrNull())
 
-        /** Timestamp when message was scheduled for */
+        /**
+         * Sets [Builder.scheduledAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.scheduledAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun scheduledAt(scheduledAt: JsonField<OffsetDateTime>) = apply {
             this.scheduledAt = scheduledAt
         }
@@ -524,48 +803,80 @@ private constructor(
         /** Timestamp when message was seen */
         fun seenAt(seenAt: OffsetDateTime?) = seenAt(JsonField.ofNullable(seenAt))
 
-        /** Timestamp when message was seen */
+        /** Alias for calling [Builder.seenAt] with `seenAt.orElse(null)`. */
         fun seenAt(seenAt: Optional<OffsetDateTime>) = seenAt(seenAt.getOrNull())
 
-        /** Timestamp when message was seen */
+        /**
+         * Sets [Builder.seenAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.seenAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun seenAt(seenAt: JsonField<OffsetDateTime>) = apply { this.seenAt = seenAt }
 
         /** Source information */
         fun source(source: Source) = source(JsonField.of(source))
 
-        /** Source information */
+        /**
+         * Sets [Builder.source] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.source] with a well-typed [Source] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun source(source: JsonField<Source>) = apply { this.source = source }
 
         /** Message delivery status */
         fun status(status: Status) = status(JsonField.of(status))
 
-        /** Message delivery status */
+        /**
+         * Sets [Builder.status] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.status] with a well-typed [Status] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun status(status: JsonField<Status>) = apply { this.status = status }
 
         /** Tenant ID that the message belongs to */
         fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
 
-        /** Tenant ID that the message belongs to */
+        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
-        /** Tenant ID that the message belongs to */
+        /**
+         * Sets [Builder.tenant] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.tenant] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         fun tenant(tenant: JsonField<String>) = apply { this.tenant = tenant }
 
         /** Timestamp of last update */
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
-        /** Timestamp of last update */
+        /**
+         * Sets [Builder.updatedAt] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.updatedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
         /** Workflow key used to create the message */
         @Deprecated("deprecated")
         fun workflow(workflow: String?) = workflow(JsonField.ofNullable(workflow))
 
-        /** Workflow key used to create the message */
+        /** Alias for calling [Builder.workflow] with `workflow.orElse(null)`. */
         @Deprecated("deprecated")
         fun workflow(workflow: Optional<String>) = workflow(workflow.getOrNull())
 
-        /** Workflow key used to create the message */
+        /**
+         * Sets [Builder.workflow] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.workflow] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
         @Deprecated("deprecated")
         fun workflow(workflow: JsonField<String>) = apply { this.workflow = workflow }
 
@@ -774,16 +1085,37 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            /** An object identifier */
+            /**
+             * An object identifier
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            /** The collection the object belongs to */
+            /**
+             * The collection the object belongs to
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun collection(): String = collection.getRequired("collection")
 
-            /** An object identifier */
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-            /** The collection the object belongs to */
+            /**
+             * Returns the raw JSON value of [collection].
+             *
+             * Unlike [collection], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("collection")
             @ExcludeMissing
             fun _collection(): JsonField<String> = collection
@@ -837,13 +1169,25 @@ private constructor(
                 /** An object identifier */
                 fun id(id: String) = id(JsonField.of(id))
 
-                /** An object identifier */
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
                 /** The collection the object belongs to */
                 fun collection(collection: String) = collection(JsonField.of(collection))
 
-                /** The collection the object belongs to */
+                /**
+                 * Sets [Builder.collection] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.collection] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun collection(collection: JsonField<String>) = apply {
                     this.collection = collection
                 }
@@ -1337,16 +1681,37 @@ private constructor(
             private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
         ) {
 
-            /** An object identifier */
+            /**
+             * An object identifier
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun id(): String = id.getRequired("id")
 
-            /** The collection the object belongs to */
+            /**
+             * The collection the object belongs to
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
             fun collection(): String = collection.getRequired("collection")
 
-            /** An object identifier */
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
             @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
-            /** The collection the object belongs to */
+            /**
+             * Returns the raw JSON value of [collection].
+             *
+             * Unlike [collection], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
             @JsonProperty("collection")
             @ExcludeMissing
             fun _collection(): JsonField<String> = collection
@@ -1400,13 +1765,25 @@ private constructor(
                 /** An object identifier */
                 fun id(id: String) = id(JsonField.of(id))
 
-                /** An object identifier */
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
                 /** The collection the object belongs to */
                 fun collection(collection: String) = collection(JsonField.of(collection))
 
-                /** The collection the object belongs to */
+                /**
+                 * Sets [Builder.collection] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.collection] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
                 fun collection(collection: JsonField<String>) = apply {
                     this.collection = collection
                 }
@@ -1479,28 +1856,64 @@ private constructor(
         private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
     ) {
 
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun _typename(): String = _typename.getRequired("__typename")
 
-        /** The workflow categories */
+        /**
+         * The workflow categories
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun categories(): List<String> = categories.getRequired("categories")
 
-        /** The workflow key */
+        /**
+         * The workflow key
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun key(): String = key.getRequired("key")
 
-        /** The source version ID */
+        /**
+         * The source version ID
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
         fun versionId(): String = versionId.getRequired("version_id")
 
+        /**
+         * Returns the raw JSON value of [_typename].
+         *
+         * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
-        /** The workflow categories */
+        /**
+         * Returns the raw JSON value of [categories].
+         *
+         * Unlike [categories], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("categories")
         @ExcludeMissing
         fun _categories(): JsonField<List<String>> = categories
 
-        /** The workflow key */
+        /**
+         * Returns the raw JSON value of [key].
+         *
+         * Unlike [key], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("key") @ExcludeMissing fun _key(): JsonField<String> = key
 
-        /** The source version ID */
+        /**
+         * Returns the raw JSON value of [versionId].
+         *
+         * Unlike [versionId], this method doesn't throw if the JSON field has an unexpected type.
+         */
         @JsonProperty("version_id") @ExcludeMissing fun _versionId(): JsonField<String> = versionId
 
         @JsonAnyGetter
@@ -1559,17 +1972,34 @@ private constructor(
 
             fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
+            /**
+             * Sets [Builder._typename] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder._typename] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
             /** The workflow categories */
             fun categories(categories: List<String>) = categories(JsonField.of(categories))
 
-            /** The workflow categories */
+            /**
+             * Sets [Builder.categories] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.categories] with a well-typed `List<String>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun categories(categories: JsonField<List<String>>) = apply {
                 this.categories = categories.map { it.toMutableList() }
             }
 
-            /** The workflow categories */
+            /**
+             * Adds a single [String] to [categories].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
             fun addCategory(category: String) = apply {
                 categories =
                     (categories ?: JsonField.of(mutableListOf())).also {
@@ -1580,13 +2010,25 @@ private constructor(
             /** The workflow key */
             fun key(key: String) = key(JsonField.of(key))
 
-            /** The workflow key */
+            /**
+             * Sets [Builder.key] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.key] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
             fun key(key: JsonField<String>) = apply { this.key = key }
 
             /** The source version ID */
             fun versionId(versionId: String) = versionId(JsonField.of(versionId))
 
-            /** The source version ID */
+            /**
+             * Sets [Builder.versionId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.versionId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
             fun versionId(versionId: JsonField<String>) = apply { this.versionId = versionId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {

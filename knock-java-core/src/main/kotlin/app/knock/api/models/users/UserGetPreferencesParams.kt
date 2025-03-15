@@ -93,7 +93,7 @@ private constructor(
         /** Tenant ID */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
-        /** Tenant ID */
+        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
