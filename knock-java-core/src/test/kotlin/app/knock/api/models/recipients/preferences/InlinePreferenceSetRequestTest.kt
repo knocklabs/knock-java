@@ -6,7 +6,7 @@ import app.knock.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class InlinePreferenceSetRequestTest {
+internal class InlinePreferenceSetRequestTest {
 
     @Test
     fun createInlinePreferenceSetRequest() {

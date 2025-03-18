@@ -5,7 +5,7 @@ package app.knock.api.models
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ConditionTest {
+internal class ConditionTest {
 
     @Test
     fun createCondition() {

@@ -6,7 +6,7 @@ import app.knock.api.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ObjectListSubscriptionsParamsTest {
+internal class ObjectListSubscriptionsParamsTest {
 
     @Test
     fun create() {

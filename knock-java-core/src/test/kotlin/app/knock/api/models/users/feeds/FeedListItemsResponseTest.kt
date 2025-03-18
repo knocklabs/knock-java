@@ -10,7 +10,7 @@ import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class FeedListItemsResponseTest {
+internal class FeedListItemsResponseTest {
 
     @Test
     fun createFeedListItemsResponse() {

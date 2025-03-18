@@ -6,17 +6,17 @@ import app.knock.api.models.Condition
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class PreferenceSetChannelTypesTest {
+internal class PreferenceSetChannelTypesTest {
 
     @Test
     fun createPreferenceSetChannelTypes() {
         val preferenceSetChannelTypes =
             PreferenceSetChannelTypes.builder()
-                .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                .push(PreferenceSetChannelTypes.Push.ofBool(true))
+                .chat(true)
+                .email(true)
+                .http(true)
+                .inAppFeed(true)
+                .push(true)
                 .sms(
                     PreferenceSetChannelTypeSetting.builder()
                         .addCondition(

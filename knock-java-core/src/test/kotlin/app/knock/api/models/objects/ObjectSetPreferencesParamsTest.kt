@@ -8,7 +8,7 @@ import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ObjectSetPreferencesParamsTest {
+internal class ObjectSetPreferencesParamsTest {
 
     @Test
     fun create() {
@@ -49,12 +49,12 @@ class ObjectSetPreferencesParamsTest {
                     )
                     .channelTypes(
                         PreferenceSetChannelTypes.builder()
-                            .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                            .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                            .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                            .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                            .push(PreferenceSetChannelTypes.Push.ofBool(true))
-                            .sms(PreferenceSetChannelTypes.Sms.ofBool(true))
+                            .chat(true)
+                            .email(true)
+                            .http(true)
+                            .inAppFeed(true)
+                            .push(true)
+                            .sms(true)
                             .build()
                     )
                     .workflows(
@@ -130,12 +130,12 @@ class ObjectSetPreferencesParamsTest {
                         )
                         .channelTypes(
                             PreferenceSetChannelTypes.builder()
-                                .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                                .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                                .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                                .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                                .push(PreferenceSetChannelTypes.Push.ofBool(true))
-                                .sms(PreferenceSetChannelTypes.Sms.ofBool(true))
+                                .chat(true)
+                                .email(true)
+                                .http(true)
+                                .inAppFeed(true)
+                                .push(true)
+                                .sms(true)
                                 .build()
                         )
                         .workflows(
@@ -206,12 +206,12 @@ class ObjectSetPreferencesParamsTest {
                     )
                     .channelTypes(
                         PreferenceSetChannelTypes.builder()
-                            .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                            .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                            .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                            .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                            .push(PreferenceSetChannelTypes.Push.ofBool(true))
-                            .sms(PreferenceSetChannelTypes.Sms.ofBool(true))
+                            .chat(true)
+                            .email(true)
+                            .http(true)
+                            .inAppFeed(true)
+                            .push(true)
+                            .sms(true)
                             .build()
                     )
                     .workflows(

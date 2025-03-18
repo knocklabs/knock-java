@@ -5,7 +5,7 @@ package app.knock.api.models.audiences
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class AudienceListMembersParamsTest {
+internal class AudienceListMembersParamsTest {
 
     @Test
     fun create() {

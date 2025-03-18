@@ -5,7 +5,7 @@ package app.knock.api.models.tenants
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class TenantGetParamsTest {
+internal class TenantGetParamsTest {
 
     @Test
     fun create() {

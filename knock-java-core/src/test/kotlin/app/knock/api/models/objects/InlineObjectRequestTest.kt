@@ -9,7 +9,7 @@ import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class InlineObjectRequestTest {
+internal class InlineObjectRequestTest {
 
     @Test
     fun createInlineObjectRequest() {

@@ -5,7 +5,7 @@ package app.knock.api.models.users
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class UserDeleteParamsTest {
+internal class UserDeleteParamsTest {
 
     @Test
     fun create() {

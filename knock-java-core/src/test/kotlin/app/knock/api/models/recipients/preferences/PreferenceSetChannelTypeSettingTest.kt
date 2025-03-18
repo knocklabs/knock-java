@@ -6,7 +6,7 @@ import app.knock.api.models.Condition
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class PreferenceSetChannelTypeSettingTest {
+internal class PreferenceSetChannelTypeSettingTest {
 
     @Test
     fun createPreferenceSetChannelTypeSetting() {

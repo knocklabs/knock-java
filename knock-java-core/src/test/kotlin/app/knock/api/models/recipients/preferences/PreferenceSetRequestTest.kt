@@ -6,7 +6,7 @@ import app.knock.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class PreferenceSetRequestTest {
+internal class PreferenceSetRequestTest {
 
     @Test
     fun createPreferenceSetRequest() {
@@ -43,12 +43,12 @@ class PreferenceSetRequestTest {
                 )
                 .channelTypes(
                     PreferenceSetChannelTypes.builder()
-                        .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                        .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                        .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                        .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                        .push(PreferenceSetChannelTypes.Push.ofBool(true))
-                        .sms(PreferenceSetChannelTypes.Sms.ofBool(true))
+                        .chat(true)
+                        .email(true)
+                        .http(true)
+                        .inAppFeed(true)
+                        .push(true)
+                        .sms(true)
                         .build()
                 )
                 .workflows(
@@ -114,12 +114,12 @@ class PreferenceSetRequestTest {
         assertThat(preferenceSetRequest.channelTypes())
             .contains(
                 PreferenceSetChannelTypes.builder()
-                    .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                    .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                    .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                    .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                    .push(PreferenceSetChannelTypes.Push.ofBool(true))
-                    .sms(PreferenceSetChannelTypes.Sms.ofBool(true))
+                    .chat(true)
+                    .email(true)
+                    .http(true)
+                    .inAppFeed(true)
+                    .push(true)
+                    .sms(true)
                     .build()
             )
         assertThat(preferenceSetRequest.workflows())

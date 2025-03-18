@@ -4,7 +4,7 @@ package app.knock.api.models.messages.batch
 
 import org.junit.jupiter.api.Test
 
-class BatchMarkAsUnreadParamsTest {
+internal class BatchMarkAsUnreadParamsTest {
 
     @Test
     fun create() {

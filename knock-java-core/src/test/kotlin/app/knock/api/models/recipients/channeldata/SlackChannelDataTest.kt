@@ -5,7 +5,7 @@ package app.knock.api.models.recipients.channeldata
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class SlackChannelDataTest {
+internal class SlackChannelDataTest {
 
     @Test
     fun createSlackChannelData() {

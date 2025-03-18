@@ -5,7 +5,7 @@ package app.knock.api.models.providers.msteams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class MsTeamCheckAuthResponseTest {
+internal class MsTeamCheckAuthResponseTest {
 
     @Test
     fun createMsTeamCheckAuthResponse() {

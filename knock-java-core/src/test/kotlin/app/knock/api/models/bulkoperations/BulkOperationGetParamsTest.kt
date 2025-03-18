@@ -5,7 +5,7 @@ package app.knock.api.models.bulkoperations
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class BulkOperationGetParamsTest {
+internal class BulkOperationGetParamsTest {
 
     @Test
     fun create() {

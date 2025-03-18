@@ -11,7 +11,7 @@ import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class TenantSetParamsTest {
+internal class TenantSetParamsTest {
 
     @Test
     fun create() {
@@ -134,12 +134,12 @@ class TenantSetParamsTest {
                             )
                             .channelTypes(
                                 PreferenceSetChannelTypes.builder()
-                                    .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                                    .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                                    .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                                    .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                                    .push(PreferenceSetChannelTypes.Push.ofBool(true))
-                                    .sms(PreferenceSetChannelTypes.Sms.ofBool(true))
+                                    .chat(true)
+                                    .email(true)
+                                    .http(true)
+                                    .inAppFeed(true)
+                                    .push(true)
+                                    .sms(true)
                                     .build()
                             )
                             .workflows(
@@ -301,12 +301,12 @@ class TenantSetParamsTest {
                                 )
                                 .channelTypes(
                                     PreferenceSetChannelTypes.builder()
-                                        .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                                        .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                                        .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                                        .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                                        .push(PreferenceSetChannelTypes.Push.ofBool(true))
-                                        .sms(PreferenceSetChannelTypes.Sms.ofBool(true))
+                                        .chat(true)
+                                        .email(true)
+                                        .http(true)
+                                        .inAppFeed(true)
+                                        .push(true)
+                                        .sms(true)
                                         .build()
                                 )
                                 .workflows(
@@ -466,12 +466,12 @@ class TenantSetParamsTest {
                             )
                             .channelTypes(
                                 PreferenceSetChannelTypes.builder()
-                                    .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                                    .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                                    .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                                    .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                                    .push(PreferenceSetChannelTypes.Push.ofBool(true))
-                                    .sms(PreferenceSetChannelTypes.Sms.ofBool(true))
+                                    .chat(true)
+                                    .email(true)
+                                    .http(true)
+                                    .inAppFeed(true)
+                                    .push(true)
+                                    .sms(true)
                                     .build()
                             )
                             .workflows(

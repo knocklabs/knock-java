@@ -5,7 +5,7 @@ package app.knock.api.models.providers.slack
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class SlackListChannelsResponseTest {
+internal class SlackListChannelsResponseTest {
 
     @Test
     fun createSlackListChannelsResponse() {

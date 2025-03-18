@@ -7,7 +7,7 @@ import app.knock.api.models.recipients.channeldata.PushChannelData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ObjectSetChannelDataParamsTest {
+internal class ObjectSetChannelDataParamsTest {
 
     @Test
     fun create() {

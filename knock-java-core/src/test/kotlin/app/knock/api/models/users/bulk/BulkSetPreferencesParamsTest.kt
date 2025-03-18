@@ -9,7 +9,7 @@ import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class BulkSetPreferencesParamsTest {
+internal class BulkSetPreferencesParamsTest {
 
     @Test
     fun create() {
@@ -47,12 +47,12 @@ class BulkSetPreferencesParamsTest {
                     )
                     .channelTypes(
                         PreferenceSetChannelTypes.builder()
-                            .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                            .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                            .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                            .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                            .push(PreferenceSetChannelTypes.Push.ofBool(true))
-                            .sms(PreferenceSetChannelTypes.Sms.ofBool(true))
+                            .chat(true)
+                            .email(true)
+                            .http(true)
+                            .inAppFeed(true)
+                            .push(true)
+                            .sms(true)
                             .build()
                     )
                     .workflows(
@@ -127,12 +127,12 @@ class BulkSetPreferencesParamsTest {
                         )
                         .channelTypes(
                             PreferenceSetChannelTypes.builder()
-                                .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                                .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                                .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                                .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                                .push(PreferenceSetChannelTypes.Push.ofBool(true))
-                                .sms(PreferenceSetChannelTypes.Sms.ofBool(true))
+                                .chat(true)
+                                .email(true)
+                                .http(true)
+                                .inAppFeed(true)
+                                .push(true)
+                                .sms(true)
                                 .build()
                         )
                         .workflows(
@@ -206,12 +206,12 @@ class BulkSetPreferencesParamsTest {
                     )
                     .channelTypes(
                         PreferenceSetChannelTypes.builder()
-                            .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                            .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                            .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                            .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                            .push(PreferenceSetChannelTypes.Push.ofBool(true))
-                            .sms(PreferenceSetChannelTypes.Sms.ofBool(true))
+                            .chat(true)
+                            .email(true)
+                            .http(true)
+                            .inAppFeed(true)
+                            .push(true)
+                            .sms(true)
                             .build()
                     )
                     .workflows(

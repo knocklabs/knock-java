@@ -5,7 +5,7 @@ package app.knock.api.models.schedules
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class ScheduleRepeatRuleTest {
+internal class ScheduleRepeatRuleTest {
 
     @Test
     fun createScheduleRepeatRule() {

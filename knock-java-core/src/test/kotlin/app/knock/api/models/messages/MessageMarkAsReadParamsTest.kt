@@ -5,7 +5,7 @@ package app.knock.api.models.messages
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class MessageMarkAsReadParamsTest {
+internal class MessageMarkAsReadParamsTest {
 
     @Test
     fun create() {

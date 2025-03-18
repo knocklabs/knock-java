@@ -1,3 +1,5 @@
+// File generated from our OpenAPI spec by Stainless.
+
 package app.knock.api.core.http
 
 import app.knock.api.core.toImmutable

@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 
 @ExtendWith(TestServerExtension::class)
-class UserServiceAsyncTest {
+internal class UserServiceAsyncTest {
 
     @Disabled(
         "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
@@ -433,12 +433,12 @@ class UserServiceAsyncTest {
                             )
                             .channelTypes(
                                 PreferenceSetChannelTypes.builder()
-                                    .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                                    .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                                    .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                                    .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                                    .push(PreferenceSetChannelTypes.Push.ofBool(true))
-                                    .sms(PreferenceSetChannelTypes.Sms.ofBool(true))
+                                    .chat(true)
+                                    .email(true)
+                                    .http(true)
+                                    .inAppFeed(true)
+                                    .push(true)
+                                    .sms(true)
                                     .build()
                             )
                             .workflows(

@@ -7,7 +7,7 @@ import app.knock.api.models.Condition
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-class PreferenceSetTest {
+internal class PreferenceSetTest {
 
     @Test
     fun createPreferenceSet() {
@@ -46,11 +46,11 @@ class PreferenceSetTest {
                 )
                 .channelTypes(
                     PreferenceSetChannelTypes.builder()
-                        .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                        .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                        .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                        .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                        .push(PreferenceSetChannelTypes.Push.ofBool(false))
+                        .chat(true)
+                        .email(true)
+                        .http(true)
+                        .inAppFeed(true)
+                        .push(false)
                         .sms(
                             PreferenceSetChannelTypeSetting.builder()
                                 .addCondition(
@@ -129,11 +129,11 @@ class PreferenceSetTest {
         assertThat(preferenceSet.channelTypes())
             .contains(
                 PreferenceSetChannelTypes.builder()
-                    .chat(PreferenceSetChannelTypes.Chat.ofBool(true))
-                    .email(PreferenceSetChannelTypes.Email.ofBool(true))
-                    .http(PreferenceSetChannelTypes.Http.ofBool(true))
-                    .inAppFeed(PreferenceSetChannelTypes.InAppFeed.ofBool(true))
-                    .push(PreferenceSetChannelTypes.Push.ofBool(false))
+                    .chat(true)
+                    .email(true)
+                    .http(true)
+                    .inAppFeed(true)
+                    .push(false)
                     .sms(
                         PreferenceSetChannelTypeSetting.builder()
                             .addCondition(
