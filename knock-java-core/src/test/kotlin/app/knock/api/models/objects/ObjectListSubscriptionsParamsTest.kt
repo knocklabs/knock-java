@@ -23,6 +23,20 @@ internal class ObjectListSubscriptionsParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            ObjectListSubscriptionsParams.builder()
+                .collection("collection")
+                .objectId("object_id")
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("collection")
+        assertThat(params._pathParam(1)).isEqualTo("object_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(2)).isEqualTo("")
+    }
+
+    @Test
     fun queryParams() {
         val params =
             ObjectListSubscriptionsParams.builder()
@@ -62,21 +76,5 @@ internal class ObjectListSubscriptionsParamsTest {
         val queryParams = params._queryParams()
 
         assertThat(queryParams).isEqualTo(QueryParams.builder().build())
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            ObjectListSubscriptionsParams.builder()
-                .collection("collection")
-                .objectId("object_id")
-                .build()
-        assertThat(params).isNotNull
-        // path param "collection"
-        assertThat(params.getPathParam(0)).isEqualTo("collection")
-        // path param "objectId"
-        assertThat(params.getPathParam(1)).isEqualTo("object_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(2)).isEqualTo("")
     }
 }

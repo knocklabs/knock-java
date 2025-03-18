@@ -56,16 +56,15 @@ private constructor(
 
     @JvmSynthetic internal fun _body(): Body = body
 
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
+    fun _pathParam(index: Int): String =
+        when (index) {
             0 -> key
             else -> ""
         }
-    }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     /** A request to remove members from an audience */
     @NoAutoDetect

@@ -60,9 +60,9 @@ class FeedServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .addPathSegments(
                         "v1",
                         "users",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "feeds",
-                        params.getPathParam(1),
+                        params._pathParam(1),
                         "settings",
                     )
                     .build()
@@ -94,9 +94,9 @@ class FeedServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .addPathSegments(
                         "v1",
                         "users",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "feeds",
-                        params.getPathParam(1),
+                        params._pathParam(1),
                     )
                     .build()
                     .prepare(clientOptions, params)

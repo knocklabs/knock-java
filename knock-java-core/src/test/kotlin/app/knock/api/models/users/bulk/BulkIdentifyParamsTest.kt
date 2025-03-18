@@ -199,93 +199,89 @@ internal class BulkIdentifyParamsTest {
 
         assertNotNull(body)
         assertThat(body.users())
-            .isEqualTo(
-                listOf(
-                    InlineIdentifyUserRequest.builder()
-                        .id("user_1")
-                        .channelData(
-                            InlineChannelDataRequest.builder()
-                                .putAdditionalProperty(
-                                    "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                                    JsonValue.from(
-                                        mapOf("data" to mapOf("tokens" to listOf("push_token_xxx")))
-                                    ),
-                                )
-                                .build()
-                        )
-                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                        .preferences(
-                            InlinePreferenceSetRequest.builder()
-                                .putAdditionalProperty(
-                                    "default",
-                                    JsonValue.from(
-                                        mapOf(
-                                            "categories" to
-                                                mapOf(
-                                                    "transactional" to
-                                                        mapOf(
-                                                            "channel_types" to
+            .containsExactly(
+                InlineIdentifyUserRequest.builder()
+                    .id("user_1")
+                    .channelData(
+                        InlineChannelDataRequest.builder()
+                            .putAdditionalProperty(
+                                "97c5837d-c65c-4d54-aa39-080eeb81c69d",
+                                JsonValue.from(
+                                    mapOf("data" to mapOf("tokens" to listOf("push_token_xxx")))
+                                ),
+                            )
+                            .build()
+                    )
+                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .preferences(
+                        InlinePreferenceSetRequest.builder()
+                            .putAdditionalProperty(
+                                "default",
+                                JsonValue.from(
+                                    mapOf(
+                                        "categories" to
+                                            mapOf(
+                                                "transactional" to
+                                                    mapOf(
+                                                        "channel_types" to
+                                                            mapOf(
+                                                                "chat" to true,
+                                                                "email" to false,
+                                                                "http" to true,
+                                                                "in_app_feed" to true,
+                                                                "push" to true,
+                                                                "sms" to true,
+                                                            ),
+                                                        "conditions" to
+                                                            listOf(
                                                                 mapOf(
-                                                                    "chat" to true,
-                                                                    "email" to false,
-                                                                    "http" to true,
-                                                                    "in_app_feed" to true,
-                                                                    "push" to true,
-                                                                    "sms" to true,
-                                                                ),
-                                                            "conditions" to
-                                                                listOf(
-                                                                    mapOf(
-                                                                        "argument" to
-                                                                            "some_property",
-                                                                        "operator" to "equal_to",
-                                                                        "variable" to
-                                                                            "recipient.property",
-                                                                    )
-                                                                ),
-                                                        )
-                                                ),
-                                            "channel_types" to
-                                                mapOf(
-                                                    "chat" to true,
-                                                    "email" to true,
-                                                    "http" to true,
-                                                    "in_app_feed" to true,
-                                                    "push" to true,
-                                                    "sms" to true,
-                                                ),
-                                            "workflows" to
-                                                mapOf(
-                                                    "dinosaurs-loose" to
-                                                        mapOf(
-                                                            "channel_types" to
+                                                                    "argument" to "some_property",
+                                                                    "operator" to "equal_to",
+                                                                    "variable" to
+                                                                        "recipient.property",
+                                                                )
+                                                            ),
+                                                    )
+                                            ),
+                                        "channel_types" to
+                                            mapOf(
+                                                "chat" to true,
+                                                "email" to true,
+                                                "http" to true,
+                                                "in_app_feed" to true,
+                                                "push" to true,
+                                                "sms" to true,
+                                            ),
+                                        "workflows" to
+                                            mapOf(
+                                                "dinosaurs-loose" to
+                                                    mapOf(
+                                                        "channel_types" to
+                                                            mapOf(
+                                                                "chat" to true,
+                                                                "email" to true,
+                                                                "http" to true,
+                                                                "in_app_feed" to true,
+                                                                "push" to true,
+                                                                "sms" to true,
+                                                            ),
+                                                        "conditions" to
+                                                            listOf(
                                                                 mapOf(
-                                                                    "chat" to true,
-                                                                    "email" to true,
-                                                                    "http" to true,
-                                                                    "in_app_feed" to true,
-                                                                    "push" to true,
-                                                                    "sms" to true,
-                                                                ),
-                                                            "conditions" to
-                                                                listOf(
-                                                                    mapOf(
-                                                                        "argument" to
-                                                                            "some_property",
-                                                                        "operator" to "equal_to",
-                                                                        "variable" to
-                                                                            "recipient.property",
-                                                                    )
-                                                                ),
-                                                        )
-                                                ),
-                                        )
-                                    ),
-                                )
-                                .build()
-                        )
-                        .build()
-                )
+                                                                    "argument" to "some_property",
+                                                                    "operator" to "equal_to",
+                                                                    "variable" to
+                                                                        "recipient.property",
+                                                                )
+                                                            ),
+                                                    )
+                                            ),
+                                    )
+                                ),
+                            )
+                            .build()
+                    )
+                    .build()
             )
     }
 
@@ -300,6 +296,6 @@ internal class BulkIdentifyParamsTest {
 
         assertNotNull(body)
         assertThat(body.users())
-            .isEqualTo(listOf(InlineIdentifyUserRequest.builder().id("user_1").build()))
+            .containsExactly(InlineIdentifyUserRequest.builder().id("user_1").build())
     }
 }

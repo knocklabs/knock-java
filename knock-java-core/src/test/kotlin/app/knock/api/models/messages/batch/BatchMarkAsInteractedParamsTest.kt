@@ -36,7 +36,7 @@ internal class BatchMarkAsInteractedParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-        assertThat(body.messageIds()).isEqualTo(listOf("1jNaXzB2RZX3LY8wVQnfCKyPnv7"))
+        assertThat(body.messageIds()).containsExactly("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
         assertThat(body.metadata())
             .contains(
                 BatchMarkAsInteractedParams.Metadata.builder()
@@ -55,6 +55,6 @@ internal class BatchMarkAsInteractedParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-        assertThat(body.messageIds()).isEqualTo(listOf("1jNaXzB2RZX3LY8wVQnfCKyPnv7"))
+        assertThat(body.messageIds()).containsExactly("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
     }
 }

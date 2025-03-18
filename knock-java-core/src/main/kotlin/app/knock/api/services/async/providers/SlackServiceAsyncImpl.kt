@@ -69,13 +69,7 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments(
-                        "v1",
-                        "providers",
-                        "slack",
-                        params.getPathParam(0),
-                        "auth_check",
-                    )
+                    .addPathSegments("v1", "providers", "slack", params._pathParam(0), "auth_check")
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -105,7 +99,7 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "providers", "slack", params.getPathParam(0), "channels")
+                    .addPathSegments("v1", "providers", "slack", params._pathParam(0), "channels")
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -145,7 +139,7 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
                         "v1",
                         "providers",
                         "slack",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "revoke_access",
                     )
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }

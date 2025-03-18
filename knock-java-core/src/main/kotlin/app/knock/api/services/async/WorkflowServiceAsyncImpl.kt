@@ -58,7 +58,7 @@ class WorkflowServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("v1", "workflows", params.getPathParam(0), "cancel")
+                    .addPathSegments("v1", "workflows", params._pathParam(0), "cancel")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -81,7 +81,7 @@ class WorkflowServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("v1", "workflows", params.getPathParam(0), "trigger")
+                    .addPathSegments("v1", "workflows", params._pathParam(0), "trigger")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)

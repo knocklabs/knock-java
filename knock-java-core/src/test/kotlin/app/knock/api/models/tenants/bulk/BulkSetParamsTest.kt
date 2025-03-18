@@ -21,16 +21,6 @@ internal class BulkSetParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-        assertThat(body.tenants()).isEqualTo(listOf(InlineTenantRequest.ofString("string")))
-    }
-
-    @Test
-    fun bodyWithoutOptionalFields() {
-        val params = BulkSetParams.builder().addTenant("string").build()
-
-        val body = params._body()
-
-        assertNotNull(body)
-        assertThat(body.tenants()).isEqualTo(listOf(InlineTenantRequest.ofString("string")))
+        assertThat(body.tenants()).containsExactly(InlineTenantRequest.ofString("string"))
     }
 }

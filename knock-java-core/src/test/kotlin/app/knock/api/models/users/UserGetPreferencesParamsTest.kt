@@ -18,6 +18,17 @@ internal class UserGetPreferencesParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            UserGetPreferencesParams.builder().userId("user_id").preferenceSetId("default").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("user_id")
+        assertThat(params._pathParam(1)).isEqualTo("default")
+        // out-of-bound path param
+        assertThat(params._pathParam(2)).isEqualTo("")
+    }
+
+    @Test
     fun queryParams() {
         val params =
             UserGetPreferencesParams.builder()
@@ -39,18 +50,5 @@ internal class UserGetPreferencesParamsTest {
         val queryParams = params._queryParams()
 
         assertThat(queryParams).isEqualTo(QueryParams.builder().build())
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            UserGetPreferencesParams.builder().userId("user_id").preferenceSetId("default").build()
-        assertThat(params).isNotNull
-        // path param "userId"
-        assertThat(params.getPathParam(0)).isEqualTo("user_id")
-        // path param "preferenceSetId"
-        assertThat(params.getPathParam(1)).isEqualTo("default")
-        // out-of-bound path param
-        assertThat(params.getPathParam(2)).isEqualTo("")
     }
 }

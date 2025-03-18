@@ -20,16 +20,6 @@ internal class BulkDeleteParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-        assertThat(body.userIds()).isEqualTo(listOf("user_1", "user_2"))
-    }
-
-    @Test
-    fun bodyWithoutOptionalFields() {
-        val params = BulkDeleteParams.builder().addUserId("user_1").addUserId("user_2").build()
-
-        val body = params._body()
-
-        assertNotNull(body)
-        assertThat(body.userIds()).isEqualTo(listOf("user_1", "user_2"))
+        assertThat(body.userIds()).containsExactly("user_1", "user_2")
     }
 }

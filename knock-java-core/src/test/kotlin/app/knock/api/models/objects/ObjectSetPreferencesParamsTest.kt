@@ -91,6 +91,23 @@ internal class ObjectSetPreferencesParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            ObjectSetPreferencesParams.builder()
+                .collection("collection")
+                .objectId("object_id")
+                .preferenceSetId("default")
+                .preferenceSetRequest(PreferenceSetRequest.builder().build())
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("collection")
+        assertThat(params._pathParam(1)).isEqualTo("object_id")
+        assertThat(params._pathParam(2)).isEqualTo("default")
+        // out-of-bound path param
+        assertThat(params._pathParam(3)).isEqualTo("")
+    }
+
+    @Test
     fun body() {
         val params =
             ObjectSetPreferencesParams.builder()
@@ -259,25 +276,5 @@ internal class ObjectSetPreferencesParamsTest {
         val body = params._body()
 
         assertThat(body).isEqualTo(PreferenceSetRequest.builder().build())
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            ObjectSetPreferencesParams.builder()
-                .collection("collection")
-                .objectId("object_id")
-                .preferenceSetId("default")
-                .preferenceSetRequest(PreferenceSetRequest.builder().build())
-                .build()
-        assertThat(params).isNotNull
-        // path param "collection"
-        assertThat(params.getPathParam(0)).isEqualTo("collection")
-        // path param "objectId"
-        assertThat(params.getPathParam(1)).isEqualTo("object_id")
-        // path param "preferenceSetId"
-        assertThat(params.getPathParam(2)).isEqualTo("default")
-        // out-of-bound path param
-        assertThat(params.getPathParam(3)).isEqualTo("")
     }
 }

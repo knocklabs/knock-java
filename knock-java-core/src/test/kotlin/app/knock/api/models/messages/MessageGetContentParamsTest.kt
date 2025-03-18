@@ -13,12 +13,11 @@ internal class MessageGetContentParamsTest {
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params = MessageGetContentParams.builder().messageId("message_id").build()
-        assertThat(params).isNotNull
-        // path param "messageId"
-        assertThat(params.getPathParam(0)).isEqualTo("message_id")
+
+        assertThat(params._pathParam(0)).isEqualTo("message_id")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 }

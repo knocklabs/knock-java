@@ -87,16 +87,15 @@ private constructor(
 
     @JvmSynthetic internal fun _body(): Body = body
 
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
+    fun _pathParam(index: Int): String =
+        when (index) {
             0 -> tenantId
             else -> ""
         }
-    }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     /**
      * A tenant to be set in the system. You can supply any additional properties on the tenant

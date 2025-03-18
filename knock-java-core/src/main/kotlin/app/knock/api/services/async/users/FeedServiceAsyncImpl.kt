@@ -62,9 +62,9 @@ class FeedServiceAsyncImpl internal constructor(private val clientOptions: Clien
                     .addPathSegments(
                         "v1",
                         "users",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "feeds",
-                        params.getPathParam(1),
+                        params._pathParam(1),
                         "settings",
                     )
                     .build()
@@ -99,9 +99,9 @@ class FeedServiceAsyncImpl internal constructor(private val clientOptions: Clien
                     .addPathSegments(
                         "v1",
                         "users",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "feeds",
-                        params.getPathParam(1),
+                        params._pathParam(1),
                     )
                     .build()
                     .prepareAsync(clientOptions, params)

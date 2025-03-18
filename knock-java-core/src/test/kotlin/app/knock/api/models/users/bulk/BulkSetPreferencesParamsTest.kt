@@ -244,7 +244,7 @@ internal class BulkSetPreferencesParamsTest {
                     )
                     .build()
             )
-        assertThat(body.userIds()).isEqualTo(listOf("user_1", "user_2"))
+        assertThat(body.userIds()).containsExactly("user_1", "user_2")
     }
 
     @Test
@@ -260,6 +260,6 @@ internal class BulkSetPreferencesParamsTest {
 
         assertNotNull(body)
         assertThat(body.preferences()).isEqualTo(PreferenceSetRequest.builder().build())
-        assertThat(body.userIds()).isEqualTo(listOf("user_1", "user_2"))
+        assertThat(body.userIds()).containsExactly("user_1", "user_2")
     }
 }

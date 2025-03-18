@@ -30,6 +30,20 @@ internal class ObjectListMessagesParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            ObjectListMessagesParams.builder()
+                .collection("projects")
+                .objectId("project-123")
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("projects")
+        assertThat(params._pathParam(1)).isEqualTo("project-123")
+        // out-of-bound path param
+        assertThat(params._pathParam(2)).isEqualTo("")
+    }
+
+    @Test
     fun queryParams() {
         val params =
             ObjectListMessagesParams.builder()
@@ -83,21 +97,5 @@ internal class ObjectListMessagesParamsTest {
         val queryParams = params._queryParams()
 
         assertThat(queryParams).isEqualTo(QueryParams.builder().build())
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            ObjectListMessagesParams.builder()
-                .collection("projects")
-                .objectId("project-123")
-                .build()
-        assertThat(params).isNotNull
-        // path param "collection"
-        assertThat(params.getPathParam(0)).isEqualTo("projects")
-        // path param "objectId"
-        assertThat(params.getPathParam(1)).isEqualTo("project-123")
-        // out-of-bound path param
-        assertThat(params.getPathParam(2)).isEqualTo("")
     }
 }

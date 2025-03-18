@@ -40,18 +40,17 @@ private constructor(
 
     @JvmSynthetic internal fun _body(): ChannelDataRequest = channelDataRequest
 
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    fun getPathParam(index: Int): String {
-        return when (index) {
+    fun _pathParam(index: Int): String =
+        when (index) {
             0 -> collection
             1 -> objectId
             2 -> channelId
             else -> ""
         }
-    }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     fun toBuilder() = Builder().from(this)
 

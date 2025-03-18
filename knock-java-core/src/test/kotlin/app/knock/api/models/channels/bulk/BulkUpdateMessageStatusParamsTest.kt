@@ -3,6 +3,7 @@
 package app.knock.api.models.channels.bulk
 
 import java.time.OffsetDateTime
+import kotlin.jvm.optionals.getOrNull
 import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -28,6 +29,20 @@ internal class BulkUpdateMessageStatusParamsTest {
             .addWorkflow("workflow1")
             .addWorkflow("workflow2")
             .build()
+    }
+
+    @Test
+    fun pathParams() {
+        val params =
+            BulkUpdateMessageStatusParams.builder()
+                .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .action(BulkUpdateMessageStatusParams.Action.SEEN)
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        assertThat(params._pathParam(1)).isEqualTo("seen")
+        // out-of-bound path param
+        assertThat(params._pathParam(2)).isEqualTo("")
     }
 
     @Test
@@ -62,10 +77,10 @@ internal class BulkUpdateMessageStatusParamsTest {
         assertThat(body.hasTenant()).contains(true)
         assertThat(body.newerThan()).contains(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
         assertThat(body.olderThan()).contains(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
-        assertThat(body.recipientIds()).contains(listOf("recipient1", "recipient2"))
-        assertThat(body.tenants()).contains(listOf("tenant1", "tenant2"))
+        assertThat(body.recipientIds().getOrNull()).containsExactly("recipient1", "recipient2")
+        assertThat(body.tenants().getOrNull()).containsExactly("tenant1", "tenant2")
         assertThat(body.triggerData()).contains("{\"key\":\"value\"}")
-        assertThat(body.workflows()).contains(listOf("workflow1", "workflow2"))
+        assertThat(body.workflows().getOrNull()).containsExactly("workflow1", "workflow2")
     }
 
     @Test
@@ -79,22 +94,5 @@ internal class BulkUpdateMessageStatusParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            BulkUpdateMessageStatusParams.builder()
-                .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .action(BulkUpdateMessageStatusParams.Action.SEEN)
-                .build()
-        assertThat(params).isNotNull
-        // path param "channelId"
-        assertThat(params.getPathParam(0)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        // path param "action"
-        assertThat(params.getPathParam(1))
-            .isEqualTo(BulkUpdateMessageStatusParams.Action.SEEN.toString())
-        // out-of-bound path param
-        assertThat(params.getPathParam(2)).isEqualTo("")
     }
 }

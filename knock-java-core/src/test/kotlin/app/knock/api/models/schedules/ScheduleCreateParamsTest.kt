@@ -88,30 +88,28 @@ internal class ScheduleCreateParamsTest {
 
         assertNotNull(body)
         assertThat(body.recipients())
-            .isEqualTo(listOf(ScheduleCreateParams.Recipient.ofString("user_123")))
+            .containsExactly(ScheduleCreateParams.Recipient.ofString("user_123"))
         assertThat(body.repeats())
-            .isEqualTo(
-                listOf(
-                    ScheduleRepeatRule.builder()
-                        ._typename("ScheduleRepeat")
-                        .frequency(ScheduleRepeatRule.Frequency.DAILY)
-                        .dayOfMonth(null)
-                        .days(
-                            listOf(
-                                ScheduleRepeatRule.Day.MON,
-                                ScheduleRepeatRule.Day.TUE,
-                                ScheduleRepeatRule.Day.WED,
-                                ScheduleRepeatRule.Day.THU,
-                                ScheduleRepeatRule.Day.FRI,
-                                ScheduleRepeatRule.Day.SAT,
-                                ScheduleRepeatRule.Day.SUN,
-                            )
+            .containsExactly(
+                ScheduleRepeatRule.builder()
+                    ._typename("ScheduleRepeat")
+                    .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                    .dayOfMonth(null)
+                    .days(
+                        listOf(
+                            ScheduleRepeatRule.Day.MON,
+                            ScheduleRepeatRule.Day.TUE,
+                            ScheduleRepeatRule.Day.WED,
+                            ScheduleRepeatRule.Day.THU,
+                            ScheduleRepeatRule.Day.FRI,
+                            ScheduleRepeatRule.Day.SAT,
+                            ScheduleRepeatRule.Day.SUN,
                         )
-                        .hours(null)
-                        .interval(1L)
-                        .minutes(null)
-                        .build()
-                )
+                    )
+                    .hours(null)
+                    .interval(1L)
+                    .minutes(null)
+                    .build()
             )
         assertThat(body.workflow()).isEqualTo("comment-created")
         assertThat(body.data())
@@ -143,15 +141,13 @@ internal class ScheduleCreateParamsTest {
 
         assertNotNull(body)
         assertThat(body.recipients())
-            .isEqualTo(listOf(ScheduleCreateParams.Recipient.ofString("user_123")))
+            .containsExactly(ScheduleCreateParams.Recipient.ofString("user_123"))
         assertThat(body.repeats())
-            .isEqualTo(
-                listOf(
-                    ScheduleRepeatRule.builder()
-                        ._typename("ScheduleRepeat")
-                        .frequency(ScheduleRepeatRule.Frequency.DAILY)
-                        .build()
-                )
+            .containsExactly(
+                ScheduleRepeatRule.builder()
+                    ._typename("ScheduleRepeat")
+                    .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                    .build()
             )
         assertThat(body.workflow()).isEqualTo("comment-created")
     }

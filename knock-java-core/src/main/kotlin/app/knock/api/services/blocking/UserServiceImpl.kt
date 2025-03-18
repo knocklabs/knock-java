@@ -168,7 +168,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
-                    .addPathSegments("v1", "users", params.getPathParam(0))
+                    .addPathSegments("v1", "users", params._pathParam(0))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)
@@ -222,7 +222,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
-                    .addPathSegments("v1", "users", params.getPathParam(0))
+                    .addPathSegments("v1", "users", params._pathParam(0))
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepare(clientOptions, params)
@@ -241,7 +241,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "users", params.getPathParam(0))
+                    .addPathSegments("v1", "users", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -270,9 +270,9 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .addPathSegments(
                         "v1",
                         "users",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "channel_data",
-                        params.getPathParam(1),
+                        params._pathParam(1),
                     )
                     .build()
                     .prepare(clientOptions, params)
@@ -302,9 +302,9 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .addPathSegments(
                         "v1",
                         "users",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "preferences",
-                        params.getPathParam(1),
+                        params._pathParam(1),
                     )
                     .build()
                     .prepare(clientOptions, params)
@@ -332,7 +332,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "users", params.getPathParam(0), "messages")
+                    .addPathSegments("v1", "users", params._pathParam(0), "messages")
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -360,7 +360,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "users", params.getPathParam(0), "preferences")
+                    .addPathSegments("v1", "users", params._pathParam(0), "preferences")
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -387,7 +387,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "users", params.getPathParam(0), "schedules")
+                    .addPathSegments("v1", "users", params._pathParam(0), "schedules")
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -415,7 +415,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "users", params.getPathParam(0), "subscriptions")
+                    .addPathSegments("v1", "users", params._pathParam(0), "subscriptions")
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -444,7 +444,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("v1", "users", params.getPathParam(0), "merge")
+                    .addPathSegments("v1", "users", params._pathParam(0), "merge")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)
@@ -474,9 +474,9 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .addPathSegments(
                         "v1",
                         "users",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "channel_data",
-                        params.getPathParam(1),
+                        params._pathParam(1),
                     )
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -507,9 +507,9 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .addPathSegments(
                         "v1",
                         "users",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "preferences",
-                        params.getPathParam(1),
+                        params._pathParam(1),
                     )
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -540,9 +540,9 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .addPathSegments(
                         "v1",
                         "users",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "channel_data",
-                        params.getPathParam(1),
+                        params._pathParam(1),
                     )
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()

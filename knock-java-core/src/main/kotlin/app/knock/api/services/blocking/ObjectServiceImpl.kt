@@ -162,7 +162,7 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "objects", params.getPathParam(0))
+                    .addPathSegments("v1", "objects", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -188,12 +188,7 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
-                    .addPathSegments(
-                        "v1",
-                        "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
-                    )
+                    .addPathSegments("v1", "objects", params._pathParam(0), params._pathParam(1))
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepare(clientOptions, params)
@@ -215,8 +210,8 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                     .addPathSegments(
                         "v1",
                         "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
+                        params._pathParam(0),
+                        params._pathParam(1),
                         "subscriptions",
                     )
                     .body(json(clientOptions.jsonMapper, params._body()))
@@ -248,8 +243,8 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                     .addPathSegments(
                         "v1",
                         "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
+                        params._pathParam(0),
+                        params._pathParam(1),
                         "subscriptions",
                     )
                     .body(json(clientOptions.jsonMapper, params._body()))
@@ -278,12 +273,7 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments(
-                        "v1",
-                        "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
-                    )
+                    .addPathSegments("v1", "objects", params._pathParam(0), params._pathParam(1))
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -312,10 +302,10 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                     .addPathSegments(
                         "v1",
                         "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
+                        params._pathParam(0),
+                        params._pathParam(1),
                         "channel_data",
-                        params.getPathParam(2),
+                        params._pathParam(2),
                     )
                     .build()
                     .prepare(clientOptions, params)
@@ -345,10 +335,10 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                     .addPathSegments(
                         "v1",
                         "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
+                        params._pathParam(0),
+                        params._pathParam(1),
                         "preferences",
-                        params.getPathParam(2),
+                        params._pathParam(2),
                     )
                     .build()
                     .prepare(clientOptions, params)
@@ -379,8 +369,8 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                     .addPathSegments(
                         "v1",
                         "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
+                        params._pathParam(0),
+                        params._pathParam(1),
                         "messages",
                     )
                     .build()
@@ -413,8 +403,8 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                     .addPathSegments(
                         "v1",
                         "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
+                        params._pathParam(0),
+                        params._pathParam(1),
                         "schedules",
                     )
                     .build()
@@ -449,8 +439,8 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                     .addPathSegments(
                         "v1",
                         "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
+                        params._pathParam(0),
+                        params._pathParam(1),
                         "subscriptions",
                     )
                     .build()
@@ -481,12 +471,7 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
-                    .addPathSegments(
-                        "v1",
-                        "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
-                    )
+                    .addPathSegments("v1", "objects", params._pathParam(0), params._pathParam(1))
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)
@@ -516,10 +501,10 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                     .addPathSegments(
                         "v1",
                         "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
+                        params._pathParam(0),
+                        params._pathParam(1),
                         "channel_data",
-                        params.getPathParam(2),
+                        params._pathParam(2),
                     )
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -550,10 +535,10 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                     .addPathSegments(
                         "v1",
                         "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
+                        params._pathParam(0),
+                        params._pathParam(1),
                         "preferences",
-                        params.getPathParam(2),
+                        params._pathParam(2),
                     )
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -584,10 +569,10 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                     .addPathSegments(
                         "v1",
                         "objects",
-                        params.getPathParam(0),
-                        params.getPathParam(1),
+                        params._pathParam(0),
+                        params._pathParam(1),
                         "channel_data",
-                        params.getPathParam(2),
+                        params._pathParam(2),
                     )
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()

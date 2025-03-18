@@ -178,6 +178,15 @@ internal class TenantSetParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params = TenantSetParams.builder().tenantId("tenant_id").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("tenant_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
     fun body() {
         val params =
             TenantSetParams.builder()
@@ -515,15 +524,5 @@ internal class TenantSetParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params = TenantSetParams.builder().tenantId("tenant_id").build()
-        assertThat(params).isNotNull
-        // path param "tenantId"
-        assertThat(params.getPathParam(0)).isEqualTo("tenant_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

@@ -2,6 +2,7 @@
 
 package app.knock.api.models.schedules
 
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -33,7 +34,7 @@ internal class ScheduleRepeatRuleTest {
         assertThat(scheduleRepeatRule._typename()).isEqualTo("ScheduleRepeat")
         assertThat(scheduleRepeatRule.frequency()).isEqualTo(ScheduleRepeatRule.Frequency.DAILY)
         assertThat(scheduleRepeatRule.dayOfMonth()).isEmpty
-        assertThat(scheduleRepeatRule.days().get())
+        assertThat(scheduleRepeatRule.days().getOrNull())
             .containsExactly(
                 ScheduleRepeatRule.Day.MON,
                 ScheduleRepeatRule.Day.TUE,

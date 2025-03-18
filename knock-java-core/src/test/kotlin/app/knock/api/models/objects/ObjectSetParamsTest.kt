@@ -94,6 +94,17 @@ internal class ObjectSetParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            ObjectSetParams.builder().collection("collection").objectId("object_id").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("collection")
+        assertThat(params._pathParam(1)).isEqualTo("object_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(2)).isEqualTo("")
+    }
+
+    @Test
     fun body() {
         val params =
             ObjectSetParams.builder()
@@ -266,18 +277,5 @@ internal class ObjectSetParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            ObjectSetParams.builder().collection("collection").objectId("object_id").build()
-        assertThat(params).isNotNull
-        // path param "collection"
-        assertThat(params.getPathParam(0)).isEqualTo("collection")
-        // path param "objectId"
-        assertThat(params.getPathParam(1)).isEqualTo("object_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(2)).isEqualTo("")
     }
 }

@@ -3,6 +3,7 @@
 package app.knock.api.models.bulkoperations
 
 import java.time.OffsetDateTime
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -43,7 +44,7 @@ internal class BulkOperationTest {
             .isEqualTo(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
         assertThat(bulkOperation.completedAt()).isEmpty
         assertThat(bulkOperation.errorCount()).contains(0L)
-        assertThat(bulkOperation.errorItems().get())
+        assertThat(bulkOperation.errorItems().getOrNull())
             .containsExactly(
                 BulkOperation.ErrorItem.builder().id("id").collection("collection").build()
             )

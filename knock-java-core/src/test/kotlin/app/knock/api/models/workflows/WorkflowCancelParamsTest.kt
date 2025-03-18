@@ -2,6 +2,7 @@
 
 package app.knock.api.models.workflows
 
+import kotlin.jvm.optionals.getOrNull
 import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -19,6 +20,16 @@ internal class WorkflowCancelParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            WorkflowCancelParams.builder().key("key").cancellationKey("cancel-workflow-123").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("key")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
     fun body() {
         val params =
             WorkflowCancelParams.builder()
@@ -32,7 +43,7 @@ internal class WorkflowCancelParamsTest {
 
         assertNotNull(body)
         assertThat(body.cancellationKey()).isEqualTo("cancel-workflow-123")
-        assertThat(body.recipients()).contains(listOf("jhammond"))
+        assertThat(body.recipients().getOrNull()).containsExactly("jhammond")
         assertThat(body.tenant()).contains("prk_1")
     }
 
@@ -45,16 +56,5 @@ internal class WorkflowCancelParamsTest {
 
         assertNotNull(body)
         assertThat(body.cancellationKey()).isEqualTo("cancel-workflow-123")
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            WorkflowCancelParams.builder().key("key").cancellationKey("cancel-workflow-123").build()
-        assertThat(params).isNotNull
-        // path param "key"
-        assertThat(params.getPathParam(0)).isEqualTo("key")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

@@ -49,7 +49,7 @@ class BulkOperationServiceAsyncImpl internal constructor(private val clientOptio
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "bulk_operations", params.getPathParam(0))
+                    .addPathSegments("v1", "bulk_operations", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))

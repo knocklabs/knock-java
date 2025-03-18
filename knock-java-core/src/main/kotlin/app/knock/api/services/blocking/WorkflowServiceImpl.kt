@@ -54,7 +54,7 @@ class WorkflowServiceImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("v1", "workflows", params.getPathParam(0), "cancel")
+                    .addPathSegments("v1", "workflows", params._pathParam(0), "cancel")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)
@@ -74,7 +74,7 @@ class WorkflowServiceImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("v1", "workflows", params.getPathParam(0), "trigger")
+                    .addPathSegments("v1", "workflows", params._pathParam(0), "trigger")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)

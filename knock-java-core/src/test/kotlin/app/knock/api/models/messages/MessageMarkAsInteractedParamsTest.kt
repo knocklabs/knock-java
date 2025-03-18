@@ -22,6 +22,16 @@ internal class MessageMarkAsInteractedParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            MessageMarkAsInteractedParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
     fun body() {
         val params =
             MessageMarkAsInteractedParams.builder()
@@ -52,16 +62,5 @@ internal class MessageMarkAsInteractedParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            MessageMarkAsInteractedParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-        assertThat(params).isNotNull
-        // path param "messageId"
-        assertThat(params.getPathParam(0)).isEqualTo("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

@@ -24,6 +24,20 @@ internal class MsTeamListChannelsParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            MsTeamListChannelsParams.builder()
+                .channelId("channel_id")
+                .msTeamsTenantObject("ms_teams_tenant_object")
+                .teamId("team_id")
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("channel_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
     fun queryParams() {
         val params =
             MsTeamListChannelsParams.builder()
@@ -69,20 +83,5 @@ internal class MsTeamListChannelsParamsTest {
                     .put("team_id", "team_id")
                     .build()
             )
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            MsTeamListChannelsParams.builder()
-                .channelId("channel_id")
-                .msTeamsTenantObject("ms_teams_tenant_object")
-                .teamId("team_id")
-                .build()
-        assertThat(params).isNotNull
-        // path param "channelId"
-        assertThat(params.getPathParam(0)).isEqualTo("channel_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

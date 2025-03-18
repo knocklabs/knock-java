@@ -5,6 +5,7 @@ package app.knock.api.models.workflows
 import app.knock.api.core.JsonValue
 import app.knock.api.models.recipients.RecipientRequest
 import app.knock.api.models.tenants.InlineTenantRequest
+import kotlin.jvm.optionals.getOrNull
 import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -29,6 +30,15 @@ internal class WorkflowTriggerParamsTest {
             .addRecipient("jhammond")
             .tenant("acme_corp")
             .build()
+    }
+
+    @Test
+    fun pathParams() {
+        val params = WorkflowTriggerParams.builder().key("key").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("key")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 
     @Test
@@ -66,7 +76,8 @@ internal class WorkflowTriggerParamsTest {
                     .putAdditionalProperty("welcome_message", JsonValue.from("bar"))
                     .build()
             )
-        assertThat(body.recipients()).contains(listOf(RecipientRequest.ofString("jhammond")))
+        assertThat(body.recipients().getOrNull())
+            .containsExactly(RecipientRequest.ofString("jhammond"))
         assertThat(body.tenant()).contains(InlineTenantRequest.ofString("acme_corp"))
     }
 
@@ -77,15 +88,5 @@ internal class WorkflowTriggerParamsTest {
         val body = params._body()
 
         assertNotNull(body)
-    }
-
-    @Test
-    fun getPathParam() {
-        val params = WorkflowTriggerParams.builder().key("key").build()
-        assertThat(params).isNotNull
-        // path param "key"
-        assertThat(params.getPathParam(0)).isEqualTo("key")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

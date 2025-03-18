@@ -102,6 +102,19 @@ internal class UserUpdateParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            UserUpdateParams.builder()
+                .userId("user_id")
+                .identifyUserRequest(IdentifyUserRequest.builder().build())
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("user_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
     fun body() {
         val params =
             UserUpdateParams.builder()
@@ -292,19 +305,5 @@ internal class UserUpdateParamsTest {
         val body = params._body()
 
         assertThat(body).isEqualTo(IdentifyUserRequest.builder().build())
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            UserUpdateParams.builder()
-                .userId("user_id")
-                .identifyUserRequest(IdentifyUserRequest.builder().build())
-                .build()
-        assertThat(params).isNotNull
-        // path param "userId"
-        assertThat(params.getPathParam(0)).isEqualTo("user_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

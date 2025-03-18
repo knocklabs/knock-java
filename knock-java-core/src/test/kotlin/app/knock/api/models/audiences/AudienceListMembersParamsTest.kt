@@ -13,12 +13,11 @@ internal class AudienceListMembersParamsTest {
     }
 
     @Test
-    fun getPathParam() {
+    fun pathParams() {
         val params = AudienceListMembersParams.builder().key("key").build()
-        assertThat(params).isNotNull
-        // path param "key"
-        assertThat(params.getPathParam(0)).isEqualTo("key")
+
+        assertThat(params._pathParam(0)).isEqualTo("key")
         // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 }

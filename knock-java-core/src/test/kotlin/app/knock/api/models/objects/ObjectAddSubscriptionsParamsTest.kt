@@ -26,6 +26,22 @@ internal class ObjectAddSubscriptionsParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            ObjectAddSubscriptionsParams.builder()
+                .collection("collection")
+                .objectId("object_id")
+                .addRecipient("user_1")
+                .addRecipient("user_2")
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("collection")
+        assertThat(params._pathParam(1)).isEqualTo("object_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(2)).isEqualTo("")
+    }
+
+    @Test
     fun body() {
         val params =
             ObjectAddSubscriptionsParams.builder()
@@ -44,8 +60,9 @@ internal class ObjectAddSubscriptionsParamsTest {
 
         assertNotNull(body)
         assertThat(body.recipients())
-            .isEqualTo(
-                listOf(RecipientRequest.ofString("user_1"), RecipientRequest.ofString("user_2"))
+            .containsExactly(
+                RecipientRequest.ofString("user_1"),
+                RecipientRequest.ofString("user_2"),
             )
         assertThat(body.properties())
             .contains(
@@ -69,26 +86,9 @@ internal class ObjectAddSubscriptionsParamsTest {
 
         assertNotNull(body)
         assertThat(body.recipients())
-            .isEqualTo(
-                listOf(RecipientRequest.ofString("user_1"), RecipientRequest.ofString("user_2"))
+            .containsExactly(
+                RecipientRequest.ofString("user_1"),
+                RecipientRequest.ofString("user_2"),
             )
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            ObjectAddSubscriptionsParams.builder()
-                .collection("collection")
-                .objectId("object_id")
-                .addRecipient("user_1")
-                .addRecipient("user_2")
-                .build()
-        assertThat(params).isNotNull
-        // path param "collection"
-        assertThat(params.getPathParam(0)).isEqualTo("collection")
-        // path param "objectId"
-        assertThat(params.getPathParam(1)).isEqualTo("object_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(2)).isEqualTo("")
     }
 }

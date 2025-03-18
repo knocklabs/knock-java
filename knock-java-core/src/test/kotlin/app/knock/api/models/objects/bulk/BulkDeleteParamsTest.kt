@@ -14,6 +14,16 @@ internal class BulkDeleteParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            BulkDeleteParams.builder().collection("collection").addObjectId("string").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("collection")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
     fun queryParams() {
         val params =
             BulkDeleteParams.builder().collection("collection").addObjectId("string").build()
@@ -22,27 +32,5 @@ internal class BulkDeleteParamsTest {
 
         assertThat(queryParams)
             .isEqualTo(QueryParams.builder().put("object_ids[]", "string").build())
-    }
-
-    @Test
-    fun queryParamsWithoutOptionalFields() {
-        val params =
-            BulkDeleteParams.builder().collection("collection").addObjectId("string").build()
-
-        val queryParams = params._queryParams()
-
-        assertThat(queryParams)
-            .isEqualTo(QueryParams.builder().put("object_ids[]", "string").build())
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            BulkDeleteParams.builder().collection("collection").addObjectId("string").build()
-        assertThat(params).isNotNull
-        // path param "collection"
-        assertThat(params.getPathParam(0)).isEqualTo("collection")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

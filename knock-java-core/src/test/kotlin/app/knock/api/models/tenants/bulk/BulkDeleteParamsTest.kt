@@ -22,14 +22,4 @@ internal class BulkDeleteParamsTest {
         assertThat(queryParams)
             .isEqualTo(QueryParams.builder().put("tenant_ids[]", "string").build())
     }
-
-    @Test
-    fun queryParamsWithoutOptionalFields() {
-        val params = BulkDeleteParams.builder().addTenantId("string").build()
-
-        val queryParams = params._queryParams()
-
-        assertThat(queryParams)
-            .isEqualTo(QueryParams.builder().put("tenant_ids[]", "string").build())
-    }
 }

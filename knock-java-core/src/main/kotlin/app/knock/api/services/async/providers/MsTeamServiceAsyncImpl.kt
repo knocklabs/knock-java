@@ -82,7 +82,7 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
                         "v1",
                         "providers",
                         "ms-teams",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "auth_check",
                     )
                     .build()
@@ -118,7 +118,7 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
                         "v1",
                         "providers",
                         "ms-teams",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "channels",
                     )
                     .build()
@@ -150,7 +150,7 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "providers", "ms-teams", params.getPathParam(0), "teams")
+                    .addPathSegments("v1", "providers", "ms-teams", params._pathParam(0), "teams")
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -183,7 +183,7 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
                         "v1",
                         "providers",
                         "ms-teams",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "revoke_access",
                     )
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }

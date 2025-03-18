@@ -68,13 +68,7 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments(
-                        "v1",
-                        "providers",
-                        "slack",
-                        params.getPathParam(0),
-                        "auth_check",
-                    )
+                    .addPathSegments("v1", "providers", "slack", params._pathParam(0), "auth_check")
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -101,7 +95,7 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "providers", "slack", params.getPathParam(0), "channels")
+                    .addPathSegments("v1", "providers", "slack", params._pathParam(0), "channels")
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -132,7 +126,7 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
                         "v1",
                         "providers",
                         "slack",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "revoke_access",
                     )
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }

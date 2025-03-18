@@ -66,7 +66,7 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("v1", "objects", params.getPathParam(0), "bulk", "delete")
+                    .addPathSegments("v1", "objects", params._pathParam(0), "bulk", "delete")
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -99,7 +99,7 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
                     .addPathSegments(
                         "v1",
                         "objects",
-                        params.getPathParam(0),
+                        params._pathParam(0),
                         "bulk",
                         "subscriptions",
                         "add",
@@ -133,7 +133,7 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("v1", "objects", params.getPathParam(0), "bulk", "set")
+                    .addPathSegments("v1", "objects", params._pathParam(0), "bulk", "set")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)

@@ -48,7 +48,7 @@ class BulkOperationServiceImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "bulk_operations", params.getPathParam(0))
+                    .addPathSegments("v1", "bulk_operations", params._pathParam(0))
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))

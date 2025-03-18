@@ -29,6 +29,15 @@ internal class UserListMessagesParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params = UserListMessagesParams.builder().userId("user-123").build()
+
+        assertThat(params._pathParam(0)).isEqualTo("user-123")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
     fun queryParams() {
         val params =
             UserListMessagesParams.builder()
@@ -77,15 +86,5 @@ internal class UserListMessagesParamsTest {
         val queryParams = params._queryParams()
 
         assertThat(queryParams).isEqualTo(QueryParams.builder().build())
-    }
-
-    @Test
-    fun getPathParam() {
-        val params = UserListMessagesParams.builder().userId("user-123").build()
-        assertThat(params).isNotNull
-        // path param "userId"
-        assertThat(params.getPathParam(0)).isEqualTo("user-123")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

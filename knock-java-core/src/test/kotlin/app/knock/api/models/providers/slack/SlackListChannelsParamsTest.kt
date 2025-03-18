@@ -26,6 +26,19 @@ internal class SlackListChannelsParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            SlackListChannelsParams.builder()
+                .channelId("channel_id")
+                .accessTokenObject("access_token_object")
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("channel_id")
+        // out-of-bound path param
+        assertThat(params._pathParam(1)).isEqualTo("")
+    }
+
+    @Test
     fun queryParams() {
         val params =
             SlackListChannelsParams.builder()
@@ -71,19 +84,5 @@ internal class SlackListChannelsParamsTest {
             .isEqualTo(
                 QueryParams.builder().put("access_token_object", "access_token_object").build()
             )
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            SlackListChannelsParams.builder()
-                .channelId("channel_id")
-                .accessTokenObject("access_token_object")
-                .build()
-        assertThat(params).isNotNull
-        // path param "channelId"
-        assertThat(params.getPathParam(0)).isEqualTo("channel_id")
-        // out-of-bound path param
-        assertThat(params.getPathParam(1)).isEqualTo("")
     }
 }

@@ -200,7 +200,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
-                    .addPathSegments("v1", "messages", params.getPathParam(0), "archived")
+                    .addPathSegments("v1", "messages", params._pathParam(0), "archived")
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -230,7 +230,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "messages", params.getPathParam(0))
+                    .addPathSegments("v1", "messages", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -260,7 +260,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "messages", params.getPathParam(0), "content")
+                    .addPathSegments("v1", "messages", params._pathParam(0), "content")
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -290,7 +290,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "messages", params.getPathParam(0), "activities")
+                    .addPathSegments("v1", "messages", params._pathParam(0), "activities")
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -327,7 +327,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "messages", params.getPathParam(0), "delivery_logs")
+                    .addPathSegments("v1", "messages", params._pathParam(0), "delivery_logs")
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -364,7 +364,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "messages", params.getPathParam(0), "events")
+                    .addPathSegments("v1", "messages", params._pathParam(0), "events")
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -400,7 +400,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
-                    .addPathSegments("v1", "messages", params.getPathParam(0), "interacted")
+                    .addPathSegments("v1", "messages", params._pathParam(0), "interacted")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -430,7 +430,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
-                    .addPathSegments("v1", "messages", params.getPathParam(0), "read")
+                    .addPathSegments("v1", "messages", params._pathParam(0), "read")
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -460,7 +460,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
-                    .addPathSegments("v1", "messages", params.getPathParam(0), "seen")
+                    .addPathSegments("v1", "messages", params._pathParam(0), "seen")
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -490,7 +490,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
-                    .addPathSegments("v1", "messages", params.getPathParam(0), "unread")
+                    .addPathSegments("v1", "messages", params._pathParam(0), "unread")
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -520,7 +520,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
-                    .addPathSegments("v1", "messages", params.getPathParam(0), "unseen")
+                    .addPathSegments("v1", "messages", params._pathParam(0), "unseen")
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -550,7 +550,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
-                    .addPathSegments("v1", "messages", params.getPathParam(0), "unarchived")
+                    .addPathSegments("v1", "messages", params._pathParam(0), "unarchived")
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepareAsync(clientOptions, params)

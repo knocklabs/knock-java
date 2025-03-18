@@ -19,6 +19,22 @@ internal class ObjectGetPreferencesParamsTest {
     }
 
     @Test
+    fun pathParams() {
+        val params =
+            ObjectGetPreferencesParams.builder()
+                .collection("collection")
+                .objectId("object_id")
+                .preferenceSetId("default")
+                .build()
+
+        assertThat(params._pathParam(0)).isEqualTo("collection")
+        assertThat(params._pathParam(1)).isEqualTo("object_id")
+        assertThat(params._pathParam(2)).isEqualTo("default")
+        // out-of-bound path param
+        assertThat(params._pathParam(3)).isEqualTo("")
+    }
+
+    @Test
     fun queryParams() {
         val params =
             ObjectGetPreferencesParams.builder()
@@ -45,24 +61,5 @@ internal class ObjectGetPreferencesParamsTest {
         val queryParams = params._queryParams()
 
         assertThat(queryParams).isEqualTo(QueryParams.builder().build())
-    }
-
-    @Test
-    fun getPathParam() {
-        val params =
-            ObjectGetPreferencesParams.builder()
-                .collection("collection")
-                .objectId("object_id")
-                .preferenceSetId("default")
-                .build()
-        assertThat(params).isNotNull
-        // path param "collection"
-        assertThat(params.getPathParam(0)).isEqualTo("collection")
-        // path param "objectId"
-        assertThat(params.getPathParam(1)).isEqualTo("object_id")
-        // path param "preferenceSetId"
-        assertThat(params.getPathParam(2)).isEqualTo("default")
-        // out-of-bound path param
-        assertThat(params.getPathParam(3)).isEqualTo("")
     }
 }

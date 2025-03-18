@@ -67,7 +67,7 @@ class AudienceServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
-                    .addPathSegments("v1", "audiences", params.getPathParam(0), "members")
+                    .addPathSegments("v1", "audiences", params._pathParam(0), "members")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -90,7 +90,7 @@ class AudienceServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
-                    .addPathSegments("v1", "audiences", params.getPathParam(0), "members")
+                    .addPathSegments("v1", "audiences", params._pathParam(0), "members")
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -119,7 +119,7 @@ class AudienceServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
-                    .addPathSegments("v1", "audiences", params.getPathParam(0), "members")
+                    .addPathSegments("v1", "audiences", params._pathParam(0), "members")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
