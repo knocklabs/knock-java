@@ -317,6 +317,19 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [ObjectListSubscriptionsParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .collection()
+         * .objectId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): ObjectListSubscriptionsParams =
             ObjectListSubscriptionsParams(
                 checkRequired("collection", collection),
@@ -605,6 +618,19 @@ private constructor(
                 /** The collection the object belongs to */
                 fun collection(collection: String) = apply { this.collection = collection }
 
+                /**
+                 * Returns an immutable instance of [ObjectReference].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .collection()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): ObjectReference =
                     ObjectReference(
                         checkRequired("id", id),
@@ -809,6 +835,19 @@ private constructor(
                 /** The collection the object belongs to */
                 fun collection(collection: String) = apply { this.collection = collection }
 
+                /**
+                 * Returns an immutable instance of [ObjectReference].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .collection()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): ObjectReference =
                     ObjectReference(
                         checkRequired("id", id),

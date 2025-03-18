@@ -218,6 +218,19 @@ private constructor(
             keys.forEach(::removeAdditionalBodyProperty)
         }
 
+        /**
+         * Returns an immutable instance of [MsTeamRevokeAccessParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .channelId()
+         * .msTeamsTenantObject()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): MsTeamRevokeAccessParams =
             MsTeamRevokeAccessParams(
                 checkRequired("channelId", channelId),

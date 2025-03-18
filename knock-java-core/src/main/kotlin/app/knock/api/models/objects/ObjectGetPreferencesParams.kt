@@ -203,6 +203,20 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [ObjectGetPreferencesParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .collection()
+         * .objectId()
+         * .preferenceSetId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): ObjectGetPreferencesParams =
             ObjectGetPreferencesParams(
                 checkRequired("collection", collection),

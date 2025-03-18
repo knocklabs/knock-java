@@ -331,6 +331,19 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [ScheduleRepeatRule].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * ._typename()
+         * .frequency()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): ScheduleRepeatRule =
             ScheduleRepeatRule(
                 checkRequired("_typename", _typename),

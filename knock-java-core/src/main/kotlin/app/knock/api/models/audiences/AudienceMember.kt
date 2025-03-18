@@ -241,6 +241,21 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [AudienceMember].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * ._typename()
+         * .addedAt()
+         * .user()
+         * .userId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): AudienceMember =
             AudienceMember(
                 checkRequired("_typename", _typename),

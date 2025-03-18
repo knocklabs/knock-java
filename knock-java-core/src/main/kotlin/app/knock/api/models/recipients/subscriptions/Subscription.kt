@@ -299,6 +299,22 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [Subscription].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * ._typename()
+         * .insertedAt()
+         * .object_()
+         * .recipient()
+         * .updatedAt()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): Subscription =
             Subscription(
                 checkRequired("_typename", _typename),
@@ -371,6 +387,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Properties].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): Properties = Properties(additionalProperties.toImmutable())
         }
 

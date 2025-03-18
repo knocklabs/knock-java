@@ -197,6 +197,19 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [SlackListChannelsParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .channelId()
+         * .accessTokenObject()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): SlackListChannelsParams =
             SlackListChannelsParams(
                 checkRequired("channelId", channelId),
@@ -369,6 +382,11 @@ private constructor(
                 additionalProperties.removeAll(keys)
             }
 
+            /**
+             * Returns an immutable instance of [QueryOptions].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): QueryOptions =
                 QueryOptions(
                     cursor,

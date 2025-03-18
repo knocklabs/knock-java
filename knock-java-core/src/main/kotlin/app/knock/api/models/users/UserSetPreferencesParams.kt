@@ -197,6 +197,20 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [UserSetPreferencesParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .userId()
+         * .preferenceSetId()
+         * .preferenceSetRequest()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): UserSetPreferencesParams =
             UserSetPreferencesParams(
                 checkRequired("userId", userId),

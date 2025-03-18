@@ -133,6 +133,18 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [OneSignalChannelData].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .playerIds()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): OneSignalChannelData =
             OneSignalChannelData(
                 checkRequired("playerIds", playerIds).map { it.toImmutable() },

@@ -166,6 +166,19 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [MsTeamListTeamsResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .msTeamsTeams()
+         * .skipToken()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): MsTeamListTeamsResponse =
             MsTeamListTeamsResponse(
                 checkRequired("msTeamsTeams", msTeamsTeams).map { it.toImmutable() },
@@ -341,6 +354,19 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [MsTeamsTeam].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * .displayName()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): MsTeamsTeam =
                 MsTeamsTeam(
                     checkRequired("id", id),

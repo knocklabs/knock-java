@@ -202,6 +202,19 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [MsTeamListTeamsParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .channelId()
+         * .msTeamsTenantObject()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): MsTeamListTeamsParams =
             MsTeamListTeamsParams(
                 checkRequired("channelId", channelId),
@@ -374,6 +387,11 @@ private constructor(
                 additionalProperties.removeAll(keys)
             }
 
+            /**
+             * Returns an immutable instance of [QueryOptions].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): QueryOptions =
                 QueryOptions(filter, select, skiptoken, top, additionalProperties.build())
         }

@@ -319,6 +319,11 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [Activity].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): Activity =
             Activity(
                 id,
@@ -392,6 +397,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Data].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): Data = Data(additionalProperties.toImmutable())
         }
 

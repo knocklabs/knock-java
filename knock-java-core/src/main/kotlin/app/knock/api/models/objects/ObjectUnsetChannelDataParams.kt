@@ -217,6 +217,20 @@ private constructor(
             keys.forEach(::removeAdditionalBodyProperty)
         }
 
+        /**
+         * Returns an immutable instance of [ObjectUnsetChannelDataParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .collection()
+         * .objectId()
+         * .channelId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): ObjectUnsetChannelDataParams =
             ObjectUnsetChannelDataParams(
                 checkRequired("collection", collection),

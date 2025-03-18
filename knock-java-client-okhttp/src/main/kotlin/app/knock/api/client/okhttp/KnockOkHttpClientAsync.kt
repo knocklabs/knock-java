@@ -146,6 +146,11 @@ class KnockOkHttpClientAsync private constructor() {
 
         fun fromEnv() = apply { clientOptions.fromEnv() }
 
+        /**
+         * Returns an immutable instance of [KnockClientAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): KnockClientAsync =
             KnockClientAsyncImpl(
                 clientOptions

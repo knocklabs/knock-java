@@ -181,6 +181,19 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [SlackCheckAuthParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .channelId()
+         * .accessTokenObject()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): SlackCheckAuthParams =
             SlackCheckAuthParams(
                 checkRequired("channelId", channelId),

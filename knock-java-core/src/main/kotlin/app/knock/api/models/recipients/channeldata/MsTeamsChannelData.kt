@@ -196,6 +196,18 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [MsTeamsChannelData].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .connections()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): MsTeamsChannelData =
             MsTeamsChannelData(
                 checkRequired("connections", connections).map { it.toImmutable() },
@@ -611,6 +623,11 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MsTeamsTokenConnection].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
                 fun build(): MsTeamsTokenConnection =
                     MsTeamsTokenConnection(
                         msTeamsChannelId,
@@ -753,6 +770,18 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MsTeamsIncomingWebhookConnection].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .incomingWebhook()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): MsTeamsIncomingWebhookConnection =
                     MsTeamsIncomingWebhookConnection(
                         checkRequired("incomingWebhook", incomingWebhook),
@@ -864,6 +893,18 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [IncomingWebhook].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .url()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): IncomingWebhook =
                         IncomingWebhook(
                             checkRequired("url", url),

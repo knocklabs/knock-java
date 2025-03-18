@@ -269,6 +269,18 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [ScheduleListParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .workflow()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): ScheduleListParams =
             ScheduleListParams(
                 checkRequired("workflow", workflow),
@@ -461,6 +473,19 @@ private constructor(
                 /** The collection the object belongs to */
                 fun collection(collection: String) = apply { this.collection = collection }
 
+                /**
+                 * Returns an immutable instance of [ObjectReference].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .id()
+                 * .collection()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): ObjectReference =
                     ObjectReference(
                         checkRequired("id", id),

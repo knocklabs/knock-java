@@ -231,6 +231,18 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [TenantRequest].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): TenantRequest =
             TenantRequest(
                 checkRequired("id", id),
@@ -374,6 +386,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Settings].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): Settings =
                 Settings(branding, preferenceSet, additionalProperties.toImmutable())
         }
@@ -591,6 +608,11 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [Branding].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
                 fun build(): Branding =
                     Branding(
                         iconUrl,

@@ -247,6 +247,21 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [MessageGetContentResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * ._typename()
+         * .data()
+         * .insertedAt()
+         * .messageId()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): MessageGetContentResponse =
             MessageGetContentResponse(
                 checkRequired("_typename", _typename),
@@ -877,6 +892,23 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MessageEmailContent].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * ._typename()
+                 * .from()
+                 * .htmlBody()
+                 * .subjectLine()
+                 * .textBody()
+                 * .to()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): MessageEmailContent =
                     MessageEmailContent(
                         checkRequired("_typename", _typename),
@@ -1078,6 +1110,20 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MessageSmsContent].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * ._typename()
+                 * .body()
+                 * .to()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): MessageSmsContent =
                     MessageSmsContent(
                         checkRequired("_typename", _typename),
@@ -1338,6 +1384,21 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MessagePushContent].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .token()
+                 * ._typename()
+                 * .body()
+                 * .title()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): MessagePushContent =
                     MessagePushContent(
                         checkRequired("token", token),
@@ -1411,6 +1472,11 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [InnerData].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
                     fun build(): InnerData = InnerData(additionalProperties.toImmutable())
                 }
 
@@ -1665,6 +1731,20 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MessageChatContent].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * ._typename()
+                 * .connection()
+                 * .template()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): MessageChatContent =
                     MessageChatContent(
                         checkRequired("_typename", _typename),
@@ -1738,6 +1818,11 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [Connection].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
                     fun build(): Connection = Connection(additionalProperties.toImmutable())
                 }
 
@@ -1953,6 +2038,11 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [Template].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
                     fun build(): Template =
                         Template(
                             (blocks ?: JsonMissing.of()).map { it.toImmutable() },
@@ -2133,6 +2223,20 @@ private constructor(
                             keys.forEach(::removeAdditionalProperty)
                         }
 
+                        /**
+                         * Returns an immutable instance of [Block].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         *
+                         * The following fields are required:
+                         * ```java
+                         * .content()
+                         * .name()
+                         * .type()
+                         * ```
+                         *
+                         * @throws IllegalStateException if any required field is unset.
+                         */
                         fun build(): Block =
                             Block(
                                 checkRequired("content", content),
@@ -2333,6 +2437,11 @@ private constructor(
                             keys.forEach(::removeAdditionalProperty)
                         }
 
+                        /**
+                         * Returns an immutable instance of [JsonContent].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         */
                         fun build(): JsonContent = JsonContent(additionalProperties.toImmutable())
                     }
 
@@ -2434,6 +2543,11 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [Metadata].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
                     fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                 }
 
@@ -2641,6 +2755,19 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MessageInAppFeedContent].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * ._typename()
+                 * .blocks()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): MessageInAppFeedContent =
                     MessageInAppFeedContent(
                         checkRequired("_typename", _typename),
@@ -3034,6 +3161,21 @@ private constructor(
                             keys.forEach(::removeAdditionalProperty)
                         }
 
+                        /**
+                         * Returns an immutable instance of [MessageInAppFeedContentBlock].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         *
+                         * The following fields are required:
+                         * ```java
+                         * .content()
+                         * .name()
+                         * .rendered()
+                         * .type()
+                         * ```
+                         *
+                         * @throws IllegalStateException if any required field is unset.
+                         */
                         fun build(): MessageInAppFeedContentBlock =
                             MessageInAppFeedContentBlock(
                                 checkRequired("content", content),
@@ -3360,6 +3502,20 @@ private constructor(
                             keys.forEach(::removeAdditionalProperty)
                         }
 
+                        /**
+                         * Returns an immutable instance of [MessageInAppFeedButtonSetBlock].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         *
+                         * The following fields are required:
+                         * ```java
+                         * .buttons()
+                         * .name()
+                         * .type()
+                         * ```
+                         *
+                         * @throws IllegalStateException if any required field is unset.
+                         */
                         fun build(): MessageInAppFeedButtonSetBlock =
                             MessageInAppFeedButtonSetBlock(
                                 checkRequired("buttons", buttons).map { it.toImmutable() },
@@ -3543,6 +3699,21 @@ private constructor(
                                 keys.forEach(::removeAdditionalProperty)
                             }
 
+                            /**
+                             * Returns an immutable instance of [Button].
+                             *
+                             * Further updates to this [Builder] will not mutate the returned
+                             * instance.
+                             *
+                             * The following fields are required:
+                             * ```java
+                             * .action()
+                             * .label()
+                             * .name()
+                             * ```
+                             *
+                             * @throws IllegalStateException if any required field is unset.
+                             */
                             fun build(): Button =
                                 Button(
                                     checkRequired("action", action),

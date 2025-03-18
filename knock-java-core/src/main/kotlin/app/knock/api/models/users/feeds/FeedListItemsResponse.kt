@@ -746,6 +746,29 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [FeedListItemsResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * ._typename()
+         * .activities()
+         * .actors()
+         * .blocks()
+         * .data()
+         * .insertedAt()
+         * .source()
+         * .tenant()
+         * .totalActivities()
+         * .totalActors()
+         * .updatedAt()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): FeedListItemsResponse =
             FeedListItemsResponse(
                 checkRequired("id", id),
@@ -1140,6 +1163,21 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MessageInAppFeedContentBlock].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .content()
+                 * .name()
+                 * .rendered()
+                 * .type()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): MessageInAppFeedContentBlock =
                     MessageInAppFeedContentBlock(
                         checkRequired("content", content),
@@ -1455,6 +1493,20 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [MessageInAppFeedButtonSetBlock].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 *
+                 * The following fields are required:
+                 * ```java
+                 * .buttons()
+                 * .name()
+                 * .type()
+                 * ```
+                 *
+                 * @throws IllegalStateException if any required field is unset.
+                 */
                 fun build(): MessageInAppFeedButtonSetBlock =
                     MessageInAppFeedButtonSetBlock(
                         checkRequired("buttons", buttons).map { it.toImmutable() },
@@ -1632,6 +1684,20 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [Button].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .action()
+                     * .label()
+                     * .name()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
                     fun build(): Button =
                         Button(
                             checkRequired("action", action),
@@ -1834,6 +1900,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Data].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): Data = Data(additionalProperties.toImmutable())
         }
 
@@ -2057,6 +2128,21 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Source].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * ._typename()
+             * .categories()
+             * .key()
+             * .versionId()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): Source =
                 Source(
                     checkRequired("_typename", _typename),

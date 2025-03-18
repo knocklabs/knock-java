@@ -178,6 +178,11 @@ private constructor(
             keys.forEach(::removeAdditionalBodyProperty)
         }
 
+        /**
+         * Returns an immutable instance of [BatchMarkAsReadParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         */
         fun build(): BatchMarkAsReadParams =
             BatchMarkAsReadParams(
                 additionalHeaders.build(),

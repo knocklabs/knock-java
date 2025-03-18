@@ -201,6 +201,21 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        /**
+         * Returns an immutable instance of [ObjectSetChannelDataParams].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .collection()
+         * .objectId()
+         * .channelId()
+         * .channelDataRequest()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): ObjectSetChannelDataParams =
             ObjectSetChannelDataParams(
                 checkRequired("collection", collection),

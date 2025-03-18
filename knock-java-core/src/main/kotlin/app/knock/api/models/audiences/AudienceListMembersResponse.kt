@@ -166,6 +166,19 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [AudienceListMembersResponse].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .entries()
+         * .pageInfo()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): AudienceListMembersResponse =
             AudienceListMembersResponse(
                 checkRequired("entries", entries).map { it.toImmutable() },
@@ -368,6 +381,19 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [PageInfo].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * ._typename()
+             * .pageSize()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
             fun build(): PageInfo =
                 PageInfo(
                     checkRequired("_typename", _typename),

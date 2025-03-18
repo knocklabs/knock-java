@@ -261,6 +261,19 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [PreferenceSet].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * ._typename()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): PreferenceSet =
             PreferenceSet(
                 checkRequired("id", id),
@@ -332,6 +345,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Categories].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): Categories = Categories(additionalProperties.toImmutable())
         }
 
@@ -412,6 +430,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Workflows].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): Workflows = Workflows(additionalProperties.toImmutable())
         }
 

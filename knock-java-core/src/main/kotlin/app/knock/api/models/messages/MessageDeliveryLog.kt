@@ -320,6 +320,24 @@ private constructor(
             keys.forEach(::removeAdditionalProperty)
         }
 
+        /**
+         * Returns an immutable instance of [MessageDeliveryLog].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * ._typename()
+         * .environmentId()
+         * .insertedAt()
+         * .request()
+         * .response()
+         * .serviceName()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
         fun build(): MessageDeliveryLog =
             MessageDeliveryLog(
                 checkRequired("id", id),
@@ -583,6 +601,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Request].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): Request =
                 Request(
                     body,
@@ -790,6 +813,11 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [UnionMember1].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
                     fun build(): UnionMember1 = UnionMember1(additionalProperties.toImmutable())
                 }
 
@@ -873,6 +901,11 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [Headers].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
                 fun build(): Headers = Headers(additionalProperties.toImmutable())
             }
 
@@ -1188,6 +1221,11 @@ private constructor(
                 keys.forEach(::removeAdditionalProperty)
             }
 
+            /**
+             * Returns an immutable instance of [Response].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
             fun build(): Response =
                 Response(body, headers, status, additionalProperties.toImmutable())
         }
@@ -1387,6 +1425,11 @@ private constructor(
                         keys.forEach(::removeAdditionalProperty)
                     }
 
+                    /**
+                     * Returns an immutable instance of [UnionMember1].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
                     fun build(): UnionMember1 = UnionMember1(additionalProperties.toImmutable())
                 }
 
@@ -1470,6 +1513,11 @@ private constructor(
                     keys.forEach(::removeAdditionalProperty)
                 }
 
+                /**
+                 * Returns an immutable instance of [Headers].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
                 fun build(): Headers = Headers(additionalProperties.toImmutable())
             }
 
