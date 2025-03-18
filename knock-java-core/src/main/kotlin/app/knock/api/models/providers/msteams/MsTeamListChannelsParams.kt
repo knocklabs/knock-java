@@ -41,18 +41,23 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.msTeamsTenantObject.let {
-            queryParams.put("ms_teams_tenant_object", listOf(it.toString()))
-        }
-        this.teamId.let { queryParams.put("team_id", listOf(it.toString())) }
-        this.queryOptions?.forEachQueryParam { key, values ->
-            queryParams.put("query_options[$key]", values)
-        }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                put("ms_teams_tenant_object", msTeamsTenantObject)
+                put("team_id", teamId)
+                queryOptions?.let {
+                    it.filter().ifPresent { put("query_options[\$filter]", it) }
+                    it.select().ifPresent { put("query_options[\$select]", it) }
+                    it._additionalProperties().keys().forEach { key ->
+                        it._additionalProperties().values(key).forEach { value ->
+                            put("query_options[$key]", value)
+                        }
+                    }
+                }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     fun getPathParam(index: Int): String {
         return when (index) {
@@ -258,13 +263,6 @@ private constructor(
         fun select(): Optional<String> = Optional.ofNullable(select)
 
         fun _additionalProperties(): QueryParams = additionalProperties
-
-        @JvmSynthetic
-        internal fun forEachQueryParam(putParam: (String, List<String>) -> Unit) {
-            this.filter?.let { putParam("\$filter", listOf(it.toString())) }
-            this.select?.let { putParam("\$select", listOf(it.toString())) }
-            additionalProperties.keys().forEach { putParam(it, additionalProperties.values(it)) }
-        }
 
         fun toBuilder() = Builder().from(this)
 

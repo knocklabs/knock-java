@@ -41,17 +41,20 @@ internal class SlackListChannelsParamsTest {
                         .build()
                 )
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("access_token_object", "access_token_object")
-        SlackListChannelsParams.QueryOptions.builder()
-            .cursor("cursor")
-            .excludeArchived(true)
-            .limit(0L)
-            .teamId("team_id")
-            .types("types")
-            .build()
-            .forEachQueryParam { key, values -> expected.put("query_options[$key]", values) }
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("access_token_object", "access_token_object")
+                    .put("query_options[cursor]", "cursor")
+                    .put("query_options[exclude_archived]", "true")
+                    .put("query_options[limit]", "0")
+                    .put("query_options[team_id]", "team_id")
+                    .put("query_options[types]", "types")
+                    .build()
+            )
     }
 
     @Test
@@ -61,9 +64,13 @@ internal class SlackListChannelsParamsTest {
                 .channelId("channel_id")
                 .accessTokenObject("access_token_object")
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("access_token_object", "access_token_object")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder().put("access_token_object", "access_token_object").build()
+            )
     }
 
     @Test

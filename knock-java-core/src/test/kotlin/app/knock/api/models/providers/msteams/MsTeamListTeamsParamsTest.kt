@@ -39,16 +39,19 @@ internal class MsTeamListTeamsParamsTest {
                         .build()
                 )
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("ms_teams_tenant_object", "ms_teams_tenant_object")
-        MsTeamListTeamsParams.QueryOptions.builder()
-            .filter("\$filter")
-            .select("\$select")
-            .skiptoken("\$skiptoken")
-            .top(0L)
-            .build()
-            .forEachQueryParam { key, values -> expected.put("query_options[$key]", values) }
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("ms_teams_tenant_object", "ms_teams_tenant_object")
+                    .put("query_options[\$filter]", "\$filter")
+                    .put("query_options[\$select]", "\$select")
+                    .put("query_options[\$skiptoken]", "\$skiptoken")
+                    .put("query_options[\$top]", "0")
+                    .build()
+            )
     }
 
     @Test
@@ -58,9 +61,15 @@ internal class MsTeamListTeamsParamsTest {
                 .channelId("channel_id")
                 .msTeamsTenantObject("ms_teams_tenant_object")
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("ms_teams_tenant_object", "ms_teams_tenant_object")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("ms_teams_tenant_object", "ms_teams_tenant_object")
+                    .build()
+            )
     }
 
     @Test

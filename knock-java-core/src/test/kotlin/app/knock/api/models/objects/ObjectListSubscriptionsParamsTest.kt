@@ -35,20 +35,20 @@ internal class ObjectListSubscriptionsParamsTest {
                 .pageSize(0L)
                 .addRecipient("user_123")
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("after", "after")
-        expected.put("before", "before")
-        expected.put("mode", ObjectListSubscriptionsParams.Mode.RECIPIENT.toString())
-        expected.put(
-            "objects[]",
-            ObjectListSubscriptionsParams.Object.ofString("user_123").toString(),
-        )
-        expected.put("page_size", "0")
-        expected.put(
-            "recipients[]",
-            ObjectListSubscriptionsParams.Recipient.ofString("user_123").toString(),
-        )
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("after", "after")
+                    .put("before", "before")
+                    .put("mode", "recipient")
+                    .put("objects[]", "user_123")
+                    .put("page_size", "0")
+                    .put("recipients[]", "user_123")
+                    .build()
+            )
     }
 
     @Test
@@ -58,8 +58,10 @@ internal class ObjectListSubscriptionsParamsTest {
                 .collection("collection")
                 .objectId("object_id")
                 .build()
-        val expected = QueryParams.builder()
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 
     @Test

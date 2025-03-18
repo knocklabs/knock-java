@@ -23,9 +23,13 @@ internal class SlackCheckAuthParamsTest {
                 .channelId("channel_id")
                 .accessTokenObject("access_token_object")
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("access_token_object", "access_token_object")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder().put("access_token_object", "access_token_object").build()
+            )
     }
 
     @Test
@@ -35,9 +39,13 @@ internal class SlackCheckAuthParamsTest {
                 .channelId("channel_id")
                 .accessTokenObject("access_token_object")
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("access_token_object", "access_token_object")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder().put("access_token_object", "access_token_object").build()
+            )
     }
 
     @Test

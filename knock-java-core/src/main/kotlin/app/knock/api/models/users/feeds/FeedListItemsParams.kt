@@ -75,23 +75,22 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.after?.let { queryParams.put("after", listOf(it.toString())) }
-        this.archived?.let { queryParams.put("archived", listOf(it.toString())) }
-        this.before?.let { queryParams.put("before", listOf(it.toString())) }
-        this.hasTenant?.let { queryParams.put("has_tenant", listOf(it.toString())) }
-        this.pageSize?.let { queryParams.put("page_size", listOf(it.toString())) }
-        this.source?.let { queryParams.put("source", listOf(it.toString())) }
-        this.status?.let { queryParams.put("status", listOf(it.toString())) }
-        this.tenant?.let { queryParams.put("tenant", listOf(it.toString())) }
-        this.triggerData?.let { queryParams.put("trigger_data", listOf(it.toString())) }
-        this.workflowCategories?.let {
-            queryParams.put("workflow_categories[]", it.map(Any::toString))
-        }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                after?.let { put("after", it) }
+                archived?.let { put("archived", it.asString()) }
+                before?.let { put("before", it) }
+                hasTenant?.let { put("has_tenant", it.toString()) }
+                pageSize?.let { put("page_size", it.toString()) }
+                source?.let { put("source", it) }
+                status?.let { put("status", it.asString()) }
+                tenant?.let { put("tenant", it) }
+                triggerData?.let { put("trigger_data", it) }
+                workflowCategories?.forEach { put("workflow_categories[]", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     fun getPathParam(index: Int): String {
         return when (index) {

@@ -61,17 +61,39 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.workflow.let { queryParams.put("workflow", listOf(it.toString())) }
-        this.after?.let { queryParams.put("after", listOf(it.toString())) }
-        this.before?.let { queryParams.put("before", listOf(it.toString())) }
-        this.pageSize?.let { queryParams.put("page_size", listOf(it.toString())) }
-        this.recipients?.let { queryParams.put("recipients[]", it.map(Any::toString)) }
-        this.tenant?.let { queryParams.put("tenant", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                put("workflow", workflow)
+                after?.let { put("after", it) }
+                before?.let { put("before", it) }
+                pageSize?.let { put("page_size", it.toString()) }
+                recipients?.forEach {
+                    it.accept(
+                        object : Recipient.Visitor<Unit> {
+                            override fun visitString(string: String) {
+                                put("recipients[]", string)
+                            }
+
+                            override fun visitObjectReference(
+                                objectReference: Recipient.ObjectReference
+                            ) {
+                                put("recipients[][id]", objectReference.id())
+                                put("recipients[][collection]", objectReference.collection())
+                                objectReference._additionalProperties().keys().forEach { key ->
+                                    objectReference._additionalProperties().values(key).forEach {
+                                        value ->
+                                        put("recipients[][$key]", value)
+                                    }
+                                }
+                            }
+                        }
+                    )
+                }
+                tenant?.let { put("tenant", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     fun toBuilder() = Builder().from(this)
 
@@ -429,15 +451,6 @@ private constructor(
 
             /** The collection the object belongs to */
             fun collection(): String = collection
-
-            @JvmSynthetic
-            internal fun forEachQueryParam(putParam: (String, List<String>) -> Unit) {
-                this.id.let { putParam("id", listOf(it.toString())) }
-                this.collection.let { putParam("collection", listOf(it.toString())) }
-                additionalProperties.keys().forEach {
-                    putParam(it, additionalProperties.values(it))
-                }
-            }
 
             fun toBuilder() = Builder().from(this)
 

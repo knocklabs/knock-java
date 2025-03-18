@@ -27,18 +27,26 @@ internal class ObjectListParamsTest {
                 .before("before")
                 .pageSize(0L)
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("after", "after")
-        expected.put("before", "before")
-        expected.put("page_size", "0")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("after", "after")
+                    .put("before", "before")
+                    .put("page_size", "0")
+                    .build()
+            )
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
         val params = ObjectListParams.builder().collection("collection").build()
-        val expected = QueryParams.builder()
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 
     @Test

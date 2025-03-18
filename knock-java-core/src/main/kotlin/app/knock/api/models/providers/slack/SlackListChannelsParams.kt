@@ -34,15 +34,27 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.accessTokenObject.let { queryParams.put("access_token_object", listOf(it.toString())) }
-        this.queryOptions?.forEachQueryParam { key, values ->
-            queryParams.put("query_options[$key]", values)
-        }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                put("access_token_object", accessTokenObject)
+                queryOptions?.let {
+                    it.cursor().ifPresent { put("query_options[cursor]", it) }
+                    it.excludeArchived().ifPresent {
+                        put("query_options[exclude_archived]", it.toString())
+                    }
+                    it.limit().ifPresent { put("query_options[limit]", it.toString()) }
+                    it.teamId().ifPresent { put("query_options[team_id]", it) }
+                    it.types().ifPresent { put("query_options[types]", it) }
+                    it._additionalProperties().keys().forEach { key ->
+                        it._additionalProperties().values(key).forEach { value ->
+                            put("query_options[$key]", value)
+                        }
+                    }
+                }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     fun getPathParam(index: Int): String {
         return when (index) {
@@ -246,16 +258,6 @@ private constructor(
         fun types(): Optional<String> = Optional.ofNullable(types)
 
         fun _additionalProperties(): QueryParams = additionalProperties
-
-        @JvmSynthetic
-        internal fun forEachQueryParam(putParam: (String, List<String>) -> Unit) {
-            this.cursor?.let { putParam("cursor", listOf(it.toString())) }
-            this.excludeArchived?.let { putParam("exclude_archived", listOf(it.toString())) }
-            this.limit?.let { putParam("limit", listOf(it.toString())) }
-            this.teamId?.let { putParam("team_id", listOf(it.toString())) }
-            this.types?.let { putParam("types", listOf(it.toString())) }
-            additionalProperties.keys().forEach { putParam(it, additionalProperties.values(it)) }
-        }
 
         fun toBuilder() = Builder().from(this)
 

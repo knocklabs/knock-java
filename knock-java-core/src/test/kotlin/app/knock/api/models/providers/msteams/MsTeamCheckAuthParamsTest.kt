@@ -23,9 +23,15 @@ internal class MsTeamCheckAuthParamsTest {
                 .channelId("channel_id")
                 .msTeamsTenantObject("ms_teams_tenant_object")
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("ms_teams_tenant_object", "ms_teams_tenant_object")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("ms_teams_tenant_object", "ms_teams_tenant_object")
+                    .build()
+            )
     }
 
     @Test
@@ -35,9 +41,15 @@ internal class MsTeamCheckAuthParamsTest {
                 .channelId("channel_id")
                 .msTeamsTenantObject("ms_teams_tenant_object")
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("ms_teams_tenant_object", "ms_teams_tenant_object")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("ms_teams_tenant_object", "ms_teams_tenant_object")
+                    .build()
+            )
     }
 
     @Test

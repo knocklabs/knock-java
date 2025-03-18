@@ -17,18 +17,22 @@ internal class BulkDeleteParamsTest {
     fun queryParams() {
         val params =
             BulkDeleteParams.builder().collection("collection").addObjectId("string").build()
-        val expected = QueryParams.builder()
-        expected.put("object_ids[]", "string")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(QueryParams.builder().put("object_ids[]", "string").build())
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
         val params =
             BulkDeleteParams.builder().collection("collection").addObjectId("string").build()
-        val expected = QueryParams.builder()
-        expected.put("object_ids[]", "string")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(QueryParams.builder().put("object_ids[]", "string").build())
     }
 
     @Test

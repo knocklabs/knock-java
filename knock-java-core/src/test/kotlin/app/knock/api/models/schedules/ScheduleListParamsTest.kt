@@ -31,21 +31,28 @@ internal class ScheduleListParamsTest {
                 .addRecipient("user_123")
                 .tenant("tenant")
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("workflow", "workflow")
-        expected.put("after", "after")
-        expected.put("before", "before")
-        expected.put("page_size", "0")
-        expected.put("recipients[]", ScheduleListParams.Recipient.ofString("user_123").toString())
-        expected.put("tenant", "tenant")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("workflow", "workflow")
+                    .put("after", "after")
+                    .put("before", "before")
+                    .put("page_size", "0")
+                    .put("recipients[]", "user_123")
+                    .put("tenant", "tenant")
+                    .build()
+            )
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
         val params = ScheduleListParams.builder().workflow("workflow").build()
-        val expected = QueryParams.builder()
-        expected.put("workflow", "workflow")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().put("workflow", "workflow").build())
     }
 }

@@ -27,9 +27,10 @@ internal class ObjectGetPreferencesParamsTest {
                 .preferenceSetId("default")
                 .tenant("tenant")
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("tenant", "tenant")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().put("tenant", "tenant").build())
     }
 
     @Test
@@ -40,8 +41,10 @@ internal class ObjectGetPreferencesParamsTest {
                 .objectId("object_id")
                 .preferenceSetId("default")
                 .build()
-        val expected = QueryParams.builder()
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 
     @Test

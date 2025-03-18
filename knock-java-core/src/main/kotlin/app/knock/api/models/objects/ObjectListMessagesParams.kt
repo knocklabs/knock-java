@@ -87,28 +87,25 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams {
-        val queryParams = QueryParams.builder()
-        this.after?.let { queryParams.put("after", listOf(it.toString())) }
-        this.before?.let { queryParams.put("before", listOf(it.toString())) }
-        this.channelId?.let { queryParams.put("channel_id", listOf(it.toString())) }
-        this.engagementStatus?.let { queryParams.put("engagement_status[]", it.map(Any::toString)) }
-        this.messageIds?.let { queryParams.put("message_ids[]", it.map(Any::toString)) }
-        this.pageSize?.let { queryParams.put("page_size", listOf(it.toString())) }
-        this.source?.let { queryParams.put("source", listOf(it.toString())) }
-        this.status?.let { queryParams.put("status[]", it.map(Any::toString)) }
-        this.tenant?.let { queryParams.put("tenant", listOf(it.toString())) }
-        this.triggerData?.let { queryParams.put("trigger_data", listOf(it.toString())) }
-        this.workflowCategories?.let {
-            queryParams.put("workflow_categories[]", it.map(Any::toString))
-        }
-        this.workflowRecipientRunId?.let {
-            queryParams.put("workflow_recipient_run_id", listOf(it.toString()))
-        }
-        this.workflowRunId?.let { queryParams.put("workflow_run_id", listOf(it.toString())) }
-        queryParams.putAll(additionalQueryParams)
-        return queryParams.build()
-    }
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                after?.let { put("after", it) }
+                before?.let { put("before", it) }
+                channelId?.let { put("channel_id", it) }
+                engagementStatus?.forEach { put("engagement_status[]", it.asString()) }
+                messageIds?.forEach { put("message_ids[]", it) }
+                pageSize?.let { put("page_size", it.toString()) }
+                source?.let { put("source", it) }
+                status?.forEach { put("status[]", it.asString()) }
+                tenant?.let { put("tenant", it) }
+                triggerData?.let { put("trigger_data", it) }
+                workflowCategories?.forEach { put("workflow_categories[]", it) }
+                workflowRecipientRunId?.let { put("workflow_recipient_run_id", it) }
+                workflowRunId?.let { put("workflow_run_id", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     fun getPathParam(index: Int): String {
         return when (index) {

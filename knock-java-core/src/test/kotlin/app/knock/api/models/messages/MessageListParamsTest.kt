@@ -45,27 +45,35 @@ internal class MessageListParamsTest {
                 .workflowRecipientRunId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .workflowRunId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("after", "after")
-        expected.put("before", "before")
-        expected.put("channel_id", "channel_id")
-        expected.put("engagement_status[]", MessageListParams.EngagementStatus.SEEN.toString())
-        expected.put("message_ids[]", "string")
-        expected.put("page_size", "0")
-        expected.put("source", "source")
-        expected.put("status[]", MessageListParams.Status.QUEUED.toString())
-        expected.put("tenant", "tenant")
-        expected.put("trigger_data", "trigger_data")
-        expected.put("workflow_categories[]", "string")
-        expected.put("workflow_recipient_run_id", "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        expected.put("workflow_run_id", "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("after", "after")
+                    .put("before", "before")
+                    .put("channel_id", "channel_id")
+                    .put("engagement_status[]", "seen")
+                    .put("message_ids[]", "string")
+                    .put("page_size", "0")
+                    .put("source", "source")
+                    .put("status[]", "queued")
+                    .put("tenant", "tenant")
+                    .put("trigger_data", "trigger_data")
+                    .put("workflow_categories[]", "string")
+                    .put("workflow_recipient_run_id", "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .put("workflow_run_id", "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .build()
+            )
     }
 
     @Test
     fun queryParamsWithoutOptionalFields() {
         val params = MessageListParams.builder().build()
-        val expected = QueryParams.builder()
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

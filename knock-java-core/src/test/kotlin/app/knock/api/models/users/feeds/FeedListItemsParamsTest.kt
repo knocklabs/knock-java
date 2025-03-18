@@ -43,18 +43,24 @@ internal class FeedListItemsParamsTest {
                 .triggerData("trigger_data")
                 .addWorkflowCategory("string")
                 .build()
-        val expected = QueryParams.builder()
-        expected.put("after", "after")
-        expected.put("archived", FeedListItemsParams.Archived.EXCLUDE.toString())
-        expected.put("before", "before")
-        expected.put("has_tenant", "true")
-        expected.put("page_size", "0")
-        expected.put("source", "source")
-        expected.put("status", FeedListItemsParams.Status.UNREAD.toString())
-        expected.put("tenant", "tenant")
-        expected.put("trigger_data", "trigger_data")
-        expected.put("workflow_categories[]", "string")
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder()
+                    .put("after", "after")
+                    .put("archived", "exclude")
+                    .put("before", "before")
+                    .put("has_tenant", "true")
+                    .put("page_size", "0")
+                    .put("source", "source")
+                    .put("status", "unread")
+                    .put("tenant", "tenant")
+                    .put("trigger_data", "trigger_data")
+                    .put("workflow_categories[]", "string")
+                    .build()
+            )
     }
 
     @Test
@@ -64,8 +70,10 @@ internal class FeedListItemsParamsTest {
                 .userId("user_id")
                 .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .build()
-        val expected = QueryParams.builder()
-        assertThat(params._queryParams()).isEqualTo(expected.build())
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 
     @Test
