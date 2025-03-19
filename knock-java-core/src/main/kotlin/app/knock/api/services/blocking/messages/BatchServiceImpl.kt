@@ -18,6 +18,7 @@ import app.knock.api.errors.KnockError
 import app.knock.api.models.messages.Message
 import app.knock.api.models.messages.batch.BatchArchiveParams
 import app.knock.api.models.messages.batch.BatchGetContentParams
+import app.knock.api.models.messages.batch.BatchGetContentResponse
 import app.knock.api.models.messages.batch.BatchMarkAsInteractedParams
 import app.knock.api.models.messages.batch.BatchMarkAsReadParams
 import app.knock.api.models.messages.batch.BatchMarkAsSeenParams
@@ -44,7 +45,7 @@ class BatchServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun getContent(
         params: BatchGetContentParams,
         requestOptions: RequestOptions,
-    ): List<MessageContent> =
+    ): List<BatchGetContentResponse> =
         // get /v1/messages/batch/content
         withRawResponse().getContent(params, requestOptions).parse()
 
@@ -122,14 +123,14 @@ class BatchServiceImpl internal constructor(private val clientOptions: ClientOpt
             }
         }
 
-        private val getContentHandler: Handler<List<MessageContent>> =
-            jsonHandler<List<MessageContent>>(clientOptions.jsonMapper)
+        private val getContentHandler: Handler<List<BatchGetContentResponse>> =
+            jsonHandler<List<BatchGetContentResponse>>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun getContent(
             params: BatchGetContentParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<List<MessageContent>> {
+        ): HttpResponseFor<List<BatchGetContentResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

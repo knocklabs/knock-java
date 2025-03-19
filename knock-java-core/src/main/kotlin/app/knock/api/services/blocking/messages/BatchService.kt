@@ -7,6 +7,7 @@ import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.messages.Message
 import app.knock.api.models.messages.batch.BatchArchiveParams
 import app.knock.api.models.messages.batch.BatchGetContentParams
+import app.knock.api.models.messages.batch.BatchGetContentResponse
 import app.knock.api.models.messages.batch.BatchMarkAsInteractedParams
 import app.knock.api.models.messages.batch.BatchMarkAsReadParams
 import app.knock.api.models.messages.batch.BatchMarkAsSeenParams
@@ -40,14 +41,14 @@ interface BatchService {
         archive(BatchArchiveParams.none(), requestOptions)
 
     /** Get the contents of multiple messages in a single request. */
-    fun getContent(params: BatchGetContentParams): List<MessageContent> =
+    fun getContent(params: BatchGetContentParams): List<BatchGetContentResponse> =
         getContent(params, RequestOptions.none())
 
     /** @see [getContent] */
     fun getContent(
         params: BatchGetContentParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): List<MessageContent>
+    ): List<BatchGetContentResponse>
 
     /** Mark messages as interacted */
     fun markAsInteracted(params: BatchMarkAsInteractedParams): List<Message> =
@@ -179,7 +180,9 @@ interface BatchService {
          * same as [BatchService.getContent].
          */
         @MustBeClosed
-        fun getContent(params: BatchGetContentParams): HttpResponseFor<List<MessageContent>> =
+        fun getContent(
+            params: BatchGetContentParams
+        ): HttpResponseFor<List<BatchGetContentResponse>> =
             getContent(params, RequestOptions.none())
 
         /** @see [getContent] */
@@ -187,7 +190,7 @@ interface BatchService {
         fun getContent(
             params: BatchGetContentParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<List<MessageContent>>
+        ): HttpResponseFor<List<BatchGetContentResponse>>
 
         /**
          * Returns a raw HTTP response for `post /v1/messages/batch/interacted`, but is otherwise

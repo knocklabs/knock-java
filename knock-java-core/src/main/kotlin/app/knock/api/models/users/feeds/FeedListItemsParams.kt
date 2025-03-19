@@ -86,12 +86,12 @@ private constructor(
         QueryParams.builder()
             .apply {
                 after?.let { put("after", it) }
-                archived?.let { put("archived", it.asString()) }
+                archived?.let { put("archived", it.toString()) }
                 before?.let { put("before", it) }
                 hasTenant?.let { put("has_tenant", it.toString()) }
                 pageSize?.let { put("page_size", it.toString()) }
                 source?.let { put("source", it) }
-                status?.let { put("status", it.asString()) }
+                status?.let { put("status", it.toString()) }
                 tenant?.let { put("tenant", it) }
                 triggerData?.let { put("trigger_data", it) }
                 workflowCategories?.forEach { put("workflow_categories[]", it) }

@@ -86,11 +86,11 @@ private constructor(
                 after?.let { put("after", it) }
                 before?.let { put("before", it) }
                 channelId?.let { put("channel_id", it) }
-                engagementStatus?.forEach { put("engagement_status[]", it.asString()) }
+                engagementStatus?.forEach { put("engagement_status[]", it.toString()) }
                 messageIds?.forEach { put("message_ids[]", it) }
                 pageSize?.let { put("page_size", it.toString()) }
                 source?.let { put("source", it) }
-                status?.forEach { put("status[]", it.asString()) }
+                status?.forEach { put("status[]", it.toString()) }
                 tenant?.let { put("tenant", it) }
                 triggerData?.let { put("trigger_data", it) }
                 workflowCategories?.forEach { put("workflow_categories[]", it) }

@@ -7,6 +7,7 @@ import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.messages.Message
 import app.knock.api.models.messages.batch.BatchArchiveParams
 import app.knock.api.models.messages.batch.BatchGetContentParams
+import app.knock.api.models.messages.batch.BatchGetContentResponse
 import app.knock.api.models.messages.batch.BatchMarkAsInteractedParams
 import app.knock.api.models.messages.batch.BatchMarkAsReadParams
 import app.knock.api.models.messages.batch.BatchMarkAsSeenParams
@@ -42,14 +43,15 @@ interface BatchServiceAsync {
         archive(BatchArchiveParams.none(), requestOptions)
 
     /** Get the contents of multiple messages in a single request. */
-    fun getContent(params: BatchGetContentParams): CompletableFuture<List<MessageContent>> =
-        getContent(params, RequestOptions.none())
+    fun getContent(
+        params: BatchGetContentParams
+    ): CompletableFuture<List<BatchGetContentResponse>> = getContent(params, RequestOptions.none())
 
     /** @see [getContent] */
     fun getContent(
         params: BatchGetContentParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<List<MessageContent>>
+    ): CompletableFuture<List<BatchGetContentResponse>>
 
     /** Mark messages as interacted */
     fun markAsInteracted(params: BatchMarkAsInteractedParams): CompletableFuture<List<Message>> =
@@ -192,7 +194,7 @@ interface BatchServiceAsync {
         @MustBeClosed
         fun getContent(
             params: BatchGetContentParams
-        ): CompletableFuture<HttpResponseFor<List<MessageContent>>> =
+        ): CompletableFuture<HttpResponseFor<List<BatchGetContentResponse>>> =
             getContent(params, RequestOptions.none())
 
         /** @see [getContent] */
@@ -200,7 +202,7 @@ interface BatchServiceAsync {
         fun getContent(
             params: BatchGetContentParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<List<MessageContent>>>
+        ): CompletableFuture<HttpResponseFor<List<BatchGetContentResponse>>>
 
         /**
          * Returns a raw HTTP response for `post /v1/messages/batch/interacted`, but is otherwise

@@ -85,7 +85,7 @@ private constructor(
             .apply {
                 after?.let { put("after", it) }
                 before?.let { put("before", it) }
-                mode?.let { put("mode", it.asString()) }
+                mode?.let { put("mode", it.toString()) }
                 objects?.forEach {
                     it.accept(
                         object : Object.Visitor<Unit> {
