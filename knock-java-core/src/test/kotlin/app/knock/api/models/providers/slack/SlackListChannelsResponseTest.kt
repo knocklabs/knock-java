@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class SlackListChannelsResponseTest {
 
     @Test
-    fun createSlackListChannelsResponse() {
+    fun create() {
         val slackListChannelsResponse =
             SlackListChannelsResponse.builder()
                 .id("id")
@@ -17,7 +17,7 @@ internal class SlackListChannelsResponseTest {
                 .isPrivate(true)
                 .name("name")
                 .build()
-        assertThat(slackListChannelsResponse).isNotNull
+
         assertThat(slackListChannelsResponse.id()).isEqualTo("id")
         assertThat(slackListChannelsResponse.contextTeamId()).isEqualTo("context_team_id")
         assertThat(slackListChannelsResponse.isIm()).isEqualTo(true)

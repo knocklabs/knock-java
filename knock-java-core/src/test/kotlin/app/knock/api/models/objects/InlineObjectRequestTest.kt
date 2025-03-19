@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 internal class InlineObjectRequestTest {
 
     @Test
-    fun createInlineObjectRequest() {
+    fun create() {
         val inlineObjectRequest =
             InlineObjectRequest.builder()
                 .id("project_1")
@@ -95,7 +95,7 @@ internal class InlineObjectRequestTest {
                         .build()
                 )
                 .build()
-        assertThat(inlineObjectRequest).isNotNull
+
         assertThat(inlineObjectRequest.id()).isEqualTo("project_1")
         assertThat(inlineObjectRequest.collection()).isEqualTo("projects")
         assertThat(inlineObjectRequest.channelData())

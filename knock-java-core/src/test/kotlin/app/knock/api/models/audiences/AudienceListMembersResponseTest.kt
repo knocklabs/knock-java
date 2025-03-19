@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 internal class AudienceListMembersResponseTest {
 
     @Test
-    fun createAudienceListMembersResponse() {
+    fun create() {
         val audienceListMembersResponse =
             AudienceListMembersResponse.builder()
                 .addEntry(
@@ -43,7 +43,7 @@ internal class AudienceListMembersResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(audienceListMembersResponse).isNotNull
+
         assertThat(audienceListMembersResponse.entries())
             .containsExactly(
                 AudienceMember.builder()

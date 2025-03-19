@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test
 internal class PushChannelDataTest {
 
     @Test
-    fun createPushChannelData() {
+    fun create() {
         val pushChannelData = PushChannelData.builder().addToken("push_token_1").build()
-        assertThat(pushChannelData).isNotNull
+
         assertThat(pushChannelData.tokens()).containsExactly("push_token_1")
     }
 }

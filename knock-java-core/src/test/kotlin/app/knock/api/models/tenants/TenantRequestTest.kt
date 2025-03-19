@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 internal class TenantRequestTest {
 
     @Test
-    fun createTenantRequest() {
+    fun create() {
         val tenantRequest =
             TenantRequest.builder()
                 .id("tenant_123")
@@ -177,7 +177,7 @@ internal class TenantRequestTest {
                         .build()
                 )
                 .build()
-        assertThat(tenantRequest).isNotNull
+
         assertThat(tenantRequest.id()).isEqualTo("tenant_123")
         assertThat(tenantRequest.channelData())
             .contains(

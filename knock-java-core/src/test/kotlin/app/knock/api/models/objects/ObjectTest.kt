@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class ObjectTest {
 
     @Test
-    fun createObject() {
+    fun create() {
         val object_ =
             Object.builder()
                 .id("project_1")
@@ -18,7 +18,7 @@ internal class ObjectTest {
                 .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                 .createdAt(null)
                 .build()
-        assertThat(object_).isNotNull
+
         assertThat(object_.id()).isEqualTo("project_1")
         assertThat(object_._typename()).isEqualTo("Object")
         assertThat(object_.collection()).isEqualTo("projects")

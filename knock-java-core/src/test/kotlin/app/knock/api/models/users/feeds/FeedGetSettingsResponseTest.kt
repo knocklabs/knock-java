@@ -8,12 +8,12 @@ import org.junit.jupiter.api.Test
 internal class FeedGetSettingsResponseTest {
 
     @Test
-    fun createFeedGetSettingsResponse() {
+    fun create() {
         val feedGetSettingsResponse =
             FeedGetSettingsResponse.builder()
                 .features(FeedGetSettingsResponse.Features.builder().brandingRequired(true).build())
                 .build()
-        assertThat(feedGetSettingsResponse).isNotNull
+
         assertThat(feedGetSettingsResponse.features())
             .isEqualTo(FeedGetSettingsResponse.Features.builder().brandingRequired(true).build())
     }

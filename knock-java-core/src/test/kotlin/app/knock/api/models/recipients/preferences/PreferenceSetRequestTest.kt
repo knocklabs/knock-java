@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class PreferenceSetRequestTest {
 
     @Test
-    fun createPreferenceSetRequest() {
+    fun create() {
         val preferenceSetRequest =
             PreferenceSetRequest.builder()
                 .categories(
@@ -80,7 +80,7 @@ internal class PreferenceSetRequestTest {
                         .build()
                 )
                 .build()
-        assertThat(preferenceSetRequest).isNotNull
+
         assertThat(preferenceSetRequest.categories())
             .contains(
                 PreferenceSetRequest.Categories.builder()

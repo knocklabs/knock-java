@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class SlackChannelDataTest {
 
     @Test
-    fun createSlackChannelData() {
+    fun create() {
         val slackChannelData =
             SlackChannelData.builder()
                 .addConnection(
@@ -20,7 +20,7 @@ internal class SlackChannelDataTest {
                 )
                 .token(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
                 .build()
-        assertThat(slackChannelData).isNotNull
+
         assertThat(slackChannelData.connections())
             .containsExactly(
                 SlackChannelData.Connection.ofSlackToken(

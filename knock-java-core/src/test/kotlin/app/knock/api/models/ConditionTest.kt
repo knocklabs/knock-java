@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test
 internal class ConditionTest {
 
     @Test
-    fun createCondition() {
+    fun create() {
         val condition =
             Condition.builder()
                 .argument("some_property")
                 .operator(Condition.Operator.EQUAL_TO)
                 .variable("recipient.property")
                 .build()
-        assertThat(condition).isNotNull
+
         assertThat(condition.argument()).contains("some_property")
         assertThat(condition.operator()).isEqualTo(Condition.Operator.EQUAL_TO)
         assertThat(condition.variable()).isEqualTo("recipient.property")

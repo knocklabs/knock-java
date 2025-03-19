@@ -3,13 +3,12 @@
 package app.knock.api.models.recipients.preferences
 
 import app.knock.api.core.JsonValue
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 internal class InlinePreferenceSetRequestTest {
 
     @Test
-    fun createInlinePreferenceSetRequest() {
+    fun create() {
         val inlinePreferenceSetRequest =
             InlinePreferenceSetRequest.builder()
                 .putAdditionalProperty(
@@ -75,6 +74,5 @@ internal class InlinePreferenceSetRequestTest {
                     ),
                 )
                 .build()
-        assertThat(inlinePreferenceSetRequest).isNotNull
     }
 }

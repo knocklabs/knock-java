@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class PreferenceSetChannelTypesTest {
 
     @Test
-    fun createPreferenceSetChannelTypes() {
+    fun create() {
         val preferenceSetChannelTypes =
             PreferenceSetChannelTypes.builder()
                 .chat(true)
@@ -29,7 +29,7 @@ internal class PreferenceSetChannelTypesTest {
                         .build()
                 )
                 .build()
-        assertThat(preferenceSetChannelTypes).isNotNull
+
         assertThat(preferenceSetChannelTypes.chat())
             .contains(PreferenceSetChannelTypes.Chat.ofBool(true))
         assertThat(preferenceSetChannelTypes.email())

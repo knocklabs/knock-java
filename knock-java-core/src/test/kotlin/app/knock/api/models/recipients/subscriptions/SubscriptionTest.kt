@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 internal class SubscriptionTest {
 
     @Test
-    fun createSubscription() {
+    fun create() {
         val subscription =
             Subscription.builder()
                 ._typename("Subscription")
@@ -47,7 +47,7 @@ internal class SubscriptionTest {
                         .build()
                 )
                 .build()
-        assertThat(subscription).isNotNull
+
         assertThat(subscription._typename()).isEqualTo("Subscription")
         assertThat(subscription.insertedAt())
             .isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))

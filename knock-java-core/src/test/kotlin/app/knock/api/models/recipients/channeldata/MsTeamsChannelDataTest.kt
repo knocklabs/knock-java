@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class MsTeamsChannelDataTest {
 
     @Test
-    fun createMsTeamsChannelData() {
+    fun create() {
         val msTeamsChannelData =
             MsTeamsChannelData.builder()
                 .addConnection(
@@ -21,7 +21,7 @@ internal class MsTeamsChannelDataTest {
                 )
                 .msTeamsTenantId(null)
                 .build()
-        assertThat(msTeamsChannelData).isNotNull
+
         assertThat(msTeamsChannelData.connections())
             .containsExactly(
                 MsTeamsChannelData.Connection.ofMsTeamsToken(

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class MessageGetContentResponseTest {
 
     @Test
-    fun createMessageGetContentResponse() {
+    fun create() {
         val messageGetContentResponse =
             MessageGetContentResponse.builder()
                 ._typename("MessageContent")
@@ -23,7 +23,7 @@ internal class MessageGetContentResponseTest {
                 .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .messageId("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                 .build()
-        assertThat(messageGetContentResponse).isNotNull
+
         assertThat(messageGetContentResponse._typename()).isEqualTo("MessageContent")
         assertThat(messageGetContentResponse.data())
             .isEqualTo(

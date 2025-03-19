@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class UserTest {
 
     @Test
-    fun createUser() {
+    fun create() {
         val user =
             User.builder()
                 .id("jane")
@@ -22,7 +22,7 @@ internal class UserTest {
                 .phoneNumber("phone_number")
                 .timezone("timezone")
                 .build()
-        assertThat(user).isNotNull
+
         assertThat(user.id()).isEqualTo("jane")
         assertThat(user._typename()).isEqualTo("User")
         assertThat(user.updatedAt()).isEqualTo(OffsetDateTime.parse("2024-05-22T12:00:00Z"))

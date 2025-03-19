@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 internal class MessageEventTest {
 
     @Test
-    fun createMessageEvent() {
+    fun create() {
         val messageEvent =
             MessageEvent.builder()
                 .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
@@ -24,7 +24,7 @@ internal class MessageEventTest {
                         .build()
                 )
                 .build()
-        assertThat(messageEvent).isNotNull
+
         assertThat(messageEvent.id()).isEqualTo("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
         assertThat(messageEvent._typename()).isEqualTo("MessageEvent")
         assertThat(messageEvent.insertedAt())

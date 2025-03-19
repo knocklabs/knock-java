@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class ScheduleRepeatRuleTest {
 
     @Test
-    fun createScheduleRepeatRule() {
+    fun create() {
         val scheduleRepeatRule =
             ScheduleRepeatRule.builder()
                 ._typename("ScheduleRepeat")
@@ -30,7 +30,7 @@ internal class ScheduleRepeatRuleTest {
                 .interval(1L)
                 .minutes(null)
                 .build()
-        assertThat(scheduleRepeatRule).isNotNull
+
         assertThat(scheduleRepeatRule._typename()).isEqualTo("ScheduleRepeat")
         assertThat(scheduleRepeatRule.frequency()).isEqualTo(ScheduleRepeatRule.Frequency.DAILY)
         assertThat(scheduleRepeatRule.dayOfMonth()).isEmpty

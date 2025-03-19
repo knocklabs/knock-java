@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test
 internal class MsTeamCheckAuthResponseTest {
 
     @Test
-    fun createMsTeamCheckAuthResponse() {
+    fun create() {
         val msTeamCheckAuthResponse =
             MsTeamCheckAuthResponse.builder()
                 .connection(
                     MsTeamCheckAuthResponse.Connection.builder().ok(true).reason("reason").build()
                 )
                 .build()
-        assertThat(msTeamCheckAuthResponse).isNotNull
+
         assertThat(msTeamCheckAuthResponse.connection())
             .isEqualTo(
                 MsTeamCheckAuthResponse.Connection.builder().ok(true).reason("reason").build()

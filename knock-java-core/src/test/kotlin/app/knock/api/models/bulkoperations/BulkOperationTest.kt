@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 internal class BulkOperationTest {
 
     @Test
-    fun createBulkOperation() {
+    fun create() {
         val bulkOperation =
             BulkOperation.builder()
                 .id("123e4567-e89b-12d3-a456-426614174000")
@@ -30,7 +30,7 @@ internal class BulkOperationTest {
                 .failedAt(null)
                 .startedAt(null)
                 .build()
-        assertThat(bulkOperation).isNotNull
+
         assertThat(bulkOperation.id()).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
         assertThat(bulkOperation._typename()).isEqualTo("BulkOperation")
         assertThat(bulkOperation.estimatedTotalRows()).isEqualTo(1000L)

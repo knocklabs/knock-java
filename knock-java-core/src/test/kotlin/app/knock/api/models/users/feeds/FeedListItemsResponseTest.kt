@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test
 internal class FeedListItemsResponseTest {
 
     @Test
-    fun createFeedListItemsResponse() {
+    fun create() {
         val feedListItemsResponse =
             FeedListItemsResponse.builder()
                 .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
@@ -105,7 +105,7 @@ internal class FeedListItemsResponseTest {
                 .readAt("read_at")
                 .seenAt("seen_at")
                 .build()
-        assertThat(feedListItemsResponse).isNotNull
+
         assertThat(feedListItemsResponse.id()).isEqualTo("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
         assertThat(feedListItemsResponse._typename()).isEqualTo("FeedItem")
         assertThat(feedListItemsResponse.activities())

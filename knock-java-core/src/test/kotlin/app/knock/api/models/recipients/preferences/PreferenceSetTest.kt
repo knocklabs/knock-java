@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 internal class PreferenceSetTest {
 
     @Test
-    fun createPreferenceSet() {
+    fun create() {
         val preferenceSet =
             PreferenceSet.builder()
                 .id("default")
@@ -93,7 +93,7 @@ internal class PreferenceSetTest {
                         .build()
                 )
                 .build()
-        assertThat(preferenceSet).isNotNull
+
         assertThat(preferenceSet.id()).isEqualTo("default")
         assertThat(preferenceSet._typename()).isEqualTo("PreferenceSet")
         assertThat(preferenceSet.categories())

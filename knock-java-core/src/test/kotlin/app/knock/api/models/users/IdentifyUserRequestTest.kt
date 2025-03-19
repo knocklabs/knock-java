@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 internal class IdentifyUserRequestTest {
 
     @Test
-    fun createIdentifyUserRequest() {
+    fun create() {
         val identifyUserRequest =
             IdentifyUserRequest.builder()
                 .channelData(
@@ -93,7 +93,7 @@ internal class IdentifyUserRequestTest {
                         .build()
                 )
                 .build()
-        assertThat(identifyUserRequest).isNotNull
+
         assertThat(identifyUserRequest.channelData())
             .contains(
                 InlineChannelDataRequest.builder()

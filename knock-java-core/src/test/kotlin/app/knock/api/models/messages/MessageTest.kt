@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test
 internal class MessageTest {
 
     @Test
-    fun createMessage() {
+    fun create() {
         val message =
             Message.builder()
                 .id("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
@@ -52,7 +52,7 @@ internal class MessageTest {
                 .updatedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .workflow("comment-created")
                 .build()
-        assertThat(message).isNotNull
+
         assertThat(message.id()).contains("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
         assertThat(message._typename()).contains("Message")
         assertThat(message.actors().getOrNull()).containsExactly(Message.Actor.ofString("user_123"))

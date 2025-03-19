@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test
 internal class TenantTest {
 
     @Test
-    fun createTenant() {
+    fun create() {
         val tenant = Tenant.builder().id("tenant_123")._typename("Tenant").build()
-        assertThat(tenant).isNotNull
+
         assertThat(tenant.id()).isEqualTo("tenant_123")
         assertThat(tenant._typename()).isEqualTo("Tenant")
     }

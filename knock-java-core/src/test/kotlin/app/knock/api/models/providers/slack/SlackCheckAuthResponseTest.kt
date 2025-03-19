@@ -8,14 +8,14 @@ import org.junit.jupiter.api.Test
 internal class SlackCheckAuthResponseTest {
 
     @Test
-    fun createSlackCheckAuthResponse() {
+    fun create() {
         val slackCheckAuthResponse =
             SlackCheckAuthResponse.builder()
                 .connection(
                     SlackCheckAuthResponse.Connection.builder().ok(true).reason("reason").build()
                 )
                 .build()
-        assertThat(slackCheckAuthResponse).isNotNull
+
         assertThat(slackCheckAuthResponse.connection())
             .isEqualTo(
                 SlackCheckAuthResponse.Connection.builder().ok(true).reason("reason").build()

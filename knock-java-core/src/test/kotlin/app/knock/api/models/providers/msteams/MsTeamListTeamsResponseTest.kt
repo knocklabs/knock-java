@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class MsTeamListTeamsResponseTest {
 
     @Test
-    fun createMsTeamListTeamsResponse() {
+    fun create() {
         val msTeamListTeamsResponse =
             MsTeamListTeamsResponse.builder()
                 .addMsTeamsTeam(
@@ -20,7 +20,7 @@ internal class MsTeamListTeamsResponseTest {
                 )
                 .skipToken("token-for-next-page")
                 .build()
-        assertThat(msTeamListTeamsResponse).isNotNull
+
         assertThat(msTeamListTeamsResponse.msTeamsTeams())
             .containsExactly(
                 MsTeamListTeamsResponse.MsTeamsTeam.builder()

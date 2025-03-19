@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class MessageDeliveryLogTest {
 
     @Test
-    fun createMessageDeliveryLog() {
+    fun create() {
         val messageDeliveryLog =
             MessageDeliveryLog.builder()
                 .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
@@ -51,7 +51,7 @@ internal class MessageDeliveryLogTest {
                 )
                 .serviceName("Postmark")
                 .build()
-        assertThat(messageDeliveryLog).isNotNull
+
         assertThat(messageDeliveryLog.id()).isEqualTo("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
         assertThat(messageDeliveryLog._typename()).isEqualTo("MessageDeliveryLog")
         assertThat(messageDeliveryLog.environmentId())

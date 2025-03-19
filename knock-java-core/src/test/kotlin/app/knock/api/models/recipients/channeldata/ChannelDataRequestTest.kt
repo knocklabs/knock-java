@@ -8,12 +8,12 @@ import org.junit.jupiter.api.Test
 internal class ChannelDataRequestTest {
 
     @Test
-    fun createChannelDataRequest() {
+    fun create() {
         val channelDataRequest =
             ChannelDataRequest.builder()
                 .data(PushChannelData.builder().addToken("push_token_1").build())
                 .build()
-        assertThat(channelDataRequest).isNotNull
+
         assertThat(channelDataRequest.data())
             .isEqualTo(
                 ChannelDataRequest.Data.ofPushChannel(

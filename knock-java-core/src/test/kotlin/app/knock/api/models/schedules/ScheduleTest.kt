@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 internal class ScheduleTest {
 
     @Test
-    fun createSchedule() {
+    fun create() {
         val schedule =
             Schedule.builder()
                 .id("123e4567-e89b-12d3-a456-426614174000")
@@ -76,7 +76,7 @@ internal class ScheduleTest {
                 .nextOccurrenceAt(null)
                 .tenant(null)
                 .build()
-        assertThat(schedule).isNotNull
+
         assertThat(schedule.id()).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
         assertThat(schedule.insertedAt()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
         assertThat(schedule.recipient())

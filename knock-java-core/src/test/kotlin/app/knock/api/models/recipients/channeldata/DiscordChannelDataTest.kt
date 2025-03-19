@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class DiscordChannelDataTest {
 
     @Test
-    fun createDiscordChannelData() {
+    fun create() {
         val discordChannelData =
             DiscordChannelData.builder()
                 .addConnection(
@@ -17,7 +17,7 @@ internal class DiscordChannelDataTest {
                         .build()
                 )
                 .build()
-        assertThat(discordChannelData).isNotNull
+
         assertThat(discordChannelData.connections())
             .containsExactly(
                 DiscordChannelData.Connection.ofDiscordChannel(

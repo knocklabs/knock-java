@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 internal class ActivityTest {
 
     @Test
-    fun createActivity() {
+    fun create() {
         val activity =
             Activity.builder()
                 .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
@@ -51,7 +51,7 @@ internal class ActivityTest {
                 )
                 .updatedAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
                 .build()
-        assertThat(activity).isNotNull
+
         assertThat(activity.id()).contains("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
         assertThat(activity._typename()).contains("Activity")
         assertThat(activity.actor())

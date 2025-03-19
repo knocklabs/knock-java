@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test
 internal class PreferenceSetChannelTypeSettingTest {
 
     @Test
-    fun createPreferenceSetChannelTypeSetting() {
+    fun create() {
         val preferenceSetChannelTypeSetting =
             PreferenceSetChannelTypeSetting.builder()
                 .addCondition(
@@ -20,7 +20,7 @@ internal class PreferenceSetChannelTypeSettingTest {
                         .build()
                 )
                 .build()
-        assertThat(preferenceSetChannelTypeSetting).isNotNull
+
         assertThat(preferenceSetChannelTypeSetting.conditions())
             .containsExactly(
                 Condition.builder()

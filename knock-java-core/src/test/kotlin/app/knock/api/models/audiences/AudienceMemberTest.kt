@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 internal class AudienceMemberTest {
 
     @Test
-    fun createAudienceMember() {
+    fun create() {
         val audienceMember =
             AudienceMember.builder()
                 ._typename("AudienceMember")
@@ -31,7 +31,7 @@ internal class AudienceMemberTest {
                 .userId("user_123")
                 .tenant("acme_corp")
                 .build()
-        assertThat(audienceMember).isNotNull
+
         assertThat(audienceMember._typename()).isEqualTo("AudienceMember")
         assertThat(audienceMember.addedAt()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
         assertThat(audienceMember.user())

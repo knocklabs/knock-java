@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test
 internal class MsTeamListChannelsResponseTest {
 
     @Test
-    fun createMsTeamListChannelsResponse() {
+    fun create() {
         val msTeamListChannelsResponse =
             MsTeamListChannelsResponse.builder()
                 .addMsTeamsChannel(
@@ -22,7 +22,7 @@ internal class MsTeamListChannelsResponseTest {
                         .build()
                 )
                 .build()
-        assertThat(msTeamListChannelsResponse).isNotNull
+
         assertThat(msTeamListChannelsResponse.msTeamsChannels())
             .containsExactly(
                 MsTeamListChannelsResponse.MsTeamsChannel.builder()
