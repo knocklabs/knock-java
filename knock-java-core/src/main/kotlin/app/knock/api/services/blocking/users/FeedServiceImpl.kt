@@ -3,6 +3,7 @@
 package app.knock.api.services.blocking.users
 
 import app.knock.api.core.ClientOptions
+import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
@@ -13,7 +14,6 @@ import app.knock.api.core.http.HttpResponse.Handler
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.parseable
 import app.knock.api.core.prepare
-import app.knock.api.errors.KnockError
 import app.knock.api.models.users.feeds.FeedGetSettingsParams
 import app.knock.api.models.users.feeds.FeedGetSettingsResponse
 import app.knock.api.models.users.feeds.FeedListItemsPage
@@ -44,7 +44,7 @@ class FeedServiceImpl internal constructor(private val clientOptions: ClientOpti
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         FeedService.WithRawResponse {
 
-        private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val getSettingsHandler: Handler<FeedGetSettingsResponse> =
             jsonHandler<FeedGetSettingsResponse>(clientOptions.jsonMapper)

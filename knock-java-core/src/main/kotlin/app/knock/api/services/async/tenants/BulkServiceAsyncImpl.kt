@@ -3,6 +3,7 @@
 package app.knock.api.services.async.tenants
 
 import app.knock.api.core.ClientOptions
+import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
@@ -14,7 +15,6 @@ import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
 import app.knock.api.core.http.parseable
 import app.knock.api.core.prepareAsync
-import app.knock.api.errors.KnockError
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.tenants.bulk.BulkDeleteParams
 import app.knock.api.models.tenants.bulk.BulkSetParams
@@ -46,7 +46,7 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         BulkServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val deleteHandler: Handler<BulkOperation> =
             jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

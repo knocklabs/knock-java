@@ -3,6 +3,7 @@
 package app.knock.api.services.blocking.providers
 
 import app.knock.api.core.ClientOptions
+import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
@@ -15,7 +16,6 @@ import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
 import app.knock.api.core.http.parseable
 import app.knock.api.core.prepare
-import app.knock.api.errors.KnockError
 import app.knock.api.models.providers.slack.SlackCheckAuthParams
 import app.knock.api.models.providers.slack.SlackCheckAuthResponse
 import app.knock.api.models.providers.slack.SlackListChannelsPage
@@ -55,7 +55,7 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         SlackService.WithRawResponse {
 
-        private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val checkAuthHandler: Handler<SlackCheckAuthResponse> =
             jsonHandler<SlackCheckAuthResponse>(clientOptions.jsonMapper)

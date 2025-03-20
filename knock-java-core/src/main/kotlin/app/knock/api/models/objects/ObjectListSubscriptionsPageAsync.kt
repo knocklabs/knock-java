@@ -9,6 +9,7 @@ import app.knock.api.core.JsonValue
 import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
+import app.knock.api.models.PageInfo
 import app.knock.api.models.recipients.subscriptions.Subscription
 import app.knock.api.services.async.ObjectServiceAsync
 import com.fasterxml.jackson.annotation.JsonAnyGetter

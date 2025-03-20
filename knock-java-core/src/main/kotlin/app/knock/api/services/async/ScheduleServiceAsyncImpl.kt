@@ -3,6 +3,7 @@
 package app.knock.api.services.async
 
 import app.knock.api.core.ClientOptions
+import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
@@ -14,7 +15,6 @@ import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
 import app.knock.api.core.http.parseable
 import app.knock.api.core.prepareAsync
-import app.knock.api.errors.KnockError
 import app.knock.api.models.schedules.Schedule
 import app.knock.api.models.schedules.ScheduleCreateParams
 import app.knock.api.models.schedules.ScheduleDeleteParams
@@ -63,7 +63,7 @@ class ScheduleServiceAsyncImpl internal constructor(private val clientOptions: C
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ScheduleServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val createHandler: Handler<List<Schedule>> =
             jsonHandler<List<Schedule>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

@@ -3,6 +3,7 @@
 package app.knock.api.services.async.users
 
 import app.knock.api.core.ClientOptions
+import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
@@ -13,7 +14,6 @@ import app.knock.api.core.http.HttpResponse.Handler
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.parseable
 import app.knock.api.core.prepareAsync
-import app.knock.api.errors.KnockError
 import app.knock.api.models.users.feeds.FeedGetSettingsParams
 import app.knock.api.models.users.feeds.FeedGetSettingsResponse
 import app.knock.api.models.users.feeds.FeedListItemsPageAsync
@@ -46,7 +46,7 @@ class FeedServiceAsyncImpl internal constructor(private val clientOptions: Clien
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         FeedServiceAsync.WithRawResponse {
 
-        private val errorHandler: Handler<KnockError> = errorHandler(clientOptions.jsonMapper)
+        private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
         private val getSettingsHandler: Handler<FeedGetSettingsResponse> =
             jsonHandler<FeedGetSettingsResponse>(clientOptions.jsonMapper)
