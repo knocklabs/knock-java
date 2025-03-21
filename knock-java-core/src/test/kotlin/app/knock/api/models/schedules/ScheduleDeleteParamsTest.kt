@@ -2,7 +2,6 @@
 
 package app.knock.api.models.schedules
 
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -22,7 +21,6 @@ internal class ScheduleDeleteParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.scheduleIds()).containsExactly("123e4567-e89b-12d3-a456-426614174000")
     }
 }

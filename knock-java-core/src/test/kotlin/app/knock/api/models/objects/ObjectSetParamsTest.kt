@@ -5,7 +5,6 @@ package app.knock.api.models.objects
 import app.knock.api.core.JsonValue
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -190,7 +189,6 @@ internal class ObjectSetParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.channelData())
             .contains(
                 InlineChannelDataRequest.builder()
@@ -275,7 +273,5 @@ internal class ObjectSetParamsTest {
             ObjectSetParams.builder().collection("collection").objectId("object_id").build()
 
         val body = params._body()
-
-        assertNotNull(body)
     }
 }

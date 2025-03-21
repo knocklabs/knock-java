@@ -7,7 +7,6 @@ import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -354,7 +353,6 @@ internal class TenantSetParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.channelData())
             .contains(
                 InlineChannelDataRequest.builder()
@@ -522,7 +520,5 @@ internal class TenantSetParamsTest {
         val params = TenantSetParams.builder().tenantId("tenant_id").build()
 
         val body = params._body()
-
-        assertNotNull(body)
     }
 }

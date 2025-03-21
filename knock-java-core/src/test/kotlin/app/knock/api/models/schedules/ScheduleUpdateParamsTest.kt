@@ -6,7 +6,6 @@ import app.knock.api.core.JsonValue
 import app.knock.api.models.recipients.RecipientRequest
 import app.knock.api.models.tenants.InlineTenantRequest
 import kotlin.jvm.optionals.getOrNull
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -88,7 +87,6 @@ internal class ScheduleUpdateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.scheduleIds()).containsExactly("123e4567-e89b-12d3-a456-426614174000")
         assertThat(body.actor()).contains(RecipientRequest.ofString("string"))
         assertThat(body.data())
@@ -133,7 +131,6 @@ internal class ScheduleUpdateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.scheduleIds()).containsExactly("123e4567-e89b-12d3-a456-426614174000")
     }
 }

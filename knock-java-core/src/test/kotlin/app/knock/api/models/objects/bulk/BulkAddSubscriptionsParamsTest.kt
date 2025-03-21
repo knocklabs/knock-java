@@ -7,7 +7,6 @@ import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import app.knock.api.models.users.InlineIdentifyUserRequest
 import java.time.OffsetDateTime
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -249,7 +248,6 @@ internal class BulkAddSubscriptionsParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.subscriptions())
             .containsExactly(
                 BulkAddSubscriptionsParams.Subscription.builder()
@@ -369,7 +367,6 @@ internal class BulkAddSubscriptionsParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.subscriptions())
             .containsExactly(
                 BulkAddSubscriptionsParams.Subscription.builder()

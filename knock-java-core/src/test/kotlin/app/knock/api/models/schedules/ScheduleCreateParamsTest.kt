@@ -4,7 +4,6 @@ package app.knock.api.models.schedules
 
 import app.knock.api.core.JsonValue
 import app.knock.api.models.tenants.InlineTenantRequest
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -86,7 +85,6 @@ internal class ScheduleCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.recipients())
             .containsExactly(ScheduleCreateParams.Recipient.ofString("user_123"))
         assertThat(body.repeats())
@@ -139,7 +137,6 @@ internal class ScheduleCreateParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.recipients())
             .containsExactly(ScheduleCreateParams.Recipient.ofString("user_123"))
         assertThat(body.repeats())

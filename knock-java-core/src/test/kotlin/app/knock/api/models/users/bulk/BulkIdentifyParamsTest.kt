@@ -7,7 +7,6 @@ import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import app.knock.api.models.users.InlineIdentifyUserRequest
 import java.time.OffsetDateTime
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -197,7 +196,6 @@ internal class BulkIdentifyParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.users())
             .containsExactly(
                 InlineIdentifyUserRequest.builder()
@@ -294,7 +292,6 @@ internal class BulkIdentifyParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.users())
             .containsExactly(InlineIdentifyUserRequest.builder().id("user_1").build())
     }

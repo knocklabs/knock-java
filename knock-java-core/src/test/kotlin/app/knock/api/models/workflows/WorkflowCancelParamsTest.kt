@@ -3,7 +3,6 @@
 package app.knock.api.models.workflows
 
 import kotlin.jvm.optionals.getOrNull
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -41,7 +40,6 @@ internal class WorkflowCancelParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.cancellationKey()).isEqualTo("cancel-workflow-123")
         assertThat(body.recipients().getOrNull()).containsExactly("jhammond")
         assertThat(body.tenant()).contains("prk_1")
@@ -54,7 +52,6 @@ internal class WorkflowCancelParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.cancellationKey()).isEqualTo("cancel-workflow-123")
     }
 }

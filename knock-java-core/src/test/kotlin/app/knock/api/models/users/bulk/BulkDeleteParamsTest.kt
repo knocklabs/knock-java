@@ -2,7 +2,6 @@
 
 package app.knock.api.models.users.bulk
 
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -19,7 +18,6 @@ internal class BulkDeleteParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.userIds()).containsExactly("user_1", "user_2")
     }
 }

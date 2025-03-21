@@ -7,7 +7,6 @@ import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import app.knock.api.models.users.InlineIdentifyUserRequest
 import java.time.OffsetDateTime
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -238,7 +237,6 @@ internal class AudienceRemoveMembersParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.members())
             .containsExactly(
                 AudienceRemoveMembersParams.Member.builder()
@@ -352,7 +350,6 @@ internal class AudienceRemoveMembersParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.members())
             .containsExactly(
                 AudienceRemoveMembersParams.Member.builder()

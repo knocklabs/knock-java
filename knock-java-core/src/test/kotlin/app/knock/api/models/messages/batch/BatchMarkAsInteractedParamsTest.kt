@@ -3,7 +3,6 @@
 package app.knock.api.models.messages.batch
 
 import app.knock.api.core.JsonValue
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -35,7 +34,6 @@ internal class BatchMarkAsInteractedParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.messageIds()).containsExactly("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
         assertThat(body.metadata())
             .contains(
@@ -54,7 +52,6 @@ internal class BatchMarkAsInteractedParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.messageIds()).containsExactly("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
     }
 }

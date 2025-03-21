@@ -6,7 +6,6 @@ import app.knock.api.core.JsonValue
 import app.knock.api.models.recipients.RecipientRequest
 import app.knock.api.models.tenants.InlineTenantRequest
 import kotlin.jvm.optionals.getOrNull
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -63,7 +62,6 @@ internal class WorkflowTriggerParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.actor()).contains(RecipientRequest.ofString("string"))
         assertThat(body.cancellationKey()).isEmpty
         assertThat(body.data())
@@ -86,7 +84,5 @@ internal class WorkflowTriggerParamsTest {
         val params = WorkflowTriggerParams.builder().key("key").build()
 
         val body = params._body()
-
-        assertNotNull(body)
     }
 }

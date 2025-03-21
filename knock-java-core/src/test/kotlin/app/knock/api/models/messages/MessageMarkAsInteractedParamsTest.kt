@@ -3,7 +3,6 @@
 package app.knock.api.models.messages
 
 import app.knock.api.core.JsonValue
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -45,7 +44,6 @@ internal class MessageMarkAsInteractedParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.metadata())
             .contains(
                 MessageMarkAsInteractedParams.Metadata.builder()
@@ -60,7 +58,5 @@ internal class MessageMarkAsInteractedParamsTest {
             MessageMarkAsInteractedParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
 
         val body = params._body()
-
-        assertNotNull(body)
     }
 }

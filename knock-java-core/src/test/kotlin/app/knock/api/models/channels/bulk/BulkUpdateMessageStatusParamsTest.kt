@@ -4,7 +4,6 @@ package app.knock.api.models.channels.bulk
 
 import java.time.OffsetDateTime
 import kotlin.jvm.optionals.getOrNull
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -68,7 +67,6 @@ internal class BulkUpdateMessageStatusParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.archived()).contains(BulkUpdateMessageStatusParams.Archived.EXCLUDE)
         assertThat(body.deliveryStatus())
             .contains(BulkUpdateMessageStatusParams.DeliveryStatus.QUEUED)
@@ -92,7 +90,5 @@ internal class BulkUpdateMessageStatusParamsTest {
                 .build()
 
         val body = params._body()
-
-        assertNotNull(body)
     }
 }

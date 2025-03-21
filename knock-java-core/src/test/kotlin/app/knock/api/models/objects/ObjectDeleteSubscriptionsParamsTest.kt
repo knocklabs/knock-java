@@ -8,7 +8,6 @@ import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import app.knock.api.models.users.InlineIdentifyUserRequest
 import java.time.OffsetDateTime
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -217,7 +216,6 @@ internal class ObjectDeleteSubscriptionsParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.recipients())
             .containsExactly(
                 RecipientRequest.ofInlineIdentifyUser(
@@ -320,7 +318,6 @@ internal class ObjectDeleteSubscriptionsParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.recipients())
             .containsExactly(
                 RecipientRequest.ofInlineIdentifyUser(

@@ -5,7 +5,6 @@ package app.knock.api.models.users.bulk
 import app.knock.api.core.JsonValue
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
-import kotlin.test.assertNotNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -171,7 +170,6 @@ internal class BulkSetPreferencesParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.preferences())
             .isEqualTo(
                 PreferenceSetRequest.builder()
@@ -258,7 +256,6 @@ internal class BulkSetPreferencesParamsTest {
 
         val body = params._body()
 
-        assertNotNull(body)
         assertThat(body.preferences()).isEqualTo(PreferenceSetRequest.builder().build())
         assertThat(body.userIds()).containsExactly("user_1", "user_2")
     }
