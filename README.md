@@ -3,7 +3,7 @@
 [![Maven Central](https://img.shields.io/maven-central/v/app.knock.api/knock-java)](https://central.sonatype.com/artifact/app.knock.api/knock-java/0.0.1-alpha.0)
 [![javadoc](https://javadoc.io/badge2/app.knock.api/knock-java/0.0.1-alpha.0/javadoc.svg)](https://javadoc.io/doc/app.knock.api/knock-java/0.0.1-alpha.0)
 
-The Knock Java SDK provides convenient access to the Knock REST API from applications written in Java.
+The Knock Java SDK provides convenient access to the [Knock REST API](https://docs.knock.app) from applications written in Java.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
@@ -21,9 +21,9 @@ implementation("app.knock.api:knock-java:0.0.1-alpha.0")
 
 ```xml
 <dependency>
-    <groupId>app.knock.api</groupId>
-    <artifactId>knock-java</artifactId>
-    <version>0.0.1-alpha.0</version>
+  <groupId>app.knock.api</groupId>
+  <artifactId>knock-java</artifactId>
+  <version>0.0.1-alpha.0</version>
 </dependency>
 ```
 
@@ -198,16 +198,16 @@ The SDK throws custom unchecked exception types:
 
 - [`KnockServiceException`](knock-java-core/src/main/kotlin/app/knock/api/errors/KnockServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
 
-  | Status | Exception                       |
-  | ------ | ------------------------------- |
-  | 400    | `BadRequestException`           |
-  | 401    | `AuthenticationException`       |
-  | 403    | `PermissionDeniedException`     |
-  | 404    | `NotFoundException`             |
-  | 422    | `UnprocessableEntityException`  |
-  | 429    | `RateLimitException`            |
-  | 5xx    | `InternalServerException`       |
-  | others | `UnexpectedStatusCodeException` |
+  | Status | Exception                                                                                                                |
+  | ------ | ------------------------------------------------------------------------------------------------------------------------ |
+  | 400    | [`BadRequestException`](knock-java-core/src/main/kotlin/app/knock/api/errors/BadRequestException.kt)                     |
+  | 401    | [`UnauthorizedException`](knock-java-core/src/main/kotlin/app/knock/api/errors/UnauthorizedException.kt)                 |
+  | 403    | [`PermissionDeniedException`](knock-java-core/src/main/kotlin/app/knock/api/errors/PermissionDeniedException.kt)         |
+  | 404    | [`NotFoundException`](knock-java-core/src/main/kotlin/app/knock/api/errors/NotFoundException.kt)                         |
+  | 422    | [`UnprocessableEntityException`](knock-java-core/src/main/kotlin/app/knock/api/errors/UnprocessableEntityException.kt)   |
+  | 429    | [`RateLimitException`](knock-java-core/src/main/kotlin/app/knock/api/errors/RateLimitException.kt)                       |
+  | 5xx    | [`InternalServerException`](knock-java-core/src/main/kotlin/app/knock/api/errors/InternalServerException.kt)             |
+  | others | [`UnexpectedStatusCodeException`](knock-java-core/src/main/kotlin/app/knock/api/errors/UnexpectedStatusCodeException.kt) |
 
 - [`KnockIoException`](knock-java-core/src/main/kotlin/app/knock/api/errors/KnockIoException.kt): I/O networking errors.
 
