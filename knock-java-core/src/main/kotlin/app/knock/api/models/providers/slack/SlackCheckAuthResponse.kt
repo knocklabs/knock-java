@@ -6,29 +6,30 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** The response from a Slack auth check request */
-@NoAutoDetect
 class SlackCheckAuthResponse
-@JsonCreator
 private constructor(
-    @JsonProperty("connection")
-    @ExcludeMissing
-    private val connection: JsonField<Connection> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val connection: JsonField<Connection>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("connection")
+        @ExcludeMissing
+        connection: JsonField<Connection> = JsonMissing.of()
+    ) : this(connection, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -45,20 +46,15 @@ private constructor(
     @ExcludeMissing
     fun _connection(): JsonField<Connection> = connection
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): SlackCheckAuthResponse = apply {
-        if (validated) {
-            return@apply
-        }
-
-        connection().validate()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -132,21 +128,33 @@ private constructor(
         fun build(): SlackCheckAuthResponse =
             SlackCheckAuthResponse(
                 checkRequired("connection", connection),
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
-    @NoAutoDetect
+    private var validated: Boolean = false
+
+    fun validate(): SlackCheckAuthResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        connection().validate()
+        validated = true
+    }
+
     class Connection
-    @JsonCreator
     private constructor(
-        @JsonProperty("ok") @ExcludeMissing private val ok: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("reason")
-        @ExcludeMissing
-        private val reason: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val ok: JsonField<Boolean>,
+        private val reason: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("ok") @ExcludeMissing ok: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("reason") @ExcludeMissing reason: JsonField<String> = JsonMissing.of(),
+        ) : this(ok, reason, mutableMapOf())
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
@@ -174,21 +182,15 @@ private constructor(
          */
         @JsonProperty("reason") @ExcludeMissing fun _reason(): JsonField<String> = reason
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Connection = apply {
-            if (validated) {
-                return@apply
-            }
-
-            ok()
-            reason()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -276,7 +278,19 @@ private constructor(
              * @throws IllegalStateException if any required field is unset.
              */
             fun build(): Connection =
-                Connection(checkRequired("ok", ok), reason, additionalProperties.toImmutable())
+                Connection(checkRequired("ok", ok), reason, additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Connection = apply {
+            if (validated) {
+                return@apply
+            }
+
+            ok()
+            reason()
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

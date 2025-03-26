@@ -6,9 +6,6 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
@@ -17,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
@@ -26,21 +24,26 @@ import kotlin.jvm.optionals.getOrNull
  * elsewhere in the request. You can supply any additional properties you'd like to upsert against
  * the user.
  */
-@NoAutoDetect
 class IdentifyUserRequest
-@JsonCreator
 private constructor(
-    @JsonProperty("channel_data")
-    @ExcludeMissing
-    private val channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of(),
-    @JsonProperty("created_at")
-    @ExcludeMissing
-    private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("preferences")
-    @ExcludeMissing
-    private val preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val channelData: JsonField<InlineChannelDataRequest>,
+    private val createdAt: JsonField<OffsetDateTime>,
+    private val preferences: JsonField<InlinePreferenceSetRequest>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("channel_data")
+        @ExcludeMissing
+        channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of(),
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("preferences")
+        @ExcludeMissing
+        preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of(),
+    ) : this(channelData, createdAt, preferences, mutableMapOf())
 
     /**
      * Allows inline setting channel data for a recipient
@@ -94,22 +97,15 @@ private constructor(
     @ExcludeMissing
     fun _preferences(): JsonField<InlinePreferenceSetRequest> = preferences
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): IdentifyUserRequest = apply {
-        if (validated) {
-            return@apply
-        }
-
-        channelData().ifPresent { it.validate() }
-        createdAt()
-        preferences().ifPresent { it.validate() }
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -216,8 +212,21 @@ private constructor(
                 channelData,
                 createdAt,
                 preferences,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): IdentifyUserRequest = apply {
+        if (validated) {
+            return@apply
+        }
+
+        channelData().ifPresent { it.validate() }
+        createdAt()
+        preferences().ifPresent { it.validate() }
+        validated = true
     }
 
     override fun equals(other: Any?): Boolean {

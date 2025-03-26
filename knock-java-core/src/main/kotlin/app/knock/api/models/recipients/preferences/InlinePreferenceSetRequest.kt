@@ -4,35 +4,27 @@ package app.knock.api.models.recipients.preferences
 
 import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
+import java.util.Collections
 import java.util.Objects
 
 /** Inline set preferences for a recipient, where the key is the preference set name */
-@NoAutoDetect
 class InlinePreferenceSetRequest
-@JsonCreator
-private constructor(
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
-) {
+private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
+
+    @JsonCreator private constructor() : this(mutableMapOf())
+
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): InlinePreferenceSetRequest = apply {
-        if (validated) {
-            return@apply
-        }
-
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -79,7 +71,17 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          */
         fun build(): InlinePreferenceSetRequest =
-            InlinePreferenceSetRequest(additionalProperties.toImmutable())
+            InlinePreferenceSetRequest(additionalProperties.toMutableMap())
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): InlinePreferenceSetRequest = apply {
+        if (validated) {
+            return@apply
+        }
+
+        validated = true
     }
 
     override fun equals(other: Any?): Boolean {

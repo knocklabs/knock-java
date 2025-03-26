@@ -2,7 +2,6 @@
 
 package app.knock.api.models.providers.msteams
 
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
@@ -35,33 +34,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> channelId
-            else -> ""
-        }
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                put("ms_teams_tenant_object", msTeamsTenantObject)
-                queryOptions?.let {
-                    it.filter().ifPresent { put("query_options[\$filter]", it) }
-                    it.select().ifPresent { put("query_options[\$select]", it) }
-                    it.skiptoken().ifPresent { put("query_options[\$skiptoken]", it) }
-                    it.top().ifPresent { put("query_options[\$top]", it.toString()) }
-                    it._additionalProperties().keys().forEach { key ->
-                        it._additionalProperties().values(key).forEach { value ->
-                            put("query_options[$key]", value)
-                        }
-                    }
-                }
-                putAll(additionalQueryParams)
-            }
-            .build()
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -79,7 +51,6 @@ private constructor(
     }
 
     /** A builder for [MsTeamListTeamsParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var channelId: String? = null
@@ -230,6 +201,33 @@ private constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> channelId
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                put("ms_teams_tenant_object", msTeamsTenantObject)
+                queryOptions?.let {
+                    it.filter().ifPresent { put("query_options[\$filter]", it) }
+                    it.select().ifPresent { put("query_options[\$select]", it) }
+                    it.skiptoken().ifPresent { put("query_options[\$skiptoken]", it) }
+                    it.top().ifPresent { put("query_options[\$top]", it.toString()) }
+                    it._additionalProperties().keys().forEach { key ->
+                        it._additionalProperties().values(key).forEach { value ->
+                            put("query_options[$key]", value)
+                        }
+                    }
+                }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     class QueryOptions
     private constructor(

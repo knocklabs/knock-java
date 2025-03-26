@@ -5,7 +5,6 @@ package app.knock.api.models.schedules
 import app.knock.api.core.BaseDeserializer
 import app.knock.api.core.BaseSerializer
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.getOrThrow
@@ -59,42 +58,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                put("workflow", workflow)
-                after?.let { put("after", it) }
-                before?.let { put("before", it) }
-                pageSize?.let { put("page_size", it.toString()) }
-                recipients?.forEach {
-                    it.accept(
-                        object : Recipient.Visitor<Unit> {
-                            override fun visitString(string: String) {
-                                put("recipients[]", string)
-                            }
-
-                            override fun visitObjectReference(
-                                objectReference: Recipient.ObjectReference
-                            ) {
-                                put("recipients[][id]", objectReference.id())
-                                put("recipients[][collection]", objectReference.collection())
-                                objectReference._additionalProperties().keys().forEach { key ->
-                                    objectReference._additionalProperties().values(key).forEach {
-                                        value ->
-                                        put("recipients[][$key]", value)
-                                    }
-                                }
-                            }
-                        }
-                    )
-                }
-                tenant?.let { put("tenant", it) }
-                putAll(additionalQueryParams)
-            }
-            .build()
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -111,7 +74,6 @@ private constructor(
     }
 
     /** A builder for [ScheduleListParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var workflow: String? = null
@@ -315,6 +277,42 @@ private constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                put("workflow", workflow)
+                after?.let { put("after", it) }
+                before?.let { put("before", it) }
+                pageSize?.let { put("page_size", it.toString()) }
+                recipients?.forEach {
+                    it.accept(
+                        object : Recipient.Visitor<Unit> {
+                            override fun visitString(string: String) {
+                                put("recipients[]", string)
+                            }
+
+                            override fun visitObjectReference(
+                                objectReference: Recipient.ObjectReference
+                            ) {
+                                put("recipients[][id]", objectReference.id())
+                                put("recipients[][collection]", objectReference.collection())
+                                objectReference._additionalProperties().keys().forEach { key ->
+                                    objectReference._additionalProperties().values(key).forEach {
+                                        value ->
+                                        put("recipients[][$key]", value)
+                                    }
+                                }
+                            }
+                        }
+                    )
+                }
+                tenant?.let { put("tenant", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     /**
      * A reference to a recipient, either a user identifier (string) or an object reference (id,

@@ -6,33 +6,34 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** A response containing a list of audience members */
-@NoAutoDetect
 class AudienceListMembersResponse
-@JsonCreator
 private constructor(
-    @JsonProperty("entries")
-    @ExcludeMissing
-    private val entries: JsonField<List<AudienceMember>> = JsonMissing.of(),
-    @JsonProperty("page_info")
-    @ExcludeMissing
-    private val pageInfo: JsonField<PageInfo> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val entries: JsonField<List<AudienceMember>>,
+    private val pageInfo: JsonField<PageInfo>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("entries")
+        @ExcludeMissing
+        entries: JsonField<List<AudienceMember>> = JsonMissing.of(),
+        @JsonProperty("page_info") @ExcludeMissing pageInfo: JsonField<PageInfo> = JsonMissing.of(),
+    ) : this(entries, pageInfo, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -64,21 +65,15 @@ private constructor(
      */
     @JsonProperty("page_info") @ExcludeMissing fun _pageInfo(): JsonField<PageInfo> = pageInfo
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): AudienceListMembersResponse = apply {
-        if (validated) {
-            return@apply
-        }
-
-        entries().forEach { it.validate() }
-        pageInfo().validate()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -183,30 +178,41 @@ private constructor(
             AudienceListMembersResponse(
                 checkRequired("entries", entries).map { it.toImmutable() },
                 checkRequired("pageInfo", pageInfo),
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
+    private var validated: Boolean = false
+
+    fun validate(): AudienceListMembersResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        entries().forEach { it.validate() }
+        pageInfo().validate()
+        validated = true
+    }
+
     /** The information about a paginated result */
-    @NoAutoDetect
     class PageInfo
-    @JsonCreator
     private constructor(
-        @JsonProperty("__typename")
-        @ExcludeMissing
-        private val _typename: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("page_size")
-        @ExcludeMissing
-        private val pageSize: JsonField<Long> = JsonMissing.of(),
-        @JsonProperty("after")
-        @ExcludeMissing
-        private val after: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("before")
-        @ExcludeMissing
-        private val before: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val _typename: JsonField<String>,
+        private val pageSize: JsonField<Long>,
+        private val after: JsonField<String>,
+        private val before: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("__typename")
+            @ExcludeMissing
+            _typename: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("page_size") @ExcludeMissing pageSize: JsonField<Long> = JsonMissing.of(),
+            @JsonProperty("after") @ExcludeMissing after: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("before") @ExcludeMissing before: JsonField<String> = JsonMissing.of(),
+        ) : this(_typename, pageSize, after, before, mutableMapOf())
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
@@ -260,23 +266,15 @@ private constructor(
          */
         @JsonProperty("before") @ExcludeMissing fun _before(): JsonField<String> = before
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): PageInfo = apply {
-            if (validated) {
-                return@apply
-            }
-
-            _typename()
-            pageSize()
-            after()
-            before()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -400,8 +398,22 @@ private constructor(
                     checkRequired("pageSize", pageSize),
                     after,
                     before,
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): PageInfo = apply {
+            if (validated) {
+                return@apply
+            }
+
+            _typename()
+            pageSize()
+            after()
+            before()
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

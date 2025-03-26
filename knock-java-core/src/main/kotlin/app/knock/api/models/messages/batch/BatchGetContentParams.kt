@@ -2,7 +2,6 @@
 
 package app.knock.api.models.messages.batch
 
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
@@ -25,16 +24,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                messageIds.forEach { put("message_ids[]", it) }
-                putAll(additionalQueryParams)
-            }
-            .build()
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -51,7 +40,6 @@ private constructor(
     }
 
     /** A builder for [BatchGetContentParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var messageIds: MutableList<String>? = null
@@ -196,6 +184,16 @@ private constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                messageIds.forEach { put("message_ids[]", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

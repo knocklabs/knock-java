@@ -6,10 +6,8 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.Condition
@@ -17,20 +15,24 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 
 /**
  * A set of settings for a channel type. Currently, this can only be a list of conditions to apply.
  */
-@NoAutoDetect
 class PreferenceSetChannelTypeSetting
-@JsonCreator
 private constructor(
-    @JsonProperty("conditions")
-    @ExcludeMissing
-    private val conditions: JsonField<List<Condition>> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val conditions: JsonField<List<Condition>>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("conditions")
+        @ExcludeMissing
+        conditions: JsonField<List<Condition>> = JsonMissing.of()
+    ) : this(conditions, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -47,20 +49,15 @@ private constructor(
     @ExcludeMissing
     fun _conditions(): JsonField<List<Condition>> = conditions
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): PreferenceSetChannelTypeSetting = apply {
-        if (validated) {
-            return@apply
-        }
-
-        conditions().forEach { it.validate() }
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -151,8 +148,19 @@ private constructor(
         fun build(): PreferenceSetChannelTypeSetting =
             PreferenceSetChannelTypeSetting(
                 checkRequired("conditions", conditions).map { it.toImmutable() },
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): PreferenceSetChannelTypeSetting = apply {
+        if (validated) {
+            return@apply
+        }
+
+        conditions().forEach { it.validate() }
+        validated = true
     }
 
     override fun equals(other: Any?): Boolean {

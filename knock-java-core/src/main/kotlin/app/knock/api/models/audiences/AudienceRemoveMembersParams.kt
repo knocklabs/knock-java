@@ -6,13 +6,11 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.users.InlineIdentifyUserRequest
@@ -20,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
@@ -54,166 +53,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): Body = body
-
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> key
-            else -> ""
-        }
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    /** A request to remove members from an audience */
-    @NoAutoDetect
-    class Body
-    @JsonCreator
-    private constructor(
-        @JsonProperty("members")
-        @ExcludeMissing
-        private val members: JsonField<List<Member>> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun members(): List<Member> = members.getRequired("members")
-
-        /**
-         * Returns the raw JSON value of [members].
-         *
-         * Unlike [members], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("members") @ExcludeMissing fun _members(): JsonField<List<Member>> = members
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
-
-            members().forEach { it.validate() }
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Body].
-             *
-             * The following fields are required:
-             * ```java
-             * .members()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Body]. */
-        class Builder internal constructor() {
-
-            private var members: JsonField<MutableList<Member>>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(body: Body) = apply {
-                members = body.members.map { it.toMutableList() }
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
-
-            fun members(members: List<Member>) = members(JsonField.of(members))
-
-            /**
-             * Sets [Builder.members] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.members] with a well-typed `List<Member>` value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun members(members: JsonField<List<Member>>) = apply {
-                this.members = members.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [Member] to [members].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addMember(member: Member) = apply {
-                members =
-                    (members ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("members", it).add(member)
-                    }
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Body].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .members()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Body =
-                Body(
-                    checkRequired("members", members).map { it.toImmutable() },
-                    additionalProperties.toImmutable(),
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Body && members == other.members && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(members, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Body{members=$members, additionalProperties=$additionalProperties}"
-    }
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -231,7 +70,6 @@ private constructor(
     }
 
     /** A builder for [AudienceRemoveMembersParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var key: String? = null
@@ -406,20 +244,189 @@ private constructor(
             )
     }
 
-    /** A request for an individual audience member */
-    @NoAutoDetect
-    class Member
-    @JsonCreator
+    @JvmSynthetic internal fun _body(): Body = body
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> key
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    /** A request to remove members from an audience */
+    class Body
     private constructor(
-        @JsonProperty("user")
-        @ExcludeMissing
-        private val user: JsonField<InlineIdentifyUserRequest> = JsonMissing.of(),
-        @JsonProperty("tenant")
-        @ExcludeMissing
-        private val tenant: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val members: JsonField<List<Member>>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("members")
+            @ExcludeMissing
+            members: JsonField<List<Member>> = JsonMissing.of()
+        ) : this(members, mutableMapOf())
+
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun members(): List<Member> = members.getRequired("members")
+
+        /**
+         * Returns the raw JSON value of [members].
+         *
+         * Unlike [members], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("members") @ExcludeMissing fun _members(): JsonField<List<Member>> = members
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .members()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var members: JsonField<MutableList<Member>>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(body: Body) = apply {
+                members = body.members.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            fun members(members: List<Member>) = members(JsonField.of(members))
+
+            /**
+             * Sets [Builder.members] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.members] with a well-typed `List<Member>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun members(members: JsonField<List<Member>>) = apply {
+                this.members = members.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [Member] to [members].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addMember(member: Member) = apply {
+                members =
+                    (members ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("members", it).add(member)
+                    }
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .members()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Body =
+                Body(
+                    checkRequired("members", members).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            members().forEach { it.validate() }
+            validated = true
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && members == other.members && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(members, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{members=$members, additionalProperties=$additionalProperties}"
+    }
+
+    /** A request for an individual audience member */
+    class Member
+    private constructor(
+        private val user: JsonField<InlineIdentifyUserRequest>,
+        private val tenant: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("user")
+            @ExcludeMissing
+            user: JsonField<InlineIdentifyUserRequest> = JsonMissing.of(),
+            @JsonProperty("tenant") @ExcludeMissing tenant: JsonField<String> = JsonMissing.of(),
+        ) : this(user, tenant, mutableMapOf())
 
         /**
          * A set of parameters to inline-identify a user with. Inline identifying the user will
@@ -453,21 +460,15 @@ private constructor(
          */
         @JsonProperty("tenant") @ExcludeMissing fun _tenant(): JsonField<String> = tenant
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Member = apply {
-            if (validated) {
-                return@apply
-            }
-
-            user().validate()
-            tenant()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -561,7 +562,19 @@ private constructor(
              * @throws IllegalStateException if any required field is unset.
              */
             fun build(): Member =
-                Member(checkRequired("user", user), tenant, additionalProperties.toImmutable())
+                Member(checkRequired("user", user), tenant, additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Member = apply {
+            if (validated) {
+                return@apply
+            }
+
+            user().validate()
+            tenant()
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

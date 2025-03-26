@@ -4,7 +4,6 @@ package app.knock.api.models.users.feeds
 
 import app.knock.api.core.Enum
 import app.knock.api.core.JsonField
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
@@ -73,32 +72,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> userId
-            1 -> channelId
-            else -> ""
-        }
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                after?.let { put("after", it) }
-                archived?.let { put("archived", it.toString()) }
-                before?.let { put("before", it) }
-                hasTenant?.let { put("has_tenant", it.toString()) }
-                pageSize?.let { put("page_size", it.toString()) }
-                source?.let { put("source", it) }
-                status?.let { put("status", it.toString()) }
-                tenant?.let { put("tenant", it) }
-                triggerData?.let { put("trigger_data", it) }
-                workflowCategories?.forEach { put("workflow_categories[]", it) }
-                putAll(additionalQueryParams)
-            }
-            .build()
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -116,7 +89,6 @@ private constructor(
     }
 
     /** A builder for [FeedListItemsParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var userId: String? = null
@@ -374,6 +346,32 @@ private constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> userId
+            1 -> channelId
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                after?.let { put("after", it) }
+                archived?.let { put("archived", it.toString()) }
+                before?.let { put("before", it) }
+                hasTenant?.let { put("has_tenant", it.toString()) }
+                pageSize?.let { put("page_size", it.toString()) }
+                source?.let { put("source", it) }
+                status?.let { put("status", it.toString()) }
+                tenant?.let { put("tenant", it) }
+                triggerData?.let { put("trigger_data", it) }
+                workflowCategories?.forEach { put("workflow_categories[]", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     /** The archived status of the feed items to return */
     class Archived @JsonCreator private constructor(private val value: JsonField<String>) : Enum {

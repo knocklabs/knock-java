@@ -6,10 +6,7 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.objects.Object
 import app.knock.api.models.recipients.Recipient
@@ -19,35 +16,40 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** A subscription object */
-@NoAutoDetect
 class Subscription
-@JsonCreator
 private constructor(
-    @JsonProperty("__typename")
-    @ExcludeMissing
-    private val _typename: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("inserted_at")
-    @ExcludeMissing
-    private val insertedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("object")
-    @ExcludeMissing
-    private val object_: JsonField<Object> = JsonMissing.of(),
-    @JsonProperty("recipient")
-    @ExcludeMissing
-    private val recipient: JsonField<Recipient> = JsonMissing.of(),
-    @JsonProperty("updated_at")
-    @ExcludeMissing
-    private val updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("properties")
-    @ExcludeMissing
-    private val properties: JsonField<Properties> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val _typename: JsonField<String>,
+    private val insertedAt: JsonField<OffsetDateTime>,
+    private val object_: JsonField<Object>,
+    private val recipient: JsonField<Recipient>,
+    private val updatedAt: JsonField<OffsetDateTime>,
+    private val properties: JsonField<Properties>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("inserted_at")
+        @ExcludeMissing
+        insertedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("object") @ExcludeMissing object_: JsonField<Object> = JsonMissing.of(),
+        @JsonProperty("recipient")
+        @ExcludeMissing
+        recipient: JsonField<Recipient> = JsonMissing.of(),
+        @JsonProperty("updated_at")
+        @ExcludeMissing
+        updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("properties")
+        @ExcludeMissing
+        properties: JsonField<Properties> = JsonMissing.of(),
+    ) : this(_typename, insertedAt, object_, recipient, updatedAt, properties, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -140,25 +142,15 @@ private constructor(
     @ExcludeMissing
     fun _properties(): JsonField<Properties> = properties
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): Subscription = apply {
-        if (validated) {
-            return@apply
-        }
-
-        _typename()
-        insertedAt()
-        object_().validate()
-        recipient().validate()
-        updatedAt()
-        properties().ifPresent { it.validate() }
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -323,32 +315,41 @@ private constructor(
                 checkRequired("recipient", recipient),
                 checkRequired("updatedAt", updatedAt),
                 properties,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
+    private var validated: Boolean = false
+
+    fun validate(): Subscription = apply {
+        if (validated) {
+            return@apply
+        }
+
+        _typename()
+        insertedAt()
+        object_().validate()
+        recipient().validate()
+        updatedAt()
+        properties().ifPresent { it.validate() }
+        validated = true
+    }
+
     /** The custom properties associated with the subscription */
-    @NoAutoDetect
     class Properties
-    @JsonCreator
-    private constructor(
+    private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
+
+        @JsonCreator private constructor() : this(mutableMapOf())
+
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
-    ) {
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Properties = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -392,7 +393,17 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Properties = Properties(additionalProperties.toImmutable())
+            fun build(): Properties = Properties(additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Properties = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

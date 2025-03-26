@@ -6,27 +6,26 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 
 /** The response for the user's feed settings */
-@NoAutoDetect
 class FeedGetSettingsResponse
-@JsonCreator
 private constructor(
-    @JsonProperty("features")
-    @ExcludeMissing
-    private val features: JsonField<Features> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val features: JsonField<Features>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("features") @ExcludeMissing features: JsonField<Features> = JsonMissing.of()
+    ) : this(features, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -41,20 +40,15 @@ private constructor(
      */
     @JsonProperty("features") @ExcludeMissing fun _features(): JsonField<Features> = features
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): FeedGetSettingsResponse = apply {
-        if (validated) {
-            return@apply
-        }
-
-        features().validate()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -128,20 +122,33 @@ private constructor(
         fun build(): FeedGetSettingsResponse =
             FeedGetSettingsResponse(
                 checkRequired("features", features),
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
-    @NoAutoDetect
+    private var validated: Boolean = false
+
+    fun validate(): FeedGetSettingsResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        features().validate()
+        validated = true
+    }
+
     class Features
-    @JsonCreator
     private constructor(
-        @JsonProperty("branding_required")
-        @ExcludeMissing
-        private val brandingRequired: JsonField<Boolean> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val brandingRequired: JsonField<Boolean>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("branding_required")
+            @ExcludeMissing
+            brandingRequired: JsonField<Boolean> = JsonMissing.of()
+        ) : this(brandingRequired, mutableMapOf())
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
@@ -159,20 +166,15 @@ private constructor(
         @ExcludeMissing
         fun _brandingRequired(): JsonField<Boolean> = brandingRequired
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Features = apply {
-            if (validated) {
-                return@apply
-            }
-
-            brandingRequired()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -249,8 +251,19 @@ private constructor(
             fun build(): Features =
                 Features(
                     checkRequired("brandingRequired", brandingRequired),
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Features = apply {
+            if (validated) {
+                return@apply
+            }
+
+            brandingRequired()
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

@@ -2,7 +2,6 @@
 
 package app.knock.api.models.providers.slack
 
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
@@ -32,36 +31,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> channelId
-            else -> ""
-        }
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                put("access_token_object", accessTokenObject)
-                queryOptions?.let {
-                    it.cursor().ifPresent { put("query_options[cursor]", it) }
-                    it.excludeArchived().ifPresent {
-                        put("query_options[exclude_archived]", it.toString())
-                    }
-                    it.limit().ifPresent { put("query_options[limit]", it.toString()) }
-                    it.teamId().ifPresent { put("query_options[team_id]", it) }
-                    it.types().ifPresent { put("query_options[types]", it) }
-                    it._additionalProperties().keys().forEach { key ->
-                        it._additionalProperties().values(key).forEach { value ->
-                            put("query_options[$key]", value)
-                        }
-                    }
-                }
-                putAll(additionalQueryParams)
-            }
-            .build()
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -79,7 +48,6 @@ private constructor(
     }
 
     /** A builder for [SlackListChannelsParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var channelId: String? = null
@@ -230,6 +198,36 @@ private constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> channelId
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                put("access_token_object", accessTokenObject)
+                queryOptions?.let {
+                    it.cursor().ifPresent { put("query_options[cursor]", it) }
+                    it.excludeArchived().ifPresent {
+                        put("query_options[exclude_archived]", it.toString())
+                    }
+                    it.limit().ifPresent { put("query_options[limit]", it.toString()) }
+                    it.teamId().ifPresent { put("query_options[team_id]", it) }
+                    it.types().ifPresent { put("query_options[types]", it) }
+                    it._additionalProperties().keys().forEach { key ->
+                        it._additionalProperties().values(key).forEach { value ->
+                            put("query_options[$key]", value)
+                        }
+                    }
+                }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     class QueryOptions
     private constructor(

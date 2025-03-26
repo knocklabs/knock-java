@@ -6,10 +6,7 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
@@ -18,6 +15,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
@@ -27,22 +25,28 @@ import kotlin.jvm.optionals.getOrNull
  * the user is available before the request is executed in Knock. It will perform an upsert against
  * the user you're supplying, replacing any properties specified.
  */
-@NoAutoDetect
 class InlineIdentifyUserRequest
-@JsonCreator
 private constructor(
-    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("channel_data")
-    @ExcludeMissing
-    private val channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of(),
-    @JsonProperty("created_at")
-    @ExcludeMissing
-    private val createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("preferences")
-    @ExcludeMissing
-    private val preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val id: JsonField<String>,
+    private val channelData: JsonField<InlineChannelDataRequest>,
+    private val createdAt: JsonField<OffsetDateTime>,
+    private val preferences: JsonField<InlinePreferenceSetRequest>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("channel_data")
+        @ExcludeMissing
+        channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of(),
+        @JsonProperty("created_at")
+        @ExcludeMissing
+        createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("preferences")
+        @ExcludeMissing
+        preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of(),
+    ) : this(id, channelData, createdAt, preferences, mutableMapOf())
 
     /**
      * The ID of the user to identify. This is an ID that you supply.
@@ -113,23 +117,15 @@ private constructor(
     @ExcludeMissing
     fun _preferences(): JsonField<InlinePreferenceSetRequest> = preferences
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): InlineIdentifyUserRequest = apply {
-        if (validated) {
-            return@apply
-        }
-
-        id()
-        channelData().ifPresent { it.validate() }
-        createdAt()
-        preferences().ifPresent { it.validate() }
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -265,8 +261,22 @@ private constructor(
                 channelData,
                 createdAt,
                 preferences,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): InlineIdentifyUserRequest = apply {
+        if (validated) {
+            return@apply
+        }
+
+        id()
+        channelData().ifPresent { it.validate() }
+        createdAt()
+        preferences().ifPresent { it.validate() }
+        validated = true
     }
 
     override fun equals(other: Any?): Boolean {

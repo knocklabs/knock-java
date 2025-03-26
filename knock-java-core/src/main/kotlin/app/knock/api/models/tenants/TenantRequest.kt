@@ -6,10 +6,7 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
@@ -18,27 +15,32 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** A tenant to be set in the system */
-@NoAutoDetect
 class TenantRequest
-@JsonCreator
 private constructor(
-    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("channel_data")
-    @ExcludeMissing
-    private val channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of(),
-    @JsonProperty("preferences")
-    @ExcludeMissing
-    private val preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of(),
-    @JsonProperty("settings")
-    @ExcludeMissing
-    private val settings: JsonField<Settings> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val id: JsonField<String>,
+    private val channelData: JsonField<InlineChannelDataRequest>,
+    private val preferences: JsonField<InlinePreferenceSetRequest>,
+    private val settings: JsonField<Settings>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("channel_data")
+        @ExcludeMissing
+        channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of(),
+        @JsonProperty("preferences")
+        @ExcludeMissing
+        preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of(),
+        @JsonProperty("settings") @ExcludeMissing settings: JsonField<Settings> = JsonMissing.of(),
+    ) : this(id, channelData, preferences, settings, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -102,23 +104,15 @@ private constructor(
      */
     @JsonProperty("settings") @ExcludeMissing fun _settings(): JsonField<Settings> = settings
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): TenantRequest = apply {
-        if (validated) {
-            return@apply
-        }
-
-        id()
-        channelData().ifPresent { it.validate() }
-        preferences().ifPresent { it.validate() }
-        settings().ifPresent { it.validate() }
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -249,23 +243,40 @@ private constructor(
                 channelData,
                 preferences,
                 settings,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
-    @NoAutoDetect
+    private var validated: Boolean = false
+
+    fun validate(): TenantRequest = apply {
+        if (validated) {
+            return@apply
+        }
+
+        id()
+        channelData().ifPresent { it.validate() }
+        preferences().ifPresent { it.validate() }
+        settings().ifPresent { it.validate() }
+        validated = true
+    }
+
     class Settings
-    @JsonCreator
     private constructor(
-        @JsonProperty("branding")
-        @ExcludeMissing
-        private val branding: JsonField<Branding> = JsonMissing.of(),
-        @JsonProperty("preference_set")
-        @ExcludeMissing
-        private val preferenceSet: JsonField<PreferenceSetRequest> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val branding: JsonField<Branding>,
+        private val preferenceSet: JsonField<PreferenceSetRequest>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("branding")
+            @ExcludeMissing
+            branding: JsonField<Branding> = JsonMissing.of(),
+            @JsonProperty("preference_set")
+            @ExcludeMissing
+            preferenceSet: JsonField<PreferenceSetRequest> = JsonMissing.of(),
+        ) : this(branding, preferenceSet, mutableMapOf())
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -299,21 +310,15 @@ private constructor(
         @ExcludeMissing
         fun _preferenceSet(): JsonField<PreferenceSetRequest> = preferenceSet
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Settings = apply {
-            if (validated) {
-                return@apply
-            }
-
-            branding().ifPresent { it.validate() }
-            preferenceSet().ifPresent { it.validate() }
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -392,28 +397,45 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              */
             fun build(): Settings =
-                Settings(branding, preferenceSet, additionalProperties.toImmutable())
+                Settings(branding, preferenceSet, additionalProperties.toMutableMap())
         }
 
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): Settings = apply {
+            if (validated) {
+                return@apply
+            }
+
+            branding().ifPresent { it.validate() }
+            preferenceSet().ifPresent { it.validate() }
+            validated = true
+        }
+
         class Branding
-        @JsonCreator
         private constructor(
-            @JsonProperty("icon_url")
-            @ExcludeMissing
-            private val iconUrl: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("logo_url")
-            @ExcludeMissing
-            private val logoUrl: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("primary_color")
-            @ExcludeMissing
-            private val primaryColor: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("primary_color_contrast")
-            @ExcludeMissing
-            private val primaryColorContrast: JsonField<String> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val iconUrl: JsonField<String>,
+            private val logoUrl: JsonField<String>,
+            private val primaryColor: JsonField<String>,
+            private val primaryColorContrast: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("icon_url")
+                @ExcludeMissing
+                iconUrl: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("logo_url")
+                @ExcludeMissing
+                logoUrl: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("primary_color")
+                @ExcludeMissing
+                primaryColor: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("primary_color_contrast")
+                @ExcludeMissing
+                primaryColorContrast: JsonField<String> = JsonMissing.of(),
+            ) : this(iconUrl, logoUrl, primaryColor, primaryColorContrast, mutableMapOf())
 
             /**
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -475,23 +497,15 @@ private constructor(
             @ExcludeMissing
             fun _primaryColorContrast(): JsonField<String> = primaryColorContrast
 
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): Branding = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                iconUrl()
-                logoUrl()
-                primaryColor()
-                primaryColorContrast()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -619,8 +633,22 @@ private constructor(
                         logoUrl,
                         primaryColor,
                         primaryColorContrast,
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): Branding = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                iconUrl()
+                logoUrl()
+                primaryColor()
+                primaryColorContrast()
+                validated = true
             }
 
             override fun equals(other: Any?): Boolean {

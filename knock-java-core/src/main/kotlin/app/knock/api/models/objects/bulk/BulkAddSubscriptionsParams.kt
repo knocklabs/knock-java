@@ -6,13 +6,11 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.objects.InlineObjectRequest
@@ -22,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
@@ -59,170 +58,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): Body = body
-
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> collection
-            else -> ""
-        }
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    /** A request to upsert subscriptions for a set of objects in a single collection */
-    @NoAutoDetect
-    class Body
-    @JsonCreator
-    private constructor(
-        @JsonProperty("subscriptions")
-        @ExcludeMissing
-        private val subscriptions: JsonField<List<Subscription>> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun subscriptions(): List<Subscription> = subscriptions.getRequired("subscriptions")
-
-        /**
-         * Returns the raw JSON value of [subscriptions].
-         *
-         * Unlike [subscriptions], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("subscriptions")
-        @ExcludeMissing
-        fun _subscriptions(): JsonField<List<Subscription>> = subscriptions
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
-
-            subscriptions().forEach { it.validate() }
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Body].
-             *
-             * The following fields are required:
-             * ```java
-             * .subscriptions()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Body]. */
-        class Builder internal constructor() {
-
-            private var subscriptions: JsonField<MutableList<Subscription>>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(body: Body) = apply {
-                subscriptions = body.subscriptions.map { it.toMutableList() }
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
-
-            fun subscriptions(subscriptions: List<Subscription>) =
-                subscriptions(JsonField.of(subscriptions))
-
-            /**
-             * Sets [Builder.subscriptions] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.subscriptions] with a well-typed
-             * `List<Subscription>` value instead. This method is primarily for setting the field to
-             * an undocumented or not yet supported value.
-             */
-            fun subscriptions(subscriptions: JsonField<List<Subscription>>) = apply {
-                this.subscriptions = subscriptions.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [Subscription] to [subscriptions].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addSubscription(subscription: Subscription) = apply {
-                subscriptions =
-                    (subscriptions ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("subscriptions", it).add(subscription)
-                    }
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Body].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .subscriptions()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Body =
-                Body(
-                    checkRequired("subscriptions", subscriptions).map { it.toImmutable() },
-                    additionalProperties.toImmutable(),
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Body && subscriptions == other.subscriptions && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(subscriptions, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Body{subscriptions=$subscriptions, additionalProperties=$additionalProperties}"
-    }
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -240,7 +75,6 @@ private constructor(
     }
 
     /** A builder for [BulkAddSubscriptionsParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var collection: String? = null
@@ -421,20 +255,196 @@ private constructor(
             )
     }
 
-    @NoAutoDetect
-    class Subscription
-    @JsonCreator
+    @JvmSynthetic internal fun _body(): Body = body
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> collection
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    /** A request to upsert subscriptions for a set of objects in a single collection */
+    class Body
     private constructor(
-        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("recipients")
-        @ExcludeMissing
-        private val recipients: JsonField<List<RecipientRequest>> = JsonMissing.of(),
-        @JsonProperty("properties")
-        @ExcludeMissing
-        private val properties: JsonField<Properties> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val subscriptions: JsonField<List<Subscription>>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("subscriptions")
+            @ExcludeMissing
+            subscriptions: JsonField<List<Subscription>> = JsonMissing.of()
+        ) : this(subscriptions, mutableMapOf())
+
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun subscriptions(): List<Subscription> = subscriptions.getRequired("subscriptions")
+
+        /**
+         * Returns the raw JSON value of [subscriptions].
+         *
+         * Unlike [subscriptions], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("subscriptions")
+        @ExcludeMissing
+        fun _subscriptions(): JsonField<List<Subscription>> = subscriptions
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .subscriptions()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var subscriptions: JsonField<MutableList<Subscription>>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(body: Body) = apply {
+                subscriptions = body.subscriptions.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            fun subscriptions(subscriptions: List<Subscription>) =
+                subscriptions(JsonField.of(subscriptions))
+
+            /**
+             * Sets [Builder.subscriptions] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.subscriptions] with a well-typed
+             * `List<Subscription>` value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
+             */
+            fun subscriptions(subscriptions: JsonField<List<Subscription>>) = apply {
+                this.subscriptions = subscriptions.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [Subscription] to [subscriptions].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addSubscription(subscription: Subscription) = apply {
+                subscriptions =
+                    (subscriptions ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("subscriptions", it).add(subscription)
+                    }
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .subscriptions()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Body =
+                Body(
+                    checkRequired("subscriptions", subscriptions).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            subscriptions().forEach { it.validate() }
+            validated = true
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && subscriptions == other.subscriptions && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(subscriptions, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{subscriptions=$subscriptions, additionalProperties=$additionalProperties}"
+    }
+
+    class Subscription
+    private constructor(
+        private val id: JsonField<String>,
+        private val recipients: JsonField<List<RecipientRequest>>,
+        private val properties: JsonField<Properties>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("recipients")
+            @ExcludeMissing
+            recipients: JsonField<List<RecipientRequest>> = JsonMissing.of(),
+            @JsonProperty("properties")
+            @ExcludeMissing
+            properties: JsonField<Properties> = JsonMissing.of(),
+        ) : this(id, recipients, properties, mutableMapOf())
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
@@ -480,22 +490,15 @@ private constructor(
         @ExcludeMissing
         fun _properties(): JsonField<Properties> = properties
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Subscription = apply {
-            if (validated) {
-                return@apply
-            }
-
-            id()
-            recipients().forEach { it.validate() }
-            properties().ifPresent { it.validate() }
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -636,31 +639,37 @@ private constructor(
                     checkRequired("id", id),
                     checkRequired("recipients", recipients).map { it.toImmutable() },
                     properties,
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
         }
 
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): Subscription = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            recipients().forEach { it.validate() }
+            properties().ifPresent { it.validate() }
+            validated = true
+        }
+
         class Properties
-        @JsonCreator
-        private constructor(
+        private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
+
+            @JsonCreator private constructor() : this(mutableMapOf())
+
             @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
-        ) {
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): Properties = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -707,7 +716,17 @@ private constructor(
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
-                fun build(): Properties = Properties(additionalProperties.toImmutable())
+                fun build(): Properties = Properties(additionalProperties.toMutableMap())
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): Properties = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
             }
 
             override fun equals(other: Any?): Boolean {

@@ -6,15 +6,13 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.models.PageInfo
 import app.knock.api.services.async.MessageServiceAsync
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
@@ -87,15 +85,17 @@ private constructor(
         ) = MessageListActivitiesPageAsync(messagesService, params, response)
     }
 
-    @NoAutoDetect
-    class Response
-    @JsonCreator
-    constructor(
-        @JsonProperty("items") private val items: JsonField<List<Activity>> = JsonMissing.of(),
-        @JsonProperty("page_info") private val pageInfo: JsonField<PageInfo> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    class Response(
+        private val items: JsonField<List<Activity>>,
+        private val pageInfo: JsonField<PageInfo>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("items") items: JsonField<List<Activity>> = JsonMissing.of(),
+            @JsonProperty("page_info") pageInfo: JsonField<PageInfo> = JsonMissing.of(),
+        ) : this(items, pageInfo, mutableMapOf())
 
         fun items(): List<Activity> = items.getNullable("items") ?: listOf()
 
@@ -107,9 +107,15 @@ private constructor(
         @JsonProperty("page_info")
         fun _pageInfo(): Optional<JsonField<PageInfo>> = Optional.ofNullable(pageInfo)
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         private var validated: Boolean = false
 
@@ -177,7 +183,7 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Response = Response(items, pageInfo, additionalProperties.toImmutable())
+            fun build(): Response = Response(items, pageInfo, additionalProperties.toMutableMap())
         }
     }
 

@@ -7,7 +7,6 @@ import app.knock.api.core.BaseSerializer
 import app.knock.api.core.Enum
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.getOrThrow
@@ -71,67 +70,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> collection
-            1 -> objectId
-            else -> ""
-        }
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                after?.let { put("after", it) }
-                before?.let { put("before", it) }
-                mode?.let { put("mode", it.toString()) }
-                objects?.forEach {
-                    it.accept(
-                        object : Object.Visitor<Unit> {
-                            override fun visitString(string: String) {
-                                put("objects[]", string)
-                            }
-
-                            override fun visitReference(reference: Object.ObjectReference) {
-                                put("objects[][id]", reference.id())
-                                put("objects[][collection]", reference.collection())
-                                reference._additionalProperties().keys().forEach { key ->
-                                    reference._additionalProperties().values(key).forEach { value ->
-                                        put("objects[][$key]", value)
-                                    }
-                                }
-                            }
-                        }
-                    )
-                }
-                pageSize?.let { put("page_size", it.toString()) }
-                recipients?.forEach {
-                    it.accept(
-                        object : Recipient.Visitor<Unit> {
-                            override fun visitString(string: String) {
-                                put("recipients[]", string)
-                            }
-
-                            override fun visitObjectReference(
-                                objectReference: Recipient.ObjectReference
-                            ) {
-                                put("recipients[][id]", objectReference.id())
-                                put("recipients[][collection]", objectReference.collection())
-                                objectReference._additionalProperties().keys().forEach { key ->
-                                    objectReference._additionalProperties().values(key).forEach {
-                                        value ->
-                                        put("recipients[][$key]", value)
-                                    }
-                                }
-                            }
-                        }
-                    )
-                }
-                putAll(additionalQueryParams)
-            }
-            .build()
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -150,7 +88,6 @@ private constructor(
     }
 
     /** A builder for [ObjectListSubscriptionsParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var collection: String? = null
@@ -383,6 +320,67 @@ private constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> collection
+            1 -> objectId
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                after?.let { put("after", it) }
+                before?.let { put("before", it) }
+                mode?.let { put("mode", it.toString()) }
+                objects?.forEach {
+                    it.accept(
+                        object : Object.Visitor<Unit> {
+                            override fun visitString(string: String) {
+                                put("objects[]", string)
+                            }
+
+                            override fun visitReference(reference: Object.ObjectReference) {
+                                put("objects[][id]", reference.id())
+                                put("objects[][collection]", reference.collection())
+                                reference._additionalProperties().keys().forEach { key ->
+                                    reference._additionalProperties().values(key).forEach { value ->
+                                        put("objects[][$key]", value)
+                                    }
+                                }
+                            }
+                        }
+                    )
+                }
+                pageSize?.let { put("page_size", it.toString()) }
+                recipients?.forEach {
+                    it.accept(
+                        object : Recipient.Visitor<Unit> {
+                            override fun visitString(string: String) {
+                                put("recipients[]", string)
+                            }
+
+                            override fun visitObjectReference(
+                                objectReference: Recipient.ObjectReference
+                            ) {
+                                put("recipients[][id]", objectReference.id())
+                                put("recipients[][collection]", objectReference.collection())
+                                objectReference._additionalProperties().keys().forEach { key ->
+                                    objectReference._additionalProperties().values(key).forEach {
+                                        value ->
+                                        put("recipients[][$key]", value)
+                                    }
+                                }
+                            }
+                        }
+                    )
+                }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     /** Mode of the request */
     class Mode @JsonCreator private constructor(private val value: JsonField<String>) : Enum {

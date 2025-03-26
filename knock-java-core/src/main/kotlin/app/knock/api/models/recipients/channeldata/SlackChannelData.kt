@@ -8,11 +8,9 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.getOrThrow
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -26,21 +24,26 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** Slack channel data */
-@NoAutoDetect
 class SlackChannelData
-@JsonCreator
 private constructor(
-    @JsonProperty("connections")
-    @ExcludeMissing
-    private val connections: JsonField<List<Connection>> = JsonMissing.of(),
-    @JsonProperty("token") @ExcludeMissing private val token: JsonField<Token> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val connections: JsonField<List<Connection>>,
+    private val token: JsonField<Token>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("connections")
+        @ExcludeMissing
+        connections: JsonField<List<Connection>> = JsonMissing.of(),
+        @JsonProperty("token") @ExcludeMissing token: JsonField<Token> = JsonMissing.of(),
+    ) : this(connections, token, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -72,21 +75,15 @@ private constructor(
      */
     @JsonProperty("token") @ExcludeMissing fun _token(): JsonField<Token> = token
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): SlackChannelData = apply {
-        if (validated) {
-            return@apply
-        }
-
-        connections().forEach { it.validate() }
-        token().ifPresent { it.validate() }
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -202,8 +199,20 @@ private constructor(
             SlackChannelData(
                 checkRequired("connections", connections).map { it.toImmutable() },
                 token,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): SlackChannelData = apply {
+        if (validated) {
+            return@apply
+        }
+
+        connections().forEach { it.validate() }
+        token().ifPresent { it.validate() }
+        validated = true
     }
 
     /** A Slack connection, which either includes a channel_id or a user_id */
@@ -363,22 +372,26 @@ private constructor(
         }
 
         /** A Slack connection, which either includes a channel_id or a user_id */
-        @NoAutoDetect
         class SlackTokenConnection
-        @JsonCreator
         private constructor(
-            @JsonProperty("access_token")
-            @ExcludeMissing
-            private val accessToken: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("channel_id")
-            @ExcludeMissing
-            private val channelId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("user_id")
-            @ExcludeMissing
-            private val userId: JsonField<String> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val accessToken: JsonField<String>,
+            private val channelId: JsonField<String>,
+            private val userId: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("access_token")
+                @ExcludeMissing
+                accessToken: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("channel_id")
+                @ExcludeMissing
+                channelId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("user_id")
+                @ExcludeMissing
+                userId: JsonField<String> = JsonMissing.of(),
+            ) : this(accessToken, channelId, userId, mutableMapOf())
 
             /**
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -427,22 +440,15 @@ private constructor(
              */
             @JsonProperty("user_id") @ExcludeMissing fun _userId(): JsonField<String> = userId
 
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): SlackTokenConnection = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                accessToken()
-                channelId()
-                userId()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -548,8 +554,21 @@ private constructor(
                         accessToken,
                         channelId,
                         userId,
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): SlackTokenConnection = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                accessToken()
+                channelId()
+                userId()
+                validated = true
             }
 
             override fun equals(other: Any?): Boolean {
@@ -571,16 +590,16 @@ private constructor(
         }
 
         /** An incoming webhook Slack connection */
-        @NoAutoDetect
         class SlackIncomingWebhookConnection
-        @JsonCreator
         private constructor(
-            @JsonProperty("url")
-            @ExcludeMissing
-            private val url: JsonField<String> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val url: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of()
+            ) : this(url, mutableMapOf())
 
             /**
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
@@ -596,20 +615,15 @@ private constructor(
              */
             @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
 
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): SlackIncomingWebhookConnection = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                url()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -689,8 +703,19 @@ private constructor(
                 fun build(): SlackIncomingWebhookConnection =
                     SlackIncomingWebhookConnection(
                         checkRequired("url", url),
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): SlackIncomingWebhookConnection = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                url()
+                validated = true
             }
 
             override fun equals(other: Any?): Boolean {
@@ -713,16 +738,18 @@ private constructor(
     }
 
     /** A token that's used to store the access token for a Slack workspace. */
-    @NoAutoDetect
     class Token
-    @JsonCreator
     private constructor(
-        @JsonProperty("access_token")
-        @ExcludeMissing
-        private val accessToken: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val accessToken: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("access_token")
+            @ExcludeMissing
+            accessToken: JsonField<String> = JsonMissing.of()
+        ) : this(accessToken, mutableMapOf())
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -740,20 +767,15 @@ private constructor(
         @ExcludeMissing
         fun _accessToken(): JsonField<String> = accessToken
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Token = apply {
-            if (validated) {
-                return@apply
-            }
-
-            accessToken()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -830,7 +852,21 @@ private constructor(
              * @throws IllegalStateException if any required field is unset.
              */
             fun build(): Token =
-                Token(checkRequired("accessToken", accessToken), additionalProperties.toImmutable())
+                Token(
+                    checkRequired("accessToken", accessToken),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Token = apply {
+            if (validated) {
+                return@apply
+            }
+
+            accessToken()
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

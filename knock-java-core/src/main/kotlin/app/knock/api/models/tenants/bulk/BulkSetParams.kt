@@ -6,13 +6,11 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.tenants.InlineTenantRequest
@@ -21,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 
 /** Bulk set tenants */
@@ -50,172 +49,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): Body = body
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    /** A request to set tenants in bulk */
-    @NoAutoDetect
-    class Body
-    @JsonCreator
-    private constructor(
-        @JsonProperty("tenants")
-        @ExcludeMissing
-        private val tenants: JsonField<List<InlineTenantRequest>> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun tenants(): List<InlineTenantRequest> = tenants.getRequired("tenants")
-
-        /**
-         * Returns the raw JSON value of [tenants].
-         *
-         * Unlike [tenants], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("tenants")
-        @ExcludeMissing
-        fun _tenants(): JsonField<List<InlineTenantRequest>> = tenants
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
-
-            tenants().forEach { it.validate() }
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Body].
-             *
-             * The following fields are required:
-             * ```java
-             * .tenants()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Body]. */
-        class Builder internal constructor() {
-
-            private var tenants: JsonField<MutableList<InlineTenantRequest>>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(body: Body) = apply {
-                tenants = body.tenants.map { it.toMutableList() }
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
-
-            fun tenants(tenants: List<InlineTenantRequest>) = tenants(JsonField.of(tenants))
-
-            /**
-             * Sets [Builder.tenants] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.tenants] with a well-typed
-             * `List<InlineTenantRequest>` value instead. This method is primarily for setting the
-             * field to an undocumented or not yet supported value.
-             */
-            fun tenants(tenants: JsonField<List<InlineTenantRequest>>) = apply {
-                this.tenants = tenants.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [InlineTenantRequest] to [tenants].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addTenant(tenant: InlineTenantRequest) = apply {
-                tenants =
-                    (tenants ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("tenants", it).add(tenant)
-                    }
-            }
-
-            /** Alias for calling [addTenant] with `InlineTenantRequest.ofString(string)`. */
-            fun addTenant(string: String) = addTenant(InlineTenantRequest.ofString(string))
-
-            /**
-             * Alias for calling [addTenant] with
-             * `InlineTenantRequest.ofTenantRequest(tenantRequest)`.
-             */
-            fun addTenant(tenantRequest: TenantRequest) =
-                addTenant(InlineTenantRequest.ofTenantRequest(tenantRequest))
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Body].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .tenants()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Body =
-                Body(
-                    checkRequired("tenants", tenants).map { it.toImmutable() },
-                    additionalProperties.toImmutable(),
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Body && tenants == other.tenants && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(tenants, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Body{tenants=$tenants, additionalProperties=$additionalProperties}"
-    }
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -232,7 +65,6 @@ private constructor(
     }
 
     /** A builder for [BulkSetParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var body: Body.Builder = Body.builder()
@@ -403,6 +235,180 @@ private constructor(
          */
         fun build(): BulkSetParams =
             BulkSetParams(body.build(), additionalHeaders.build(), additionalQueryParams.build())
+    }
+
+    @JvmSynthetic internal fun _body(): Body = body
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    /** A request to set tenants in bulk */
+    class Body
+    private constructor(
+        private val tenants: JsonField<List<InlineTenantRequest>>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("tenants")
+            @ExcludeMissing
+            tenants: JsonField<List<InlineTenantRequest>> = JsonMissing.of()
+        ) : this(tenants, mutableMapOf())
+
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun tenants(): List<InlineTenantRequest> = tenants.getRequired("tenants")
+
+        /**
+         * Returns the raw JSON value of [tenants].
+         *
+         * Unlike [tenants], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("tenants")
+        @ExcludeMissing
+        fun _tenants(): JsonField<List<InlineTenantRequest>> = tenants
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .tenants()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var tenants: JsonField<MutableList<InlineTenantRequest>>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(body: Body) = apply {
+                tenants = body.tenants.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            fun tenants(tenants: List<InlineTenantRequest>) = tenants(JsonField.of(tenants))
+
+            /**
+             * Sets [Builder.tenants] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.tenants] with a well-typed
+             * `List<InlineTenantRequest>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun tenants(tenants: JsonField<List<InlineTenantRequest>>) = apply {
+                this.tenants = tenants.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [InlineTenantRequest] to [tenants].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addTenant(tenant: InlineTenantRequest) = apply {
+                tenants =
+                    (tenants ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("tenants", it).add(tenant)
+                    }
+            }
+
+            /** Alias for calling [addTenant] with `InlineTenantRequest.ofString(string)`. */
+            fun addTenant(string: String) = addTenant(InlineTenantRequest.ofString(string))
+
+            /**
+             * Alias for calling [addTenant] with
+             * `InlineTenantRequest.ofTenantRequest(tenantRequest)`.
+             */
+            fun addTenant(tenantRequest: TenantRequest) =
+                addTenant(InlineTenantRequest.ofTenantRequest(tenantRequest))
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .tenants()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Body =
+                Body(
+                    checkRequired("tenants", tenants).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            tenants().forEach { it.validate() }
+            validated = true
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && tenants == other.tenants && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(tenants, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{tenants=$tenants, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

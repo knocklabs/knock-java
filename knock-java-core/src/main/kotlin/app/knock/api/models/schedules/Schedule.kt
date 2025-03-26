@@ -6,10 +6,8 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.objects.Object
@@ -20,49 +18,70 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** A schedule that represents a recurring workflow execution */
-@NoAutoDetect
 class Schedule
-@JsonCreator
 private constructor(
-    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("inserted_at")
-    @ExcludeMissing
-    private val insertedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("recipient")
-    @ExcludeMissing
-    private val recipient: JsonField<Recipient> = JsonMissing.of(),
-    @JsonProperty("repeats")
-    @ExcludeMissing
-    private val repeats: JsonField<List<ScheduleRepeatRule>> = JsonMissing.of(),
-    @JsonProperty("updated_at")
-    @ExcludeMissing
-    private val updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("workflow")
-    @ExcludeMissing
-    private val workflow: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("__typename")
-    @ExcludeMissing
-    private val _typename: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("actor")
-    @ExcludeMissing
-    private val actor: JsonField<Recipient> = JsonMissing.of(),
-    @JsonProperty("data") @ExcludeMissing private val data: JsonField<Data> = JsonMissing.of(),
-    @JsonProperty("last_occurrence_at")
-    @ExcludeMissing
-    private val lastOccurrenceAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("next_occurrence_at")
-    @ExcludeMissing
-    private val nextOccurrenceAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("tenant")
-    @ExcludeMissing
-    private val tenant: JsonField<String> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val id: JsonField<String>,
+    private val insertedAt: JsonField<OffsetDateTime>,
+    private val recipient: JsonField<Recipient>,
+    private val repeats: JsonField<List<ScheduleRepeatRule>>,
+    private val updatedAt: JsonField<OffsetDateTime>,
+    private val workflow: JsonField<String>,
+    private val _typename: JsonField<String>,
+    private val actor: JsonField<Recipient>,
+    private val data: JsonField<Data>,
+    private val lastOccurrenceAt: JsonField<OffsetDateTime>,
+    private val nextOccurrenceAt: JsonField<OffsetDateTime>,
+    private val tenant: JsonField<String>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("inserted_at")
+        @ExcludeMissing
+        insertedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("recipient")
+        @ExcludeMissing
+        recipient: JsonField<Recipient> = JsonMissing.of(),
+        @JsonProperty("repeats")
+        @ExcludeMissing
+        repeats: JsonField<List<ScheduleRepeatRule>> = JsonMissing.of(),
+        @JsonProperty("updated_at")
+        @ExcludeMissing
+        updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("workflow") @ExcludeMissing workflow: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("actor") @ExcludeMissing actor: JsonField<Recipient> = JsonMissing.of(),
+        @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
+        @JsonProperty("last_occurrence_at")
+        @ExcludeMissing
+        lastOccurrenceAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("next_occurrence_at")
+        @ExcludeMissing
+        nextOccurrenceAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("tenant") @ExcludeMissing tenant: JsonField<String> = JsonMissing.of(),
+    ) : this(
+        id,
+        insertedAt,
+        recipient,
+        repeats,
+        updatedAt,
+        workflow,
+        _typename,
+        actor,
+        data,
+        lastOccurrenceAt,
+        nextOccurrenceAt,
+        tenant,
+        mutableMapOf(),
+    )
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -238,31 +257,15 @@ private constructor(
      */
     @JsonProperty("tenant") @ExcludeMissing fun _tenant(): JsonField<String> = tenant
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): Schedule = apply {
-        if (validated) {
-            return@apply
-        }
-
-        id()
-        insertedAt()
-        recipient().validate()
-        repeats().forEach { it.validate() }
-        updatedAt()
-        workflow()
-        _typename()
-        actor().ifPresent { it.validate() }
-        data().ifPresent { it.validate() }
-        lastOccurrenceAt()
-        nextOccurrenceAt()
-        tenant()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -548,31 +551,46 @@ private constructor(
                 lastOccurrenceAt,
                 nextOccurrenceAt,
                 tenant,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
-    @NoAutoDetect
+    private var validated: Boolean = false
+
+    fun validate(): Schedule = apply {
+        if (validated) {
+            return@apply
+        }
+
+        id()
+        insertedAt()
+        recipient().validate()
+        repeats().forEach { it.validate() }
+        updatedAt()
+        workflow()
+        _typename()
+        actor().ifPresent { it.validate() }
+        data().ifPresent { it.validate() }
+        lastOccurrenceAt()
+        nextOccurrenceAt()
+        tenant()
+        validated = true
+    }
+
     class Data
-    @JsonCreator
-    private constructor(
+    private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
+
+        @JsonCreator private constructor() : this(mutableMapOf())
+
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
-    ) {
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Data = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -616,7 +634,17 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Data = Data(additionalProperties.toImmutable())
+            fun build(): Data = Data(additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Data = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

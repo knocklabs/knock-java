@@ -2,7 +2,6 @@
 
 package app.knock.api.models.messages
 
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
@@ -41,25 +40,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> messageId
-            else -> ""
-        }
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                after?.let { put("after", it) }
-                before?.let { put("before", it) }
-                pageSize?.let { put("page_size", it.toString()) }
-                triggerData?.let { put("trigger_data", it) }
-                putAll(additionalQueryParams)
-            }
-            .build()
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -76,7 +56,6 @@ private constructor(
     }
 
     /** A builder for [MessageListActivitiesParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var messageId: String? = null
@@ -252,6 +231,25 @@ private constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> messageId
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                after?.let { put("after", it) }
+                before?.let { put("before", it) }
+                pageSize?.let { put("page_size", it.toString()) }
+                triggerData?.let { put("trigger_data", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

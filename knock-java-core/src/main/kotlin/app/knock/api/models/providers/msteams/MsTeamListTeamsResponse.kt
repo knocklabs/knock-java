@@ -6,33 +6,34 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** The response from a teams for Microsoft Teams provider request */
-@NoAutoDetect
 class MsTeamListTeamsResponse
-@JsonCreator
 private constructor(
-    @JsonProperty("ms_teams_teams")
-    @ExcludeMissing
-    private val msTeamsTeams: JsonField<List<MsTeamsTeam>> = JsonMissing.of(),
-    @JsonProperty("skip_token")
-    @ExcludeMissing
-    private val skipToken: JsonField<String> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val msTeamsTeams: JsonField<List<MsTeamsTeam>>,
+    private val skipToken: JsonField<String>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("ms_teams_teams")
+        @ExcludeMissing
+        msTeamsTeams: JsonField<List<MsTeamsTeam>> = JsonMissing.of(),
+        @JsonProperty("skip_token") @ExcludeMissing skipToken: JsonField<String> = JsonMissing.of(),
+    ) : this(msTeamsTeams, skipToken, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -62,21 +63,15 @@ private constructor(
      */
     @JsonProperty("skip_token") @ExcludeMissing fun _skipToken(): JsonField<String> = skipToken
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): MsTeamListTeamsResponse = apply {
-        if (validated) {
-            return@apply
-        }
-
-        msTeamsTeams().forEach { it.validate() }
-        skipToken()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -183,24 +178,40 @@ private constructor(
             MsTeamListTeamsResponse(
                 checkRequired("msTeamsTeams", msTeamsTeams).map { it.toImmutable() },
                 checkRequired("skipToken", skipToken),
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
-    @NoAutoDetect
+    private var validated: Boolean = false
+
+    fun validate(): MsTeamListTeamsResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        msTeamsTeams().forEach { it.validate() }
+        skipToken()
+        validated = true
+    }
+
     class MsTeamsTeam
-    @JsonCreator
     private constructor(
-        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("displayName")
-        @ExcludeMissing
-        private val displayName: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("description")
-        @ExcludeMissing
-        private val description: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val id: JsonField<String>,
+        private val displayName: JsonField<String>,
+        private val description: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("displayName")
+            @ExcludeMissing
+            displayName: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("description")
+            @ExcludeMissing
+            description: JsonField<String> = JsonMissing.of(),
+        ) : this(id, displayName, description, mutableMapOf())
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
@@ -246,22 +257,15 @@ private constructor(
         @ExcludeMissing
         fun _description(): JsonField<String> = description
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): MsTeamsTeam = apply {
-            if (validated) {
-                return@apply
-            }
-
-            id()
-            displayName()
-            description()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -372,8 +376,21 @@ private constructor(
                     checkRequired("id", id),
                     checkRequired("displayName", displayName),
                     description,
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): MsTeamsTeam = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            displayName()
+            description()
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

@@ -6,32 +6,37 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 
-@NoAutoDetect
 class SlackListChannelsResponse
-@JsonCreator
 private constructor(
-    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("context_team_id")
-    @ExcludeMissing
-    private val contextTeamId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("is_im") @ExcludeMissing private val isIm: JsonField<Boolean> = JsonMissing.of(),
-    @JsonProperty("is_private")
-    @ExcludeMissing
-    private val isPrivate: JsonField<Boolean> = JsonMissing.of(),
-    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val id: JsonField<String>,
+    private val contextTeamId: JsonField<String>,
+    private val isIm: JsonField<Boolean>,
+    private val isPrivate: JsonField<Boolean>,
+    private val name: JsonField<String>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("context_team_id")
+        @ExcludeMissing
+        contextTeamId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("is_im") @ExcludeMissing isIm: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("is_private")
+        @ExcludeMissing
+        isPrivate: JsonField<Boolean> = JsonMissing.of(),
+        @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+    ) : this(id, contextTeamId, isIm, isPrivate, name, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -100,24 +105,15 @@ private constructor(
      */
     @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): SlackListChannelsResponse = apply {
-        if (validated) {
-            return@apply
-        }
-
-        id()
-        contextTeamId()
-        isIm()
-        isPrivate()
-        name()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -254,8 +250,23 @@ private constructor(
                 checkRequired("isIm", isIm),
                 checkRequired("isPrivate", isPrivate),
                 checkRequired("name", name),
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): SlackListChannelsResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        id()
+        contextTeamId()
+        isIm()
+        isPrivate()
+        name()
+        validated = true
     }
 
     override fun equals(other: Any?): Boolean {

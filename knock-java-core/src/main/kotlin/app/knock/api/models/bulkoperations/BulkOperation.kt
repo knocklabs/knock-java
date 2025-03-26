@@ -7,10 +7,8 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -18,55 +16,82 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** A bulk operation entity */
-@NoAutoDetect
 class BulkOperation
-@JsonCreator
 private constructor(
-    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("__typename")
-    @ExcludeMissing
-    private val _typename: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("estimated_total_rows")
-    @ExcludeMissing
-    private val estimatedTotalRows: JsonField<Long> = JsonMissing.of(),
-    @JsonProperty("inserted_at")
-    @ExcludeMissing
-    private val insertedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("name") @ExcludeMissing private val name: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("processed_rows")
-    @ExcludeMissing
-    private val processedRows: JsonField<Long> = JsonMissing.of(),
-    @JsonProperty("status")
-    @ExcludeMissing
-    private val status: JsonField<Status> = JsonMissing.of(),
-    @JsonProperty("success_count")
-    @ExcludeMissing
-    private val successCount: JsonField<Long> = JsonMissing.of(),
-    @JsonProperty("updated_at")
-    @ExcludeMissing
-    private val updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("completed_at")
-    @ExcludeMissing
-    private val completedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("error_count")
-    @ExcludeMissing
-    private val errorCount: JsonField<Long> = JsonMissing.of(),
-    @JsonProperty("error_items")
-    @ExcludeMissing
-    private val errorItems: JsonField<List<ErrorItem>> = JsonMissing.of(),
-    @JsonProperty("failed_at")
-    @ExcludeMissing
-    private val failedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("started_at")
-    @ExcludeMissing
-    private val startedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val id: JsonField<String>,
+    private val _typename: JsonField<String>,
+    private val estimatedTotalRows: JsonField<Long>,
+    private val insertedAt: JsonField<OffsetDateTime>,
+    private val name: JsonField<String>,
+    private val processedRows: JsonField<Long>,
+    private val status: JsonField<Status>,
+    private val successCount: JsonField<Long>,
+    private val updatedAt: JsonField<OffsetDateTime>,
+    private val completedAt: JsonField<OffsetDateTime>,
+    private val errorCount: JsonField<Long>,
+    private val errorItems: JsonField<List<ErrorItem>>,
+    private val failedAt: JsonField<OffsetDateTime>,
+    private val startedAt: JsonField<OffsetDateTime>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("estimated_total_rows")
+        @ExcludeMissing
+        estimatedTotalRows: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("inserted_at")
+        @ExcludeMissing
+        insertedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("processed_rows")
+        @ExcludeMissing
+        processedRows: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("status") @ExcludeMissing status: JsonField<Status> = JsonMissing.of(),
+        @JsonProperty("success_count")
+        @ExcludeMissing
+        successCount: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("updated_at")
+        @ExcludeMissing
+        updatedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("completed_at")
+        @ExcludeMissing
+        completedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("error_count") @ExcludeMissing errorCount: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("error_items")
+        @ExcludeMissing
+        errorItems: JsonField<List<ErrorItem>> = JsonMissing.of(),
+        @JsonProperty("failed_at")
+        @ExcludeMissing
+        failedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("started_at")
+        @ExcludeMissing
+        startedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+    ) : this(
+        id,
+        _typename,
+        estimatedTotalRows,
+        insertedAt,
+        name,
+        processedRows,
+        status,
+        successCount,
+        updatedAt,
+        completedAt,
+        errorCount,
+        errorItems,
+        failedAt,
+        startedAt,
+        mutableMapOf(),
+    )
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -273,33 +298,15 @@ private constructor(
     @ExcludeMissing
     fun _startedAt(): JsonField<OffsetDateTime> = startedAt
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): BulkOperation = apply {
-        if (validated) {
-            return@apply
-        }
-
-        id()
-        _typename()
-        estimatedTotalRows()
-        insertedAt()
-        name()
-        processedRows()
-        status()
-        successCount()
-        updatedAt()
-        completedAt()
-        errorCount()
-        errorItems().ifPresent { it.forEach { it.validate() } }
-        failedAt()
-        startedAt()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -602,8 +609,32 @@ private constructor(
                 (errorItems ?: JsonMissing.of()).map { it.toImmutable() },
                 failedAt,
                 startedAt,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): BulkOperation = apply {
+        if (validated) {
+            return@apply
+        }
+
+        id()
+        _typename()
+        estimatedTotalRows()
+        insertedAt()
+        name()
+        processedRows()
+        status()
+        successCount()
+        updatedAt()
+        completedAt()
+        errorCount()
+        errorItems().ifPresent { it.forEach { it.validate() } }
+        failedAt()
+        startedAt()
+        validated = true
     }
 
     class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
@@ -715,17 +746,20 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    @NoAutoDetect
     class ErrorItem
-    @JsonCreator
     private constructor(
-        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("collection")
-        @ExcludeMissing
-        private val collection: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val id: JsonField<String>,
+        private val collection: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("collection")
+            @ExcludeMissing
+            collection: JsonField<String> = JsonMissing.of(),
+        ) : this(id, collection, mutableMapOf())
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
@@ -756,21 +790,15 @@ private constructor(
         @ExcludeMissing
         fun _collection(): JsonField<String> = collection
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): ErrorItem = apply {
-            if (validated) {
-                return@apply
-            }
-
-            id()
-            collection()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -858,7 +886,19 @@ private constructor(
              * @throws IllegalStateException if any required field is unset.
              */
             fun build(): ErrorItem =
-                ErrorItem(checkRequired("id", id), collection, additionalProperties.toImmutable())
+                ErrorItem(checkRequired("id", id), collection, additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): ErrorItem = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            collection()
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

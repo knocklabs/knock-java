@@ -8,10 +8,7 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.getOrThrow
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -24,24 +21,33 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 
 /** Channel type preferences */
-@NoAutoDetect
 class PreferenceSetChannelTypes
-@JsonCreator
 private constructor(
-    @JsonProperty("chat") @ExcludeMissing private val chat: JsonField<Chat> = JsonMissing.of(),
-    @JsonProperty("email") @ExcludeMissing private val email: JsonField<Email> = JsonMissing.of(),
-    @JsonProperty("http") @ExcludeMissing private val http: JsonField<Http> = JsonMissing.of(),
-    @JsonProperty("in_app_feed")
-    @ExcludeMissing
-    private val inAppFeed: JsonField<InAppFeed> = JsonMissing.of(),
-    @JsonProperty("push") @ExcludeMissing private val push: JsonField<Push> = JsonMissing.of(),
-    @JsonProperty("sms") @ExcludeMissing private val sms: JsonField<Sms> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val chat: JsonField<Chat>,
+    private val email: JsonField<Email>,
+    private val http: JsonField<Http>,
+    private val inAppFeed: JsonField<InAppFeed>,
+    private val push: JsonField<Push>,
+    private val sms: JsonField<Sms>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("chat") @ExcludeMissing chat: JsonField<Chat> = JsonMissing.of(),
+        @JsonProperty("email") @ExcludeMissing email: JsonField<Email> = JsonMissing.of(),
+        @JsonProperty("http") @ExcludeMissing http: JsonField<Http> = JsonMissing.of(),
+        @JsonProperty("in_app_feed")
+        @ExcludeMissing
+        inAppFeed: JsonField<InAppFeed> = JsonMissing.of(),
+        @JsonProperty("push") @ExcludeMissing push: JsonField<Push> = JsonMissing.of(),
+        @JsonProperty("sms") @ExcludeMissing sms: JsonField<Sms> = JsonMissing.of(),
+    ) : this(chat, email, http, inAppFeed, push, sms, mutableMapOf())
 
     /**
      * A set of settings for a channel type. Currently, this can only be a list of conditions to
@@ -139,25 +145,15 @@ private constructor(
      */
     @JsonProperty("sms") @ExcludeMissing fun _sms(): JsonField<Sms> = sms
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): PreferenceSetChannelTypes = apply {
-        if (validated) {
-            return@apply
-        }
-
-        chat().ifPresent { it.validate() }
-        email().ifPresent { it.validate() }
-        http().ifPresent { it.validate() }
-        inAppFeed().ifPresent { it.validate() }
-        push().ifPresent { it.validate() }
-        sms().ifPresent { it.validate() }
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -368,8 +364,24 @@ private constructor(
                 inAppFeed,
                 push,
                 sms,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): PreferenceSetChannelTypes = apply {
+        if (validated) {
+            return@apply
+        }
+
+        chat().ifPresent { it.validate() }
+        email().ifPresent { it.validate() }
+        http().ifPresent { it.validate() }
+        inAppFeed().ifPresent { it.validate() }
+        push().ifPresent { it.validate() }
+        sms().ifPresent { it.validate() }
+        validated = true
     }
 
     /**

@@ -6,39 +6,42 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** A preference set object. */
-@NoAutoDetect
 class PreferenceSet
-@JsonCreator
 private constructor(
-    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("__typename")
-    @ExcludeMissing
-    private val _typename: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("categories")
-    @ExcludeMissing
-    private val categories: JsonField<Categories> = JsonMissing.of(),
-    @JsonProperty("channel_types")
-    @ExcludeMissing
-    private val channelTypes: JsonField<PreferenceSetChannelTypes> = JsonMissing.of(),
-    @JsonProperty("workflows")
-    @ExcludeMissing
-    private val workflows: JsonField<Workflows> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val id: JsonField<String>,
+    private val _typename: JsonField<String>,
+    private val categories: JsonField<Categories>,
+    private val channelTypes: JsonField<PreferenceSetChannelTypes>,
+    private val workflows: JsonField<Workflows>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("categories")
+        @ExcludeMissing
+        categories: JsonField<Categories> = JsonMissing.of(),
+        @JsonProperty("channel_types")
+        @ExcludeMissing
+        channelTypes: JsonField<PreferenceSetChannelTypes> = JsonMissing.of(),
+        @JsonProperty("workflows")
+        @ExcludeMissing
+        workflows: JsonField<Workflows> = JsonMissing.of(),
+    ) : this(id, _typename, categories, channelTypes, workflows, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -117,24 +120,15 @@ private constructor(
      */
     @JsonProperty("workflows") @ExcludeMissing fun _workflows(): JsonField<Workflows> = workflows
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): PreferenceSet = apply {
-        if (validated) {
-            return@apply
-        }
-
-        id()
-        _typename()
-        categories().ifPresent { it.validate() }
-        channelTypes().ifPresent { it.validate() }
-        workflows().ifPresent { it.validate() }
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -281,32 +275,40 @@ private constructor(
                 categories,
                 channelTypes,
                 workflows,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
+    private var validated: Boolean = false
+
+    fun validate(): PreferenceSet = apply {
+        if (validated) {
+            return@apply
+        }
+
+        id()
+        _typename()
+        categories().ifPresent { it.validate() }
+        channelTypes().ifPresent { it.validate() }
+        workflows().ifPresent { it.validate() }
+        validated = true
+    }
+
     /** A map of categories and their settings */
-    @NoAutoDetect
     class Categories
-    @JsonCreator
-    private constructor(
+    private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
+
+        @JsonCreator private constructor() : this(mutableMapOf())
+
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
-    ) {
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Categories = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -350,7 +352,17 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Categories = Categories(additionalProperties.toImmutable())
+            fun build(): Categories = Categories(additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Categories = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {
@@ -371,27 +383,20 @@ private constructor(
     }
 
     /** A map of workflows and their settings */
-    @NoAutoDetect
     class Workflows
-    @JsonCreator
-    private constructor(
+    private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
+
+        @JsonCreator private constructor() : this(mutableMapOf())
+
         @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
-    ) {
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Workflows = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -435,7 +440,17 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Workflows = Workflows(additionalProperties.toImmutable())
+            fun build(): Workflows = Workflows(additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Workflows = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

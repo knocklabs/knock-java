@@ -4,7 +4,6 @@ package app.knock.api.models.messages
 
 import app.knock.api.core.Enum
 import app.knock.api.core.JsonField
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
@@ -78,28 +77,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                after?.let { put("after", it) }
-                before?.let { put("before", it) }
-                channelId?.let { put("channel_id", it) }
-                engagementStatus?.forEach { put("engagement_status[]", it.toString()) }
-                messageIds?.forEach { put("message_ids[]", it) }
-                pageSize?.let { put("page_size", it.toString()) }
-                source?.let { put("source", it) }
-                status?.forEach { put("status[]", it.toString()) }
-                tenant?.let { put("tenant", it) }
-                triggerData?.let { put("trigger_data", it) }
-                workflowCategories?.forEach { put("workflow_categories[]", it) }
-                workflowRecipientRunId?.let { put("workflow_recipient_run_id", it) }
-                workflowRunId?.let { put("workflow_run_id", it) }
-                putAll(additionalQueryParams)
-            }
-            .build()
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -111,7 +88,6 @@ private constructor(
     }
 
     /** A builder for [MessageListParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var after: String? = null
@@ -411,6 +387,28 @@ private constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                after?.let { put("after", it) }
+                before?.let { put("before", it) }
+                channelId?.let { put("channel_id", it) }
+                engagementStatus?.forEach { put("engagement_status[]", it.toString()) }
+                messageIds?.forEach { put("message_ids[]", it) }
+                pageSize?.let { put("page_size", it.toString()) }
+                source?.let { put("source", it) }
+                status?.forEach { put("status[]", it.toString()) }
+                tenant?.let { put("tenant", it) }
+                triggerData?.let { put("trigger_data", it) }
+                workflowCategories?.forEach { put("workflow_categories[]", it) }
+                workflowRecipientRunId?.let { put("workflow_recipient_run_id", it) }
+                workflowRunId?.let { put("workflow_run_id", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     class EngagementStatus @JsonCreator private constructor(private val value: JsonField<String>) :
         Enum {

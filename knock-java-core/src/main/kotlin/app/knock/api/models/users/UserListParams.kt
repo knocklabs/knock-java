@@ -2,7 +2,6 @@
 
 package app.knock.api.models.users
 
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
@@ -33,18 +32,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                after?.let { put("after", it) }
-                before?.let { put("before", it) }
-                pageSize?.let { put("page_size", it.toString()) }
-                putAll(additionalQueryParams)
-            }
-            .build()
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -56,7 +43,6 @@ private constructor(
     }
 
     /** A builder for [UserListParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var after: String? = null
@@ -211,6 +197,18 @@ private constructor(
                 additionalQueryParams.build(),
             )
     }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                after?.let { put("after", it) }
+                before?.let { put("before", it) }
+                pageSize?.let { put("page_size", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

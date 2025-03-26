@@ -6,10 +6,7 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.users.User
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -17,30 +14,32 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** A user belonging to an audience */
-@NoAutoDetect
 class AudienceMember
-@JsonCreator
 private constructor(
-    @JsonProperty("__typename")
-    @ExcludeMissing
-    private val _typename: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("added_at")
-    @ExcludeMissing
-    private val addedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    @JsonProperty("user") @ExcludeMissing private val user: JsonField<User> = JsonMissing.of(),
-    @JsonProperty("user_id")
-    @ExcludeMissing
-    private val userId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("tenant")
-    @ExcludeMissing
-    private val tenant: JsonField<String> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val _typename: JsonField<String>,
+    private val addedAt: JsonField<OffsetDateTime>,
+    private val user: JsonField<User>,
+    private val userId: JsonField<String>,
+    private val tenant: JsonField<String>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("added_at")
+        @ExcludeMissing
+        addedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("user") @ExcludeMissing user: JsonField<User> = JsonMissing.of(),
+        @JsonProperty("user_id") @ExcludeMissing userId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("tenant") @ExcludeMissing tenant: JsonField<String> = JsonMissing.of(),
+    ) : this(_typename, addedAt, user, userId, tenant, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -109,24 +108,15 @@ private constructor(
      */
     @JsonProperty("tenant") @ExcludeMissing fun _tenant(): JsonField<String> = tenant
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): AudienceMember = apply {
-        if (validated) {
-            return@apply
-        }
-
-        _typename()
-        addedAt()
-        user().validate()
-        userId()
-        tenant()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -263,8 +253,23 @@ private constructor(
                 checkRequired("user", user),
                 checkRequired("userId", userId),
                 tenant,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): AudienceMember = apply {
+        if (validated) {
+            return@apply
+        }
+
+        _typename()
+        addedAt()
+        user().validate()
+        userId()
+        tenant()
+        validated = true
     }
 
     override fun equals(other: Any?): Boolean {

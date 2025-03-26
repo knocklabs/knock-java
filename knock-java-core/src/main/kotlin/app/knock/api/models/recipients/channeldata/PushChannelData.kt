@@ -6,28 +6,28 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 
 /** Channel data for push providers */
-@NoAutoDetect
 class PushChannelData
-@JsonCreator
 private constructor(
-    @JsonProperty("tokens")
-    @ExcludeMissing
-    private val tokens: JsonField<List<String>> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val tokens: JsonField<List<String>>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("tokens") @ExcludeMissing tokens: JsonField<List<String>> = JsonMissing.of()
+    ) : this(tokens, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -42,20 +42,15 @@ private constructor(
      */
     @JsonProperty("tokens") @ExcludeMissing fun _tokens(): JsonField<List<String>> = tokens
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): PushChannelData = apply {
-        if (validated) {
-            return@apply
-        }
-
-        tokens()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -143,8 +138,19 @@ private constructor(
         fun build(): PushChannelData =
             PushChannelData(
                 checkRequired("tokens", tokens).map { it.toImmutable() },
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): PushChannelData = apply {
+        if (validated) {
+            return@apply
+        }
+
+        tokens()
+        validated = true
     }
 
     override fun equals(other: Any?): Boolean {

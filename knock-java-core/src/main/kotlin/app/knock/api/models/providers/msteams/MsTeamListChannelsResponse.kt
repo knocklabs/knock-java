@@ -6,30 +6,32 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** The response from a channels for Microsoft Teams provider request */
-@NoAutoDetect
 class MsTeamListChannelsResponse
-@JsonCreator
 private constructor(
-    @JsonProperty("ms_teams_channels")
-    @ExcludeMissing
-    private val msTeamsChannels: JsonField<List<MsTeamsChannel>> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val msTeamsChannels: JsonField<List<MsTeamsChannel>>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("ms_teams_channels")
+        @ExcludeMissing
+        msTeamsChannels: JsonField<List<MsTeamsChannel>> = JsonMissing.of()
+    ) : this(msTeamsChannels, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -46,20 +48,15 @@ private constructor(
     @ExcludeMissing
     fun _msTeamsChannels(): JsonField<List<MsTeamsChannel>> = msTeamsChannels
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): MsTeamListChannelsResponse = apply {
-        if (validated) {
-            return@apply
-        }
-
-        msTeamsChannels().forEach { it.validate() }
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -148,33 +145,59 @@ private constructor(
         fun build(): MsTeamListChannelsResponse =
             MsTeamListChannelsResponse(
                 checkRequired("msTeamsChannels", msTeamsChannels).map { it.toImmutable() },
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
-    @NoAutoDetect
+    private var validated: Boolean = false
+
+    fun validate(): MsTeamListChannelsResponse = apply {
+        if (validated) {
+            return@apply
+        }
+
+        msTeamsChannels().forEach { it.validate() }
+        validated = true
+    }
+
     class MsTeamsChannel
-    @JsonCreator
     private constructor(
-        @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("displayName")
-        @ExcludeMissing
-        private val displayName: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("createdDateTime")
-        @ExcludeMissing
-        private val createdDateTime: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("description")
-        @ExcludeMissing
-        private val description: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("isArchived")
-        @ExcludeMissing
-        private val isArchived: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("membershipType")
-        @ExcludeMissing
-        private val membershipType: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val id: JsonField<String>,
+        private val displayName: JsonField<String>,
+        private val createdDateTime: JsonField<String>,
+        private val description: JsonField<String>,
+        private val isArchived: JsonField<Boolean>,
+        private val membershipType: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("displayName")
+            @ExcludeMissing
+            displayName: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("createdDateTime")
+            @ExcludeMissing
+            createdDateTime: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("description")
+            @ExcludeMissing
+            description: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("isArchived")
+            @ExcludeMissing
+            isArchived: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("membershipType")
+            @ExcludeMissing
+            membershipType: JsonField<String> = JsonMissing.of(),
+        ) : this(
+            id,
+            displayName,
+            createdDateTime,
+            description,
+            isArchived,
+            membershipType,
+            mutableMapOf(),
+        )
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
@@ -270,25 +293,15 @@ private constructor(
         @ExcludeMissing
         fun _membershipType(): JsonField<String> = membershipType
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): MsTeamsChannel = apply {
-            if (validated) {
-                return@apply
-            }
-
-            id()
-            displayName()
-            createdDateTime()
-            description()
-            isArchived()
-            membershipType()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -447,8 +460,24 @@ private constructor(
                     description,
                     isArchived,
                     membershipType,
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): MsTeamsChannel = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            displayName()
+            createdDateTime()
+            description()
+            isArchived()
+            membershipType()
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

@@ -7,35 +7,32 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** A condition to be evaluated */
-@NoAutoDetect
 class Condition
-@JsonCreator
 private constructor(
-    @JsonProperty("argument")
-    @ExcludeMissing
-    private val argument: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("operator")
-    @ExcludeMissing
-    private val operator: JsonField<Operator> = JsonMissing.of(),
-    @JsonProperty("variable")
-    @ExcludeMissing
-    private val variable: JsonField<String> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val argument: JsonField<String>,
+    private val operator: JsonField<Operator>,
+    private val variable: JsonField<String>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("argument") @ExcludeMissing argument: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("operator") @ExcludeMissing operator: JsonField<Operator> = JsonMissing.of(),
+        @JsonProperty("variable") @ExcludeMissing variable: JsonField<String> = JsonMissing.of(),
+    ) : this(argument, operator, variable, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -76,22 +73,15 @@ private constructor(
      */
     @JsonProperty("variable") @ExcludeMissing fun _variable(): JsonField<String> = variable
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): Condition = apply {
-        if (validated) {
-            return@apply
-        }
-
-        argument()
-        operator()
-        variable()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -198,8 +188,21 @@ private constructor(
                 checkRequired("argument", argument),
                 checkRequired("operator", operator),
                 checkRequired("variable", variable),
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): Condition = apply {
+        if (validated) {
+            return@apply
+        }
+
+        argument()
+        operator()
+        variable()
+        validated = true
     }
 
     class Operator @JsonCreator private constructor(private val value: JsonField<String>) : Enum {

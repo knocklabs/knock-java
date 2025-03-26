@@ -6,28 +6,30 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 
 /** OneSignal channel data */
-@NoAutoDetect
 class OneSignalChannelData
-@JsonCreator
 private constructor(
-    @JsonProperty("player_ids")
-    @ExcludeMissing
-    private val playerIds: JsonField<List<String>> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val playerIds: JsonField<List<String>>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("player_ids")
+        @ExcludeMissing
+        playerIds: JsonField<List<String>> = JsonMissing.of()
+    ) : this(playerIds, mutableMapOf())
 
     /**
      * The OneSignal player IDs
@@ -46,20 +48,15 @@ private constructor(
     @ExcludeMissing
     fun _playerIds(): JsonField<List<String>> = playerIds
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): OneSignalChannelData = apply {
-        if (validated) {
-            return@apply
-        }
-
-        playerIds()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -148,8 +145,19 @@ private constructor(
         fun build(): OneSignalChannelData =
             OneSignalChannelData(
                 checkRequired("playerIds", playerIds).map { it.toImmutable() },
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): OneSignalChannelData = apply {
+        if (validated) {
+            return@apply
+        }
+
+        playerIds()
+        validated = true
     }
 
     override fun equals(other: Any?): Boolean {

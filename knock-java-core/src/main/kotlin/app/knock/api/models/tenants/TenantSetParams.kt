@@ -6,13 +6,10 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
@@ -21,6 +18,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
@@ -85,224 +83,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): Body = body
-
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> tenantId
-            else -> ""
-        }
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    /**
-     * A tenant to be set in the system. You can supply any additional properties on the tenant
-     * object.
-     */
-    @NoAutoDetect
-    class Body
-    @JsonCreator
-    private constructor(
-        @JsonProperty("channel_data")
-        @ExcludeMissing
-        private val channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of(),
-        @JsonProperty("preferences")
-        @ExcludeMissing
-        private val preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of(),
-        @JsonProperty("settings")
-        @ExcludeMissing
-        private val settings: JsonField<Settings> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        /**
-         * Allows inline setting channel data for a recipient
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun channelData(): Optional<InlineChannelDataRequest> =
-            Optional.ofNullable(channelData.getNullable("channel_data"))
-
-        /**
-         * Inline set preferences for a recipient, where the key is the preference set name
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun preferences(): Optional<InlinePreferenceSetRequest> =
-            Optional.ofNullable(preferences.getNullable("preferences"))
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun settings(): Optional<Settings> = Optional.ofNullable(settings.getNullable("settings"))
-
-        /**
-         * Returns the raw JSON value of [channelData].
-         *
-         * Unlike [channelData], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("channel_data")
-        @ExcludeMissing
-        fun _channelData(): JsonField<InlineChannelDataRequest> = channelData
-
-        /**
-         * Returns the raw JSON value of [preferences].
-         *
-         * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("preferences")
-        @ExcludeMissing
-        fun _preferences(): JsonField<InlinePreferenceSetRequest> = preferences
-
-        /**
-         * Returns the raw JSON value of [settings].
-         *
-         * Unlike [settings], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("settings") @ExcludeMissing fun _settings(): JsonField<Settings> = settings
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
-
-            channelData().ifPresent { it.validate() }
-            preferences().ifPresent { it.validate() }
-            settings().ifPresent { it.validate() }
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Body]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Body]. */
-        class Builder internal constructor() {
-
-            private var channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of()
-            private var preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of()
-            private var settings: JsonField<Settings> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(body: Body) = apply {
-                channelData = body.channelData
-                preferences = body.preferences
-                settings = body.settings
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
-
-            /** Allows inline setting channel data for a recipient */
-            fun channelData(channelData: InlineChannelDataRequest?) =
-                channelData(JsonField.ofNullable(channelData))
-
-            /** Alias for calling [Builder.channelData] with `channelData.orElse(null)`. */
-            fun channelData(channelData: Optional<InlineChannelDataRequest>) =
-                channelData(channelData.getOrNull())
-
-            /**
-             * Sets [Builder.channelData] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.channelData] with a well-typed
-             * [InlineChannelDataRequest] value instead. This method is primarily for setting the
-             * field to an undocumented or not yet supported value.
-             */
-            fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
-                this.channelData = channelData
-            }
-
-            /** Inline set preferences for a recipient, where the key is the preference set name */
-            fun preferences(preferences: InlinePreferenceSetRequest?) =
-                preferences(JsonField.ofNullable(preferences))
-
-            /** Alias for calling [Builder.preferences] with `preferences.orElse(null)`. */
-            fun preferences(preferences: Optional<InlinePreferenceSetRequest>) =
-                preferences(preferences.getOrNull())
-
-            /**
-             * Sets [Builder.preferences] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.preferences] with a well-typed
-             * [InlinePreferenceSetRequest] value instead. This method is primarily for setting the
-             * field to an undocumented or not yet supported value.
-             */
-            fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {
-                this.preferences = preferences
-            }
-
-            fun settings(settings: Settings) = settings(JsonField.of(settings))
-
-            /**
-             * Sets [Builder.settings] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.settings] with a well-typed [Settings] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun settings(settings: JsonField<Settings>) = apply { this.settings = settings }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Body].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Body =
-                Body(channelData, preferences, settings, additionalProperties.toImmutable())
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Body && channelData == other.channelData && preferences == other.preferences && settings == other.settings && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(channelData, preferences, settings, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Body{channelData=$channelData, preferences=$preferences, settings=$settings, additionalProperties=$additionalProperties}"
-    }
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -319,7 +99,6 @@ private constructor(
     }
 
     /** A builder for [TenantSetParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var tenantId: String? = null
@@ -526,19 +305,250 @@ private constructor(
             )
     }
 
-    @NoAutoDetect
-    class Settings
-    @JsonCreator
+    @JvmSynthetic internal fun _body(): Body = body
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> tenantId
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    /**
+     * A tenant to be set in the system. You can supply any additional properties on the tenant
+     * object.
+     */
+    class Body
     private constructor(
-        @JsonProperty("branding")
-        @ExcludeMissing
-        private val branding: JsonField<Branding> = JsonMissing.of(),
-        @JsonProperty("preference_set")
-        @ExcludeMissing
-        private val preferenceSet: JsonField<PreferenceSetRequest> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val channelData: JsonField<InlineChannelDataRequest>,
+        private val preferences: JsonField<InlinePreferenceSetRequest>,
+        private val settings: JsonField<Settings>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("channel_data")
+            @ExcludeMissing
+            channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of(),
+            @JsonProperty("preferences")
+            @ExcludeMissing
+            preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of(),
+            @JsonProperty("settings")
+            @ExcludeMissing
+            settings: JsonField<Settings> = JsonMissing.of(),
+        ) : this(channelData, preferences, settings, mutableMapOf())
+
+        /**
+         * Allows inline setting channel data for a recipient
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun channelData(): Optional<InlineChannelDataRequest> =
+            Optional.ofNullable(channelData.getNullable("channel_data"))
+
+        /**
+         * Inline set preferences for a recipient, where the key is the preference set name
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun preferences(): Optional<InlinePreferenceSetRequest> =
+            Optional.ofNullable(preferences.getNullable("preferences"))
+
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun settings(): Optional<Settings> = Optional.ofNullable(settings.getNullable("settings"))
+
+        /**
+         * Returns the raw JSON value of [channelData].
+         *
+         * Unlike [channelData], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("channel_data")
+        @ExcludeMissing
+        fun _channelData(): JsonField<InlineChannelDataRequest> = channelData
+
+        /**
+         * Returns the raw JSON value of [preferences].
+         *
+         * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("preferences")
+        @ExcludeMissing
+        fun _preferences(): JsonField<InlinePreferenceSetRequest> = preferences
+
+        /**
+         * Returns the raw JSON value of [settings].
+         *
+         * Unlike [settings], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("settings") @ExcludeMissing fun _settings(): JsonField<Settings> = settings
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Body]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of()
+            private var preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of()
+            private var settings: JsonField<Settings> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(body: Body) = apply {
+                channelData = body.channelData
+                preferences = body.preferences
+                settings = body.settings
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            /** Allows inline setting channel data for a recipient */
+            fun channelData(channelData: InlineChannelDataRequest?) =
+                channelData(JsonField.ofNullable(channelData))
+
+            /** Alias for calling [Builder.channelData] with `channelData.orElse(null)`. */
+            fun channelData(channelData: Optional<InlineChannelDataRequest>) =
+                channelData(channelData.getOrNull())
+
+            /**
+             * Sets [Builder.channelData] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.channelData] with a well-typed
+             * [InlineChannelDataRequest] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
+                this.channelData = channelData
+            }
+
+            /** Inline set preferences for a recipient, where the key is the preference set name */
+            fun preferences(preferences: InlinePreferenceSetRequest?) =
+                preferences(JsonField.ofNullable(preferences))
+
+            /** Alias for calling [Builder.preferences] with `preferences.orElse(null)`. */
+            fun preferences(preferences: Optional<InlinePreferenceSetRequest>) =
+                preferences(preferences.getOrNull())
+
+            /**
+             * Sets [Builder.preferences] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.preferences] with a well-typed
+             * [InlinePreferenceSetRequest] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {
+                this.preferences = preferences
+            }
+
+            fun settings(settings: Settings) = settings(JsonField.of(settings))
+
+            /**
+             * Sets [Builder.settings] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.settings] with a well-typed [Settings] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun settings(settings: JsonField<Settings>) = apply { this.settings = settings }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Body =
+                Body(channelData, preferences, settings, additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            channelData().ifPresent { it.validate() }
+            preferences().ifPresent { it.validate() }
+            settings().ifPresent { it.validate() }
+            validated = true
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && channelData == other.channelData && preferences == other.preferences && settings == other.settings && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(channelData, preferences, settings, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{channelData=$channelData, preferences=$preferences, settings=$settings, additionalProperties=$additionalProperties}"
+    }
+
+    class Settings
+    private constructor(
+        private val branding: JsonField<Branding>,
+        private val preferenceSet: JsonField<PreferenceSetRequest>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("branding")
+            @ExcludeMissing
+            branding: JsonField<Branding> = JsonMissing.of(),
+            @JsonProperty("preference_set")
+            @ExcludeMissing
+            preferenceSet: JsonField<PreferenceSetRequest> = JsonMissing.of(),
+        ) : this(branding, preferenceSet, mutableMapOf())
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -572,21 +582,15 @@ private constructor(
         @ExcludeMissing
         fun _preferenceSet(): JsonField<PreferenceSetRequest> = preferenceSet
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Settings = apply {
-            if (validated) {
-                return@apply
-            }
-
-            branding().ifPresent { it.validate() }
-            preferenceSet().ifPresent { it.validate() }
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -665,28 +669,45 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              */
             fun build(): Settings =
-                Settings(branding, preferenceSet, additionalProperties.toImmutable())
+                Settings(branding, preferenceSet, additionalProperties.toMutableMap())
         }
 
-        @NoAutoDetect
+        private var validated: Boolean = false
+
+        fun validate(): Settings = apply {
+            if (validated) {
+                return@apply
+            }
+
+            branding().ifPresent { it.validate() }
+            preferenceSet().ifPresent { it.validate() }
+            validated = true
+        }
+
         class Branding
-        @JsonCreator
         private constructor(
-            @JsonProperty("icon_url")
-            @ExcludeMissing
-            private val iconUrl: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("logo_url")
-            @ExcludeMissing
-            private val logoUrl: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("primary_color")
-            @ExcludeMissing
-            private val primaryColor: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("primary_color_contrast")
-            @ExcludeMissing
-            private val primaryColorContrast: JsonField<String> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val iconUrl: JsonField<String>,
+            private val logoUrl: JsonField<String>,
+            private val primaryColor: JsonField<String>,
+            private val primaryColorContrast: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("icon_url")
+                @ExcludeMissing
+                iconUrl: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("logo_url")
+                @ExcludeMissing
+                logoUrl: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("primary_color")
+                @ExcludeMissing
+                primaryColor: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("primary_color_contrast")
+                @ExcludeMissing
+                primaryColorContrast: JsonField<String> = JsonMissing.of(),
+            ) : this(iconUrl, logoUrl, primaryColor, primaryColorContrast, mutableMapOf())
 
             /**
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
@@ -748,23 +769,15 @@ private constructor(
             @ExcludeMissing
             fun _primaryColorContrast(): JsonField<String> = primaryColorContrast
 
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): Branding = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                iconUrl()
-                logoUrl()
-                primaryColor()
-                primaryColorContrast()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -892,8 +905,22 @@ private constructor(
                         logoUrl,
                         primaryColor,
                         primaryColorContrast,
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): Branding = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                iconUrl()
+                logoUrl()
+                primaryColor()
+                primaryColorContrast()
+                validated = true
             }
 
             override fun equals(other: Any?): Boolean {

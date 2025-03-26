@@ -6,13 +6,11 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.objects.InlineObjectRequest
@@ -24,6 +22,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
@@ -129,374 +128,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): Body = body
-
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> key
-            else -> ""
-        }
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    /** A set of parameters to trigger a workflow with. */
-    @NoAutoDetect
-    class Body
-    @JsonCreator
-    private constructor(
-        @JsonProperty("actor")
-        @ExcludeMissing
-        private val actor: JsonField<RecipientRequest> = JsonMissing.of(),
-        @JsonProperty("cancellation_key")
-        @ExcludeMissing
-        private val cancellationKey: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("data") @ExcludeMissing private val data: JsonField<Data> = JsonMissing.of(),
-        @JsonProperty("recipients")
-        @ExcludeMissing
-        private val recipients: JsonField<List<RecipientRequest>> = JsonMissing.of(),
-        @JsonProperty("tenant")
-        @ExcludeMissing
-        private val tenant: JsonField<InlineTenantRequest> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        /**
-         * Specifies a recipient in a request. This can either be a user identifier (string), an
-         * inline user request (object), or an inline object request, which is determined by the
-         * presence of a `collection` property.
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun actor(): Optional<RecipientRequest> = Optional.ofNullable(actor.getNullable("actor"))
-
-        /**
-         * An optional key that is used in the workflow cancellation endpoint to target a
-         * cancellation of any workflow runs associated with this trigger.
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun cancellationKey(): Optional<String> =
-            Optional.ofNullable(cancellationKey.getNullable("cancellation_key"))
-
-        /**
-         * An optional map of data to be used in the workflow. This data will be available to the
-         * workflow as a map in the `data` field.
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun data(): Optional<Data> = Optional.ofNullable(data.getNullable("data"))
-
-        /**
-         * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-         * trigger.
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun recipients(): Optional<List<RecipientRequest>> =
-            Optional.ofNullable(recipients.getNullable("recipients"))
-
-        /**
-         * An inline tenant request
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun tenant(): Optional<InlineTenantRequest> =
-            Optional.ofNullable(tenant.getNullable("tenant"))
-
-        /**
-         * Returns the raw JSON value of [actor].
-         *
-         * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("actor") @ExcludeMissing fun _actor(): JsonField<RecipientRequest> = actor
-
-        /**
-         * Returns the raw JSON value of [cancellationKey].
-         *
-         * Unlike [cancellationKey], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("cancellation_key")
-        @ExcludeMissing
-        fun _cancellationKey(): JsonField<String> = cancellationKey
-
-        /**
-         * Returns the raw JSON value of [data].
-         *
-         * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
-
-        /**
-         * Returns the raw JSON value of [recipients].
-         *
-         * Unlike [recipients], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("recipients")
-        @ExcludeMissing
-        fun _recipients(): JsonField<List<RecipientRequest>> = recipients
-
-        /**
-         * Returns the raw JSON value of [tenant].
-         *
-         * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("tenant")
-        @ExcludeMissing
-        fun _tenant(): JsonField<InlineTenantRequest> = tenant
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
-
-            actor().ifPresent { it.validate() }
-            cancellationKey()
-            data().ifPresent { it.validate() }
-            recipients().ifPresent { it.forEach { it.validate() } }
-            tenant().ifPresent { it.validate() }
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Body]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Body]. */
-        class Builder internal constructor() {
-
-            private var actor: JsonField<RecipientRequest> = JsonMissing.of()
-            private var cancellationKey: JsonField<String> = JsonMissing.of()
-            private var data: JsonField<Data> = JsonMissing.of()
-            private var recipients: JsonField<MutableList<RecipientRequest>>? = null
-            private var tenant: JsonField<InlineTenantRequest> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(body: Body) = apply {
-                actor = body.actor
-                cancellationKey = body.cancellationKey
-                data = body.data
-                recipients = body.recipients.map { it.toMutableList() }
-                tenant = body.tenant
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
-
-            /**
-             * Specifies a recipient in a request. This can either be a user identifier (string), an
-             * inline user request (object), or an inline object request, which is determined by the
-             * presence of a `collection` property.
-             */
-            fun actor(actor: RecipientRequest?) = actor(JsonField.ofNullable(actor))
-
-            /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
-            fun actor(actor: Optional<RecipientRequest>) = actor(actor.getOrNull())
-
-            /**
-             * Sets [Builder.actor] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.actor] with a well-typed [RecipientRequest] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun actor(actor: JsonField<RecipientRequest>) = apply { this.actor = actor }
-
-            /** Alias for calling [actor] with `RecipientRequest.ofString(string)`. */
-            fun actor(string: String) = actor(RecipientRequest.ofString(string))
-
-            /**
-             * Alias for calling [actor] with
-             * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
-             */
-            fun actor(inlineIdentifyUser: InlineIdentifyUserRequest) =
-                actor(RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser))
-
-            /** Alias for calling [actor] with `RecipientRequest.ofInlineObject(inlineObject)`. */
-            fun actor(inlineObject: InlineObjectRequest) =
-                actor(RecipientRequest.ofInlineObject(inlineObject))
-
-            /**
-             * An optional key that is used in the workflow cancellation endpoint to target a
-             * cancellation of any workflow runs associated with this trigger.
-             */
-            fun cancellationKey(cancellationKey: String?) =
-                cancellationKey(JsonField.ofNullable(cancellationKey))
-
-            /** Alias for calling [Builder.cancellationKey] with `cancellationKey.orElse(null)`. */
-            fun cancellationKey(cancellationKey: Optional<String>) =
-                cancellationKey(cancellationKey.getOrNull())
-
-            /**
-             * Sets [Builder.cancellationKey] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.cancellationKey] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun cancellationKey(cancellationKey: JsonField<String>) = apply {
-                this.cancellationKey = cancellationKey
-            }
-
-            /**
-             * An optional map of data to be used in the workflow. This data will be available to
-             * the workflow as a map in the `data` field.
-             */
-            fun data(data: Data?) = data(JsonField.ofNullable(data))
-
-            /** Alias for calling [Builder.data] with `data.orElse(null)`. */
-            fun data(data: Optional<Data>) = data(data.getOrNull())
-
-            /**
-             * Sets [Builder.data] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.data] with a well-typed [Data] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun data(data: JsonField<Data>) = apply { this.data = data }
-
-            /**
-             * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-             * trigger.
-             */
-            fun recipients(recipients: List<RecipientRequest>) =
-                recipients(JsonField.of(recipients))
-
-            /**
-             * Sets [Builder.recipients] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.recipients] with a well-typed
-             * `List<RecipientRequest>` value instead. This method is primarily for setting the
-             * field to an undocumented or not yet supported value.
-             */
-            fun recipients(recipients: JsonField<List<RecipientRequest>>) = apply {
-                this.recipients = recipients.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [RecipientRequest] to [recipients].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addRecipient(recipient: RecipientRequest) = apply {
-                recipients =
-                    (recipients ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("recipients", it).add(recipient)
-                    }
-            }
-
-            /** Alias for calling [addRecipient] with `RecipientRequest.ofString(string)`. */
-            fun addRecipient(string: String) = addRecipient(RecipientRequest.ofString(string))
-
-            /**
-             * Alias for calling [addRecipient] with
-             * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
-             */
-            fun addRecipient(inlineIdentifyUser: InlineIdentifyUserRequest) =
-                addRecipient(RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser))
-
-            /**
-             * Alias for calling [addRecipient] with
-             * `RecipientRequest.ofInlineObject(inlineObject)`.
-             */
-            fun addRecipient(inlineObject: InlineObjectRequest) =
-                addRecipient(RecipientRequest.ofInlineObject(inlineObject))
-
-            /** An inline tenant request */
-            fun tenant(tenant: InlineTenantRequest?) = tenant(JsonField.ofNullable(tenant))
-
-            /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
-            fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.getOrNull())
-
-            /**
-             * Sets [Builder.tenant] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.tenant] with a well-typed [InlineTenantRequest]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun tenant(tenant: JsonField<InlineTenantRequest>) = apply { this.tenant = tenant }
-
-            /** Alias for calling [tenant] with `InlineTenantRequest.ofString(string)`. */
-            fun tenant(string: String) = tenant(InlineTenantRequest.ofString(string))
-
-            /**
-             * Alias for calling [tenant] with `InlineTenantRequest.ofTenantRequest(tenantRequest)`.
-             */
-            fun tenant(tenantRequest: TenantRequest) =
-                tenant(InlineTenantRequest.ofTenantRequest(tenantRequest))
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Body].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Body =
-                Body(
-                    actor,
-                    cancellationKey,
-                    data,
-                    (recipients ?: JsonMissing.of()).map { it.toImmutable() },
-                    tenant,
-                    additionalProperties.toImmutable(),
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Body && actor == other.actor && cancellationKey == other.cancellationKey && data == other.data && recipients == other.recipients && tenant == other.tenant && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(actor, cancellationKey, data, recipients, tenant, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Body{actor=$actor, cancellationKey=$cancellationKey, data=$data, recipients=$recipients, tenant=$tenant, additionalProperties=$additionalProperties}"
-    }
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -513,7 +144,6 @@ private constructor(
     }
 
     /** A builder for [WorkflowTriggerParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var key: String? = null
@@ -805,31 +435,404 @@ private constructor(
             )
     }
 
-    /**
-     * An optional map of data to be used in the workflow. This data will be available to the
-     * workflow as a map in the `data` field.
-     */
-    @NoAutoDetect
-    class Data
-    @JsonCreator
+    @JvmSynthetic internal fun _body(): Body = body
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> key
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    /** A set of parameters to trigger a workflow with. */
+    class Body
     private constructor(
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
+        private val actor: JsonField<RecipientRequest>,
+        private val cancellationKey: JsonField<String>,
+        private val data: JsonField<Data>,
+        private val recipients: JsonField<List<RecipientRequest>>,
+        private val tenant: JsonField<InlineTenantRequest>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("actor")
+            @ExcludeMissing
+            actor: JsonField<RecipientRequest> = JsonMissing.of(),
+            @JsonProperty("cancellation_key")
+            @ExcludeMissing
+            cancellationKey: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
+            @JsonProperty("recipients")
+            @ExcludeMissing
+            recipients: JsonField<List<RecipientRequest>> = JsonMissing.of(),
+            @JsonProperty("tenant")
+            @ExcludeMissing
+            tenant: JsonField<InlineTenantRequest> = JsonMissing.of(),
+        ) : this(actor, cancellationKey, data, recipients, tenant, mutableMapOf())
+
+        /**
+         * Specifies a recipient in a request. This can either be a user identifier (string), an
+         * inline user request (object), or an inline object request, which is determined by the
+         * presence of a `collection` property.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun actor(): Optional<RecipientRequest> = Optional.ofNullable(actor.getNullable("actor"))
+
+        /**
+         * An optional key that is used in the workflow cancellation endpoint to target a
+         * cancellation of any workflow runs associated with this trigger.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun cancellationKey(): Optional<String> =
+            Optional.ofNullable(cancellationKey.getNullable("cancellation_key"))
+
+        /**
+         * An optional map of data to be used in the workflow. This data will be available to the
+         * workflow as a map in the `data` field.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun data(): Optional<Data> = Optional.ofNullable(data.getNullable("data"))
+
+        /**
+         * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
+         * trigger.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun recipients(): Optional<List<RecipientRequest>> =
+            Optional.ofNullable(recipients.getNullable("recipients"))
+
+        /**
+         * An inline tenant request
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun tenant(): Optional<InlineTenantRequest> =
+            Optional.ofNullable(tenant.getNullable("tenant"))
+
+        /**
+         * Returns the raw JSON value of [actor].
+         *
+         * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("actor") @ExcludeMissing fun _actor(): JsonField<RecipientRequest> = actor
+
+        /**
+         * Returns the raw JSON value of [cancellationKey].
+         *
+         * Unlike [cancellationKey], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("cancellation_key")
+        @ExcludeMissing
+        fun _cancellationKey(): JsonField<String> = cancellationKey
+
+        /**
+         * Returns the raw JSON value of [data].
+         *
+         * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
+
+        /**
+         * Returns the raw JSON value of [recipients].
+         *
+         * Unlike [recipients], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("recipients")
+        @ExcludeMissing
+        fun _recipients(): JsonField<List<RecipientRequest>> = recipients
+
+        /**
+         * Returns the raw JSON value of [tenant].
+         *
+         * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("tenant")
+        @ExcludeMissing
+        fun _tenant(): JsonField<InlineTenantRequest> = tenant
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Body]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var actor: JsonField<RecipientRequest> = JsonMissing.of()
+            private var cancellationKey: JsonField<String> = JsonMissing.of()
+            private var data: JsonField<Data> = JsonMissing.of()
+            private var recipients: JsonField<MutableList<RecipientRequest>>? = null
+            private var tenant: JsonField<InlineTenantRequest> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(body: Body) = apply {
+                actor = body.actor
+                cancellationKey = body.cancellationKey
+                data = body.data
+                recipients = body.recipients.map { it.toMutableList() }
+                tenant = body.tenant
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            /**
+             * Specifies a recipient in a request. This can either be a user identifier (string), an
+             * inline user request (object), or an inline object request, which is determined by the
+             * presence of a `collection` property.
+             */
+            fun actor(actor: RecipientRequest?) = actor(JsonField.ofNullable(actor))
+
+            /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
+            fun actor(actor: Optional<RecipientRequest>) = actor(actor.getOrNull())
+
+            /**
+             * Sets [Builder.actor] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.actor] with a well-typed [RecipientRequest] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun actor(actor: JsonField<RecipientRequest>) = apply { this.actor = actor }
+
+            /** Alias for calling [actor] with `RecipientRequest.ofString(string)`. */
+            fun actor(string: String) = actor(RecipientRequest.ofString(string))
+
+            /**
+             * Alias for calling [actor] with
+             * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
+             */
+            fun actor(inlineIdentifyUser: InlineIdentifyUserRequest) =
+                actor(RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser))
+
+            /** Alias for calling [actor] with `RecipientRequest.ofInlineObject(inlineObject)`. */
+            fun actor(inlineObject: InlineObjectRequest) =
+                actor(RecipientRequest.ofInlineObject(inlineObject))
+
+            /**
+             * An optional key that is used in the workflow cancellation endpoint to target a
+             * cancellation of any workflow runs associated with this trigger.
+             */
+            fun cancellationKey(cancellationKey: String?) =
+                cancellationKey(JsonField.ofNullable(cancellationKey))
+
+            /** Alias for calling [Builder.cancellationKey] with `cancellationKey.orElse(null)`. */
+            fun cancellationKey(cancellationKey: Optional<String>) =
+                cancellationKey(cancellationKey.getOrNull())
+
+            /**
+             * Sets [Builder.cancellationKey] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.cancellationKey] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun cancellationKey(cancellationKey: JsonField<String>) = apply {
+                this.cancellationKey = cancellationKey
+            }
+
+            /**
+             * An optional map of data to be used in the workflow. This data will be available to
+             * the workflow as a map in the `data` field.
+             */
+            fun data(data: Data?) = data(JsonField.ofNullable(data))
+
+            /** Alias for calling [Builder.data] with `data.orElse(null)`. */
+            fun data(data: Optional<Data>) = data(data.getOrNull())
+
+            /**
+             * Sets [Builder.data] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun data(data: JsonField<Data>) = apply { this.data = data }
+
+            /**
+             * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
+             * trigger.
+             */
+            fun recipients(recipients: List<RecipientRequest>) =
+                recipients(JsonField.of(recipients))
+
+            /**
+             * Sets [Builder.recipients] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.recipients] with a well-typed
+             * `List<RecipientRequest>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun recipients(recipients: JsonField<List<RecipientRequest>>) = apply {
+                this.recipients = recipients.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [RecipientRequest] to [recipients].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addRecipient(recipient: RecipientRequest) = apply {
+                recipients =
+                    (recipients ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("recipients", it).add(recipient)
+                    }
+            }
+
+            /** Alias for calling [addRecipient] with `RecipientRequest.ofString(string)`. */
+            fun addRecipient(string: String) = addRecipient(RecipientRequest.ofString(string))
+
+            /**
+             * Alias for calling [addRecipient] with
+             * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
+             */
+            fun addRecipient(inlineIdentifyUser: InlineIdentifyUserRequest) =
+                addRecipient(RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser))
+
+            /**
+             * Alias for calling [addRecipient] with
+             * `RecipientRequest.ofInlineObject(inlineObject)`.
+             */
+            fun addRecipient(inlineObject: InlineObjectRequest) =
+                addRecipient(RecipientRequest.ofInlineObject(inlineObject))
+
+            /** An inline tenant request */
+            fun tenant(tenant: InlineTenantRequest?) = tenant(JsonField.ofNullable(tenant))
+
+            /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
+            fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.getOrNull())
+
+            /**
+             * Sets [Builder.tenant] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.tenant] with a well-typed [InlineTenantRequest]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun tenant(tenant: JsonField<InlineTenantRequest>) = apply { this.tenant = tenant }
+
+            /** Alias for calling [tenant] with `InlineTenantRequest.ofString(string)`. */
+            fun tenant(string: String) = tenant(InlineTenantRequest.ofString(string))
+
+            /**
+             * Alias for calling [tenant] with `InlineTenantRequest.ofTenantRequest(tenantRequest)`.
+             */
+            fun tenant(tenantRequest: TenantRequest) =
+                tenant(InlineTenantRequest.ofTenantRequest(tenantRequest))
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Body =
+                Body(
+                    actor,
+                    cancellationKey,
+                    data,
+                    (recipients ?: JsonMissing.of()).map { it.toImmutable() },
+                    tenant,
+                    additionalProperties.toMutableMap(),
+                )
+        }
 
         private var validated: Boolean = false
 
-        fun validate(): Data = apply {
+        fun validate(): Body = apply {
             if (validated) {
                 return@apply
             }
 
+            actor().ifPresent { it.validate() }
+            cancellationKey()
+            data().ifPresent { it.validate() }
+            recipients().ifPresent { it.forEach { it.validate() } }
+            tenant().ifPresent { it.validate() }
             validated = true
         }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && actor == other.actor && cancellationKey == other.cancellationKey && data == other.data && recipients == other.recipients && tenant == other.tenant && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(actor, cancellationKey, data, recipients, tenant, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{actor=$actor, cancellationKey=$cancellationKey, data=$data, recipients=$recipients, tenant=$tenant, additionalProperties=$additionalProperties}"
+    }
+
+    /**
+     * An optional map of data to be used in the workflow. This data will be available to the
+     * workflow as a map in the `data` field.
+     */
+    class Data
+    private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
+
+        @JsonCreator private constructor() : this(mutableMapOf())
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -873,7 +876,17 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Data = Data(additionalProperties.toImmutable())
+            fun build(): Data = Data(additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Data = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
         }
 
         override fun equals(other: Any?): Boolean {

@@ -7,44 +7,46 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** A schedule repeat rule */
-@NoAutoDetect
 class ScheduleRepeatRule
-@JsonCreator
 private constructor(
-    @JsonProperty("__typename")
-    @ExcludeMissing
-    private val _typename: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("frequency")
-    @ExcludeMissing
-    private val frequency: JsonField<Frequency> = JsonMissing.of(),
-    @JsonProperty("day_of_month")
-    @ExcludeMissing
-    private val dayOfMonth: JsonField<Long> = JsonMissing.of(),
-    @JsonProperty("days") @ExcludeMissing private val days: JsonField<List<Day>> = JsonMissing.of(),
-    @JsonProperty("hours") @ExcludeMissing private val hours: JsonField<Long> = JsonMissing.of(),
-    @JsonProperty("interval")
-    @ExcludeMissing
-    private val interval: JsonField<Long> = JsonMissing.of(),
-    @JsonProperty("minutes")
-    @ExcludeMissing
-    private val minutes: JsonField<Long> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val _typename: JsonField<String>,
+    private val frequency: JsonField<Frequency>,
+    private val dayOfMonth: JsonField<Long>,
+    private val days: JsonField<List<Day>>,
+    private val hours: JsonField<Long>,
+    private val interval: JsonField<Long>,
+    private val minutes: JsonField<Long>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("frequency")
+        @ExcludeMissing
+        frequency: JsonField<Frequency> = JsonMissing.of(),
+        @JsonProperty("day_of_month")
+        @ExcludeMissing
+        dayOfMonth: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("days") @ExcludeMissing days: JsonField<List<Day>> = JsonMissing.of(),
+        @JsonProperty("hours") @ExcludeMissing hours: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("interval") @ExcludeMissing interval: JsonField<Long> = JsonMissing.of(),
+        @JsonProperty("minutes") @ExcludeMissing minutes: JsonField<Long> = JsonMissing.of(),
+    ) : this(_typename, frequency, dayOfMonth, days, hours, interval, minutes, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -137,26 +139,15 @@ private constructor(
      */
     @JsonProperty("minutes") @ExcludeMissing fun _minutes(): JsonField<Long> = minutes
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): ScheduleRepeatRule = apply {
-        if (validated) {
-            return@apply
-        }
-
-        _typename()
-        frequency()
-        dayOfMonth()
-        days()
-        hours()
-        interval()
-        minutes()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -353,8 +344,25 @@ private constructor(
                 hours,
                 interval,
                 minutes,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): ScheduleRepeatRule = apply {
+        if (validated) {
+            return@apply
+        }
+
+        _typename()
+        frequency()
+        dayOfMonth()
+        days()
+        hours()
+        interval()
+        minutes()
+        validated = true
     }
 
     class Frequency @JsonCreator private constructor(private val value: JsonField<String>) : Enum {

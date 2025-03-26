@@ -8,11 +8,9 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.getOrThrow
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -26,19 +24,23 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 
 /** Discord channel data */
-@NoAutoDetect
 class DiscordChannelData
-@JsonCreator
 private constructor(
-    @JsonProperty("connections")
-    @ExcludeMissing
-    private val connections: JsonField<List<Connection>> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val connections: JsonField<List<Connection>>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("connections")
+        @ExcludeMissing
+        connections: JsonField<List<Connection>> = JsonMissing.of()
+    ) : this(connections, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -55,20 +57,15 @@ private constructor(
     @ExcludeMissing
     fun _connections(): JsonField<List<Connection>> = connections
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): DiscordChannelData = apply {
-        if (validated) {
-            return@apply
-        }
-
-        connections().forEach { it.validate() }
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -167,8 +164,19 @@ private constructor(
         fun build(): DiscordChannelData =
             DiscordChannelData(
                 checkRequired("connections", connections).map { it.toImmutable() },
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): DiscordChannelData = apply {
+        if (validated) {
+            return@apply
+        }
+
+        connections().forEach { it.validate() }
+        validated = true
     }
 
     /** Discord channel connection */
@@ -333,16 +341,18 @@ private constructor(
         }
 
         /** Discord channel connection */
-        @NoAutoDetect
         class DiscordChannelConnection
-        @JsonCreator
         private constructor(
-            @JsonProperty("channel_id")
-            @ExcludeMissing
-            private val channelId: JsonField<String> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val channelId: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("channel_id")
+                @ExcludeMissing
+                channelId: JsonField<String> = JsonMissing.of()
+            ) : this(channelId, mutableMapOf())
 
             /**
              * The Discord channel ID
@@ -363,20 +373,15 @@ private constructor(
             @ExcludeMissing
             fun _channelId(): JsonField<String> = channelId
 
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): DiscordChannelConnection = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                channelId()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -456,8 +461,19 @@ private constructor(
                 fun build(): DiscordChannelConnection =
                     DiscordChannelConnection(
                         checkRequired("channelId", channelId),
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): DiscordChannelConnection = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                channelId()
+                validated = true
             }
 
             override fun equals(other: Any?): Boolean {
@@ -479,16 +495,18 @@ private constructor(
         }
 
         /** Discord incoming webhook connection */
-        @NoAutoDetect
         class DiscordIncomingWebhookConnection
-        @JsonCreator
         private constructor(
-            @JsonProperty("incoming_webhook")
-            @ExcludeMissing
-            private val incomingWebhook: JsonField<IncomingWebhook> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val incomingWebhook: JsonField<IncomingWebhook>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("incoming_webhook")
+                @ExcludeMissing
+                incomingWebhook: JsonField<IncomingWebhook> = JsonMissing.of()
+            ) : this(incomingWebhook, mutableMapOf())
 
             /**
              * The incoming webhook
@@ -509,20 +527,15 @@ private constructor(
             @ExcludeMissing
             fun _incomingWebhook(): JsonField<IncomingWebhook> = incomingWebhook
 
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): DiscordIncomingWebhookConnection = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                incomingWebhook().validate()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -607,21 +620,32 @@ private constructor(
                 fun build(): DiscordIncomingWebhookConnection =
                     DiscordIncomingWebhookConnection(
                         checkRequired("incomingWebhook", incomingWebhook),
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
             }
 
+            private var validated: Boolean = false
+
+            fun validate(): DiscordIncomingWebhookConnection = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                incomingWebhook().validate()
+                validated = true
+            }
+
             /** The incoming webhook */
-            @NoAutoDetect
             class IncomingWebhook
-            @JsonCreator
             private constructor(
-                @JsonProperty("url")
-                @ExcludeMissing
-                private val url: JsonField<String> = JsonMissing.of(),
-                @JsonAnySetter
-                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+                private val url: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
             ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of()
+                ) : this(url, mutableMapOf())
 
                 /**
                  * The URL of the incoming webhook
@@ -639,20 +663,15 @@ private constructor(
                  */
                 @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
 
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
                 @JsonAnyGetter
                 @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-                private var validated: Boolean = false
-
-                fun validate(): IncomingWebhook = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    url()
-                    validated = true
-                }
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
 
                 fun toBuilder() = Builder().from(this)
 
@@ -730,8 +749,19 @@ private constructor(
                     fun build(): IncomingWebhook =
                         IncomingWebhook(
                             checkRequired("url", url),
-                            additionalProperties.toImmutable(),
+                            additionalProperties.toMutableMap(),
                         )
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): IncomingWebhook = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    url()
+                    validated = true
                 }
 
                 override fun equals(other: Any?): Boolean {

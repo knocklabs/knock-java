@@ -9,11 +9,8 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkRequired
 import app.knock.api.core.getOrThrow
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -26,36 +23,49 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** A message delivery log */
-@NoAutoDetect
 class MessageDeliveryLog
-@JsonCreator
 private constructor(
-    @JsonProperty("id") @ExcludeMissing private val id: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("__typename")
-    @ExcludeMissing
-    private val _typename: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("environment_id")
-    @ExcludeMissing
-    private val environmentId: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("inserted_at")
-    @ExcludeMissing
-    private val insertedAt: JsonField<String> = JsonMissing.of(),
-    @JsonProperty("request")
-    @ExcludeMissing
-    private val request: JsonField<Request> = JsonMissing.of(),
-    @JsonProperty("response")
-    @ExcludeMissing
-    private val response: JsonField<Response> = JsonMissing.of(),
-    @JsonProperty("service_name")
-    @ExcludeMissing
-    private val serviceName: JsonField<String> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val id: JsonField<String>,
+    private val _typename: JsonField<String>,
+    private val environmentId: JsonField<String>,
+    private val insertedAt: JsonField<String>,
+    private val request: JsonField<Request>,
+    private val response: JsonField<Response>,
+    private val serviceName: JsonField<String>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("environment_id")
+        @ExcludeMissing
+        environmentId: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("inserted_at")
+        @ExcludeMissing
+        insertedAt: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("request") @ExcludeMissing request: JsonField<Request> = JsonMissing.of(),
+        @JsonProperty("response") @ExcludeMissing response: JsonField<Response> = JsonMissing.of(),
+        @JsonProperty("service_name")
+        @ExcludeMissing
+        serviceName: JsonField<String> = JsonMissing.of(),
+    ) : this(
+        id,
+        _typename,
+        environmentId,
+        insertedAt,
+        request,
+        response,
+        serviceName,
+        mutableMapOf(),
+    )
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -156,26 +166,15 @@ private constructor(
     @ExcludeMissing
     fun _serviceName(): JsonField<String> = serviceName
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): MessageDeliveryLog = apply {
-        if (validated) {
-            return@apply
-        }
-
-        id()
-        _typename()
-        environmentId()
-        insertedAt()
-        request().validate()
-        response().validate()
-        serviceName()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -347,34 +346,48 @@ private constructor(
                 checkRequired("request", request),
                 checkRequired("response", response),
                 checkRequired("serviceName", serviceName),
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
     }
 
+    private var validated: Boolean = false
+
+    fun validate(): MessageDeliveryLog = apply {
+        if (validated) {
+            return@apply
+        }
+
+        id()
+        _typename()
+        environmentId()
+        insertedAt()
+        request().validate()
+        response().validate()
+        serviceName()
+        validated = true
+    }
+
     /** A message delivery log request */
-    @NoAutoDetect
     class Request
-    @JsonCreator
     private constructor(
-        @JsonProperty("body") @ExcludeMissing private val body: JsonField<Body> = JsonMissing.of(),
-        @JsonProperty("headers")
-        @ExcludeMissing
-        private val headers: JsonField<Headers> = JsonMissing.of(),
-        @JsonProperty("host")
-        @ExcludeMissing
-        private val host: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("method")
-        @ExcludeMissing
-        private val method: JsonField<Method> = JsonMissing.of(),
-        @JsonProperty("path")
-        @ExcludeMissing
-        private val path: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("query")
-        @ExcludeMissing
-        private val query: JsonField<String> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val body: JsonField<Body>,
+        private val headers: JsonField<Headers>,
+        private val host: JsonField<String>,
+        private val method: JsonField<Method>,
+        private val path: JsonField<String>,
+        private val query: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("body") @ExcludeMissing body: JsonField<Body> = JsonMissing.of(),
+            @JsonProperty("headers") @ExcludeMissing headers: JsonField<Headers> = JsonMissing.of(),
+            @JsonProperty("host") @ExcludeMissing host: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("method") @ExcludeMissing method: JsonField<Method> = JsonMissing.of(),
+            @JsonProperty("path") @ExcludeMissing path: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("query") @ExcludeMissing query: JsonField<String> = JsonMissing.of(),
+        ) : this(body, headers, host, method, path, query, mutableMapOf())
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -454,25 +467,15 @@ private constructor(
          */
         @JsonProperty("query") @ExcludeMissing fun _query(): JsonField<String> = query
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Request = apply {
-            if (validated) {
-                return@apply
-            }
-
-            body().ifPresent { it.validate() }
-            headers().ifPresent { it.validate() }
-            host()
-            method()
-            path()
-            query()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -614,8 +617,24 @@ private constructor(
                     method,
                     path,
                     query,
-                    additionalProperties.toImmutable(),
+                    additionalProperties.toMutableMap(),
                 )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Request = apply {
+            if (validated) {
+                return@apply
+            }
+
+            body().ifPresent { it.validate() }
+            headers().ifPresent { it.validate() }
+            host()
+            method()
+            path()
+            query()
+            validated = true
         }
 
         @JsonDeserialize(using = Body.Deserializer::class)
@@ -751,27 +770,20 @@ private constructor(
                 }
             }
 
-            @NoAutoDetect
             class UnionMember1
-            @JsonCreator
-            private constructor(
+            private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
+
+                @JsonCreator private constructor() : this(mutableMapOf())
+
                 @JsonAnySetter
-                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
-            ) {
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
 
                 @JsonAnyGetter
                 @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-                private var validated: Boolean = false
-
-                fun validate(): UnionMember1 = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    validated = true
-                }
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
 
                 fun toBuilder() = Builder().from(this)
 
@@ -818,7 +830,17 @@ private constructor(
                      *
                      * Further updates to this [Builder] will not mutate the returned instance.
                      */
-                    fun build(): UnionMember1 = UnionMember1(additionalProperties.toImmutable())
+                    fun build(): UnionMember1 = UnionMember1(additionalProperties.toMutableMap())
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): UnionMember1 = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    validated = true
                 }
 
                 override fun equals(other: Any?): Boolean {
@@ -839,27 +861,20 @@ private constructor(
             }
         }
 
-        @NoAutoDetect
         class Headers
-        @JsonCreator
-        private constructor(
+        private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
+
+            @JsonCreator private constructor() : this(mutableMapOf())
+
             @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
-        ) {
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): Headers = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -906,7 +921,17 @@ private constructor(
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
-                fun build(): Headers = Headers(additionalProperties.toImmutable())
+                fun build(): Headers = Headers(additionalProperties.toMutableMap())
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): Headers = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
             }
 
             override fun equals(other: Any?): Boolean {
@@ -1065,20 +1090,20 @@ private constructor(
     }
 
     /** A message delivery log response */
-    @NoAutoDetect
     class Response
-    @JsonCreator
     private constructor(
-        @JsonProperty("body") @ExcludeMissing private val body: JsonField<Body> = JsonMissing.of(),
-        @JsonProperty("headers")
-        @ExcludeMissing
-        private val headers: JsonField<Headers> = JsonMissing.of(),
-        @JsonProperty("status")
-        @ExcludeMissing
-        private val status: JsonField<Long> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+        private val body: JsonField<Body>,
+        private val headers: JsonField<Headers>,
+        private val status: JsonField<Long>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("body") @ExcludeMissing body: JsonField<Body> = JsonMissing.of(),
+            @JsonProperty("headers") @ExcludeMissing headers: JsonField<Headers> = JsonMissing.of(),
+            @JsonProperty("status") @ExcludeMissing status: JsonField<Long> = JsonMissing.of(),
+        ) : this(body, headers, status, mutableMapOf())
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -1119,22 +1144,15 @@ private constructor(
          */
         @JsonProperty("status") @ExcludeMissing fun _status(): JsonField<Long> = status
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
-
-            body().ifPresent { it.validate() }
-            headers().ifPresent { it.validate() }
-            status()
-            validated = true
-        }
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         fun toBuilder() = Builder().from(this)
 
@@ -1227,7 +1245,20 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              */
             fun build(): Response =
-                Response(body, headers, status, additionalProperties.toImmutable())
+                Response(body, headers, status, additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Response = apply {
+            if (validated) {
+                return@apply
+            }
+
+            body().ifPresent { it.validate() }
+            headers().ifPresent { it.validate() }
+            status()
+            validated = true
         }
 
         @JsonDeserialize(using = Body.Deserializer::class)
@@ -1363,27 +1394,20 @@ private constructor(
                 }
             }
 
-            @NoAutoDetect
             class UnionMember1
-            @JsonCreator
-            private constructor(
+            private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
+
+                @JsonCreator private constructor() : this(mutableMapOf())
+
                 @JsonAnySetter
-                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
-            ) {
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
 
                 @JsonAnyGetter
                 @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-                private var validated: Boolean = false
-
-                fun validate(): UnionMember1 = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    validated = true
-                }
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
 
                 fun toBuilder() = Builder().from(this)
 
@@ -1430,7 +1454,17 @@ private constructor(
                      *
                      * Further updates to this [Builder] will not mutate the returned instance.
                      */
-                    fun build(): UnionMember1 = UnionMember1(additionalProperties.toImmutable())
+                    fun build(): UnionMember1 = UnionMember1(additionalProperties.toMutableMap())
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): UnionMember1 = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    validated = true
                 }
 
                 override fun equals(other: Any?): Boolean {
@@ -1451,27 +1485,20 @@ private constructor(
             }
         }
 
-        @NoAutoDetect
         class Headers
-        @JsonCreator
-        private constructor(
+        private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
+
+            @JsonCreator private constructor() : this(mutableMapOf())
+
             @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap()
-        ) {
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
 
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): Headers = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -1518,7 +1545,17 @@ private constructor(
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
-                fun build(): Headers = Headers(additionalProperties.toImmutable())
+                fun build(): Headers = Headers(additionalProperties.toMutableMap())
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): Headers = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
             }
 
             override fun equals(other: Any?): Boolean {

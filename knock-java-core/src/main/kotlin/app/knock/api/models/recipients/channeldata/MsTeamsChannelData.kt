@@ -8,11 +8,9 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.getOrThrow
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -26,23 +24,28 @@ import com.fasterxml.jackson.databind.SerializerProvider
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize
 import com.fasterxml.jackson.databind.annotation.JsonSerialize
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** Microsoft Teams channel data */
-@NoAutoDetect
 class MsTeamsChannelData
-@JsonCreator
 private constructor(
-    @JsonProperty("connections")
-    @ExcludeMissing
-    private val connections: JsonField<List<Connection>> = JsonMissing.of(),
-    @JsonProperty("ms_teams_tenant_id")
-    @ExcludeMissing
-    private val msTeamsTenantId: JsonField<String> = JsonMissing.of(),
-    @JsonAnySetter private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    private val connections: JsonField<List<Connection>>,
+    private val msTeamsTenantId: JsonField<String>,
+    private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
+
+    @JsonCreator
+    private constructor(
+        @JsonProperty("connections")
+        @ExcludeMissing
+        connections: JsonField<List<Connection>> = JsonMissing.of(),
+        @JsonProperty("ms_teams_tenant_id")
+        @ExcludeMissing
+        msTeamsTenantId: JsonField<String> = JsonMissing.of(),
+    ) : this(connections, msTeamsTenantId, mutableMapOf())
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -77,21 +80,15 @@ private constructor(
     @ExcludeMissing
     fun _msTeamsTenantId(): JsonField<String> = msTeamsTenantId
 
+    @JsonAnySetter
+    private fun putAdditionalProperty(key: String, value: JsonValue) {
+        additionalProperties.put(key, value)
+    }
+
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-    private var validated: Boolean = false
-
-    fun validate(): MsTeamsChannelData = apply {
-        if (validated) {
-            return@apply
-        }
-
-        connections().forEach { it.validate() }
-        msTeamsTenantId()
-        validated = true
-    }
+    fun _additionalProperties(): Map<String, JsonValue> =
+        Collections.unmodifiableMap(additionalProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -212,8 +209,20 @@ private constructor(
             MsTeamsChannelData(
                 checkRequired("connections", connections).map { it.toImmutable() },
                 msTeamsTenantId,
-                additionalProperties.toImmutable(),
+                additionalProperties.toMutableMap(),
             )
+    }
+
+    private var validated: Boolean = false
+
+    fun validate(): MsTeamsChannelData = apply {
+        if (validated) {
+            return@apply
+        }
+
+        connections().forEach { it.validate() }
+        msTeamsTenantId()
+        validated = true
     }
 
     /** Microsoft Teams token connection */
@@ -376,25 +385,36 @@ private constructor(
         }
 
         /** Microsoft Teams token connection */
-        @NoAutoDetect
         class MsTeamsTokenConnection
-        @JsonCreator
         private constructor(
-            @JsonProperty("ms_teams_channel_id")
-            @ExcludeMissing
-            private val msTeamsChannelId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("ms_teams_team_id")
-            @ExcludeMissing
-            private val msTeamsTeamId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("ms_teams_tenant_id")
-            @ExcludeMissing
-            private val msTeamsTenantId: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("ms_teams_user_id")
-            @ExcludeMissing
-            private val msTeamsUserId: JsonField<String> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val msTeamsChannelId: JsonField<String>,
+            private val msTeamsTeamId: JsonField<String>,
+            private val msTeamsTenantId: JsonField<String>,
+            private val msTeamsUserId: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("ms_teams_channel_id")
+                @ExcludeMissing
+                msTeamsChannelId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("ms_teams_team_id")
+                @ExcludeMissing
+                msTeamsTeamId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("ms_teams_tenant_id")
+                @ExcludeMissing
+                msTeamsTenantId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("ms_teams_user_id")
+                @ExcludeMissing
+                msTeamsUserId: JsonField<String> = JsonMissing.of(),
+            ) : this(
+                msTeamsChannelId,
+                msTeamsTeamId,
+                msTeamsTenantId,
+                msTeamsUserId,
+                mutableMapOf(),
+            )
 
             /**
              * The Microsoft Teams channel ID
@@ -472,23 +492,15 @@ private constructor(
             @ExcludeMissing
             fun _msTeamsUserId(): JsonField<String> = msTeamsUserId
 
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): MsTeamsTokenConnection = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                msTeamsChannelId()
-                msTeamsTeamId()
-                msTeamsTenantId()
-                msTeamsUserId()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -634,8 +646,22 @@ private constructor(
                         msTeamsTeamId,
                         msTeamsTenantId,
                         msTeamsUserId,
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): MsTeamsTokenConnection = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                msTeamsChannelId()
+                msTeamsTeamId()
+                msTeamsTenantId()
+                msTeamsUserId()
+                validated = true
             }
 
             override fun equals(other: Any?): Boolean {
@@ -657,16 +683,18 @@ private constructor(
         }
 
         /** Microsoft Teams incoming webhook connection */
-        @NoAutoDetect
         class MsTeamsIncomingWebhookConnection
-        @JsonCreator
         private constructor(
-            @JsonProperty("incoming_webhook")
-            @ExcludeMissing
-            private val incomingWebhook: JsonField<IncomingWebhook> = JsonMissing.of(),
-            @JsonAnySetter
-            private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+            private val incomingWebhook: JsonField<IncomingWebhook>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("incoming_webhook")
+                @ExcludeMissing
+                incomingWebhook: JsonField<IncomingWebhook> = JsonMissing.of()
+            ) : this(incomingWebhook, mutableMapOf())
 
             /**
              * The incoming webhook
@@ -687,20 +715,15 @@ private constructor(
             @ExcludeMissing
             fun _incomingWebhook(): JsonField<IncomingWebhook> = incomingWebhook
 
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
             @JsonAnyGetter
             @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-            private var validated: Boolean = false
-
-            fun validate(): MsTeamsIncomingWebhookConnection = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                incomingWebhook().validate()
-                validated = true
-            }
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
 
             fun toBuilder() = Builder().from(this)
 
@@ -785,21 +808,32 @@ private constructor(
                 fun build(): MsTeamsIncomingWebhookConnection =
                     MsTeamsIncomingWebhookConnection(
                         checkRequired("incomingWebhook", incomingWebhook),
-                        additionalProperties.toImmutable(),
+                        additionalProperties.toMutableMap(),
                     )
             }
 
+            private var validated: Boolean = false
+
+            fun validate(): MsTeamsIncomingWebhookConnection = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                incomingWebhook().validate()
+                validated = true
+            }
+
             /** The incoming webhook */
-            @NoAutoDetect
             class IncomingWebhook
-            @JsonCreator
             private constructor(
-                @JsonProperty("url")
-                @ExcludeMissing
-                private val url: JsonField<String> = JsonMissing.of(),
-                @JsonAnySetter
-                private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+                private val url: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
             ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of()
+                ) : this(url, mutableMapOf())
 
                 /**
                  * The URL of the incoming webhook
@@ -817,20 +851,15 @@ private constructor(
                  */
                 @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
 
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
                 @JsonAnyGetter
                 @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-                private var validated: Boolean = false
-
-                fun validate(): IncomingWebhook = apply {
-                    if (validated) {
-                        return@apply
-                    }
-
-                    url()
-                    validated = true
-                }
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
 
                 fun toBuilder() = Builder().from(this)
 
@@ -908,8 +937,19 @@ private constructor(
                     fun build(): IncomingWebhook =
                         IncomingWebhook(
                             checkRequired("url", url),
-                            additionalProperties.toImmutable(),
+                            additionalProperties.toMutableMap(),
                         )
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): IncomingWebhook = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    url()
+                    validated = true
                 }
 
                 override fun equals(other: Any?): Boolean {

@@ -6,14 +6,12 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
-import app.knock.api.core.immutableEmptyMap
-import app.knock.api.core.toImmutable
 import app.knock.api.services.async.providers.SlackServiceAsync
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
@@ -86,16 +84,18 @@ private constructor(
         ) = SlackListChannelsPageAsync(slackService, params, response)
     }
 
-    @NoAutoDetect
-    class Response
-    @JsonCreator
-    constructor(
-        @JsonProperty("next_cursor") private val nextCursor: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("slack_channels")
-        private val slackChannels: JsonField<List<SlackListChannelsResponse>> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
+    class Response(
+        private val nextCursor: JsonField<String>,
+        private val slackChannels: JsonField<List<SlackListChannelsResponse>>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("next_cursor") nextCursor: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("slack_channels")
+            slackChannels: JsonField<List<SlackListChannelsResponse>> = JsonMissing.of(),
+        ) : this(nextCursor, slackChannels, mutableMapOf())
 
         fun nextCursor(): Optional<String> =
             Optional.ofNullable(nextCursor.getNullable("next_cursor"))
@@ -110,9 +110,15 @@ private constructor(
         fun _slackChannels(): Optional<JsonField<List<SlackListChannelsResponse>>> =
             Optional.ofNullable(slackChannels)
 
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
 
         private var validated: Boolean = false
 
@@ -184,7 +190,7 @@ private constructor(
              * Further updates to this [Builder] will not mutate the returned instance.
              */
             fun build(): Response =
-                Response(nextCursor, slackChannels, additionalProperties.toImmutable())
+                Response(nextCursor, slackChannels, additionalProperties.toMutableMap())
         }
     }
 

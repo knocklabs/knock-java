@@ -7,13 +7,11 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.NoAutoDetect
 import app.knock.api.core.Params
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
-import app.knock.api.core.immutableEmptyMap
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -21,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.OffsetDateTime
+import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 
@@ -179,497 +178,6 @@ private constructor(
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
 
-    @JvmSynthetic internal fun _body(): Body = body
-
-    fun _pathParam(index: Int): String =
-        when (index) {
-            0 -> channelId
-            1 -> action.toString()
-            else -> ""
-        }
-
-    override fun _headers(): Headers = additionalHeaders
-
-    override fun _queryParams(): QueryParams = additionalQueryParams
-
-    /** Request body for bulk updating messages for a specific channel */
-    @NoAutoDetect
-    class Body
-    @JsonCreator
-    private constructor(
-        @JsonProperty("archived")
-        @ExcludeMissing
-        private val archived: JsonField<Archived> = JsonMissing.of(),
-        @JsonProperty("delivery_status")
-        @ExcludeMissing
-        private val deliveryStatus: JsonField<DeliveryStatus> = JsonMissing.of(),
-        @JsonProperty("engagement_status")
-        @ExcludeMissing
-        private val engagementStatus: JsonField<EngagementStatus> = JsonMissing.of(),
-        @JsonProperty("has_tenant")
-        @ExcludeMissing
-        private val hasTenant: JsonField<Boolean> = JsonMissing.of(),
-        @JsonProperty("newer_than")
-        @ExcludeMissing
-        private val newerThan: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("older_than")
-        @ExcludeMissing
-        private val olderThan: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("recipient_ids")
-        @ExcludeMissing
-        private val recipientIds: JsonField<List<String>> = JsonMissing.of(),
-        @JsonProperty("tenants")
-        @ExcludeMissing
-        private val tenants: JsonField<List<String>> = JsonMissing.of(),
-        @JsonProperty("trigger_data")
-        @ExcludeMissing
-        private val triggerData: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("workflows")
-        @ExcludeMissing
-        private val workflows: JsonField<List<String>> = JsonMissing.of(),
-        @JsonAnySetter
-        private val additionalProperties: Map<String, JsonValue> = immutableEmptyMap(),
-    ) {
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun archived(): Optional<Archived> = Optional.ofNullable(archived.getNullable("archived"))
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun deliveryStatus(): Optional<DeliveryStatus> =
-            Optional.ofNullable(deliveryStatus.getNullable("delivery_status"))
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun engagementStatus(): Optional<EngagementStatus> =
-            Optional.ofNullable(engagementStatus.getNullable("engagement_status"))
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun hasTenant(): Optional<Boolean> =
-            Optional.ofNullable(hasTenant.getNullable("has_tenant"))
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun newerThan(): Optional<OffsetDateTime> =
-            Optional.ofNullable(newerThan.getNullable("newer_than"))
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun olderThan(): Optional<OffsetDateTime> =
-            Optional.ofNullable(olderThan.getNullable("older_than"))
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun recipientIds(): Optional<List<String>> =
-            Optional.ofNullable(recipientIds.getNullable("recipient_ids"))
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun tenants(): Optional<List<String>> = Optional.ofNullable(tenants.getNullable("tenants"))
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun triggerData(): Optional<String> =
-            Optional.ofNullable(triggerData.getNullable("trigger_data"))
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun workflows(): Optional<List<String>> =
-            Optional.ofNullable(workflows.getNullable("workflows"))
-
-        /**
-         * Returns the raw JSON value of [archived].
-         *
-         * Unlike [archived], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("archived") @ExcludeMissing fun _archived(): JsonField<Archived> = archived
-
-        /**
-         * Returns the raw JSON value of [deliveryStatus].
-         *
-         * Unlike [deliveryStatus], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("delivery_status")
-        @ExcludeMissing
-        fun _deliveryStatus(): JsonField<DeliveryStatus> = deliveryStatus
-
-        /**
-         * Returns the raw JSON value of [engagementStatus].
-         *
-         * Unlike [engagementStatus], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("engagement_status")
-        @ExcludeMissing
-        fun _engagementStatus(): JsonField<EngagementStatus> = engagementStatus
-
-        /**
-         * Returns the raw JSON value of [hasTenant].
-         *
-         * Unlike [hasTenant], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("has_tenant") @ExcludeMissing fun _hasTenant(): JsonField<Boolean> = hasTenant
-
-        /**
-         * Returns the raw JSON value of [newerThan].
-         *
-         * Unlike [newerThan], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("newer_than")
-        @ExcludeMissing
-        fun _newerThan(): JsonField<OffsetDateTime> = newerThan
-
-        /**
-         * Returns the raw JSON value of [olderThan].
-         *
-         * Unlike [olderThan], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("older_than")
-        @ExcludeMissing
-        fun _olderThan(): JsonField<OffsetDateTime> = olderThan
-
-        /**
-         * Returns the raw JSON value of [recipientIds].
-         *
-         * Unlike [recipientIds], this method doesn't throw if the JSON field has an unexpected
-         * type.
-         */
-        @JsonProperty("recipient_ids")
-        @ExcludeMissing
-        fun _recipientIds(): JsonField<List<String>> = recipientIds
-
-        /**
-         * Returns the raw JSON value of [tenants].
-         *
-         * Unlike [tenants], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("tenants") @ExcludeMissing fun _tenants(): JsonField<List<String>> = tenants
-
-        /**
-         * Returns the raw JSON value of [triggerData].
-         *
-         * Unlike [triggerData], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("trigger_data")
-        @ExcludeMissing
-        fun _triggerData(): JsonField<String> = triggerData
-
-        /**
-         * Returns the raw JSON value of [workflows].
-         *
-         * Unlike [workflows], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("workflows")
-        @ExcludeMissing
-        fun _workflows(): JsonField<List<String>> = workflows
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        private var validated: Boolean = false
-
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
-
-            archived()
-            deliveryStatus()
-            engagementStatus()
-            hasTenant()
-            newerThan()
-            olderThan()
-            recipientIds()
-            tenants()
-            triggerData()
-            workflows()
-            validated = true
-        }
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Body]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Body]. */
-        class Builder internal constructor() {
-
-            private var archived: JsonField<Archived> = JsonMissing.of()
-            private var deliveryStatus: JsonField<DeliveryStatus> = JsonMissing.of()
-            private var engagementStatus: JsonField<EngagementStatus> = JsonMissing.of()
-            private var hasTenant: JsonField<Boolean> = JsonMissing.of()
-            private var newerThan: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var olderThan: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var recipientIds: JsonField<MutableList<String>>? = null
-            private var tenants: JsonField<MutableList<String>>? = null
-            private var triggerData: JsonField<String> = JsonMissing.of()
-            private var workflows: JsonField<MutableList<String>>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(body: Body) = apply {
-                archived = body.archived
-                deliveryStatus = body.deliveryStatus
-                engagementStatus = body.engagementStatus
-                hasTenant = body.hasTenant
-                newerThan = body.newerThan
-                olderThan = body.olderThan
-                recipientIds = body.recipientIds.map { it.toMutableList() }
-                tenants = body.tenants.map { it.toMutableList() }
-                triggerData = body.triggerData
-                workflows = body.workflows.map { it.toMutableList() }
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
-
-            fun archived(archived: Archived) = archived(JsonField.of(archived))
-
-            /**
-             * Sets [Builder.archived] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.archived] with a well-typed [Archived] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun archived(archived: JsonField<Archived>) = apply { this.archived = archived }
-
-            fun deliveryStatus(deliveryStatus: DeliveryStatus) =
-                deliveryStatus(JsonField.of(deliveryStatus))
-
-            /**
-             * Sets [Builder.deliveryStatus] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.deliveryStatus] with a well-typed [DeliveryStatus]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun deliveryStatus(deliveryStatus: JsonField<DeliveryStatus>) = apply {
-                this.deliveryStatus = deliveryStatus
-            }
-
-            fun engagementStatus(engagementStatus: EngagementStatus) =
-                engagementStatus(JsonField.of(engagementStatus))
-
-            /**
-             * Sets [Builder.engagementStatus] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.engagementStatus] with a well-typed
-             * [EngagementStatus] value instead. This method is primarily for setting the field to
-             * an undocumented or not yet supported value.
-             */
-            fun engagementStatus(engagementStatus: JsonField<EngagementStatus>) = apply {
-                this.engagementStatus = engagementStatus
-            }
-
-            fun hasTenant(hasTenant: Boolean) = hasTenant(JsonField.of(hasTenant))
-
-            /**
-             * Sets [Builder.hasTenant] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.hasTenant] with a well-typed [Boolean] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun hasTenant(hasTenant: JsonField<Boolean>) = apply { this.hasTenant = hasTenant }
-
-            fun newerThan(newerThan: OffsetDateTime) = newerThan(JsonField.of(newerThan))
-
-            /**
-             * Sets [Builder.newerThan] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.newerThan] with a well-typed [OffsetDateTime] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun newerThan(newerThan: JsonField<OffsetDateTime>) = apply {
-                this.newerThan = newerThan
-            }
-
-            fun olderThan(olderThan: OffsetDateTime) = olderThan(JsonField.of(olderThan))
-
-            /**
-             * Sets [Builder.olderThan] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.olderThan] with a well-typed [OffsetDateTime] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun olderThan(olderThan: JsonField<OffsetDateTime>) = apply {
-                this.olderThan = olderThan
-            }
-
-            fun recipientIds(recipientIds: List<String>) = recipientIds(JsonField.of(recipientIds))
-
-            /**
-             * Sets [Builder.recipientIds] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.recipientIds] with a well-typed `List<String>` value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun recipientIds(recipientIds: JsonField<List<String>>) = apply {
-                this.recipientIds = recipientIds.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [String] to [recipientIds].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addRecipientId(recipientId: String) = apply {
-                recipientIds =
-                    (recipientIds ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("recipientIds", it).add(recipientId)
-                    }
-            }
-
-            fun tenants(tenants: List<String>) = tenants(JsonField.of(tenants))
-
-            /**
-             * Sets [Builder.tenants] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.tenants] with a well-typed `List<String>` value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun tenants(tenants: JsonField<List<String>>) = apply {
-                this.tenants = tenants.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [String] to [tenants].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addTenant(tenant: String) = apply {
-                tenants =
-                    (tenants ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("tenants", it).add(tenant)
-                    }
-            }
-
-            fun triggerData(triggerData: String) = triggerData(JsonField.of(triggerData))
-
-            /**
-             * Sets [Builder.triggerData] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.triggerData] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun triggerData(triggerData: JsonField<String>) = apply {
-                this.triggerData = triggerData
-            }
-
-            fun workflows(workflows: List<String>) = workflows(JsonField.of(workflows))
-
-            /**
-             * Sets [Builder.workflows] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.workflows] with a well-typed `List<String>` value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun workflows(workflows: JsonField<List<String>>) = apply {
-                this.workflows = workflows.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [String] to [workflows].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addWorkflow(workflow: String) = apply {
-                workflows =
-                    (workflows ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("workflows", it).add(workflow)
-                    }
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Body].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Body =
-                Body(
-                    archived,
-                    deliveryStatus,
-                    engagementStatus,
-                    hasTenant,
-                    newerThan,
-                    olderThan,
-                    (recipientIds ?: JsonMissing.of()).map { it.toImmutable() },
-                    (tenants ?: JsonMissing.of()).map { it.toImmutable() },
-                    triggerData,
-                    (workflows ?: JsonMissing.of()).map { it.toImmutable() },
-                    additionalProperties.toImmutable(),
-                )
-        }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Body && archived == other.archived && deliveryStatus == other.deliveryStatus && engagementStatus == other.engagementStatus && hasTenant == other.hasTenant && newerThan == other.newerThan && olderThan == other.olderThan && recipientIds == other.recipientIds && tenants == other.tenants && triggerData == other.triggerData && workflows == other.workflows && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(archived, deliveryStatus, engagementStatus, hasTenant, newerThan, olderThan, recipientIds, tenants, triggerData, workflows, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Body{archived=$archived, deliveryStatus=$deliveryStatus, engagementStatus=$engagementStatus, hasTenant=$hasTenant, newerThan=$newerThan, olderThan=$olderThan, recipientIds=$recipientIds, tenants=$tenants, triggerData=$triggerData, workflows=$workflows, additionalProperties=$additionalProperties}"
-    }
-
     fun toBuilder() = Builder().from(this)
 
     companion object {
@@ -688,7 +196,6 @@ private constructor(
     }
 
     /** A builder for [BulkUpdateMessageStatusParams]. */
-    @NoAutoDetect
     class Builder internal constructor() {
 
         private var channelId: String? = null
@@ -989,6 +496,526 @@ private constructor(
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
+    }
+
+    @JvmSynthetic internal fun _body(): Body = body
+
+    fun _pathParam(index: Int): String =
+        when (index) {
+            0 -> channelId
+            1 -> action.toString()
+            else -> ""
+        }
+
+    override fun _headers(): Headers = additionalHeaders
+
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    /** Request body for bulk updating messages for a specific channel */
+    class Body
+    private constructor(
+        private val archived: JsonField<Archived>,
+        private val deliveryStatus: JsonField<DeliveryStatus>,
+        private val engagementStatus: JsonField<EngagementStatus>,
+        private val hasTenant: JsonField<Boolean>,
+        private val newerThan: JsonField<OffsetDateTime>,
+        private val olderThan: JsonField<OffsetDateTime>,
+        private val recipientIds: JsonField<List<String>>,
+        private val tenants: JsonField<List<String>>,
+        private val triggerData: JsonField<String>,
+        private val workflows: JsonField<List<String>>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("archived")
+            @ExcludeMissing
+            archived: JsonField<Archived> = JsonMissing.of(),
+            @JsonProperty("delivery_status")
+            @ExcludeMissing
+            deliveryStatus: JsonField<DeliveryStatus> = JsonMissing.of(),
+            @JsonProperty("engagement_status")
+            @ExcludeMissing
+            engagementStatus: JsonField<EngagementStatus> = JsonMissing.of(),
+            @JsonProperty("has_tenant")
+            @ExcludeMissing
+            hasTenant: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("newer_than")
+            @ExcludeMissing
+            newerThan: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("older_than")
+            @ExcludeMissing
+            olderThan: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("recipient_ids")
+            @ExcludeMissing
+            recipientIds: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("tenants")
+            @ExcludeMissing
+            tenants: JsonField<List<String>> = JsonMissing.of(),
+            @JsonProperty("trigger_data")
+            @ExcludeMissing
+            triggerData: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("workflows")
+            @ExcludeMissing
+            workflows: JsonField<List<String>> = JsonMissing.of(),
+        ) : this(
+            archived,
+            deliveryStatus,
+            engagementStatus,
+            hasTenant,
+            newerThan,
+            olderThan,
+            recipientIds,
+            tenants,
+            triggerData,
+            workflows,
+            mutableMapOf(),
+        )
+
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun archived(): Optional<Archived> = Optional.ofNullable(archived.getNullable("archived"))
+
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun deliveryStatus(): Optional<DeliveryStatus> =
+            Optional.ofNullable(deliveryStatus.getNullable("delivery_status"))
+
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun engagementStatus(): Optional<EngagementStatus> =
+            Optional.ofNullable(engagementStatus.getNullable("engagement_status"))
+
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun hasTenant(): Optional<Boolean> =
+            Optional.ofNullable(hasTenant.getNullable("has_tenant"))
+
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun newerThan(): Optional<OffsetDateTime> =
+            Optional.ofNullable(newerThan.getNullable("newer_than"))
+
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun olderThan(): Optional<OffsetDateTime> =
+            Optional.ofNullable(olderThan.getNullable("older_than"))
+
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun recipientIds(): Optional<List<String>> =
+            Optional.ofNullable(recipientIds.getNullable("recipient_ids"))
+
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun tenants(): Optional<List<String>> = Optional.ofNullable(tenants.getNullable("tenants"))
+
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun triggerData(): Optional<String> =
+            Optional.ofNullable(triggerData.getNullable("trigger_data"))
+
+        /**
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun workflows(): Optional<List<String>> =
+            Optional.ofNullable(workflows.getNullable("workflows"))
+
+        /**
+         * Returns the raw JSON value of [archived].
+         *
+         * Unlike [archived], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("archived") @ExcludeMissing fun _archived(): JsonField<Archived> = archived
+
+        /**
+         * Returns the raw JSON value of [deliveryStatus].
+         *
+         * Unlike [deliveryStatus], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("delivery_status")
+        @ExcludeMissing
+        fun _deliveryStatus(): JsonField<DeliveryStatus> = deliveryStatus
+
+        /**
+         * Returns the raw JSON value of [engagementStatus].
+         *
+         * Unlike [engagementStatus], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("engagement_status")
+        @ExcludeMissing
+        fun _engagementStatus(): JsonField<EngagementStatus> = engagementStatus
+
+        /**
+         * Returns the raw JSON value of [hasTenant].
+         *
+         * Unlike [hasTenant], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("has_tenant") @ExcludeMissing fun _hasTenant(): JsonField<Boolean> = hasTenant
+
+        /**
+         * Returns the raw JSON value of [newerThan].
+         *
+         * Unlike [newerThan], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("newer_than")
+        @ExcludeMissing
+        fun _newerThan(): JsonField<OffsetDateTime> = newerThan
+
+        /**
+         * Returns the raw JSON value of [olderThan].
+         *
+         * Unlike [olderThan], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("older_than")
+        @ExcludeMissing
+        fun _olderThan(): JsonField<OffsetDateTime> = olderThan
+
+        /**
+         * Returns the raw JSON value of [recipientIds].
+         *
+         * Unlike [recipientIds], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("recipient_ids")
+        @ExcludeMissing
+        fun _recipientIds(): JsonField<List<String>> = recipientIds
+
+        /**
+         * Returns the raw JSON value of [tenants].
+         *
+         * Unlike [tenants], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("tenants") @ExcludeMissing fun _tenants(): JsonField<List<String>> = tenants
+
+        /**
+         * Returns the raw JSON value of [triggerData].
+         *
+         * Unlike [triggerData], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("trigger_data")
+        @ExcludeMissing
+        fun _triggerData(): JsonField<String> = triggerData
+
+        /**
+         * Returns the raw JSON value of [workflows].
+         *
+         * Unlike [workflows], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("workflows")
+        @ExcludeMissing
+        fun _workflows(): JsonField<List<String>> = workflows
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Body]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var archived: JsonField<Archived> = JsonMissing.of()
+            private var deliveryStatus: JsonField<DeliveryStatus> = JsonMissing.of()
+            private var engagementStatus: JsonField<EngagementStatus> = JsonMissing.of()
+            private var hasTenant: JsonField<Boolean> = JsonMissing.of()
+            private var newerThan: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var olderThan: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var recipientIds: JsonField<MutableList<String>>? = null
+            private var tenants: JsonField<MutableList<String>>? = null
+            private var triggerData: JsonField<String> = JsonMissing.of()
+            private var workflows: JsonField<MutableList<String>>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(body: Body) = apply {
+                archived = body.archived
+                deliveryStatus = body.deliveryStatus
+                engagementStatus = body.engagementStatus
+                hasTenant = body.hasTenant
+                newerThan = body.newerThan
+                olderThan = body.olderThan
+                recipientIds = body.recipientIds.map { it.toMutableList() }
+                tenants = body.tenants.map { it.toMutableList() }
+                triggerData = body.triggerData
+                workflows = body.workflows.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            fun archived(archived: Archived) = archived(JsonField.of(archived))
+
+            /**
+             * Sets [Builder.archived] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.archived] with a well-typed [Archived] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun archived(archived: JsonField<Archived>) = apply { this.archived = archived }
+
+            fun deliveryStatus(deliveryStatus: DeliveryStatus) =
+                deliveryStatus(JsonField.of(deliveryStatus))
+
+            /**
+             * Sets [Builder.deliveryStatus] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.deliveryStatus] with a well-typed [DeliveryStatus]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun deliveryStatus(deliveryStatus: JsonField<DeliveryStatus>) = apply {
+                this.deliveryStatus = deliveryStatus
+            }
+
+            fun engagementStatus(engagementStatus: EngagementStatus) =
+                engagementStatus(JsonField.of(engagementStatus))
+
+            /**
+             * Sets [Builder.engagementStatus] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.engagementStatus] with a well-typed
+             * [EngagementStatus] value instead. This method is primarily for setting the field to
+             * an undocumented or not yet supported value.
+             */
+            fun engagementStatus(engagementStatus: JsonField<EngagementStatus>) = apply {
+                this.engagementStatus = engagementStatus
+            }
+
+            fun hasTenant(hasTenant: Boolean) = hasTenant(JsonField.of(hasTenant))
+
+            /**
+             * Sets [Builder.hasTenant] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.hasTenant] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun hasTenant(hasTenant: JsonField<Boolean>) = apply { this.hasTenant = hasTenant }
+
+            fun newerThan(newerThan: OffsetDateTime) = newerThan(JsonField.of(newerThan))
+
+            /**
+             * Sets [Builder.newerThan] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.newerThan] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun newerThan(newerThan: JsonField<OffsetDateTime>) = apply {
+                this.newerThan = newerThan
+            }
+
+            fun olderThan(olderThan: OffsetDateTime) = olderThan(JsonField.of(olderThan))
+
+            /**
+             * Sets [Builder.olderThan] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.olderThan] with a well-typed [OffsetDateTime] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun olderThan(olderThan: JsonField<OffsetDateTime>) = apply {
+                this.olderThan = olderThan
+            }
+
+            fun recipientIds(recipientIds: List<String>) = recipientIds(JsonField.of(recipientIds))
+
+            /**
+             * Sets [Builder.recipientIds] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.recipientIds] with a well-typed `List<String>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun recipientIds(recipientIds: JsonField<List<String>>) = apply {
+                this.recipientIds = recipientIds.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [String] to [recipientIds].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addRecipientId(recipientId: String) = apply {
+                recipientIds =
+                    (recipientIds ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("recipientIds", it).add(recipientId)
+                    }
+            }
+
+            fun tenants(tenants: List<String>) = tenants(JsonField.of(tenants))
+
+            /**
+             * Sets [Builder.tenants] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.tenants] with a well-typed `List<String>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun tenants(tenants: JsonField<List<String>>) = apply {
+                this.tenants = tenants.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [String] to [tenants].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addTenant(tenant: String) = apply {
+                tenants =
+                    (tenants ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("tenants", it).add(tenant)
+                    }
+            }
+
+            fun triggerData(triggerData: String) = triggerData(JsonField.of(triggerData))
+
+            /**
+             * Sets [Builder.triggerData] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.triggerData] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun triggerData(triggerData: JsonField<String>) = apply {
+                this.triggerData = triggerData
+            }
+
+            fun workflows(workflows: List<String>) = workflows(JsonField.of(workflows))
+
+            /**
+             * Sets [Builder.workflows] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.workflows] with a well-typed `List<String>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun workflows(workflows: JsonField<List<String>>) = apply {
+                this.workflows = workflows.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [String] to [workflows].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addWorkflow(workflow: String) = apply {
+                workflows =
+                    (workflows ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("workflows", it).add(workflow)
+                    }
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Body =
+                Body(
+                    archived,
+                    deliveryStatus,
+                    engagementStatus,
+                    hasTenant,
+                    newerThan,
+                    olderThan,
+                    (recipientIds ?: JsonMissing.of()).map { it.toImmutable() },
+                    (tenants ?: JsonMissing.of()).map { it.toImmutable() },
+                    triggerData,
+                    (workflows ?: JsonMissing.of()).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            archived()
+            deliveryStatus()
+            engagementStatus()
+            hasTenant()
+            newerThan()
+            olderThan()
+            recipientIds()
+            tenants()
+            triggerData()
+            workflows()
+            validated = true
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && archived == other.archived && deliveryStatus == other.deliveryStatus && engagementStatus == other.engagementStatus && hasTenant == other.hasTenant && newerThan == other.newerThan && olderThan == other.olderThan && recipientIds == other.recipientIds && tenants == other.tenants && triggerData == other.triggerData && workflows == other.workflows && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(archived, deliveryStatus, engagementStatus, hasTenant, newerThan, olderThan, recipientIds, tenants, triggerData, workflows, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{archived=$archived, deliveryStatus=$deliveryStatus, engagementStatus=$engagementStatus, hasTenant=$hasTenant, newerThan=$newerThan, olderThan=$olderThan, recipientIds=$recipientIds, tenants=$tenants, triggerData=$triggerData, workflows=$workflows, additionalProperties=$additionalProperties}"
     }
 
     class Archived @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
