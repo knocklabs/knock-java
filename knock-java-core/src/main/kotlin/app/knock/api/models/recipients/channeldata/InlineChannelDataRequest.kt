@@ -4,27 +4,22 @@ package app.knock.api.models.recipients.channeldata
 
 import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonValue
+import app.knock.api.core.toImmutable
 import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
-import java.util.Collections
 import java.util.Objects
 
 /** Allows inline setting channel data for a recipient */
 class InlineChannelDataRequest
-private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
-
-    @JsonCreator private constructor() : this(mutableMapOf())
-
-    @JsonAnySetter
-    private fun putAdditionalProperty(key: String, value: JsonValue) {
-        additionalProperties.put(key, value)
-    }
+@JsonCreator
+private constructor(
+    @com.fasterxml.jackson.annotation.JsonValue
+    private val additionalProperties: Map<String, JsonValue>
+) {
 
     @JsonAnyGetter
     @ExcludeMissing
-    fun _additionalProperties(): Map<String, JsonValue> =
-        Collections.unmodifiableMap(additionalProperties)
+    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
     fun toBuilder() = Builder().from(this)
 
@@ -69,7 +64,7 @@ private constructor(private val additionalProperties: MutableMap<String, JsonVal
          * Further updates to this [Builder] will not mutate the returned instance.
          */
         fun build(): InlineChannelDataRequest =
-            InlineChannelDataRequest(additionalProperties.toMutableMap())
+            InlineChannelDataRequest(additionalProperties.toImmutable())
     }
 
     private var validated: Boolean = false

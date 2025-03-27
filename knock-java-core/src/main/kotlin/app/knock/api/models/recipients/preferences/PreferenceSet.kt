@@ -7,6 +7,7 @@ import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
 import app.knock.api.core.checkRequired
+import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -296,19 +297,15 @@ private constructor(
 
     /** A map of categories and their settings */
     class Categories
-    private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
-
-        @JsonCreator private constructor() : this(mutableMapOf())
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
 
@@ -352,7 +349,7 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Categories = Categories(additionalProperties.toMutableMap())
+            fun build(): Categories = Categories(additionalProperties.toImmutable())
         }
 
         private var validated: Boolean = false
@@ -384,19 +381,15 @@ private constructor(
 
     /** A map of workflows and their settings */
     class Workflows
-    private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
-
-        @JsonCreator private constructor() : this(mutableMapOf())
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
 
         @JsonAnyGetter
         @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
         fun toBuilder() = Builder().from(this)
 
@@ -440,7 +433,7 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Workflows = Workflows(additionalProperties.toMutableMap())
+            fun build(): Workflows = Workflows(additionalProperties.toImmutable())
         }
 
         private var validated: Boolean = false

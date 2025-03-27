@@ -1447,19 +1447,15 @@ private constructor(
             }
 
             class InnerData
-            private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
-
-                @JsonCreator private constructor() : this(mutableMapOf())
-
-                @JsonAnySetter
-                private fun putAdditionalProperty(key: String, value: JsonValue) {
-                    additionalProperties.put(key, value)
-                }
+            @JsonCreator
+            private constructor(
+                @com.fasterxml.jackson.annotation.JsonValue
+                private val additionalProperties: Map<String, JsonValue>
+            ) {
 
                 @JsonAnyGetter
                 @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> =
-                    Collections.unmodifiableMap(additionalProperties)
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
                 fun toBuilder() = Builder().from(this)
 
@@ -1506,7 +1502,7 @@ private constructor(
                      *
                      * Further updates to this [Builder] will not mutate the returned instance.
                      */
-                    fun build(): InnerData = InnerData(additionalProperties.toMutableMap())
+                    fun build(): InnerData = InnerData(additionalProperties.toImmutable())
                 }
 
                 private var validated: Boolean = false
@@ -1807,19 +1803,15 @@ private constructor(
 
             /** The channel data connection from the recipient to the underlying provider */
             class Connection
-            private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
-
-                @JsonCreator private constructor() : this(mutableMapOf())
-
-                @JsonAnySetter
-                private fun putAdditionalProperty(key: String, value: JsonValue) {
-                    additionalProperties.put(key, value)
-                }
+            @JsonCreator
+            private constructor(
+                @com.fasterxml.jackson.annotation.JsonValue
+                private val additionalProperties: Map<String, JsonValue>
+            ) {
 
                 @JsonAnyGetter
                 @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> =
-                    Collections.unmodifiableMap(additionalProperties)
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
                 fun toBuilder() = Builder().from(this)
 
@@ -1866,7 +1858,7 @@ private constructor(
                      *
                      * Further updates to this [Builder] will not mutate the returned instance.
                      */
-                    fun build(): Connection = Connection(additionalProperties.toMutableMap())
+                    fun build(): Connection = Connection(additionalProperties.toImmutable())
                 }
 
                 private var validated: Boolean = false
@@ -2446,21 +2438,15 @@ private constructor(
 
                 /** The JSON content of the message */
                 class JsonContent
+                @JsonCreator
                 private constructor(
-                    private val additionalProperties: MutableMap<String, JsonValue>
+                    @com.fasterxml.jackson.annotation.JsonValue
+                    private val additionalProperties: Map<String, JsonValue>
                 ) {
-
-                    @JsonCreator private constructor() : this(mutableMapOf())
-
-                    @JsonAnySetter
-                    private fun putAdditionalProperty(key: String, value: JsonValue) {
-                        additionalProperties.put(key, value)
-                    }
 
                     @JsonAnyGetter
                     @ExcludeMissing
-                    fun _additionalProperties(): Map<String, JsonValue> =
-                        Collections.unmodifiableMap(additionalProperties)
+                    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
                     fun toBuilder() = Builder().from(this)
 
@@ -2510,7 +2496,7 @@ private constructor(
                          *
                          * Further updates to this [Builder] will not mutate the returned instance.
                          */
-                        fun build(): JsonContent = JsonContent(additionalProperties.toMutableMap())
+                        fun build(): JsonContent = JsonContent(additionalProperties.toImmutable())
                     }
 
                     private var validated: Boolean = false
@@ -2560,19 +2546,15 @@ private constructor(
             }
 
             class Metadata
-            private constructor(private val additionalProperties: MutableMap<String, JsonValue>) {
-
-                @JsonCreator private constructor() : this(mutableMapOf())
-
-                @JsonAnySetter
-                private fun putAdditionalProperty(key: String, value: JsonValue) {
-                    additionalProperties.put(key, value)
-                }
+            @JsonCreator
+            private constructor(
+                @com.fasterxml.jackson.annotation.JsonValue
+                private val additionalProperties: Map<String, JsonValue>
+            ) {
 
                 @JsonAnyGetter
                 @ExcludeMissing
-                fun _additionalProperties(): Map<String, JsonValue> =
-                    Collections.unmodifiableMap(additionalProperties)
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
 
                 fun toBuilder() = Builder().from(this)
 
@@ -2619,7 +2601,7 @@ private constructor(
                      *
                      * Further updates to this [Builder] will not mutate the returned instance.
                      */
-                    fun build(): Metadata = Metadata(additionalProperties.toMutableMap())
+                    fun build(): Metadata = Metadata(additionalProperties.toImmutable())
                 }
 
                 private var validated: Boolean = false

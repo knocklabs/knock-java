@@ -2,15 +2,12 @@
 
 package app.knock.api.models.providers.slack
 
-import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import java.util.Collections
+import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
@@ -21,7 +18,7 @@ private constructor(
     private val accessTokenObject: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: MutableMap<String, JsonValue>,
+    private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
     fun channelId(): String = channelId
@@ -29,19 +26,11 @@ private constructor(
     /** A JSON encoded string containing the access token object reference */
     fun accessTokenObject(): String = accessTokenObject
 
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+
     fun _additionalHeaders(): Headers = additionalHeaders
 
     fun _additionalQueryParams(): QueryParams = additionalQueryParams
-
-    @JsonAnySetter
-    private fun putAdditionalBodyProperty(key: String, value: JsonValue) {
-        additionalBodyProperties.put(key, value)
-    }
-
-    @JsonAnyGetter
-    @ExcludeMissing
-    fun _additionalBodyProperties(): Map<String, JsonValue> =
-        Collections.unmodifiableMap(additionalBodyProperties)
 
     fun toBuilder() = Builder().from(this)
 
@@ -224,7 +213,7 @@ private constructor(
                 checkRequired("accessTokenObject", accessTokenObject),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toMutableMap(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
