@@ -8,6 +8,7 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
+import app.knock.api.core.allMaxBy
 import app.knock.api.core.checkRequired
 import app.knock.api.core.getOrThrow
 import app.knock.api.errors.KnockInvalidDataException
@@ -25,6 +26,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Set channel data for a type of channel */
 class ChannelDataRequest
@@ -163,6 +165,21 @@ private constructor(
         validated = true
     }
 
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: KnockInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic internal fun validity(): Int = (data.asKnown().getOrNull()?.validity() ?: 0)
+
     /** Channel data for push providers */
     @JsonDeserialize(using = Data.Deserializer::class)
     @JsonSerialize(using = Data.Serializer::class)
@@ -220,8 +237,8 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
+        fun <T> accept(visitor: Visitor<T>): T =
+            when {
                 pushChannel != null -> visitor.visitPushChannel(pushChannel)
                 oneSignalChannel != null -> visitor.visitOneSignalChannel(oneSignalChannel)
                 slackChannel != null -> visitor.visitSlackChannel(slackChannel)
@@ -229,7 +246,6 @@ private constructor(
                 discordChannel != null -> visitor.visitDiscordChannel(discordChannel)
                 else -> visitor.unknown(_json)
             }
-        }
 
         private var validated: Boolean = false
 
@@ -263,6 +279,43 @@ private constructor(
             )
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            accept(
+                object : Visitor<Int> {
+                    override fun visitPushChannel(pushChannel: PushChannelData) =
+                        pushChannel.validity()
+
+                    override fun visitOneSignalChannel(oneSignalChannel: OneSignalChannelData) =
+                        oneSignalChannel.validity()
+
+                    override fun visitSlackChannel(slackChannel: SlackChannelData) =
+                        slackChannel.validity()
+
+                    override fun visitMsTeamsChannel(msTeamsChannel: MsTeamsChannelData) =
+                        msTeamsChannel.validity()
+
+                    override fun visitDiscordChannel(discordChannel: DiscordChannelData) =
+                        discordChannel.validity()
+
+                    override fun unknown(json: JsonValue?) = 0
+                }
+            )
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -348,28 +401,37 @@ private constructor(
             override fun ObjectCodec.deserialize(node: JsonNode): Data {
                 val json = JsonValue.fromJsonNode(node)
 
-                tryDeserialize(node, jacksonTypeRef<PushChannelData>()) { it.validate() }
-                    ?.let {
-                        return Data(pushChannel = it, _json = json)
-                    }
-                tryDeserialize(node, jacksonTypeRef<OneSignalChannelData>()) { it.validate() }
-                    ?.let {
-                        return Data(oneSignalChannel = it, _json = json)
-                    }
-                tryDeserialize(node, jacksonTypeRef<SlackChannelData>()) { it.validate() }
-                    ?.let {
-                        return Data(slackChannel = it, _json = json)
-                    }
-                tryDeserialize(node, jacksonTypeRef<MsTeamsChannelData>()) { it.validate() }
-                    ?.let {
-                        return Data(msTeamsChannel = it, _json = json)
-                    }
-                tryDeserialize(node, jacksonTypeRef<DiscordChannelData>()) { it.validate() }
-                    ?.let {
-                        return Data(discordChannel = it, _json = json)
-                    }
-
-                return Data(_json = json)
+                val bestMatches =
+                    sequenceOf(
+                            tryDeserialize(node, jacksonTypeRef<PushChannelData>())?.let {
+                                Data(pushChannel = it, _json = json)
+                            },
+                            tryDeserialize(node, jacksonTypeRef<OneSignalChannelData>())?.let {
+                                Data(oneSignalChannel = it, _json = json)
+                            },
+                            tryDeserialize(node, jacksonTypeRef<SlackChannelData>())?.let {
+                                Data(slackChannel = it, _json = json)
+                            },
+                            tryDeserialize(node, jacksonTypeRef<MsTeamsChannelData>())?.let {
+                                Data(msTeamsChannel = it, _json = json)
+                            },
+                            tryDeserialize(node, jacksonTypeRef<DiscordChannelData>())?.let {
+                                Data(discordChannel = it, _json = json)
+                            },
+                        )
+                        .filterNotNull()
+                        .allMaxBy { it.validity() }
+                        .toList()
+                return when (bestMatches.size) {
+                    // This can happen if what we're deserializing is completely incompatible with
+                    // all the possible variants (e.g. deserializing from boolean).
+                    0 -> Data(_json = json)
+                    1 -> bestMatches.single()
+                    // If there's more than one match with the highest validity, then use the first
+                    // completely valid match, or simply the first match if none are completely
+                    // valid.
+                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+                }
             }
         }
 

@@ -22,6 +22,7 @@ import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Bulk update messages for a specific channel. The channel is specified by the `channel_id`
@@ -987,9 +988,9 @@ private constructor(
                 return@apply
             }
 
-            archived()
-            deliveryStatus()
-            engagementStatus()
+            archived().ifPresent { it.validate() }
+            deliveryStatus().ifPresent { it.validate() }
+            engagementStatus().ifPresent { it.validate() }
             hasTenant()
             newerThan()
             olderThan()
@@ -999,6 +1000,33 @@ private constructor(
             workflows()
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (archived.asKnown().getOrNull()?.validity() ?: 0) +
+                (deliveryStatus.asKnown().getOrNull()?.validity() ?: 0) +
+                (engagementStatus.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (hasTenant.asKnown().isPresent) 1 else 0) +
+                (if (newerThan.asKnown().isPresent) 1 else 0) +
+                (if (olderThan.asKnown().isPresent) 1 else 0) +
+                (recipientIds.asKnown().getOrNull()?.size ?: 0) +
+                (tenants.asKnown().getOrNull()?.size ?: 0) +
+                (if (triggerData.asKnown().isPresent) 1 else 0) +
+                (workflows.asKnown().getOrNull()?.size ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1107,6 +1135,33 @@ private constructor(
          */
         fun asString(): String =
             _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): Archived = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1238,6 +1293,33 @@ private constructor(
          */
         fun asString(): String =
             _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): DeliveryStatus = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1375,6 +1457,33 @@ private constructor(
          */
         fun asString(): String =
             _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): EngagementStatus = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1520,6 +1629,33 @@ private constructor(
          */
         fun asString(): String =
             _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): Action = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

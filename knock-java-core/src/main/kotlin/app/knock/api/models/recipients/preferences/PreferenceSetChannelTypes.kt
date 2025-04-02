@@ -8,6 +8,7 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
+import app.knock.api.core.allMaxBy
 import app.knock.api.core.getOrThrow
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
@@ -24,6 +25,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Channel type preferences */
 class PreferenceSetChannelTypes
@@ -384,6 +386,28 @@ private constructor(
         validated = true
     }
 
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: KnockInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (chat.asKnown().getOrNull()?.validity() ?: 0) +
+            (email.asKnown().getOrNull()?.validity() ?: 0) +
+            (http.asKnown().getOrNull()?.validity() ?: 0) +
+            (inAppFeed.asKnown().getOrNull()?.validity() ?: 0) +
+            (push.asKnown().getOrNull()?.validity() ?: 0) +
+            (sms.asKnown().getOrNull()?.validity() ?: 0)
+
     /**
      * A set of settings for a channel type. Currently, this can only be a list of conditions to
      * apply.
@@ -421,14 +445,13 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
+        fun <T> accept(visitor: Visitor<T>): T =
+            when {
                 bool != null -> visitor.visitBool(bool)
                 preferenceSetChannelTypeSetting != null ->
                     visitor.visitPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)
                 else -> visitor.unknown(_json)
             }
-        }
 
         private var validated: Boolean = false
 
@@ -450,6 +473,34 @@ private constructor(
             )
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            accept(
+                object : Visitor<Int> {
+                    override fun visitBool(bool: Boolean) = 1
+
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) = preferenceSetChannelTypeSetting.validity()
+
+                    override fun unknown(json: JsonValue?) = 0
+                }
+            )
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -516,17 +567,27 @@ private constructor(
             override fun ObjectCodec.deserialize(node: JsonNode): Chat {
                 val json = JsonValue.fromJsonNode(node)
 
-                tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
-                    return Chat(bool = it, _json = json)
+                val bestMatches =
+                    sequenceOf(
+                            tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>())
+                                ?.let { Chat(preferenceSetChannelTypeSetting = it, _json = json) },
+                            tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
+                                Chat(bool = it, _json = json)
+                            },
+                        )
+                        .filterNotNull()
+                        .allMaxBy { it.validity() }
+                        .toList()
+                return when (bestMatches.size) {
+                    // This can happen if what we're deserializing is completely incompatible with
+                    // all the possible variants (e.g. deserializing from string).
+                    0 -> Chat(_json = json)
+                    1 -> bestMatches.single()
+                    // If there's more than one match with the highest validity, then use the first
+                    // completely valid match, or simply the first match if none are completely
+                    // valid.
+                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
                 }
-                tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>()) {
-                        it.validate()
-                    }
-                    ?.let {
-                        return Chat(preferenceSetChannelTypeSetting = it, _json = json)
-                    }
-
-                return Chat(_json = json)
             }
         }
 
@@ -585,14 +646,13 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
+        fun <T> accept(visitor: Visitor<T>): T =
+            when {
                 bool != null -> visitor.visitBool(bool)
                 preferenceSetChannelTypeSetting != null ->
                     visitor.visitPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)
                 else -> visitor.unknown(_json)
             }
-        }
 
         private var validated: Boolean = false
 
@@ -614,6 +674,34 @@ private constructor(
             )
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            accept(
+                object : Visitor<Int> {
+                    override fun visitBool(bool: Boolean) = 1
+
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) = preferenceSetChannelTypeSetting.validity()
+
+                    override fun unknown(json: JsonValue?) = 0
+                }
+            )
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -681,17 +769,27 @@ private constructor(
             override fun ObjectCodec.deserialize(node: JsonNode): Email {
                 val json = JsonValue.fromJsonNode(node)
 
-                tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
-                    return Email(bool = it, _json = json)
+                val bestMatches =
+                    sequenceOf(
+                            tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>())
+                                ?.let { Email(preferenceSetChannelTypeSetting = it, _json = json) },
+                            tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
+                                Email(bool = it, _json = json)
+                            },
+                        )
+                        .filterNotNull()
+                        .allMaxBy { it.validity() }
+                        .toList()
+                return when (bestMatches.size) {
+                    // This can happen if what we're deserializing is completely incompatible with
+                    // all the possible variants (e.g. deserializing from string).
+                    0 -> Email(_json = json)
+                    1 -> bestMatches.single()
+                    // If there's more than one match with the highest validity, then use the first
+                    // completely valid match, or simply the first match if none are completely
+                    // valid.
+                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
                 }
-                tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>()) {
-                        it.validate()
-                    }
-                    ?.let {
-                        return Email(preferenceSetChannelTypeSetting = it, _json = json)
-                    }
-
-                return Email(_json = json)
             }
         }
 
@@ -750,14 +848,13 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
+        fun <T> accept(visitor: Visitor<T>): T =
+            when {
                 bool != null -> visitor.visitBool(bool)
                 preferenceSetChannelTypeSetting != null ->
                     visitor.visitPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)
                 else -> visitor.unknown(_json)
             }
-        }
 
         private var validated: Boolean = false
 
@@ -779,6 +876,34 @@ private constructor(
             )
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            accept(
+                object : Visitor<Int> {
+                    override fun visitBool(bool: Boolean) = 1
+
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) = preferenceSetChannelTypeSetting.validity()
+
+                    override fun unknown(json: JsonValue?) = 0
+                }
+            )
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -845,17 +970,27 @@ private constructor(
             override fun ObjectCodec.deserialize(node: JsonNode): Http {
                 val json = JsonValue.fromJsonNode(node)
 
-                tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
-                    return Http(bool = it, _json = json)
+                val bestMatches =
+                    sequenceOf(
+                            tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>())
+                                ?.let { Http(preferenceSetChannelTypeSetting = it, _json = json) },
+                            tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
+                                Http(bool = it, _json = json)
+                            },
+                        )
+                        .filterNotNull()
+                        .allMaxBy { it.validity() }
+                        .toList()
+                return when (bestMatches.size) {
+                    // This can happen if what we're deserializing is completely incompatible with
+                    // all the possible variants (e.g. deserializing from string).
+                    0 -> Http(_json = json)
+                    1 -> bestMatches.single()
+                    // If there's more than one match with the highest validity, then use the first
+                    // completely valid match, or simply the first match if none are completely
+                    // valid.
+                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
                 }
-                tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>()) {
-                        it.validate()
-                    }
-                    ?.let {
-                        return Http(preferenceSetChannelTypeSetting = it, _json = json)
-                    }
-
-                return Http(_json = json)
             }
         }
 
@@ -914,14 +1049,13 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
+        fun <T> accept(visitor: Visitor<T>): T =
+            when {
                 bool != null -> visitor.visitBool(bool)
                 preferenceSetChannelTypeSetting != null ->
                     visitor.visitPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)
                 else -> visitor.unknown(_json)
             }
-        }
 
         private var validated: Boolean = false
 
@@ -943,6 +1077,34 @@ private constructor(
             )
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            accept(
+                object : Visitor<Int> {
+                    override fun visitBool(bool: Boolean) = 1
+
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) = preferenceSetChannelTypeSetting.validity()
+
+                    override fun unknown(json: JsonValue?) = 0
+                }
+            )
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1012,17 +1174,29 @@ private constructor(
             override fun ObjectCodec.deserialize(node: JsonNode): InAppFeed {
                 val json = JsonValue.fromJsonNode(node)
 
-                tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
-                    return InAppFeed(bool = it, _json = json)
+                val bestMatches =
+                    sequenceOf(
+                            tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>())
+                                ?.let {
+                                    InAppFeed(preferenceSetChannelTypeSetting = it, _json = json)
+                                },
+                            tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
+                                InAppFeed(bool = it, _json = json)
+                            },
+                        )
+                        .filterNotNull()
+                        .allMaxBy { it.validity() }
+                        .toList()
+                return when (bestMatches.size) {
+                    // This can happen if what we're deserializing is completely incompatible with
+                    // all the possible variants (e.g. deserializing from string).
+                    0 -> InAppFeed(_json = json)
+                    1 -> bestMatches.single()
+                    // If there's more than one match with the highest validity, then use the first
+                    // completely valid match, or simply the first match if none are completely
+                    // valid.
+                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
                 }
-                tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>()) {
-                        it.validate()
-                    }
-                    ?.let {
-                        return InAppFeed(preferenceSetChannelTypeSetting = it, _json = json)
-                    }
-
-                return InAppFeed(_json = json)
             }
         }
 
@@ -1081,14 +1255,13 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
+        fun <T> accept(visitor: Visitor<T>): T =
+            when {
                 bool != null -> visitor.visitBool(bool)
                 preferenceSetChannelTypeSetting != null ->
                     visitor.visitPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)
                 else -> visitor.unknown(_json)
             }
-        }
 
         private var validated: Boolean = false
 
@@ -1110,6 +1283,34 @@ private constructor(
             )
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            accept(
+                object : Visitor<Int> {
+                    override fun visitBool(bool: Boolean) = 1
+
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) = preferenceSetChannelTypeSetting.validity()
+
+                    override fun unknown(json: JsonValue?) = 0
+                }
+            )
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1176,17 +1377,27 @@ private constructor(
             override fun ObjectCodec.deserialize(node: JsonNode): Push {
                 val json = JsonValue.fromJsonNode(node)
 
-                tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
-                    return Push(bool = it, _json = json)
+                val bestMatches =
+                    sequenceOf(
+                            tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>())
+                                ?.let { Push(preferenceSetChannelTypeSetting = it, _json = json) },
+                            tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
+                                Push(bool = it, _json = json)
+                            },
+                        )
+                        .filterNotNull()
+                        .allMaxBy { it.validity() }
+                        .toList()
+                return when (bestMatches.size) {
+                    // This can happen if what we're deserializing is completely incompatible with
+                    // all the possible variants (e.g. deserializing from string).
+                    0 -> Push(_json = json)
+                    1 -> bestMatches.single()
+                    // If there's more than one match with the highest validity, then use the first
+                    // completely valid match, or simply the first match if none are completely
+                    // valid.
+                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
                 }
-                tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>()) {
-                        it.validate()
-                    }
-                    ?.let {
-                        return Push(preferenceSetChannelTypeSetting = it, _json = json)
-                    }
-
-                return Push(_json = json)
             }
         }
 
@@ -1245,14 +1456,13 @@ private constructor(
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
+        fun <T> accept(visitor: Visitor<T>): T =
+            when {
                 bool != null -> visitor.visitBool(bool)
                 preferenceSetChannelTypeSetting != null ->
                     visitor.visitPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)
                 else -> visitor.unknown(_json)
             }
-        }
 
         private var validated: Boolean = false
 
@@ -1274,6 +1484,34 @@ private constructor(
             )
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            accept(
+                object : Visitor<Int> {
+                    override fun visitBool(bool: Boolean) = 1
+
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) = preferenceSetChannelTypeSetting.validity()
+
+                    override fun unknown(json: JsonValue?) = 0
+                }
+            )
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -1340,17 +1578,27 @@ private constructor(
             override fun ObjectCodec.deserialize(node: JsonNode): Sms {
                 val json = JsonValue.fromJsonNode(node)
 
-                tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
-                    return Sms(bool = it, _json = json)
+                val bestMatches =
+                    sequenceOf(
+                            tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>())
+                                ?.let { Sms(preferenceSetChannelTypeSetting = it, _json = json) },
+                            tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
+                                Sms(bool = it, _json = json)
+                            },
+                        )
+                        .filterNotNull()
+                        .allMaxBy { it.validity() }
+                        .toList()
+                return when (bestMatches.size) {
+                    // This can happen if what we're deserializing is completely incompatible with
+                    // all the possible variants (e.g. deserializing from string).
+                    0 -> Sms(_json = json)
+                    1 -> bestMatches.single()
+                    // If there's more than one match with the highest validity, then use the first
+                    // completely valid match, or simply the first match if none are completely
+                    // valid.
+                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
                 }
-                tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>()) {
-                        it.validate()
-                    }
-                    ?.let {
-                        return Sms(preferenceSetChannelTypeSetting = it, _json = json)
-                    }
-
-                return Sms(_json = json)
             }
         }
 

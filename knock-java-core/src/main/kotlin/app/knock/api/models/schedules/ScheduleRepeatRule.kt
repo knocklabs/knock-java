@@ -356,14 +356,37 @@ private constructor(
         }
 
         _typename()
-        frequency()
+        frequency().validate()
         dayOfMonth()
-        days()
+        days().ifPresent { it.forEach { it.validate() } }
         hours()
         interval()
         minutes()
         validated = true
     }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: KnockInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (if (_typename.asKnown().isPresent) 1 else 0) +
+            (frequency.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (dayOfMonth.asKnown().isPresent) 1 else 0) +
+            (days.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (hours.asKnown().isPresent) 1 else 0) +
+            (if (interval.asKnown().isPresent) 1 else 0) +
+            (if (minutes.asKnown().isPresent) 1 else 0)
 
     class Frequency @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
@@ -462,6 +485,33 @@ private constructor(
          */
         fun asString(): String =
             _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): Frequency = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -589,6 +639,33 @@ private constructor(
          */
         fun asString(): String =
             _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): Day = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

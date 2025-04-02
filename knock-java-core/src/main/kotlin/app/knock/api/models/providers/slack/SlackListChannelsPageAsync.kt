@@ -6,6 +6,7 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.services.async.providers.SlackServiceAsync
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -131,6 +132,14 @@ private constructor(
             slackChannels().map { it.validate() }
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
 
         fun toBuilder() = Builder().from(this)
 

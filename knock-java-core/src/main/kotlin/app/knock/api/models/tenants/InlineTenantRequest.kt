@@ -5,6 +5,7 @@ package app.knock.api.models.tenants
 import app.knock.api.core.BaseDeserializer
 import app.knock.api.core.BaseSerializer
 import app.knock.api.core.JsonValue
+import app.knock.api.core.allMaxBy
 import app.knock.api.core.getOrThrow
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.core.JsonGenerator
@@ -45,13 +46,12 @@ private constructor(
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
-    fun <T> accept(visitor: Visitor<T>): T {
-        return when {
+    fun <T> accept(visitor: Visitor<T>): T =
+        when {
             string != null -> visitor.visitString(string)
             tenantRequest != null -> visitor.visitTenantRequest(tenantRequest)
             else -> visitor.unknown(_json)
         }
-    }
 
     private var validated: Boolean = false
 
@@ -71,6 +71,32 @@ private constructor(
         )
         validated = true
     }
+
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: KnockInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        accept(
+            object : Visitor<Int> {
+                override fun visitString(string: String) = 1
+
+                override fun visitTenantRequest(tenantRequest: TenantRequest) =
+                    tenantRequest.validity()
+
+                override fun unknown(json: JsonValue?) = 0
+            }
+        )
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -134,15 +160,27 @@ private constructor(
         override fun ObjectCodec.deserialize(node: JsonNode): InlineTenantRequest {
             val json = JsonValue.fromJsonNode(node)
 
-            tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                return InlineTenantRequest(string = it, _json = json)
+            val bestMatches =
+                sequenceOf(
+                        tryDeserialize(node, jacksonTypeRef<TenantRequest>())?.let {
+                            InlineTenantRequest(tenantRequest = it, _json = json)
+                        },
+                        tryDeserialize(node, jacksonTypeRef<String>())?.let {
+                            InlineTenantRequest(string = it, _json = json)
+                        },
+                    )
+                    .filterNotNull()
+                    .allMaxBy { it.validity() }
+                    .toList()
+            return when (bestMatches.size) {
+                // This can happen if what we're deserializing is completely incompatible with all
+                // the possible variants (e.g. deserializing from array).
+                0 -> InlineTenantRequest(_json = json)
+                1 -> bestMatches.single()
+                // If there's more than one match with the highest validity, then use the first
+                // completely valid match, or simply the first match if none are completely valid.
+                else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
             }
-            tryDeserialize(node, jacksonTypeRef<TenantRequest>()) { it.validate() }
-                ?.let {
-                    return InlineTenantRequest(tenantRequest = it, _json = json)
-                }
-
-            return InlineTenantRequest(_json = json)
         }
     }
 

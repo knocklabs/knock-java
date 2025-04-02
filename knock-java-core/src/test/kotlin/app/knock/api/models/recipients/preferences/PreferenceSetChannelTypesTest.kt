@@ -2,7 +2,9 @@
 
 package app.knock.api.models.recipients.preferences
 
+import app.knock.api.core.jsonMapper
 import app.knock.api.models.Condition
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -54,5 +56,37 @@ internal class PreferenceSetChannelTypesTest {
                         .build()
                 )
             )
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val preferenceSetChannelTypes =
+            PreferenceSetChannelTypes.builder()
+                .chat(true)
+                .email(true)
+                .http(true)
+                .inAppFeed(true)
+                .push(true)
+                .sms(
+                    PreferenceSetChannelTypeSetting.builder()
+                        .addCondition(
+                            Condition.builder()
+                                .argument("US")
+                                .operator(Condition.Operator.EQUAL_TO)
+                                .variable("recipient.country_code")
+                                .build()
+                        )
+                        .build()
+                )
+                .build()
+
+        val roundtrippedPreferenceSetChannelTypes =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(preferenceSetChannelTypes),
+                jacksonTypeRef<PreferenceSetChannelTypes>(),
+            )
+
+        assertThat(roundtrippedPreferenceSetChannelTypes).isEqualTo(preferenceSetChannelTypes)
     }
 }

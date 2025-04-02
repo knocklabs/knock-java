@@ -3,6 +3,8 @@
 package app.knock.api.models.messages
 
 import app.knock.api.core.JsonValue
+import app.knock.api.core.jsonMapper
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
@@ -91,5 +93,55 @@ internal class MessageTest {
         assertThat(message.tenant()).contains("tenant_123")
         assertThat(message.updatedAt()).contains(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
         assertThat(message.workflow()).contains("comment-created")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val message =
+            Message.builder()
+                .id("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
+                ._typename("Message")
+                .addActor("user_123")
+                .archivedAt(null)
+                .channelId("123e4567-e89b-12d3-a456-426614174000")
+                .clickedAt(null)
+                .data(
+                    Message.Data.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
+                .addEngagementStatus(Message.EngagementStatus.SEEN)
+                .addEngagementStatus(Message.EngagementStatus.READ)
+                .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                .interactedAt(null)
+                .linkClickedAt(null)
+                .metadata(
+                    Message.Metadata.builder()
+                        .putAdditionalProperty("external_id", JsonValue.from("bar"))
+                        .build()
+                )
+                .readAt(null)
+                .recipient("user_123")
+                .scheduledAt(null)
+                .seenAt(null)
+                .source(
+                    Message.Source.builder()
+                        ._typename("NotificationSource")
+                        .addCategory("collaboration")
+                        .key("comment-created")
+                        .versionId("123e4567-e89b-12d3-a456-426614174000")
+                        .build()
+                )
+                .status(Message.Status.QUEUED)
+                .tenant("tenant_123")
+                .updatedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                .workflow("comment-created")
+                .build()
+
+        val roundtrippedMessage =
+            jsonMapper.readValue(jsonMapper.writeValueAsString(message), jacksonTypeRef<Message>())
+
+        assertThat(roundtrippedMessage).isEqualTo(message)
     }
 }

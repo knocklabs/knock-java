@@ -577,6 +577,34 @@ private constructor(
         validated = true
     }
 
+    fun isValid(): Boolean =
+        try {
+            validate()
+            true
+        } catch (e: KnockInvalidDataException) {
+            false
+        }
+
+    /**
+     * Returns a score indicating how many valid values are contained in this object recursively.
+     *
+     * Used for best match union deserialization.
+     */
+    @JvmSynthetic
+    internal fun validity(): Int =
+        (if (id.asKnown().isPresent) 1 else 0) +
+            (if (insertedAt.asKnown().isPresent) 1 else 0) +
+            (recipient.asKnown().getOrNull()?.validity() ?: 0) +
+            (repeats.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (updatedAt.asKnown().isPresent) 1 else 0) +
+            (if (workflow.asKnown().isPresent) 1 else 0) +
+            (if (_typename.asKnown().isPresent) 1 else 0) +
+            (actor.asKnown().getOrNull()?.validity() ?: 0) +
+            (data.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (lastOccurrenceAt.asKnown().isPresent) 1 else 0) +
+            (if (nextOccurrenceAt.asKnown().isPresent) 1 else 0) +
+            (if (tenant.asKnown().isPresent) 1 else 0)
+
     class Data
     @JsonCreator
     private constructor(
@@ -642,6 +670,24 @@ private constructor(
 
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {

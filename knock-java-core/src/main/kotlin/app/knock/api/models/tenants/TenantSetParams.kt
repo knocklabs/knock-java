@@ -515,6 +515,26 @@ private constructor(
             validated = true
         }
 
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (channelData.asKnown().getOrNull()?.validity() ?: 0) +
+                (preferences.asKnown().getOrNull()?.validity() ?: 0) +
+                (settings.asKnown().getOrNull()?.validity() ?: 0)
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -683,6 +703,25 @@ private constructor(
             preferenceSet().ifPresent { it.validate() }
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (branding.asKnown().getOrNull()?.validity() ?: 0) +
+                (preferenceSet.asKnown().getOrNull()?.validity() ?: 0)
 
         class Branding
         private constructor(
@@ -922,6 +961,27 @@ private constructor(
                 primaryColorContrast()
                 validated = true
             }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: KnockInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (iconUrl.asKnown().isPresent) 1 else 0) +
+                    (if (logoUrl.asKnown().isPresent) 1 else 0) +
+                    (if (primaryColor.asKnown().isPresent) 1 else 0) +
+                    (if (primaryColorContrast.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {

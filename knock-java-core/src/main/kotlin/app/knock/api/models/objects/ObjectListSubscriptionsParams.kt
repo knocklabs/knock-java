@@ -2,11 +2,8 @@
 
 package app.knock.api.models.objects
 
-import app.knock.api.core.BaseDeserializer
-import app.knock.api.core.BaseSerializer
 import app.knock.api.core.Enum
 import app.knock.api.core.JsonField
-import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.getOrThrow
@@ -15,13 +12,6 @@ import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.ObjectCodec
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
@@ -467,6 +457,33 @@ private constructor(
         fun asString(): String =
             _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
 
+        private var validated: Boolean = false
+
+        fun validate(): Mode = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
@@ -484,13 +501,10 @@ private constructor(
      * A reference to a recipient, either a user identifier (string) or an object reference (id,
      * collection).
      */
-    @JsonDeserialize(using = Object.Deserializer::class)
-    @JsonSerialize(using = Object.Serializer::class)
     class Object
     private constructor(
         private val string: String? = null,
         private val reference: ObjectReference? = null,
-        private val _json: JsonValue? = null,
     ) {
 
         /** A user identifier */
@@ -509,15 +523,12 @@ private constructor(
         /** An object reference to a recipient */
         fun asReference(): ObjectReference = reference.getOrThrow("reference")
 
-        fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
-
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
+        fun <T> accept(visitor: Visitor<T>): T =
+            when {
                 string != null -> visitor.visitString(string)
                 reference != null -> visitor.visitReference(reference)
-                else -> visitor.unknown(_json)
+                else -> throw IllegalStateException("Invalid Object")
             }
-        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -533,7 +544,6 @@ private constructor(
             when {
                 string != null -> "Object{string=$string}"
                 reference != null -> "Object{reference=$reference}"
-                _json != null -> "Object{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Object")
             }
 
@@ -554,52 +564,6 @@ private constructor(
 
             /** An object reference to a recipient */
             fun visitReference(reference: ObjectReference): T
-
-            /**
-             * Maps an unknown variant of [Object] to a value of type [T].
-             *
-             * An instance of [Object] can contain an unknown variant if it was deserialized from
-             * data that doesn't match any known variant. For example, if the SDK is on an older
-             * version than the API, then the API may respond with new variants that the SDK is
-             * unaware of.
-             *
-             * @throws KnockInvalidDataException in the default implementation.
-             */
-            fun unknown(json: JsonValue?): T {
-                throw KnockInvalidDataException("Unknown Object: $json")
-            }
-        }
-
-        internal class Deserializer : BaseDeserializer<Object>(Object::class) {
-
-            override fun ObjectCodec.deserialize(node: JsonNode): Object {
-                val json = JsonValue.fromJsonNode(node)
-
-                tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                    return Object(string = it, _json = json)
-                }
-                tryDeserialize(node, jacksonTypeRef<ObjectReference>())?.let {
-                    return Object(reference = it, _json = json)
-                }
-
-                return Object(_json = json)
-            }
-        }
-
-        internal class Serializer : BaseSerializer<Object>(Object::class) {
-
-            override fun serialize(
-                value: Object,
-                generator: JsonGenerator,
-                provider: SerializerProvider,
-            ) {
-                when {
-                    value.string != null -> generator.writeObject(value.string)
-                    value.reference != null -> generator.writeObject(value.reference)
-                    value._json != null -> generator.writeObject(value._json)
-                    else -> throw IllegalStateException("Invalid Object")
-                }
-            }
         }
 
         /** An object reference to a recipient */
@@ -688,13 +652,10 @@ private constructor(
      * A reference to a recipient, either a user identifier (string) or an object reference (id,
      * collection).
      */
-    @JsonDeserialize(using = Recipient.Deserializer::class)
-    @JsonSerialize(using = Recipient.Serializer::class)
     class Recipient
     private constructor(
         private val string: String? = null,
         private val objectReference: ObjectReference? = null,
-        private val _json: JsonValue? = null,
     ) {
 
         /** A user identifier */
@@ -713,15 +674,12 @@ private constructor(
         /** An object reference to a recipient */
         fun asObjectReference(): ObjectReference = objectReference.getOrThrow("objectReference")
 
-        fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
-
-        fun <T> accept(visitor: Visitor<T>): T {
-            return when {
+        fun <T> accept(visitor: Visitor<T>): T =
+            when {
                 string != null -> visitor.visitString(string)
                 objectReference != null -> visitor.visitObjectReference(objectReference)
-                else -> visitor.unknown(_json)
+                else -> throw IllegalStateException("Invalid Recipient")
             }
-        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -737,7 +695,6 @@ private constructor(
             when {
                 string != null -> "Recipient{string=$string}"
                 objectReference != null -> "Recipient{objectReference=$objectReference}"
-                _json != null -> "Recipient{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Recipient")
             }
 
@@ -762,52 +719,6 @@ private constructor(
 
             /** An object reference to a recipient */
             fun visitObjectReference(objectReference: ObjectReference): T
-
-            /**
-             * Maps an unknown variant of [Recipient] to a value of type [T].
-             *
-             * An instance of [Recipient] can contain an unknown variant if it was deserialized from
-             * data that doesn't match any known variant. For example, if the SDK is on an older
-             * version than the API, then the API may respond with new variants that the SDK is
-             * unaware of.
-             *
-             * @throws KnockInvalidDataException in the default implementation.
-             */
-            fun unknown(json: JsonValue?): T {
-                throw KnockInvalidDataException("Unknown Recipient: $json")
-            }
-        }
-
-        internal class Deserializer : BaseDeserializer<Recipient>(Recipient::class) {
-
-            override fun ObjectCodec.deserialize(node: JsonNode): Recipient {
-                val json = JsonValue.fromJsonNode(node)
-
-                tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                    return Recipient(string = it, _json = json)
-                }
-                tryDeserialize(node, jacksonTypeRef<ObjectReference>())?.let {
-                    return Recipient(objectReference = it, _json = json)
-                }
-
-                return Recipient(_json = json)
-            }
-        }
-
-        internal class Serializer : BaseSerializer<Recipient>(Recipient::class) {
-
-            override fun serialize(
-                value: Recipient,
-                generator: JsonGenerator,
-                provider: SerializerProvider,
-            ) {
-                when {
-                    value.string != null -> generator.writeObject(value.string)
-                    value.objectReference != null -> generator.writeObject(value.objectReference)
-                    value._json != null -> generator.writeObject(value._json)
-                    else -> throw IllegalStateException("Invalid Recipient")
-                }
-            }
         }
 
         /** An object reference to a recipient */

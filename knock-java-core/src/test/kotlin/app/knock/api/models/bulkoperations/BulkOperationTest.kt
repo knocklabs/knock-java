@@ -2,6 +2,8 @@
 
 package app.knock.api.models.bulkoperations
 
+import app.knock.api.core.jsonMapper
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
@@ -50,5 +52,37 @@ internal class BulkOperationTest {
             )
         assertThat(bulkOperation.failedAt()).isEmpty
         assertThat(bulkOperation.startedAt()).isEmpty
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val bulkOperation =
+            BulkOperation.builder()
+                .id("123e4567-e89b-12d3-a456-426614174000")
+                ._typename("BulkOperation")
+                .estimatedTotalRows(1000L)
+                .insertedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
+                .name("Bulk operation name")
+                .processedRows(0L)
+                .status(BulkOperation.Status.QUEUED)
+                .successCount(0L)
+                .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
+                .completedAt(null)
+                .errorCount(0L)
+                .addErrorItem(
+                    BulkOperation.ErrorItem.builder().id("id").collection("collection").build()
+                )
+                .failedAt(null)
+                .startedAt(null)
+                .build()
+
+        val roundtrippedBulkOperation =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(bulkOperation),
+                jacksonTypeRef<BulkOperation>(),
+            )
+
+        assertThat(roundtrippedBulkOperation).isEqualTo(bulkOperation)
     }
 }

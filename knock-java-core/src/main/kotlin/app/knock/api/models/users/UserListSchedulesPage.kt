@@ -6,6 +6,7 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
+import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.PageInfo
 import app.knock.api.models.schedules.Schedule
 import app.knock.api.services.blocking.UserService
@@ -124,6 +125,14 @@ private constructor(
             pageInfo().ifPresent { it.validate() }
             validated = true
         }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
 
         fun toBuilder() = Builder().from(this)
 

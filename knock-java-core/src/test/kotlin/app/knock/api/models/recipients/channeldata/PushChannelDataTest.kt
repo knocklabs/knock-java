@@ -2,6 +2,8 @@
 
 package app.knock.api.models.recipients.channeldata
 
+import app.knock.api.core.jsonMapper
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,5 +14,19 @@ internal class PushChannelDataTest {
         val pushChannelData = PushChannelData.builder().addToken("push_token_1").build()
 
         assertThat(pushChannelData.tokens()).containsExactly("push_token_1")
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val pushChannelData = PushChannelData.builder().addToken("push_token_1").build()
+
+        val roundtrippedPushChannelData =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(pushChannelData),
+                jacksonTypeRef<PushChannelData>(),
+            )
+
+        assertThat(roundtrippedPushChannelData).isEqualTo(pushChannelData)
     }
 }
