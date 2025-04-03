@@ -87,6 +87,15 @@ private constructor(
 
         fun key(key: String) = apply { this.key = key }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [members]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         fun members(members: List<Member>) = apply { body.members(members) }
 
         /**
@@ -244,7 +253,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {

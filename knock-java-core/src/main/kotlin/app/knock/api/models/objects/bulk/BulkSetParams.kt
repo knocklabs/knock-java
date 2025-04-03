@@ -86,6 +86,15 @@ private constructor(
 
         fun collection(collection: String) = apply { this.collection = collection }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [objects]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         fun objects(objects: List<InlineObjectRequest>) = apply { body.objects(objects) }
 
         /**
@@ -243,7 +252,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {

@@ -116,6 +116,17 @@ private constructor(
 
         fun tenantId(tenantId: String) = apply { this.tenantId = tenantId }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [channelData]
+         * - [preferences]
+         * - [settings]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         /** Allows inline setting channel data for a recipient */
         fun channelData(channelData: InlineChannelDataRequest?) = apply {
             body.channelData(channelData)
@@ -305,7 +316,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {

@@ -174,6 +174,20 @@ private constructor(
             additionalQueryParams = scheduleCreateParams.additionalQueryParams.toBuilder()
         }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [recipients]
+         * - [repeats]
+         * - [workflow]
+         * - [data]
+         * - [endingAt]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         fun recipients(recipients: List<Recipient>) = apply { body.recipients(recipients) }
 
         /**
@@ -434,7 +448,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 

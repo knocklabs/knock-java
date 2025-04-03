@@ -218,6 +218,20 @@ private constructor(
 
         fun action(action: Action) = apply { this.action = action }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [archived]
+         * - [deliveryStatus]
+         * - [engagementStatus]
+         * - [hasTenant]
+         * - [newerThan]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         fun archived(archived: Archived) = apply { body.archived(archived) }
 
         /**
@@ -499,7 +513,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {

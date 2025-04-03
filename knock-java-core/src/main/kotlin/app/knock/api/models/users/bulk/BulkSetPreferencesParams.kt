@@ -94,6 +94,16 @@ private constructor(
             additionalQueryParams = bulkSetPreferencesParams.additionalQueryParams.toBuilder()
         }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [preferences]
+         * - [userIds]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         /** Set preferences for a recipient */
         fun preferences(preferences: PreferenceSetRequest) = apply { body.preferences(preferences) }
 
@@ -264,7 +274,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     override fun _headers(): Headers = additionalHeaders
 

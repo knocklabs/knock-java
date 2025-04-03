@@ -197,7 +197,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): IdentifyUserRequest = identifyUserRequest
+    fun _body(): IdentifyUserRequest = identifyUserRequest
 
     fun _pathParam(index: Int): String =
         when (index) {

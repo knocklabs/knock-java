@@ -122,6 +122,17 @@ private constructor(
         fun key(key: String) = apply { this.key = key }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [cancellationKey]
+         * - [recipients]
+         * - [tenant]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * The cancellation key supplied to the workflow trigger endpoint to use for cancelling one
          * or more workflow runs.
          */
@@ -314,7 +325,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {

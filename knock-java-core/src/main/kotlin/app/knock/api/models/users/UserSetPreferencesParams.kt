@@ -205,7 +205,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): PreferenceSetRequest = preferenceSetRequest
+    fun _body(): PreferenceSetRequest = preferenceSetRequest
 
     fun _pathParam(index: Int): String =
         when (index) {

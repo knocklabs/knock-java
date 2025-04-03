@@ -162,6 +162,20 @@ private constructor(
         fun key(key: String) = apply { this.key = key }
 
         /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [actor]
+         * - [cancellationKey]
+         * - [data]
+         * - [recipients]
+         * - [tenant]
+         * - etc.
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /**
          * Specifies a recipient in a request. This can either be a user identifier (string), an
          * inline user request (object), or an inline object request, which is determined by the
          * presence of a `collection` property.
@@ -435,7 +449,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {

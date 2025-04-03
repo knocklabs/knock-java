@@ -87,6 +87,15 @@ private constructor(
 
         fun userId(userId: String) = apply { this.userId = userId }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [fromUserId]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         /** The user ID to merge from */
         fun fromUserId(fromUserId: String) = apply { body.fromUserId(fromUserId) }
 
@@ -238,7 +247,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {

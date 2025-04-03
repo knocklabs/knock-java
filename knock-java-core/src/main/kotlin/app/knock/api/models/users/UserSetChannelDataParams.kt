@@ -200,7 +200,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): ChannelDataRequest = channelDataRequest
+    fun _body(): ChannelDataRequest = channelDataRequest
 
     fun _pathParam(index: Int): String =
         when (index) {

@@ -113,6 +113,16 @@ private constructor(
 
         fun objectId(objectId: String) = apply { this.objectId = objectId }
 
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [recipients]
+         * - [properties]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
         /** The recipients to subscribe to the object */
         fun recipients(recipients: List<RecipientRequest>) = apply { body.recipients(recipients) }
 
@@ -308,7 +318,7 @@ private constructor(
             )
     }
 
-    @JvmSynthetic internal fun _body(): Body = body
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
