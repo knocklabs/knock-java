@@ -435,6 +435,19 @@ JsonValue complexValue = JsonValue.from(Map.of(
 ));
 ```
 
+Normally a `Builder` class's `build` method will throw [`IllegalStateException`](https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html) if any required parameter or property is unset.
+
+To forcibly omit a required parameter or property, pass [`JsonMissing`](knock-java-core/src/main/kotlin/app/knock/api/core/Values.kt):
+
+```java
+import app.knock.api.core.JsonMissing;
+import app.knock.api.models.workflows.WorkflowTriggerParams;
+
+WorkflowTriggerParams params = WorkflowTriggerParams.builder()
+    .key(JsonMissing.of())
+    .build();
+```
+
 ### Response properties
 
 To access undocumented response properties, call the `_additionalProperties()` method:
