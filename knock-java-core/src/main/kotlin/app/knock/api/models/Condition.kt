@@ -38,7 +38,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun argument(): Optional<String> = Optional.ofNullable(argument.getNullable("argument"))
+    fun argument(): Optional<String> = argument.getOptional("argument")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly

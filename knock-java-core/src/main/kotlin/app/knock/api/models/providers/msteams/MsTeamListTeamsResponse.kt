@@ -45,7 +45,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun skipToken(): Optional<String> = Optional.ofNullable(skipToken.getNullable("skip_token"))
+    fun skipToken(): Optional<String> = skipToken.getOptional("skip_token")
 
     /**
      * Returns the raw JSON value of [msTeamsTeams].
@@ -247,8 +247,7 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun description(): Optional<String> =
-            Optional.ofNullable(description.getNullable("description"))
+        fun description(): Optional<String> = description.getOptional("description")
 
         /**
          * Returns the raw JSON value of [id].

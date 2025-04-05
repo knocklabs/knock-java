@@ -54,8 +54,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun channelData(): Optional<InlineChannelDataRequest> =
-        Optional.ofNullable(channelData.getNullable("channel_data"))
+    fun channelData(): Optional<InlineChannelDataRequest> = channelData.getOptional("channel_data")
 
     /**
      * Inline set preferences for a recipient, where the key is the preference set name
@@ -63,14 +62,13 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun preferences(): Optional<InlinePreferenceSetRequest> =
-        Optional.ofNullable(preferences.getNullable("preferences"))
+    fun preferences(): Optional<InlinePreferenceSetRequest> = preferences.getOptional("preferences")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun settings(): Optional<Settings> = Optional.ofNullable(settings.getNullable("settings"))
+    fun settings(): Optional<Settings> = settings.getOptional("settings")
 
     /**
      * Returns the raw JSON value of [id].
@@ -302,7 +300,7 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun branding(): Optional<Branding> = Optional.ofNullable(branding.getNullable("branding"))
+        fun branding(): Optional<Branding> = branding.getOptional("branding")
 
         /**
          * Set preferences for a recipient
@@ -311,7 +309,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun preferenceSet(): Optional<PreferenceSetRequest> =
-            Optional.ofNullable(preferenceSet.getNullable("preference_set"))
+            preferenceSet.getOptional("preference_set")
 
         /**
          * Returns the raw JSON value of [branding].
@@ -480,27 +478,26 @@ private constructor(
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
-            fun iconUrl(): Optional<String> = Optional.ofNullable(iconUrl.getNullable("icon_url"))
+            fun iconUrl(): Optional<String> = iconUrl.getOptional("icon_url")
 
             /**
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
-            fun logoUrl(): Optional<String> = Optional.ofNullable(logoUrl.getNullable("logo_url"))
+            fun logoUrl(): Optional<String> = logoUrl.getOptional("logo_url")
 
             /**
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
-            fun primaryColor(): Optional<String> =
-                Optional.ofNullable(primaryColor.getNullable("primary_color"))
+            fun primaryColor(): Optional<String> = primaryColor.getOptional("primary_color")
 
             /**
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
             fun primaryColorContrast(): Optional<String> =
-                Optional.ofNullable(primaryColorContrast.getNullable("primary_color_contrast"))
+                primaryColorContrast.getOptional("primary_color_contrast")
 
             /**
              * Returns the raw JSON value of [iconUrl].

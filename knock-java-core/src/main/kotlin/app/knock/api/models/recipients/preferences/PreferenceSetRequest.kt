@@ -46,8 +46,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun categories(): Optional<Categories> =
-        Optional.ofNullable(categories.getNullable("categories"))
+    fun categories(): Optional<Categories> = categories.getOptional("categories")
 
     /**
      * Channel type preferences
@@ -56,7 +55,7 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun channelTypes(): Optional<PreferenceSetChannelTypes> =
-        Optional.ofNullable(channelTypes.getNullable("channel_types"))
+        channelTypes.getOptional("channel_types")
 
     /**
      * A setting for a preference set, where the key in the object is the workflow key, and the
@@ -65,7 +64,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun workflows(): Optional<Workflows> = Optional.ofNullable(workflows.getNullable("workflows"))
+    fun workflows(): Optional<Workflows> = workflows.getOptional("workflows")
 
     /**
      * Returns the raw JSON value of [categories].

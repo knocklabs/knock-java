@@ -94,9 +94,9 @@ private constructor(
             @JsonProperty("page_info") pageInfo: JsonField<PageInfo> = JsonMissing.of(),
         ) : this(entries, pageInfo, mutableMapOf())
 
-        fun entries(): List<Schedule> = entries.getNullable("entries") ?: listOf()
+        fun entries(): List<Schedule> = entries.getOptional("entries").getOrNull() ?: listOf()
 
-        fun pageInfo(): Optional<PageInfo> = Optional.ofNullable(pageInfo.getNullable("page_info"))
+        fun pageInfo(): Optional<PageInfo> = pageInfo.getOptional("page_info")
 
         @JsonProperty("entries")
         fun _entries(): Optional<JsonField<List<Schedule>>> = Optional.ofNullable(entries)

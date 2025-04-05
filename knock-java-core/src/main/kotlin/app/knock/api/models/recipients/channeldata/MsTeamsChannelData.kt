@@ -60,8 +60,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun msTeamsTenantId(): Optional<String> =
-        Optional.ofNullable(msTeamsTenantId.getNullable("ms_teams_tenant_id"))
+    fun msTeamsTenantId(): Optional<String> = msTeamsTenantId.getOptional("ms_teams_tenant_id")
 
     /**
      * Returns the raw JSON value of [connections].
@@ -479,7 +478,7 @@ private constructor(
              *   the server responded with an unexpected value).
              */
             fun msTeamsChannelId(): Optional<String> =
-                Optional.ofNullable(msTeamsChannelId.getNullable("ms_teams_channel_id"))
+                msTeamsChannelId.getOptional("ms_teams_channel_id")
 
             /**
              * The Microsoft Teams team ID
@@ -487,8 +486,7 @@ private constructor(
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
-            fun msTeamsTeamId(): Optional<String> =
-                Optional.ofNullable(msTeamsTeamId.getNullable("ms_teams_team_id"))
+            fun msTeamsTeamId(): Optional<String> = msTeamsTeamId.getOptional("ms_teams_team_id")
 
             /**
              * The Microsoft Teams tenant ID
@@ -497,7 +495,7 @@ private constructor(
              *   the server responded with an unexpected value).
              */
             fun msTeamsTenantId(): Optional<String> =
-                Optional.ofNullable(msTeamsTenantId.getNullable("ms_teams_tenant_id"))
+                msTeamsTenantId.getOptional("ms_teams_tenant_id")
 
             /**
              * The Microsoft Teams user ID
@@ -505,8 +503,7 @@ private constructor(
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
-            fun msTeamsUserId(): Optional<String> =
-                Optional.ofNullable(msTeamsUserId.getNullable("ms_teams_user_id"))
+            fun msTeamsUserId(): Optional<String> = msTeamsUserId.getOptional("ms_teams_user_id")
 
             /**
              * Returns the raw JSON value of [msTeamsChannelId].

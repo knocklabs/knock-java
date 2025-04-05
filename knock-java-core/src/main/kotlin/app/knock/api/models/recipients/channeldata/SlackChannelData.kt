@@ -58,7 +58,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun token(): Optional<Token> = Optional.ofNullable(token.getNullable("token"))
+    fun token(): Optional<Token> = token.getOptional("token")
 
     /**
      * Returns the raw JSON value of [connections].
@@ -453,21 +453,19 @@ private constructor(
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
-            fun accessToken(): Optional<String> =
-                Optional.ofNullable(accessToken.getNullable("access_token"))
+            fun accessToken(): Optional<String> = accessToken.getOptional("access_token")
 
             /**
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
-            fun channelId(): Optional<String> =
-                Optional.ofNullable(channelId.getNullable("channel_id"))
+            fun channelId(): Optional<String> = channelId.getOptional("channel_id")
 
             /**
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
-            fun userId(): Optional<String> = Optional.ofNullable(userId.getNullable("user_id"))
+            fun userId(): Optional<String> = userId.getOptional("user_id")
 
             /**
              * Returns the raw JSON value of [accessToken].
@@ -847,8 +845,7 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun accessToken(): Optional<String> =
-            Optional.ofNullable(accessToken.getNullable("access_token"))
+        fun accessToken(): Optional<String> = accessToken.getOptional("access_token")
 
         /**
          * Returns the raw JSON value of [accessToken].

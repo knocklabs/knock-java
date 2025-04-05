@@ -338,7 +338,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun channelData(): Optional<InlineChannelDataRequest> =
-            Optional.ofNullable(channelData.getNullable("channel_data"))
+            channelData.getOptional("channel_data")
 
         /**
          * Inline set preferences for a recipient, where the key is the preference set name
@@ -347,7 +347,7 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun preferences(): Optional<InlinePreferenceSetRequest> =
-            Optional.ofNullable(preferences.getNullable("preferences"))
+            preferences.getOptional("preferences")
 
         /**
          * Returns the raw JSON value of [channelData].

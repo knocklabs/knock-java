@@ -20,6 +20,7 @@ import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * List subscriptions for an object. Either list all subscriptions that belong to the object, or all
@@ -102,9 +103,9 @@ private constructor(
             @JsonProperty("page_info") pageInfo: JsonField<PageInfo> = JsonMissing.of(),
         ) : this(entries, pageInfo, mutableMapOf())
 
-        fun entries(): List<Subscription> = entries.getNullable("entries") ?: listOf()
+        fun entries(): List<Subscription> = entries.getOptional("entries").getOrNull() ?: listOf()
 
-        fun pageInfo(): Optional<PageInfo> = Optional.ofNullable(pageInfo.getNullable("page_info"))
+        fun pageInfo(): Optional<PageInfo> = pageInfo.getOptional("page_info")
 
         @JsonProperty("entries")
         fun _entries(): Optional<JsonField<List<Subscription>>> = Optional.ofNullable(entries)

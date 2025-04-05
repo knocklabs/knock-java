@@ -248,13 +248,13 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun after(): Optional<String> = Optional.ofNullable(after.getNullable("after"))
+        fun after(): Optional<String> = after.getOptional("after")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun before(): Optional<String> = Optional.ofNullable(before.getNullable("before"))
+        fun before(): Optional<String> = before.getOptional("before")
 
         /**
          * Returns the raw JSON value of [_typename].

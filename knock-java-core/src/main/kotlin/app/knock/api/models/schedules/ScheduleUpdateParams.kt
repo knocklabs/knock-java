@@ -511,34 +511,31 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun actor(): Optional<RecipientRequest> = Optional.ofNullable(actor.getNullable("actor"))
+        fun actor(): Optional<RecipientRequest> = actor.getOptional("actor")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun data(): Optional<Data> = Optional.ofNullable(data.getNullable("data"))
+        fun data(): Optional<Data> = data.getOptional("data")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun endingAt(): Optional<OffsetDateTime> =
-            Optional.ofNullable(endingAt.getNullable("ending_at"))
+        fun endingAt(): Optional<OffsetDateTime> = endingAt.getOptional("ending_at")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun repeats(): Optional<List<ScheduleRepeatRule>> =
-            Optional.ofNullable(repeats.getNullable("repeats"))
+        fun repeats(): Optional<List<ScheduleRepeatRule>> = repeats.getOptional("repeats")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun scheduledAt(): Optional<OffsetDateTime> =
-            Optional.ofNullable(scheduledAt.getNullable("scheduled_at"))
+        fun scheduledAt(): Optional<OffsetDateTime> = scheduledAt.getOptional("scheduled_at")
 
         /**
          * An inline tenant request
@@ -546,8 +543,7 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun tenant(): Optional<InlineTenantRequest> =
-            Optional.ofNullable(tenant.getNullable("tenant"))
+        fun tenant(): Optional<InlineTenantRequest> = tenant.getOptional("tenant")
 
         /**
          * Returns the raw JSON value of [scheduleIds].

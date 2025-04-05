@@ -592,69 +592,63 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun archived(): Optional<Archived> = Optional.ofNullable(archived.getNullable("archived"))
+        fun archived(): Optional<Archived> = archived.getOptional("archived")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun deliveryStatus(): Optional<DeliveryStatus> =
-            Optional.ofNullable(deliveryStatus.getNullable("delivery_status"))
+            deliveryStatus.getOptional("delivery_status")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun engagementStatus(): Optional<EngagementStatus> =
-            Optional.ofNullable(engagementStatus.getNullable("engagement_status"))
+            engagementStatus.getOptional("engagement_status")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun hasTenant(): Optional<Boolean> =
-            Optional.ofNullable(hasTenant.getNullable("has_tenant"))
+        fun hasTenant(): Optional<Boolean> = hasTenant.getOptional("has_tenant")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun newerThan(): Optional<OffsetDateTime> =
-            Optional.ofNullable(newerThan.getNullable("newer_than"))
+        fun newerThan(): Optional<OffsetDateTime> = newerThan.getOptional("newer_than")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun olderThan(): Optional<OffsetDateTime> =
-            Optional.ofNullable(olderThan.getNullable("older_than"))
+        fun olderThan(): Optional<OffsetDateTime> = olderThan.getOptional("older_than")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun recipientIds(): Optional<List<String>> =
-            Optional.ofNullable(recipientIds.getNullable("recipient_ids"))
+        fun recipientIds(): Optional<List<String>> = recipientIds.getOptional("recipient_ids")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun tenants(): Optional<List<String>> = Optional.ofNullable(tenants.getNullable("tenants"))
+        fun tenants(): Optional<List<String>> = tenants.getOptional("tenants")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun triggerData(): Optional<String> =
-            Optional.ofNullable(triggerData.getNullable("trigger_data"))
+        fun triggerData(): Optional<String> = triggerData.getOptional("trigger_data")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun workflows(): Optional<List<String>> =
-            Optional.ofNullable(workflows.getNullable("workflows"))
+        fun workflows(): Optional<List<String>> = workflows.getOptional("workflows")
 
         /**
          * Returns the raw JSON value of [archived].

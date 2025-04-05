@@ -64,31 +64,31 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun dayOfMonth(): Optional<Long> = Optional.ofNullable(dayOfMonth.getNullable("day_of_month"))
+    fun dayOfMonth(): Optional<Long> = dayOfMonth.getOptional("day_of_month")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun days(): Optional<List<Day>> = Optional.ofNullable(days.getNullable("days"))
+    fun days(): Optional<List<Day>> = days.getOptional("days")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun hours(): Optional<Long> = Optional.ofNullable(hours.getNullable("hours"))
+    fun hours(): Optional<Long> = hours.getOptional("hours")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun interval(): Optional<Long> = Optional.ofNullable(interval.getNullable("interval"))
+    fun interval(): Optional<Long> = interval.getOptional("interval")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun minutes(): Optional<Long> = Optional.ofNullable(minutes.getNullable("minutes"))
+    fun minutes(): Optional<Long> = minutes.getOptional("minutes")
 
     /**
      * Returns the raw JSON value of [_typename].

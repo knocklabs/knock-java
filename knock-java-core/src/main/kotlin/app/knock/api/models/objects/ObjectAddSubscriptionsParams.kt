@@ -363,8 +363,7 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun properties(): Optional<Properties> =
-            Optional.ofNullable(properties.getNullable("properties"))
+        fun properties(): Optional<Properties> = properties.getOptional("properties")
 
         /**
          * Returns the raw JSON value of [recipients].

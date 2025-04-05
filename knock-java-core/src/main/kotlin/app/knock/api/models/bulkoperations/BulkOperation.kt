@@ -151,14 +151,13 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun completedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(completedAt.getNullable("completed_at"))
+    fun completedAt(): Optional<OffsetDateTime> = completedAt.getOptional("completed_at")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun errorCount(): Optional<Long> = Optional.ofNullable(errorCount.getNullable("error_count"))
+    fun errorCount(): Optional<Long> = errorCount.getOptional("error_count")
 
     /**
      * A list of items that failed to be processed
@@ -166,22 +165,19 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun errorItems(): Optional<List<ErrorItem>> =
-        Optional.ofNullable(errorItems.getNullable("error_items"))
+    fun errorItems(): Optional<List<ErrorItem>> = errorItems.getOptional("error_items")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun failedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(failedAt.getNullable("failed_at"))
+    fun failedAt(): Optional<OffsetDateTime> = failedAt.getOptional("failed_at")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun startedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(startedAt.getNullable("started_at"))
+    fun startedAt(): Optional<OffsetDateTime> = startedAt.getOptional("started_at")
 
     /**
      * Returns the raw JSON value of [id].
@@ -828,8 +824,7 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun collection(): Optional<String> =
-            Optional.ofNullable(collection.getNullable("collection"))
+        fun collection(): Optional<String> = collection.getOptional("collection")
 
         /**
          * Returns the raw JSON value of [id].

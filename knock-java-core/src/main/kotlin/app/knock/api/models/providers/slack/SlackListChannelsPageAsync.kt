@@ -18,6 +18,7 @@ import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
 /** List Slack channels for a Slack workspace */
 class SlackListChannelsPageAsync
@@ -98,11 +99,10 @@ private constructor(
             slackChannels: JsonField<List<SlackListChannelsResponse>> = JsonMissing.of(),
         ) : this(nextCursor, slackChannels, mutableMapOf())
 
-        fun nextCursor(): Optional<String> =
-            Optional.ofNullable(nextCursor.getNullable("next_cursor"))
+        fun nextCursor(): Optional<String> = nextCursor.getOptional("next_cursor")
 
         fun slackChannels(): List<SlackListChannelsResponse> =
-            slackChannels.getNullable("slack_channels") ?: listOf()
+            slackChannels.getOptional("slack_channels").getOrNull() ?: listOf()
 
         @JsonProperty("next_cursor")
         fun _nextCursor(): Optional<JsonField<String>> = Optional.ofNullable(nextCursor)

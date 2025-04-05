@@ -497,7 +497,7 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun actor(): Optional<RecipientRequest> = Optional.ofNullable(actor.getNullable("actor"))
+        fun actor(): Optional<RecipientRequest> = actor.getOptional("actor")
 
         /**
          * An optional key that is used in the workflow cancellation endpoint to target a
@@ -506,8 +506,7 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun cancellationKey(): Optional<String> =
-            Optional.ofNullable(cancellationKey.getNullable("cancellation_key"))
+        fun cancellationKey(): Optional<String> = cancellationKey.getOptional("cancellation_key")
 
         /**
          * An optional map of data to be used in the workflow. This data will be available to the
@@ -516,7 +515,7 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun data(): Optional<Data> = Optional.ofNullable(data.getNullable("data"))
+        fun data(): Optional<Data> = data.getOptional("data")
 
         /**
          * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
@@ -525,8 +524,7 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun recipients(): Optional<List<RecipientRequest>> =
-            Optional.ofNullable(recipients.getNullable("recipients"))
+        fun recipients(): Optional<List<RecipientRequest>> = recipients.getOptional("recipients")
 
         /**
          * An inline tenant request
@@ -534,8 +532,7 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun tenant(): Optional<InlineTenantRequest> =
-            Optional.ofNullable(tenant.getNullable("tenant"))
+        fun tenant(): Optional<InlineTenantRequest> = tenant.getOptional("tenant")
 
         /**
          * Returns the raw JSON value of [actor].

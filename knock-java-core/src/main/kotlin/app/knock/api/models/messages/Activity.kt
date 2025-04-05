@@ -55,13 +55,13 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun id(): Optional<String> = Optional.ofNullable(id.getNullable("id"))
+    fun id(): Optional<String> = id.getOptional("id")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun _typename(): Optional<String> = Optional.ofNullable(_typename.getNullable("__typename"))
+    fun _typename(): Optional<String> = _typename.getOptional("__typename")
 
     /**
      * A recipient, which is either a user or an object
@@ -69,7 +69,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun actor(): Optional<Recipient> = Optional.ofNullable(actor.getNullable("actor"))
+    fun actor(): Optional<Recipient> = actor.getOptional("actor")
 
     /**
      * The data associated with the activity
@@ -77,14 +77,13 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun data(): Optional<Data> = Optional.ofNullable(data.getNullable("data"))
+    fun data(): Optional<Data> = data.getOptional("data")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun insertedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(insertedAt.getNullable("inserted_at"))
+    fun insertedAt(): Optional<OffsetDateTime> = insertedAt.getOptional("inserted_at")
 
     /**
      * A recipient, which is either a user or an object
@@ -92,14 +91,13 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun recipient(): Optional<Recipient> = Optional.ofNullable(recipient.getNullable("recipient"))
+    fun recipient(): Optional<Recipient> = recipient.getOptional("recipient")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun updatedAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(updatedAt.getNullable("updated_at"))
+    fun updatedAt(): Optional<OffsetDateTime> = updatedAt.getOptional("updated_at")
 
     /**
      * Returns the raw JSON value of [id].

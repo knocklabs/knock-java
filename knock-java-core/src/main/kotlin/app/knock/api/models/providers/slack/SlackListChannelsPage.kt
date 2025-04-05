@@ -93,11 +93,10 @@ private constructor(
             slackChannels: JsonField<List<SlackListChannelsResponse>> = JsonMissing.of(),
         ) : this(nextCursor, slackChannels, mutableMapOf())
 
-        fun nextCursor(): Optional<String> =
-            Optional.ofNullable(nextCursor.getNullable("next_cursor"))
+        fun nextCursor(): Optional<String> = nextCursor.getOptional("next_cursor")
 
         fun slackChannels(): List<SlackListChannelsResponse> =
-            slackChannels.getNullable("slack_channels") ?: listOf()
+            slackChannels.getOptional("slack_channels").getOrNull() ?: listOf()
 
         @JsonProperty("next_cursor")
         fun _nextCursor(): Optional<JsonField<String>> = Optional.ofNullable(nextCursor)

@@ -372,14 +372,13 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun recipients(): Optional<List<String>> =
-            Optional.ofNullable(recipients.getNullable("recipients"))
+        fun recipients(): Optional<List<String>> = recipients.getOptional("recipients")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun tenant(): Optional<String> = Optional.ofNullable(tenant.getNullable("tenant"))
+        fun tenant(): Optional<String> = tenant.getOptional("tenant")
 
         /**
          * Returns the raw JSON value of [cancellationKey].

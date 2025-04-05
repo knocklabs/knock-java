@@ -62,8 +62,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun channelData(): Optional<InlineChannelDataRequest> =
-        Optional.ofNullable(channelData.getNullable("channel_data"))
+    fun channelData(): Optional<InlineChannelDataRequest> = channelData.getOptional("channel_data")
 
     /**
      * The creation date of the user from your system.
@@ -71,8 +70,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun createdAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(createdAt.getNullable("created_at"))
+    fun createdAt(): Optional<OffsetDateTime> = createdAt.getOptional("created_at")
 
     /**
      * Inline set preferences for a recipient, where the key is the preference set name
@@ -80,8 +78,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun preferences(): Optional<InlinePreferenceSetRequest> =
-        Optional.ofNullable(preferences.getNullable("preferences"))
+    fun preferences(): Optional<InlinePreferenceSetRequest> = preferences.getOptional("preferences")
 
     /**
      * Returns the raw JSON value of [id].

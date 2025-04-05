@@ -58,7 +58,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun chat(): Optional<Chat> = Optional.ofNullable(chat.getNullable("chat"))
+    fun chat(): Optional<Chat> = chat.getOptional("chat")
 
     /**
      * A set of settings for a channel type. Currently, this can only be a list of conditions to
@@ -67,7 +67,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun email(): Optional<Email> = Optional.ofNullable(email.getNullable("email"))
+    fun email(): Optional<Email> = email.getOptional("email")
 
     /**
      * A set of settings for a channel type. Currently, this can only be a list of conditions to
@@ -76,7 +76,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun http(): Optional<Http> = Optional.ofNullable(http.getNullable("http"))
+    fun http(): Optional<Http> = http.getOptional("http")
 
     /**
      * A set of settings for a channel type. Currently, this can only be a list of conditions to
@@ -85,7 +85,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun inAppFeed(): Optional<InAppFeed> = Optional.ofNullable(inAppFeed.getNullable("in_app_feed"))
+    fun inAppFeed(): Optional<InAppFeed> = inAppFeed.getOptional("in_app_feed")
 
     /**
      * A set of settings for a channel type. Currently, this can only be a list of conditions to
@@ -94,7 +94,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun push(): Optional<Push> = Optional.ofNullable(push.getNullable("push"))
+    fun push(): Optional<Push> = push.getOptional("push")
 
     /**
      * A set of settings for a channel type. Currently, this can only be a list of conditions to
@@ -103,7 +103,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun sms(): Optional<Sms> = Optional.ofNullable(sms.getNullable("sms"))
+    fun sms(): Optional<Sms> = sms.getOptional("sms")
 
     /**
      * Returns the raw JSON value of [chat].

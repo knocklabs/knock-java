@@ -85,39 +85,37 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun avatar(): Optional<String> = Optional.ofNullable(avatar.getNullable("avatar"))
+    fun avatar(): Optional<String> = avatar.getOptional("avatar")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun createdAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(createdAt.getNullable("created_at"))
+    fun createdAt(): Optional<OffsetDateTime> = createdAt.getOptional("created_at")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun email(): Optional<String> = Optional.ofNullable(email.getNullable("email"))
+    fun email(): Optional<String> = email.getOptional("email")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun name(): Optional<String> = Optional.ofNullable(name.getNullable("name"))
+    fun name(): Optional<String> = name.getOptional("name")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun phoneNumber(): Optional<String> =
-        Optional.ofNullable(phoneNumber.getNullable("phone_number"))
+    fun phoneNumber(): Optional<String> = phoneNumber.getOptional("phone_number")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun timezone(): Optional<String> = Optional.ofNullable(timezone.getNullable("timezone"))
+    fun timezone(): Optional<String> = timezone.getOptional("timezone")
 
     /**
      * Returns the raw JSON value of [id].

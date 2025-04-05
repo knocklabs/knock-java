@@ -151,7 +151,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun data(): Optional<Data> = Optional.ofNullable(data.getNullable("data"))
+    fun data(): Optional<Data> = data.getOptional("data")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -169,7 +169,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun tenant(): Optional<String> = Optional.ofNullable(tenant.getNullable("tenant"))
+    fun tenant(): Optional<String> = tenant.getOptional("tenant")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -193,39 +193,37 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun archivedAt(): Optional<String> = Optional.ofNullable(archivedAt.getNullable("archived_at"))
+    fun archivedAt(): Optional<String> = archivedAt.getOptional("archived_at")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun clickedAt(): Optional<String> = Optional.ofNullable(clickedAt.getNullable("clicked_at"))
+    fun clickedAt(): Optional<String> = clickedAt.getOptional("clicked_at")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun interactedAt(): Optional<String> =
-        Optional.ofNullable(interactedAt.getNullable("interacted_at"))
+    fun interactedAt(): Optional<String> = interactedAt.getOptional("interacted_at")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun linkClickedAt(): Optional<String> =
-        Optional.ofNullable(linkClickedAt.getNullable("link_clicked_at"))
+    fun linkClickedAt(): Optional<String> = linkClickedAt.getOptional("link_clicked_at")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun readAt(): Optional<String> = Optional.ofNullable(readAt.getNullable("read_at"))
+    fun readAt(): Optional<String> = readAt.getOptional("read_at")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun seenAt(): Optional<String> = Optional.ofNullable(seenAt.getNullable("seen_at"))
+    fun seenAt(): Optional<String> = seenAt.getOptional("seen_at")
 
     /**
      * Returns the raw JSON value of [id].

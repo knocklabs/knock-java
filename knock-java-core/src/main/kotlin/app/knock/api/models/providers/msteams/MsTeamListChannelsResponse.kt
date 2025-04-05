@@ -232,29 +232,25 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun createdDateTime(): Optional<String> =
-            Optional.ofNullable(createdDateTime.getNullable("createdDateTime"))
+        fun createdDateTime(): Optional<String> = createdDateTime.getOptional("createdDateTime")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun description(): Optional<String> =
-            Optional.ofNullable(description.getNullable("description"))
+        fun description(): Optional<String> = description.getOptional("description")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun isArchived(): Optional<Boolean> =
-            Optional.ofNullable(isArchived.getNullable("isArchived"))
+        fun isArchived(): Optional<Boolean> = isArchived.getOptional("isArchived")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun membershipType(): Optional<String> =
-            Optional.ofNullable(membershipType.getNullable("membershipType"))
+        fun membershipType(): Optional<String> = membershipType.getOptional("membershipType")
 
         /**
          * Returns the raw JSON value of [id].

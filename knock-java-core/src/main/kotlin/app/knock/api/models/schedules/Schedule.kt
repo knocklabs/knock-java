@@ -125,7 +125,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun _typename(): Optional<String> = Optional.ofNullable(_typename.getNullable("__typename"))
+    fun _typename(): Optional<String> = _typename.getOptional("__typename")
 
     /**
      * A recipient, which is either a user or an object
@@ -133,33 +133,33 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun actor(): Optional<Recipient> = Optional.ofNullable(actor.getNullable("actor"))
+    fun actor(): Optional<Recipient> = actor.getOptional("actor")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun data(): Optional<Data> = Optional.ofNullable(data.getNullable("data"))
+    fun data(): Optional<Data> = data.getOptional("data")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun lastOccurrenceAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(lastOccurrenceAt.getNullable("last_occurrence_at"))
+        lastOccurrenceAt.getOptional("last_occurrence_at")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun nextOccurrenceAt(): Optional<OffsetDateTime> =
-        Optional.ofNullable(nextOccurrenceAt.getNullable("next_occurrence_at"))
+        nextOccurrenceAt.getOptional("next_occurrence_at")
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun tenant(): Optional<String> = Optional.ofNullable(tenant.getNullable("tenant"))
+    fun tenant(): Optional<String> = tenant.getOptional("tenant")
 
     /**
      * Returns the raw JSON value of [id].

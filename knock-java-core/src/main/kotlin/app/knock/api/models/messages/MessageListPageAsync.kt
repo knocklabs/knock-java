@@ -19,6 +19,7 @@ import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
 import java.util.function.Predicate
+import kotlin.jvm.optionals.getOrNull
 
 /** List messages */
 class MessageListPageAsync
@@ -98,9 +99,9 @@ private constructor(
             @JsonProperty("page_info") pageInfo: JsonField<PageInfo> = JsonMissing.of(),
         ) : this(entries, pageInfo, mutableMapOf())
 
-        fun entries(): List<Message> = entries.getNullable("entries") ?: listOf()
+        fun entries(): List<Message> = entries.getOptional("entries").getOrNull() ?: listOf()
 
-        fun pageInfo(): Optional<PageInfo> = Optional.ofNullable(pageInfo.getNullable("page_info"))
+        fun pageInfo(): Optional<PageInfo> = pageInfo.getOptional("page_info")
 
         @JsonProperty("entries")
         fun _entries(): Optional<JsonField<List<Message>>> = Optional.ofNullable(entries)

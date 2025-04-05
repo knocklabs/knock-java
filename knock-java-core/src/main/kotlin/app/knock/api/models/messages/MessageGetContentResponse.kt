@@ -692,19 +692,19 @@ private constructor(
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
-            fun bcc(): Optional<String> = Optional.ofNullable(bcc.getNullable("bcc"))
+            fun bcc(): Optional<String> = bcc.getOptional("bcc")
 
             /**
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
-            fun cc(): Optional<String> = Optional.ofNullable(cc.getNullable("cc"))
+            fun cc(): Optional<String> = cc.getOptional("cc")
 
             /**
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
-            fun replyTo(): Optional<String> = Optional.ofNullable(replyTo.getNullable("reply_to"))
+            fun replyTo(): Optional<String> = replyTo.getOptional("reply_to")
 
             /**
              * Returns the raw JSON value of [_typename].
@@ -1351,7 +1351,7 @@ private constructor(
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
-            fun data(): Optional<InnerData> = Optional.ofNullable(data.getNullable("data"))
+            fun data(): Optional<InnerData> = data.getOptional("data")
 
             /**
              * Returns the raw JSON value of [token].
@@ -1759,8 +1759,7 @@ private constructor(
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
-            fun metadata(): Optional<Metadata> =
-                Optional.ofNullable(metadata.getNullable("metadata"))
+            fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
             /**
              * Returns the raw JSON value of [_typename].
@@ -2112,8 +2111,7 @@ private constructor(
                  * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g.
                  *   if the server responded with an unexpected value).
                  */
-                fun blocks(): Optional<List<Block>> =
-                    Optional.ofNullable(blocks.getNullable("blocks"))
+                fun blocks(): Optional<List<Block>> = blocks.getOptional("blocks")
 
                 /**
                  * The JSON content of the message
@@ -2121,15 +2119,13 @@ private constructor(
                  * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g.
                  *   if the server responded with an unexpected value).
                  */
-                fun jsonContent(): Optional<JsonContent> =
-                    Optional.ofNullable(jsonContent.getNullable("json_content"))
+                fun jsonContent(): Optional<JsonContent> = jsonContent.getOptional("json_content")
 
                 /**
                  * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g.
                  *   if the server responded with an unexpected value).
                  */
-                fun summary(): Optional<String> =
-                    Optional.ofNullable(summary.getNullable("summary"))
+                fun summary(): Optional<String> = summary.getOptional("summary")
 
                 /**
                  * Returns the raw JSON value of [blocks].

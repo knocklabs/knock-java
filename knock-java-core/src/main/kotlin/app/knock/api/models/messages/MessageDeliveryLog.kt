@@ -418,37 +418,37 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun body(): Optional<Body> = Optional.ofNullable(body.getNullable("body"))
+        fun body(): Optional<Body> = body.getOptional("body")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun headers(): Optional<Headers> = Optional.ofNullable(headers.getNullable("headers"))
+        fun headers(): Optional<Headers> = headers.getOptional("headers")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun host(): Optional<String> = Optional.ofNullable(host.getNullable("host"))
+        fun host(): Optional<String> = host.getOptional("host")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun method(): Optional<Method> = Optional.ofNullable(method.getNullable("method"))
+        fun method(): Optional<Method> = method.getOptional("method")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun path(): Optional<String> = Optional.ofNullable(path.getNullable("path"))
+        fun path(): Optional<String> = path.getOptional("path")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun query(): Optional<String> = Optional.ofNullable(query.getNullable("query"))
+        fun query(): Optional<String> = query.getOptional("query")
 
         /**
          * Returns the raw JSON value of [body].
@@ -1253,19 +1253,19 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun body(): Optional<Body> = Optional.ofNullable(body.getNullable("body"))
+        fun body(): Optional<Body> = body.getOptional("body")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun headers(): Optional<Headers> = Optional.ofNullable(headers.getNullable("headers"))
+        fun headers(): Optional<Headers> = headers.getOptional("headers")
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun status(): Optional<Long> = Optional.ofNullable(status.getNullable("status"))
+        fun status(): Optional<Long> = status.getOptional("status")
 
         /**
          * Returns the raw JSON value of [body].
