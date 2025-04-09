@@ -19,7 +19,7 @@ internal class MessageEventTest {
                 ._typename("MessageEvent")
                 .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .recipient("user_123")
-                .type(MessageEvent.Type.MESSAGE_QUEUED)
+                .type(MessageEvent.Type.MESSAGE_SENT)
                 .data(
                     MessageEvent.Data.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -32,7 +32,7 @@ internal class MessageEventTest {
         assertThat(messageEvent.insertedAt())
             .isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
         assertThat(messageEvent.recipient()).isEqualTo(MessageEvent.Recipient.ofString("user_123"))
-        assertThat(messageEvent.type()).isEqualTo(MessageEvent.Type.MESSAGE_QUEUED)
+        assertThat(messageEvent.type()).isEqualTo(MessageEvent.Type.MESSAGE_SENT)
         assertThat(messageEvent.data())
             .contains(
                 MessageEvent.Data.builder()
@@ -50,7 +50,7 @@ internal class MessageEventTest {
                 ._typename("MessageEvent")
                 .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .recipient("user_123")
-                .type(MessageEvent.Type.MESSAGE_QUEUED)
+                .type(MessageEvent.Type.MESSAGE_SENT)
                 .data(
                     MessageEvent.Data.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))
