@@ -20,6 +20,7 @@ import app.knock.api.models.tenants.Tenant
 import app.knock.api.models.tenants.TenantDeleteParams
 import app.knock.api.models.tenants.TenantGetParams
 import app.knock.api.models.tenants.TenantListPageAsync
+import app.knock.api.models.tenants.TenantListPageResponse
 import app.knock.api.models.tenants.TenantListParams
 import app.knock.api.models.tenants.TenantSetParams
 import app.knock.api.services.async.tenants.BulkServiceAsync
@@ -78,8 +79,8 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
 
         override fun bulk(): BulkServiceAsync.WithRawResponse = bulk
 
-        private val listHandler: Handler<TenantListPageAsync.Response> =
-            jsonHandler<TenantListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<TenantListPageResponse> =
+            jsonHandler<TenantListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(

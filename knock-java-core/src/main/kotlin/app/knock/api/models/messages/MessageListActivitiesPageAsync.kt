@@ -2,18 +2,7 @@
 
 package app.knock.api.models.messages
 
-import app.knock.api.core.ExcludeMissing
-import app.knock.api.core.JsonField
-import app.knock.api.core.JsonMissing
-import app.knock.api.core.JsonValue
-import app.knock.api.errors.KnockInvalidDataException
-import app.knock.api.models.PageInfo
 import app.knock.api.services.async.MessageServiceAsync
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
@@ -26,14 +15,26 @@ class MessageListActivitiesPageAsync
 private constructor(
     private val messagesService: MessageServiceAsync,
     private val params: MessageListActivitiesParams,
-    private val response: Response,
+    private val response: MessageListActivitiesPageResponse,
 ) {
 
-    fun response(): Response = response
+    /** Returns the response that this page was parsed from. */
+    fun response(): MessageListActivitiesPageResponse = response
 
-    fun items(): List<Activity> = response().items()
+    /**
+     * Delegates to [MessageListActivitiesPageResponse], but gracefully handles missing data.
+     *
+     * @see [MessageListActivitiesPageResponse.items]
+     */
+    fun items(): List<Activity> = response._items().getOptional("items").getOrNull() ?: emptyList()
 
-    fun pageInfo(): Optional<PageInfo> = response().pageInfo()
+    /**
+     * Delegates to [MessageListActivitiesPageResponse], but gracefully handles missing data.
+     *
+     * @see [MessageListActivitiesPageResponse.pageInfo]
+     */
+    fun pageInfo(): Optional<MessageListActivitiesPageResponse.PageInfo> =
+        response._pageInfo().getOptional("page_info")
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -48,13 +49,8 @@ private constructor(
     override fun toString() =
         "MessageListActivitiesPageAsync{messagesService=$messagesService, params=$params, response=$response}"
 
-    fun hasNextPage(): Boolean {
-        if (items().isEmpty()) {
-            return false
-        }
-
-        return pageInfo().flatMap { it.after() }.isPresent
-    }
+    fun hasNextPage(): Boolean =
+        items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
 
     fun getNextPageParams(): Optional<MessageListActivitiesParams> {
         if (!hasNextPage()) {
@@ -62,9 +58,11 @@ private constructor(
         }
 
         return Optional.of(
-            MessageListActivitiesParams.builder()
-                .from(params)
-                .apply { pageInfo().flatMap { it.after() }.ifPresent { this.after(it) } }
+            params
+                .toBuilder()
+                .apply {
+                    pageInfo().flatMap { it._after().getOptional("after") }.ifPresent { after(it) }
+                }
                 .build()
         )
     }
@@ -83,118 +81,8 @@ private constructor(
         fun of(
             messagesService: MessageServiceAsync,
             params: MessageListActivitiesParams,
-            response: Response,
+            response: MessageListActivitiesPageResponse,
         ) = MessageListActivitiesPageAsync(messagesService, params, response)
-    }
-
-    class Response(
-        private val items: JsonField<List<Activity>>,
-        private val pageInfo: JsonField<PageInfo>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("items") items: JsonField<List<Activity>> = JsonMissing.of(),
-            @JsonProperty("page_info") pageInfo: JsonField<PageInfo> = JsonMissing.of(),
-        ) : this(items, pageInfo, mutableMapOf())
-
-        fun items(): List<Activity> = items.getOptional("items").getOrNull() ?: listOf()
-
-        fun pageInfo(): Optional<PageInfo> = pageInfo.getOptional("page_info")
-
-        @JsonProperty("items")
-        fun _items(): Optional<JsonField<List<Activity>>> = Optional.ofNullable(items)
-
-        @JsonProperty("page_info")
-        fun _pageInfo(): Optional<JsonField<PageInfo>> = Optional.ofNullable(pageInfo)
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        private var validated: Boolean = false
-
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
-
-            items().map { it.validate() }
-            pageInfo().ifPresent { it.validate() }
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: KnockInvalidDataException) {
-                false
-            }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && items == other.items && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(items, pageInfo, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{items=$items, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of
-             * [MessageListActivitiesPageAsync].
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var items: JsonField<List<Activity>> = JsonMissing.of()
-            private var pageInfo: JsonField<PageInfo> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.items = page.items
-                this.pageInfo = page.pageInfo
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun items(items: List<Activity>) = items(JsonField.of(items))
-
-            fun items(items: JsonField<List<Activity>>) = apply { this.items = items }
-
-            fun pageInfo(pageInfo: PageInfo) = pageInfo(JsonField.of(pageInfo))
-
-            fun pageInfo(pageInfo: JsonField<PageInfo>) = apply { this.pageInfo = pageInfo }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            /**
-             * Returns an immutable instance of [Response].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Response = Response(items, pageInfo, additionalProperties.toMutableMap())
-        }
     }
 
     class AutoPager(private val firstPage: MessageListActivitiesPageAsync) {

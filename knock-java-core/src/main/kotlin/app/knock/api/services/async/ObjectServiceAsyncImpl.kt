@@ -24,12 +24,16 @@ import app.knock.api.models.objects.ObjectGetChannelDataParams
 import app.knock.api.models.objects.ObjectGetParams
 import app.knock.api.models.objects.ObjectGetPreferencesParams
 import app.knock.api.models.objects.ObjectListMessagesPageAsync
+import app.knock.api.models.objects.ObjectListMessagesPageResponse
 import app.knock.api.models.objects.ObjectListMessagesParams
 import app.knock.api.models.objects.ObjectListPageAsync
+import app.knock.api.models.objects.ObjectListPageResponse
 import app.knock.api.models.objects.ObjectListParams
 import app.knock.api.models.objects.ObjectListSchedulesPageAsync
+import app.knock.api.models.objects.ObjectListSchedulesPageResponse
 import app.knock.api.models.objects.ObjectListSchedulesParams
 import app.knock.api.models.objects.ObjectListSubscriptionsPageAsync
+import app.knock.api.models.objects.ObjectListSubscriptionsPageResponse
 import app.knock.api.models.objects.ObjectListSubscriptionsParams
 import app.knock.api.models.objects.ObjectSetChannelDataParams
 import app.knock.api.models.objects.ObjectSetParams
@@ -164,8 +168,8 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
 
         override fun bulk(): BulkServiceAsync.WithRawResponse = bulk
 
-        private val listHandler: Handler<ObjectListPageAsync.Response> =
-            jsonHandler<ObjectListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<ObjectListPageResponse> =
+            jsonHandler<ObjectListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
@@ -395,8 +399,8 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val listMessagesHandler: Handler<ObjectListMessagesPageAsync.Response> =
-            jsonHandler<ObjectListMessagesPageAsync.Response>(clientOptions.jsonMapper)
+        private val listMessagesHandler: Handler<ObjectListMessagesPageResponse> =
+            jsonHandler<ObjectListMessagesPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listMessages(
@@ -438,8 +442,8 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val listSchedulesHandler: Handler<ObjectListSchedulesPageAsync.Response> =
-            jsonHandler<ObjectListSchedulesPageAsync.Response>(clientOptions.jsonMapper)
+        private val listSchedulesHandler: Handler<ObjectListSchedulesPageResponse> =
+            jsonHandler<ObjectListSchedulesPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listSchedules(
@@ -481,8 +485,8 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val listSubscriptionsHandler: Handler<ObjectListSubscriptionsPageAsync.Response> =
-            jsonHandler<ObjectListSubscriptionsPageAsync.Response>(clientOptions.jsonMapper)
+        private val listSubscriptionsHandler: Handler<ObjectListSubscriptionsPageResponse> =
+            jsonHandler<ObjectListSubscriptionsPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listSubscriptions(

@@ -17,6 +17,7 @@ import app.knock.api.core.prepareAsync
 import app.knock.api.models.users.feeds.FeedGetSettingsParams
 import app.knock.api.models.users.feeds.FeedGetSettingsResponse
 import app.knock.api.models.users.feeds.FeedListItemsPageAsync
+import app.knock.api.models.users.feeds.FeedListItemsPageResponse
 import app.knock.api.models.users.feeds.FeedListItemsParams
 import java.util.concurrent.CompletableFuture
 
@@ -85,8 +86,8 @@ class FeedServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 }
         }
 
-        private val listItemsHandler: Handler<FeedListItemsPageAsync.Response> =
-            jsonHandler<FeedListItemsPageAsync.Response>(clientOptions.jsonMapper)
+        private val listItemsHandler: Handler<FeedListItemsPageResponse> =
+            jsonHandler<FeedListItemsPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listItems(

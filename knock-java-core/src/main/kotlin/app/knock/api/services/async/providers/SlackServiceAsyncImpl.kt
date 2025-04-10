@@ -19,6 +19,7 @@ import app.knock.api.core.prepareAsync
 import app.knock.api.models.providers.slack.SlackCheckAuthParams
 import app.knock.api.models.providers.slack.SlackCheckAuthResponse
 import app.knock.api.models.providers.slack.SlackListChannelsPageAsync
+import app.knock.api.models.providers.slack.SlackListChannelsPageResponse
 import app.knock.api.models.providers.slack.SlackListChannelsParams
 import app.knock.api.models.providers.slack.SlackRevokeAccessParams
 import java.util.concurrent.CompletableFuture
@@ -88,8 +89,8 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val listChannelsHandler: Handler<SlackListChannelsPageAsync.Response> =
-            jsonHandler<SlackListChannelsPageAsync.Response>(clientOptions.jsonMapper)
+        private val listChannelsHandler: Handler<SlackListChannelsPageResponse> =
+            jsonHandler<SlackListChannelsPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listChannels(

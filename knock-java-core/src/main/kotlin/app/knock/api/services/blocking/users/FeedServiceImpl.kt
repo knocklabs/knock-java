@@ -17,6 +17,7 @@ import app.knock.api.core.prepare
 import app.knock.api.models.users.feeds.FeedGetSettingsParams
 import app.knock.api.models.users.feeds.FeedGetSettingsResponse
 import app.knock.api.models.users.feeds.FeedListItemsPage
+import app.knock.api.models.users.feeds.FeedListItemsPageResponse
 import app.knock.api.models.users.feeds.FeedListItemsParams
 
 class FeedServiceImpl internal constructor(private val clientOptions: ClientOptions) : FeedService {
@@ -80,8 +81,8 @@ class FeedServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val listItemsHandler: Handler<FeedListItemsPage.Response> =
-            jsonHandler<FeedListItemsPage.Response>(clientOptions.jsonMapper)
+        private val listItemsHandler: Handler<FeedListItemsPageResponse> =
+            jsonHandler<FeedListItemsPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listItems(

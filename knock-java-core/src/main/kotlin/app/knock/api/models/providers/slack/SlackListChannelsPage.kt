@@ -2,17 +2,7 @@
 
 package app.knock.api.models.providers.slack
 
-import app.knock.api.core.ExcludeMissing
-import app.knock.api.core.JsonField
-import app.knock.api.core.JsonMissing
-import app.knock.api.core.JsonValue
-import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.services.blocking.providers.SlackService
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import java.util.stream.Stream
@@ -24,14 +14,26 @@ class SlackListChannelsPage
 private constructor(
     private val slackService: SlackService,
     private val params: SlackListChannelsParams,
-    private val response: Response,
+    private val response: SlackListChannelsPageResponse,
 ) {
 
-    fun response(): Response = response
+    /** Returns the response that this page was parsed from. */
+    fun response(): SlackListChannelsPageResponse = response
 
-    fun nextCursor(): Optional<String> = response().nextCursor()
+    /**
+     * Delegates to [SlackListChannelsPageResponse], but gracefully handles missing data.
+     *
+     * @see [SlackListChannelsPageResponse.nextCursor]
+     */
+    fun nextCursor(): Optional<String> = response._nextCursor().getOptional("next_cursor")
 
-    fun slackChannels(): List<SlackListChannelsResponse> = response().slackChannels()
+    /**
+     * Delegates to [SlackListChannelsPageResponse], but gracefully handles missing data.
+     *
+     * @see [SlackListChannelsPageResponse.slackChannels]
+     */
+    fun slackChannels(): List<SlackListChannelsResponse> =
+        response._slackChannels().getOptional("slack_channels").getOrNull() ?: emptyList()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
@@ -46,13 +48,7 @@ private constructor(
     override fun toString() =
         "SlackListChannelsPage{slackService=$slackService, params=$params, response=$response}"
 
-    fun hasNextPage(): Boolean {
-        if (slackChannels().isEmpty()) {
-            return false
-        }
-
-        return nextCursor().isPresent
-    }
+    fun hasNextPage(): Boolean = slackChannels().isNotEmpty() && nextCursor().isPresent
 
     fun getNextPageParams(): Optional<SlackListChannelsParams> {
         if (!hasNextPage()) {
@@ -60,10 +56,7 @@ private constructor(
         }
 
         return Optional.of(
-            SlackListChannelsParams.builder()
-                .from(params)
-                .apply { nextCursor().ifPresent { this.queryOptionsCursor(it) } }
-                .build()
+            params.toBuilder().apply { nextCursor().ifPresent { queryOptionsCursor(it) } }.build()
         )
     }
 
@@ -76,124 +69,11 @@ private constructor(
     companion object {
 
         @JvmStatic
-        fun of(slackService: SlackService, params: SlackListChannelsParams, response: Response) =
-            SlackListChannelsPage(slackService, params, response)
-    }
-
-    class Response(
-        private val nextCursor: JsonField<String>,
-        private val slackChannels: JsonField<List<SlackListChannelsResponse>>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("next_cursor") nextCursor: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("slack_channels")
-            slackChannels: JsonField<List<SlackListChannelsResponse>> = JsonMissing.of(),
-        ) : this(nextCursor, slackChannels, mutableMapOf())
-
-        fun nextCursor(): Optional<String> = nextCursor.getOptional("next_cursor")
-
-        fun slackChannels(): List<SlackListChannelsResponse> =
-            slackChannels.getOptional("slack_channels").getOrNull() ?: listOf()
-
-        @JsonProperty("next_cursor")
-        fun _nextCursor(): Optional<JsonField<String>> = Optional.ofNullable(nextCursor)
-
-        @JsonProperty("slack_channels")
-        fun _slackChannels(): Optional<JsonField<List<SlackListChannelsResponse>>> =
-            Optional.ofNullable(slackChannels)
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        private var validated: Boolean = false
-
-        fun validate(): Response = apply {
-            if (validated) {
-                return@apply
-            }
-
-            nextCursor()
-            slackChannels().map { it.validate() }
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: KnockInvalidDataException) {
-                false
-            }
-
-        fun toBuilder() = Builder().from(this)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Response && nextCursor == other.nextCursor && slackChannels == other.slackChannels && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(nextCursor, slackChannels, additionalProperties) /* spotless:on */
-
-        override fun toString() =
-            "Response{nextCursor=$nextCursor, slackChannels=$slackChannels, additionalProperties=$additionalProperties}"
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [SlackListChannelsPage].
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        class Builder {
-
-            private var nextCursor: JsonField<String> = JsonMissing.of()
-            private var slackChannels: JsonField<List<SlackListChannelsResponse>> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(page: Response) = apply {
-                this.nextCursor = page.nextCursor
-                this.slackChannels = page.slackChannels
-                this.additionalProperties.putAll(page.additionalProperties)
-            }
-
-            fun nextCursor(nextCursor: String) = nextCursor(JsonField.of(nextCursor))
-
-            fun nextCursor(nextCursor: JsonField<String>) = apply { this.nextCursor = nextCursor }
-
-            fun slackChannels(slackChannels: List<SlackListChannelsResponse>) =
-                slackChannels(JsonField.of(slackChannels))
-
-            fun slackChannels(slackChannels: JsonField<List<SlackListChannelsResponse>>) = apply {
-                this.slackChannels = slackChannels
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                this.additionalProperties.put(key, value)
-            }
-
-            /**
-             * Returns an immutable instance of [Response].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Response =
-                Response(nextCursor, slackChannels, additionalProperties.toMutableMap())
-        }
+        fun of(
+            slackService: SlackService,
+            params: SlackListChannelsParams,
+            response: SlackListChannelsPageResponse,
+        ) = SlackListChannelsPage(slackService, params, response)
     }
 
     class AutoPager(private val firstPage: SlackListChannelsPage) :

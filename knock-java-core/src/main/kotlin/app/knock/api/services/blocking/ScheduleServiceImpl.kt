@@ -19,6 +19,7 @@ import app.knock.api.models.schedules.Schedule
 import app.knock.api.models.schedules.ScheduleCreateParams
 import app.knock.api.models.schedules.ScheduleDeleteParams
 import app.knock.api.models.schedules.ScheduleListPage
+import app.knock.api.models.schedules.ScheduleListPageResponse
 import app.knock.api.models.schedules.ScheduleListParams
 import app.knock.api.models.schedules.ScheduleUpdateParams
 
@@ -118,8 +119,8 @@ class ScheduleServiceImpl internal constructor(private val clientOptions: Client
             }
         }
 
-        private val listHandler: Handler<ScheduleListPage.Response> =
-            jsonHandler<ScheduleListPage.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<ScheduleListPageResponse> =
+            jsonHandler<ScheduleListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(

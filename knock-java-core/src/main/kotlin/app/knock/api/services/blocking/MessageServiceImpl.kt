@@ -21,12 +21,16 @@ import app.knock.api.models.messages.MessageGetContentParams
 import app.knock.api.models.messages.MessageGetContentResponse
 import app.knock.api.models.messages.MessageGetParams
 import app.knock.api.models.messages.MessageListActivitiesPage
+import app.knock.api.models.messages.MessageListActivitiesPageResponse
 import app.knock.api.models.messages.MessageListActivitiesParams
 import app.knock.api.models.messages.MessageListDeliveryLogsPage
+import app.knock.api.models.messages.MessageListDeliveryLogsPageResponse
 import app.knock.api.models.messages.MessageListDeliveryLogsParams
 import app.knock.api.models.messages.MessageListEventsPage
+import app.knock.api.models.messages.MessageListEventsPageResponse
 import app.knock.api.models.messages.MessageListEventsParams
 import app.knock.api.models.messages.MessageListPage
+import app.knock.api.models.messages.MessageListPageResponse
 import app.knock.api.models.messages.MessageListParams
 import app.knock.api.models.messages.MessageMarkAsInteractedParams
 import app.knock.api.models.messages.MessageMarkAsReadParams
@@ -143,8 +147,8 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
 
         override fun batch(): BatchService.WithRawResponse = batch
 
-        private val listHandler: Handler<MessageListPage.Response> =
-            jsonHandler<MessageListPage.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<MessageListPageResponse> =
+            jsonHandler<MessageListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
@@ -251,8 +255,8 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val listActivitiesHandler: Handler<MessageListActivitiesPage.Response> =
-            jsonHandler<MessageListActivitiesPage.Response>(clientOptions.jsonMapper)
+        private val listActivitiesHandler: Handler<MessageListActivitiesPageResponse> =
+            jsonHandler<MessageListActivitiesPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listActivities(
@@ -281,8 +285,8 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val listDeliveryLogsHandler: Handler<MessageListDeliveryLogsPage.Response> =
-            jsonHandler<MessageListDeliveryLogsPage.Response>(clientOptions.jsonMapper)
+        private val listDeliveryLogsHandler: Handler<MessageListDeliveryLogsPageResponse> =
+            jsonHandler<MessageListDeliveryLogsPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listDeliveryLogs(
@@ -315,8 +319,8 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val listEventsHandler: Handler<MessageListEventsPage.Response> =
-            jsonHandler<MessageListEventsPage.Response>(clientOptions.jsonMapper)
+        private val listEventsHandler: Handler<MessageListEventsPageResponse> =
+            jsonHandler<MessageListEventsPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listEvents(

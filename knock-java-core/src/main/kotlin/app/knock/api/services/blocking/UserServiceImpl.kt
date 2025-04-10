@@ -24,13 +24,17 @@ import app.knock.api.models.users.UserGetChannelDataParams
 import app.knock.api.models.users.UserGetParams
 import app.knock.api.models.users.UserGetPreferencesParams
 import app.knock.api.models.users.UserListMessagesPage
+import app.knock.api.models.users.UserListMessagesPageResponse
 import app.knock.api.models.users.UserListMessagesParams
 import app.knock.api.models.users.UserListPage
+import app.knock.api.models.users.UserListPageResponse
 import app.knock.api.models.users.UserListParams
 import app.knock.api.models.users.UserListPreferencesParams
 import app.knock.api.models.users.UserListSchedulesPage
+import app.knock.api.models.users.UserListSchedulesPageResponse
 import app.knock.api.models.users.UserListSchedulesParams
 import app.knock.api.models.users.UserListSubscriptionsPage
+import app.knock.api.models.users.UserListSubscriptionsPageResponse
 import app.knock.api.models.users.UserListSubscriptionsParams
 import app.knock.api.models.users.UserMergeParams
 import app.knock.api.models.users.UserSetChannelDataParams
@@ -185,8 +189,8 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val listHandler: Handler<UserListPage.Response> =
-            jsonHandler<UserListPage.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<UserListPageResponse> =
+            jsonHandler<UserListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
@@ -321,8 +325,8 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val listMessagesHandler: Handler<UserListMessagesPage.Response> =
-            jsonHandler<UserListMessagesPage.Response>(clientOptions.jsonMapper)
+        private val listMessagesHandler: Handler<UserListMessagesPageResponse> =
+            jsonHandler<UserListMessagesPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listMessages(
@@ -376,8 +380,8 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val listSchedulesHandler: Handler<UserListSchedulesPage.Response> =
-            jsonHandler<UserListSchedulesPage.Response>(clientOptions.jsonMapper)
+        private val listSchedulesHandler: Handler<UserListSchedulesPageResponse> =
+            jsonHandler<UserListSchedulesPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listSchedules(
@@ -404,8 +408,8 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val listSubscriptionsHandler: Handler<UserListSubscriptionsPage.Response> =
-            jsonHandler<UserListSubscriptionsPage.Response>(clientOptions.jsonMapper)
+        private val listSubscriptionsHandler: Handler<UserListSubscriptionsPageResponse> =
+            jsonHandler<UserListSubscriptionsPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listSubscriptions(

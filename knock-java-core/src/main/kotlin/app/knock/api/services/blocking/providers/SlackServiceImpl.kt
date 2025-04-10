@@ -19,6 +19,7 @@ import app.knock.api.core.prepare
 import app.knock.api.models.providers.slack.SlackCheckAuthParams
 import app.knock.api.models.providers.slack.SlackCheckAuthResponse
 import app.knock.api.models.providers.slack.SlackListChannelsPage
+import app.knock.api.models.providers.slack.SlackListChannelsPageResponse
 import app.knock.api.models.providers.slack.SlackListChannelsParams
 import app.knock.api.models.providers.slack.SlackRevokeAccessParams
 
@@ -84,8 +85,8 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
             }
         }
 
-        private val listChannelsHandler: Handler<SlackListChannelsPage.Response> =
-            jsonHandler<SlackListChannelsPage.Response>(clientOptions.jsonMapper)
+        private val listChannelsHandler: Handler<SlackListChannelsPageResponse> =
+            jsonHandler<SlackListChannelsPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listChannels(

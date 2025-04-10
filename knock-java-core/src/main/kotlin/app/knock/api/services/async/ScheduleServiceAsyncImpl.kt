@@ -19,6 +19,7 @@ import app.knock.api.models.schedules.Schedule
 import app.knock.api.models.schedules.ScheduleCreateParams
 import app.knock.api.models.schedules.ScheduleDeleteParams
 import app.knock.api.models.schedules.ScheduleListPageAsync
+import app.knock.api.models.schedules.ScheduleListPageResponse
 import app.knock.api.models.schedules.ScheduleListParams
 import app.knock.api.models.schedules.ScheduleUpdateParams
 import java.util.concurrent.CompletableFuture
@@ -125,8 +126,8 @@ class ScheduleServiceAsyncImpl internal constructor(private val clientOptions: C
                 }
         }
 
-        private val listHandler: Handler<ScheduleListPageAsync.Response> =
-            jsonHandler<ScheduleListPageAsync.Response>(clientOptions.jsonMapper)
+        private val listHandler: Handler<ScheduleListPageResponse> =
+            jsonHandler<ScheduleListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
