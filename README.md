@@ -40,7 +40,7 @@ import app.knock.api.core.JsonValue;
 import app.knock.api.models.workflows.WorkflowTriggerParams;
 import app.knock.api.models.workflows.WorkflowTriggerResponse;
 
-// Configures using the `KNOCK_API_KEY` environment variable
+// Configures using the `KNOCK_API_KEY` and `KNOCK_BASE_URL` environment variables
 KnockClient client = KnockOkHttpClient.fromEnv();
 
 WorkflowTriggerParams params = WorkflowTriggerParams.builder()
@@ -61,7 +61,7 @@ Configure the client using environment variables:
 import app.knock.api.client.KnockClient;
 import app.knock.api.client.okhttp.KnockOkHttpClient;
 
-// Configures using the `KNOCK_API_KEY` environment variable
+// Configures using the `KNOCK_API_KEY` and `KNOCK_BASE_URL` environment variables
 KnockClient client = KnockOkHttpClient.fromEnv();
 ```
 
@@ -83,7 +83,7 @@ import app.knock.api.client.KnockClient;
 import app.knock.api.client.okhttp.KnockOkHttpClient;
 
 KnockClient client = KnockOkHttpClient.builder()
-    // Configures using the `KNOCK_API_KEY` environment variable
+    // Configures using the `KNOCK_API_KEY` and `KNOCK_BASE_URL` environment variables
     .fromEnv()
     .bearerToken("My Bearer Token")
     .build();
@@ -91,9 +91,10 @@ KnockClient client = KnockOkHttpClient.builder()
 
 See this table for the available options:
 
-| Setter        | Environment variable | Required | Default value |
-| ------------- | -------------------- | -------- | ------------- |
-| `bearerToken` | `KNOCK_API_KEY`      | true     | -             |
+| Setter        | Environment variable | Required | Default value             |
+| ------------- | -------------------- | -------- | ------------------------- |
+| `bearerToken` | `KNOCK_API_KEY`      | true     | -                         |
+| `baseUrl`     | `KNOCK_BASE_URL`     | true     | `"https://api.knock.app"` |
 
 > [!TIP]
 > Don't create more than one client in the same application. Each client has a connection pool and
@@ -125,7 +126,7 @@ import app.knock.api.models.workflows.WorkflowTriggerParams;
 import app.knock.api.models.workflows.WorkflowTriggerResponse;
 import java.util.concurrent.CompletableFuture;
 
-// Configures using the `KNOCK_API_KEY` environment variable
+// Configures using the `KNOCK_API_KEY` and `KNOCK_BASE_URL` environment variables
 KnockClient client = KnockOkHttpClient.fromEnv();
 
 WorkflowTriggerParams params = WorkflowTriggerParams.builder()
@@ -148,7 +149,7 @@ import app.knock.api.models.workflows.WorkflowTriggerParams;
 import app.knock.api.models.workflows.WorkflowTriggerResponse;
 import java.util.concurrent.CompletableFuture;
 
-// Configures using the `KNOCK_API_KEY` environment variable
+// Configures using the `KNOCK_API_KEY` and `KNOCK_BASE_URL` environment variables
 KnockClientAsync client = KnockOkHttpClientAsync.fromEnv();
 
 WorkflowTriggerParams params = WorkflowTriggerParams.builder()
