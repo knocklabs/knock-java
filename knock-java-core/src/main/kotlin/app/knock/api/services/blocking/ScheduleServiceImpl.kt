@@ -143,7 +143,13 @@ class ScheduleServiceImpl internal constructor(private val clientOptions: Client
                             it.validate()
                         }
                     }
-                    .let { ScheduleListPage.of(ScheduleServiceImpl(clientOptions), params, it) }
+                    .let {
+                        ScheduleListPage.builder()
+                            .service(ScheduleServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
 

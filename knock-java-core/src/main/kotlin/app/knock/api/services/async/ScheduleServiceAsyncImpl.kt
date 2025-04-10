@@ -153,11 +153,11 @@ class ScheduleServiceAsyncImpl internal constructor(private val clientOptions: C
                                 }
                             }
                             .let {
-                                ScheduleListPageAsync.of(
-                                    ScheduleServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                ScheduleListPageAsync.builder()
+                                    .service(ScheduleServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }

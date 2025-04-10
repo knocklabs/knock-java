@@ -2,6 +2,7 @@
 
 package app.knock.api.models.objects
 
+import app.knock.api.core.checkRequired
 import app.knock.api.models.messages.Message
 import app.knock.api.services.async.ObjectServiceAsync
 import java.util.Objects
@@ -11,16 +12,13 @@ import java.util.concurrent.Executor
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
-/** List messages */
+/** @see [ObjectServiceAsync.listMessages] */
 class ObjectListMessagesPageAsync
 private constructor(
-    private val objectsService: ObjectServiceAsync,
+    private val service: ObjectServiceAsync,
     private val params: ObjectListMessagesParams,
     private val response: ObjectListMessagesPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): ObjectListMessagesPageResponse = response
 
     /**
      * Delegates to [ObjectListMessagesPageResponse], but gracefully handles missing data.
@@ -37,19 +35,6 @@ private constructor(
      */
     fun pageInfo(): Optional<ObjectListMessagesPageResponse.PageInfo> =
         response._pageInfo().getOptional("page_info")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ObjectListMessagesPageAsync && objectsService == other.objectsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(objectsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "ObjectListMessagesPageAsync{objectsService=$objectsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
@@ -69,22 +54,78 @@ private constructor(
         )
     }
 
-    fun getNextPage(): CompletableFuture<Optional<ObjectListMessagesPageAsync>> {
-        return getNextPageParams()
-            .map { objectsService.listMessages(it).thenApply { Optional.of(it) } }
+    fun getNextPage(): CompletableFuture<Optional<ObjectListMessagesPageAsync>> =
+        getNextPageParams()
+            .map { service.listMessages(it).thenApply { Optional.of(it) } }
             .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): ObjectListMessagesParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): ObjectListMessagesPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            objectsService: ObjectServiceAsync,
-            params: ObjectListMessagesParams,
-            response: ObjectListMessagesPageResponse,
-        ) = ObjectListMessagesPageAsync(objectsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [ObjectListMessagesPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [ObjectListMessagesPageAsync]. */
+    class Builder internal constructor() {
+
+        private var service: ObjectServiceAsync? = null
+        private var params: ObjectListMessagesParams? = null
+        private var response: ObjectListMessagesPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(objectListMessagesPageAsync: ObjectListMessagesPageAsync) = apply {
+            service = objectListMessagesPageAsync.service
+            params = objectListMessagesPageAsync.params
+            response = objectListMessagesPageAsync.response
+        }
+
+        fun service(service: ObjectServiceAsync) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: ObjectListMessagesParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: ObjectListMessagesPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [ObjectListMessagesPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): ObjectListMessagesPageAsync =
+            ObjectListMessagesPageAsync(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: ObjectListMessagesPageAsync) {
@@ -112,4 +153,17 @@ private constructor(
             return forEach(values::add, executor).thenApply { values }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ObjectListMessagesPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "ObjectListMessagesPageAsync{service=$service, params=$params, response=$response}"
 }

@@ -213,7 +213,13 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                             it.validate()
                         }
                     }
-                    .let { UserListPage.of(UserServiceImpl(clientOptions), params, it) }
+                    .let {
+                        UserListPage.builder()
+                            .service(UserServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
 
@@ -349,7 +355,13 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                             it.validate()
                         }
                     }
-                    .let { UserListMessagesPage.of(UserServiceImpl(clientOptions), params, it) }
+                    .let {
+                        UserListMessagesPage.builder()
+                            .service(UserServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
 
@@ -404,7 +416,13 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                             it.validate()
                         }
                     }
-                    .let { UserListSchedulesPage.of(UserServiceImpl(clientOptions), params, it) }
+                    .let {
+                        UserListSchedulesPage.builder()
+                            .service(UserServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
 
@@ -433,7 +451,11 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                         }
                     }
                     .let {
-                        UserListSubscriptionsPage.of(UserServiceImpl(clientOptions), params, it)
+                        UserListSubscriptionsPage.builder()
+                            .service(UserServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }

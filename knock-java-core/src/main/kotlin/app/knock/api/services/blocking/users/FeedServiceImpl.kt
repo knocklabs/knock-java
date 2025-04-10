@@ -111,7 +111,13 @@ class FeedServiceImpl internal constructor(private val clientOptions: ClientOpti
                             it.validate()
                         }
                     }
-                    .let { FeedListItemsPage.of(FeedServiceImpl(clientOptions), params, it) }
+                    .let {
+                        FeedListItemsPage.builder()
+                            .service(FeedServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
     }

@@ -2,6 +2,7 @@
 
 package app.knock.api.models.users.feeds
 
+import app.knock.api.core.checkRequired
 import app.knock.api.services.async.users.FeedServiceAsync
 import java.util.Objects
 import java.util.Optional
@@ -10,16 +11,13 @@ import java.util.concurrent.Executor
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
-/** Returns a paginated list of feed items for a user, including metadata about the feed. */
+/** @see [FeedServiceAsync.listItems] */
 class FeedListItemsPageAsync
 private constructor(
-    private val feedsService: FeedServiceAsync,
+    private val service: FeedServiceAsync,
     private val params: FeedListItemsParams,
     private val response: FeedListItemsPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): FeedListItemsPageResponse = response
 
     /**
      * Delegates to [FeedListItemsPageResponse], but gracefully handles missing data.
@@ -36,19 +34,6 @@ private constructor(
      */
     fun pageInfo(): Optional<FeedListItemsPageResponse.PageInfo> =
         response._pageInfo().getOptional("page_info")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is FeedListItemsPageAsync && feedsService == other.feedsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(feedsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "FeedListItemsPageAsync{feedsService=$feedsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
@@ -68,22 +53,78 @@ private constructor(
         )
     }
 
-    fun getNextPage(): CompletableFuture<Optional<FeedListItemsPageAsync>> {
-        return getNextPageParams()
-            .map { feedsService.listItems(it).thenApply { Optional.of(it) } }
+    fun getNextPage(): CompletableFuture<Optional<FeedListItemsPageAsync>> =
+        getNextPageParams()
+            .map { service.listItems(it).thenApply { Optional.of(it) } }
             .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): FeedListItemsParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): FeedListItemsPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            feedsService: FeedServiceAsync,
-            params: FeedListItemsParams,
-            response: FeedListItemsPageResponse,
-        ) = FeedListItemsPageAsync(feedsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [FeedListItemsPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [FeedListItemsPageAsync]. */
+    class Builder internal constructor() {
+
+        private var service: FeedServiceAsync? = null
+        private var params: FeedListItemsParams? = null
+        private var response: FeedListItemsPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(feedListItemsPageAsync: FeedListItemsPageAsync) = apply {
+            service = feedListItemsPageAsync.service
+            params = feedListItemsPageAsync.params
+            response = feedListItemsPageAsync.response
+        }
+
+        fun service(service: FeedServiceAsync) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: FeedListItemsParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: FeedListItemsPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [FeedListItemsPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): FeedListItemsPageAsync =
+            FeedListItemsPageAsync(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: FeedListItemsPageAsync) {
@@ -114,4 +155,17 @@ private constructor(
             return forEach(values::add, executor).thenApply { values }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is FeedListItemsPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "FeedListItemsPageAsync{service=$service, params=$params, response=$response}"
 }

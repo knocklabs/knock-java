@@ -2,6 +2,7 @@
 
 package app.knock.api.models.objects
 
+import app.knock.api.core.checkRequired
 import app.knock.api.models.recipients.subscriptions.Subscription
 import app.knock.api.services.async.ObjectServiceAsync
 import java.util.Objects
@@ -11,19 +12,13 @@ import java.util.concurrent.Executor
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * List subscriptions for an object. Either list all subscriptions that belong to the object, or all
- * subscriptions that this object has. Determined by the `mode` query parameter.
- */
+/** @see [ObjectServiceAsync.listSubscriptions] */
 class ObjectListSubscriptionsPageAsync
 private constructor(
-    private val objectsService: ObjectServiceAsync,
+    private val service: ObjectServiceAsync,
     private val params: ObjectListSubscriptionsParams,
     private val response: ObjectListSubscriptionsPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): ObjectListSubscriptionsPageResponse = response
 
     /**
      * Delegates to [ObjectListSubscriptionsPageResponse], but gracefully handles missing data.
@@ -40,19 +35,6 @@ private constructor(
      */
     fun pageInfo(): Optional<ObjectListSubscriptionsPageResponse.PageInfo> =
         response._pageInfo().getOptional("page_info")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ObjectListSubscriptionsPageAsync && objectsService == other.objectsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(objectsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "ObjectListSubscriptionsPageAsync{objectsService=$objectsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
@@ -72,22 +54,82 @@ private constructor(
         )
     }
 
-    fun getNextPage(): CompletableFuture<Optional<ObjectListSubscriptionsPageAsync>> {
-        return getNextPageParams()
-            .map { objectsService.listSubscriptions(it).thenApply { Optional.of(it) } }
+    fun getNextPage(): CompletableFuture<Optional<ObjectListSubscriptionsPageAsync>> =
+        getNextPageParams()
+            .map { service.listSubscriptions(it).thenApply { Optional.of(it) } }
             .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): ObjectListSubscriptionsParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): ObjectListSubscriptionsPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            objectsService: ObjectServiceAsync,
-            params: ObjectListSubscriptionsParams,
-            response: ObjectListSubscriptionsPageResponse,
-        ) = ObjectListSubscriptionsPageAsync(objectsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of
+         * [ObjectListSubscriptionsPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [ObjectListSubscriptionsPageAsync]. */
+    class Builder internal constructor() {
+
+        private var service: ObjectServiceAsync? = null
+        private var params: ObjectListSubscriptionsParams? = null
+        private var response: ObjectListSubscriptionsPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(objectListSubscriptionsPageAsync: ObjectListSubscriptionsPageAsync) =
+            apply {
+                service = objectListSubscriptionsPageAsync.service
+                params = objectListSubscriptionsPageAsync.params
+                response = objectListSubscriptionsPageAsync.response
+            }
+
+        fun service(service: ObjectServiceAsync) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: ObjectListSubscriptionsParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: ObjectListSubscriptionsPageResponse) = apply {
+            this.response = response
+        }
+
+        /**
+         * Returns an immutable instance of [ObjectListSubscriptionsPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): ObjectListSubscriptionsPageAsync =
+            ObjectListSubscriptionsPageAsync(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: ObjectListSubscriptionsPageAsync) {
@@ -115,4 +157,17 @@ private constructor(
             return forEach(values::add, executor).thenApply { values }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ObjectListSubscriptionsPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "ObjectListSubscriptionsPageAsync{service=$service, params=$params, response=$response}"
 }

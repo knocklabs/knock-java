@@ -90,7 +90,13 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
                             it.validate()
                         }
                     }
-                    .let { TenantListPage.of(TenantServiceImpl(clientOptions), params, it) }
+                    .let {
+                        TenantListPage.builder()
+                            .service(TenantServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
 

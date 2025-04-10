@@ -184,11 +184,11 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                                 }
                             }
                             .let {
-                                MessageListPageAsync.of(
-                                    MessageServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                MessageListPageAsync.builder()
+                                    .service(MessageServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }
@@ -310,11 +310,11 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                                 }
                             }
                             .let {
-                                MessageListActivitiesPageAsync.of(
-                                    MessageServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                MessageListActivitiesPageAsync.builder()
+                                    .service(MessageServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }
@@ -347,11 +347,11 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                                 }
                             }
                             .let {
-                                MessageListDeliveryLogsPageAsync.of(
-                                    MessageServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                MessageListDeliveryLogsPageAsync.builder()
+                                    .service(MessageServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }
@@ -384,11 +384,11 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                                 }
                             }
                             .let {
-                                MessageListEventsPageAsync.of(
-                                    MessageServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                MessageListEventsPageAsync.builder()
+                                    .service(MessageServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }

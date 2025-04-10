@@ -2,6 +2,7 @@
 
 package app.knock.api.models.objects
 
+import app.knock.api.core.checkRequired
 import app.knock.api.services.blocking.ObjectService
 import java.util.Objects
 import java.util.Optional
@@ -9,16 +10,13 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/** List objects in a collection */
+/** @see [ObjectService.list] */
 class ObjectListPage
 private constructor(
-    private val objectsService: ObjectService,
+    private val service: ObjectService,
     private val params: ObjectListParams,
     private val response: ObjectListPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): ObjectListPageResponse = response
 
     /**
      * Delegates to [ObjectListPageResponse], but gracefully handles missing data.
@@ -35,19 +33,6 @@ private constructor(
      */
     fun pageInfo(): Optional<ObjectListPageResponse.PageInfo> =
         response._pageInfo().getOptional("page_info")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ObjectListPage && objectsService == other.objectsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(objectsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "ObjectListPage{objectsService=$objectsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
@@ -67,20 +52,75 @@ private constructor(
         )
     }
 
-    fun getNextPage(): Optional<ObjectListPage> {
-        return getNextPageParams().map { objectsService.list(it) }
-    }
+    fun getNextPage(): Optional<ObjectListPage> = getNextPageParams().map { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): ObjectListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): ObjectListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            objectsService: ObjectService,
-            params: ObjectListParams,
-            response: ObjectListPageResponse,
-        ) = ObjectListPage(objectsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [ObjectListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [ObjectListPage]. */
+    class Builder internal constructor() {
+
+        private var service: ObjectService? = null
+        private var params: ObjectListParams? = null
+        private var response: ObjectListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(objectListPage: ObjectListPage) = apply {
+            service = objectListPage.service
+            params = objectListPage.params
+            response = objectListPage.response
+        }
+
+        fun service(service: ObjectService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: ObjectListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: ObjectListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [ObjectListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): ObjectListPage =
+            ObjectListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: ObjectListPage) : Iterable<Object> {
@@ -101,4 +141,16 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ObjectListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() = "ObjectListPage{service=$service, params=$params, response=$response}"
 }

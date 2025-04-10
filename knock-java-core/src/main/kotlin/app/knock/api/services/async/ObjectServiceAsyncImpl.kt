@@ -195,11 +195,11 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                                 }
                             }
                             .let {
-                                ObjectListPageAsync.of(
-                                    ObjectServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                ObjectListPageAsync.builder()
+                                    .service(ObjectServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }
@@ -432,11 +432,11 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                                 }
                             }
                             .let {
-                                ObjectListMessagesPageAsync.of(
-                                    ObjectServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                ObjectListMessagesPageAsync.builder()
+                                    .service(ObjectServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }
@@ -475,11 +475,11 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                                 }
                             }
                             .let {
-                                ObjectListSchedulesPageAsync.of(
-                                    ObjectServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                ObjectListSchedulesPageAsync.builder()
+                                    .service(ObjectServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }
@@ -518,11 +518,11 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                                 }
                             }
                             .let {
-                                ObjectListSubscriptionsPageAsync.of(
-                                    ObjectServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                ObjectListSubscriptionsPageAsync.builder()
+                                    .service(ObjectServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }

@@ -106,11 +106,11 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
                                 }
                             }
                             .let {
-                                TenantListPageAsync.of(
-                                    TenantServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                TenantListPageAsync.builder()
+                                    .service(TenantServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }

@@ -2,6 +2,7 @@
 
 package app.knock.api.models.tenants
 
+import app.knock.api.core.checkRequired
 import app.knock.api.services.blocking.TenantService
 import java.util.Objects
 import java.util.Optional
@@ -9,16 +10,13 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/** List tenants */
+/** @see [TenantService.list] */
 class TenantListPage
 private constructor(
-    private val tenantsService: TenantService,
+    private val service: TenantService,
     private val params: TenantListParams,
     private val response: TenantListPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): TenantListPageResponse = response
 
     /**
      * Delegates to [TenantListPageResponse], but gracefully handles missing data.
@@ -35,19 +33,6 @@ private constructor(
      */
     fun pageInfo(): Optional<TenantListPageResponse.PageInfo> =
         response._pageInfo().getOptional("page_info")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is TenantListPage && tenantsService == other.tenantsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(tenantsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "TenantListPage{tenantsService=$tenantsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
@@ -67,20 +52,75 @@ private constructor(
         )
     }
 
-    fun getNextPage(): Optional<TenantListPage> {
-        return getNextPageParams().map { tenantsService.list(it) }
-    }
+    fun getNextPage(): Optional<TenantListPage> = getNextPageParams().map { service.list(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): TenantListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): TenantListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            tenantsService: TenantService,
-            params: TenantListParams,
-            response: TenantListPageResponse,
-        ) = TenantListPage(tenantsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [TenantListPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [TenantListPage]. */
+    class Builder internal constructor() {
+
+        private var service: TenantService? = null
+        private var params: TenantListParams? = null
+        private var response: TenantListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(tenantListPage: TenantListPage) = apply {
+            service = tenantListPage.service
+            params = tenantListPage.params
+            response = tenantListPage.response
+        }
+
+        fun service(service: TenantService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: TenantListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: TenantListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [TenantListPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): TenantListPage =
+            TenantListPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: TenantListPage) : Iterable<Tenant> {
@@ -101,4 +141,16 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is TenantListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() = "TenantListPage{service=$service, params=$params, response=$response}"
 }

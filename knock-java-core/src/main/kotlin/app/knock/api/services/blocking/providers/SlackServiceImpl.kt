@@ -109,7 +109,13 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
                             it.validate()
                         }
                     }
-                    .let { SlackListChannelsPage.of(SlackServiceImpl(clientOptions), params, it) }
+                    .let {
+                        SlackListChannelsPage.builder()
+                            .service(SlackServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
 

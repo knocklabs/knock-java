@@ -2,6 +2,7 @@
 
 package app.knock.api.models.messages
 
+import app.knock.api.core.checkRequired
 import app.knock.api.services.blocking.MessageService
 import java.util.Objects
 import java.util.Optional
@@ -9,16 +10,13 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/** List events */
+/** @see [MessageService.listEvents] */
 class MessageListEventsPage
 private constructor(
-    private val messagesService: MessageService,
+    private val service: MessageService,
     private val params: MessageListEventsParams,
     private val response: MessageListEventsPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): MessageListEventsPageResponse = response
 
     /**
      * Delegates to [MessageListEventsPageResponse], but gracefully handles missing data.
@@ -35,19 +33,6 @@ private constructor(
      */
     fun pageInfo(): Optional<MessageListEventsPageResponse.PageInfo> =
         response._pageInfo().getOptional("page_info")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is MessageListEventsPage && messagesService == other.messagesService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(messagesService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "MessageListEventsPage{messagesService=$messagesService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
@@ -67,20 +52,76 @@ private constructor(
         )
     }
 
-    fun getNextPage(): Optional<MessageListEventsPage> {
-        return getNextPageParams().map { messagesService.listEvents(it) }
-    }
+    fun getNextPage(): Optional<MessageListEventsPage> =
+        getNextPageParams().map { service.listEvents(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): MessageListEventsParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): MessageListEventsPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            messagesService: MessageService,
-            params: MessageListEventsParams,
-            response: MessageListEventsPageResponse,
-        ) = MessageListEventsPage(messagesService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [MessageListEventsPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [MessageListEventsPage]. */
+    class Builder internal constructor() {
+
+        private var service: MessageService? = null
+        private var params: MessageListEventsParams? = null
+        private var response: MessageListEventsPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(messageListEventsPage: MessageListEventsPage) = apply {
+            service = messageListEventsPage.service
+            params = messageListEventsPage.params
+            response = messageListEventsPage.response
+        }
+
+        fun service(service: MessageService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: MessageListEventsParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: MessageListEventsPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [MessageListEventsPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): MessageListEventsPage =
+            MessageListEventsPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: MessageListEventsPage) : Iterable<MessageEvent> {
@@ -101,4 +142,17 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is MessageListEventsPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "MessageListEventsPage{service=$service, params=$params, response=$response}"
 }

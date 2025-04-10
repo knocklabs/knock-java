@@ -171,7 +171,13 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
                             it.validate()
                         }
                     }
-                    .let { MessageListPage.of(MessageServiceImpl(clientOptions), params, it) }
+                    .let {
+                        MessageListPage.builder()
+                            .service(MessageServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
 
@@ -280,7 +286,11 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
                         }
                     }
                     .let {
-                        MessageListActivitiesPage.of(MessageServiceImpl(clientOptions), params, it)
+                        MessageListActivitiesPage.builder()
+                            .service(MessageServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }
@@ -310,11 +320,11 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
                         }
                     }
                     .let {
-                        MessageListDeliveryLogsPage.of(
-                            MessageServiceImpl(clientOptions),
-                            params,
-                            it,
-                        )
+                        MessageListDeliveryLogsPage.builder()
+                            .service(MessageServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }
@@ -343,7 +353,13 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
                             it.validate()
                         }
                     }
-                    .let { MessageListEventsPage.of(MessageServiceImpl(clientOptions), params, it) }
+                    .let {
+                        MessageListEventsPage.builder()
+                            .service(MessageServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
 

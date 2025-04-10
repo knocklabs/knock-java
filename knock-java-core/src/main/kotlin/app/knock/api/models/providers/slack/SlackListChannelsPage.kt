@@ -2,6 +2,7 @@
 
 package app.knock.api.models.providers.slack
 
+import app.knock.api.core.checkRequired
 import app.knock.api.services.blocking.providers.SlackService
 import java.util.Objects
 import java.util.Optional
@@ -9,16 +10,13 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/** List Slack channels for a Slack workspace */
+/** @see [SlackService.listChannels] */
 class SlackListChannelsPage
 private constructor(
-    private val slackService: SlackService,
+    private val service: SlackService,
     private val params: SlackListChannelsParams,
     private val response: SlackListChannelsPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): SlackListChannelsPageResponse = response
 
     /**
      * Delegates to [SlackListChannelsPageResponse], but gracefully handles missing data.
@@ -35,19 +33,6 @@ private constructor(
     fun slackChannels(): List<SlackListChannelsResponse> =
         response._slackChannels().getOptional("slack_channels").getOrNull() ?: emptyList()
 
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is SlackListChannelsPage && slackService == other.slackService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(slackService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "SlackListChannelsPage{slackService=$slackService, params=$params, response=$response}"
-
     fun hasNextPage(): Boolean = slackChannels().isNotEmpty() && nextCursor().isPresent
 
     fun getNextPageParams(): Optional<SlackListChannelsParams> {
@@ -60,20 +45,76 @@ private constructor(
         )
     }
 
-    fun getNextPage(): Optional<SlackListChannelsPage> {
-        return getNextPageParams().map { slackService.listChannels(it) }
-    }
+    fun getNextPage(): Optional<SlackListChannelsPage> =
+        getNextPageParams().map { service.listChannels(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): SlackListChannelsParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): SlackListChannelsPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            slackService: SlackService,
-            params: SlackListChannelsParams,
-            response: SlackListChannelsPageResponse,
-        ) = SlackListChannelsPage(slackService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [SlackListChannelsPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [SlackListChannelsPage]. */
+    class Builder internal constructor() {
+
+        private var service: SlackService? = null
+        private var params: SlackListChannelsParams? = null
+        private var response: SlackListChannelsPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(slackListChannelsPage: SlackListChannelsPage) = apply {
+            service = slackListChannelsPage.service
+            params = slackListChannelsPage.params
+            response = slackListChannelsPage.response
+        }
+
+        fun service(service: SlackService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: SlackListChannelsParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: SlackListChannelsPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [SlackListChannelsPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): SlackListChannelsPage =
+            SlackListChannelsPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: SlackListChannelsPage) :
@@ -95,4 +136,17 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is SlackListChannelsPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "SlackListChannelsPage{service=$service, params=$params, response=$response}"
 }

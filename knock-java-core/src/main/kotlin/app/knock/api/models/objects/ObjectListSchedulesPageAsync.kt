@@ -2,6 +2,7 @@
 
 package app.knock.api.models.objects
 
+import app.knock.api.core.checkRequired
 import app.knock.api.models.schedules.Schedule
 import app.knock.api.services.async.ObjectServiceAsync
 import java.util.Objects
@@ -11,16 +12,13 @@ import java.util.concurrent.Executor
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
-/** List schedules */
+/** @see [ObjectServiceAsync.listSchedules] */
 class ObjectListSchedulesPageAsync
 private constructor(
-    private val objectsService: ObjectServiceAsync,
+    private val service: ObjectServiceAsync,
     private val params: ObjectListSchedulesParams,
     private val response: ObjectListSchedulesPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): ObjectListSchedulesPageResponse = response
 
     /**
      * Delegates to [ObjectListSchedulesPageResponse], but gracefully handles missing data.
@@ -37,19 +35,6 @@ private constructor(
      */
     fun pageInfo(): Optional<ObjectListSchedulesPageResponse.PageInfo> =
         response._pageInfo().getOptional("page_info")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is ObjectListSchedulesPageAsync && objectsService == other.objectsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(objectsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "ObjectListSchedulesPageAsync{objectsService=$objectsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
@@ -69,22 +54,78 @@ private constructor(
         )
     }
 
-    fun getNextPage(): CompletableFuture<Optional<ObjectListSchedulesPageAsync>> {
-        return getNextPageParams()
-            .map { objectsService.listSchedules(it).thenApply { Optional.of(it) } }
+    fun getNextPage(): CompletableFuture<Optional<ObjectListSchedulesPageAsync>> =
+        getNextPageParams()
+            .map { service.listSchedules(it).thenApply { Optional.of(it) } }
             .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): ObjectListSchedulesParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): ObjectListSchedulesPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            objectsService: ObjectServiceAsync,
-            params: ObjectListSchedulesParams,
-            response: ObjectListSchedulesPageResponse,
-        ) = ObjectListSchedulesPageAsync(objectsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [ObjectListSchedulesPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [ObjectListSchedulesPageAsync]. */
+    class Builder internal constructor() {
+
+        private var service: ObjectServiceAsync? = null
+        private var params: ObjectListSchedulesParams? = null
+        private var response: ObjectListSchedulesPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(objectListSchedulesPageAsync: ObjectListSchedulesPageAsync) = apply {
+            service = objectListSchedulesPageAsync.service
+            params = objectListSchedulesPageAsync.params
+            response = objectListSchedulesPageAsync.response
+        }
+
+        fun service(service: ObjectServiceAsync) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: ObjectListSchedulesParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: ObjectListSchedulesPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [ObjectListSchedulesPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): ObjectListSchedulesPageAsync =
+            ObjectListSchedulesPageAsync(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: ObjectListSchedulesPageAsync) {
@@ -112,4 +153,17 @@ private constructor(
             return forEach(values::add, executor).thenApply { values }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is ObjectListSchedulesPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "ObjectListSchedulesPageAsync{service=$service, params=$params, response=$response}"
 }

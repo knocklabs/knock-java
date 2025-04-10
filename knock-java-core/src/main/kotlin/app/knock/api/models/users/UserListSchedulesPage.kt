@@ -2,6 +2,7 @@
 
 package app.knock.api.models.users
 
+import app.knock.api.core.checkRequired
 import app.knock.api.models.schedules.Schedule
 import app.knock.api.services.blocking.UserService
 import java.util.Objects
@@ -10,16 +11,13 @@ import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/** List schedules */
+/** @see [UserService.listSchedules] */
 class UserListSchedulesPage
 private constructor(
-    private val usersService: UserService,
+    private val service: UserService,
     private val params: UserListSchedulesParams,
     private val response: UserListSchedulesPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): UserListSchedulesPageResponse = response
 
     /**
      * Delegates to [UserListSchedulesPageResponse], but gracefully handles missing data.
@@ -36,19 +34,6 @@ private constructor(
      */
     fun pageInfo(): Optional<UserListSchedulesPageResponse.PageInfo> =
         response._pageInfo().getOptional("page_info")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is UserListSchedulesPage && usersService == other.usersService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(usersService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "UserListSchedulesPage{usersService=$usersService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
@@ -68,20 +53,76 @@ private constructor(
         )
     }
 
-    fun getNextPage(): Optional<UserListSchedulesPage> {
-        return getNextPageParams().map { usersService.listSchedules(it) }
-    }
+    fun getNextPage(): Optional<UserListSchedulesPage> =
+        getNextPageParams().map { service.listSchedules(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): UserListSchedulesParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): UserListSchedulesPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            usersService: UserService,
-            params: UserListSchedulesParams,
-            response: UserListSchedulesPageResponse,
-        ) = UserListSchedulesPage(usersService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [UserListSchedulesPage].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [UserListSchedulesPage]. */
+    class Builder internal constructor() {
+
+        private var service: UserService? = null
+        private var params: UserListSchedulesParams? = null
+        private var response: UserListSchedulesPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(userListSchedulesPage: UserListSchedulesPage) = apply {
+            service = userListSchedulesPage.service
+            params = userListSchedulesPage.params
+            response = userListSchedulesPage.response
+        }
+
+        fun service(service: UserService) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: UserListSchedulesParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: UserListSchedulesPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [UserListSchedulesPage].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): UserListSchedulesPage =
+            UserListSchedulesPage(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: UserListSchedulesPage) : Iterable<Schedule> {
@@ -102,4 +143,17 @@ private constructor(
             return StreamSupport.stream(spliterator(), false)
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is UserListSchedulesPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "UserListSchedulesPage{service=$service, params=$params, response=$response}"
 }

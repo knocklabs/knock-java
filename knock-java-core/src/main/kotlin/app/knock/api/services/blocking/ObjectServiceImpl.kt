@@ -179,7 +179,13 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                             it.validate()
                         }
                     }
-                    .let { ObjectListPage.of(ObjectServiceImpl(clientOptions), params, it) }
+                    .let {
+                        ObjectListPage.builder()
+                            .service(ObjectServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
 
@@ -389,7 +395,13 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                             it.validate()
                         }
                     }
-                    .let { ObjectListMessagesPage.of(ObjectServiceImpl(clientOptions), params, it) }
+                    .let {
+                        ObjectListMessagesPage.builder()
+                            .service(ObjectServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
+                    }
             }
         }
 
@@ -424,7 +436,11 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                         }
                     }
                     .let {
-                        ObjectListSchedulesPage.of(ObjectServiceImpl(clientOptions), params, it)
+                        ObjectListSchedulesPage.builder()
+                            .service(ObjectServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }
@@ -460,7 +476,11 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                         }
                     }
                     .let {
-                        ObjectListSubscriptionsPage.of(ObjectServiceImpl(clientOptions), params, it)
+                        ObjectListSubscriptionsPage.builder()
+                            .service(ObjectServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }

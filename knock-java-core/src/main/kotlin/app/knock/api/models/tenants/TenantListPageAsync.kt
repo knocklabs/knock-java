@@ -2,6 +2,7 @@
 
 package app.knock.api.models.tenants
 
+import app.knock.api.core.checkRequired
 import app.knock.api.services.async.TenantServiceAsync
 import java.util.Objects
 import java.util.Optional
@@ -10,16 +11,13 @@ import java.util.concurrent.Executor
 import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
-/** List tenants */
+/** @see [TenantServiceAsync.list] */
 class TenantListPageAsync
 private constructor(
-    private val tenantsService: TenantServiceAsync,
+    private val service: TenantServiceAsync,
     private val params: TenantListParams,
     private val response: TenantListPageResponse,
 ) {
-
-    /** Returns the response that this page was parsed from. */
-    fun response(): TenantListPageResponse = response
 
     /**
      * Delegates to [TenantListPageResponse], but gracefully handles missing data.
@@ -36,19 +34,6 @@ private constructor(
      */
     fun pageInfo(): Optional<TenantListPageResponse.PageInfo> =
         response._pageInfo().getOptional("page_info")
-
-    override fun equals(other: Any?): Boolean {
-        if (this === other) {
-            return true
-        }
-
-        return /* spotless:off */ other is TenantListPageAsync && tenantsService == other.tenantsService && params == other.params && response == other.response /* spotless:on */
-    }
-
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(tenantsService, params, response) /* spotless:on */
-
-    override fun toString() =
-        "TenantListPageAsync{tenantsService=$tenantsService, params=$params, response=$response}"
 
     fun hasNextPage(): Boolean =
         entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
@@ -68,22 +53,78 @@ private constructor(
         )
     }
 
-    fun getNextPage(): CompletableFuture<Optional<TenantListPageAsync>> {
-        return getNextPageParams()
-            .map { tenantsService.list(it).thenApply { Optional.of(it) } }
+    fun getNextPage(): CompletableFuture<Optional<TenantListPageAsync>> =
+        getNextPageParams()
+            .map { service.list(it).thenApply { Optional.of(it) } }
             .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
-    }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
+    /** The parameters that were used to request this page. */
+    fun params(): TenantListParams = params
+
+    /** The response that this page was parsed from. */
+    fun response(): TenantListPageResponse = response
+
+    fun toBuilder() = Builder().from(this)
+
     companion object {
 
-        @JvmStatic
-        fun of(
-            tenantsService: TenantServiceAsync,
-            params: TenantListParams,
-            response: TenantListPageResponse,
-        ) = TenantListPageAsync(tenantsService, params, response)
+        /**
+         * Returns a mutable builder for constructing an instance of [TenantListPageAsync].
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         */
+        @JvmStatic fun builder() = Builder()
+    }
+
+    /** A builder for [TenantListPageAsync]. */
+    class Builder internal constructor() {
+
+        private var service: TenantServiceAsync? = null
+        private var params: TenantListParams? = null
+        private var response: TenantListPageResponse? = null
+
+        @JvmSynthetic
+        internal fun from(tenantListPageAsync: TenantListPageAsync) = apply {
+            service = tenantListPageAsync.service
+            params = tenantListPageAsync.params
+            response = tenantListPageAsync.response
+        }
+
+        fun service(service: TenantServiceAsync) = apply { this.service = service }
+
+        /** The parameters that were used to request this page. */
+        fun params(params: TenantListParams) = apply { this.params = params }
+
+        /** The response that this page was parsed from. */
+        fun response(response: TenantListPageResponse) = apply { this.response = response }
+
+        /**
+         * Returns an immutable instance of [TenantListPageAsync].
+         *
+         * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .service()
+         * .params()
+         * .response()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
+         */
+        fun build(): TenantListPageAsync =
+            TenantListPageAsync(
+                checkRequired("service", service),
+                checkRequired("params", params),
+                checkRequired("response", response),
+            )
     }
 
     class AutoPager(private val firstPage: TenantListPageAsync) {
@@ -111,4 +152,17 @@ private constructor(
             return forEach(values::add, executor).thenApply { values }
         }
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) {
+            return true
+        }
+
+        return /* spotless:off */ other is TenantListPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+    }
+
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+
+    override fun toString() =
+        "TenantListPageAsync{service=$service, params=$params, response=$response}"
 }

@@ -236,11 +236,11 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                                 }
                             }
                             .let {
-                                UserListPageAsync.of(
-                                    UserServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                UserListPageAsync.builder()
+                                    .service(UserServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }
@@ -393,11 +393,11 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                                 }
                             }
                             .let {
-                                UserListMessagesPageAsync.of(
-                                    UserServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                UserListMessagesPageAsync.builder()
+                                    .service(UserServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }
@@ -460,11 +460,11 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                                 }
                             }
                             .let {
-                                UserListSchedulesPageAsync.of(
-                                    UserServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                UserListSchedulesPageAsync.builder()
+                                    .service(UserServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }
@@ -497,11 +497,11 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                                 }
                             }
                             .let {
-                                UserListSubscriptionsPageAsync.of(
-                                    UserServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                UserListSubscriptionsPageAsync.builder()
+                                    .service(UserServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }

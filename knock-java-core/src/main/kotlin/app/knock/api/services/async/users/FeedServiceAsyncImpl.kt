@@ -119,11 +119,11 @@ class FeedServiceAsyncImpl internal constructor(private val clientOptions: Clien
                                 }
                             }
                             .let {
-                                FeedListItemsPageAsync.of(
-                                    FeedServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                FeedListItemsPageAsync.builder()
+                                    .service(FeedServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }

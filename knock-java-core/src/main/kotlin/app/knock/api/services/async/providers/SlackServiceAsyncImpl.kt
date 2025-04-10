@@ -116,11 +116,11 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
                                 }
                             }
                             .let {
-                                SlackListChannelsPageAsync.of(
-                                    SlackServiceAsyncImpl(clientOptions),
-                                    params,
-                                    it,
-                                )
+                                SlackListChannelsPageAsync.builder()
+                                    .service(SlackServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }
