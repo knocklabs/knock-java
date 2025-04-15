@@ -10,7 +10,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Mark messages as archived */
+/** Marks one or more messages as archived */
 class BatchArchiveParams
 private constructor(
     private val additionalHeaders: Headers,

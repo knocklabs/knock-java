@@ -13,7 +13,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
@@ -23,7 +22,7 @@ import kotlin.jvm.optionals.getOrNull
 class AudienceMember
 private constructor(
     private val _typename: JsonField<String>,
-    private val addedAt: JsonField<OffsetDateTime>,
+    private val addedAt: JsonField<String>,
     private val user: JsonField<User>,
     private val userId: JsonField<String>,
     private val tenant: JsonField<String>,
@@ -33,9 +32,7 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("added_at")
-        @ExcludeMissing
-        addedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("added_at") @ExcludeMissing addedAt: JsonField<String> = JsonMissing.of(),
         @JsonProperty("user") @ExcludeMissing user: JsonField<User> = JsonMissing.of(),
         @JsonProperty("user_id") @ExcludeMissing userId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("tenant") @ExcludeMissing tenant: JsonField<String> = JsonMissing.of(),
@@ -51,7 +48,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun addedAt(): OffsetDateTime = addedAt.getRequired("added_at")
+    fun addedAt(): String = addedAt.getRequired("added_at")
 
     /**
      * A user object
@@ -85,7 +82,7 @@ private constructor(
      *
      * Unlike [addedAt], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("added_at") @ExcludeMissing fun _addedAt(): JsonField<OffsetDateTime> = addedAt
+    @JsonProperty("added_at") @ExcludeMissing fun _addedAt(): JsonField<String> = addedAt
 
     /**
      * Returns the raw JSON value of [user].
@@ -140,7 +137,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var _typename: JsonField<String>? = null
-        private var addedAt: JsonField<OffsetDateTime>? = null
+        private var addedAt: JsonField<String>? = null
         private var user: JsonField<User>? = null
         private var userId: JsonField<String>? = null
         private var tenant: JsonField<String> = JsonMissing.of()
@@ -167,16 +164,15 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
-        fun addedAt(addedAt: OffsetDateTime) = addedAt(JsonField.of(addedAt))
+        fun addedAt(addedAt: String) = addedAt(JsonField.of(addedAt))
 
         /**
          * Sets [Builder.addedAt] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.addedAt] with a well-typed [OffsetDateTime] value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.addedAt] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
          */
-        fun addedAt(addedAt: JsonField<OffsetDateTime>) = apply { this.addedAt = addedAt }
+        fun addedAt(addedAt: JsonField<String>) = apply { this.addedAt = addedAt }
 
         /** A user object */
         fun user(user: User) = user(JsonField.of(user))

@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List schedules */
+/** List schedules for a user */
 class UserListSchedulesParams
 private constructor(
     private val userId: String,

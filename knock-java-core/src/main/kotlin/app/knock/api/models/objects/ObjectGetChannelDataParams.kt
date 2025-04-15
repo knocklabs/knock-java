@@ -8,7 +8,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get channel data */
+/** Get channel data for an object */
 class ObjectGetChannelDataParams
 private constructor(
     private val collection: String,

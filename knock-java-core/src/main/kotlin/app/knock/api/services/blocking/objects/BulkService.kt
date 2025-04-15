@@ -17,7 +17,7 @@ interface BulkService {
      */
     fun withRawResponse(): WithRawResponse
 
-    /** Bulk delete objects */
+    /** Deletes objects in bulk for a given collection */
     fun delete(params: BulkDeleteParams): BulkOperation = delete(params, RequestOptions.none())
 
     /** @see [delete] */
@@ -26,10 +26,7 @@ interface BulkService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
-    /**
-     * Add subscriptions for a set of objects in a single collection. If a subscription already
-     * exists, it will be updated.
-     */
+    /** Bulk upserts subscriptions for a set of objects in a single collection */
     fun addSubscriptions(params: BulkAddSubscriptionsParams): BulkOperation =
         addSubscriptions(params, RequestOptions.none())
 
@@ -39,7 +36,7 @@ interface BulkService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
-    /** Bulk set objects */
+    /** Sets objects in bulk for a given collection */
     fun set(params: BulkSetParams): BulkOperation = set(params, RequestOptions.none())
 
     /** @see [set] */

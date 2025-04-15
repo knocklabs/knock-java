@@ -17,7 +17,7 @@ interface AudienceService {
      */
     fun withRawResponse(): WithRawResponse
 
-    /** Add members */
+    /** Add members to an audience */
     fun addMembers(params: AudienceAddMembersParams): String =
         addMembers(params, RequestOptions.none())
 
@@ -27,7 +27,7 @@ interface AudienceService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): String
 
-    /** List members */
+    /** List members of an audience */
     fun listMembers(params: AudienceListMembersParams): AudienceListMembersResponse =
         listMembers(params, RequestOptions.none())
 
@@ -37,7 +37,7 @@ interface AudienceService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): AudienceListMembersResponse
 
-    /** Remove members */
+    /** Remove members from an audience */
     fun removeMembers(params: AudienceRemoveMembersParams): String =
         removeMembers(params, RequestOptions.none())
 

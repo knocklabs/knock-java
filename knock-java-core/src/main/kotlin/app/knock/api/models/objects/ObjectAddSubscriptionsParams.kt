@@ -24,7 +24,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Add subscriptions for an object. If a subscription already exists, it will be updated. */
+/** Upsert subscriptions for an object */
 class ObjectAddSubscriptionsParams
 private constructor(
     private val collection: String,

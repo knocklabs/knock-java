@@ -2,52 +2,27 @@
 
 package app.knock.api.models.audiences
 
-import app.knock.api.core.ExcludeMissing
-import app.knock.api.core.JsonField
-import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
-import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
-import app.knock.api.errors.KnockInvalidDataException
-import app.knock.api.models.users.InlineIdentifyUserRequest
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import java.util.Collections
 import java.util.Objects
 import java.util.Optional
-import kotlin.jvm.optionals.getOrNull
 
-/** Add members */
+/** Add members to an audience */
 class AudienceAddMembersParams
 private constructor(
     private val key: String,
-    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
+    private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
     fun key(): String = key
 
-    /**
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
-     *   missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun members(): List<Member> = body.members()
-
-    /**
-     * Returns the raw JSON value of [members].
-     *
-     * Unlike [members], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _members(): JsonField<List<Member>> = body._members()
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -63,7 +38,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .key()
-         * .members()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -73,65 +47,20 @@ private constructor(
     class Builder internal constructor() {
 
         private var key: String? = null
-        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
+        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(audienceAddMembersParams: AudienceAddMembersParams) = apply {
             key = audienceAddMembersParams.key
-            body = audienceAddMembersParams.body.toBuilder()
             additionalHeaders = audienceAddMembersParams.additionalHeaders.toBuilder()
             additionalQueryParams = audienceAddMembersParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                audienceAddMembersParams.additionalBodyProperties.toMutableMap()
         }
 
         fun key(key: String) = apply { this.key = key }
-
-        /**
-         * Sets the entire request body.
-         *
-         * This is generally only useful if you are already constructing the body separately.
-         * Otherwise, it's more convenient to use the top-level setters instead:
-         * - [members]
-         */
-        fun body(body: Body) = apply { this.body = body.toBuilder() }
-
-        fun members(members: List<Member>) = apply { body.members(members) }
-
-        /**
-         * Sets [Builder.members] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.members] with a well-typed `List<Member>` value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun members(members: JsonField<List<Member>>) = apply { body.members(members) }
-
-        /**
-         * Adds a single [Member] to [members].
-         *
-         * @throws IllegalStateException if the field was previously set to a non-list.
-         */
-        fun addMember(member: Member) = apply { body.addMember(member) }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
-        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -231,6 +160,28 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.clear()
+            putAllAdditionalBodyProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            additionalBodyProperties.put(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalBodyProperties.putAll(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply {
+            additionalBodyProperties.remove(key)
+        }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalBodyProperty)
+        }
+
         /**
          * Returns an immutable instance of [AudienceAddMembersParams].
          *
@@ -239,7 +190,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .key()
-         * .members()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -247,13 +197,14 @@ private constructor(
         fun build(): AudienceAddMembersParams =
             AudienceAddMembersParams(
                 checkRequired("key", key),
-                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
-    fun _body(): Body = body
+    fun _body(): Optional<Map<String, JsonValue>> =
+        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -265,392 +216,16 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    /** A request to add members to an audience */
-    class Body
-    private constructor(
-        private val members: JsonField<List<Member>>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("members")
-            @ExcludeMissing
-            members: JsonField<List<Member>> = JsonMissing.of()
-        ) : this(members, mutableMapOf())
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun members(): List<Member> = members.getRequired("members")
-
-        /**
-         * Returns the raw JSON value of [members].
-         *
-         * Unlike [members], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("members") @ExcludeMissing fun _members(): JsonField<List<Member>> = members
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Body].
-             *
-             * The following fields are required:
-             * ```java
-             * .members()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Body]. */
-        class Builder internal constructor() {
-
-            private var members: JsonField<MutableList<Member>>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(body: Body) = apply {
-                members = body.members.map { it.toMutableList() }
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
-
-            fun members(members: List<Member>) = members(JsonField.of(members))
-
-            /**
-             * Sets [Builder.members] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.members] with a well-typed `List<Member>` value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun members(members: JsonField<List<Member>>) = apply {
-                this.members = members.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [Member] to [members].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addMember(member: Member) = apply {
-                members =
-                    (members ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("members", it).add(member)
-                    }
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Body].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .members()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Body =
-                Body(
-                    checkRequired("members", members).map { it.toImmutable() },
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
-
-            members().forEach { it.validate() }
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: KnockInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            (members.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Body && members == other.members && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(members, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Body{members=$members, additionalProperties=$additionalProperties}"
-    }
-
-    /** A request for an individual audience member */
-    class Member
-    private constructor(
-        private val user: JsonField<InlineIdentifyUserRequest>,
-        private val tenant: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("user")
-            @ExcludeMissing
-            user: JsonField<InlineIdentifyUserRequest> = JsonMissing.of(),
-            @JsonProperty("tenant") @ExcludeMissing tenant: JsonField<String> = JsonMissing.of(),
-        ) : this(user, tenant, mutableMapOf())
-
-        /**
-         * A set of parameters to inline-identify a user with. Inline identifying the user will
-         * ensure that the user is available before the request is executed in Knock. It will
-         * perform an upsert against the user you're supplying, replacing any properties specified.
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun user(): InlineIdentifyUserRequest = user.getRequired("user")
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun tenant(): Optional<String> = tenant.getOptional("tenant")
-
-        /**
-         * Returns the raw JSON value of [user].
-         *
-         * Unlike [user], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("user")
-        @ExcludeMissing
-        fun _user(): JsonField<InlineIdentifyUserRequest> = user
-
-        /**
-         * Returns the raw JSON value of [tenant].
-         *
-         * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("tenant") @ExcludeMissing fun _tenant(): JsonField<String> = tenant
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Member].
-             *
-             * The following fields are required:
-             * ```java
-             * .user()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Member]. */
-        class Builder internal constructor() {
-
-            private var user: JsonField<InlineIdentifyUserRequest>? = null
-            private var tenant: JsonField<String> = JsonMissing.of()
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(member: Member) = apply {
-                user = member.user
-                tenant = member.tenant
-                additionalProperties = member.additionalProperties.toMutableMap()
-            }
-
-            /**
-             * A set of parameters to inline-identify a user with. Inline identifying the user will
-             * ensure that the user is available before the request is executed in Knock. It will
-             * perform an upsert against the user you're supplying, replacing any properties
-             * specified.
-             */
-            fun user(user: InlineIdentifyUserRequest) = user(JsonField.of(user))
-
-            /**
-             * Sets [Builder.user] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.user] with a well-typed [InlineIdentifyUserRequest]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
-             */
-            fun user(user: JsonField<InlineIdentifyUserRequest>) = apply { this.user = user }
-
-            fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
-
-            /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
-            fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
-
-            /**
-             * Sets [Builder.tenant] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.tenant] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun tenant(tenant: JsonField<String>) = apply { this.tenant = tenant }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Member].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .user()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Member =
-                Member(checkRequired("user", user), tenant, additionalProperties.toMutableMap())
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Member = apply {
-            if (validated) {
-                return@apply
-            }
-
-            user().validate()
-            tenant()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: KnockInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            (user.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (tenant.asKnown().isPresent) 1 else 0)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Member && user == other.user && tenant == other.tenant && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(user, tenant, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Member{user=$user, tenant=$tenant, additionalProperties=$additionalProperties}"
-    }
-
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is AudienceAddMembersParams && key == other.key && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is AudienceAddMembersParams && key == other.key && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(key, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(key, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
-        "AudienceAddMembersParams{key=$key, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "AudienceAddMembersParams{key=$key, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

@@ -22,11 +22,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * When invoked for a workflow using a specific workflow key and cancellation key, will cancel any
- * queued workflow runs associated with that key/cancellation key pair. Can optionally be provided
- * one or more recipients to scope the request to.
- */
+/** Issues a cancellation request to inflight workflow runs */
 class WorkflowCancelParams
 private constructor(
     private val key: String,

@@ -14,7 +14,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List messages */
+/** Returns a paginated list of messages */
 class MessageListParams
 private constructor(
     private val after: String?,

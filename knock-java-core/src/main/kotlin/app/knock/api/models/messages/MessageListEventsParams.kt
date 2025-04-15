@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List events */
+/** Get events for a message */
 class MessageListEventsParams
 private constructor(
     private val messageId: String,

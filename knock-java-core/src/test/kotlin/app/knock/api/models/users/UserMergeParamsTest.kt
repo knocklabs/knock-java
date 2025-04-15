@@ -14,7 +14,7 @@ internal class UserMergeParamsTest {
 
     @Test
     fun pathParams() {
-        val params = UserMergeParams.builder().userId("user_id").fromUserId("user_1").build()
+        val params = UserMergeParams.builder().userId("user_id").build()
 
         assertThat(params._pathParam(0)).isEqualTo("user_id")
         // out-of-bound path param
@@ -27,6 +27,13 @@ internal class UserMergeParamsTest {
 
         val body = params._body()
 
-        assertThat(body.fromUserId()).isEqualTo("user_1")
+        assertThat(body.fromUserId()).contains("user_1")
+    }
+
+    @Test
+    fun bodyWithoutOptionalFields() {
+        val params = UserMergeParams.builder().userId("user_id").build()
+
+        val body = params._body()
     }
 }

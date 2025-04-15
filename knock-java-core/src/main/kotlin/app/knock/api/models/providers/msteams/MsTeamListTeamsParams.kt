@@ -10,10 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * Get a list of teams belonging to the Microsoft Entra tenant. By default, archived and private
- * channels are excluded from the results.
- */
+/** Get a list of teams belonging to the Microsoft Entra tenant */
 class MsTeamListTeamsParams
 private constructor(
     private val channelId: String,

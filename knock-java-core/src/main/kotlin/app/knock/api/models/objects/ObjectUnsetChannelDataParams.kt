@@ -11,7 +11,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Unset channel data */
+/** Unset channel data for an object */
 class ObjectUnsetChannelDataParams
 private constructor(
     private val collection: String,

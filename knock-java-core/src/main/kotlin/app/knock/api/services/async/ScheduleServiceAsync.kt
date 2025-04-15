@@ -21,24 +21,40 @@ interface ScheduleServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** Create schedules */
-    fun create(params: ScheduleCreateParams): CompletableFuture<List<Schedule>> =
-        create(params, RequestOptions.none())
+    fun create(): CompletableFuture<List<Schedule>> = create(ScheduleCreateParams.none())
 
     /** @see [create] */
     fun create(
-        params: ScheduleCreateParams,
+        params: ScheduleCreateParams = ScheduleCreateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<List<Schedule>>
 
+    /** @see [create] */
+    fun create(
+        params: ScheduleCreateParams = ScheduleCreateParams.none()
+    ): CompletableFuture<List<Schedule>> = create(params, RequestOptions.none())
+
+    /** @see [create] */
+    fun create(requestOptions: RequestOptions): CompletableFuture<List<Schedule>> =
+        create(ScheduleCreateParams.none(), requestOptions)
+
     /** Update schedules */
-    fun update(params: ScheduleUpdateParams): CompletableFuture<List<Schedule>> =
-        update(params, RequestOptions.none())
+    fun update(): CompletableFuture<List<Schedule>> = update(ScheduleUpdateParams.none())
 
     /** @see [update] */
     fun update(
-        params: ScheduleUpdateParams,
+        params: ScheduleUpdateParams = ScheduleUpdateParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<List<Schedule>>
+
+    /** @see [update] */
+    fun update(
+        params: ScheduleUpdateParams = ScheduleUpdateParams.none()
+    ): CompletableFuture<List<Schedule>> = update(params, RequestOptions.none())
+
+    /** @see [update] */
+    fun update(requestOptions: RequestOptions): CompletableFuture<List<Schedule>> =
+        update(ScheduleUpdateParams.none(), requestOptions)
 
     /** List schedules */
     fun list(params: ScheduleListParams): CompletableFuture<ScheduleListPageAsync> =
@@ -51,14 +67,22 @@ interface ScheduleServiceAsync {
     ): CompletableFuture<ScheduleListPageAsync>
 
     /** Delete schedules */
-    fun delete(params: ScheduleDeleteParams): CompletableFuture<List<Schedule>> =
-        delete(params, RequestOptions.none())
+    fun delete(): CompletableFuture<List<Schedule>> = delete(ScheduleDeleteParams.none())
 
     /** @see [delete] */
     fun delete(
-        params: ScheduleDeleteParams,
+        params: ScheduleDeleteParams = ScheduleDeleteParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<List<Schedule>>
+
+    /** @see [delete] */
+    fun delete(
+        params: ScheduleDeleteParams = ScheduleDeleteParams.none()
+    ): CompletableFuture<List<Schedule>> = delete(params, RequestOptions.none())
+
+    /** @see [delete] */
+    fun delete(requestOptions: RequestOptions): CompletableFuture<List<Schedule>> =
+        delete(ScheduleDeleteParams.none(), requestOptions)
 
     /**
      * A view of [ScheduleServiceAsync] that provides access to raw HTTP responses for each method.
@@ -70,34 +94,58 @@ interface ScheduleServiceAsync {
          * [ScheduleServiceAsync.create].
          */
         @MustBeClosed
+        fun create(): CompletableFuture<HttpResponseFor<List<Schedule>>> =
+            create(ScheduleCreateParams.none())
+
+        /** @see [create] */
+        @MustBeClosed
         fun create(
-            params: ScheduleCreateParams
+            params: ScheduleCreateParams = ScheduleCreateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<List<Schedule>>>
+
+        /** @see [create] */
+        @MustBeClosed
+        fun create(
+            params: ScheduleCreateParams = ScheduleCreateParams.none()
         ): CompletableFuture<HttpResponseFor<List<Schedule>>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
         @MustBeClosed
         fun create(
-            params: ScheduleCreateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<List<Schedule>>>
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<List<Schedule>>> =
+            create(ScheduleCreateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `put /v1/schedules`, but is otherwise the same as
          * [ScheduleServiceAsync.update].
          */
         @MustBeClosed
+        fun update(): CompletableFuture<HttpResponseFor<List<Schedule>>> =
+            update(ScheduleUpdateParams.none())
+
+        /** @see [update] */
+        @MustBeClosed
         fun update(
-            params: ScheduleUpdateParams
+            params: ScheduleUpdateParams = ScheduleUpdateParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<List<Schedule>>>
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            params: ScheduleUpdateParams = ScheduleUpdateParams.none()
         ): CompletableFuture<HttpResponseFor<List<Schedule>>> =
             update(params, RequestOptions.none())
 
         /** @see [update] */
         @MustBeClosed
         fun update(
-            params: ScheduleUpdateParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<List<Schedule>>>
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<List<Schedule>>> =
+            update(ScheduleUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /v1/schedules`, but is otherwise the same as
@@ -121,16 +169,28 @@ interface ScheduleServiceAsync {
          * [ScheduleServiceAsync.delete].
          */
         @MustBeClosed
+        fun delete(): CompletableFuture<HttpResponseFor<List<Schedule>>> =
+            delete(ScheduleDeleteParams.none())
+
+        /** @see [delete] */
+        @MustBeClosed
         fun delete(
-            params: ScheduleDeleteParams
+            params: ScheduleDeleteParams = ScheduleDeleteParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<List<Schedule>>>
+
+        /** @see [delete] */
+        @MustBeClosed
+        fun delete(
+            params: ScheduleDeleteParams = ScheduleDeleteParams.none()
         ): CompletableFuture<HttpResponseFor<List<Schedule>>> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
-            params: ScheduleDeleteParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<List<Schedule>>>
+            requestOptions: RequestOptions
+        ): CompletableFuture<HttpResponseFor<List<Schedule>>> =
+            delete(ScheduleDeleteParams.none(), requestOptions)
     }
 }

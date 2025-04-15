@@ -57,8 +57,6 @@ private constructor(
     fun _typename(): String = _typename.getRequired("__typename")
 
     /**
-     * A map of categories and their settings
-     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -74,8 +72,6 @@ private constructor(
         channelTypes.getOptional("channel_types")
 
     /**
-     * A map of workflows and their settings
-     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -187,7 +183,6 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
-        /** A map of categories and their settings */
         fun categories(categories: Categories?) = categories(JsonField.ofNullable(categories))
 
         /** Alias for calling [Builder.categories] with `categories.orElse(null)`. */
@@ -221,7 +216,6 @@ private constructor(
             this.channelTypes = channelTypes
         }
 
-        /** A map of workflows and their settings */
         fun workflows(workflows: Workflows?) = workflows(JsonField.ofNullable(workflows))
 
         /** Alias for calling [Builder.workflows] with `workflows.orElse(null)`. */
@@ -315,7 +309,6 @@ private constructor(
             (channelTypes.asKnown().getOrNull()?.validity() ?: 0) +
             (workflows.asKnown().getOrNull()?.validity() ?: 0)
 
-    /** A map of categories and their settings */
     class Categories
     @JsonCreator
     private constructor(
@@ -417,7 +410,6 @@ private constructor(
         override fun toString() = "Categories{additionalProperties=$additionalProperties}"
     }
 
-    /** A map of workflows and their settings */
     class Workflows
     @JsonCreator
     private constructor(

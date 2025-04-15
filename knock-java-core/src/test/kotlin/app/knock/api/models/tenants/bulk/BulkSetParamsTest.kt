@@ -2,23 +2,12 @@
 
 package app.knock.api.models.tenants.bulk
 
-import app.knock.api.models.tenants.InlineTenantRequest
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
 internal class BulkSetParamsTest {
 
     @Test
     fun create() {
-        BulkSetParams.builder().addTenant("string").build()
-    }
-
-    @Test
-    fun body() {
-        val params = BulkSetParams.builder().addTenant("string").build()
-
-        val body = params._body()
-
-        assertThat(body.tenants()).containsExactly(InlineTenantRequest.ofString("string"))
+        BulkSetParams.builder().build()
     }
 }

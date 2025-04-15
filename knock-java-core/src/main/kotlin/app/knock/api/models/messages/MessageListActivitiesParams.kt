@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List activities */
+/** Get activities for a message */
 class MessageListActivitiesParams
 private constructor(
     private val messageId: String,

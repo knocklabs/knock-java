@@ -134,9 +134,9 @@ private constructor(
         /** Alias for calling [addRecipient] with `Recipient.ofString(string)`. */
         fun addRecipient(string: String) = addRecipient(Recipient.ofString(string))
 
-        /** Alias for calling [addRecipient] with `Recipient.ofObjectReference(objectReference)`. */
-        fun addRecipient(objectReference: Recipient.ObjectReference) =
-            addRecipient(Recipient.ofObjectReference(objectReference))
+        /** Alias for calling [addRecipient] with `Recipient.ofUnionMember1(unionMember1)`. */
+        fun addRecipient(unionMember1: Recipient.UnionMember1) =
+            addRecipient(Recipient.ofUnionMember1(unionMember1))
 
         /** Filter by tenant */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
@@ -283,14 +283,12 @@ private constructor(
                                 put("recipients[]", string)
                             }
 
-                            override fun visitObjectReference(
-                                objectReference: Recipient.ObjectReference
-                            ) {
-                                put("recipients[][id]", objectReference.id())
-                                put("recipients[][collection]", objectReference.collection())
-                                objectReference._additionalProperties().keys().forEach { key ->
-                                    objectReference._additionalProperties().values(key).forEach {
-                                        value ->
+                            override fun visitUnionMember1(unionMember1: Recipient.UnionMember1) {
+                                put("recipients[][id]", unionMember1.id())
+                                put("recipients[][collection]", unionMember1.collection())
+                                unionMember1._additionalProperties().keys().forEach { key ->
+                                    unionMember1._additionalProperties().values(key).forEach { value
+                                        ->
                                         put("recipients[][$key]", value)
                                     }
                                 }
@@ -310,29 +308,29 @@ private constructor(
     class Recipient
     private constructor(
         private val string: String? = null,
-        private val objectReference: ObjectReference? = null,
+        private val unionMember1: UnionMember1? = null,
     ) {
 
         /** A user identifier */
         fun string(): Optional<String> = Optional.ofNullable(string)
 
         /** An object reference to a recipient */
-        fun objectReference(): Optional<ObjectReference> = Optional.ofNullable(objectReference)
+        fun unionMember1(): Optional<UnionMember1> = Optional.ofNullable(unionMember1)
 
         fun isString(): Boolean = string != null
 
-        fun isObjectReference(): Boolean = objectReference != null
+        fun isUnionMember1(): Boolean = unionMember1 != null
 
         /** A user identifier */
         fun asString(): String = string.getOrThrow("string")
 
         /** An object reference to a recipient */
-        fun asObjectReference(): ObjectReference = objectReference.getOrThrow("objectReference")
+        fun asUnionMember1(): UnionMember1 = unionMember1.getOrThrow("unionMember1")
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 string != null -> visitor.visitString(string)
-                objectReference != null -> visitor.visitObjectReference(objectReference)
+                unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
                 else -> throw IllegalStateException("Invalid Recipient")
             }
 
@@ -341,15 +339,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Recipient && string == other.string && objectReference == other.objectReference /* spotless:on */
+            return /* spotless:off */ other is Recipient && string == other.string && unionMember1 == other.unionMember1 /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, objectReference) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, unionMember1) /* spotless:on */
 
         override fun toString(): String =
             when {
                 string != null -> "Recipient{string=$string}"
-                objectReference != null -> "Recipient{objectReference=$objectReference}"
+                unionMember1 != null -> "Recipient{unionMember1=$unionMember1}"
                 else -> throw IllegalStateException("Invalid Recipient")
             }
 
@@ -360,8 +358,7 @@ private constructor(
 
             /** An object reference to a recipient */
             @JvmStatic
-            fun ofObjectReference(objectReference: ObjectReference) =
-                Recipient(objectReference = objectReference)
+            fun ofUnionMember1(unionMember1: UnionMember1) = Recipient(unionMember1 = unionMember1)
         }
 
         /**
@@ -373,11 +370,11 @@ private constructor(
             fun visitString(string: String): T
 
             /** An object reference to a recipient */
-            fun visitObjectReference(objectReference: ObjectReference): T
+            fun visitUnionMember1(unionMember1: UnionMember1): T
         }
 
         /** An object reference to a recipient */
-        class ObjectReference
+        class UnionMember1
         private constructor(private val id: String, private val collection: String) {
 
             /** An object identifier */
@@ -391,7 +388,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of [ObjectReference].
+                 * Returns a mutable builder for constructing an instance of [UnionMember1].
                  *
                  * The following fields are required:
                  * ```java
@@ -402,16 +399,16 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            /** A builder for [ObjectReference]. */
+            /** A builder for [UnionMember1]. */
             class Builder internal constructor() {
 
                 private var id: String? = null
                 private var collection: String? = null
 
                 @JvmSynthetic
-                internal fun from(objectReference: ObjectReference) = apply {
-                    id = objectReference.id
-                    collection = objectReference.collection
+                internal fun from(unionMember1: UnionMember1) = apply {
+                    id = unionMember1.id
+                    collection = unionMember1.collection
                 }
 
                 /** An object identifier */
@@ -421,7 +418,7 @@ private constructor(
                 fun collection(collection: String) = apply { this.collection = collection }
 
                 /**
-                 * Returns an immutable instance of [ObjectReference].
+                 * Returns an immutable instance of [UnionMember1].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -433,11 +430,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): ObjectReference =
-                    ObjectReference(
-                        checkRequired("id", id),
-                        checkRequired("collection", collection),
-                    )
+                fun build(): UnionMember1 =
+                    UnionMember1(checkRequired("id", id), checkRequired("collection", collection))
             }
 
             override fun equals(other: Any?): Boolean {
@@ -445,7 +439,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ObjectReference && id == other.id && collection == other.collection /* spotless:on */
+                return /* spotless:off */ other is UnionMember1 && id == other.id && collection == other.collection /* spotless:on */
             }
 
             /* spotless:off */
@@ -454,7 +448,7 @@ private constructor(
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() = "ObjectReference{id=$id, collection=$collection}"
+            override fun toString() = "UnionMember1{id=$id, collection=$collection}"
         }
     }
 

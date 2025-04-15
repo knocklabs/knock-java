@@ -16,31 +16,18 @@ import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
 import app.knock.api.core.http.parseable
 import app.knock.api.core.prepareAsync
-import app.knock.api.models.objects.Object
 import app.knock.api.models.objects.ObjectAddSubscriptionsParams
-import app.knock.api.models.objects.ObjectDeleteParams
 import app.knock.api.models.objects.ObjectDeleteSubscriptionsParams
 import app.knock.api.models.objects.ObjectGetChannelDataParams
-import app.knock.api.models.objects.ObjectGetParams
-import app.knock.api.models.objects.ObjectGetPreferencesParams
-import app.knock.api.models.objects.ObjectListMessagesPageAsync
-import app.knock.api.models.objects.ObjectListMessagesPageResponse
-import app.knock.api.models.objects.ObjectListMessagesParams
 import app.knock.api.models.objects.ObjectListPageAsync
 import app.knock.api.models.objects.ObjectListPageResponse
 import app.knock.api.models.objects.ObjectListParams
-import app.knock.api.models.objects.ObjectListSchedulesPageAsync
-import app.knock.api.models.objects.ObjectListSchedulesPageResponse
-import app.knock.api.models.objects.ObjectListSchedulesParams
 import app.knock.api.models.objects.ObjectListSubscriptionsPageAsync
 import app.knock.api.models.objects.ObjectListSubscriptionsPageResponse
 import app.knock.api.models.objects.ObjectListSubscriptionsParams
 import app.knock.api.models.objects.ObjectSetChannelDataParams
-import app.knock.api.models.objects.ObjectSetParams
-import app.knock.api.models.objects.ObjectSetPreferencesParams
 import app.knock.api.models.objects.ObjectUnsetChannelDataParams
 import app.knock.api.models.recipients.channeldata.ChannelData
-import app.knock.api.models.recipients.preferences.PreferenceSet
 import app.knock.api.models.recipients.subscriptions.Subscription
 import app.knock.api.services.async.objects.BulkServiceAsync
 import app.knock.api.services.async.objects.BulkServiceAsyncImpl
@@ -66,13 +53,6 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
         // get /v1/objects/{collection}
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
-    override fun delete(
-        params: ObjectDeleteParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
-        // delete /v1/objects/{collection}/{object_id}
-        withRawResponse().delete(params, requestOptions).thenApply { it.parse() }
-
     override fun addSubscriptions(
         params: ObjectAddSubscriptionsParams,
         requestOptions: RequestOptions,
@@ -87,40 +67,12 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
         // delete /v1/objects/{collection}/{object_id}/subscriptions
         withRawResponse().deleteSubscriptions(params, requestOptions).thenApply { it.parse() }
 
-    override fun get(
-        params: ObjectGetParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<Object> =
-        // get /v1/objects/{collection}/{object_id}
-        withRawResponse().get(params, requestOptions).thenApply { it.parse() }
-
     override fun getChannelData(
         params: ObjectGetChannelDataParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<ChannelData> =
         // get /v1/objects/{collection}/{object_id}/channel_data/{channel_id}
         withRawResponse().getChannelData(params, requestOptions).thenApply { it.parse() }
-
-    override fun getPreferences(
-        params: ObjectGetPreferencesParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<PreferenceSet> =
-        // get /v1/objects/{collection}/{object_id}/preferences/{preference_set_id}
-        withRawResponse().getPreferences(params, requestOptions).thenApply { it.parse() }
-
-    override fun listMessages(
-        params: ObjectListMessagesParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<ObjectListMessagesPageAsync> =
-        // get /v1/objects/{collection}/{object_id}/messages
-        withRawResponse().listMessages(params, requestOptions).thenApply { it.parse() }
-
-    override fun listSchedules(
-        params: ObjectListSchedulesParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<ObjectListSchedulesPageAsync> =
-        // get /v1/objects/{collection}/{object_id}/schedules
-        withRawResponse().listSchedules(params, requestOptions).thenApply { it.parse() }
 
     override fun listSubscriptions(
         params: ObjectListSubscriptionsParams,
@@ -129,26 +81,12 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
         // get /v1/objects/{collection}/{object_id}/subscriptions
         withRawResponse().listSubscriptions(params, requestOptions).thenApply { it.parse() }
 
-    override fun set(
-        params: ObjectSetParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<Object> =
-        // put /v1/objects/{collection}/{object_id}
-        withRawResponse().set(params, requestOptions).thenApply { it.parse() }
-
     override fun setChannelData(
         params: ObjectSetChannelDataParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<ChannelData> =
         // put /v1/objects/{collection}/{object_id}/channel_data/{channel_id}
         withRawResponse().setChannelData(params, requestOptions).thenApply { it.parse() }
-
-    override fun setPreferences(
-        params: ObjectSetPreferencesParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<PreferenceSet> =
-        // put /v1/objects/{collection}/{object_id}/preferences/{preference_set_id}
-        withRawResponse().setPreferences(params, requestOptions).thenApply { it.parse() }
 
     override fun unsetChannelData(
         params: ObjectUnsetChannelDataParams,
@@ -202,27 +140,6 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                                     .build()
                             }
                     }
-                }
-        }
-
-        private val deleteHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
-
-        override fun delete(
-            params: ObjectDeleteParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.DELETE)
-                    .addPathSegments("v1", "objects", params._pathParam(0), params._pathParam(1))
-                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable { response.use { deleteHandler.handle(it) } }
                 }
         }
 
@@ -298,35 +215,6 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val getHandler: Handler<Object> =
-            jsonHandler<Object>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-        override fun get(
-            params: ObjectGetParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<Object>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments("v1", "objects", params._pathParam(0), params._pathParam(1))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { getHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
-        }
-
         private val getChannelDataHandler: Handler<ChannelData> =
             jsonHandler<ChannelData>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
@@ -358,128 +246,6 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()
                                 }
-                            }
-                    }
-                }
-        }
-
-        private val getPreferencesHandler: Handler<PreferenceSet> =
-            jsonHandler<PreferenceSet>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-        override fun getPreferences(
-            params: ObjectGetPreferencesParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<PreferenceSet>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments(
-                        "v1",
-                        "objects",
-                        params._pathParam(0),
-                        params._pathParam(1),
-                        "preferences",
-                        params._pathParam(2),
-                    )
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { getPreferencesHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
-        }
-
-        private val listMessagesHandler: Handler<ObjectListMessagesPageResponse> =
-            jsonHandler<ObjectListMessagesPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
-
-        override fun listMessages(
-            params: ObjectListMessagesParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<ObjectListMessagesPageAsync>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments(
-                        "v1",
-                        "objects",
-                        params._pathParam(0),
-                        params._pathParam(1),
-                        "messages",
-                    )
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { listMessagesHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                            .let {
-                                ObjectListMessagesPageAsync.builder()
-                                    .service(ObjectServiceAsyncImpl(clientOptions))
-                                    .params(params)
-                                    .response(it)
-                                    .build()
-                            }
-                    }
-                }
-        }
-
-        private val listSchedulesHandler: Handler<ObjectListSchedulesPageResponse> =
-            jsonHandler<ObjectListSchedulesPageResponse>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
-
-        override fun listSchedules(
-            params: ObjectListSchedulesParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<ObjectListSchedulesPageAsync>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .addPathSegments(
-                        "v1",
-                        "objects",
-                        params._pathParam(0),
-                        params._pathParam(1),
-                        "schedules",
-                    )
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { listSchedulesHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                            .let {
-                                ObjectListSchedulesPageAsync.builder()
-                                    .service(ObjectServiceAsyncImpl(clientOptions))
-                                    .params(params)
-                                    .response(it)
-                                    .build()
                             }
                     }
                 }
@@ -528,36 +294,6 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val setHandler: Handler<Object> =
-            jsonHandler<Object>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-        override fun set(
-            params: ObjectSetParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<Object>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.PUT)
-                    .addPathSegments("v1", "objects", params._pathParam(0), params._pathParam(1))
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { setHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
-        }
-
         private val setChannelDataHandler: Handler<ChannelData> =
             jsonHandler<ChannelData>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
@@ -576,7 +312,7 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                         "channel_data",
                         params._pathParam(2),
                     )
-                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -586,43 +322,6 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                     response.parseable {
                         response
                             .use { setChannelDataHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
-        }
-
-        private val setPreferencesHandler: Handler<PreferenceSet> =
-            jsonHandler<PreferenceSet>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
-
-        override fun setPreferences(
-            params: ObjectSetPreferencesParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<PreferenceSet>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.PUT)
-                    .addPathSegments(
-                        "v1",
-                        "objects",
-                        params._pathParam(0),
-                        params._pathParam(1),
-                        "preferences",
-                        params._pathParam(2),
-                    )
-                    .body(json(clientOptions.jsonMapper, params._body()))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    response.parseable {
-                        response
-                            .use { setPreferencesHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()

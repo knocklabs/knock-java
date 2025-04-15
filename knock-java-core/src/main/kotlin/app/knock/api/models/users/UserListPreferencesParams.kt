@@ -8,7 +8,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
 
-/** List preference sets */
+/** List preference sets for a user */
 class UserListPreferencesParams
 private constructor(
     private val userId: String,

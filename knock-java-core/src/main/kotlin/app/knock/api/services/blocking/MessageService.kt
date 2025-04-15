@@ -35,7 +35,7 @@ interface MessageService {
 
     fun batch(): BatchService
 
-    /** List messages */
+    /** Returns a paginated list of messages */
     fun list(): MessageListPage = list(MessageListParams.none())
 
     /** @see [list] */
@@ -52,7 +52,7 @@ interface MessageService {
     fun list(requestOptions: RequestOptions): MessageListPage =
         list(MessageListParams.none(), requestOptions)
 
-    /** Archive message */
+    /** Archives a message */
     fun archive(params: MessageArchiveParams): Message = archive(params, RequestOptions.none())
 
     /** @see [archive] */
@@ -61,7 +61,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Message
 
-    /** Get message */
+    /** Retrieves a single message */
     fun get(params: MessageGetParams): Message = get(params, RequestOptions.none())
 
     /** @see [get] */
@@ -70,10 +70,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Message
 
-    /**
-     * Returns the fully rendered contents of a message, where the response depends on the channel
-     * the message was sent on.
-     */
+    /** Get the contents of a message */
     fun getContent(params: MessageGetContentParams): MessageGetContentResponse =
         getContent(params, RequestOptions.none())
 
@@ -83,7 +80,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): MessageGetContentResponse
 
-    /** List activities */
+    /** Get activities for a message */
     fun listActivities(params: MessageListActivitiesParams): MessageListActivitiesPage =
         listActivities(params, RequestOptions.none())
 
@@ -93,7 +90,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): MessageListActivitiesPage
 
-    /** List delivery logs */
+    /** Get delivery logs for a message */
     fun listDeliveryLogs(params: MessageListDeliveryLogsParams): MessageListDeliveryLogsPage =
         listDeliveryLogs(params, RequestOptions.none())
 
@@ -103,7 +100,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): MessageListDeliveryLogsPage
 
-    /** List events */
+    /** Get events for a message */
     fun listEvents(params: MessageListEventsParams): MessageListEventsPage =
         listEvents(params, RequestOptions.none())
 
@@ -113,7 +110,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): MessageListEventsPage
 
-    /** Mark message as interacted */
+    /** Marks a message as interacted with */
     fun markAsInteracted(params: MessageMarkAsInteractedParams): Message =
         markAsInteracted(params, RequestOptions.none())
 
@@ -123,7 +120,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Message
 
-    /** Mark message as read */
+    /** Marks a message as read */
     fun markAsRead(params: MessageMarkAsReadParams): Message =
         markAsRead(params, RequestOptions.none())
 
@@ -133,7 +130,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Message
 
-    /** Mark message as seen */
+    /** Marks a message as seen */
     fun markAsSeen(params: MessageMarkAsSeenParams): Message =
         markAsSeen(params, RequestOptions.none())
 
@@ -143,7 +140,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Message
 
-    /** Mark message as unread */
+    /** Marks a message as unread */
     fun markAsUnread(params: MessageMarkAsUnreadParams): Message =
         markAsUnread(params, RequestOptions.none())
 
@@ -153,7 +150,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Message
 
-    /** Mark message as unseen */
+    /** Marks a message as unseen */
     fun markAsUnseen(params: MessageMarkAsUnseenParams): Message =
         markAsUnseen(params, RequestOptions.none())
 
@@ -163,7 +160,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Message
 
-    /** Unarchive message */
+    /** Unarchives a message */
     fun unarchive(params: MessageUnarchiveParams): Message =
         unarchive(params, RequestOptions.none())
 

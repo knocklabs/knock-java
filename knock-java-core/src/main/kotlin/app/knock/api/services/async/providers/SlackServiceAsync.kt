@@ -6,8 +6,8 @@ import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.providers.slack.SlackCheckAuthParams
 import app.knock.api.models.providers.slack.SlackCheckAuthResponse
-import app.knock.api.models.providers.slack.SlackListChannelsPageAsync
 import app.knock.api.models.providers.slack.SlackListChannelsParams
+import app.knock.api.models.providers.slack.SlackListChannelsResponse
 import app.knock.api.models.providers.slack.SlackRevokeAccessParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
@@ -29,16 +29,16 @@ interface SlackServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<SlackCheckAuthResponse>
 
-    /** List Slack channels for a Slack workspace */
+    /** Get Slack channels from a Slack workspace */
     fun listChannels(
         params: SlackListChannelsParams
-    ): CompletableFuture<SlackListChannelsPageAsync> = listChannels(params, RequestOptions.none())
+    ): CompletableFuture<SlackListChannelsResponse> = listChannels(params, RequestOptions.none())
 
     /** @see [listChannels] */
     fun listChannels(
         params: SlackListChannelsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<SlackListChannelsPageAsync>
+    ): CompletableFuture<SlackListChannelsResponse>
 
     /** Revoke access for a Slack channel */
     fun revokeAccess(params: SlackRevokeAccessParams): CompletableFuture<String> =
@@ -77,7 +77,7 @@ interface SlackServiceAsync {
         @MustBeClosed
         fun listChannels(
             params: SlackListChannelsParams
-        ): CompletableFuture<HttpResponseFor<SlackListChannelsPageAsync>> =
+        ): CompletableFuture<HttpResponseFor<SlackListChannelsResponse>> =
             listChannels(params, RequestOptions.none())
 
         /** @see [listChannels] */
@@ -85,7 +85,7 @@ interface SlackServiceAsync {
         fun listChannels(
             params: SlackListChannelsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<SlackListChannelsPageAsync>>
+        ): CompletableFuture<HttpResponseFor<SlackListChannelsResponse>>
 
         /**
          * Returns a raw HTTP response for `put /v1/providers/slack/{channel_id}/revoke_access`, but

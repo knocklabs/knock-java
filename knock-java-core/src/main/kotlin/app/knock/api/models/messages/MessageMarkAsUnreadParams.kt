@@ -11,7 +11,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Mark message as unread */
+/** Marks a message as unread */
 class MessageMarkAsUnreadParams
 private constructor(
     private val messageId: String,

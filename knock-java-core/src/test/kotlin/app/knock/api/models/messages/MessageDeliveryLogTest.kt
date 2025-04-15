@@ -20,16 +20,8 @@ internal class MessageDeliveryLogTest {
                 .insertedAt("2021-01-01T00:00:00Z")
                 .request(
                     MessageDeliveryLog.Request.builder()
-                        .body(
-                            MessageDeliveryLog.Request.Body.UnionMember1.builder()
-                                .putAdditionalProperty("html_content", JsonValue.from("bar"))
-                                .build()
-                        )
-                        .headers(
-                            MessageDeliveryLog.Request.Headers.builder()
-                                .putAdditionalProperty("Content-Type", JsonValue.from("bar"))
-                                .build()
-                        )
+                        .body(JsonValue.from(mapOf("html_content" to "<html></html>")))
+                        .headers(JsonValue.from(mapOf("Content-Type" to "application/json")))
                         .host("localhost")
                         .method(MessageDeliveryLog.Request.Method.GET)
                         .path("/")
@@ -38,16 +30,8 @@ internal class MessageDeliveryLogTest {
                 )
                 .response(
                     MessageDeliveryLog.Response.builder()
-                        .body(
-                            MessageDeliveryLog.Response.Body.UnionMember1.builder()
-                                .putAdditionalProperty("success", JsonValue.from("bar"))
-                                .build()
-                        )
-                        .headers(
-                            MessageDeliveryLog.Response.Headers.builder()
-                                .putAdditionalProperty("Content-Type", JsonValue.from("bar"))
-                                .build()
-                        )
+                        .body(JsonValue.from(mapOf("success" to true)))
+                        .headers(JsonValue.from(mapOf("Content-Type" to "application/json")))
                         .status(200L)
                         .build()
                 )
@@ -62,16 +46,8 @@ internal class MessageDeliveryLogTest {
         assertThat(messageDeliveryLog.request())
             .isEqualTo(
                 MessageDeliveryLog.Request.builder()
-                    .body(
-                        MessageDeliveryLog.Request.Body.UnionMember1.builder()
-                            .putAdditionalProperty("html_content", JsonValue.from("bar"))
-                            .build()
-                    )
-                    .headers(
-                        MessageDeliveryLog.Request.Headers.builder()
-                            .putAdditionalProperty("Content-Type", JsonValue.from("bar"))
-                            .build()
-                    )
+                    .body(JsonValue.from(mapOf("html_content" to "<html></html>")))
+                    .headers(JsonValue.from(mapOf("Content-Type" to "application/json")))
                     .host("localhost")
                     .method(MessageDeliveryLog.Request.Method.GET)
                     .path("/")
@@ -81,16 +57,8 @@ internal class MessageDeliveryLogTest {
         assertThat(messageDeliveryLog.response())
             .isEqualTo(
                 MessageDeliveryLog.Response.builder()
-                    .body(
-                        MessageDeliveryLog.Response.Body.UnionMember1.builder()
-                            .putAdditionalProperty("success", JsonValue.from("bar"))
-                            .build()
-                    )
-                    .headers(
-                        MessageDeliveryLog.Response.Headers.builder()
-                            .putAdditionalProperty("Content-Type", JsonValue.from("bar"))
-                            .build()
-                    )
+                    .body(JsonValue.from(mapOf("success" to true)))
+                    .headers(JsonValue.from(mapOf("Content-Type" to "application/json")))
                     .status(200L)
                     .build()
             )
@@ -108,16 +76,8 @@ internal class MessageDeliveryLogTest {
                 .insertedAt("2021-01-01T00:00:00Z")
                 .request(
                     MessageDeliveryLog.Request.builder()
-                        .body(
-                            MessageDeliveryLog.Request.Body.UnionMember1.builder()
-                                .putAdditionalProperty("html_content", JsonValue.from("bar"))
-                                .build()
-                        )
-                        .headers(
-                            MessageDeliveryLog.Request.Headers.builder()
-                                .putAdditionalProperty("Content-Type", JsonValue.from("bar"))
-                                .build()
-                        )
+                        .body(JsonValue.from(mapOf("html_content" to "<html></html>")))
+                        .headers(JsonValue.from(mapOf("Content-Type" to "application/json")))
                         .host("localhost")
                         .method(MessageDeliveryLog.Request.Method.GET)
                         .path("/")
@@ -126,16 +86,8 @@ internal class MessageDeliveryLogTest {
                 )
                 .response(
                     MessageDeliveryLog.Response.builder()
-                        .body(
-                            MessageDeliveryLog.Response.Body.UnionMember1.builder()
-                                .putAdditionalProperty("success", JsonValue.from("bar"))
-                                .build()
-                        )
-                        .headers(
-                            MessageDeliveryLog.Response.Headers.builder()
-                                .putAdditionalProperty("Content-Type", JsonValue.from("bar"))
-                                .build()
-                        )
+                        .body(JsonValue.from(mapOf("success" to true)))
+                        .headers(JsonValue.from(mapOf("Content-Type" to "application/json")))
                         .status(200L)
                         .build()
                 )

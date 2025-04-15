@@ -2,7 +2,6 @@
 
 package app.knock.api.models.messages
 
-import app.knock.api.core.JsonValue
 import app.knock.api.core.jsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -22,11 +21,7 @@ internal class MessageListEventsPageResponseTest {
                         .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                         .recipient("user_123")
                         .type(MessageEvent.Type.MESSAGE_SENT)
-                        .data(
-                            MessageEvent.Data.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                .build()
-                        )
+                        .data(null)
                         .build()
                 )
                 .pageInfo(
@@ -47,11 +42,7 @@ internal class MessageListEventsPageResponseTest {
                     .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                     .recipient("user_123")
                     .type(MessageEvent.Type.MESSAGE_SENT)
-                    .data(
-                        MessageEvent.Data.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
-                            .build()
-                    )
+                    .data(null)
                     .build()
             )
         assertThat(messageListEventsPageResponse.pageInfo())
@@ -77,11 +68,7 @@ internal class MessageListEventsPageResponseTest {
                         .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                         .recipient("user_123")
                         .type(MessageEvent.Type.MESSAGE_SENT)
-                        .data(
-                            MessageEvent.Data.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                .build()
-                        )
+                        .data(null)
                         .build()
                 )
                 .pageInfo(

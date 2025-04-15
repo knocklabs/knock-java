@@ -53,8 +53,6 @@ private constructor(
     fun connections(): List<Connection> = connections.getRequired("connections")
 
     /**
-     * A token that's used to store the access token for a Slack workspace.
-     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -140,18 +138,16 @@ private constructor(
                 }
         }
 
-        /** Alias for calling [addConnection] with `Connection.ofSlackToken(slackToken)`. */
-        fun addConnection(slackToken: Connection.SlackTokenConnection) =
-            addConnection(Connection.ofSlackToken(slackToken))
+        /** Alias for calling [addConnection] with `Connection.ofToken(token)`. */
+        fun addConnection(token: Connection.TokenConnection) =
+            addConnection(Connection.ofToken(token))
 
         /**
-         * Alias for calling [addConnection] with
-         * `Connection.ofSlackIncomingWebhook(slackIncomingWebhook)`.
+         * Alias for calling [addConnection] with `Connection.ofIncomingWebhook(incomingWebhook)`.
          */
-        fun addConnection(slackIncomingWebhook: Connection.SlackIncomingWebhookConnection) =
-            addConnection(Connection.ofSlackIncomingWebhook(slackIncomingWebhook))
+        fun addConnection(incomingWebhook: Connection.IncomingWebhookConnection) =
+            addConnection(Connection.ofIncomingWebhook(incomingWebhook))
 
-        /** A token that's used to store the access token for a Slack workspace. */
         fun token(token: Token?) = token(JsonField.ofNullable(token))
 
         /** Alias for calling [Builder.token] with `token.orElse(null)`. */
@@ -239,36 +235,35 @@ private constructor(
     @JsonSerialize(using = Connection.Serializer::class)
     class Connection
     private constructor(
-        private val slackToken: SlackTokenConnection? = null,
-        private val slackIncomingWebhook: SlackIncomingWebhookConnection? = null,
+        private val token: TokenConnection? = null,
+        private val incomingWebhook: IncomingWebhookConnection? = null,
         private val _json: JsonValue? = null,
     ) {
 
         /** A Slack connection, which either includes a channel_id or a user_id */
-        fun slackToken(): Optional<SlackTokenConnection> = Optional.ofNullable(slackToken)
+        fun token(): Optional<TokenConnection> = Optional.ofNullable(token)
 
         /** An incoming webhook Slack connection */
-        fun slackIncomingWebhook(): Optional<SlackIncomingWebhookConnection> =
-            Optional.ofNullable(slackIncomingWebhook)
+        fun incomingWebhook(): Optional<IncomingWebhookConnection> =
+            Optional.ofNullable(incomingWebhook)
 
-        fun isSlackToken(): Boolean = slackToken != null
+        fun isToken(): Boolean = token != null
 
-        fun isSlackIncomingWebhook(): Boolean = slackIncomingWebhook != null
+        fun isIncomingWebhook(): Boolean = incomingWebhook != null
 
         /** A Slack connection, which either includes a channel_id or a user_id */
-        fun asSlackToken(): SlackTokenConnection = slackToken.getOrThrow("slackToken")
+        fun asToken(): TokenConnection = token.getOrThrow("token")
 
         /** An incoming webhook Slack connection */
-        fun asSlackIncomingWebhook(): SlackIncomingWebhookConnection =
-            slackIncomingWebhook.getOrThrow("slackIncomingWebhook")
+        fun asIncomingWebhook(): IncomingWebhookConnection =
+            incomingWebhook.getOrThrow("incomingWebhook")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
-                slackToken != null -> visitor.visitSlackToken(slackToken)
-                slackIncomingWebhook != null ->
-                    visitor.visitSlackIncomingWebhook(slackIncomingWebhook)
+                token != null -> visitor.visitToken(token)
+                incomingWebhook != null -> visitor.visitIncomingWebhook(incomingWebhook)
                 else -> visitor.unknown(_json)
             }
 
@@ -281,14 +276,12 @@ private constructor(
 
             accept(
                 object : Visitor<Unit> {
-                    override fun visitSlackToken(slackToken: SlackTokenConnection) {
-                        slackToken.validate()
+                    override fun visitToken(token: TokenConnection) {
+                        token.validate()
                     }
 
-                    override fun visitSlackIncomingWebhook(
-                        slackIncomingWebhook: SlackIncomingWebhookConnection
-                    ) {
-                        slackIncomingWebhook.validate()
+                    override fun visitIncomingWebhook(incomingWebhook: IncomingWebhookConnection) {
+                        incomingWebhook.validate()
                     }
                 }
             )
@@ -313,12 +306,10 @@ private constructor(
         internal fun validity(): Int =
             accept(
                 object : Visitor<Int> {
-                    override fun visitSlackToken(slackToken: SlackTokenConnection) =
-                        slackToken.validity()
+                    override fun visitToken(token: TokenConnection) = token.validity()
 
-                    override fun visitSlackIncomingWebhook(
-                        slackIncomingWebhook: SlackIncomingWebhookConnection
-                    ) = slackIncomingWebhook.validity()
+                    override fun visitIncomingWebhook(incomingWebhook: IncomingWebhookConnection) =
+                        incomingWebhook.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -329,16 +320,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Connection && slackToken == other.slackToken && slackIncomingWebhook == other.slackIncomingWebhook /* spotless:on */
+            return /* spotless:off */ other is Connection && token == other.token && incomingWebhook == other.incomingWebhook /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(slackToken, slackIncomingWebhook) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(token, incomingWebhook) /* spotless:on */
 
         override fun toString(): String =
             when {
-                slackToken != null -> "Connection{slackToken=$slackToken}"
-                slackIncomingWebhook != null ->
-                    "Connection{slackIncomingWebhook=$slackIncomingWebhook}"
+                token != null -> "Connection{token=$token}"
+                incomingWebhook != null -> "Connection{incomingWebhook=$incomingWebhook}"
                 _json != null -> "Connection{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Connection")
             }
@@ -346,13 +336,12 @@ private constructor(
         companion object {
 
             /** A Slack connection, which either includes a channel_id or a user_id */
-            @JvmStatic
-            fun ofSlackToken(slackToken: SlackTokenConnection) = Connection(slackToken = slackToken)
+            @JvmStatic fun ofToken(token: TokenConnection) = Connection(token = token)
 
             /** An incoming webhook Slack connection */
             @JvmStatic
-            fun ofSlackIncomingWebhook(slackIncomingWebhook: SlackIncomingWebhookConnection) =
-                Connection(slackIncomingWebhook = slackIncomingWebhook)
+            fun ofIncomingWebhook(incomingWebhook: IncomingWebhookConnection) =
+                Connection(incomingWebhook = incomingWebhook)
         }
 
         /**
@@ -361,10 +350,10 @@ private constructor(
         interface Visitor<out T> {
 
             /** A Slack connection, which either includes a channel_id or a user_id */
-            fun visitSlackToken(slackToken: SlackTokenConnection): T
+            fun visitToken(token: TokenConnection): T
 
             /** An incoming webhook Slack connection */
-            fun visitSlackIncomingWebhook(slackIncomingWebhook: SlackIncomingWebhookConnection): T
+            fun visitIncomingWebhook(incomingWebhook: IncomingWebhookConnection): T
 
             /**
              * Maps an unknown variant of [Connection] to a value of type [T].
@@ -388,11 +377,12 @@ private constructor(
 
                 val bestMatches =
                     sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<SlackTokenConnection>())?.let {
-                                Connection(slackToken = it, _json = json)
+                            tryDeserialize(node, jacksonTypeRef<TokenConnection>())?.let {
+                                Connection(token = it, _json = json)
                             },
-                            tryDeserialize(node, jacksonTypeRef<SlackIncomingWebhookConnection>())
-                                ?.let { Connection(slackIncomingWebhook = it, _json = json) },
+                            tryDeserialize(node, jacksonTypeRef<IncomingWebhookConnection>())?.let {
+                                Connection(incomingWebhook = it, _json = json)
+                            },
                         )
                         .filterNotNull()
                         .allMaxBy { it.validity() }
@@ -418,9 +408,8 @@ private constructor(
                 provider: SerializerProvider,
             ) {
                 when {
-                    value.slackToken != null -> generator.writeObject(value.slackToken)
-                    value.slackIncomingWebhook != null ->
-                        generator.writeObject(value.slackIncomingWebhook)
+                    value.token != null -> generator.writeObject(value.token)
+                    value.incomingWebhook != null -> generator.writeObject(value.incomingWebhook)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Connection")
                 }
@@ -428,7 +417,7 @@ private constructor(
         }
 
         /** A Slack connection, which either includes a channel_id or a user_id */
-        class SlackTokenConnection
+        class TokenConnection
         private constructor(
             private val accessToken: JsonField<String>,
             private val channelId: JsonField<String>,
@@ -508,13 +497,11 @@ private constructor(
 
             companion object {
 
-                /**
-                 * Returns a mutable builder for constructing an instance of [SlackTokenConnection].
-                 */
+                /** Returns a mutable builder for constructing an instance of [TokenConnection]. */
                 @JvmStatic fun builder() = Builder()
             }
 
-            /** A builder for [SlackTokenConnection]. */
+            /** A builder for [TokenConnection]. */
             class Builder internal constructor() {
 
                 private var accessToken: JsonField<String> = JsonMissing.of()
@@ -523,11 +510,11 @@ private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(slackTokenConnection: SlackTokenConnection) = apply {
-                    accessToken = slackTokenConnection.accessToken
-                    channelId = slackTokenConnection.channelId
-                    userId = slackTokenConnection.userId
-                    additionalProperties = slackTokenConnection.additionalProperties.toMutableMap()
+                internal fun from(tokenConnection: TokenConnection) = apply {
+                    accessToken = tokenConnection.accessToken
+                    channelId = tokenConnection.channelId
+                    userId = tokenConnection.userId
+                    additionalProperties = tokenConnection.additionalProperties.toMutableMap()
                 }
 
                 fun accessToken(accessToken: String?) =
@@ -599,12 +586,12 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [SlackTokenConnection].
+                 * Returns an immutable instance of [TokenConnection].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
-                fun build(): SlackTokenConnection =
-                    SlackTokenConnection(
+                fun build(): TokenConnection =
+                    TokenConnection(
                         accessToken,
                         channelId,
                         userId,
@@ -614,7 +601,7 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): SlackTokenConnection = apply {
+            fun validate(): TokenConnection = apply {
                 if (validated) {
                     return@apply
                 }
@@ -650,7 +637,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is SlackTokenConnection && accessToken == other.accessToken && channelId == other.channelId && userId == other.userId && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is TokenConnection && accessToken == other.accessToken && channelId == other.channelId && userId == other.userId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -660,11 +647,11 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "SlackTokenConnection{accessToken=$accessToken, channelId=$channelId, userId=$userId, additionalProperties=$additionalProperties}"
+                "TokenConnection{accessToken=$accessToken, channelId=$channelId, userId=$userId, additionalProperties=$additionalProperties}"
         }
 
         /** An incoming webhook Slack connection */
-        class SlackIncomingWebhookConnection
+        class IncomingWebhookConnection
         private constructor(
             private val url: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -705,7 +692,7 @@ private constructor(
 
                 /**
                  * Returns a mutable builder for constructing an instance of
-                 * [SlackIncomingWebhookConnection].
+                 * [IncomingWebhookConnection].
                  *
                  * The following fields are required:
                  * ```java
@@ -715,19 +702,18 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            /** A builder for [SlackIncomingWebhookConnection]. */
+            /** A builder for [IncomingWebhookConnection]. */
             class Builder internal constructor() {
 
                 private var url: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(slackIncomingWebhookConnection: SlackIncomingWebhookConnection) =
-                    apply {
-                        url = slackIncomingWebhookConnection.url
-                        additionalProperties =
-                            slackIncomingWebhookConnection.additionalProperties.toMutableMap()
-                    }
+                internal fun from(incomingWebhookConnection: IncomingWebhookConnection) = apply {
+                    url = incomingWebhookConnection.url
+                    additionalProperties =
+                        incomingWebhookConnection.additionalProperties.toMutableMap()
+                }
 
                 fun url(url: String) = url(JsonField.of(url))
 
@@ -763,7 +749,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [SlackIncomingWebhookConnection].
+                 * Returns an immutable instance of [IncomingWebhookConnection].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -774,8 +760,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): SlackIncomingWebhookConnection =
-                    SlackIncomingWebhookConnection(
+                fun build(): IncomingWebhookConnection =
+                    IncomingWebhookConnection(
                         checkRequired("url", url),
                         additionalProperties.toMutableMap(),
                     )
@@ -783,7 +769,7 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): SlackIncomingWebhookConnection = apply {
+            fun validate(): IncomingWebhookConnection = apply {
                 if (validated) {
                     return@apply
                 }
@@ -813,7 +799,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is SlackIncomingWebhookConnection && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is IncomingWebhookConnection && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -823,11 +809,10 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "SlackIncomingWebhookConnection{url=$url, additionalProperties=$additionalProperties}"
+                "IncomingWebhookConnection{url=$url, additionalProperties=$additionalProperties}"
         }
     }
 
-    /** A token that's used to store the access token for a Slack workspace. */
     class Token
     private constructor(
         private val accessToken: JsonField<String>,

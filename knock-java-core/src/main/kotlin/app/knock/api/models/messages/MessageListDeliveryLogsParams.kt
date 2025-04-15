@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List delivery logs */
+/** Get delivery logs for a message */
 class MessageListDeliveryLogsParams
 private constructor(
     private val messageId: String,

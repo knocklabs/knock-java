@@ -13,18 +13,29 @@ internal class SlackListChannelsResponseTest {
     fun create() {
         val slackListChannelsResponse =
             SlackListChannelsResponse.builder()
-                .id("id")
-                .contextTeamId("context_team_id")
-                .isIm(true)
-                .isPrivate(true)
-                .name("name")
+                .nextCursor(null)
+                .addSlackChannel(
+                    SlackListChannelsResponse.SlackChannel.builder()
+                        .id("C01234567890")
+                        .contextTeamId("T01234567890")
+                        .isIm(false)
+                        .isPrivate(false)
+                        .name("general")
+                        .build()
+                )
                 .build()
 
-        assertThat(slackListChannelsResponse.id()).isEqualTo("id")
-        assertThat(slackListChannelsResponse.contextTeamId()).isEqualTo("context_team_id")
-        assertThat(slackListChannelsResponse.isIm()).isEqualTo(true)
-        assertThat(slackListChannelsResponse.isPrivate()).isEqualTo(true)
-        assertThat(slackListChannelsResponse.name()).isEqualTo("name")
+        assertThat(slackListChannelsResponse.nextCursor()).isEmpty
+        assertThat(slackListChannelsResponse.slackChannels())
+            .containsExactly(
+                SlackListChannelsResponse.SlackChannel.builder()
+                    .id("C01234567890")
+                    .contextTeamId("T01234567890")
+                    .isIm(false)
+                    .isPrivate(false)
+                    .name("general")
+                    .build()
+            )
     }
 
     @Test
@@ -32,11 +43,16 @@ internal class SlackListChannelsResponseTest {
         val jsonMapper = jsonMapper()
         val slackListChannelsResponse =
             SlackListChannelsResponse.builder()
-                .id("id")
-                .contextTeamId("context_team_id")
-                .isIm(true)
-                .isPrivate(true)
-                .name("name")
+                .nextCursor(null)
+                .addSlackChannel(
+                    SlackListChannelsResponse.SlackChannel.builder()
+                        .id("C01234567890")
+                        .contextTeamId("T01234567890")
+                        .isIm(false)
+                        .isPrivate(false)
+                        .name("general")
+                        .build()
+                )
                 .build()
 
         val roundtrippedSlackListChannelsResponse =

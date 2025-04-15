@@ -27,11 +27,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * Trigger a workflow specified by the key to run for the given recipients, using the parameters
- * provided. Returns an identifier for the workflow run request. All workflow runs are executed
- * asynchronously.
- */
+/** Triggers a workflow */
 class WorkflowTriggerParams
 private constructor(
     private val key: String,
@@ -71,8 +67,7 @@ private constructor(
     fun data(): Optional<Data> = body.data()
 
     /**
-     * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-     * trigger.
+     * The recipients to trigger the workflow for.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -248,10 +243,7 @@ private constructor(
          */
         fun data(data: JsonField<Data>) = apply { body.data(data) }
 
-        /**
-         * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-         * trigger.
-         */
+        /** The recipients to trigger the workflow for. */
         fun recipients(recipients: List<RecipientRequest>) = apply { body.recipients(recipients) }
 
         /**
@@ -518,8 +510,7 @@ private constructor(
         fun data(): Optional<Data> = data.getOptional("data")
 
         /**
-         * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-         * trigger.
+         * The recipients to trigger the workflow for.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -687,10 +678,7 @@ private constructor(
              */
             fun data(data: JsonField<Data>) = apply { this.data = data }
 
-            /**
-             * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-             * trigger.
-             */
+            /** The recipients to trigger the workflow for. */
             fun recipients(recipients: List<RecipientRequest>) =
                 recipients(JsonField.of(recipients))
 

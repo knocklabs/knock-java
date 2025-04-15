@@ -50,16 +50,25 @@ internal class SlackServiceAsyncTest {
                 .build()
         val slackServiceAsync = client.providers().slack()
 
-        val pageFuture =
+        val responseFuture =
             slackServiceAsync.listChannels(
                 SlackListChannelsParams.builder()
                     .channelId("channel_id")
                     .accessTokenObject("access_token_object")
+                    .queryOptions(
+                        SlackListChannelsParams.QueryOptions.builder()
+                            .cursor("cursor")
+                            .excludeArchived("exclude_archived")
+                            .limit("limit")
+                            .teamId("team_id")
+                            .types("types")
+                            .build()
+                    )
                     .build()
             )
 
-        val page = pageFuture.get()
-        page.response().validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
     @Disabled(

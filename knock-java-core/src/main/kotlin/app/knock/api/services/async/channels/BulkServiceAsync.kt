@@ -16,11 +16,7 @@ interface BulkServiceAsync {
      */
     fun withRawResponse(): WithRawResponse
 
-    /**
-     * Bulk update messages for a specific channel. The channel is specified by the `channel_id`
-     * parameter. The action to perform is specified by the `action` parameter, where the action is
-     * a status change action (e.g. `archive`, `unarchive`).
-     */
+    /** Bulk update messages for a specific channel */
     fun updateMessageStatus(
         params: BulkUpdateMessageStatusParams
     ): CompletableFuture<BulkOperation> = updateMessageStatus(params, RequestOptions.none())

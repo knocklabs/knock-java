@@ -14,6 +14,7 @@ internal class UserListSubscriptionsParamsTest {
             .userId("user_id")
             .after("after")
             .before("before")
+            .addObject("user_123")
             .pageSize(0L)
             .build()
     }
@@ -34,6 +35,7 @@ internal class UserListSubscriptionsParamsTest {
                 .userId("user_id")
                 .after("after")
                 .before("before")
+                .addObject("user_123")
                 .pageSize(0L)
                 .build()
 
@@ -44,6 +46,7 @@ internal class UserListSubscriptionsParamsTest {
                 QueryParams.builder()
                     .put("after", "after")
                     .put("before", "before")
+                    .put("objects[]", "user_123")
                     .put("page_size", "0")
                     .build()
             )

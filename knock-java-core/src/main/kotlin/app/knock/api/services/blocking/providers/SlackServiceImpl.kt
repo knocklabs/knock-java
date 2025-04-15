@@ -18,9 +18,8 @@ import app.knock.api.core.http.parseable
 import app.knock.api.core.prepare
 import app.knock.api.models.providers.slack.SlackCheckAuthParams
 import app.knock.api.models.providers.slack.SlackCheckAuthResponse
-import app.knock.api.models.providers.slack.SlackListChannelsPage
-import app.knock.api.models.providers.slack.SlackListChannelsPageResponse
 import app.knock.api.models.providers.slack.SlackListChannelsParams
+import app.knock.api.models.providers.slack.SlackListChannelsResponse
 import app.knock.api.models.providers.slack.SlackRevokeAccessParams
 
 class SlackServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -42,7 +41,7 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun listChannels(
         params: SlackListChannelsParams,
         requestOptions: RequestOptions,
-    ): SlackListChannelsPage =
+    ): SlackListChannelsResponse =
         // get /v1/providers/slack/{channel_id}/channels
         withRawResponse().listChannels(params, requestOptions).parse()
 
@@ -85,14 +84,14 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
             }
         }
 
-        private val listChannelsHandler: Handler<SlackListChannelsPageResponse> =
-            jsonHandler<SlackListChannelsPageResponse>(clientOptions.jsonMapper)
+        private val listChannelsHandler: Handler<SlackListChannelsResponse> =
+            jsonHandler<SlackListChannelsResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listChannels(
             params: SlackListChannelsParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<SlackListChannelsPage> {
+        ): HttpResponseFor<SlackListChannelsResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -108,13 +107,6 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
                         if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
-                    }
-                    .let {
-                        SlackListChannelsPage.builder()
-                            .service(SlackServiceImpl(clientOptions))
-                            .params(params)
-                            .response(it)
-                            .build()
                     }
             }
         }

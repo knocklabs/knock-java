@@ -11,8 +11,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * List the Microsoft Teams channels within a team. By default, archived and private channels are
- * excluded from the results.
+ * Get a list of the Microsoft Teams channels within a team. By default, archived and private
+ * channels are excluded from the results.
  */
 class MsTeamListChannelsParams
 private constructor(

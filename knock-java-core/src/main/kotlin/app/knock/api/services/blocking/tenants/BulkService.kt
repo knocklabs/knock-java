@@ -16,7 +16,7 @@ interface BulkService {
      */
     fun withRawResponse(): WithRawResponse
 
-    /** Bulk delete tenants */
+    /** Deletes tenants in bulk */
     fun delete(params: BulkDeleteParams): BulkOperation = delete(params, RequestOptions.none())
 
     /** @see [delete] */
@@ -25,14 +25,22 @@ interface BulkService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
-    /** Bulk set tenants */
-    fun set(params: BulkSetParams): BulkOperation = set(params, RequestOptions.none())
+    /** Sets tenants in bulk */
+    fun set(): BulkOperation = set(BulkSetParams.none())
 
     /** @see [set] */
     fun set(
-        params: BulkSetParams,
+        params: BulkSetParams = BulkSetParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
+
+    /** @see [set] */
+    fun set(params: BulkSetParams = BulkSetParams.none()): BulkOperation =
+        set(params, RequestOptions.none())
+
+    /** @see [set] */
+    fun set(requestOptions: RequestOptions): BulkOperation =
+        set(BulkSetParams.none(), requestOptions)
 
     /** A view of [BulkService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -56,15 +64,23 @@ interface BulkService {
          * Returns a raw HTTP response for `post /v1/tenants/bulk/set`, but is otherwise the same as
          * [BulkService.set].
          */
-        @MustBeClosed
-        fun set(params: BulkSetParams): HttpResponseFor<BulkOperation> =
-            set(params, RequestOptions.none())
+        @MustBeClosed fun set(): HttpResponseFor<BulkOperation> = set(BulkSetParams.none())
 
         /** @see [set] */
         @MustBeClosed
         fun set(
-            params: BulkSetParams,
+            params: BulkSetParams = BulkSetParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BulkOperation>
+
+        /** @see [set] */
+        @MustBeClosed
+        fun set(params: BulkSetParams = BulkSetParams.none()): HttpResponseFor<BulkOperation> =
+            set(params, RequestOptions.none())
+
+        /** @see [set] */
+        @MustBeClosed
+        fun set(requestOptions: RequestOptions): HttpResponseFor<BulkOperation> =
+            set(BulkSetParams.none(), requestOptions)
     }
 }

@@ -16,11 +16,7 @@ interface WorkflowService {
      */
     fun withRawResponse(): WithRawResponse
 
-    /**
-     * When invoked for a workflow using a specific workflow key and cancellation key, will cancel
-     * any queued workflow runs associated with that key/cancellation key pair. Can optionally be
-     * provided one or more recipients to scope the request to.
-     */
+    /** Issues a cancellation request to inflight workflow runs */
     fun cancel(params: WorkflowCancelParams): String = cancel(params, RequestOptions.none())
 
     /** @see [cancel] */
@@ -29,11 +25,7 @@ interface WorkflowService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): String
 
-    /**
-     * Trigger a workflow specified by the key to run for the given recipients, using the parameters
-     * provided. Returns an identifier for the workflow run request. All workflow runs are executed
-     * asynchronously.
-     */
+    /** Triggers a workflow */
     fun trigger(params: WorkflowTriggerParams): WorkflowTriggerResponse =
         trigger(params, RequestOptions.none())
 

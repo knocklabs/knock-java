@@ -2,6 +2,7 @@
 
 package app.knock.api.models.users.bulk
 
+import app.knock.api.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -9,15 +10,15 @@ internal class BulkDeleteParamsTest {
 
     @Test
     fun create() {
-        BulkDeleteParams.builder().addUserId("user_1").addUserId("user_2").build()
+        BulkDeleteParams.builder().addUserId("string").build()
     }
 
     @Test
-    fun body() {
-        val params = BulkDeleteParams.builder().addUserId("user_1").addUserId("user_2").build()
+    fun queryParams() {
+        val params = BulkDeleteParams.builder().addUserId("string").build()
 
-        val body = params._body()
+        val queryParams = params._queryParams()
 
-        assertThat(body.userIds()).containsExactly("user_1", "user_2")
+        assertThat(queryParams).isEqualTo(QueryParams.builder().put("user_ids[]", "string").build())
     }
 }

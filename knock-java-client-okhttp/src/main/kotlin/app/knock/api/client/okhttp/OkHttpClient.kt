@@ -84,9 +84,7 @@ private constructor(private val okHttpClient: okhttp3.OkHttpClient, private val 
                 else -> null
             }
         if (logLevel != null) {
-            clientBuilder.addNetworkInterceptor(
-                HttpLoggingInterceptor().setLevel(logLevel).apply { redactHeader("Authorization") }
-            )
+            clientBuilder.addNetworkInterceptor(HttpLoggingInterceptor().setLevel(logLevel))
         }
 
         requestOptions.timeout?.let {

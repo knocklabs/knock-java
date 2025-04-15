@@ -8,7 +8,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get user */
+/** Returns a user */
 class UserGetParams
 private constructor(
     private val userId: String,

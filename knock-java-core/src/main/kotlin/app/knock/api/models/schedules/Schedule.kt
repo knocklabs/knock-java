@@ -34,7 +34,7 @@ private constructor(
     private val workflow: JsonField<String>,
     private val _typename: JsonField<String>,
     private val actor: JsonField<Recipient>,
-    private val data: JsonField<Data>,
+    private val data: JsonValue,
     private val lastOccurrenceAt: JsonField<OffsetDateTime>,
     private val nextOccurrenceAt: JsonField<OffsetDateTime>,
     private val tenant: JsonField<String>,
@@ -59,7 +59,7 @@ private constructor(
         @JsonProperty("workflow") @ExcludeMissing workflow: JsonField<String> = JsonMissing.of(),
         @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
         @JsonProperty("actor") @ExcludeMissing actor: JsonField<Recipient> = JsonMissing.of(),
-        @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
+        @JsonProperty("data") @ExcludeMissing data: JsonValue = JsonMissing.of(),
         @JsonProperty("last_occurrence_at")
         @ExcludeMissing
         lastOccurrenceAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -135,11 +135,7 @@ private constructor(
      */
     fun actor(): Optional<Recipient> = actor.getOptional("actor")
 
-    /**
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun data(): Optional<Data> = data.getOptional("data")
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonValue = data
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -224,13 +220,6 @@ private constructor(
     @JsonProperty("actor") @ExcludeMissing fun _actor(): JsonField<Recipient> = actor
 
     /**
-     * Returns the raw JSON value of [data].
-     *
-     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
-
-    /**
      * Returns the raw JSON value of [lastOccurrenceAt].
      *
      * Unlike [lastOccurrenceAt], this method doesn't throw if the JSON field has an unexpected
@@ -298,7 +287,7 @@ private constructor(
         private var workflow: JsonField<String>? = null
         private var _typename: JsonField<String> = JsonMissing.of()
         private var actor: JsonField<Recipient> = JsonMissing.of()
-        private var data: JsonField<Data> = JsonMissing.of()
+        private var data: JsonValue = JsonMissing.of()
         private var lastOccurrenceAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var nextOccurrenceAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var tenant: JsonField<String> = JsonMissing.of()
@@ -439,18 +428,7 @@ private constructor(
         /** Alias for calling [actor] with `Recipient.ofObject(object_)`. */
         fun actor(object_: Object) = actor(Recipient.ofObject(object_))
 
-        fun data(data: Data?) = data(JsonField.ofNullable(data))
-
-        /** Alias for calling [Builder.data] with `data.orElse(null)`. */
-        fun data(data: Optional<Data>) = data(data.getOrNull())
-
-        /**
-         * Sets [Builder.data] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun data(data: JsonField<Data>) = apply { this.data = data }
+        fun data(data: JsonValue) = apply { this.data = data }
 
         fun lastOccurrenceAt(lastOccurrenceAt: OffsetDateTime?) =
             lastOccurrenceAt(JsonField.ofNullable(lastOccurrenceAt))
@@ -570,7 +548,6 @@ private constructor(
         workflow()
         _typename()
         actor().ifPresent { it.validate() }
-        data().ifPresent { it.validate() }
         lastOccurrenceAt()
         nextOccurrenceAt()
         tenant()
@@ -600,111 +577,9 @@ private constructor(
             (if (workflow.asKnown().isPresent) 1 else 0) +
             (if (_typename.asKnown().isPresent) 1 else 0) +
             (actor.asKnown().getOrNull()?.validity() ?: 0) +
-            (data.asKnown().getOrNull()?.validity() ?: 0) +
             (if (lastOccurrenceAt.asKnown().isPresent) 1 else 0) +
             (if (nextOccurrenceAt.asKnown().isPresent) 1 else 0) +
             (if (tenant.asKnown().isPresent) 1 else 0)
-
-    class Data
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Data]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Data]. */
-        class Builder internal constructor() {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(data: Data) = apply {
-                additionalProperties = data.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Data].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Data = Data(additionalProperties.toImmutable())
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Data = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: KnockInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Data && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "Data{additionalProperties=$additionalProperties}"
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

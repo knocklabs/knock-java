@@ -11,7 +11,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Mark message as read */
+/** Marks a message as read */
 class MessageMarkAsReadParams
 private constructor(
     private val messageId: String,

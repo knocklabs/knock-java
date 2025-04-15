@@ -6,7 +6,6 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.objects.Object
 import app.knock.api.models.recipients.Recipient
@@ -27,7 +26,7 @@ private constructor(
     private val id: JsonField<String>,
     private val _typename: JsonField<String>,
     private val actor: JsonField<Recipient>,
-    private val data: JsonField<Data>,
+    private val data: JsonValue,
     private val insertedAt: JsonField<OffsetDateTime>,
     private val recipient: JsonField<Recipient>,
     private val updatedAt: JsonField<OffsetDateTime>,
@@ -39,7 +38,7 @@ private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
         @JsonProperty("actor") @ExcludeMissing actor: JsonField<Recipient> = JsonMissing.of(),
-        @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
+        @JsonProperty("data") @ExcludeMissing data: JsonValue = JsonMissing.of(),
         @JsonProperty("inserted_at")
         @ExcludeMissing
         insertedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -71,13 +70,8 @@ private constructor(
      */
     fun actor(): Optional<Recipient> = actor.getOptional("actor")
 
-    /**
-     * The data associated with the activity
-     *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun data(): Optional<Data> = data.getOptional("data")
+    /** The data associated with the activity */
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonValue = data
 
     /**
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -119,13 +113,6 @@ private constructor(
      * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("actor") @ExcludeMissing fun _actor(): JsonField<Recipient> = actor
-
-    /**
-     * Returns the raw JSON value of [data].
-     *
-     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     /**
      * Returns the raw JSON value of [insertedAt].
@@ -176,7 +163,7 @@ private constructor(
         private var id: JsonField<String> = JsonMissing.of()
         private var _typename: JsonField<String> = JsonMissing.of()
         private var actor: JsonField<Recipient> = JsonMissing.of()
-        private var data: JsonField<Data> = JsonMissing.of()
+        private var data: JsonValue = JsonMissing.of()
         private var insertedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var recipient: JsonField<Recipient> = JsonMissing.of()
         private var updatedAt: JsonField<OffsetDateTime> = JsonMissing.of()
@@ -236,18 +223,7 @@ private constructor(
         fun actor(object_: Object) = actor(Recipient.ofObject(object_))
 
         /** The data associated with the activity */
-        fun data(data: Data?) = data(JsonField.ofNullable(data))
-
-        /** Alias for calling [Builder.data] with `data.orElse(null)`. */
-        fun data(data: Optional<Data>) = data(data.getOrNull())
-
-        /**
-         * Sets [Builder.data] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun data(data: JsonField<Data>) = apply { this.data = data }
+        fun data(data: JsonValue) = apply { this.data = data }
 
         fun insertedAt(insertedAt: OffsetDateTime) = insertedAt(JsonField.of(insertedAt))
 
@@ -338,7 +314,6 @@ private constructor(
         id()
         _typename()
         actor().ifPresent { it.validate() }
-        data().ifPresent { it.validate() }
         insertedAt()
         recipient().ifPresent { it.validate() }
         updatedAt()
@@ -363,112 +338,9 @@ private constructor(
         (if (id.asKnown().isPresent) 1 else 0) +
             (if (_typename.asKnown().isPresent) 1 else 0) +
             (actor.asKnown().getOrNull()?.validity() ?: 0) +
-            (data.asKnown().getOrNull()?.validity() ?: 0) +
             (if (insertedAt.asKnown().isPresent) 1 else 0) +
             (recipient.asKnown().getOrNull()?.validity() ?: 0) +
             (if (updatedAt.asKnown().isPresent) 1 else 0)
-
-    /** The data associated with the activity */
-    class Data
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Data]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Data]. */
-        class Builder internal constructor() {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(data: Data) = apply {
-                additionalProperties = data.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Data].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Data = Data(additionalProperties.toImmutable())
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Data = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: KnockInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Data && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "Data{additionalProperties=$additionalProperties}"
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

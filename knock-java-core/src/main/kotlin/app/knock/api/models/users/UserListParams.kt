@@ -9,7 +9,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List users */
+/** Returns a list of users */
 class UserListParams
 private constructor(
     private val after: String?,

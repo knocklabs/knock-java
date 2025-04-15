@@ -10,7 +10,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Mark messages as seen */
+/** Marks one or more messages as seen */
 class BatchMarkAsSeenParams
 private constructor(
     private val additionalHeaders: Headers,

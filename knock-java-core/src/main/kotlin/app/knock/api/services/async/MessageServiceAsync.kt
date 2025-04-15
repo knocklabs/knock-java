@@ -36,7 +36,7 @@ interface MessageServiceAsync {
 
     fun batch(): BatchServiceAsync
 
-    /** List messages */
+    /** Returns a paginated list of messages */
     fun list(): CompletableFuture<MessageListPageAsync> = list(MessageListParams.none())
 
     /** @see [list] */
@@ -54,7 +54,7 @@ interface MessageServiceAsync {
     fun list(requestOptions: RequestOptions): CompletableFuture<MessageListPageAsync> =
         list(MessageListParams.none(), requestOptions)
 
-    /** Archive message */
+    /** Archives a message */
     fun archive(params: MessageArchiveParams): CompletableFuture<Message> =
         archive(params, RequestOptions.none())
 
@@ -64,7 +64,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Get message */
+    /** Retrieves a single message */
     fun get(params: MessageGetParams): CompletableFuture<Message> =
         get(params, RequestOptions.none())
 
@@ -74,10 +74,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /**
-     * Returns the fully rendered contents of a message, where the response depends on the channel
-     * the message was sent on.
-     */
+    /** Get the contents of a message */
     fun getContent(params: MessageGetContentParams): CompletableFuture<MessageGetContentResponse> =
         getContent(params, RequestOptions.none())
 
@@ -87,7 +84,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<MessageGetContentResponse>
 
-    /** List activities */
+    /** Get activities for a message */
     fun listActivities(
         params: MessageListActivitiesParams
     ): CompletableFuture<MessageListActivitiesPageAsync> =
@@ -99,7 +96,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<MessageListActivitiesPageAsync>
 
-    /** List delivery logs */
+    /** Get delivery logs for a message */
     fun listDeliveryLogs(
         params: MessageListDeliveryLogsParams
     ): CompletableFuture<MessageListDeliveryLogsPageAsync> =
@@ -111,7 +108,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<MessageListDeliveryLogsPageAsync>
 
-    /** List events */
+    /** Get events for a message */
     fun listEvents(params: MessageListEventsParams): CompletableFuture<MessageListEventsPageAsync> =
         listEvents(params, RequestOptions.none())
 
@@ -121,7 +118,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<MessageListEventsPageAsync>
 
-    /** Mark message as interacted */
+    /** Marks a message as interacted with */
     fun markAsInteracted(params: MessageMarkAsInteractedParams): CompletableFuture<Message> =
         markAsInteracted(params, RequestOptions.none())
 
@@ -131,7 +128,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Mark message as read */
+    /** Marks a message as read */
     fun markAsRead(params: MessageMarkAsReadParams): CompletableFuture<Message> =
         markAsRead(params, RequestOptions.none())
 
@@ -141,7 +138,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Mark message as seen */
+    /** Marks a message as seen */
     fun markAsSeen(params: MessageMarkAsSeenParams): CompletableFuture<Message> =
         markAsSeen(params, RequestOptions.none())
 
@@ -151,7 +148,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Mark message as unread */
+    /** Marks a message as unread */
     fun markAsUnread(params: MessageMarkAsUnreadParams): CompletableFuture<Message> =
         markAsUnread(params, RequestOptions.none())
 
@@ -161,7 +158,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Mark message as unseen */
+    /** Marks a message as unseen */
     fun markAsUnseen(params: MessageMarkAsUnseenParams): CompletableFuture<Message> =
         markAsUnseen(params, RequestOptions.none())
 
@@ -171,7 +168,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Unarchive message */
+    /** Unarchives a message */
     fun unarchive(params: MessageUnarchiveParams): CompletableFuture<Message> =
         unarchive(params, RequestOptions.none())
 

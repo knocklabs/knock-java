@@ -2,48 +2,23 @@
 
 package app.knock.api.models.users.bulk
 
-import app.knock.api.core.ExcludeMissing
-import app.knock.api.core.JsonField
-import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
-import app.knock.api.core.checkKnown
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
-import app.knock.api.errors.KnockInvalidDataException
-import app.knock.api.models.users.InlineIdentifyUserRequest
-import com.fasterxml.jackson.annotation.JsonAnyGetter
-import com.fasterxml.jackson.annotation.JsonAnySetter
-import com.fasterxml.jackson.annotation.JsonCreator
-import com.fasterxml.jackson.annotation.JsonProperty
-import java.util.Collections
 import java.util.Objects
-import kotlin.jvm.optionals.getOrNull
+import java.util.Optional
 
-/** Bulk identifies users */
+/** Bulk identifies a list of users */
 class BulkIdentifyParams
 private constructor(
-    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
+    private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    /**
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
-     *   missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun users(): List<InlineIdentifyUserRequest> = body.users()
-
-    /**
-     * Returns the raw JSON value of [users].
-     *
-     * Unlike [users], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _users(): JsonField<List<InlineIdentifyUserRequest>> = body._users()
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -53,75 +28,24 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [BulkIdentifyParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .users()
-         * ```
-         */
+        @JvmStatic fun none(): BulkIdentifyParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [BulkIdentifyParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [BulkIdentifyParams]. */
     class Builder internal constructor() {
 
-        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
+        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(bulkIdentifyParams: BulkIdentifyParams) = apply {
-            body = bulkIdentifyParams.body.toBuilder()
             additionalHeaders = bulkIdentifyParams.additionalHeaders.toBuilder()
             additionalQueryParams = bulkIdentifyParams.additionalQueryParams.toBuilder()
-        }
-
-        /**
-         * Sets the entire request body.
-         *
-         * This is generally only useful if you are already constructing the body separately.
-         * Otherwise, it's more convenient to use the top-level setters instead:
-         * - [users]
-         */
-        fun body(body: Body) = apply { this.body = body.toBuilder() }
-
-        fun users(users: List<InlineIdentifyUserRequest>) = apply { body.users(users) }
-
-        /**
-         * Sets [Builder.users] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.users] with a well-typed
-         * `List<InlineIdentifyUserRequest>` value instead. This method is primarily for setting the
-         * field to an undocumented or not yet supported value.
-         */
-        fun users(users: JsonField<List<InlineIdentifyUserRequest>>) = apply { body.users(users) }
-
-        /**
-         * Adds a single [InlineIdentifyUserRequest] to [users].
-         *
-         * @throws IllegalStateException if the field was previously set to a non-list.
-         */
-        fun addUser(user: InlineIdentifyUserRequest) = apply { body.addUser(user) }
-
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            body.additionalProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            body.putAdditionalProperty(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                body.putAllAdditionalProperties(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            body.removeAllAdditionalProperties(keys)
+            additionalBodyProperties = bulkIdentifyParams.additionalBodyProperties.toMutableMap()
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -222,217 +146,58 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.clear()
+            putAllAdditionalBodyProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            additionalBodyProperties.put(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalBodyProperties.putAll(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply {
+            additionalBodyProperties.remove(key)
+        }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalBodyProperty)
+        }
+
         /**
          * Returns an immutable instance of [BulkIdentifyParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .users()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): BulkIdentifyParams =
             BulkIdentifyParams(
-                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
-    fun _body(): Body = body
+    fun _body(): Optional<Map<String, JsonValue>> =
+        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
 
     override fun _headers(): Headers = additionalHeaders
 
     override fun _queryParams(): QueryParams = additionalQueryParams
-
-    /** A request to identify a list of users */
-    class Body
-    private constructor(
-        private val users: JsonField<List<InlineIdentifyUserRequest>>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("users")
-            @ExcludeMissing
-            users: JsonField<List<InlineIdentifyUserRequest>> = JsonMissing.of()
-        ) : this(users, mutableMapOf())
-
-        /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun users(): List<InlineIdentifyUserRequest> = users.getRequired("users")
-
-        /**
-         * Returns the raw JSON value of [users].
-         *
-         * Unlike [users], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("users")
-        @ExcludeMissing
-        fun _users(): JsonField<List<InlineIdentifyUserRequest>> = users
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /**
-             * Returns a mutable builder for constructing an instance of [Body].
-             *
-             * The following fields are required:
-             * ```java
-             * .users()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Body]. */
-        class Builder internal constructor() {
-
-            private var users: JsonField<MutableList<InlineIdentifyUserRequest>>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(body: Body) = apply {
-                users = body.users.map { it.toMutableList() }
-                additionalProperties = body.additionalProperties.toMutableMap()
-            }
-
-            fun users(users: List<InlineIdentifyUserRequest>) = users(JsonField.of(users))
-
-            /**
-             * Sets [Builder.users] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.users] with a well-typed
-             * `List<InlineIdentifyUserRequest>` value instead. This method is primarily for setting
-             * the field to an undocumented or not yet supported value.
-             */
-            fun users(users: JsonField<List<InlineIdentifyUserRequest>>) = apply {
-                this.users = users.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [InlineIdentifyUserRequest] to [users].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addUser(user: InlineIdentifyUserRequest) = apply {
-                users =
-                    (users ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("users", it).add(user)
-                    }
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Body].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .users()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Body =
-                Body(
-                    checkRequired("users", users).map { it.toImmutable() },
-                    additionalProperties.toMutableMap(),
-                )
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Body = apply {
-            if (validated) {
-                return@apply
-            }
-
-            users().forEach { it.validate() }
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: KnockInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            (users.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Body && users == other.users && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(users, additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "Body{users=$users, additionalProperties=$additionalProperties}"
-    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is BulkIdentifyParams && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is BulkIdentifyParams && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
-        "BulkIdentifyParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "BulkIdentifyParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

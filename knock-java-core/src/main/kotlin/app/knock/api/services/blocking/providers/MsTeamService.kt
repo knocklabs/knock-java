@@ -34,8 +34,8 @@ interface MsTeamService {
     ): MsTeamCheckAuthResponse
 
     /**
-     * List the Microsoft Teams channels within a team. By default, archived and private channels
-     * are excluded from the results.
+     * Get a list of the Microsoft Teams channels within a team. By default, archived and private
+     * channels are excluded from the results.
      */
     fun listChannels(params: MsTeamListChannelsParams): MsTeamListChannelsResponse =
         listChannels(params, RequestOptions.none())
@@ -46,10 +46,7 @@ interface MsTeamService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): MsTeamListChannelsResponse
 
-    /**
-     * Get a list of teams belonging to the Microsoft Entra tenant. By default, archived and private
-     * channels are excluded from the results.
-     */
+    /** Get a list of teams belonging to the Microsoft Entra tenant */
     fun listTeams(params: MsTeamListTeamsParams): MsTeamListTeamsResponse =
         listTeams(params, RequestOptions.none())
 

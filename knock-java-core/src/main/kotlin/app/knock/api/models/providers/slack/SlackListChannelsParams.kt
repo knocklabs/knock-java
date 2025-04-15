@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List Slack channels for a Slack workspace */
+/** Get Slack channels from a Slack workspace */
 class SlackListChannelsParams
 private constructor(
     private val channelId: String,
@@ -213,10 +213,8 @@ private constructor(
                 put("access_token_object", accessTokenObject)
                 queryOptions?.let {
                     it.cursor().ifPresent { put("query_options[cursor]", it) }
-                    it.excludeArchived().ifPresent {
-                        put("query_options[exclude_archived]", it.toString())
-                    }
-                    it.limit().ifPresent { put("query_options[limit]", it.toString()) }
+                    it.excludeArchived().ifPresent { put("query_options[exclude_archived]", it) }
+                    it.limit().ifPresent { put("query_options[limit]", it) }
                     it.teamId().ifPresent { put("query_options[team_id]", it) }
                     it.types().ifPresent { put("query_options[types]", it) }
                     it._additionalProperties().keys().forEach { key ->
@@ -232,8 +230,8 @@ private constructor(
     class QueryOptions
     private constructor(
         private val cursor: String?,
-        private val excludeArchived: Boolean?,
-        private val limit: Long?,
+        private val excludeArchived: String?,
+        private val limit: String?,
         private val teamId: String?,
         private val types: String?,
         private val additionalProperties: QueryParams,
@@ -243,15 +241,15 @@ private constructor(
         fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
         /** Whether to exclude archived channels */
-        fun excludeArchived(): Optional<Boolean> = Optional.ofNullable(excludeArchived)
+        fun excludeArchived(): Optional<String> = Optional.ofNullable(excludeArchived)
 
         /** The number of channels to return */
-        fun limit(): Optional<Long> = Optional.ofNullable(limit)
+        fun limit(): Optional<String> = Optional.ofNullable(limit)
 
         /** The ID of the Slack team to get channels for */
         fun teamId(): Optional<String> = Optional.ofNullable(teamId)
 
-        /** The types of channels to return (comma separated list) */
+        /** The types of channels to return */
         fun types(): Optional<String> = Optional.ofNullable(types)
 
         fun _additionalProperties(): QueryParams = additionalProperties
@@ -268,8 +266,8 @@ private constructor(
         class Builder internal constructor() {
 
             private var cursor: String? = null
-            private var excludeArchived: Boolean? = null
-            private var limit: Long? = null
+            private var excludeArchived: String? = null
+            private var limit: String? = null
             private var teamId: String? = null
             private var types: String? = null
             private var additionalProperties: QueryParams.Builder = QueryParams.builder()
@@ -291,34 +289,19 @@ private constructor(
             fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
             /** Whether to exclude archived channels */
-            fun excludeArchived(excludeArchived: Boolean?) = apply {
+            fun excludeArchived(excludeArchived: String?) = apply {
                 this.excludeArchived = excludeArchived
             }
 
-            /**
-             * Alias for [Builder.excludeArchived].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun excludeArchived(excludeArchived: Boolean) =
-                excludeArchived(excludeArchived as Boolean?)
-
             /** Alias for calling [Builder.excludeArchived] with `excludeArchived.orElse(null)`. */
-            fun excludeArchived(excludeArchived: Optional<Boolean>) =
+            fun excludeArchived(excludeArchived: Optional<String>) =
                 excludeArchived(excludeArchived.getOrNull())
 
             /** The number of channels to return */
-            fun limit(limit: Long?) = apply { this.limit = limit }
-
-            /**
-             * Alias for [Builder.limit].
-             *
-             * This unboxed primitive overload exists for backwards compatibility.
-             */
-            fun limit(limit: Long) = limit(limit as Long?)
+            fun limit(limit: String?) = apply { this.limit = limit }
 
             /** Alias for calling [Builder.limit] with `limit.orElse(null)`. */
-            fun limit(limit: Optional<Long>) = limit(limit.getOrNull())
+            fun limit(limit: Optional<String>) = limit(limit.getOrNull())
 
             /** The ID of the Slack team to get channels for */
             fun teamId(teamId: String?) = apply { this.teamId = teamId }
@@ -326,7 +309,7 @@ private constructor(
             /** Alias for calling [Builder.teamId] with `teamId.orElse(null)`. */
             fun teamId(teamId: Optional<String>) = teamId(teamId.getOrNull())
 
-            /** The types of channels to return (comma separated list) */
+            /** The types of channels to return */
             fun types(types: String?) = apply { this.types = types }
 
             /** Alias for calling [Builder.types] with `types.orElse(null)`. */

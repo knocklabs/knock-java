@@ -6,7 +6,6 @@ import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClientAsync
 import app.knock.api.core.JsonValue
 import app.knock.api.models.messages.batch.BatchGetContentParams
-import app.knock.api.models.messages.batch.BatchMarkAsInteractedParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -46,7 +45,9 @@ internal class BatchServiceAsyncTest {
 
         val responseFuture =
             batchServiceAsync.getContent(
-                BatchGetContentParams.builder().addMessageId("string").build()
+                BatchGetContentParams.builder()
+                    .addMessageId(JsonValue.from(mapOf<String, Any>()))
+                    .build()
             )
 
         val response = responseFuture.get()
@@ -65,17 +66,7 @@ internal class BatchServiceAsyncTest {
                 .build()
         val batchServiceAsync = client.messages().batch()
 
-        val messagesFuture =
-            batchServiceAsync.markAsInteracted(
-                BatchMarkAsInteractedParams.builder()
-                    .addMessageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
-                    .metadata(
-                        BatchMarkAsInteractedParams.Metadata.builder()
-                            .putAdditionalProperty("key", JsonValue.from("bar"))
-                            .build()
-                    )
-                    .build()
-            )
+        val messagesFuture = batchServiceAsync.markAsInteracted()
 
         val messages = messagesFuture.get()
         messages.forEach { it.validate() }

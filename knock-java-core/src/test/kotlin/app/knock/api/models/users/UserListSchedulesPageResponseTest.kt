@@ -2,7 +2,6 @@
 
 package app.knock.api.models.users
 
-import app.knock.api.core.JsonValue
 import app.knock.api.core.jsonMapper
 import app.knock.api.models.schedules.Schedule
 import app.knock.api.models.schedules.ScheduleRepeatRule
@@ -65,17 +64,13 @@ internal class UserListSchedulesPageResponseTest {
                                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .avatar("avatar")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .email("email")
+                                .email("dev@stainless.com")
                                 .name("name")
                                 .phoneNumber("phone_number")
                                 .timezone("timezone")
                                 .build()
                         )
-                        .data(
-                            Schedule.Data.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                .build()
-                        )
+                        .data(null)
                         .lastOccurrenceAt(null)
                         .nextOccurrenceAt(null)
                         .tenant(null)
@@ -140,17 +135,13 @@ internal class UserListSchedulesPageResponseTest {
                             .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .avatar("avatar")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .email("email")
+                            .email("dev@stainless.com")
                             .name("name")
                             .phoneNumber("phone_number")
                             .timezone("timezone")
                             .build()
                     )
-                    .data(
-                        Schedule.Data.builder()
-                            .putAdditionalProperty("foo", JsonValue.from("bar"))
-                            .build()
-                    )
+                    .data(null)
                     .lastOccurrenceAt(null)
                     .nextOccurrenceAt(null)
                     .tenant(null)
@@ -220,17 +211,13 @@ internal class UserListSchedulesPageResponseTest {
                                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .avatar("avatar")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .email("email")
+                                .email("dev@stainless.com")
                                 .name("name")
                                 .phoneNumber("phone_number")
                                 .timezone("timezone")
                                 .build()
                         )
-                        .data(
-                            Schedule.Data.builder()
-                                .putAdditionalProperty("foo", JsonValue.from("bar"))
-                                .build()
-                        )
+                        .data(null)
                         .lastOccurrenceAt(null)
                         .nextOccurrenceAt(null)
                         .tenant(null)

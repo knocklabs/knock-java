@@ -11,7 +11,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Archive message */
+/** Archives a message */
 class MessageArchiveParams
 private constructor(
     private val messageId: String,

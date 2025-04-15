@@ -11,7 +11,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Bulk delete tenants */
+/** Deletes tenants in bulk */
 class BulkDeleteParams
 private constructor(
     private val tenantIds: List<String>,

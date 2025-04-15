@@ -2,8 +2,6 @@
 
 package app.knock.api.models.objects
 
-import app.knock.api.models.recipients.channeldata.ChannelDataRequest
-import app.knock.api.models.recipients.channeldata.PushChannelData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -15,11 +13,6 @@ internal class ObjectSetChannelDataParamsTest {
             .collection("collection")
             .objectId("object_id")
             .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-            .channelDataRequest(
-                ChannelDataRequest.builder()
-                    .data(PushChannelData.builder().addToken("push_token_1").build())
-                    .build()
-            )
             .build()
     }
 
@@ -30,11 +23,6 @@ internal class ObjectSetChannelDataParamsTest {
                 .collection("collection")
                 .objectId("object_id")
                 .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .channelDataRequest(
-                    ChannelDataRequest.builder()
-                        .data(PushChannelData.builder().addToken("push_token_1").build())
-                        .build()
-                )
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("collection")
@@ -42,29 +30,5 @@ internal class ObjectSetChannelDataParamsTest {
         assertThat(params._pathParam(2)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         // out-of-bound path param
         assertThat(params._pathParam(3)).isEqualTo("")
-    }
-
-    @Test
-    fun body() {
-        val params =
-            ObjectSetChannelDataParams.builder()
-                .collection("collection")
-                .objectId("object_id")
-                .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .channelDataRequest(
-                    ChannelDataRequest.builder()
-                        .data(PushChannelData.builder().addToken("push_token_1").build())
-                        .build()
-                )
-                .build()
-
-        val body = params._body()
-
-        assertThat(body)
-            .isEqualTo(
-                ChannelDataRequest.builder()
-                    .data(PushChannelData.builder().addToken("push_token_1").build())
-                    .build()
-            )
     }
 }

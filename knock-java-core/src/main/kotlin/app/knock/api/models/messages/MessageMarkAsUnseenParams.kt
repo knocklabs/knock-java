@@ -11,7 +11,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Mark message as unseen */
+/** Marks a message as unseen */
 class MessageMarkAsUnseenParams
 private constructor(
     private val messageId: String,

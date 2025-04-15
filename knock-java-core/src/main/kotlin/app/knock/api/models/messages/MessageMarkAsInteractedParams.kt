@@ -21,7 +21,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Mark message as interacted */
+/** Marks a message as interacted with */
 class MessageMarkAsInteractedParams
 private constructor(
     private val messageId: String,

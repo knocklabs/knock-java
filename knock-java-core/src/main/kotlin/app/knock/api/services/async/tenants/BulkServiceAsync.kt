@@ -17,7 +17,7 @@ interface BulkServiceAsync {
      */
     fun withRawResponse(): WithRawResponse
 
-    /** Bulk delete tenants */
+    /** Deletes tenants in bulk */
     fun delete(params: BulkDeleteParams): CompletableFuture<BulkOperation> =
         delete(params, RequestOptions.none())
 
@@ -27,15 +27,22 @@ interface BulkServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
-    /** Bulk set tenants */
-    fun set(params: BulkSetParams): CompletableFuture<BulkOperation> =
-        set(params, RequestOptions.none())
+    /** Sets tenants in bulk */
+    fun set(): CompletableFuture<BulkOperation> = set(BulkSetParams.none())
 
     /** @see [set] */
     fun set(
-        params: BulkSetParams,
+        params: BulkSetParams = BulkSetParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
+
+    /** @see [set] */
+    fun set(params: BulkSetParams = BulkSetParams.none()): CompletableFuture<BulkOperation> =
+        set(params, RequestOptions.none())
+
+    /** @see [set] */
+    fun set(requestOptions: RequestOptions): CompletableFuture<BulkOperation> =
+        set(BulkSetParams.none(), requestOptions)
 
     /** A view of [BulkServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -60,14 +67,24 @@ interface BulkServiceAsync {
          * [BulkServiceAsync.set].
          */
         @MustBeClosed
-        fun set(params: BulkSetParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
-            set(params, RequestOptions.none())
+        fun set(): CompletableFuture<HttpResponseFor<BulkOperation>> = set(BulkSetParams.none())
 
         /** @see [set] */
         @MustBeClosed
         fun set(
-            params: BulkSetParams,
+            params: BulkSetParams = BulkSetParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
+
+        /** @see [set] */
+        @MustBeClosed
+        fun set(
+            params: BulkSetParams = BulkSetParams.none()
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> = set(params, RequestOptions.none())
+
+        /** @see [set] */
+        @MustBeClosed
+        fun set(requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            set(BulkSetParams.none(), requestOptions)
     }
 }

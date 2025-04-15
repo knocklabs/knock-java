@@ -7,28 +7,25 @@ import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
-import app.knock.api.models.recipients.channeldata.ChannelDataRequest
+import app.knock.api.core.toImmutable
 import java.util.Objects
+import java.util.Optional
 
-/** Set channel data */
+/** Sets channel data for a user */
 class UserSetChannelDataParams
 private constructor(
     private val userId: String,
     private val channelId: String,
-    private val channelDataRequest: ChannelDataRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
+    private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
     fun userId(): String = userId
 
     fun channelId(): String = channelId
 
-    /** Set channel data for a type of channel */
-    fun channelDataRequest(): ChannelDataRequest = channelDataRequest
-
-    fun _additionalBodyProperties(): Map<String, JsonValue> =
-        channelDataRequest._additionalProperties()
+    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -45,7 +42,6 @@ private constructor(
          * ```java
          * .userId()
          * .channelId()
-         * .channelDataRequest()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -56,27 +52,23 @@ private constructor(
 
         private var userId: String? = null
         private var channelId: String? = null
-        private var channelDataRequest: ChannelDataRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
+        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(userSetChannelDataParams: UserSetChannelDataParams) = apply {
             userId = userSetChannelDataParams.userId
             channelId = userSetChannelDataParams.channelId
-            channelDataRequest = userSetChannelDataParams.channelDataRequest
             additionalHeaders = userSetChannelDataParams.additionalHeaders.toBuilder()
             additionalQueryParams = userSetChannelDataParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties =
+                userSetChannelDataParams.additionalBodyProperties.toMutableMap()
         }
 
         fun userId(userId: String) = apply { this.userId = userId }
 
         fun channelId(channelId: String) = apply { this.channelId = channelId }
-
-        /** Set channel data for a type of channel */
-        fun channelDataRequest(channelDataRequest: ChannelDataRequest) = apply {
-            this.channelDataRequest = channelDataRequest
-        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -176,6 +168,28 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            this.additionalBodyProperties.clear()
+            putAllAdditionalBodyProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            additionalBodyProperties.put(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                this.additionalBodyProperties.putAll(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply {
+            additionalBodyProperties.remove(key)
+        }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            keys.forEach(::removeAdditionalBodyProperty)
+        }
+
         /**
          * Returns an immutable instance of [UserSetChannelDataParams].
          *
@@ -185,7 +199,6 @@ private constructor(
          * ```java
          * .userId()
          * .channelId()
-         * .channelDataRequest()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -194,13 +207,14 @@ private constructor(
             UserSetChannelDataParams(
                 checkRequired("userId", userId),
                 checkRequired("channelId", channelId),
-                checkRequired("channelDataRequest", channelDataRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
+                additionalBodyProperties.toImmutable(),
             )
     }
 
-    fun _body(): ChannelDataRequest = channelDataRequest
+    fun _body(): Optional<Map<String, JsonValue>> =
+        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -218,11 +232,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is UserSetChannelDataParams && userId == other.userId && channelId == other.channelId && channelDataRequest == other.channelDataRequest && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is UserSetChannelDataParams && userId == other.userId && channelId == other.channelId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, channelId, channelDataRequest, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, channelId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
-        "UserSetChannelDataParams{userId=$userId, channelId=$channelId, channelDataRequest=$channelDataRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserSetChannelDataParams{userId=$userId, channelId=$channelId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

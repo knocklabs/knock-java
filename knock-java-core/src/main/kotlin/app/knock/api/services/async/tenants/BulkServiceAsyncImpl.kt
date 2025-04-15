@@ -89,7 +89,7 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
                     .addPathSegments("v1", "tenants", "bulk", "set")
-                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))

@@ -8,7 +8,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
 
-/** List members */
+/** List members of an audience */
 class AudienceListMembersParams
 private constructor(
     private val key: String,

@@ -11,7 +11,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Delete user */
+/** Deletes a user */
 class UserDeleteParams
 private constructor(
     private val userId: String,

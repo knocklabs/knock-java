@@ -11,7 +11,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Unarchive message */
+/** Unarchives a message */
 class MessageUnarchiveParams
 private constructor(
     private val messageId: String,

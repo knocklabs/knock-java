@@ -23,7 +23,7 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/** Delete subscriptions */
+/** Delete subscriptions for an object */
 class ObjectDeleteSubscriptionsParams
 private constructor(
     private val collection: String,

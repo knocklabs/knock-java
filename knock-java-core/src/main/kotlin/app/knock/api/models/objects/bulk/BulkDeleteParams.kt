@@ -11,7 +11,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Bulk delete objects */
+/** Deletes objects in bulk for a given collection */
 class BulkDeleteParams
 private constructor(
     private val collection: String,
