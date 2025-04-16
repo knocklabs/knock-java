@@ -7,7 +7,7 @@ The Knock Java SDK provides convenient access to the [Knock REST API](https://do
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-The REST API documentation can be found on [docs.knock.app](https://docs.knock.app). Javadocs are also available on [javadoc.io](https://javadoc.io/doc/app.knock.api/knock-java/0.0.1-alpha.0).
+The REST API documentation can be found on [docs.knock.app](https://docs.knock.app). Javadocs are available on [javadoc.io](https://javadoc.io/doc/app.knock.api/knock-java/0.0.1-alpha.0).
 
 ## Installation
 
