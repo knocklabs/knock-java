@@ -32,7 +32,6 @@ internal class WorkflowServiceAsyncTest {
                     .key("key")
                     .cancellationKey("cancel-workflow-123")
                     .addRecipient("jhammond")
-                    .tenant("prk_1")
                     .build()
             )
 

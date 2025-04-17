@@ -14,7 +14,6 @@ internal class WorkflowCancelParamsTest {
             .key("key")
             .cancellationKey("cancel-workflow-123")
             .addRecipient("jhammond")
-            .tenant("prk_1")
             .build()
     }
 
@@ -35,14 +34,12 @@ internal class WorkflowCancelParamsTest {
                 .key("key")
                 .cancellationKey("cancel-workflow-123")
                 .addRecipient("jhammond")
-                .tenant("prk_1")
                 .build()
 
         val body = params._body()
 
         assertThat(body.cancellationKey()).isEqualTo("cancel-workflow-123")
         assertThat(body.recipients().getOrNull()).containsExactly("jhammond")
-        assertThat(body.tenant()).contains("prk_1")
     }
 
     @Test

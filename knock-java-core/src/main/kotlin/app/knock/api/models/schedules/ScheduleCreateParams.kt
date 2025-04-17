@@ -48,8 +48,8 @@ private constructor(
 ) : Params {
 
     /**
-     * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-     * trigger.
+     * The recipients to trigger the workflow for. Can inline identify users, objects, or use a list
+     * of user ids. Cannot exceed 1000 recipients in a single trigger.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -205,8 +205,8 @@ private constructor(
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /**
-         * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-         * trigger.
+         * The recipients to trigger the workflow for. Can inline identify users, objects, or use a
+         * list of user ids. Cannot exceed 1000 recipients in a single trigger.
          */
         fun recipients(recipients: List<Recipient>) = apply { body.recipients(recipients) }
 
@@ -516,8 +516,8 @@ private constructor(
         ) : this(recipients, repeats, workflow, data, endingAt, scheduledAt, tenant, mutableMapOf())
 
         /**
-         * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-         * trigger.
+         * The recipients to trigger the workflow for. Can inline identify users, objects, or use a
+         * list of user ids. Cannot exceed 1000 recipients in a single trigger.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -683,8 +683,8 @@ private constructor(
             }
 
             /**
-             * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
-             * trigger.
+             * The recipients to trigger the workflow for. Can inline identify users, objects, or
+             * use a list of user ids. Cannot exceed 1000 recipients in a single trigger.
              */
             fun recipients(recipients: List<Recipient>) = recipients(JsonField.of(recipients))
 

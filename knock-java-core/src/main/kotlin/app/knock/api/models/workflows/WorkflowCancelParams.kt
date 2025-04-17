@@ -56,14 +56,6 @@ private constructor(
     fun recipients(): Optional<List<String>> = body.recipients()
 
     /**
-     * The unique identifier for the tenant.
-     *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun tenant(): Optional<String> = body.tenant()
-
-    /**
      * Returns the raw JSON value of [cancellationKey].
      *
      * Unlike [cancellationKey], this method doesn't throw if the JSON field has an unexpected type.
@@ -76,13 +68,6 @@ private constructor(
      * Unlike [recipients], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _recipients(): JsonField<List<String>> = body._recipients()
-
-    /**
-     * Returns the raw JSON value of [tenant].
-     *
-     * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _tenant(): JsonField<String> = body._tenant()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -131,7 +116,6 @@ private constructor(
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [cancellationKey]
          * - [recipients]
-         * - [tenant]
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -178,20 +162,6 @@ private constructor(
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
         fun addRecipient(recipient: String) = apply { body.addRecipient(recipient) }
-
-        /** The unique identifier for the tenant. */
-        fun tenant(tenant: String?) = apply { body.tenant(tenant) }
-
-        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
-        fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
-
-        /**
-         * Sets [Builder.tenant] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.tenant] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun tenant(tenant: JsonField<String>) = apply { body.tenant(tenant) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -349,7 +319,6 @@ private constructor(
     private constructor(
         private val cancellationKey: JsonField<String>,
         private val recipients: JsonField<List<String>>,
-        private val tenant: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -361,8 +330,7 @@ private constructor(
             @JsonProperty("recipients")
             @ExcludeMissing
             recipients: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("tenant") @ExcludeMissing tenant: JsonField<String> = JsonMissing.of(),
-        ) : this(cancellationKey, recipients, tenant, mutableMapOf())
+        ) : this(cancellationKey, recipients, mutableMapOf())
 
         /**
          * The cancellation key provided during the initial notify call. If used in a cancel
@@ -383,14 +351,6 @@ private constructor(
         fun recipients(): Optional<List<String>> = recipients.getOptional("recipients")
 
         /**
-         * The unique identifier for the tenant.
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun tenant(): Optional<String> = tenant.getOptional("tenant")
-
-        /**
          * Returns the raw JSON value of [cancellationKey].
          *
          * Unlike [cancellationKey], this method doesn't throw if the JSON field has an unexpected
@@ -408,13 +368,6 @@ private constructor(
         @JsonProperty("recipients")
         @ExcludeMissing
         fun _recipients(): JsonField<List<String>> = recipients
-
-        /**
-         * Returns the raw JSON value of [tenant].
-         *
-         * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("tenant") @ExcludeMissing fun _tenant(): JsonField<String> = tenant
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -446,14 +399,12 @@ private constructor(
 
             private var cancellationKey: JsonField<String>? = null
             private var recipients: JsonField<MutableList<String>>? = null
-            private var tenant: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(body: Body) = apply {
                 cancellationKey = body.cancellationKey
                 recipients = body.recipients.map { it.toMutableList() }
-                tenant = body.tenant
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -508,21 +459,6 @@ private constructor(
                     }
             }
 
-            /** The unique identifier for the tenant. */
-            fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
-
-            /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
-            fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
-
-            /**
-             * Sets [Builder.tenant] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.tenant] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun tenant(tenant: JsonField<String>) = apply { this.tenant = tenant }
-
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -558,7 +494,6 @@ private constructor(
                 Body(
                     checkRequired("cancellationKey", cancellationKey),
                     (recipients ?: JsonMissing.of()).map { it.toImmutable() },
-                    tenant,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -572,7 +507,6 @@ private constructor(
 
             cancellationKey()
             recipients()
-            tenant()
             validated = true
         }
 
@@ -593,25 +527,24 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (if (cancellationKey.asKnown().isPresent) 1 else 0) +
-                (recipients.asKnown().getOrNull()?.size ?: 0) +
-                (if (tenant.asKnown().isPresent) 1 else 0)
+                (recipients.asKnown().getOrNull()?.size ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Body && cancellationKey == other.cancellationKey && recipients == other.recipients && tenant == other.tenant && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && cancellationKey == other.cancellationKey && recipients == other.recipients && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(cancellationKey, recipients, tenant, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(cancellationKey, recipients, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{cancellationKey=$cancellationKey, recipients=$recipients, tenant=$tenant, additionalProperties=$additionalProperties}"
+            "Body{cancellationKey=$cancellationKey, recipients=$recipients, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
