@@ -217,6 +217,11 @@ private constructor(
             headers.put("X-Stainless-Package-Version", getPackageVersion())
             headers.put("X-Stainless-Runtime", "JRE")
             headers.put("X-Stainless-Runtime-Version", getJavaVersion())
+            bearerToken.let {
+                if (!it.isEmpty()) {
+                    headers.put("Authorization", "Bearer $it")
+                }
+            }
             headers.replaceAll(this.headers.build())
             queryParams.replaceAll(this.queryParams.build())
 

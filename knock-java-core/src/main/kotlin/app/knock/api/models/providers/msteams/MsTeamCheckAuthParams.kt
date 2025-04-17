@@ -10,7 +10,7 @@ import java.util.Objects
 
 /**
  * Check if a connection to Microsoft Teams has been authorized for a given Microsoft Teams tenant
- * object
+ * object.
  */
 class MsTeamCheckAuthParams
 private constructor(
@@ -22,7 +22,7 @@ private constructor(
 
     fun channelId(): String = channelId
 
-    /** A JSON encoded string containing the Microsoft Teams tenant object reference */
+    /** A JSON encoded string containing the Microsoft Teams tenant object reference. */
     fun msTeamsTenantObject(): String = msTeamsTenantObject
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -63,7 +63,7 @@ private constructor(
 
         fun channelId(channelId: String) = apply { this.channelId = channelId }
 
-        /** A JSON encoded string containing the Microsoft Teams tenant object reference */
+        /** A JSON encoded string containing the Microsoft Teams tenant object reference. */
         fun msTeamsTenantObject(msTeamsTenantObject: String) = apply {
             this.msTeamsTenantObject = msTeamsTenantObject
         }

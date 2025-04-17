@@ -18,7 +18,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A condition to be evaluated */
+/** A condition to be evaluated. */
 class Condition
 private constructor(
     private val argument: JsonField<String>,
@@ -35,18 +35,24 @@ private constructor(
     ) : this(argument, operator, variable, mutableMapOf())
 
     /**
+     * The argument value to compare against in the condition.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun argument(): Optional<String> = argument.getOptional("argument")
 
     /**
+     * The operator to use in the condition evaluation.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun operator(): Operator = operator.getRequired("operator")
 
     /**
+     * The variable to be evaluated in the condition.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -116,6 +122,7 @@ private constructor(
             additionalProperties = condition.additionalProperties.toMutableMap()
         }
 
+        /** The argument value to compare against in the condition. */
         fun argument(argument: String?) = argument(JsonField.ofNullable(argument))
 
         /** Alias for calling [Builder.argument] with `argument.orElse(null)`. */
@@ -129,6 +136,7 @@ private constructor(
          */
         fun argument(argument: JsonField<String>) = apply { this.argument = argument }
 
+        /** The operator to use in the condition evaluation. */
         fun operator(operator: Operator) = operator(JsonField.of(operator))
 
         /**
@@ -140,6 +148,7 @@ private constructor(
          */
         fun operator(operator: JsonField<Operator>) = apply { this.operator = operator }
 
+        /** The variable to be evaluated in the condition. */
         fun variable(variable: String) = variable(JsonField.of(variable))
 
         /**
@@ -224,6 +233,7 @@ private constructor(
             (operator.asKnown().getOrNull()?.validity() ?: 0) +
             (if (variable.asKnown().isPresent) 1 else 0)
 
+    /** The operator to use in the condition evaluation. */
     class Operator @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
@@ -272,6 +282,8 @@ private constructor(
 
             @JvmField val IS_AUDIENCE_MEMBER = of("is_audience_member")
 
+            @JvmField val IS_NOT_AUDIENCE_MEMBER = of("is_not_audience_member")
+
             @JvmStatic fun of(value: String) = Operator(JsonField.of(value))
         }
 
@@ -294,6 +306,7 @@ private constructor(
             IS_TIMESTAMP_BEFORE,
             IS_TIMESTAMP_BETWEEN,
             IS_AUDIENCE_MEMBER,
+            IS_NOT_AUDIENCE_MEMBER,
         }
 
         /**
@@ -323,6 +336,7 @@ private constructor(
             IS_TIMESTAMP_BEFORE,
             IS_TIMESTAMP_BETWEEN,
             IS_AUDIENCE_MEMBER,
+            IS_NOT_AUDIENCE_MEMBER,
             /** An enum member indicating that [Operator] was instantiated with an unknown value. */
             _UNKNOWN,
         }
@@ -353,6 +367,7 @@ private constructor(
                 IS_TIMESTAMP_BEFORE -> Value.IS_TIMESTAMP_BEFORE
                 IS_TIMESTAMP_BETWEEN -> Value.IS_TIMESTAMP_BETWEEN
                 IS_AUDIENCE_MEMBER -> Value.IS_AUDIENCE_MEMBER
+                IS_NOT_AUDIENCE_MEMBER -> Value.IS_NOT_AUDIENCE_MEMBER
                 else -> Value._UNKNOWN
             }
 
@@ -383,6 +398,7 @@ private constructor(
                 IS_TIMESTAMP_BEFORE -> Known.IS_TIMESTAMP_BEFORE
                 IS_TIMESTAMP_BETWEEN -> Known.IS_TIMESTAMP_BETWEEN
                 IS_AUDIENCE_MEMBER -> Known.IS_AUDIENCE_MEMBER
+                IS_NOT_AUDIENCE_MEMBER -> Known.IS_NOT_AUDIENCE_MEMBER
                 else -> throw KnockInvalidDataException("Unknown Operator: $value")
             }
 

@@ -22,7 +22,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A subscription object */
+/** A subscription object. */
 class Subscription
 private constructor(
     private val _typename: JsonField<String>,
@@ -53,19 +53,23 @@ private constructor(
     ) : this(_typename, insertedAt, object_, recipient, updatedAt, properties, mutableMapOf())
 
     /**
+     * The type name of the schema.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun _typename(): String = _typename.getRequired("__typename")
 
     /**
+     * Timestamp when the resource was created.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun insertedAt(): OffsetDateTime = insertedAt.getRequired("inserted_at")
 
     /**
-     * A custom-object entity which belongs to a collection.
+     * A custom object entity which belongs to a collection.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -73,7 +77,7 @@ private constructor(
     fun object_(): Object = object_.getRequired("object")
 
     /**
-     * A recipient, which is either a user or an object
+     * A recipient, which is either a user or an object.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -81,13 +85,15 @@ private constructor(
     fun recipient(): Recipient = recipient.getRequired("recipient")
 
     /**
+     * The timestamp when the resource was last updated.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
     /**
-     * The custom properties associated with the subscription
+     * The custom properties associated with the recipients of the subscription.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -193,6 +199,7 @@ private constructor(
             additionalProperties = subscription.additionalProperties.toMutableMap()
         }
 
+        /** The type name of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -204,6 +211,7 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
+        /** Timestamp when the resource was created. */
         fun insertedAt(insertedAt: OffsetDateTime) = insertedAt(JsonField.of(insertedAt))
 
         /**
@@ -217,7 +225,7 @@ private constructor(
             this.insertedAt = insertedAt
         }
 
-        /** A custom-object entity which belongs to a collection. */
+        /** A custom object entity which belongs to a collection. */
         fun object_(object_: Object) = object_(JsonField.of(object_))
 
         /**
@@ -228,7 +236,7 @@ private constructor(
          */
         fun object_(object_: JsonField<Object>) = apply { this.object_ = object_ }
 
-        /** A recipient, which is either a user or an object */
+        /** A recipient, which is either a user or an object. */
         fun recipient(recipient: Recipient) = recipient(JsonField.of(recipient))
 
         /**
@@ -246,6 +254,7 @@ private constructor(
         /** Alias for calling [recipient] with `Recipient.ofObject(object_)`. */
         fun recipient(object_: Object) = recipient(Recipient.ofObject(object_))
 
+        /** The timestamp when the resource was last updated. */
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
         /**
@@ -257,7 +266,7 @@ private constructor(
          */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
-        /** The custom properties associated with the subscription */
+        /** The custom properties associated with the recipients of the subscription. */
         fun properties(properties: Properties?) = properties(JsonField.ofNullable(properties))
 
         /** Alias for calling [Builder.properties] with `properties.orElse(null)`. */
@@ -357,7 +366,7 @@ private constructor(
             (if (updatedAt.asKnown().isPresent) 1 else 0) +
             (properties.asKnown().getOrNull()?.validity() ?: 0)
 
-    /** The custom properties associated with the subscription */
+    /** The custom properties associated with the recipients of the subscription. */
     class Properties
     @JsonCreator
     private constructor(

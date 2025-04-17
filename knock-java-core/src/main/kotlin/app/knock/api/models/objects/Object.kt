@@ -18,7 +18,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A custom-object entity which belongs to a collection. */
+/** A custom object entity which belongs to a collection. */
 class Object
 private constructor(
     private val id: JsonField<String>,
@@ -45,30 +45,40 @@ private constructor(
     ) : this(id, _typename, collection, updatedAt, createdAt, mutableMapOf())
 
     /**
+     * Unique identifier for the object.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
 
     /**
+     * The type name of the schema.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun _typename(): String = _typename.getRequired("__typename")
 
     /**
+     * The collection this object belongs to.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun collection(): String = collection.getRequired("collection")
 
     /**
+     * The timestamp when the resource was last updated.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
     /**
+     * Timestamp when the resource was created.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -161,6 +171,7 @@ private constructor(
             additionalProperties = object_.additionalProperties.toMutableMap()
         }
 
+        /** Unique identifier for the object. */
         fun id(id: String) = id(JsonField.of(id))
 
         /**
@@ -171,6 +182,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
+        /** The type name of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -182,6 +194,7 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
+        /** The collection this object belongs to. */
         fun collection(collection: String) = collection(JsonField.of(collection))
 
         /**
@@ -193,6 +206,7 @@ private constructor(
          */
         fun collection(collection: JsonField<String>) = apply { this.collection = collection }
 
+        /** The timestamp when the resource was last updated. */
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
         /**
@@ -204,6 +218,7 @@ private constructor(
          */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
+        /** Timestamp when the resource was created. */
         fun createdAt(createdAt: OffsetDateTime?) = createdAt(JsonField.ofNullable(createdAt))
 
         /** Alias for calling [Builder.createdAt] with `createdAt.orElse(null)`. */

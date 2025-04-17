@@ -21,9 +21,10 @@ private constructor(
     /**
      * Delegates to [MessageListActivitiesPageResponse], but gracefully handles missing data.
      *
-     * @see [MessageListActivitiesPageResponse.items]
+     * @see [MessageListActivitiesPageResponse.entries]
      */
-    fun items(): List<Activity> = response._items().getOptional("items").getOrNull() ?: emptyList()
+    fun entries(): List<Activity> =
+        response._entries().getOptional("entries").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [MessageListActivitiesPageResponse], but gracefully handles missing data.
@@ -34,7 +35,7 @@ private constructor(
         response._pageInfo().getOptional("page_info")
 
     fun hasNextPage(): Boolean =
-        items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
+        entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
 
     fun getNextPageParams(): Optional<MessageListActivitiesParams> {
         if (!hasNextPage()) {
@@ -131,8 +132,8 @@ private constructor(
             var page = firstPage
             var index = 0
             while (true) {
-                while (index < page.items().size) {
-                    yield(page.items()[index++])
+                while (index < page.entries().size) {
+                    yield(page.entries()[index++])
                 }
                 page = page.getNextPage().getOrNull() ?: break
                 index = 0

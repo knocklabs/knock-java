@@ -11,7 +11,10 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Marks a message as read */
+/**
+ * Marks a message as read for the current user. This indicates that the user has read the message
+ * content.
+ */
 class MessageMarkAsReadParams
 private constructor(
     private val messageId: String,

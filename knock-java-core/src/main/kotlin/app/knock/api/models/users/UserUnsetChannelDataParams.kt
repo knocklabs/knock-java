@@ -11,7 +11,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Unsets channel data for a user */
+/** Deletes channel data for a specific user and channel ID. */
 class UserUnsetChannelDataParams
 private constructor(
     private val userId: String,

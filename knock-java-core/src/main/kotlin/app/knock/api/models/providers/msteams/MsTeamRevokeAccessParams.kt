@@ -11,7 +11,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Remove a Microsoft Entra tenant ID from a Microsoft Teams tenant object */
+/** Remove a Microsoft Entra tenant ID from a Microsoft Teams tenant object. */
 class MsTeamRevokeAccessParams
 private constructor(
     private val channelId: String,
@@ -23,7 +23,7 @@ private constructor(
 
     fun channelId(): String = channelId
 
-    /** A JSON encoded string containing the Microsoft Teams tenant object reference */
+    /** A JSON encoded string containing the Microsoft Teams tenant object reference. */
     fun msTeamsTenantObject(): String = msTeamsTenantObject
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
@@ -69,7 +69,7 @@ private constructor(
 
         fun channelId(channelId: String) = apply { this.channelId = channelId }
 
-        /** A JSON encoded string containing the Microsoft Teams tenant object reference */
+        /** A JSON encoded string containing the Microsoft Teams tenant object reference. */
         fun msTeamsTenantObject(msTeamsTenantObject: String) = apply {
             this.msTeamsTenantObject = msTeamsTenantObject
         }

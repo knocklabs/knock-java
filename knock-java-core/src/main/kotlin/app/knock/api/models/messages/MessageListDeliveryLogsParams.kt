@@ -10,7 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get delivery logs for a message */
+/** Returns a paginated list of delivery logs for the specified message. */
 class MessageListDeliveryLogsParams
 private constructor(
     private val messageId: String,
@@ -23,13 +23,13 @@ private constructor(
 
     fun messageId(): String = messageId
 
-    /** The cursor to fetch entries after */
+    /** The cursor to fetch entries after. */
     fun after(): Optional<String> = Optional.ofNullable(after)
 
-    /** The cursor to fetch entries before */
+    /** The cursor to fetch entries before. */
     fun before(): Optional<String> = Optional.ofNullable(before)
 
-    /** The page size to fetch */
+    /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -74,19 +74,19 @@ private constructor(
 
         fun messageId(messageId: String) = apply { this.messageId = messageId }
 
-        /** The cursor to fetch entries after */
+        /** The cursor to fetch entries after. */
         fun after(after: String?) = apply { this.after = after }
 
         /** Alias for calling [Builder.after] with `after.orElse(null)`. */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
-        /** The cursor to fetch entries before */
+        /** The cursor to fetch entries before. */
         fun before(before: String?) = apply { this.before = before }
 
         /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
-        /** The page size to fetch */
+        /** The number of items per page. */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**

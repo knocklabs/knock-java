@@ -14,6 +14,7 @@ internal class ObjectListParamsTest {
             .collection("collection")
             .after("after")
             .before("before")
+            .addInclude(ObjectListParams.Include.PREFERENCES)
             .pageSize(0L)
             .build()
     }
@@ -34,6 +35,7 @@ internal class ObjectListParamsTest {
                 .collection("collection")
                 .after("after")
                 .before("before")
+                .addInclude(ObjectListParams.Include.PREFERENCES)
                 .pageSize(0L)
                 .build()
 
@@ -44,6 +46,7 @@ internal class ObjectListParamsTest {
                 QueryParams.builder()
                     .put("after", "after")
                     .put("before", "before")
+                    .put("include[]", "preferences")
                     .put("page_size", "0")
                     .build()
             )

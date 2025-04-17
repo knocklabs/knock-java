@@ -17,9 +17,11 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
-import java.util.Optional
 
-/** Merges two users together */
+/**
+ * Merge two users together, where the user specified with the `from_user_id` param will be merged
+ * into the user specified by `user_id`.
+ */
 class UserMergeParams
 private constructor(
     private val userId: String,
@@ -31,10 +33,12 @@ private constructor(
     fun userId(): String = userId
 
     /**
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * The user ID to merge from.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun fromUserId(): Optional<String> = body.fromUserId()
+    fun fromUserId(): String = body.fromUserId()
 
     /**
      * Returns the raw JSON value of [fromUserId].
@@ -59,6 +63,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .userId()
+         * .fromUserId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -91,6 +96,7 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
+        /** The user ID to merge from. */
         fun fromUserId(fromUserId: String) = apply { body.fromUserId(fromUserId) }
 
         /**
@@ -227,6 +233,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .userId()
+         * .fromUserId()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -252,7 +259,7 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    /** A set of parameters to merge one user into another */
+    /** A set of parameters to merge one user into another. */
     class Body
     private constructor(
         private val fromUserId: JsonField<String>,
@@ -267,10 +274,12 @@ private constructor(
         ) : this(fromUserId, mutableMapOf())
 
         /**
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
+         * The user ID to merge from.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun fromUserId(): Optional<String> = fromUserId.getOptional("from_user_id")
+        fun fromUserId(): String = fromUserId.getRequired("from_user_id")
 
         /**
          * Returns the raw JSON value of [fromUserId].
@@ -295,14 +304,21 @@ private constructor(
 
         companion object {
 
-            /** Returns a mutable builder for constructing an instance of [Body]. */
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .fromUserId()
+             * ```
+             */
             @JvmStatic fun builder() = Builder()
         }
 
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
-            private var fromUserId: JsonField<String> = JsonMissing.of()
+            private var fromUserId: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -311,6 +327,7 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
+            /** The user ID to merge from. */
             fun fromUserId(fromUserId: String) = fromUserId(JsonField.of(fromUserId))
 
             /**
@@ -345,8 +362,16 @@ private constructor(
              * Returns an immutable instance of [Body].
              *
              * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .fromUserId()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
              */
-            fun build(): Body = Body(fromUserId, additionalProperties.toMutableMap())
+            fun build(): Body =
+                Body(checkRequired("fromUserId", fromUserId), additionalProperties.toMutableMap())
         }
 
         private var validated: Boolean = false

@@ -17,7 +17,10 @@ interface BulkService {
      */
     fun withRawResponse(): WithRawResponse
 
-    /** Bulk deletes a list of users */
+    /**
+     * Deletes multiple users in a single operation. Accepts up to 100 user IDs to delete and
+     * returns a bulk operation that can be queried for progress.
+     */
     fun delete(params: BulkDeleteParams): BulkOperation = delete(params, RequestOptions.none())
 
     /** @see [delete] */
@@ -26,40 +29,31 @@ interface BulkService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
-    /** Bulk identifies a list of users */
-    fun identify(): BulkOperation = identify(BulkIdentifyParams.none())
-
-    /** @see [identify] */
-    fun identify(
-        params: BulkIdentifyParams = BulkIdentifyParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): BulkOperation
-
-    /** @see [identify] */
-    fun identify(params: BulkIdentifyParams = BulkIdentifyParams.none()): BulkOperation =
+    /**
+     * Identifies multiple users in a single operation. Allows creating or updating up to 100 users
+     * in a single batch with various properties, preferences, and channel data.
+     */
+    fun identify(params: BulkIdentifyParams): BulkOperation =
         identify(params, RequestOptions.none())
 
     /** @see [identify] */
-    fun identify(requestOptions: RequestOptions): BulkOperation =
-        identify(BulkIdentifyParams.none(), requestOptions)
-
-    /** Bulk sets user preferences */
-    fun setPreferences(): BulkOperation = setPreferences(BulkSetPreferencesParams.none())
-
-    /** @see [setPreferences] */
-    fun setPreferences(
-        params: BulkSetPreferencesParams = BulkSetPreferencesParams.none(),
+    fun identify(
+        params: BulkIdentifyParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
-    /** @see [setPreferences] */
-    fun setPreferences(
-        params: BulkSetPreferencesParams = BulkSetPreferencesParams.none()
-    ): BulkOperation = setPreferences(params, RequestOptions.none())
+    /**
+     * Sets preferences for multiple users in a single operation. Supports either setting the same
+     * preferences for multiple users or specific preferences for each user.
+     */
+    fun setPreferences(params: BulkSetPreferencesParams): BulkOperation =
+        setPreferences(params, RequestOptions.none())
 
     /** @see [setPreferences] */
-    fun setPreferences(requestOptions: RequestOptions): BulkOperation =
-        setPreferences(BulkSetPreferencesParams.none(), requestOptions)
+    fun setPreferences(
+        params: BulkSetPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BulkOperation
 
     /** A view of [BulkService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -84,50 +78,29 @@ interface BulkService {
          * as [BulkService.identify].
          */
         @MustBeClosed
-        fun identify(): HttpResponseFor<BulkOperation> = identify(BulkIdentifyParams.none())
+        fun identify(params: BulkIdentifyParams): HttpResponseFor<BulkOperation> =
+            identify(params, RequestOptions.none())
 
         /** @see [identify] */
         @MustBeClosed
         fun identify(
-            params: BulkIdentifyParams = BulkIdentifyParams.none(),
+            params: BulkIdentifyParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BulkOperation>
-
-        /** @see [identify] */
-        @MustBeClosed
-        fun identify(
-            params: BulkIdentifyParams = BulkIdentifyParams.none()
-        ): HttpResponseFor<BulkOperation> = identify(params, RequestOptions.none())
-
-        /** @see [identify] */
-        @MustBeClosed
-        fun identify(requestOptions: RequestOptions): HttpResponseFor<BulkOperation> =
-            identify(BulkIdentifyParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /v1/users/bulk/preferences`, but is otherwise the
          * same as [BulkService.setPreferences].
          */
         @MustBeClosed
-        fun setPreferences(): HttpResponseFor<BulkOperation> =
-            setPreferences(BulkSetPreferencesParams.none())
+        fun setPreferences(params: BulkSetPreferencesParams): HttpResponseFor<BulkOperation> =
+            setPreferences(params, RequestOptions.none())
 
         /** @see [setPreferences] */
         @MustBeClosed
         fun setPreferences(
-            params: BulkSetPreferencesParams = BulkSetPreferencesParams.none(),
+            params: BulkSetPreferencesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BulkOperation>
-
-        /** @see [setPreferences] */
-        @MustBeClosed
-        fun setPreferences(
-            params: BulkSetPreferencesParams = BulkSetPreferencesParams.none()
-        ): HttpResponseFor<BulkOperation> = setPreferences(params, RequestOptions.none())
-
-        /** @see [setPreferences] */
-        @MustBeClosed
-        fun setPreferences(requestOptions: RequestOptions): HttpResponseFor<BulkOperation> =
-            setPreferences(BulkSetPreferencesParams.none(), requestOptions)
     }
 }

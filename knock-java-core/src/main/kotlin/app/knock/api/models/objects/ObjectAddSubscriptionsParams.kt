@@ -24,7 +24,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Upsert subscriptions for an object */
+/** Add subscriptions for an object. If a subscription already exists, it will be updated. */
 class ObjectAddSubscriptionsParams
 private constructor(
     private val collection: String,
@@ -39,7 +39,7 @@ private constructor(
     fun objectId(): String = objectId
 
     /**
-     * The recipients to subscribe to the object
+     * The recipients of the subscription.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -47,7 +47,7 @@ private constructor(
     fun recipients(): List<RecipientRequest> = body.recipients()
 
     /**
-     * The custom properties associated with the subscription
+     * The custom properties associated with the recipients of the subscription.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -123,7 +123,7 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /** The recipients to subscribe to the object */
+        /** The recipients of the subscription. */
         fun recipients(recipients: List<RecipientRequest>) = apply { body.recipients(recipients) }
 
         /**
@@ -162,7 +162,7 @@ private constructor(
             body.addRecipient(inlineObject)
         }
 
-        /** The custom properties associated with the subscription */
+        /** The custom properties associated with the recipients of the subscription. */
         fun properties(properties: Properties?) = apply { body.properties(properties) }
 
         /** Alias for calling [Builder.properties] with `properties.orElse(null)`. */
@@ -331,7 +331,7 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    /** Request to upsert subscriptions for an object */
+    /** A request to upsert subscriptions for a set of recipients. */
     class Body
     private constructor(
         private val recipients: JsonField<List<RecipientRequest>>,
@@ -350,7 +350,7 @@ private constructor(
         ) : this(recipients, properties, mutableMapOf())
 
         /**
-         * The recipients to subscribe to the object
+         * The recipients of the subscription.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -358,7 +358,7 @@ private constructor(
         fun recipients(): List<RecipientRequest> = recipients.getRequired("recipients")
 
         /**
-         * The custom properties associated with the subscription
+         * The custom properties associated with the recipients of the subscription.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -422,7 +422,7 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /** The recipients to subscribe to the object */
+            /** The recipients of the subscription. */
             fun recipients(recipients: List<RecipientRequest>) =
                 recipients(JsonField.of(recipients))
 
@@ -466,7 +466,7 @@ private constructor(
             fun addRecipient(inlineObject: InlineObjectRequest) =
                 addRecipient(RecipientRequest.ofInlineObject(inlineObject))
 
-            /** The custom properties associated with the subscription */
+            /** The custom properties associated with the recipients of the subscription. */
             fun properties(properties: Properties?) = properties(JsonField.ofNullable(properties))
 
             /** Alias for calling [Builder.properties] with `properties.orElse(null)`. */
@@ -571,7 +571,7 @@ private constructor(
             "Body{recipients=$recipients, properties=$properties, additionalProperties=$additionalProperties}"
     }
 
-    /** The custom properties associated with the subscription */
+    /** The custom properties associated with the recipients of the subscription. */
     class Properties
     @JsonCreator
     private constructor(

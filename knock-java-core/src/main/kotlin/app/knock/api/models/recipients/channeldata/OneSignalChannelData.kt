@@ -18,7 +18,7 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/** OneSignal channel data */
+/** OneSignal channel data. */
 class OneSignalChannelData
 private constructor(
     private val playerIds: JsonField<List<String>>,
@@ -33,7 +33,7 @@ private constructor(
     ) : this(playerIds, mutableMapOf())
 
     /**
-     * The OneSignal player IDs
+     * A list of OneSignal player IDs.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -86,7 +86,7 @@ private constructor(
             additionalProperties = oneSignalChannelData.additionalProperties.toMutableMap()
         }
 
-        /** The OneSignal player IDs */
+        /** A list of OneSignal player IDs. */
         fun playerIds(playerIds: List<String>) = playerIds(JsonField.of(playerIds))
 
         /**

@@ -17,7 +17,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Set preferences for a recipient */
+/** A request to set a preference set for a recipient. */
 class PreferenceSetRequest
 private constructor(
     private val categories: JsonField<Categories>,
@@ -40,13 +40,16 @@ private constructor(
     ) : this(categories, channelTypes, workflows, mutableMapOf())
 
     /**
+     * A setting for a preference set, where the key in the object is the category, and the values
+     * are the preference settings for that category.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun categories(): Optional<Categories> = categories.getOptional("categories")
 
     /**
-     * Channel type preferences
+     * Channel type preferences.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -55,6 +58,9 @@ private constructor(
         channelTypes.getOptional("channel_types")
 
     /**
+     * A setting for a preference set, where the key in the object is the workflow key, and the
+     * values are the preference settings for that workflow.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -119,6 +125,10 @@ private constructor(
             additionalProperties = preferenceSetRequest.additionalProperties.toMutableMap()
         }
 
+        /**
+         * A setting for a preference set, where the key in the object is the category, and the
+         * values are the preference settings for that category.
+         */
         fun categories(categories: Categories?) = categories(JsonField.ofNullable(categories))
 
         /** Alias for calling [Builder.categories] with `categories.orElse(null)`. */
@@ -133,7 +143,7 @@ private constructor(
          */
         fun categories(categories: JsonField<Categories>) = apply { this.categories = categories }
 
-        /** Channel type preferences */
+        /** Channel type preferences. */
         fun channelTypes(channelTypes: PreferenceSetChannelTypes?) =
             channelTypes(JsonField.ofNullable(channelTypes))
 
@@ -152,6 +162,10 @@ private constructor(
             this.channelTypes = channelTypes
         }
 
+        /**
+         * A setting for a preference set, where the key in the object is the workflow key, and the
+         * values are the preference settings for that workflow.
+         */
         fun workflows(workflows: Workflows?) = workflows(JsonField.ofNullable(workflows))
 
         /** Alias for calling [Builder.workflows] with `workflows.orElse(null)`. */
@@ -231,6 +245,10 @@ private constructor(
             (channelTypes.asKnown().getOrNull()?.validity() ?: 0) +
             (workflows.asKnown().getOrNull()?.validity() ?: 0)
 
+    /**
+     * A setting for a preference set, where the key in the object is the category, and the values
+     * are the preference settings for that category.
+     */
     class Categories
     @JsonCreator
     private constructor(
@@ -332,6 +350,10 @@ private constructor(
         override fun toString() = "Categories{additionalProperties=$additionalProperties}"
     }
 
+    /**
+     * A setting for a preference set, where the key in the object is the workflow key, and the
+     * values are the preference settings for that workflow.
+     */
     class Workflows
     @JsonCreator
     private constructor(

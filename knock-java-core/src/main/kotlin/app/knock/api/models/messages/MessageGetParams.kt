@@ -8,7 +8,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
 
-/** Retrieves a single message */
+/** Retrieves a specific message by its ID. */
 class MessageGetParams
 private constructor(
     private val messageId: String,

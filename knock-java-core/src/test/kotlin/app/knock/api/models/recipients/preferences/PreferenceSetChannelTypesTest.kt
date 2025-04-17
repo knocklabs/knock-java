@@ -20,7 +20,7 @@ internal class PreferenceSetChannelTypesTest {
                 .inAppFeed(true)
                 .push(true)
                 .sms(
-                    PreferenceSetChannelTypes.Sms.Conditions.builder()
+                    PreferenceSetChannelTypeSetting.builder()
                         .addCondition(
                             Condition.builder()
                                 .argument("US")
@@ -44,8 +44,8 @@ internal class PreferenceSetChannelTypesTest {
             .contains(PreferenceSetChannelTypes.Push.ofBool(true))
         assertThat(preferenceSetChannelTypes.sms())
             .contains(
-                PreferenceSetChannelTypes.Sms.ofConditions(
-                    PreferenceSetChannelTypes.Sms.Conditions.builder()
+                PreferenceSetChannelTypes.Sms.ofPreferenceSetChannelTypeSetting(
+                    PreferenceSetChannelTypeSetting.builder()
                         .addCondition(
                             Condition.builder()
                                 .argument("US")
@@ -69,7 +69,7 @@ internal class PreferenceSetChannelTypesTest {
                 .inAppFeed(true)
                 .push(true)
                 .sms(
-                    PreferenceSetChannelTypes.Sms.Conditions.builder()
+                    PreferenceSetChannelTypeSetting.builder()
                         .addCondition(
                             Condition.builder()
                                 .argument("US")

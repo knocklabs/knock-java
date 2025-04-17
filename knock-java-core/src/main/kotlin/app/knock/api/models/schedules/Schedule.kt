@@ -23,7 +23,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A schedule that represents a recurring workflow execution */
+/** A schedule that represents a recurring workflow execution. */
 class Schedule
 private constructor(
     private val id: JsonField<String>,
@@ -34,7 +34,7 @@ private constructor(
     private val workflow: JsonField<String>,
     private val _typename: JsonField<String>,
     private val actor: JsonField<Recipient>,
-    private val data: JsonValue,
+    private val data: JsonField<Data>,
     private val lastOccurrenceAt: JsonField<OffsetDateTime>,
     private val nextOccurrenceAt: JsonField<OffsetDateTime>,
     private val tenant: JsonField<String>,
@@ -59,7 +59,7 @@ private constructor(
         @JsonProperty("workflow") @ExcludeMissing workflow: JsonField<String> = JsonMissing.of(),
         @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
         @JsonProperty("actor") @ExcludeMissing actor: JsonField<Recipient> = JsonMissing.of(),
-        @JsonProperty("data") @ExcludeMissing data: JsonValue = JsonMissing.of(),
+        @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
         @JsonProperty("last_occurrence_at")
         @ExcludeMissing
         lastOccurrenceAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -84,19 +84,23 @@ private constructor(
     )
 
     /**
+     * Unique identifier for the schedule.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
 
     /**
+     * Timestamp when the resource was created.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun insertedAt(): OffsetDateTime = insertedAt.getRequired("inserted_at")
 
     /**
-     * A recipient, which is either a user or an object
+     * A recipient, which is either a user or an object.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -104,40 +108,56 @@ private constructor(
     fun recipient(): Recipient = recipient.getRequired("recipient")
 
     /**
+     * The repeat rule for the schedule.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun repeats(): List<ScheduleRepeatRule> = repeats.getRequired("repeats")
 
     /**
+     * The timestamp when the resource was last updated.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
     /**
+     * The workflow the schedule is applied to.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun workflow(): String = workflow.getRequired("workflow")
 
     /**
+     * The type name of the schema.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun _typename(): Optional<String> = _typename.getOptional("__typename")
 
     /**
-     * A recipient, which is either a user or an object
+     * A recipient, which is either a user or an object.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun actor(): Optional<Recipient> = actor.getOptional("actor")
 
-    @JsonProperty("data") @ExcludeMissing fun _data(): JsonValue = data
+    /**
+     * An optional map of data to pass into the workflow execution.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun data(): Optional<Data> = data.getOptional("data")
 
     /**
+     * The last occurrence of the schedule.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -145,6 +165,8 @@ private constructor(
         lastOccurrenceAt.getOptional("last_occurrence_at")
 
     /**
+     * The next occurrence of the schedule.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -152,6 +174,10 @@ private constructor(
         nextOccurrenceAt.getOptional("next_occurrence_at")
 
     /**
+     * The tenant to trigger the workflow for. Triggering with a tenant will use any tenant-level
+     * overrides associated with the tenant object, and all messages produced from workflow runs
+     * will be tagged with the tenant.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -218,6 +244,13 @@ private constructor(
      * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("actor") @ExcludeMissing fun _actor(): JsonField<Recipient> = actor
+
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
 
     /**
      * Returns the raw JSON value of [lastOccurrenceAt].
@@ -287,7 +320,7 @@ private constructor(
         private var workflow: JsonField<String>? = null
         private var _typename: JsonField<String> = JsonMissing.of()
         private var actor: JsonField<Recipient> = JsonMissing.of()
-        private var data: JsonValue = JsonMissing.of()
+        private var data: JsonField<Data> = JsonMissing.of()
         private var lastOccurrenceAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var nextOccurrenceAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var tenant: JsonField<String> = JsonMissing.of()
@@ -310,6 +343,7 @@ private constructor(
             additionalProperties = schedule.additionalProperties.toMutableMap()
         }
 
+        /** Unique identifier for the schedule. */
         fun id(id: String) = id(JsonField.of(id))
 
         /**
@@ -320,6 +354,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
+        /** Timestamp when the resource was created. */
         fun insertedAt(insertedAt: OffsetDateTime) = insertedAt(JsonField.of(insertedAt))
 
         /**
@@ -333,7 +368,7 @@ private constructor(
             this.insertedAt = insertedAt
         }
 
-        /** A recipient, which is either a user or an object */
+        /** A recipient, which is either a user or an object. */
         fun recipient(recipient: Recipient) = recipient(JsonField.of(recipient))
 
         /**
@@ -351,6 +386,7 @@ private constructor(
         /** Alias for calling [recipient] with `Recipient.ofObject(object_)`. */
         fun recipient(object_: Object) = recipient(Recipient.ofObject(object_))
 
+        /** The repeat rule for the schedule. */
         fun repeats(repeats: List<ScheduleRepeatRule>) = repeats(JsonField.of(repeats))
 
         /**
@@ -376,6 +412,7 @@ private constructor(
                 }
         }
 
+        /** The timestamp when the resource was last updated. */
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
         /**
@@ -387,6 +424,7 @@ private constructor(
          */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
+        /** The workflow the schedule is applied to. */
         fun workflow(workflow: String) = workflow(JsonField.of(workflow))
 
         /**
@@ -397,6 +435,7 @@ private constructor(
          */
         fun workflow(workflow: JsonField<String>) = apply { this.workflow = workflow }
 
+        /** The type name of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -408,7 +447,7 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
-        /** A recipient, which is either a user or an object */
+        /** A recipient, which is either a user or an object. */
         fun actor(actor: Recipient?) = actor(JsonField.ofNullable(actor))
 
         /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
@@ -428,8 +467,21 @@ private constructor(
         /** Alias for calling [actor] with `Recipient.ofObject(object_)`. */
         fun actor(object_: Object) = actor(Recipient.ofObject(object_))
 
-        fun data(data: JsonValue) = apply { this.data = data }
+        /** An optional map of data to pass into the workflow execution. */
+        fun data(data: Data?) = data(JsonField.ofNullable(data))
 
+        /** Alias for calling [Builder.data] with `data.orElse(null)`. */
+        fun data(data: Optional<Data>) = data(data.getOrNull())
+
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun data(data: JsonField<Data>) = apply { this.data = data }
+
+        /** The last occurrence of the schedule. */
         fun lastOccurrenceAt(lastOccurrenceAt: OffsetDateTime?) =
             lastOccurrenceAt(JsonField.ofNullable(lastOccurrenceAt))
 
@@ -448,6 +500,7 @@ private constructor(
             this.lastOccurrenceAt = lastOccurrenceAt
         }
 
+        /** The next occurrence of the schedule. */
         fun nextOccurrenceAt(nextOccurrenceAt: OffsetDateTime?) =
             nextOccurrenceAt(JsonField.ofNullable(nextOccurrenceAt))
 
@@ -466,6 +519,11 @@ private constructor(
             this.nextOccurrenceAt = nextOccurrenceAt
         }
 
+        /**
+         * The tenant to trigger the workflow for. Triggering with a tenant will use any
+         * tenant-level overrides associated with the tenant object, and all messages produced from
+         * workflow runs will be tagged with the tenant.
+         */
         fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
 
         /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
@@ -548,6 +606,7 @@ private constructor(
         workflow()
         _typename()
         actor().ifPresent { it.validate() }
+        data().ifPresent { it.validate() }
         lastOccurrenceAt()
         nextOccurrenceAt()
         tenant()
@@ -577,9 +636,112 @@ private constructor(
             (if (workflow.asKnown().isPresent) 1 else 0) +
             (if (_typename.asKnown().isPresent) 1 else 0) +
             (actor.asKnown().getOrNull()?.validity() ?: 0) +
+            (data.asKnown().getOrNull()?.validity() ?: 0) +
             (if (lastOccurrenceAt.asKnown().isPresent) 1 else 0) +
             (if (nextOccurrenceAt.asKnown().isPresent) 1 else 0) +
             (if (tenant.asKnown().isPresent) 1 else 0)
+
+    /** An optional map of data to pass into the workflow execution. */
+    class Data
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Data]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Data]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(data: Data) = apply {
+                additionalProperties = data.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Data].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Data = Data(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Data = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Data && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Data{additionalProperties=$additionalProperties}"
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {

@@ -17,7 +17,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** The response from a Microsoft Teams auth check request */
+/** The response from a Microsoft Teams auth check request. */
 class MsTeamCheckAuthResponse
 private constructor(
     private val connection: JsonField<Connection>,
@@ -32,6 +32,8 @@ private constructor(
     ) : this(connection, mutableMapOf())
 
     /**
+     * A Microsoft Teams connection object.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -83,6 +85,7 @@ private constructor(
             additionalProperties = msTeamCheckAuthResponse.additionalProperties.toMutableMap()
         }
 
+        /** A Microsoft Teams connection object. */
         fun connection(connection: Connection) = connection(JsonField.of(connection))
 
         /**
@@ -158,6 +161,7 @@ private constructor(
      */
     @JvmSynthetic internal fun validity(): Int = (connection.asKnown().getOrNull()?.validity() ?: 0)
 
+    /** A Microsoft Teams connection object. */
     class Connection
     private constructor(
         private val ok: JsonField<Boolean>,
@@ -172,12 +176,16 @@ private constructor(
         ) : this(ok, reason, mutableMapOf())
 
         /**
+         * Whether the Microsoft Teams connection is valid.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun ok(): Boolean = ok.getRequired("ok")
 
         /**
+         * The reason for the Microsoft Teams connection if it is not valid.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
@@ -236,6 +244,7 @@ private constructor(
                 additionalProperties = connection.additionalProperties.toMutableMap()
             }
 
+            /** Whether the Microsoft Teams connection is valid. */
             fun ok(ok: Boolean) = ok(JsonField.of(ok))
 
             /**
@@ -247,6 +256,7 @@ private constructor(
              */
             fun ok(ok: JsonField<Boolean>) = apply { this.ok = ok }
 
+            /** The reason for the Microsoft Teams connection if it is not valid. */
             fun reason(reason: String?) = reason(JsonField.ofNullable(reason))
 
             /** Alias for calling [Builder.reason] with `reason.orElse(null)`. */

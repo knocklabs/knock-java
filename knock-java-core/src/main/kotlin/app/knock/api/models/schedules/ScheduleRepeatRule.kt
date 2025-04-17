@@ -20,7 +20,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A schedule repeat rule */
+/** The repeat rule for the schedule. */
 class ScheduleRepeatRule
 private constructor(
     private val _typename: JsonField<String>,
@@ -49,42 +49,56 @@ private constructor(
     ) : this(_typename, frequency, dayOfMonth, days, hours, interval, minutes, mutableMapOf())
 
     /**
+     * The type name of the schema.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun _typename(): String = _typename.getRequired("__typename")
 
     /**
+     * The frequency of the schedule.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun frequency(): Frequency = frequency.getRequired("frequency")
 
     /**
+     * The day of the month to repeat the schedule.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun dayOfMonth(): Optional<Long> = dayOfMonth.getOptional("day_of_month")
 
     /**
+     * The days of the week to repeat the schedule.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun days(): Optional<List<Day>> = days.getOptional("days")
 
     /**
+     * The hour of the day to repeat the schedule.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun hours(): Optional<Long> = hours.getOptional("hours")
 
     /**
+     * The interval of the schedule.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun interval(): Optional<Long> = interval.getOptional("interval")
 
     /**
+     * The minute of the hour to repeat the schedule.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -189,6 +203,7 @@ private constructor(
             additionalProperties = scheduleRepeatRule.additionalProperties.toMutableMap()
         }
 
+        /** The type name of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -200,6 +215,7 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
+        /** The frequency of the schedule. */
         fun frequency(frequency: Frequency) = frequency(JsonField.of(frequency))
 
         /**
@@ -211,6 +227,7 @@ private constructor(
          */
         fun frequency(frequency: JsonField<Frequency>) = apply { this.frequency = frequency }
 
+        /** The day of the month to repeat the schedule. */
         fun dayOfMonth(dayOfMonth: Long?) = dayOfMonth(JsonField.ofNullable(dayOfMonth))
 
         /**
@@ -231,6 +248,7 @@ private constructor(
          */
         fun dayOfMonth(dayOfMonth: JsonField<Long>) = apply { this.dayOfMonth = dayOfMonth }
 
+        /** The days of the week to repeat the schedule. */
         fun days(days: List<Day>?) = days(JsonField.ofNullable(days))
 
         /** Alias for calling [Builder.days] with `days.orElse(null)`. */
@@ -253,6 +271,7 @@ private constructor(
             days = (days ?: JsonField.of(mutableListOf())).also { checkKnown("days", it).add(day) }
         }
 
+        /** The hour of the day to repeat the schedule. */
         fun hours(hours: Long?) = hours(JsonField.ofNullable(hours))
 
         /**
@@ -273,6 +292,7 @@ private constructor(
          */
         fun hours(hours: JsonField<Long>) = apply { this.hours = hours }
 
+        /** The interval of the schedule. */
         fun interval(interval: Long) = interval(JsonField.of(interval))
 
         /**
@@ -283,6 +303,7 @@ private constructor(
          */
         fun interval(interval: JsonField<Long>) = apply { this.interval = interval }
 
+        /** The minute of the hour to repeat the schedule. */
         fun minutes(minutes: Long?) = minutes(JsonField.ofNullable(minutes))
 
         /**
@@ -388,6 +409,7 @@ private constructor(
             (if (interval.asKnown().isPresent) 1 else 0) +
             (if (minutes.asKnown().isPresent) 1 else 0)
 
+    /** The frequency of the schedule. */
     class Frequency @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
@@ -526,6 +548,7 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /** An identifier for a day of the week. */
     class Day @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**

@@ -10,7 +10,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Get a list of teams belonging to the Microsoft Entra tenant */
+/**
+ * Get a list of teams belonging to the Microsoft Entra tenant. By default, archived and private
+ * channels are excluded from the results.
+ */
 class MsTeamListTeamsParams
 private constructor(
     private val channelId: String,
@@ -22,7 +25,7 @@ private constructor(
 
     fun channelId(): String = channelId
 
-    /** A JSON encoded string containing the Microsoft Teams tenant object reference */
+    /** A JSON encoded string containing the Microsoft Teams tenant object reference. */
     fun msTeamsTenantObject(): String = msTeamsTenantObject
 
     fun queryOptions(): Optional<QueryOptions> = Optional.ofNullable(queryOptions)
@@ -67,7 +70,7 @@ private constructor(
 
         fun channelId(channelId: String) = apply { this.channelId = channelId }
 
-        /** A JSON encoded string containing the Microsoft Teams tenant object reference */
+        /** A JSON encoded string containing the Microsoft Teams tenant object reference. */
         fun msTeamsTenantObject(msTeamsTenantObject: String) = apply {
             this.msTeamsTenantObject = msTeamsTenantObject
         }
@@ -237,25 +240,25 @@ private constructor(
 
         /**
          * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-         * Microsoft Graph API to filter teams
+         * Microsoft Graph API to filter teams.
          */
         fun filter(): Optional<String> = Optional.ofNullable(filter)
 
         /**
          * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-         * Microsoft Graph API to select fields on a team
+         * Microsoft Graph API to select fields on a team.
          */
         fun select(): Optional<String> = Optional.ofNullable(select)
 
         /**
          * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-         * Microsoft Graph API to retrieve the next page of results
+         * Microsoft Graph API to retrieve the next page of results.
          */
         fun skiptoken(): Optional<String> = Optional.ofNullable(skiptoken)
 
         /**
          * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-         * Microsoft Graph API to limit the number of teams returned
+         * Microsoft Graph API to limit the number of teams returned.
          */
         fun top(): Optional<Long> = Optional.ofNullable(top)
 
@@ -289,7 +292,7 @@ private constructor(
 
             /**
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-             * Microsoft Graph API to filter teams
+             * Microsoft Graph API to filter teams.
              */
             fun filter(filter: String?) = apply { this.filter = filter }
 
@@ -298,7 +301,7 @@ private constructor(
 
             /**
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-             * Microsoft Graph API to select fields on a team
+             * Microsoft Graph API to select fields on a team.
              */
             fun select(select: String?) = apply { this.select = select }
 
@@ -307,7 +310,7 @@ private constructor(
 
             /**
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-             * Microsoft Graph API to retrieve the next page of results
+             * Microsoft Graph API to retrieve the next page of results.
              */
             fun skiptoken(skiptoken: String?) = apply { this.skiptoken = skiptoken }
 
@@ -316,7 +319,7 @@ private constructor(
 
             /**
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-             * Microsoft Graph API to limit the number of teams returned
+             * Microsoft Graph API to limit the number of teams returned.
              */
             fun top(top: Long?) = apply { this.top = top }
 

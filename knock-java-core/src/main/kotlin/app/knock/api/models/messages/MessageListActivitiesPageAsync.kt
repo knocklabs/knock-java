@@ -22,9 +22,10 @@ private constructor(
     /**
      * Delegates to [MessageListActivitiesPageResponse], but gracefully handles missing data.
      *
-     * @see [MessageListActivitiesPageResponse.items]
+     * @see [MessageListActivitiesPageResponse.entries]
      */
-    fun items(): List<Activity> = response._items().getOptional("items").getOrNull() ?: emptyList()
+    fun entries(): List<Activity> =
+        response._entries().getOptional("entries").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [MessageListActivitiesPageResponse], but gracefully handles missing data.
@@ -35,7 +36,7 @@ private constructor(
         response._pageInfo().getOptional("page_info")
 
     fun hasNextPage(): Boolean =
-        items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
+        entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
 
     fun getNextPageParams(): Optional<MessageListActivitiesParams> {
         if (!hasNextPage()) {
@@ -139,7 +140,7 @@ private constructor(
                 thenComposeAsync(
                     { page ->
                         page
-                            .filter { it.items().all(action) }
+                            .filter { it.entries().all(action) }
                             .map { it.getNextPage().forEach(action, executor) }
                             .orElseGet { CompletableFuture.completedFuture(null) }
                     },

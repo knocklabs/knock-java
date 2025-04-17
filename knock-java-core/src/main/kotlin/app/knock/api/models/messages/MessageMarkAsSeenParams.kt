@@ -11,7 +11,10 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Marks a message as seen */
+/**
+ * Marks a message as seen for the current user. This indicates that the user has viewed the message
+ * in their feed or inbox.
+ */
 class MessageMarkAsSeenParams
 private constructor(
     private val messageId: String,

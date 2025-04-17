@@ -18,7 +18,7 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/** Channel data for push providers */
+/** The content of a push notification. */
 class PushChannelData
 private constructor(
     private val tokens: JsonField<List<String>>,
@@ -31,6 +31,8 @@ private constructor(
     ) : this(tokens, mutableMapOf())
 
     /**
+     * A list of push channel tokens.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -80,6 +82,7 @@ private constructor(
             additionalProperties = pushChannelData.additionalProperties.toMutableMap()
         }
 
+        /** A list of push channel tokens. */
         fun tokens(tokens: List<String>) = tokens(JsonField.of(tokens))
 
         /**

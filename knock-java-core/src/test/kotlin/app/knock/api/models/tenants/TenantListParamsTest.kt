@@ -10,12 +10,25 @@ internal class TenantListParamsTest {
 
     @Test
     fun create() {
-        TenantListParams.builder().after("after").before("before").pageSize(0L).build()
+        TenantListParams.builder()
+            .after("after")
+            .before("before")
+            .name("name")
+            .pageSize(0L)
+            .tenantId("tenant_id")
+            .build()
     }
 
     @Test
     fun queryParams() {
-        val params = TenantListParams.builder().after("after").before("before").pageSize(0L).build()
+        val params =
+            TenantListParams.builder()
+                .after("after")
+                .before("before")
+                .name("name")
+                .pageSize(0L)
+                .tenantId("tenant_id")
+                .build()
 
         val queryParams = params._queryParams()
 
@@ -24,7 +37,9 @@ internal class TenantListParamsTest {
                 QueryParams.builder()
                     .put("after", "after")
                     .put("before", "before")
+                    .put("name", "name")
                     .put("page_size", "0")
+                    .put("tenant_id", "tenant_id")
                     .build()
             )
     }

@@ -18,7 +18,7 @@ interface AudienceServiceAsync {
      */
     fun withRawResponse(): WithRawResponse
 
-    /** Add members to an audience */
+    /** Adds one or more members to the specified audience. */
     fun addMembers(params: AudienceAddMembersParams): CompletableFuture<String> =
         addMembers(params, RequestOptions.none())
 
@@ -28,7 +28,7 @@ interface AudienceServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<String>
 
-    /** List members of an audience */
+    /** Returns a paginated list of members for the specified audience. */
     fun listMembers(
         params: AudienceListMembersParams
     ): CompletableFuture<AudienceListMembersResponse> = listMembers(params, RequestOptions.none())
@@ -39,7 +39,7 @@ interface AudienceServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<AudienceListMembersResponse>
 
-    /** Remove members from an audience */
+    /** Removes one or more members from the specified audience. */
     fun removeMembers(params: AudienceRemoveMembersParams): CompletableFuture<String> =
         removeMembers(params, RequestOptions.none())
 

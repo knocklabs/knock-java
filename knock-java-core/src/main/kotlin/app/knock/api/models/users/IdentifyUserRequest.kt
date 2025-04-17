@@ -46,7 +46,7 @@ private constructor(
     ) : this(channelData, createdAt, preferences, mutableMapOf())
 
     /**
-     * Allows inline setting channel data for a recipient
+     * A request to set channel data for a type of channel inline.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -54,6 +54,8 @@ private constructor(
     fun channelData(): Optional<InlineChannelDataRequest> = channelData.getOptional("channel_data")
 
     /**
+     * The creation date of the user from your system.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -128,7 +130,7 @@ private constructor(
             additionalProperties = identifyUserRequest.additionalProperties.toMutableMap()
         }
 
-        /** Allows inline setting channel data for a recipient */
+        /** A request to set channel data for a type of channel inline. */
         fun channelData(channelData: InlineChannelDataRequest?) =
             channelData(JsonField.ofNullable(channelData))
 
@@ -147,6 +149,7 @@ private constructor(
             this.channelData = channelData
         }
 
+        /** The creation date of the user from your system. */
         fun createdAt(createdAt: OffsetDateTime?) = createdAt(JsonField.ofNullable(createdAt))
 
         /** Alias for calling [Builder.createdAt] with `createdAt.orElse(null)`. */

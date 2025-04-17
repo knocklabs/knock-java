@@ -8,7 +8,10 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get the contents of a message */
+/**
+ * Returns the fully rendered contents of a message, where the response depends on which channel the
+ * message was sent through.
+ */
 class MessageGetContentParams
 private constructor(
     private val messageId: String,

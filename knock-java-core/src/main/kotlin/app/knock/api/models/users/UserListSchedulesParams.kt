@@ -10,7 +10,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List schedules for a user */
+/**
+ * Returns a paginated list of schedules for a specific user. Can be filtered by workflow and
+ * tenant.
+ */
 class UserListSchedulesParams
 private constructor(
     private val userId: String,
@@ -25,19 +28,19 @@ private constructor(
 
     fun userId(): String = userId
 
-    /** The cursor to fetch entries after */
+    /** The cursor to fetch entries after. */
     fun after(): Optional<String> = Optional.ofNullable(after)
 
-    /** The cursor to fetch entries before */
+    /** The cursor to fetch entries before. */
     fun before(): Optional<String> = Optional.ofNullable(before)
 
-    /** The page size to fetch */
+    /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
-    /** The ID of the tenant to list schedules for */
+    /** The ID of the tenant to list schedules for. */
     fun tenant(): Optional<String> = Optional.ofNullable(tenant)
 
-    /** The ID of the workflow to list schedules for */
+    /** The ID of the workflow to list schedules for. */
     fun workflow(): Optional<String> = Optional.ofNullable(workflow)
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -85,19 +88,19 @@ private constructor(
 
         fun userId(userId: String) = apply { this.userId = userId }
 
-        /** The cursor to fetch entries after */
+        /** The cursor to fetch entries after. */
         fun after(after: String?) = apply { this.after = after }
 
         /** Alias for calling [Builder.after] with `after.orElse(null)`. */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
-        /** The cursor to fetch entries before */
+        /** The cursor to fetch entries before. */
         fun before(before: String?) = apply { this.before = before }
 
         /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
-        /** The page size to fetch */
+        /** The number of items per page. */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**
@@ -110,13 +113,13 @@ private constructor(
         /** Alias for calling [Builder.pageSize] with `pageSize.orElse(null)`. */
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
-        /** The ID of the tenant to list schedules for */
+        /** The ID of the tenant to list schedules for. */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
         /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
-        /** The ID of the workflow to list schedules for */
+        /** The ID of the workflow to list schedules for. */
         fun workflow(workflow: String?) = apply { this.workflow = workflow }
 
         /** Alias for calling [Builder.workflow] with `workflow.orElse(null)`. */

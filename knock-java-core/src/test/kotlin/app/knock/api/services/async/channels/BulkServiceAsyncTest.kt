@@ -5,6 +5,7 @@ package app.knock.api.services.async.channels
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClientAsync
 import app.knock.api.models.channels.bulk.BulkUpdateMessageStatusParams
+import java.time.OffsetDateTime
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -29,6 +30,19 @@ internal class BulkServiceAsyncTest {
                 BulkUpdateMessageStatusParams.builder()
                     .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .action(BulkUpdateMessageStatusParams.Action.SEEN)
+                    .archived(BulkUpdateMessageStatusParams.Archived.INCLUDE)
+                    .deliveryStatus(BulkUpdateMessageStatusParams.DeliveryStatus.DELIVERED)
+                    .engagementStatus(BulkUpdateMessageStatusParams.EngagementStatus.SEEN)
+                    .hasTenant(true)
+                    .newerThan(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
+                    .olderThan(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
+                    .addRecipientId("recipient1")
+                    .addRecipientId("recipient2")
+                    .addTenant("tenant1")
+                    .addTenant("tenant2")
+                    .triggerData("{\"key\":\"value\"}")
+                    .addWorkflow("workflow1")
+                    .addWorkflow("workflow2")
                     .build()
             )
 

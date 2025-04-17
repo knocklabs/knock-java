@@ -11,7 +11,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Revoke access for a Slack channel */
+/** Revoke access for a Slack channel. */
 class SlackRevokeAccessParams
 private constructor(
     private val channelId: String,
@@ -23,7 +23,7 @@ private constructor(
 
     fun channelId(): String = channelId
 
-    /** A JSON encoded string containing the access token object reference */
+    /** A JSON encoded string containing the access token object reference. */
     fun accessTokenObject(): String = accessTokenObject
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
@@ -69,7 +69,7 @@ private constructor(
 
         fun channelId(channelId: String) = apply { this.channelId = channelId }
 
-        /** A JSON encoded string containing the access token object reference */
+        /** A JSON encoded string containing the access token object reference. */
         fun accessTokenObject(accessTokenObject: String) = apply {
             this.accessTokenObject = accessTokenObject
         }

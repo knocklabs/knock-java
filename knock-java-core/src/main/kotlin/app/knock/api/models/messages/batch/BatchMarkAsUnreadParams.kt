@@ -10,7 +10,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Marks one or more messages as unread */
+/** Marks the given messages as unread. */
 class BatchMarkAsUnreadParams
 private constructor(
     private val additionalHeaders: Headers,

@@ -45,25 +45,32 @@ private constructor(
     ) : this(id, _typename, categories, channelTypes, workflows, mutableMapOf())
 
     /**
+     * Unique identifier for the preference set.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
 
     /**
+     * The type name of the schema.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun _typename(): String = _typename.getRequired("__typename")
 
     /**
+     * A setting for a preference set, where the key in the object is the category, and the values
+     * are the preference settings for that category.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun categories(): Optional<Categories> = categories.getOptional("categories")
 
     /**
-     * Channel type preferences
+     * Channel type preferences.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -72,6 +79,9 @@ private constructor(
         channelTypes.getOptional("channel_types")
 
     /**
+     * A setting for a preference set, where the key in the object is the workflow key, and the
+     * values are the preference settings for that workflow.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -162,6 +172,7 @@ private constructor(
             additionalProperties = preferenceSet.additionalProperties.toMutableMap()
         }
 
+        /** Unique identifier for the preference set. */
         fun id(id: String) = id(JsonField.of(id))
 
         /**
@@ -172,6 +183,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
+        /** The type name of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -183,6 +195,10 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
+        /**
+         * A setting for a preference set, where the key in the object is the category, and the
+         * values are the preference settings for that category.
+         */
         fun categories(categories: Categories?) = categories(JsonField.ofNullable(categories))
 
         /** Alias for calling [Builder.categories] with `categories.orElse(null)`. */
@@ -197,7 +213,7 @@ private constructor(
          */
         fun categories(categories: JsonField<Categories>) = apply { this.categories = categories }
 
-        /** Channel type preferences */
+        /** Channel type preferences. */
         fun channelTypes(channelTypes: PreferenceSetChannelTypes?) =
             channelTypes(JsonField.ofNullable(channelTypes))
 
@@ -216,6 +232,10 @@ private constructor(
             this.channelTypes = channelTypes
         }
 
+        /**
+         * A setting for a preference set, where the key in the object is the workflow key, and the
+         * values are the preference settings for that workflow.
+         */
         fun workflows(workflows: Workflows?) = workflows(JsonField.ofNullable(workflows))
 
         /** Alias for calling [Builder.workflows] with `workflows.orElse(null)`. */
@@ -309,6 +329,10 @@ private constructor(
             (channelTypes.asKnown().getOrNull()?.validity() ?: 0) +
             (workflows.asKnown().getOrNull()?.validity() ?: 0)
 
+    /**
+     * A setting for a preference set, where the key in the object is the category, and the values
+     * are the preference settings for that category.
+     */
     class Categories
     @JsonCreator
     private constructor(
@@ -410,6 +434,10 @@ private constructor(
         override fun toString() = "Categories{additionalProperties=$additionalProperties}"
     }
 
+    /**
+     * A setting for a preference set, where the key in the object is the workflow key, and the
+     * values are the preference settings for that workflow.
+     */
     class Workflows
     @JsonCreator
     private constructor(

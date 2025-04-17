@@ -77,11 +77,11 @@ internal class ServiceParamsTest {
                 .cancellationKey(null)
                 .data(
                     WorkflowTriggerParams.Data.builder()
-                        .putAdditionalProperty("park_id", JsonValue.from("prk_1"))
-                        .putAdditionalProperty(
-                            "welcome_message",
-                            JsonValue.from("Welcome, to Jurassic Park!"),
-                        )
+                        .putAdditionalProperty("dinosaur_names", JsonValue.from("bar"))
+                        .putAdditionalProperty("is_alert", JsonValue.from("bar"))
+                        .putAdditionalProperty("park_id", JsonValue.from("bar"))
+                        .putAdditionalProperty("severity", JsonValue.from("bar"))
+                        .putAdditionalProperty("welcome_message", JsonValue.from("bar"))
                         .build()
                 )
                 .addRecipient("jhammond")

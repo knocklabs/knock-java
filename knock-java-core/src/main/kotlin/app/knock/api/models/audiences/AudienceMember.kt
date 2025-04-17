@@ -13,16 +13,17 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
+import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A user belonging to an audience */
+/** An audience member. */
 class AudienceMember
 private constructor(
     private val _typename: JsonField<String>,
-    private val addedAt: JsonField<String>,
+    private val addedAt: JsonField<OffsetDateTime>,
     private val user: JsonField<User>,
     private val userId: JsonField<String>,
     private val tenant: JsonField<String>,
@@ -32,26 +33,32 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("added_at") @ExcludeMissing addedAt: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("added_at")
+        @ExcludeMissing
+        addedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("user") @ExcludeMissing user: JsonField<User> = JsonMissing.of(),
         @JsonProperty("user_id") @ExcludeMissing userId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("tenant") @ExcludeMissing tenant: JsonField<String> = JsonMissing.of(),
     ) : this(_typename, addedAt, user, userId, tenant, mutableMapOf())
 
     /**
+     * The type name of the schema.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun _typename(): String = _typename.getRequired("__typename")
 
     /**
+     * Timestamp when the resource was created.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun addedAt(): String = addedAt.getRequired("added_at")
+    fun addedAt(): OffsetDateTime = addedAt.getRequired("added_at")
 
     /**
-     * A user object
+     * A user object.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -59,12 +66,16 @@ private constructor(
     fun user(): User = user.getRequired("user")
 
     /**
+     * The unique identifier for the user.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun userId(): String = userId.getRequired("user_id")
 
     /**
+     * The unique identifier for the tenant.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -82,7 +93,7 @@ private constructor(
      *
      * Unlike [addedAt], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("added_at") @ExcludeMissing fun _addedAt(): JsonField<String> = addedAt
+    @JsonProperty("added_at") @ExcludeMissing fun _addedAt(): JsonField<OffsetDateTime> = addedAt
 
     /**
      * Returns the raw JSON value of [user].
@@ -137,7 +148,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var _typename: JsonField<String>? = null
-        private var addedAt: JsonField<String>? = null
+        private var addedAt: JsonField<OffsetDateTime>? = null
         private var user: JsonField<User>? = null
         private var userId: JsonField<String>? = null
         private var tenant: JsonField<String> = JsonMissing.of()
@@ -153,6 +164,7 @@ private constructor(
             additionalProperties = audienceMember.additionalProperties.toMutableMap()
         }
 
+        /** The type name of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -164,17 +176,19 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
-        fun addedAt(addedAt: String) = addedAt(JsonField.of(addedAt))
+        /** Timestamp when the resource was created. */
+        fun addedAt(addedAt: OffsetDateTime) = addedAt(JsonField.of(addedAt))
 
         /**
          * Sets [Builder.addedAt] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.addedAt] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.addedAt] with a well-typed [OffsetDateTime] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun addedAt(addedAt: JsonField<String>) = apply { this.addedAt = addedAt }
+        fun addedAt(addedAt: JsonField<OffsetDateTime>) = apply { this.addedAt = addedAt }
 
-        /** A user object */
+        /** A user object. */
         fun user(user: User) = user(JsonField.of(user))
 
         /**
@@ -185,6 +199,7 @@ private constructor(
          */
         fun user(user: JsonField<User>) = apply { this.user = user }
 
+        /** The unique identifier for the user. */
         fun userId(userId: String) = userId(JsonField.of(userId))
 
         /**
@@ -195,6 +210,7 @@ private constructor(
          */
         fun userId(userId: JsonField<String>) = apply { this.userId = userId }
 
+        /** The unique identifier for the tenant. */
         fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
 
         /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */

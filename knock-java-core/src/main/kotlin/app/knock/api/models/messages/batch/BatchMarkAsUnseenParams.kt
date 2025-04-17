@@ -10,7 +10,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Marks one or more messages as unseen */
+/** Marks the given messages as unseen. */
 class BatchMarkAsUnseenParams
 private constructor(
     private val additionalHeaders: Headers,

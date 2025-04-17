@@ -30,7 +30,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Discord channel data */
+/** Discord channel data. */
 class DiscordChannelData
 private constructor(
     private val connections: JsonField<List<Connection>>,
@@ -45,6 +45,8 @@ private constructor(
     ) : this(connections, mutableMapOf())
 
     /**
+     * List of Discord channel connections.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -96,6 +98,7 @@ private constructor(
             additionalProperties = discordChannelData.additionalProperties.toMutableMap()
         }
 
+        /** List of Discord channel connections. */
         fun connections(connections: List<Connection>) = connections(JsonField.of(connections))
 
         /**
@@ -121,15 +124,16 @@ private constructor(
                 }
         }
 
-        /** Alias for calling [addConnection] with `Connection.ofChannel(channel)`. */
-        fun addConnection(channel: Connection.ChannelConnection) =
-            addConnection(Connection.ofChannel(channel))
+        /** Alias for calling [addConnection] with `Connection.ofDiscordChannel(discordChannel)`. */
+        fun addConnection(discordChannel: Connection.DiscordChannelConnection) =
+            addConnection(Connection.ofDiscordChannel(discordChannel))
 
         /**
-         * Alias for calling [addConnection] with `Connection.ofIncomingWebhook(incomingWebhook)`.
+         * Alias for calling [addConnection] with
+         * `Connection.ofDiscordIncomingWebhook(discordIncomingWebhook)`.
          */
-        fun addConnection(incomingWebhook: Connection.IncomingWebhookConnection) =
-            addConnection(Connection.ofIncomingWebhook(incomingWebhook))
+        fun addConnection(discordIncomingWebhook: Connection.DiscordIncomingWebhookConnection) =
+            addConnection(Connection.ofDiscordIncomingWebhook(discordIncomingWebhook))
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -197,40 +201,45 @@ private constructor(
     internal fun validity(): Int =
         (connections.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
-    /** Discord channel connection */
+    /**
+     * Discord channel connection, either a channel connection or an incoming webhook connection.
+     */
     @JsonDeserialize(using = Connection.Deserializer::class)
     @JsonSerialize(using = Connection.Serializer::class)
     class Connection
     private constructor(
-        private val channel: ChannelConnection? = null,
-        private val incomingWebhook: IncomingWebhookConnection? = null,
+        private val discordChannel: DiscordChannelConnection? = null,
+        private val discordIncomingWebhook: DiscordIncomingWebhookConnection? = null,
         private val _json: JsonValue? = null,
     ) {
 
-        /** Discord channel connection */
-        fun channel(): Optional<ChannelConnection> = Optional.ofNullable(channel)
+        /** Discord channel connection. */
+        fun discordChannel(): Optional<DiscordChannelConnection> =
+            Optional.ofNullable(discordChannel)
 
-        /** An incoming webhook Slack connection */
-        fun incomingWebhook(): Optional<IncomingWebhookConnection> =
-            Optional.ofNullable(incomingWebhook)
+        /** Discord incoming webhook connection. */
+        fun discordIncomingWebhook(): Optional<DiscordIncomingWebhookConnection> =
+            Optional.ofNullable(discordIncomingWebhook)
 
-        fun isChannel(): Boolean = channel != null
+        fun isDiscordChannel(): Boolean = discordChannel != null
 
-        fun isIncomingWebhook(): Boolean = incomingWebhook != null
+        fun isDiscordIncomingWebhook(): Boolean = discordIncomingWebhook != null
 
-        /** Discord channel connection */
-        fun asChannel(): ChannelConnection = channel.getOrThrow("channel")
+        /** Discord channel connection. */
+        fun asDiscordChannel(): DiscordChannelConnection =
+            discordChannel.getOrThrow("discordChannel")
 
-        /** An incoming webhook Slack connection */
-        fun asIncomingWebhook(): IncomingWebhookConnection =
-            incomingWebhook.getOrThrow("incomingWebhook")
+        /** Discord incoming webhook connection. */
+        fun asDiscordIncomingWebhook(): DiscordIncomingWebhookConnection =
+            discordIncomingWebhook.getOrThrow("discordIncomingWebhook")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
-                channel != null -> visitor.visitChannel(channel)
-                incomingWebhook != null -> visitor.visitIncomingWebhook(incomingWebhook)
+                discordChannel != null -> visitor.visitDiscordChannel(discordChannel)
+                discordIncomingWebhook != null ->
+                    visitor.visitDiscordIncomingWebhook(discordIncomingWebhook)
                 else -> visitor.unknown(_json)
             }
 
@@ -243,12 +252,14 @@ private constructor(
 
             accept(
                 object : Visitor<Unit> {
-                    override fun visitChannel(channel: ChannelConnection) {
-                        channel.validate()
+                    override fun visitDiscordChannel(discordChannel: DiscordChannelConnection) {
+                        discordChannel.validate()
                     }
 
-                    override fun visitIncomingWebhook(incomingWebhook: IncomingWebhookConnection) {
-                        incomingWebhook.validate()
+                    override fun visitDiscordIncomingWebhook(
+                        discordIncomingWebhook: DiscordIncomingWebhookConnection
+                    ) {
+                        discordIncomingWebhook.validate()
                     }
                 }
             )
@@ -273,10 +284,12 @@ private constructor(
         internal fun validity(): Int =
             accept(
                 object : Visitor<Int> {
-                    override fun visitChannel(channel: ChannelConnection) = channel.validity()
+                    override fun visitDiscordChannel(discordChannel: DiscordChannelConnection) =
+                        discordChannel.validity()
 
-                    override fun visitIncomingWebhook(incomingWebhook: IncomingWebhookConnection) =
-                        incomingWebhook.validity()
+                    override fun visitDiscordIncomingWebhook(
+                        discordIncomingWebhook: DiscordIncomingWebhookConnection
+                    ) = discordIncomingWebhook.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -287,28 +300,31 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Connection && channel == other.channel && incomingWebhook == other.incomingWebhook /* spotless:on */
+            return /* spotless:off */ other is Connection && discordChannel == other.discordChannel && discordIncomingWebhook == other.discordIncomingWebhook /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(channel, incomingWebhook) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(discordChannel, discordIncomingWebhook) /* spotless:on */
 
         override fun toString(): String =
             when {
-                channel != null -> "Connection{channel=$channel}"
-                incomingWebhook != null -> "Connection{incomingWebhook=$incomingWebhook}"
+                discordChannel != null -> "Connection{discordChannel=$discordChannel}"
+                discordIncomingWebhook != null ->
+                    "Connection{discordIncomingWebhook=$discordIncomingWebhook}"
                 _json != null -> "Connection{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Connection")
             }
 
         companion object {
 
-            /** Discord channel connection */
-            @JvmStatic fun ofChannel(channel: ChannelConnection) = Connection(channel = channel)
-
-            /** An incoming webhook Slack connection */
+            /** Discord channel connection. */
             @JvmStatic
-            fun ofIncomingWebhook(incomingWebhook: IncomingWebhookConnection) =
-                Connection(incomingWebhook = incomingWebhook)
+            fun ofDiscordChannel(discordChannel: DiscordChannelConnection) =
+                Connection(discordChannel = discordChannel)
+
+            /** Discord incoming webhook connection. */
+            @JvmStatic
+            fun ofDiscordIncomingWebhook(discordIncomingWebhook: DiscordIncomingWebhookConnection) =
+                Connection(discordIncomingWebhook = discordIncomingWebhook)
         }
 
         /**
@@ -316,11 +332,13 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            /** Discord channel connection */
-            fun visitChannel(channel: ChannelConnection): T
+            /** Discord channel connection. */
+            fun visitDiscordChannel(discordChannel: DiscordChannelConnection): T
 
-            /** An incoming webhook Slack connection */
-            fun visitIncomingWebhook(incomingWebhook: IncomingWebhookConnection): T
+            /** Discord incoming webhook connection. */
+            fun visitDiscordIncomingWebhook(
+                discordIncomingWebhook: DiscordIncomingWebhookConnection
+            ): T
 
             /**
              * Maps an unknown variant of [Connection] to a value of type [T].
@@ -344,12 +362,11 @@ private constructor(
 
                 val bestMatches =
                     sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<ChannelConnection>())?.let {
-                                Connection(channel = it, _json = json)
+                            tryDeserialize(node, jacksonTypeRef<DiscordChannelConnection>())?.let {
+                                Connection(discordChannel = it, _json = json)
                             },
-                            tryDeserialize(node, jacksonTypeRef<IncomingWebhookConnection>())?.let {
-                                Connection(incomingWebhook = it, _json = json)
-                            },
+                            tryDeserialize(node, jacksonTypeRef<DiscordIncomingWebhookConnection>())
+                                ?.let { Connection(discordIncomingWebhook = it, _json = json) },
                         )
                         .filterNotNull()
                         .allMaxBy { it.validity() }
@@ -375,16 +392,17 @@ private constructor(
                 provider: SerializerProvider,
             ) {
                 when {
-                    value.channel != null -> generator.writeObject(value.channel)
-                    value.incomingWebhook != null -> generator.writeObject(value.incomingWebhook)
+                    value.discordChannel != null -> generator.writeObject(value.discordChannel)
+                    value.discordIncomingWebhook != null ->
+                        generator.writeObject(value.discordIncomingWebhook)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Connection")
                 }
             }
         }
 
-        /** Discord channel connection */
-        class ChannelConnection
+        /** Discord channel connection. */
+        class DiscordChannelConnection
         private constructor(
             private val channelId: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
@@ -398,7 +416,7 @@ private constructor(
             ) : this(channelId, mutableMapOf())
 
             /**
-             * The Discord channel ID
+             * Discord channel ID.
              *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -431,7 +449,8 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of [ChannelConnection].
+                 * Returns a mutable builder for constructing an instance of
+                 * [DiscordChannelConnection].
                  *
                  * The following fields are required:
                  * ```java
@@ -441,19 +460,20 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            /** A builder for [ChannelConnection]. */
+            /** A builder for [DiscordChannelConnection]. */
             class Builder internal constructor() {
 
                 private var channelId: JsonField<String>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(channelConnection: ChannelConnection) = apply {
-                    channelId = channelConnection.channelId
-                    additionalProperties = channelConnection.additionalProperties.toMutableMap()
+                internal fun from(discordChannelConnection: DiscordChannelConnection) = apply {
+                    channelId = discordChannelConnection.channelId
+                    additionalProperties =
+                        discordChannelConnection.additionalProperties.toMutableMap()
                 }
 
-                /** The Discord channel ID */
+                /** Discord channel ID. */
                 fun channelId(channelId: String) = channelId(JsonField.of(channelId))
 
                 /**
@@ -488,7 +508,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [ChannelConnection].
+                 * Returns an immutable instance of [DiscordChannelConnection].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -499,8 +519,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): ChannelConnection =
-                    ChannelConnection(
+                fun build(): DiscordChannelConnection =
+                    DiscordChannelConnection(
                         checkRequired("channelId", channelId),
                         additionalProperties.toMutableMap(),
                     )
@@ -508,7 +528,7 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): ChannelConnection = apply {
+            fun validate(): DiscordChannelConnection = apply {
                 if (validated) {
                     return@apply
                 }
@@ -539,7 +559,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ChannelConnection && channelId == other.channelId && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is DiscordChannelConnection && channelId == other.channelId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -549,34 +569,41 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "ChannelConnection{channelId=$channelId, additionalProperties=$additionalProperties}"
+                "DiscordChannelConnection{channelId=$channelId, additionalProperties=$additionalProperties}"
         }
 
-        /** An incoming webhook Slack connection */
-        class IncomingWebhookConnection
+        /** Discord incoming webhook connection. */
+        class DiscordIncomingWebhookConnection
         private constructor(
-            private val url: JsonField<String>,
+            private val incomingWebhook: JsonField<IncomingWebhook>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of()
-            ) : this(url, mutableMapOf())
+                @JsonProperty("incoming_webhook")
+                @ExcludeMissing
+                incomingWebhook: JsonField<IncomingWebhook> = JsonMissing.of()
+            ) : this(incomingWebhook, mutableMapOf())
 
             /**
+             * Discord incoming webhook object.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun url(): String = url.getRequired("url")
+            fun incomingWebhook(): IncomingWebhook = incomingWebhook.getRequired("incoming_webhook")
 
             /**
-             * Returns the raw JSON value of [url].
+             * Returns the raw JSON value of [incomingWebhook].
              *
-             * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+             * Unlike [incomingWebhook], this method doesn't throw if the JSON field has an
+             * unexpected type.
              */
-            @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+            @JsonProperty("incoming_webhook")
+            @ExcludeMissing
+            fun _incomingWebhook(): JsonField<IncomingWebhook> = incomingWebhook
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -594,39 +621,45 @@ private constructor(
 
                 /**
                  * Returns a mutable builder for constructing an instance of
-                 * [IncomingWebhookConnection].
+                 * [DiscordIncomingWebhookConnection].
                  *
                  * The following fields are required:
                  * ```java
-                 * .url()
+                 * .incomingWebhook()
                  * ```
                  */
                 @JvmStatic fun builder() = Builder()
             }
 
-            /** A builder for [IncomingWebhookConnection]. */
+            /** A builder for [DiscordIncomingWebhookConnection]. */
             class Builder internal constructor() {
 
-                private var url: JsonField<String>? = null
+                private var incomingWebhook: JsonField<IncomingWebhook>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(incomingWebhookConnection: IncomingWebhookConnection) = apply {
-                    url = incomingWebhookConnection.url
+                internal fun from(
+                    discordIncomingWebhookConnection: DiscordIncomingWebhookConnection
+                ) = apply {
+                    incomingWebhook = discordIncomingWebhookConnection.incomingWebhook
                     additionalProperties =
-                        incomingWebhookConnection.additionalProperties.toMutableMap()
+                        discordIncomingWebhookConnection.additionalProperties.toMutableMap()
                 }
 
-                fun url(url: String) = url(JsonField.of(url))
+                /** Discord incoming webhook object. */
+                fun incomingWebhook(incomingWebhook: IncomingWebhook) =
+                    incomingWebhook(JsonField.of(incomingWebhook))
 
                 /**
-                 * Sets [Builder.url] to an arbitrary JSON value.
+                 * Sets [Builder.incomingWebhook] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.url] with a well-typed [String] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.incomingWebhook] with a well-typed
+                 * [IncomingWebhook] value instead. This method is primarily for setting the field
+                 * to an undocumented or not yet supported value.
                  */
-                fun url(url: JsonField<String>) = apply { this.url = url }
+                fun incomingWebhook(incomingWebhook: JsonField<IncomingWebhook>) = apply {
+                    this.incomingWebhook = incomingWebhook
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -651,32 +684,32 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [IncomingWebhookConnection].
+                 * Returns an immutable instance of [DiscordIncomingWebhookConnection].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
                  * ```java
-                 * .url()
+                 * .incomingWebhook()
                  * ```
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): IncomingWebhookConnection =
-                    IncomingWebhookConnection(
-                        checkRequired("url", url),
+                fun build(): DiscordIncomingWebhookConnection =
+                    DiscordIncomingWebhookConnection(
+                        checkRequired("incomingWebhook", incomingWebhook),
                         additionalProperties.toMutableMap(),
                     )
             }
 
             private var validated: Boolean = false
 
-            fun validate(): IncomingWebhookConnection = apply {
+            fun validate(): DiscordIncomingWebhookConnection = apply {
                 if (validated) {
                     return@apply
                 }
 
-                url()
+                incomingWebhook().validate()
                 validated = true
             }
 
@@ -694,24 +727,188 @@ private constructor(
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic internal fun validity(): Int = (if (url.asKnown().isPresent) 1 else 0)
+            @JvmSynthetic
+            internal fun validity(): Int = (incomingWebhook.asKnown().getOrNull()?.validity() ?: 0)
+
+            /** Discord incoming webhook object. */
+            class IncomingWebhook
+            private constructor(
+                private val url: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of()
+                ) : this(url, mutableMapOf())
+
+                /**
+                 * Incoming webhook URL.
+                 *
+                 * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
+                fun url(): String = url.getRequired("url")
+
+                /**
+                 * Returns the raw JSON value of [url].
+                 *
+                 * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /**
+                     * Returns a mutable builder for constructing an instance of [IncomingWebhook].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .url()
+                     * ```
+                     */
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                /** A builder for [IncomingWebhook]. */
+                class Builder internal constructor() {
+
+                    private var url: JsonField<String>? = null
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(incomingWebhook: IncomingWebhook) = apply {
+                        url = incomingWebhook.url
+                        additionalProperties = incomingWebhook.additionalProperties.toMutableMap()
+                    }
+
+                    /** Incoming webhook URL. */
+                    fun url(url: String) = url(JsonField.of(url))
+
+                    /**
+                     * Sets [Builder.url] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.url] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun url(url: JsonField<String>) = apply { this.url = url }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [IncomingWebhook].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .url()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
+                    fun build(): IncomingWebhook =
+                        IncomingWebhook(
+                            checkRequired("url", url),
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): IncomingWebhook = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    url()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: KnockInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = (if (url.asKnown().isPresent) 1 else 0)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is IncomingWebhook && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                /* spotless:off */
+                private val hashCode: Int by lazy { Objects.hash(url, additionalProperties) }
+                /* spotless:on */
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "IncomingWebhook{url=$url, additionalProperties=$additionalProperties}"
+            }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is IncomingWebhookConnection && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is DiscordIncomingWebhookConnection && incomingWebhook == other.incomingWebhook && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(url, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(incomingWebhook, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "IncomingWebhookConnection{url=$url, additionalProperties=$additionalProperties}"
+                "DiscordIncomingWebhookConnection{incomingWebhook=$incomingWebhook, additionalProperties=$additionalProperties}"
         }
     }
 

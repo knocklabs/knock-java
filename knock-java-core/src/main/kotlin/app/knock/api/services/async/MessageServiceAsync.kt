@@ -36,7 +36,7 @@ interface MessageServiceAsync {
 
     fun batch(): BatchServiceAsync
 
-    /** Returns a paginated list of messages */
+    /** Returns a paginated list of messages for the current environment. */
     fun list(): CompletableFuture<MessageListPageAsync> = list(MessageListParams.none())
 
     /** @see [list] */
@@ -54,7 +54,10 @@ interface MessageServiceAsync {
     fun list(requestOptions: RequestOptions): CompletableFuture<MessageListPageAsync> =
         list(MessageListParams.none(), requestOptions)
 
-    /** Archives a message */
+    /**
+     * Archives a message for the current user. Archived messages are hidden from the default
+     * message list but can still be accessed and unarchived later.
+     */
     fun archive(params: MessageArchiveParams): CompletableFuture<Message> =
         archive(params, RequestOptions.none())
 
@@ -64,7 +67,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Retrieves a single message */
+    /** Retrieves a specific message by its ID. */
     fun get(params: MessageGetParams): CompletableFuture<Message> =
         get(params, RequestOptions.none())
 
@@ -74,7 +77,10 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Get the contents of a message */
+    /**
+     * Returns the fully rendered contents of a message, where the response depends on which channel
+     * the message was sent through.
+     */
     fun getContent(params: MessageGetContentParams): CompletableFuture<MessageGetContentResponse> =
         getContent(params, RequestOptions.none())
 
@@ -84,7 +90,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<MessageGetContentResponse>
 
-    /** Get activities for a message */
+    /** Returns a paginated list of activities for the specified message. */
     fun listActivities(
         params: MessageListActivitiesParams
     ): CompletableFuture<MessageListActivitiesPageAsync> =
@@ -96,7 +102,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<MessageListActivitiesPageAsync>
 
-    /** Get delivery logs for a message */
+    /** Returns a paginated list of delivery logs for the specified message. */
     fun listDeliveryLogs(
         params: MessageListDeliveryLogsParams
     ): CompletableFuture<MessageListDeliveryLogsPageAsync> =
@@ -108,7 +114,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<MessageListDeliveryLogsPageAsync>
 
-    /** Get events for a message */
+    /** Returns a paginated list of events for the specified message. */
     fun listEvents(params: MessageListEventsParams): CompletableFuture<MessageListEventsPageAsync> =
         listEvents(params, RequestOptions.none())
 
@@ -118,7 +124,10 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<MessageListEventsPageAsync>
 
-    /** Marks a message as interacted with */
+    /**
+     * Marks a message as interacted with by the current user. This can include any user action on
+     * the message, with optional metadata about the specific interaction.
+     */
     fun markAsInteracted(params: MessageMarkAsInteractedParams): CompletableFuture<Message> =
         markAsInteracted(params, RequestOptions.none())
 
@@ -128,7 +137,10 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Marks a message as read */
+    /**
+     * Marks a message as read for the current user. This indicates that the user has read the
+     * message content.
+     */
     fun markAsRead(params: MessageMarkAsReadParams): CompletableFuture<Message> =
         markAsRead(params, RequestOptions.none())
 
@@ -138,7 +150,10 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Marks a message as seen */
+    /**
+     * Marks a message as seen for the current user. This indicates that the user has viewed the
+     * message in their feed or inbox.
+     */
     fun markAsSeen(params: MessageMarkAsSeenParams): CompletableFuture<Message> =
         markAsSeen(params, RequestOptions.none())
 
@@ -148,7 +163,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Marks a message as unread */
+    /** Marks a message as unread for the current user, reversing the read state. */
     fun markAsUnread(params: MessageMarkAsUnreadParams): CompletableFuture<Message> =
         markAsUnread(params, RequestOptions.none())
 
@@ -158,7 +173,7 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Marks a message as unseen */
+    /** Marks a message as unseen for the current user, reversing the seen state. */
     fun markAsUnseen(params: MessageMarkAsUnseenParams): CompletableFuture<Message> =
         markAsUnseen(params, RequestOptions.none())
 
@@ -168,7 +183,10 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Unarchives a message */
+    /**
+     * Removes a message from the archived state, making it visible in the default message list
+     * again.
+     */
     fun unarchive(params: MessageUnarchiveParams): CompletableFuture<Message> =
         unarchive(params, RequestOptions.none())
 

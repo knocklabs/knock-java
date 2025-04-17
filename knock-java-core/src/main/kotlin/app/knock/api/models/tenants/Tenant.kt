@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
 
-/** A tenant entity */
+/** A tenant entity. */
 class Tenant
 private constructor(
     private val id: JsonField<String>,
@@ -30,12 +30,16 @@ private constructor(
     ) : this(id, _typename, mutableMapOf())
 
     /**
+     * The unique identifier for the tenant.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
 
     /**
+     * The type name of the schema.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -95,6 +99,7 @@ private constructor(
             additionalProperties = tenant.additionalProperties.toMutableMap()
         }
 
+        /** The unique identifier for the tenant. */
         fun id(id: String) = id(JsonField.of(id))
 
         /**
@@ -105,6 +110,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
+        /** The type name of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**

@@ -54,7 +54,7 @@ internal class PreferenceSetTest {
                         .inAppFeed(true)
                         .push(false)
                         .sms(
-                            PreferenceSetChannelTypes.Sms.Conditions.builder()
+                            PreferenceSetChannelTypeSetting.builder()
                                 .addCondition(
                                     Condition.builder()
                                         .argument("US")
@@ -75,22 +75,11 @@ internal class PreferenceSetTest {
                                     "channel_types" to
                                         mapOf(
                                             "chat" to true,
-                                            "email" to true,
+                                            "email" to false,
                                             "http" to true,
                                             "in_app_feed" to true,
                                             "push" to true,
-                                            "sms" to
-                                                mapOf(
-                                                    "conditions" to
-                                                        listOf(
-                                                            mapOf(
-                                                                "argument" to "US",
-                                                                "operator" to "equal_to",
-                                                                "variable" to
-                                                                    "recipient.country_code",
-                                                            )
-                                                        )
-                                                ),
+                                            "sms" to true,
                                         ),
                                     "conditions" to
                                         listOf(
@@ -148,7 +137,7 @@ internal class PreferenceSetTest {
                     .inAppFeed(true)
                     .push(false)
                     .sms(
-                        PreferenceSetChannelTypes.Sms.Conditions.builder()
+                        PreferenceSetChannelTypeSetting.builder()
                             .addCondition(
                                 Condition.builder()
                                     .argument("US")
@@ -170,21 +159,11 @@ internal class PreferenceSetTest {
                                 "channel_types" to
                                     mapOf(
                                         "chat" to true,
-                                        "email" to true,
+                                        "email" to false,
                                         "http" to true,
                                         "in_app_feed" to true,
                                         "push" to true,
-                                        "sms" to
-                                            mapOf(
-                                                "conditions" to
-                                                    listOf(
-                                                        mapOf(
-                                                            "argument" to "US",
-                                                            "operator" to "equal_to",
-                                                            "variable" to "recipient.country_code",
-                                                        )
-                                                    )
-                                            ),
+                                        "sms" to true,
                                     ),
                                 "conditions" to
                                     listOf(
@@ -245,7 +224,7 @@ internal class PreferenceSetTest {
                         .inAppFeed(true)
                         .push(false)
                         .sms(
-                            PreferenceSetChannelTypes.Sms.Conditions.builder()
+                            PreferenceSetChannelTypeSetting.builder()
                                 .addCondition(
                                     Condition.builder()
                                         .argument("US")
@@ -266,22 +245,11 @@ internal class PreferenceSetTest {
                                     "channel_types" to
                                         mapOf(
                                             "chat" to true,
-                                            "email" to true,
+                                            "email" to false,
                                             "http" to true,
                                             "in_app_feed" to true,
                                             "push" to true,
-                                            "sms" to
-                                                mapOf(
-                                                    "conditions" to
-                                                        listOf(
-                                                            mapOf(
-                                                                "argument" to "US",
-                                                                "operator" to "equal_to",
-                                                                "variable" to
-                                                                    "recipient.country_code",
-                                                            )
-                                                        )
-                                                ),
+                                            "sms" to true,
                                         ),
                                     "conditions" to
                                         listOf(

@@ -7,19 +7,18 @@ import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
-import app.knock.api.core.toImmutable
+import app.knock.api.models.recipients.channeldata.ChannelDataRequest
 import java.util.Objects
-import java.util.Optional
 
-/** Set channel data for an object */
+/** Sets the channel data for the specified object and channel. */
 class ObjectSetChannelDataParams
 private constructor(
     private val collection: String,
     private val objectId: String,
     private val channelId: String,
+    private val channelDataRequest: ChannelDataRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
     fun collection(): String = collection
@@ -28,7 +27,11 @@ private constructor(
 
     fun channelId(): String = channelId
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    /** A request to set channel data for a type of channel. */
+    fun channelDataRequest(): ChannelDataRequest = channelDataRequest
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> =
+        channelDataRequest._additionalProperties()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -46,6 +49,7 @@ private constructor(
          * .collection()
          * .objectId()
          * .channelId()
+         * .channelDataRequest()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -57,19 +61,18 @@ private constructor(
         private var collection: String? = null
         private var objectId: String? = null
         private var channelId: String? = null
+        private var channelDataRequest: ChannelDataRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(objectSetChannelDataParams: ObjectSetChannelDataParams) = apply {
             collection = objectSetChannelDataParams.collection
             objectId = objectSetChannelDataParams.objectId
             channelId = objectSetChannelDataParams.channelId
+            channelDataRequest = objectSetChannelDataParams.channelDataRequest
             additionalHeaders = objectSetChannelDataParams.additionalHeaders.toBuilder()
             additionalQueryParams = objectSetChannelDataParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                objectSetChannelDataParams.additionalBodyProperties.toMutableMap()
         }
 
         fun collection(collection: String) = apply { this.collection = collection }
@@ -77,6 +80,11 @@ private constructor(
         fun objectId(objectId: String) = apply { this.objectId = objectId }
 
         fun channelId(channelId: String) = apply { this.channelId = channelId }
+
+        /** A request to set channel data for a type of channel. */
+        fun channelDataRequest(channelDataRequest: ChannelDataRequest) = apply {
+            this.channelDataRequest = channelDataRequest
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -176,28 +184,6 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
-        }
-
         /**
          * Returns an immutable instance of [ObjectSetChannelDataParams].
          *
@@ -208,6 +194,7 @@ private constructor(
          * .collection()
          * .objectId()
          * .channelId()
+         * .channelDataRequest()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -217,14 +204,13 @@ private constructor(
                 checkRequired("collection", collection),
                 checkRequired("objectId", objectId),
                 checkRequired("channelId", channelId),
+                checkRequired("channelDataRequest", channelDataRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
-    fun _body(): Optional<Map<String, JsonValue>> =
-        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+    fun _body(): ChannelDataRequest = channelDataRequest
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -243,11 +229,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectSetChannelDataParams && collection == other.collection && objectId == other.objectId && channelId == other.channelId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is ObjectSetChannelDataParams && collection == other.collection && objectId == other.objectId && channelId == other.channelId && channelDataRequest == other.channelDataRequest && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, channelId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, channelId, channelDataRequest, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ObjectSetChannelDataParams{collection=$collection, objectId=$objectId, channelId=$channelId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "ObjectSetChannelDataParams{collection=$collection, objectId=$objectId, channelId=$channelId, channelDataRequest=$channelDataRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

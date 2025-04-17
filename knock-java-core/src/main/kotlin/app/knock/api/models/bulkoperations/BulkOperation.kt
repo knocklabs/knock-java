@@ -21,7 +21,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A bulk operation entity */
+/** A bulk operation entity. */
 class BulkOperation
 private constructor(
     private val id: JsonField<String>,
@@ -94,73 +94,95 @@ private constructor(
     )
 
     /**
+     * Unique identifier for the bulk operation.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
 
     /**
+     * The type name of the schema.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun _typename(): String = _typename.getRequired("__typename")
 
     /**
+     * The estimated total number of rows to process.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun estimatedTotalRows(): Long = estimatedTotalRows.getRequired("estimated_total_rows")
 
     /**
+     * Timestamp when the resource was created.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun insertedAt(): OffsetDateTime = insertedAt.getRequired("inserted_at")
 
     /**
+     * The name of the bulk operation.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun name(): String = name.getRequired("name")
 
     /**
+     * The number of rows processed so far.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun processedRows(): Long = processedRows.getRequired("processed_rows")
 
     /**
+     * The status of the bulk operation. One of: queued, processing, completed, failed.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun status(): Status = status.getRequired("status")
 
     /**
+     * The number of successful operations.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun successCount(): Long = successCount.getRequired("success_count")
 
     /**
+     * The timestamp when the resource was last updated.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
     /**
+     * Timestamp when the bulk operation was completed.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun completedAt(): Optional<OffsetDateTime> = completedAt.getOptional("completed_at")
 
     /**
+     * The number of failed operations.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun errorCount(): Optional<Long> = errorCount.getOptional("error_count")
 
     /**
-     * A list of items that failed to be processed
+     * A list of items that failed to be processed.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -168,12 +190,16 @@ private constructor(
     fun errorItems(): Optional<List<ErrorItem>> = errorItems.getOptional("error_items")
 
     /**
+     * Timestamp when the bulk operation failed.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun failedAt(): Optional<OffsetDateTime> = failedAt.getOptional("failed_at")
 
     /**
+     * Timestamp when the bulk operation was started.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -365,6 +391,7 @@ private constructor(
             additionalProperties = bulkOperation.additionalProperties.toMutableMap()
         }
 
+        /** Unique identifier for the bulk operation. */
         fun id(id: String) = id(JsonField.of(id))
 
         /**
@@ -375,6 +402,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
+        /** The type name of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -386,6 +414,7 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
+        /** The estimated total number of rows to process. */
         fun estimatedTotalRows(estimatedTotalRows: Long) =
             estimatedTotalRows(JsonField.of(estimatedTotalRows))
 
@@ -400,6 +429,7 @@ private constructor(
             this.estimatedTotalRows = estimatedTotalRows
         }
 
+        /** Timestamp when the resource was created. */
         fun insertedAt(insertedAt: OffsetDateTime) = insertedAt(JsonField.of(insertedAt))
 
         /**
@@ -413,6 +443,7 @@ private constructor(
             this.insertedAt = insertedAt
         }
 
+        /** The name of the bulk operation. */
         fun name(name: String) = name(JsonField.of(name))
 
         /**
@@ -423,6 +454,7 @@ private constructor(
          */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
+        /** The number of rows processed so far. */
         fun processedRows(processedRows: Long) = processedRows(JsonField.of(processedRows))
 
         /**
@@ -436,6 +468,7 @@ private constructor(
             this.processedRows = processedRows
         }
 
+        /** The status of the bulk operation. One of: queued, processing, completed, failed. */
         fun status(status: Status) = status(JsonField.of(status))
 
         /**
@@ -446,6 +479,7 @@ private constructor(
          */
         fun status(status: JsonField<Status>) = apply { this.status = status }
 
+        /** The number of successful operations. */
         fun successCount(successCount: Long) = successCount(JsonField.of(successCount))
 
         /**
@@ -457,6 +491,7 @@ private constructor(
          */
         fun successCount(successCount: JsonField<Long>) = apply { this.successCount = successCount }
 
+        /** The timestamp when the resource was last updated. */
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
         /**
@@ -468,6 +503,7 @@ private constructor(
          */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
+        /** Timestamp when the bulk operation was completed. */
         fun completedAt(completedAt: OffsetDateTime?) =
             completedAt(JsonField.ofNullable(completedAt))
 
@@ -486,6 +522,7 @@ private constructor(
             this.completedAt = completedAt
         }
 
+        /** The number of failed operations. */
         fun errorCount(errorCount: Long) = errorCount(JsonField.of(errorCount))
 
         /**
@@ -496,7 +533,7 @@ private constructor(
          */
         fun errorCount(errorCount: JsonField<Long>) = apply { this.errorCount = errorCount }
 
-        /** A list of items that failed to be processed */
+        /** A list of items that failed to be processed. */
         fun errorItems(errorItems: List<ErrorItem>) = errorItems(JsonField.of(errorItems))
 
         /**
@@ -522,6 +559,7 @@ private constructor(
                 }
         }
 
+        /** Timestamp when the bulk operation failed. */
         fun failedAt(failedAt: OffsetDateTime?) = failedAt(JsonField.ofNullable(failedAt))
 
         /** Alias for calling [Builder.failedAt] with `failedAt.orElse(null)`. */
@@ -536,6 +574,7 @@ private constructor(
          */
         fun failedAt(failedAt: JsonField<OffsetDateTime>) = apply { this.failedAt = failedAt }
 
+        /** Timestamp when the bulk operation was started. */
         fun startedAt(startedAt: OffsetDateTime?) = startedAt(JsonField.ofNullable(startedAt))
 
         /** Alias for calling [Builder.startedAt] with `startedAt.orElse(null)`. */
@@ -663,6 +702,7 @@ private constructor(
             (if (failedAt.asKnown().isPresent) 1 else 0) +
             (if (startedAt.asKnown().isPresent) 1 else 0)
 
+    /** The status of the bulk operation. One of: queued, processing, completed, failed. */
     class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
@@ -815,12 +855,16 @@ private constructor(
         ) : this(id, collection, mutableMapOf())
 
         /**
+         * Unique identifier for the object.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun id(): String = id.getRequired("id")
 
         /**
+         * The collection this object belongs to.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
@@ -881,6 +925,7 @@ private constructor(
                 additionalProperties = errorItem.additionalProperties.toMutableMap()
             }
 
+            /** Unique identifier for the object. */
             fun id(id: String) = id(JsonField.of(id))
 
             /**
@@ -892,6 +937,7 @@ private constructor(
              */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
+            /** The collection this object belongs to. */
             fun collection(collection: String?) = collection(JsonField.ofNullable(collection))
 
             /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */

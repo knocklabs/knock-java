@@ -12,6 +12,7 @@ import app.knock.api.core.JsonValue
 import app.knock.api.core.allMaxBy
 import app.knock.api.core.checkRequired
 import app.knock.api.core.getOrThrow
+import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -30,7 +31,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A single event that occurred for a message */
+/** A message event. */
 class MessageEvent
 private constructor(
     private val id: JsonField<String>,
@@ -38,7 +39,7 @@ private constructor(
     private val insertedAt: JsonField<OffsetDateTime>,
     private val recipient: JsonField<Recipient>,
     private val type: JsonField<Type>,
-    private val data: JsonValue,
+    private val data: JsonField<Data>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -53,22 +54,28 @@ private constructor(
         @ExcludeMissing
         recipient: JsonField<Recipient> = JsonMissing.of(),
         @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-        @JsonProperty("data") @ExcludeMissing data: JsonValue = JsonMissing.of(),
+        @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
     ) : this(id, _typename, insertedAt, recipient, type, data, mutableMapOf())
 
     /**
+     * The unique identifier for the message event.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
 
     /**
+     * The type name of the schema.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun _typename(): String = _typename.getRequired("__typename")
 
     /**
+     * Timestamp when the event was created.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -84,13 +91,20 @@ private constructor(
     fun recipient(): Recipient = recipient.getRequired("recipient")
 
     /**
+     * The type of event that occurred.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun type(): Type = type.getRequired("type")
 
-    /** The data associated with the event. Only present for some event types */
-    @JsonProperty("data") @ExcludeMissing fun _data(): JsonValue = data
+    /**
+     * The data associated with the message event. Only present for some event types.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun data(): Optional<Data> = data.getOptional("data")
 
     /**
      * Returns the raw JSON value of [id].
@@ -129,6 +143,13 @@ private constructor(
      */
     @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
 
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -166,7 +187,7 @@ private constructor(
         private var insertedAt: JsonField<OffsetDateTime>? = null
         private var recipient: JsonField<Recipient>? = null
         private var type: JsonField<Type>? = null
-        private var data: JsonValue = JsonMissing.of()
+        private var data: JsonField<Data> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -180,6 +201,7 @@ private constructor(
             additionalProperties = messageEvent.additionalProperties.toMutableMap()
         }
 
+        /** The unique identifier for the message event. */
         fun id(id: String) = id(JsonField.of(id))
 
         /**
@@ -190,6 +212,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
+        /** The type name of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -201,6 +224,7 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
+        /** Timestamp when the event was created. */
         fun insertedAt(insertedAt: OffsetDateTime) = insertedAt(JsonField.of(insertedAt))
 
         /**
@@ -232,10 +256,11 @@ private constructor(
         /** Alias for calling [recipient] with `Recipient.ofString(string)`. */
         fun recipient(string: String) = recipient(Recipient.ofString(string))
 
-        /** Alias for calling [recipient] with `Recipient.ofUnionMember1(unionMember1)`. */
-        fun recipient(unionMember1: Recipient.UnionMember1) =
-            recipient(Recipient.ofUnionMember1(unionMember1))
+        /** Alias for calling [recipient] with `Recipient.ofObjectReference(objectReference)`. */
+        fun recipient(objectReference: Recipient.ObjectReference) =
+            recipient(Recipient.ofObjectReference(objectReference))
 
+        /** The type of event that occurred. */
         fun type(type: Type) = type(JsonField.of(type))
 
         /**
@@ -246,8 +271,19 @@ private constructor(
          */
         fun type(type: JsonField<Type>) = apply { this.type = type }
 
-        /** The data associated with the event. Only present for some event types */
-        fun data(data: JsonValue) = apply { this.data = data }
+        /** The data associated with the message event. Only present for some event types. */
+        fun data(data: Data?) = data(JsonField.ofNullable(data))
+
+        /** Alias for calling [Builder.data] with `data.orElse(null)`. */
+        fun data(data: Optional<Data>) = data(data.getOrNull())
+
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun data(data: JsonField<Data>) = apply { this.data = data }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -308,6 +344,7 @@ private constructor(
         insertedAt()
         recipient().validate()
         type().validate()
+        data().ifPresent { it.validate() }
         validated = true
     }
 
@@ -330,7 +367,8 @@ private constructor(
             (if (_typename.asKnown().isPresent) 1 else 0) +
             (if (insertedAt.asKnown().isPresent) 1 else 0) +
             (recipient.asKnown().getOrNull()?.validity() ?: 0) +
-            (type.asKnown().getOrNull()?.validity() ?: 0)
+            (type.asKnown().getOrNull()?.validity() ?: 0) +
+            (data.asKnown().getOrNull()?.validity() ?: 0)
 
     /**
      * A reference to a recipient, either a user identifier (string) or an object reference (id,
@@ -341,32 +379,32 @@ private constructor(
     class Recipient
     private constructor(
         private val string: String? = null,
-        private val unionMember1: UnionMember1? = null,
+        private val objectReference: ObjectReference? = null,
         private val _json: JsonValue? = null,
     ) {
 
-        /** A user identifier */
+        /** An identifier for a user recipient. */
         fun string(): Optional<String> = Optional.ofNullable(string)
 
-        /** An object reference to a recipient */
-        fun unionMember1(): Optional<UnionMember1> = Optional.ofNullable(unionMember1)
+        /** An object reference to a recipient. */
+        fun objectReference(): Optional<ObjectReference> = Optional.ofNullable(objectReference)
 
         fun isString(): Boolean = string != null
 
-        fun isUnionMember1(): Boolean = unionMember1 != null
+        fun isObjectReference(): Boolean = objectReference != null
 
-        /** A user identifier */
+        /** An identifier for a user recipient. */
         fun asString(): String = string.getOrThrow("string")
 
-        /** An object reference to a recipient */
-        fun asUnionMember1(): UnionMember1 = unionMember1.getOrThrow("unionMember1")
+        /** An object reference to a recipient. */
+        fun asObjectReference(): ObjectReference = objectReference.getOrThrow("objectReference")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 string != null -> visitor.visitString(string)
-                unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
+                objectReference != null -> visitor.visitObjectReference(objectReference)
                 else -> visitor.unknown(_json)
             }
 
@@ -381,8 +419,8 @@ private constructor(
                 object : Visitor<Unit> {
                     override fun visitString(string: String) {}
 
-                    override fun visitUnionMember1(unionMember1: UnionMember1) {
-                        unionMember1.validate()
+                    override fun visitObjectReference(objectReference: ObjectReference) {
+                        objectReference.validate()
                     }
                 }
             )
@@ -409,8 +447,8 @@ private constructor(
                 object : Visitor<Int> {
                     override fun visitString(string: String) = 1
 
-                    override fun visitUnionMember1(unionMember1: UnionMember1) =
-                        unionMember1.validity()
+                    override fun visitObjectReference(objectReference: ObjectReference) =
+                        objectReference.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -421,27 +459,28 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Recipient && string == other.string && unionMember1 == other.unionMember1 /* spotless:on */
+            return /* spotless:off */ other is Recipient && string == other.string && objectReference == other.objectReference /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, unionMember1) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, objectReference) /* spotless:on */
 
         override fun toString(): String =
             when {
                 string != null -> "Recipient{string=$string}"
-                unionMember1 != null -> "Recipient{unionMember1=$unionMember1}"
+                objectReference != null -> "Recipient{objectReference=$objectReference}"
                 _json != null -> "Recipient{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Recipient")
             }
 
         companion object {
 
-            /** A user identifier */
+            /** An identifier for a user recipient. */
             @JvmStatic fun ofString(string: String) = Recipient(string = string)
 
-            /** An object reference to a recipient */
+            /** An object reference to a recipient. */
             @JvmStatic
-            fun ofUnionMember1(unionMember1: UnionMember1) = Recipient(unionMember1 = unionMember1)
+            fun ofObjectReference(objectReference: ObjectReference) =
+                Recipient(objectReference = objectReference)
         }
 
         /**
@@ -449,11 +488,11 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            /** A user identifier */
+            /** An identifier for a user recipient. */
             fun visitString(string: String): T
 
-            /** An object reference to a recipient */
-            fun visitUnionMember1(unionMember1: UnionMember1): T
+            /** An object reference to a recipient. */
+            fun visitObjectReference(objectReference: ObjectReference): T
 
             /**
              * Maps an unknown variant of [Recipient] to a value of type [T].
@@ -477,8 +516,8 @@ private constructor(
 
                 val bestMatches =
                     sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<UnionMember1>())?.let {
-                                Recipient(unionMember1 = it, _json = json)
+                            tryDeserialize(node, jacksonTypeRef<ObjectReference>())?.let {
+                                Recipient(objectReference = it, _json = json)
                             },
                             tryDeserialize(node, jacksonTypeRef<String>())?.let {
                                 Recipient(string = it, _json = json)
@@ -509,15 +548,15 @@ private constructor(
             ) {
                 when {
                     value.string != null -> generator.writeObject(value.string)
-                    value.unionMember1 != null -> generator.writeObject(value.unionMember1)
+                    value.objectReference != null -> generator.writeObject(value.objectReference)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Recipient")
                 }
             }
         }
 
-        /** An object reference to a recipient */
-        class UnionMember1
+        /** An object reference to a recipient. */
+        class ObjectReference
         private constructor(
             private val id: JsonField<String>,
             private val collection: JsonField<String>,
@@ -533,7 +572,7 @@ private constructor(
             ) : this(id, collection, mutableMapOf())
 
             /**
-             * An object identifier
+             * An identifier for the recipient object.
              *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -542,7 +581,7 @@ private constructor(
             fun id(): String = id.getRequired("id")
 
             /**
-             * The collection the object belongs to
+             * The collection the recipient object belongs to.
              *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -582,7 +621,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of [UnionMember1].
+                 * Returns a mutable builder for constructing an instance of [ObjectReference].
                  *
                  * The following fields are required:
                  * ```java
@@ -593,7 +632,7 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            /** A builder for [UnionMember1]. */
+            /** A builder for [ObjectReference]. */
             class Builder internal constructor() {
 
                 private var id: JsonField<String>? = null
@@ -601,13 +640,13 @@ private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(unionMember1: UnionMember1) = apply {
-                    id = unionMember1.id
-                    collection = unionMember1.collection
-                    additionalProperties = unionMember1.additionalProperties.toMutableMap()
+                internal fun from(objectReference: ObjectReference) = apply {
+                    id = objectReference.id
+                    collection = objectReference.collection
+                    additionalProperties = objectReference.additionalProperties.toMutableMap()
                 }
 
-                /** An object identifier */
+                /** An identifier for the recipient object. */
                 fun id(id: String) = id(JsonField.of(id))
 
                 /**
@@ -619,7 +658,7 @@ private constructor(
                  */
                 fun id(id: JsonField<String>) = apply { this.id = id }
 
-                /** The collection the object belongs to */
+                /** The collection the recipient object belongs to. */
                 fun collection(collection: String) = collection(JsonField.of(collection))
 
                 /**
@@ -656,7 +695,7 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [UnionMember1].
+                 * Returns an immutable instance of [ObjectReference].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -668,8 +707,8 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): UnionMember1 =
-                    UnionMember1(
+                fun build(): ObjectReference =
+                    ObjectReference(
                         checkRequired("id", id),
                         checkRequired("collection", collection),
                         additionalProperties.toMutableMap(),
@@ -678,7 +717,7 @@ private constructor(
 
             private var validated: Boolean = false
 
-            fun validate(): UnionMember1 = apply {
+            fun validate(): ObjectReference = apply {
                 if (validated) {
                     return@apply
                 }
@@ -712,7 +751,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is UnionMember1 && id == other.id && collection == other.collection && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is ObjectReference && id == other.id && collection == other.collection && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -722,10 +761,11 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "UnionMember1{id=$id, collection=$collection, additionalProperties=$additionalProperties}"
+                "ObjectReference{id=$id, collection=$collection, additionalProperties=$additionalProperties}"
         }
     }
 
+    /** The type of event that occurred. */
     class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
@@ -740,50 +780,56 @@ private constructor(
 
         companion object {
 
-            @JvmField val MESSAGE_QUEUED = of("message.queued")
-
-            @JvmField val MESSAGE_SENT = of("message.sent")
-
-            @JvmField val MESSAGE_DELIVERED = of("message.delivered")
-
-            @JvmField val MESSAGE_UNDELIVERED = of("message.undelivered")
+            @JvmField val MESSAGE_ARCHIVED = of("message.archived")
 
             @JvmField val MESSAGE_BOUNCED = of("message.bounced")
 
-            @JvmField val MESSAGE_READ = of("message.read")
+            @JvmField val MESSAGE_DELIVERED = of("message.delivered")
 
-            @JvmField val MESSAGE_UNREAD = of("message.unread")
-
-            @JvmField val MESSAGE_LINK_CLICKED = of("message.link_clicked")
+            @JvmField val MESSAGE_DELIVERY_ATTEMPTED = of("message.delivery_attempted")
 
             @JvmField val MESSAGE_INTERACTED = of("message.interacted")
 
+            @JvmField val MESSAGE_LINK_CLICKED = of("message.link_clicked")
+
+            @JvmField val MESSAGE_NOT_SENT = of("message.not_sent")
+
+            @JvmField val MESSAGE_QUEUED = of("message.queued")
+
+            @JvmField val MESSAGE_READ = of("message.read")
+
             @JvmField val MESSAGE_SEEN = of("message.seen")
 
-            @JvmField val MESSAGE_UNSEEN = of("message.unseen")
-
-            @JvmField val MESSAGE_ARCHIVED = of("message.archived")
+            @JvmField val MESSAGE_SENT = of("message.sent")
 
             @JvmField val MESSAGE_UNARCHIVED = of("message.unarchived")
+
+            @JvmField val MESSAGE_UNDELIVERED = of("message.undelivered")
+
+            @JvmField val MESSAGE_UNREAD = of("message.unread")
+
+            @JvmField val MESSAGE_UNSEEN = of("message.unseen")
 
             @JvmStatic fun of(value: String) = Type(JsonField.of(value))
         }
 
         /** An enum containing [Type]'s known values. */
         enum class Known {
-            MESSAGE_QUEUED,
-            MESSAGE_SENT,
-            MESSAGE_DELIVERED,
-            MESSAGE_UNDELIVERED,
-            MESSAGE_BOUNCED,
-            MESSAGE_READ,
-            MESSAGE_UNREAD,
-            MESSAGE_LINK_CLICKED,
-            MESSAGE_INTERACTED,
-            MESSAGE_SEEN,
-            MESSAGE_UNSEEN,
             MESSAGE_ARCHIVED,
+            MESSAGE_BOUNCED,
+            MESSAGE_DELIVERED,
+            MESSAGE_DELIVERY_ATTEMPTED,
+            MESSAGE_INTERACTED,
+            MESSAGE_LINK_CLICKED,
+            MESSAGE_NOT_SENT,
+            MESSAGE_QUEUED,
+            MESSAGE_READ,
+            MESSAGE_SEEN,
+            MESSAGE_SENT,
             MESSAGE_UNARCHIVED,
+            MESSAGE_UNDELIVERED,
+            MESSAGE_UNREAD,
+            MESSAGE_UNSEEN,
         }
 
         /**
@@ -796,19 +842,21 @@ private constructor(
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
-            MESSAGE_QUEUED,
-            MESSAGE_SENT,
-            MESSAGE_DELIVERED,
-            MESSAGE_UNDELIVERED,
-            MESSAGE_BOUNCED,
-            MESSAGE_READ,
-            MESSAGE_UNREAD,
-            MESSAGE_LINK_CLICKED,
-            MESSAGE_INTERACTED,
-            MESSAGE_SEEN,
-            MESSAGE_UNSEEN,
             MESSAGE_ARCHIVED,
+            MESSAGE_BOUNCED,
+            MESSAGE_DELIVERED,
+            MESSAGE_DELIVERY_ATTEMPTED,
+            MESSAGE_INTERACTED,
+            MESSAGE_LINK_CLICKED,
+            MESSAGE_NOT_SENT,
+            MESSAGE_QUEUED,
+            MESSAGE_READ,
+            MESSAGE_SEEN,
+            MESSAGE_SENT,
             MESSAGE_UNARCHIVED,
+            MESSAGE_UNDELIVERED,
+            MESSAGE_UNREAD,
+            MESSAGE_UNSEEN,
             /** An enum member indicating that [Type] was instantiated with an unknown value. */
             _UNKNOWN,
         }
@@ -822,19 +870,21 @@ private constructor(
          */
         fun value(): Value =
             when (this) {
-                MESSAGE_QUEUED -> Value.MESSAGE_QUEUED
-                MESSAGE_SENT -> Value.MESSAGE_SENT
-                MESSAGE_DELIVERED -> Value.MESSAGE_DELIVERED
-                MESSAGE_UNDELIVERED -> Value.MESSAGE_UNDELIVERED
-                MESSAGE_BOUNCED -> Value.MESSAGE_BOUNCED
-                MESSAGE_READ -> Value.MESSAGE_READ
-                MESSAGE_UNREAD -> Value.MESSAGE_UNREAD
-                MESSAGE_LINK_CLICKED -> Value.MESSAGE_LINK_CLICKED
-                MESSAGE_INTERACTED -> Value.MESSAGE_INTERACTED
-                MESSAGE_SEEN -> Value.MESSAGE_SEEN
-                MESSAGE_UNSEEN -> Value.MESSAGE_UNSEEN
                 MESSAGE_ARCHIVED -> Value.MESSAGE_ARCHIVED
+                MESSAGE_BOUNCED -> Value.MESSAGE_BOUNCED
+                MESSAGE_DELIVERED -> Value.MESSAGE_DELIVERED
+                MESSAGE_DELIVERY_ATTEMPTED -> Value.MESSAGE_DELIVERY_ATTEMPTED
+                MESSAGE_INTERACTED -> Value.MESSAGE_INTERACTED
+                MESSAGE_LINK_CLICKED -> Value.MESSAGE_LINK_CLICKED
+                MESSAGE_NOT_SENT -> Value.MESSAGE_NOT_SENT
+                MESSAGE_QUEUED -> Value.MESSAGE_QUEUED
+                MESSAGE_READ -> Value.MESSAGE_READ
+                MESSAGE_SEEN -> Value.MESSAGE_SEEN
+                MESSAGE_SENT -> Value.MESSAGE_SENT
                 MESSAGE_UNARCHIVED -> Value.MESSAGE_UNARCHIVED
+                MESSAGE_UNDELIVERED -> Value.MESSAGE_UNDELIVERED
+                MESSAGE_UNREAD -> Value.MESSAGE_UNREAD
+                MESSAGE_UNSEEN -> Value.MESSAGE_UNSEEN
                 else -> Value._UNKNOWN
             }
 
@@ -848,19 +898,21 @@ private constructor(
          */
         fun known(): Known =
             when (this) {
-                MESSAGE_QUEUED -> Known.MESSAGE_QUEUED
-                MESSAGE_SENT -> Known.MESSAGE_SENT
-                MESSAGE_DELIVERED -> Known.MESSAGE_DELIVERED
-                MESSAGE_UNDELIVERED -> Known.MESSAGE_UNDELIVERED
-                MESSAGE_BOUNCED -> Known.MESSAGE_BOUNCED
-                MESSAGE_READ -> Known.MESSAGE_READ
-                MESSAGE_UNREAD -> Known.MESSAGE_UNREAD
-                MESSAGE_LINK_CLICKED -> Known.MESSAGE_LINK_CLICKED
-                MESSAGE_INTERACTED -> Known.MESSAGE_INTERACTED
-                MESSAGE_SEEN -> Known.MESSAGE_SEEN
-                MESSAGE_UNSEEN -> Known.MESSAGE_UNSEEN
                 MESSAGE_ARCHIVED -> Known.MESSAGE_ARCHIVED
+                MESSAGE_BOUNCED -> Known.MESSAGE_BOUNCED
+                MESSAGE_DELIVERED -> Known.MESSAGE_DELIVERED
+                MESSAGE_DELIVERY_ATTEMPTED -> Known.MESSAGE_DELIVERY_ATTEMPTED
+                MESSAGE_INTERACTED -> Known.MESSAGE_INTERACTED
+                MESSAGE_LINK_CLICKED -> Known.MESSAGE_LINK_CLICKED
+                MESSAGE_NOT_SENT -> Known.MESSAGE_NOT_SENT
+                MESSAGE_QUEUED -> Known.MESSAGE_QUEUED
+                MESSAGE_READ -> Known.MESSAGE_READ
+                MESSAGE_SEEN -> Known.MESSAGE_SEEN
+                MESSAGE_SENT -> Known.MESSAGE_SENT
                 MESSAGE_UNARCHIVED -> Known.MESSAGE_UNARCHIVED
+                MESSAGE_UNDELIVERED -> Known.MESSAGE_UNDELIVERED
+                MESSAGE_UNREAD -> Known.MESSAGE_UNREAD
+                MESSAGE_UNSEEN -> Known.MESSAGE_UNSEEN
                 else -> throw KnockInvalidDataException("Unknown Type: $value")
             }
 
@@ -914,6 +966,108 @@ private constructor(
         override fun hashCode() = value.hashCode()
 
         override fun toString() = value.toString()
+    }
+
+    /** The data associated with the message event. Only present for some event types. */
+    class Data
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Data]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Data]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(data: Data) = apply {
+                additionalProperties = data.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Data].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Data = Data(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Data = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Data && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Data{additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

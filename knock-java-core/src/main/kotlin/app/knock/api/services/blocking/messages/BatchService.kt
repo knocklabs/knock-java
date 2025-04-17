@@ -23,7 +23,7 @@ interface BatchService {
      */
     fun withRawResponse(): WithRawResponse
 
-    /** Marks one or more messages as archived */
+    /** Marks the given messages as archived. */
     fun archive(): List<Message> = archive(BatchArchiveParams.none())
 
     /** @see [archive] */
@@ -40,7 +40,7 @@ interface BatchService {
     fun archive(requestOptions: RequestOptions): List<Message> =
         archive(BatchArchiveParams.none(), requestOptions)
 
-    /** Get the contents of multiple messages */
+    /** Get the contents of multiple messages in a single request. */
     fun getContent(params: BatchGetContentParams): List<BatchGetContentResponse> =
         getContent(params, RequestOptions.none())
 
@@ -50,25 +50,17 @@ interface BatchService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<BatchGetContentResponse>
 
-    /** Marks one or more messages as interacted */
-    fun markAsInteracted(): List<Message> = markAsInteracted(BatchMarkAsInteractedParams.none())
+    /** Marks the given messages as interacted with. */
+    fun markAsInteracted(params: BatchMarkAsInteractedParams): List<Message> =
+        markAsInteracted(params, RequestOptions.none())
 
     /** @see [markAsInteracted] */
     fun markAsInteracted(
-        params: BatchMarkAsInteractedParams = BatchMarkAsInteractedParams.none(),
+        params: BatchMarkAsInteractedParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Message>
 
-    /** @see [markAsInteracted] */
-    fun markAsInteracted(
-        params: BatchMarkAsInteractedParams = BatchMarkAsInteractedParams.none()
-    ): List<Message> = markAsInteracted(params, RequestOptions.none())
-
-    /** @see [markAsInteracted] */
-    fun markAsInteracted(requestOptions: RequestOptions): List<Message> =
-        markAsInteracted(BatchMarkAsInteractedParams.none(), requestOptions)
-
-    /** Marks one or more messages as read */
+    /** Marks the given messages as read. */
     fun markAsRead(): List<Message> = markAsRead(BatchMarkAsReadParams.none())
 
     /** @see [markAsRead] */
@@ -85,7 +77,7 @@ interface BatchService {
     fun markAsRead(requestOptions: RequestOptions): List<Message> =
         markAsRead(BatchMarkAsReadParams.none(), requestOptions)
 
-    /** Marks one or more messages as seen */
+    /** Marks the given messages as seen. */
     fun markAsSeen(): List<Message> = markAsSeen(BatchMarkAsSeenParams.none())
 
     /** @see [markAsSeen] */
@@ -102,7 +94,7 @@ interface BatchService {
     fun markAsSeen(requestOptions: RequestOptions): List<Message> =
         markAsSeen(BatchMarkAsSeenParams.none(), requestOptions)
 
-    /** Marks one or more messages as unread */
+    /** Marks the given messages as unread. */
     fun markAsUnread(): List<Message> = markAsUnread(BatchMarkAsUnreadParams.none())
 
     /** @see [markAsUnread] */
@@ -120,7 +112,7 @@ interface BatchService {
     fun markAsUnread(requestOptions: RequestOptions): List<Message> =
         markAsUnread(BatchMarkAsUnreadParams.none(), requestOptions)
 
-    /** Marks one or more messages as unseen */
+    /** Marks the given messages as unseen. */
     fun markAsUnseen(): List<Message> = markAsUnseen(BatchMarkAsUnseenParams.none())
 
     /** @see [markAsUnseen] */
@@ -138,7 +130,7 @@ interface BatchService {
     fun markAsUnseen(requestOptions: RequestOptions): List<Message> =
         markAsUnseen(BatchMarkAsUnseenParams.none(), requestOptions)
 
-    /** Marks one or more messages as unarchived */
+    /** Marks the given messages as unarchived. */
     fun unarchive(): List<Message> = unarchive(BatchUnarchiveParams.none())
 
     /** @see [unarchive] */
@@ -205,26 +197,15 @@ interface BatchService {
          * the same as [BatchService.markAsInteracted].
          */
         @MustBeClosed
-        fun markAsInteracted(): HttpResponseFor<List<Message>> =
-            markAsInteracted(BatchMarkAsInteractedParams.none())
+        fun markAsInteracted(params: BatchMarkAsInteractedParams): HttpResponseFor<List<Message>> =
+            markAsInteracted(params, RequestOptions.none())
 
         /** @see [markAsInteracted] */
         @MustBeClosed
         fun markAsInteracted(
-            params: BatchMarkAsInteractedParams = BatchMarkAsInteractedParams.none(),
+            params: BatchMarkAsInteractedParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<List<Message>>
-
-        /** @see [markAsInteracted] */
-        @MustBeClosed
-        fun markAsInteracted(
-            params: BatchMarkAsInteractedParams = BatchMarkAsInteractedParams.none()
-        ): HttpResponseFor<List<Message>> = markAsInteracted(params, RequestOptions.none())
-
-        /** @see [markAsInteracted] */
-        @MustBeClosed
-        fun markAsInteracted(requestOptions: RequestOptions): HttpResponseFor<List<Message>> =
-            markAsInteracted(BatchMarkAsInteractedParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /v1/messages/batch/read`, but is otherwise the same

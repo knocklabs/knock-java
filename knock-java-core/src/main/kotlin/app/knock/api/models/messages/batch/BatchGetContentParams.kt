@@ -2,7 +2,6 @@
 
 package app.knock.api.models.messages.batch
 
-import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
@@ -10,16 +9,16 @@ import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import java.util.Objects
 
-/** Get the contents of multiple messages */
+/** Get the contents of multiple messages in a single request. */
 class BatchGetContentParams
 private constructor(
-    private val messageIds: List<JsonValue>,
+    private val messageIds: List<String>,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** The IDs of the messages to fetch contents of */
-    fun messageIds(): List<JsonValue> = messageIds
+    /** The IDs of the messages to fetch contents of. */
+    fun messageIds(): List<String> = messageIds
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -43,7 +42,7 @@ private constructor(
     /** A builder for [BatchGetContentParams]. */
     class Builder internal constructor() {
 
-        private var messageIds: MutableList<JsonValue>? = null
+        private var messageIds: MutableList<String>? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -54,17 +53,17 @@ private constructor(
             additionalQueryParams = batchGetContentParams.additionalQueryParams.toBuilder()
         }
 
-        /** The IDs of the messages to fetch contents of */
-        fun messageIds(messageIds: List<JsonValue>) = apply {
+        /** The IDs of the messages to fetch contents of. */
+        fun messageIds(messageIds: List<String>) = apply {
             this.messageIds = messageIds.toMutableList()
         }
 
         /**
-         * Adds a single [JsonValue] to [messageIds].
+         * Adds a single [String] to [messageIds].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addMessageId(messageId: JsonValue) = apply {
+        fun addMessageId(messageId: String) = apply {
             messageIds = (messageIds ?: mutableListOf()).apply { add(messageId) }
         }
 
@@ -191,8 +190,7 @@ private constructor(
     override fun _queryParams(): QueryParams =
         QueryParams.builder()
             .apply {
-                messageIds.forEach {}
-
+                messageIds.forEach { put("message_ids[]", it) }
                 putAll(additionalQueryParams)
             }
             .build()

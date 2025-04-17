@@ -8,7 +8,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
 
-/** Get channel data for a user */
+/** Retrieves the channel data for a specific user and channel ID. */
 class UserGetChannelDataParams
 private constructor(
     private val userId: String,

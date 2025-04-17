@@ -18,7 +18,10 @@ interface BulkServiceAsync {
      */
     fun withRawResponse(): WithRawResponse
 
-    /** Bulk deletes a list of users */
+    /**
+     * Deletes multiple users in a single operation. Accepts up to 100 user IDs to delete and
+     * returns a bulk operation that can be queried for progress.
+     */
     fun delete(params: BulkDeleteParams): CompletableFuture<BulkOperation> =
         delete(params, RequestOptions.none())
 
@@ -28,42 +31,31 @@ interface BulkServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
-    /** Bulk identifies a list of users */
-    fun identify(): CompletableFuture<BulkOperation> = identify(BulkIdentifyParams.none())
+    /**
+     * Identifies multiple users in a single operation. Allows creating or updating up to 100 users
+     * in a single batch with various properties, preferences, and channel data.
+     */
+    fun identify(params: BulkIdentifyParams): CompletableFuture<BulkOperation> =
+        identify(params, RequestOptions.none())
 
     /** @see [identify] */
     fun identify(
-        params: BulkIdentifyParams = BulkIdentifyParams.none(),
+        params: BulkIdentifyParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
-    /** @see [identify] */
-    fun identify(
-        params: BulkIdentifyParams = BulkIdentifyParams.none()
-    ): CompletableFuture<BulkOperation> = identify(params, RequestOptions.none())
-
-    /** @see [identify] */
-    fun identify(requestOptions: RequestOptions): CompletableFuture<BulkOperation> =
-        identify(BulkIdentifyParams.none(), requestOptions)
-
-    /** Bulk sets user preferences */
-    fun setPreferences(): CompletableFuture<BulkOperation> =
-        setPreferences(BulkSetPreferencesParams.none())
+    /**
+     * Sets preferences for multiple users in a single operation. Supports either setting the same
+     * preferences for multiple users or specific preferences for each user.
+     */
+    fun setPreferences(params: BulkSetPreferencesParams): CompletableFuture<BulkOperation> =
+        setPreferences(params, RequestOptions.none())
 
     /** @see [setPreferences] */
     fun setPreferences(
-        params: BulkSetPreferencesParams = BulkSetPreferencesParams.none(),
+        params: BulkSetPreferencesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
-
-    /** @see [setPreferences] */
-    fun setPreferences(
-        params: BulkSetPreferencesParams = BulkSetPreferencesParams.none()
-    ): CompletableFuture<BulkOperation> = setPreferences(params, RequestOptions.none())
-
-    /** @see [setPreferences] */
-    fun setPreferences(requestOptions: RequestOptions): CompletableFuture<BulkOperation> =
-        setPreferences(BulkSetPreferencesParams.none(), requestOptions)
 
     /** A view of [BulkServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -88,57 +80,33 @@ interface BulkServiceAsync {
          * as [BulkServiceAsync.identify].
          */
         @MustBeClosed
-        fun identify(): CompletableFuture<HttpResponseFor<BulkOperation>> =
-            identify(BulkIdentifyParams.none())
-
-        /** @see [identify] */
-        @MustBeClosed
         fun identify(
-            params: BulkIdentifyParams = BulkIdentifyParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<BulkOperation>>
-
-        /** @see [identify] */
-        @MustBeClosed
-        fun identify(
-            params: BulkIdentifyParams = BulkIdentifyParams.none()
+            params: BulkIdentifyParams
         ): CompletableFuture<HttpResponseFor<BulkOperation>> =
             identify(params, RequestOptions.none())
 
         /** @see [identify] */
         @MustBeClosed
         fun identify(
-            requestOptions: RequestOptions
-        ): CompletableFuture<HttpResponseFor<BulkOperation>> =
-            identify(BulkIdentifyParams.none(), requestOptions)
+            params: BulkIdentifyParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
 
         /**
          * Returns a raw HTTP response for `post /v1/users/bulk/preferences`, but is otherwise the
          * same as [BulkServiceAsync.setPreferences].
          */
         @MustBeClosed
-        fun setPreferences(): CompletableFuture<HttpResponseFor<BulkOperation>> =
-            setPreferences(BulkSetPreferencesParams.none())
-
-        /** @see [setPreferences] */
-        @MustBeClosed
         fun setPreferences(
-            params: BulkSetPreferencesParams = BulkSetPreferencesParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<BulkOperation>>
-
-        /** @see [setPreferences] */
-        @MustBeClosed
-        fun setPreferences(
-            params: BulkSetPreferencesParams = BulkSetPreferencesParams.none()
+            params: BulkSetPreferencesParams
         ): CompletableFuture<HttpResponseFor<BulkOperation>> =
             setPreferences(params, RequestOptions.none())
 
         /** @see [setPreferences] */
         @MustBeClosed
         fun setPreferences(
-            requestOptions: RequestOptions
-        ): CompletableFuture<HttpResponseFor<BulkOperation>> =
-            setPreferences(BulkSetPreferencesParams.none(), requestOptions)
+            params: BulkSetPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
     }
 }

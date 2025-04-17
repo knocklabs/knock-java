@@ -19,28 +19,32 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A paginated list of activities */
+/** A paginated list of activities. */
 class MessageListActivitiesPageResponse
 private constructor(
-    private val items: JsonField<List<Activity>>,
+    private val entries: JsonField<List<Activity>>,
     private val pageInfo: JsonField<PageInfo>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("items") @ExcludeMissing items: JsonField<List<Activity>> = JsonMissing.of(),
+        @JsonProperty("entries")
+        @ExcludeMissing
+        entries: JsonField<List<Activity>> = JsonMissing.of(),
         @JsonProperty("page_info") @ExcludeMissing pageInfo: JsonField<PageInfo> = JsonMissing.of(),
-    ) : this(items, pageInfo, mutableMapOf())
+    ) : this(entries, pageInfo, mutableMapOf())
 
     /**
+     * A list of activities.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun items(): List<Activity> = items.getRequired("items")
+    fun entries(): List<Activity> = entries.getRequired("entries")
 
     /**
-     * The information about a paginated result
+     * Pagination information for a list of resources.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -48,11 +52,11 @@ private constructor(
     fun pageInfo(): PageInfo = pageInfo.getRequired("page_info")
 
     /**
-     * Returns the raw JSON value of [items].
+     * Returns the raw JSON value of [entries].
      *
-     * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [entries], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<Activity>> = items
+    @JsonProperty("entries") @ExcludeMissing fun _entries(): JsonField<List<Activity>> = entries
 
     /**
      * Returns the raw JSON value of [pageInfo].
@@ -81,7 +85,7 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .items()
+         * .entries()
          * .pageInfo()
          * ```
          */
@@ -91,43 +95,46 @@ private constructor(
     /** A builder for [MessageListActivitiesPageResponse]. */
     class Builder internal constructor() {
 
-        private var items: JsonField<MutableList<Activity>>? = null
+        private var entries: JsonField<MutableList<Activity>>? = null
         private var pageInfo: JsonField<PageInfo>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(messageListActivitiesPageResponse: MessageListActivitiesPageResponse) =
             apply {
-                items = messageListActivitiesPageResponse.items.map { it.toMutableList() }
+                entries = messageListActivitiesPageResponse.entries.map { it.toMutableList() }
                 pageInfo = messageListActivitiesPageResponse.pageInfo
                 additionalProperties =
                     messageListActivitiesPageResponse.additionalProperties.toMutableMap()
             }
 
-        fun items(items: List<Activity>) = items(JsonField.of(items))
+        /** A list of activities. */
+        fun entries(entries: List<Activity>) = entries(JsonField.of(entries))
 
         /**
-         * Sets [Builder.items] to an arbitrary JSON value.
+         * Sets [Builder.entries] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.items] with a well-typed `List<Activity>` value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.entries] with a well-typed `List<Activity>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun items(items: JsonField<List<Activity>>) = apply {
-            this.items = items.map { it.toMutableList() }
+        fun entries(entries: JsonField<List<Activity>>) = apply {
+            this.entries = entries.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [Activity] to [items].
+         * Adds a single [Activity] to [entries].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addItem(item: Activity) = apply {
-            items =
-                (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
+        fun addEntry(entry: Activity) = apply {
+            entries =
+                (entries ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("entries", it).add(entry)
+                }
         }
 
-        /** The information about a paginated result */
+        /** Pagination information for a list of resources. */
         fun pageInfo(pageInfo: PageInfo) = pageInfo(JsonField.of(pageInfo))
 
         /**
@@ -165,7 +172,7 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .items()
+         * .entries()
          * .pageInfo()
          * ```
          *
@@ -173,7 +180,7 @@ private constructor(
          */
         fun build(): MessageListActivitiesPageResponse =
             MessageListActivitiesPageResponse(
-                checkRequired("items", items).map { it.toImmutable() },
+                checkRequired("entries", entries).map { it.toImmutable() },
                 checkRequired("pageInfo", pageInfo),
                 additionalProperties.toMutableMap(),
             )
@@ -186,7 +193,7 @@ private constructor(
             return@apply
         }
 
-        items().forEach { it.validate() }
+        entries().forEach { it.validate() }
         pageInfo().validate()
         validated = true
     }
@@ -206,10 +213,10 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (items.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+        (entries.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (pageInfo.asKnown().getOrNull()?.validity() ?: 0)
 
-    /** The information about a paginated result */
+    /** Pagination information for a list of resources. */
     class PageInfo
     private constructor(
         private val _typename: JsonField<String>,
@@ -230,24 +237,32 @@ private constructor(
         ) : this(_typename, pageSize, after, before, mutableMapOf())
 
         /**
+         * The type name of the schema.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun _typename(): String = _typename.getRequired("__typename")
 
         /**
+         * The number of items per page.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun pageSize(): Long = pageSize.getRequired("page_size")
 
         /**
+         * The cursor to fetch entries after.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun after(): Optional<String> = after.getOptional("after")
 
         /**
+         * The cursor to fetch entries before.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
@@ -325,6 +340,7 @@ private constructor(
                 additionalProperties = pageInfo.additionalProperties.toMutableMap()
             }
 
+            /** The type name of the schema. */
             fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
             /**
@@ -336,6 +352,7 @@ private constructor(
              */
             fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
+            /** The number of items per page. */
             fun pageSize(pageSize: Long) = pageSize(JsonField.of(pageSize))
 
             /**
@@ -347,6 +364,7 @@ private constructor(
              */
             fun pageSize(pageSize: JsonField<Long>) = apply { this.pageSize = pageSize }
 
+            /** The cursor to fetch entries after. */
             fun after(after: String?) = after(JsonField.ofNullable(after))
 
             /** Alias for calling [Builder.after] with `after.orElse(null)`. */
@@ -361,6 +379,7 @@ private constructor(
              */
             fun after(after: JsonField<String>) = apply { this.after = after }
 
+            /** The cursor to fetch entries before. */
             fun before(before: String?) = before(JsonField.ofNullable(before))
 
             /** Alias for calling [Builder.before] with `before.orElse(null)`. */
@@ -475,15 +494,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is MessageListActivitiesPageResponse && items == other.items && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is MessageListActivitiesPageResponse && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(items, pageInfo, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(entries, pageInfo, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "MessageListActivitiesPageResponse{items=$items, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
+        "MessageListActivitiesPageResponse{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
 }

@@ -20,7 +20,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A tenant to be set in the system */
+/** A request to get a tenant. */
 class TenantRequest
 private constructor(
     private val id: JsonField<String>,
@@ -43,13 +43,15 @@ private constructor(
     ) : this(id, channelData, preferences, settings, mutableMapOf())
 
     /**
+     * The unique identifier for the tenant.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
 
     /**
-     * Allows inline setting channel data for a recipient
+     * A request to set channel data for a type of channel inline.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -65,6 +67,8 @@ private constructor(
     fun preferences(): Optional<InlinePreferenceSetRequest> = preferences.getOptional("preferences")
 
     /**
+     * The settings for the tenant. Includes branding and preference set.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -145,6 +149,7 @@ private constructor(
             additionalProperties = tenantRequest.additionalProperties.toMutableMap()
         }
 
+        /** The unique identifier for the tenant. */
         fun id(id: String) = id(JsonField.of(id))
 
         /**
@@ -155,7 +160,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        /** Allows inline setting channel data for a recipient */
+        /** A request to set channel data for a type of channel inline. */
         fun channelData(channelData: InlineChannelDataRequest?) =
             channelData(JsonField.ofNullable(channelData))
 
@@ -193,6 +198,7 @@ private constructor(
             this.preferences = preferences
         }
 
+        /** The settings for the tenant. Includes branding and preference set. */
         fun settings(settings: Settings) = settings(JsonField.of(settings))
 
         /**
@@ -279,6 +285,7 @@ private constructor(
             (preferences.asKnown().getOrNull()?.validity() ?: 0) +
             (settings.asKnown().getOrNull()?.validity() ?: 0)
 
+    /** The settings for the tenant. Includes branding and preference set. */
     class Settings
     private constructor(
         private val branding: JsonField<Branding>,
@@ -297,13 +304,15 @@ private constructor(
         ) : this(branding, preferenceSet, mutableMapOf())
 
         /**
+         * The branding for the tenant.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun branding(): Optional<Branding> = branding.getOptional("branding")
 
         /**
-         * Set preferences for a recipient
+         * A request to set a preference set for a recipient.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -360,6 +369,7 @@ private constructor(
                 additionalProperties = settings.additionalProperties.toMutableMap()
             }
 
+            /** The branding for the tenant. */
             fun branding(branding: Branding) = branding(JsonField.of(branding))
 
             /**
@@ -371,7 +381,7 @@ private constructor(
              */
             fun branding(branding: JsonField<Branding>) = apply { this.branding = branding }
 
-            /** Set preferences for a recipient */
+            /** A request to set a preference set for a recipient. */
             fun preferenceSet(preferenceSet: PreferenceSetRequest?) =
                 preferenceSet(JsonField.ofNullable(preferenceSet))
 
@@ -449,6 +459,7 @@ private constructor(
             (branding.asKnown().getOrNull()?.validity() ?: 0) +
                 (preferenceSet.asKnown().getOrNull()?.validity() ?: 0)
 
+        /** The branding for the tenant. */
         class Branding
         private constructor(
             private val iconUrl: JsonField<String>,
@@ -475,24 +486,32 @@ private constructor(
             ) : this(iconUrl, logoUrl, primaryColor, primaryColorContrast, mutableMapOf())
 
             /**
+             * The icon URL for the tenant.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
             fun iconUrl(): Optional<String> = iconUrl.getOptional("icon_url")
 
             /**
+             * The logo URL for the tenant.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
             fun logoUrl(): Optional<String> = logoUrl.getOptional("logo_url")
 
             /**
+             * The primary color for the tenant.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
             fun primaryColor(): Optional<String> = primaryColor.getOptional("primary_color")
 
             /**
+             * The primary color contrast for the tenant.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
@@ -569,6 +588,7 @@ private constructor(
                     additionalProperties = branding.additionalProperties.toMutableMap()
                 }
 
+                /** The icon URL for the tenant. */
                 fun iconUrl(iconUrl: String?) = iconUrl(JsonField.ofNullable(iconUrl))
 
                 /** Alias for calling [Builder.iconUrl] with `iconUrl.orElse(null)`. */
@@ -583,6 +603,7 @@ private constructor(
                  */
                 fun iconUrl(iconUrl: JsonField<String>) = apply { this.iconUrl = iconUrl }
 
+                /** The logo URL for the tenant. */
                 fun logoUrl(logoUrl: String?) = logoUrl(JsonField.ofNullable(logoUrl))
 
                 /** Alias for calling [Builder.logoUrl] with `logoUrl.orElse(null)`. */
@@ -597,6 +618,7 @@ private constructor(
                  */
                 fun logoUrl(logoUrl: JsonField<String>) = apply { this.logoUrl = logoUrl }
 
+                /** The primary color for the tenant. */
                 fun primaryColor(primaryColor: String?) =
                     primaryColor(JsonField.ofNullable(primaryColor))
 
@@ -615,6 +637,7 @@ private constructor(
                     this.primaryColor = primaryColor
                 }
 
+                /** The primary color contrast for the tenant. */
                 fun primaryColorContrast(primaryColorContrast: String?) =
                     primaryColorContrast(JsonField.ofNullable(primaryColorContrast))
 

@@ -10,6 +10,7 @@ import app.knock.api.models.users.User
 import app.knock.api.models.users.UserDeleteParams
 import app.knock.api.models.users.UserGetChannelDataParams
 import app.knock.api.models.users.UserGetParams
+import app.knock.api.models.users.UserGetPreferencesParams
 import app.knock.api.models.users.UserListMessagesPageAsync
 import app.knock.api.models.users.UserListMessagesParams
 import app.knock.api.models.users.UserListPageAsync
@@ -21,6 +22,7 @@ import app.knock.api.models.users.UserListSubscriptionsPageAsync
 import app.knock.api.models.users.UserListSubscriptionsParams
 import app.knock.api.models.users.UserMergeParams
 import app.knock.api.models.users.UserSetChannelDataParams
+import app.knock.api.models.users.UserSetPreferencesParams
 import app.knock.api.models.users.UserUnsetChannelDataParams
 import app.knock.api.models.users.UserUpdateParams
 import app.knock.api.services.async.users.BulkServiceAsync
@@ -39,7 +41,7 @@ interface UserServiceAsync {
 
     fun bulk(): BulkServiceAsync
 
-    /** Identify a user */
+    /** Create or update a user with the provided identification data. */
     fun update(params: UserUpdateParams): CompletableFuture<User> =
         update(params, RequestOptions.none())
 
@@ -49,7 +51,7 @@ interface UserServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<User>
 
-    /** Returns a list of users */
+    /** Retrieve a paginated list of users in the environment. */
     fun list(): CompletableFuture<UserListPageAsync> = list(UserListParams.none())
 
     /** @see [list] */
@@ -66,7 +68,7 @@ interface UserServiceAsync {
     fun list(requestOptions: RequestOptions): CompletableFuture<UserListPageAsync> =
         list(UserListParams.none(), requestOptions)
 
-    /** Deletes a user */
+    /** Permanently delete a user and all associated data. */
     fun delete(params: UserDeleteParams): CompletableFuture<String> =
         delete(params, RequestOptions.none())
 
@@ -76,7 +78,7 @@ interface UserServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<String>
 
-    /** Returns a user */
+    /** Retrieve a specific user by their ID. */
     fun get(params: UserGetParams): CompletableFuture<User> = get(params, RequestOptions.none())
 
     /** @see [get] */
@@ -85,7 +87,7 @@ interface UserServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<User>
 
-    /** Get channel data for a user */
+    /** Retrieves the channel data for a specific user and channel ID. */
     fun getChannelData(params: UserGetChannelDataParams): CompletableFuture<ChannelData> =
         getChannelData(params, RequestOptions.none())
 
@@ -95,7 +97,20 @@ interface UserServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ChannelData>
 
-    /** Returns a paginated list of messages for a user */
+    /** Retrieves a specific preference set for a user identified by the preference set ID. */
+    fun getPreferences(params: UserGetPreferencesParams): CompletableFuture<PreferenceSet> =
+        getPreferences(params, RequestOptions.none())
+
+    /** @see [getPreferences] */
+    fun getPreferences(
+        params: UserGetPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PreferenceSet>
+
+    /**
+     * Returns a paginated list of messages for a specific user. Allows filtering by message status
+     * and provides various sorting options.
+     */
     fun listMessages(params: UserListMessagesParams): CompletableFuture<UserListMessagesPageAsync> =
         listMessages(params, RequestOptions.none())
 
@@ -105,7 +120,7 @@ interface UserServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<UserListMessagesPageAsync>
 
-    /** List preference sets for a user */
+    /** Retrieves a list of all preference sets for a specific user. */
     fun listPreferences(params: UserListPreferencesParams): CompletableFuture<List<PreferenceSet>> =
         listPreferences(params, RequestOptions.none())
 
@@ -115,7 +130,10 @@ interface UserServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<List<PreferenceSet>>
 
-    /** List schedules for a user */
+    /**
+     * Returns a paginated list of schedules for a specific user. Can be filtered by workflow and
+     * tenant.
+     */
     fun listSchedules(
         params: UserListSchedulesParams
     ): CompletableFuture<UserListSchedulesPageAsync> = listSchedules(params, RequestOptions.none())
@@ -126,7 +144,10 @@ interface UserServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<UserListSchedulesPageAsync>
 
-    /** List subscriptions for a user */
+    /**
+     * Retrieves a paginated list of subscriptions for a specific user. Allows filtering by objects
+     * and includes optional preference data.
+     */
     fun listSubscriptions(
         params: UserListSubscriptionsParams
     ): CompletableFuture<UserListSubscriptionsPageAsync> =
@@ -138,7 +159,10 @@ interface UserServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<UserListSubscriptionsPageAsync>
 
-    /** Merges two users together */
+    /**
+     * Merge two users together, where the user specified with the `from_user_id` param will be
+     * merged into the user specified by `user_id`.
+     */
     fun merge(params: UserMergeParams): CompletableFuture<User> =
         merge(params, RequestOptions.none())
 
@@ -148,7 +172,7 @@ interface UserServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<User>
 
-    /** Sets channel data for a user */
+    /** Updates or creates channel data for a specific user and channel ID. */
     fun setChannelData(params: UserSetChannelDataParams): CompletableFuture<ChannelData> =
         setChannelData(params, RequestOptions.none())
 
@@ -158,7 +182,20 @@ interface UserServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ChannelData>
 
-    /** Unsets channel data for a user */
+    /**
+     * Updates a complete preference set for a user. This is a destructive operation that will
+     * replace the existing preference set for the user.
+     */
+    fun setPreferences(params: UserSetPreferencesParams): CompletableFuture<PreferenceSet> =
+        setPreferences(params, RequestOptions.none())
+
+    /** @see [setPreferences] */
+    fun setPreferences(
+        params: UserSetPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<PreferenceSet>
+
+    /** Deletes channel data for a specific user and channel ID. */
     fun unsetChannelData(params: UserUnsetChannelDataParams): CompletableFuture<String> =
         unsetChannelData(params, RequestOptions.none())
 
@@ -267,6 +304,24 @@ interface UserServiceAsync {
         ): CompletableFuture<HttpResponseFor<ChannelData>>
 
         /**
+         * Returns a raw HTTP response for `get
+         * /v1/users/{user_id}/preferences/{preference_set_id}`, but is otherwise the same as
+         * [UserServiceAsync.getPreferences].
+         */
+        @MustBeClosed
+        fun getPreferences(
+            params: UserGetPreferencesParams
+        ): CompletableFuture<HttpResponseFor<PreferenceSet>> =
+            getPreferences(params, RequestOptions.none())
+
+        /** @see [getPreferences] */
+        @MustBeClosed
+        fun getPreferences(
+            params: UserGetPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PreferenceSet>>
+
+        /**
          * Returns a raw HTTP response for `get /v1/users/{user_id}/messages`, but is otherwise the
          * same as [UserServiceAsync.listMessages].
          */
@@ -365,6 +420,24 @@ interface UserServiceAsync {
             params: UserSetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<ChannelData>>
+
+        /**
+         * Returns a raw HTTP response for `put
+         * /v1/users/{user_id}/preferences/{preference_set_id}`, but is otherwise the same as
+         * [UserServiceAsync.setPreferences].
+         */
+        @MustBeClosed
+        fun setPreferences(
+            params: UserSetPreferencesParams
+        ): CompletableFuture<HttpResponseFor<PreferenceSet>> =
+            setPreferences(params, RequestOptions.none())
+
+        /** @see [setPreferences] */
+        @MustBeClosed
+        fun setPreferences(
+            params: UserSetPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<PreferenceSet>>
 
         /**
          * Returns a raw HTTP response for `delete /v1/users/{user_id}/channel_data/{channel_id}`,

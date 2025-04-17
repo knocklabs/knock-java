@@ -20,7 +20,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A paginated list of subscriptions for an object. */
+/** A response containing a list of subscriptions. */
 class UserListSubscriptionsPageResponse
 private constructor(
     private val entries: JsonField<List<Subscription>>,
@@ -37,7 +37,7 @@ private constructor(
     ) : this(entries, pageInfo, mutableMapOf())
 
     /**
-     * The list of subscriptions
+     * A list of subscriptions.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -45,7 +45,7 @@ private constructor(
     fun entries(): List<Subscription> = entries.getRequired("entries")
 
     /**
-     * The information about a paginated result
+     * Pagination information for a list of resources.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -109,7 +109,7 @@ private constructor(
                     userListSubscriptionsPageResponse.additionalProperties.toMutableMap()
             }
 
-        /** The list of subscriptions */
+        /** A list of subscriptions. */
         fun entries(entries: List<Subscription>) = entries(JsonField.of(entries))
 
         /**
@@ -135,7 +135,7 @@ private constructor(
                 }
         }
 
-        /** The information about a paginated result */
+        /** Pagination information for a list of resources. */
         fun pageInfo(pageInfo: PageInfo) = pageInfo(JsonField.of(pageInfo))
 
         /**
@@ -217,7 +217,7 @@ private constructor(
         (entries.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (pageInfo.asKnown().getOrNull()?.validity() ?: 0)
 
-    /** The information about a paginated result */
+    /** Pagination information for a list of resources. */
     class PageInfo
     private constructor(
         private val _typename: JsonField<String>,
@@ -238,24 +238,32 @@ private constructor(
         ) : this(_typename, pageSize, after, before, mutableMapOf())
 
         /**
+         * The type name of the schema.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun _typename(): String = _typename.getRequired("__typename")
 
         /**
+         * The number of items per page.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun pageSize(): Long = pageSize.getRequired("page_size")
 
         /**
+         * The cursor to fetch entries after.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun after(): Optional<String> = after.getOptional("after")
 
         /**
+         * The cursor to fetch entries before.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
@@ -333,6 +341,7 @@ private constructor(
                 additionalProperties = pageInfo.additionalProperties.toMutableMap()
             }
 
+            /** The type name of the schema. */
             fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
             /**
@@ -344,6 +353,7 @@ private constructor(
              */
             fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
+            /** The number of items per page. */
             fun pageSize(pageSize: Long) = pageSize(JsonField.of(pageSize))
 
             /**
@@ -355,6 +365,7 @@ private constructor(
              */
             fun pageSize(pageSize: JsonField<Long>) = apply { this.pageSize = pageSize }
 
+            /** The cursor to fetch entries after. */
             fun after(after: String?) = after(JsonField.ofNullable(after))
 
             /** Alias for calling [Builder.after] with `after.orElse(null)`. */
@@ -369,6 +380,7 @@ private constructor(
              */
             fun after(after: JsonField<String>) = apply { this.after = after }
 
+            /** The cursor to fetch entries before. */
             fun before(before: String?) = before(JsonField.ofNullable(before))
 
             /** Alias for calling [Builder.before] with `before.orElse(null)`. */

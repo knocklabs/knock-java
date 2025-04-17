@@ -14,10 +14,11 @@ internal class MsTeamsChannelDataTest {
         val msTeamsChannelData =
             MsTeamsChannelData.builder()
                 .addConnection(
-                    MsTeamsChannelData.Connection.TokenConnection.builder()
-                        .accessToken("xoxb-1234567890")
-                        .channelId("C01234567890")
-                        .userId("U01234567890")
+                    MsTeamsChannelData.Connection.MsTeamsTokenConnection.builder()
+                        .msTeamsChannelId("123e4567-e89b-12d3-a456-426614174000")
+                        .msTeamsTeamId("123e4567-e89b-12d3-a456-426614174000")
+                        .msTeamsTenantId(null)
+                        .msTeamsUserId(null)
                         .build()
                 )
                 .msTeamsTenantId(null)
@@ -25,11 +26,12 @@ internal class MsTeamsChannelDataTest {
 
         assertThat(msTeamsChannelData.connections())
             .containsExactly(
-                MsTeamsChannelData.Connection.ofToken(
-                    MsTeamsChannelData.Connection.TokenConnection.builder()
-                        .accessToken("xoxb-1234567890")
-                        .channelId("C01234567890")
-                        .userId("U01234567890")
+                MsTeamsChannelData.Connection.ofMsTeamsToken(
+                    MsTeamsChannelData.Connection.MsTeamsTokenConnection.builder()
+                        .msTeamsChannelId("123e4567-e89b-12d3-a456-426614174000")
+                        .msTeamsTeamId("123e4567-e89b-12d3-a456-426614174000")
+                        .msTeamsTenantId(null)
+                        .msTeamsUserId(null)
                         .build()
                 )
             )
@@ -42,10 +44,11 @@ internal class MsTeamsChannelDataTest {
         val msTeamsChannelData =
             MsTeamsChannelData.builder()
                 .addConnection(
-                    MsTeamsChannelData.Connection.TokenConnection.builder()
-                        .accessToken("xoxb-1234567890")
-                        .channelId("C01234567890")
-                        .userId("U01234567890")
+                    MsTeamsChannelData.Connection.MsTeamsTokenConnection.builder()
+                        .msTeamsChannelId("123e4567-e89b-12d3-a456-426614174000")
+                        .msTeamsTeamId("123e4567-e89b-12d3-a456-426614174000")
+                        .msTeamsTenantId(null)
+                        .msTeamsUserId(null)
                         .build()
                 )
                 .msTeamsTenantId(null)

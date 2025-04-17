@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import java.util.Objects
 
-/** Allows inline setting channel data for a recipient */
+/** A request to set channel data for a type of channel inline. */
 class InlineChannelDataRequest
 @JsonCreator
 private constructor(

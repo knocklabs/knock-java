@@ -9,24 +9,32 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List tenants */
+/** List tenants for the current environment. */
 class TenantListParams
 private constructor(
     private val after: String?,
     private val before: String?,
+    private val name: String?,
     private val pageSize: Long?,
+    private val tenantId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** The cursor to fetch entries after */
+    /** The cursor to fetch entries after. */
     fun after(): Optional<String> = Optional.ofNullable(after)
 
-    /** The cursor to fetch entries before */
+    /** The cursor to fetch entries before. */
     fun before(): Optional<String> = Optional.ofNullable(before)
 
-    /** The page size to fetch */
+    /** Filter tenants by name. */
+    fun name(): Optional<String> = Optional.ofNullable(name)
+
+    /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
+
+    /** Filter tenants by ID. */
+    fun tenantId(): Optional<String> = Optional.ofNullable(tenantId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -47,7 +55,9 @@ private constructor(
 
         private var after: String? = null
         private var before: String? = null
+        private var name: String? = null
         private var pageSize: Long? = null
+        private var tenantId: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -55,24 +65,32 @@ private constructor(
         internal fun from(tenantListParams: TenantListParams) = apply {
             after = tenantListParams.after
             before = tenantListParams.before
+            name = tenantListParams.name
             pageSize = tenantListParams.pageSize
+            tenantId = tenantListParams.tenantId
             additionalHeaders = tenantListParams.additionalHeaders.toBuilder()
             additionalQueryParams = tenantListParams.additionalQueryParams.toBuilder()
         }
 
-        /** The cursor to fetch entries after */
+        /** The cursor to fetch entries after. */
         fun after(after: String?) = apply { this.after = after }
 
         /** Alias for calling [Builder.after] with `after.orElse(null)`. */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
-        /** The cursor to fetch entries before */
+        /** The cursor to fetch entries before. */
         fun before(before: String?) = apply { this.before = before }
 
         /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
-        /** The page size to fetch */
+        /** Filter tenants by name. */
+        fun name(name: String?) = apply { this.name = name }
+
+        /** Alias for calling [Builder.name] with `name.orElse(null)`. */
+        fun name(name: Optional<String>) = name(name.getOrNull())
+
+        /** The number of items per page. */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**
@@ -84,6 +102,12 @@ private constructor(
 
         /** Alias for calling [Builder.pageSize] with `pageSize.orElse(null)`. */
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
+
+        /** Filter tenants by ID. */
+        fun tenantId(tenantId: String?) = apply { this.tenantId = tenantId }
+
+        /** Alias for calling [Builder.tenantId] with `tenantId.orElse(null)`. */
+        fun tenantId(tenantId: Optional<String>) = tenantId(tenantId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -192,7 +216,9 @@ private constructor(
             TenantListParams(
                 after,
                 before,
+                name,
                 pageSize,
+                tenantId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -205,7 +231,9 @@ private constructor(
             .apply {
                 after?.let { put("after", it) }
                 before?.let { put("before", it) }
+                name?.let { put("name", it) }
                 pageSize?.let { put("page_size", it.toString()) }
+                tenantId?.let { put("tenant_id", it) }
                 putAll(additionalQueryParams)
             }
             .build()
@@ -215,11 +243,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is TenantListParams && after == other.after && before == other.before && pageSize == other.pageSize && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is TenantListParams && after == other.after && before == other.before && name == other.name && pageSize == other.pageSize && tenantId == other.tenantId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(after, before, pageSize, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(after, before, name, pageSize, tenantId, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "TenantListParams{after=$after, before=$before, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TenantListParams{after=$after, before=$before, name=$name, pageSize=$pageSize, tenantId=$tenantId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

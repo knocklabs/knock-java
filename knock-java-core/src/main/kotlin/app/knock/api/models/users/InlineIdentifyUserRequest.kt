@@ -49,7 +49,7 @@ private constructor(
     ) : this(id, channelData, createdAt, preferences, mutableMapOf())
 
     /**
-     * The ID of the user to identify. This is an ID that you supply.
+     * The unique identifier for the user.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -57,7 +57,7 @@ private constructor(
     fun id(): String = id.getRequired("id")
 
     /**
-     * Allows inline setting channel data for a recipient
+     * A request to set channel data for a type of channel inline.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -157,7 +157,7 @@ private constructor(
             additionalProperties = inlineIdentifyUserRequest.additionalProperties.toMutableMap()
         }
 
-        /** The ID of the user to identify. This is an ID that you supply. */
+        /** The unique identifier for the user. */
         fun id(id: String) = id(JsonField.of(id))
 
         /**
@@ -168,7 +168,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        /** Allows inline setting channel data for a recipient */
+        /** A request to set channel data for a type of channel inline. */
         fun channelData(channelData: InlineChannelDataRequest?) =
             channelData(JsonField.ofNullable(channelData))
 

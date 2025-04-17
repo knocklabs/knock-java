@@ -18,7 +18,7 @@ interface BulkServiceAsync {
      */
     fun withRawResponse(): WithRawResponse
 
-    /** Deletes objects in bulk for a given collection */
+    /** Bulk deletes objects from the specified collection. */
     fun delete(params: BulkDeleteParams): CompletableFuture<BulkOperation> =
         delete(params, RequestOptions.none())
 
@@ -28,7 +28,10 @@ interface BulkServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
-    /** Bulk upserts subscriptions for a set of objects in a single collection */
+    /**
+     * Add subscriptions for a set of objects in a single collection. If a subscription already
+     * exists, it will be updated.
+     */
     fun addSubscriptions(params: BulkAddSubscriptionsParams): CompletableFuture<BulkOperation> =
         addSubscriptions(params, RequestOptions.none())
 
@@ -38,7 +41,7 @@ interface BulkServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
-    /** Sets objects in bulk for a given collection */
+    /** Bulk sets objects in the specified collection. */
     fun set(params: BulkSetParams): CompletableFuture<BulkOperation> =
         set(params, RequestOptions.none())
 

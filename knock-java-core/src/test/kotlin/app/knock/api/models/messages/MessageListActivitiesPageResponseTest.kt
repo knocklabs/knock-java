@@ -16,7 +16,7 @@ internal class MessageListActivitiesPageResponseTest {
     fun create() {
         val messageListActivitiesPageResponse =
             MessageListActivitiesPageResponse.builder()
-                .addItem(
+                .addEntry(
                     Activity.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                         ._typename("Activity")
@@ -27,13 +27,17 @@ internal class MessageListActivitiesPageResponseTest {
                                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .avatar("avatar")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .email("dev@stainless.com")
+                                .email("email")
                                 .name("name")
                                 .phoneNumber("phone_number")
                                 .timezone("timezone")
                                 .build()
                         )
-                        .data(JsonValue.from(mapOf("foo" to "bar")))
+                        .data(
+                            Activity.Data.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .insertedAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
                         .recipient(
                             User.builder()
@@ -61,7 +65,7 @@ internal class MessageListActivitiesPageResponseTest {
                 )
                 .build()
 
-        assertThat(messageListActivitiesPageResponse.items())
+        assertThat(messageListActivitiesPageResponse.entries())
             .containsExactly(
                 Activity.builder()
                     .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
@@ -73,13 +77,17 @@ internal class MessageListActivitiesPageResponseTest {
                             .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .avatar("avatar")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .email("dev@stainless.com")
+                            .email("email")
                             .name("name")
                             .phoneNumber("phone_number")
                             .timezone("timezone")
                             .build()
                     )
-                    .data(JsonValue.from(mapOf("foo" to "bar")))
+                    .data(
+                        Activity.Data.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .insertedAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
                     .recipient(
                         User.builder()
@@ -113,7 +121,7 @@ internal class MessageListActivitiesPageResponseTest {
         val jsonMapper = jsonMapper()
         val messageListActivitiesPageResponse =
             MessageListActivitiesPageResponse.builder()
-                .addItem(
+                .addEntry(
                     Activity.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                         ._typename("Activity")
@@ -124,13 +132,17 @@ internal class MessageListActivitiesPageResponseTest {
                                 .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .avatar("avatar")
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                                .email("dev@stainless.com")
+                                .email("email")
                                 .name("name")
                                 .phoneNumber("phone_number")
                                 .timezone("timezone")
                                 .build()
                         )
-                        .data(JsonValue.from(mapOf("foo" to "bar")))
+                        .data(
+                            Activity.Data.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
                         .insertedAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
                         .recipient(
                             User.builder()

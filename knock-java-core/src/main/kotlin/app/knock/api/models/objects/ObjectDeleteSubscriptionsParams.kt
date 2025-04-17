@@ -23,7 +23,10 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/** Delete subscriptions for an object */
+/**
+ * Delete subscriptions for the specified recipients from an object. Returns the list of deleted
+ * subscriptions.
+ */
 class ObjectDeleteSubscriptionsParams
 private constructor(
     private val collection: String,
@@ -38,6 +41,8 @@ private constructor(
     fun objectId(): String = objectId
 
     /**
+     * The recipients of the subscription.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -107,6 +112,7 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
+        /** The recipients of the subscription. */
         fun recipients(recipients: List<RecipientRequest>) = apply { body.recipients(recipients) }
 
         /**
@@ -299,7 +305,7 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    /** Request to delete subscriptions */
+    /** A request to delete subscriptions for a set of recipients. */
     class Body
     private constructor(
         private val recipients: JsonField<List<RecipientRequest>>,
@@ -314,6 +320,8 @@ private constructor(
         ) : this(recipients, mutableMapOf())
 
         /**
+         * The recipients of the subscription.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -365,6 +373,7 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
+            /** The recipients of the subscription. */
             fun recipients(recipients: List<RecipientRequest>) =
                 recipients(JsonField.of(recipients))
 

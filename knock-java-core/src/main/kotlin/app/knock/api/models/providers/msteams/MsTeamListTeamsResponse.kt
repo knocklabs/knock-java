@@ -19,7 +19,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** The response from a teams for Microsoft Teams provider request */
+/** The response from a Microsoft Teams provider request, containing a list of teams. */
 class MsTeamListTeamsResponse
 private constructor(
     private val msTeamsTeams: JsonField<List<MsTeamsTeam>>,
@@ -36,12 +36,17 @@ private constructor(
     ) : this(msTeamsTeams, skipToken, mutableMapOf())
 
     /**
+     * List of Microsoft Teams teams.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun msTeamsTeams(): List<MsTeamsTeam> = msTeamsTeams.getRequired("ms_teams_teams")
 
     /**
+     * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
+     * Microsoft Graph API to retrieve the next page of results.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -103,6 +108,7 @@ private constructor(
             additionalProperties = msTeamListTeamsResponse.additionalProperties.toMutableMap()
         }
 
+        /** List of Microsoft Teams teams. */
         fun msTeamsTeams(msTeamsTeams: List<MsTeamsTeam>) = msTeamsTeams(JsonField.of(msTeamsTeams))
 
         /**
@@ -128,6 +134,10 @@ private constructor(
                 }
         }
 
+        /**
+         * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
+         * Microsoft Graph API to retrieve the next page of results.
+         */
         fun skipToken(skipToken: String?) = skipToken(JsonField.ofNullable(skipToken))
 
         /** Alias for calling [Builder.skipToken] with `skipToken.orElse(null)`. */
@@ -232,18 +242,24 @@ private constructor(
         ) : this(id, displayName, description, mutableMapOf())
 
         /**
+         * Microsoft Teams team ID.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun id(): String = id.getRequired("id")
 
         /**
+         * Microsoft Teams team display name.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun displayName(): String = displayName.getRequired("displayName")
 
         /**
+         * Microsoft Teams team description.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
@@ -316,6 +332,7 @@ private constructor(
                 additionalProperties = msTeamsTeam.additionalProperties.toMutableMap()
             }
 
+            /** Microsoft Teams team ID. */
             fun id(id: String) = id(JsonField.of(id))
 
             /**
@@ -327,6 +344,7 @@ private constructor(
              */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
+            /** Microsoft Teams team display name. */
             fun displayName(displayName: String) = displayName(JsonField.of(displayName))
 
             /**
@@ -340,6 +358,7 @@ private constructor(
                 this.displayName = displayName
             }
 
+            /** Microsoft Teams team description. */
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
             /** Alias for calling [Builder.description] with `description.orElse(null)`. */

@@ -20,7 +20,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.Objects
 import java.util.Optional
 
-/** A recipient, which is either a user or an object */
+/** A recipient, which is either a user or an object. */
 @JsonDeserialize(using = Recipient.Deserializer::class)
 @JsonSerialize(using = Recipient.Serializer::class)
 class Recipient
@@ -30,20 +30,20 @@ private constructor(
     private val _json: JsonValue? = null,
 ) {
 
-    /** A user object */
+    /** A user object. */
     fun user(): Optional<User> = Optional.ofNullable(user)
 
-    /** A custom-object entity which belongs to a collection. */
+    /** A custom object entity which belongs to a collection. */
     fun object_(): Optional<Object> = Optional.ofNullable(object_)
 
     fun isUser(): Boolean = user != null
 
     fun isObject(): Boolean = object_ != null
 
-    /** A user object */
+    /** A user object. */
     fun asUser(): User = user.getOrThrow("user")
 
-    /** A custom-object entity which belongs to a collection. */
+    /** A custom object entity which belongs to a collection. */
     fun asObject(): Object = object_.getOrThrow("object_")
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
@@ -121,20 +121,20 @@ private constructor(
 
     companion object {
 
-        /** A user object */
+        /** A user object. */
         @JvmStatic fun ofUser(user: User) = Recipient(user = user)
 
-        /** A custom-object entity which belongs to a collection. */
+        /** A custom object entity which belongs to a collection. */
         @JvmStatic fun ofObject(object_: Object) = Recipient(object_ = object_)
     }
 
     /** An interface that defines how to map each variant of [Recipient] to a value of type [T]. */
     interface Visitor<out T> {
 
-        /** A user object */
+        /** A user object. */
         fun visitUser(user: User): T
 
-        /** A custom-object entity which belongs to a collection. */
+        /** A custom object entity which belongs to a collection. */
         fun visitObject(object_: Object): T
 
         /**

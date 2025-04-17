@@ -11,7 +11,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Deletes objects in bulk for a given collection */
+/** Bulk deletes objects from the specified collection. */
 class BulkDeleteParams
 private constructor(
     private val collection: String,
@@ -23,7 +23,7 @@ private constructor(
 
     fun collection(): String = collection
 
-    /** The IDs of the objects to delete */
+    /** A list of object IDs. */
     fun objectIds(): List<String> = objectIds
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
@@ -68,7 +68,7 @@ private constructor(
 
         fun collection(collection: String) = apply { this.collection = collection }
 
-        /** The IDs of the objects to delete */
+        /** A list of object IDs. */
         fun objectIds(objectIds: List<String>) = apply {
             this.objectIds = objectIds.toMutableList()
         }

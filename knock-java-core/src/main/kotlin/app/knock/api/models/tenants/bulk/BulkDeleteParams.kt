@@ -11,7 +11,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Deletes tenants in bulk */
+/** Delete multiple tenants in a single operation. This operation cannot be undone. */
 class BulkDeleteParams
 private constructor(
     private val tenantIds: List<String>,
@@ -20,7 +20,7 @@ private constructor(
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    /** The IDs of the tenants to delete */
+    /** The IDs of the tenants to delete. */
     fun tenantIds(): List<String> = tenantIds
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
@@ -60,7 +60,7 @@ private constructor(
             additionalBodyProperties = bulkDeleteParams.additionalBodyProperties.toMutableMap()
         }
 
-        /** The IDs of the tenants to delete */
+        /** The IDs of the tenants to delete. */
         fun tenantIds(tenantIds: List<String>) = apply {
             this.tenantIds = tenantIds.toMutableList()
         }

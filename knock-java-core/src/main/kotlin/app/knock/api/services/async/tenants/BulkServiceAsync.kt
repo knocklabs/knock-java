@@ -17,7 +17,7 @@ interface BulkServiceAsync {
      */
     fun withRawResponse(): WithRawResponse
 
-    /** Deletes tenants in bulk */
+    /** Delete multiple tenants in a single operation. This operation cannot be undone. */
     fun delete(params: BulkDeleteParams): CompletableFuture<BulkOperation> =
         delete(params, RequestOptions.none())
 
@@ -27,22 +27,18 @@ interface BulkServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
-    /** Sets tenants in bulk */
-    fun set(): CompletableFuture<BulkOperation> = set(BulkSetParams.none())
-
-    /** @see [set] */
-    fun set(
-        params: BulkSetParams = BulkSetParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<BulkOperation>
-
-    /** @see [set] */
-    fun set(params: BulkSetParams = BulkSetParams.none()): CompletableFuture<BulkOperation> =
+    /**
+     * Set or update multiple tenants in a single operation. This operation allows you to create or
+     * update multiple tenants with their properties and settings.
+     */
+    fun set(params: BulkSetParams): CompletableFuture<BulkOperation> =
         set(params, RequestOptions.none())
 
     /** @see [set] */
-    fun set(requestOptions: RequestOptions): CompletableFuture<BulkOperation> =
-        set(BulkSetParams.none(), requestOptions)
+    fun set(
+        params: BulkSetParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<BulkOperation>
 
     /** A view of [BulkServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -67,24 +63,14 @@ interface BulkServiceAsync {
          * [BulkServiceAsync.set].
          */
         @MustBeClosed
-        fun set(): CompletableFuture<HttpResponseFor<BulkOperation>> = set(BulkSetParams.none())
+        fun set(params: BulkSetParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            set(params, RequestOptions.none())
 
         /** @see [set] */
         @MustBeClosed
         fun set(
-            params: BulkSetParams = BulkSetParams.none(),
+            params: BulkSetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
-
-        /** @see [set] */
-        @MustBeClosed
-        fun set(
-            params: BulkSetParams = BulkSetParams.none()
-        ): CompletableFuture<HttpResponseFor<BulkOperation>> = set(params, RequestOptions.none())
-
-        /** @see [set] */
-        @MustBeClosed
-        fun set(requestOptions: RequestOptions): CompletableFuture<HttpResponseFor<BulkOperation>> =
-            set(BulkSetParams.none(), requestOptions)
     }
 }

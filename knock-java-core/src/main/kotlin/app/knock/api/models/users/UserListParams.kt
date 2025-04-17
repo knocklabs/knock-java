@@ -2,30 +2,39 @@
 
 package app.knock.api.models.users
 
+import app.knock.api.core.Enum
+import app.knock.api.core.JsonField
 import app.knock.api.core.Params
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
+import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
+import com.fasterxml.jackson.annotation.JsonCreator
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Returns a list of users */
+/** Retrieve a paginated list of users in the environment. */
 class UserListParams
 private constructor(
     private val after: String?,
     private val before: String?,
+    private val include: List<Include>?,
     private val pageSize: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** The cursor to fetch entries after */
+    /** The cursor to fetch entries after.. */
     fun after(): Optional<String> = Optional.ofNullable(after)
 
-    /** The cursor to fetch entries before */
+    /** The cursor to fetch entries before.. */
     fun before(): Optional<String> = Optional.ofNullable(before)
 
-    /** The page size to fetch */
+    /** Includes preferences of the users in the response. */
+    fun include(): Optional<List<Include>> = Optional.ofNullable(include)
+
+    /** The number of items per page.. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -47,6 +56,7 @@ private constructor(
 
         private var after: String? = null
         private var before: String? = null
+        private var include: MutableList<Include>? = null
         private var pageSize: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -55,24 +65,40 @@ private constructor(
         internal fun from(userListParams: UserListParams) = apply {
             after = userListParams.after
             before = userListParams.before
+            include = userListParams.include?.toMutableList()
             pageSize = userListParams.pageSize
             additionalHeaders = userListParams.additionalHeaders.toBuilder()
             additionalQueryParams = userListParams.additionalQueryParams.toBuilder()
         }
 
-        /** The cursor to fetch entries after */
+        /** The cursor to fetch entries after.. */
         fun after(after: String?) = apply { this.after = after }
 
         /** Alias for calling [Builder.after] with `after.orElse(null)`. */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
-        /** The cursor to fetch entries before */
+        /** The cursor to fetch entries before.. */
         fun before(before: String?) = apply { this.before = before }
 
         /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
-        /** The page size to fetch */
+        /** Includes preferences of the users in the response. */
+        fun include(include: List<Include>?) = apply { this.include = include?.toMutableList() }
+
+        /** Alias for calling [Builder.include] with `include.orElse(null)`. */
+        fun include(include: Optional<List<Include>>) = include(include.getOrNull())
+
+        /**
+         * Adds a single [Include] to [Builder.include].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addInclude(include: Include) = apply {
+            this.include = (this.include ?: mutableListOf()).apply { add(include) }
+        }
+
+        /** The number of items per page.. */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**
@@ -192,6 +218,7 @@ private constructor(
             UserListParams(
                 after,
                 before,
+                include?.toImmutable(),
                 pageSize,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -205,21 +232,140 @@ private constructor(
             .apply {
                 after?.let { put("after", it) }
                 before?.let { put("before", it) }
+                include?.forEach { put("include[]", it.toString()) }
                 pageSize?.let { put("page_size", it.toString()) }
                 putAll(additionalQueryParams)
             }
             .build()
+
+    class Include @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val PREFERENCES = of("preferences")
+
+            @JvmStatic fun of(value: String) = Include(JsonField.of(value))
+        }
+
+        /** An enum containing [Include]'s known values. */
+        enum class Known {
+            PREFERENCES
+        }
+
+        /**
+         * An enum containing [Include]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Include] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            PREFERENCES,
+            /** An enum member indicating that [Include] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                PREFERENCES -> Value.PREFERENCES
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
+         */
+        fun known(): Known =
+            when (this) {
+                PREFERENCES -> Known.PREFERENCES
+                else -> throw KnockInvalidDataException("Unknown Include: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws KnockInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): Include = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Include && value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is UserListParams && after == other.after && before == other.before && pageSize == other.pageSize && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is UserListParams && after == other.after && before == other.before && include == other.include && pageSize == other.pageSize && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(after, before, pageSize, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(after, before, include, pageSize, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "UserListParams{after=$after, before=$before, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserListParams{after=$after, before=$before, include=$include, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

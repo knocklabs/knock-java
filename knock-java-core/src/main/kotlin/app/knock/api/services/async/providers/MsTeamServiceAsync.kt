@@ -23,7 +23,7 @@ interface MsTeamServiceAsync {
 
     /**
      * Check if a connection to Microsoft Teams has been authorized for a given Microsoft Teams
-     * tenant object
+     * tenant object.
      */
     fun checkAuth(params: MsTeamCheckAuthParams): CompletableFuture<MsTeamCheckAuthResponse> =
         checkAuth(params, RequestOptions.none())
@@ -35,8 +35,8 @@ interface MsTeamServiceAsync {
     ): CompletableFuture<MsTeamCheckAuthResponse>
 
     /**
-     * Get a list of the Microsoft Teams channels within a team. By default, archived and private
-     * channels are excluded from the results.
+     * List the Microsoft Teams channels within a team. By default, archived and private channels
+     * are excluded from the results.
      */
     fun listChannels(
         params: MsTeamListChannelsParams
@@ -48,7 +48,10 @@ interface MsTeamServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<MsTeamListChannelsResponse>
 
-    /** Get a list of teams belonging to the Microsoft Entra tenant */
+    /**
+     * Get a list of teams belonging to the Microsoft Entra tenant. By default, archived and private
+     * channels are excluded from the results.
+     */
     fun listTeams(params: MsTeamListTeamsParams): CompletableFuture<MsTeamListTeamsResponse> =
         listTeams(params, RequestOptions.none())
 
@@ -58,7 +61,7 @@ interface MsTeamServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<MsTeamListTeamsResponse>
 
-    /** Remove a Microsoft Entra tenant ID from a Microsoft Teams tenant object */
+    /** Remove a Microsoft Entra tenant ID from a Microsoft Teams tenant object. */
     fun revokeAccess(params: MsTeamRevokeAccessParams): CompletableFuture<String> =
         revokeAccess(params, RequestOptions.none())
 

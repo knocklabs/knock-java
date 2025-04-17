@@ -22,7 +22,11 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Issues a cancellation request to inflight workflow runs */
+/**
+ * When invoked for a workflow using a specific workflow key and cancellation key, will cancel any
+ * queued workflow runs associated with that key/cancellation key pair. Can optionally be provided
+ * one or more recipients to scope the request to.
+ */
 class WorkflowCancelParams
 private constructor(
     private val key: String,
@@ -34,8 +38,8 @@ private constructor(
     fun key(): String = key
 
     /**
-     * The cancellation key supplied to the workflow trigger endpoint to use for cancelling one or
-     * more workflow runs.
+     * The cancellation key provided during the initial notify call. If used in a cancel request,
+     * will cancel the notification for the recipients specified in the cancel request.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -43,7 +47,8 @@ private constructor(
     fun cancellationKey(): String = body.cancellationKey()
 
     /**
-     * An optional list of recipients to cancel the workflow for using the cancellation key.
+     * A list of recipients to cancel the notification for. If omitted, cancels for all recipients
+     * associated with the cancellation key.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -51,6 +56,8 @@ private constructor(
     fun recipients(): Optional<List<String>> = body.recipients()
 
     /**
+     * The unique identifier for the tenant.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -129,8 +136,8 @@ private constructor(
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /**
-         * The cancellation key supplied to the workflow trigger endpoint to use for cancelling one
-         * or more workflow runs.
+         * The cancellation key provided during the initial notify call. If used in a cancel
+         * request, will cancel the notification for the recipients specified in the cancel request.
          */
         fun cancellationKey(cancellationKey: String) = apply {
             body.cancellationKey(cancellationKey)
@@ -147,7 +154,10 @@ private constructor(
             body.cancellationKey(cancellationKey)
         }
 
-        /** An optional list of recipients to cancel the workflow for using the cancellation key. */
+        /**
+         * A list of recipients to cancel the notification for. If omitted, cancels for all
+         * recipients associated with the cancellation key.
+         */
         fun recipients(recipients: List<String>?) = apply { body.recipients(recipients) }
 
         /** Alias for calling [Builder.recipients] with `recipients.orElse(null)`. */
@@ -169,6 +179,7 @@ private constructor(
          */
         fun addRecipient(recipient: String) = apply { body.addRecipient(recipient) }
 
+        /** The unique identifier for the tenant. */
         fun tenant(tenant: String?) = apply { body.tenant(tenant) }
 
         /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
@@ -333,7 +344,7 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    /** A set of parameters to cancel a workflow with */
+    /** A request to cancel a previously triggered workflow. */
     class Body
     private constructor(
         private val cancellationKey: JsonField<String>,
@@ -354,8 +365,8 @@ private constructor(
         ) : this(cancellationKey, recipients, tenant, mutableMapOf())
 
         /**
-         * The cancellation key supplied to the workflow trigger endpoint to use for cancelling one
-         * or more workflow runs.
+         * The cancellation key provided during the initial notify call. If used in a cancel
+         * request, will cancel the notification for the recipients specified in the cancel request.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -363,7 +374,8 @@ private constructor(
         fun cancellationKey(): String = cancellationKey.getRequired("cancellation_key")
 
         /**
-         * An optional list of recipients to cancel the workflow for using the cancellation key.
+         * A list of recipients to cancel the notification for. If omitted, cancels for all
+         * recipients associated with the cancellation key.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -371,6 +383,8 @@ private constructor(
         fun recipients(): Optional<List<String>> = recipients.getOptional("recipients")
 
         /**
+         * The unique identifier for the tenant.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
@@ -444,8 +458,9 @@ private constructor(
             }
 
             /**
-             * The cancellation key supplied to the workflow trigger endpoint to use for cancelling
-             * one or more workflow runs.
+             * The cancellation key provided during the initial notify call. If used in a cancel
+             * request, will cancel the notification for the recipients specified in the cancel
+             * request.
              */
             fun cancellationKey(cancellationKey: String) =
                 cancellationKey(JsonField.of(cancellationKey))
@@ -462,7 +477,8 @@ private constructor(
             }
 
             /**
-             * An optional list of recipients to cancel the workflow for using the cancellation key.
+             * A list of recipients to cancel the notification for. If omitted, cancels for all
+             * recipients associated with the cancellation key.
              */
             fun recipients(recipients: List<String>?) = recipients(JsonField.ofNullable(recipients))
 
@@ -492,6 +508,7 @@ private constructor(
                     }
             }
 
+            /** The unique identifier for the tenant. */
             fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
 
             /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */

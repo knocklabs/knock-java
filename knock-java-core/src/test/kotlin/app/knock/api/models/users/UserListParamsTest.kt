@@ -10,12 +10,23 @@ internal class UserListParamsTest {
 
     @Test
     fun create() {
-        UserListParams.builder().after("after").before("before").pageSize(0L).build()
+        UserListParams.builder()
+            .after("after")
+            .before("before")
+            .addInclude(UserListParams.Include.PREFERENCES)
+            .pageSize(0L)
+            .build()
     }
 
     @Test
     fun queryParams() {
-        val params = UserListParams.builder().after("after").before("before").pageSize(0L).build()
+        val params =
+            UserListParams.builder()
+                .after("after")
+                .before("before")
+                .addInclude(UserListParams.Include.PREFERENCES)
+                .pageSize(0L)
+                .build()
 
         val queryParams = params._queryParams()
 
@@ -24,6 +35,7 @@ internal class UserListParamsTest {
                 QueryParams.builder()
                     .put("after", "after")
                     .put("before", "before")
+                    .put("include[]", "preferences")
                     .put("page_size", "0")
                     .build()
             )

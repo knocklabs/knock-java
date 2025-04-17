@@ -35,7 +35,7 @@ private constructor(
     private val _json: JsonValue? = null,
 ) {
 
-    /** A user identifier */
+    /** An identifier for a user recipient. */
     fun string(): Optional<String> = Optional.ofNullable(string)
 
     /**
@@ -46,7 +46,7 @@ private constructor(
     fun inlineIdentifyUser(): Optional<InlineIdentifyUserRequest> =
         Optional.ofNullable(inlineIdentifyUser)
 
-    /** Inline identifies a custom object belonging to a collection */
+    /** A custom object entity which belongs to a collection. */
     fun inlineObject(): Optional<InlineObjectRequest> = Optional.ofNullable(inlineObject)
 
     fun isString(): Boolean = string != null
@@ -55,7 +55,7 @@ private constructor(
 
     fun isInlineObject(): Boolean = inlineObject != null
 
-    /** A user identifier */
+    /** An identifier for a user recipient. */
     fun asString(): String = string.getOrThrow("string")
 
     /**
@@ -66,7 +66,7 @@ private constructor(
     fun asInlineIdentifyUser(): InlineIdentifyUserRequest =
         inlineIdentifyUser.getOrThrow("inlineIdentifyUser")
 
-    /** Inline identifies a custom object belonging to a collection */
+    /** A custom object entity which belongs to a collection. */
     fun asInlineObject(): InlineObjectRequest = inlineObject.getOrThrow("inlineObject")
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
@@ -155,7 +155,7 @@ private constructor(
 
     companion object {
 
-        /** A user identifier */
+        /** An identifier for a user recipient. */
         @JvmStatic fun ofString(string: String) = RecipientRequest(string = string)
 
         /**
@@ -167,7 +167,7 @@ private constructor(
         fun ofInlineIdentifyUser(inlineIdentifyUser: InlineIdentifyUserRequest) =
             RecipientRequest(inlineIdentifyUser = inlineIdentifyUser)
 
-        /** Inline identifies a custom object belonging to a collection */
+        /** A custom object entity which belongs to a collection. */
         @JvmStatic
         fun ofInlineObject(inlineObject: InlineObjectRequest) =
             RecipientRequest(inlineObject = inlineObject)
@@ -179,7 +179,7 @@ private constructor(
      */
     interface Visitor<out T> {
 
-        /** A user identifier */
+        /** An identifier for a user recipient. */
         fun visitString(string: String): T
 
         /**
@@ -189,7 +189,7 @@ private constructor(
          */
         fun visitInlineIdentifyUser(inlineIdentifyUser: InlineIdentifyUserRequest): T
 
-        /** Inline identifies a custom object belonging to a collection */
+        /** A custom object entity which belongs to a collection. */
         fun visitInlineObject(inlineObject: InlineObjectRequest): T
 
         /**

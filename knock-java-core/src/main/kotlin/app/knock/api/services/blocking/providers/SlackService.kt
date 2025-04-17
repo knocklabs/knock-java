@@ -6,8 +6,8 @@ import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.providers.slack.SlackCheckAuthParams
 import app.knock.api.models.providers.slack.SlackCheckAuthResponse
+import app.knock.api.models.providers.slack.SlackListChannelsPage
 import app.knock.api.models.providers.slack.SlackListChannelsParams
-import app.knock.api.models.providers.slack.SlackListChannelsResponse
 import app.knock.api.models.providers.slack.SlackRevokeAccessParams
 import com.google.errorprone.annotations.MustBeClosed
 
@@ -18,7 +18,7 @@ interface SlackService {
      */
     fun withRawResponse(): WithRawResponse
 
-    /** Check if a Slack channel is authenticated */
+    /** Check if a Slack channel is authenticated. */
     fun checkAuth(params: SlackCheckAuthParams): SlackCheckAuthResponse =
         checkAuth(params, RequestOptions.none())
 
@@ -28,17 +28,17 @@ interface SlackService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): SlackCheckAuthResponse
 
-    /** Get Slack channels from a Slack workspace */
-    fun listChannels(params: SlackListChannelsParams): SlackListChannelsResponse =
+    /** List Slack channels for a Slack workspace. */
+    fun listChannels(params: SlackListChannelsParams): SlackListChannelsPage =
         listChannels(params, RequestOptions.none())
 
     /** @see [listChannels] */
     fun listChannels(
         params: SlackListChannelsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): SlackListChannelsResponse
+    ): SlackListChannelsPage
 
-    /** Revoke access for a Slack channel */
+    /** Revoke access for a Slack channel. */
     fun revokeAccess(params: SlackRevokeAccessParams): String =
         revokeAccess(params, RequestOptions.none())
 
@@ -71,16 +71,15 @@ interface SlackService {
          * otherwise the same as [SlackService.listChannels].
          */
         @MustBeClosed
-        fun listChannels(
-            params: SlackListChannelsParams
-        ): HttpResponseFor<SlackListChannelsResponse> = listChannels(params, RequestOptions.none())
+        fun listChannels(params: SlackListChannelsParams): HttpResponseFor<SlackListChannelsPage> =
+            listChannels(params, RequestOptions.none())
 
         /** @see [listChannels] */
         @MustBeClosed
         fun listChannels(
             params: SlackListChannelsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<SlackListChannelsResponse>
+        ): HttpResponseFor<SlackListChannelsPage>
 
         /**
          * Returns a raw HTTP response for `put /v1/providers/slack/{channel_id}/revoke_access`, but

@@ -10,7 +10,7 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Marks one or more messages as read */
+/** Marks the given messages as read. */
 class BatchMarkAsReadParams
 private constructor(
     private val additionalHeaders: Headers,

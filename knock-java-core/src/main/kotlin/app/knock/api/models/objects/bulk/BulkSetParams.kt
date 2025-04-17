@@ -2,27 +2,53 @@
 
 package app.knock.api.models.objects.bulk
 
+import app.knock.api.core.ExcludeMissing
+import app.knock.api.core.JsonField
+import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
+import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
+import app.knock.api.models.objects.InlineObjectRequest
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
-import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
-/** Sets objects in bulk for a given collection */
+/** Bulk sets objects in the specified collection. */
 class BulkSetParams
 private constructor(
     private val collection: String,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
     fun collection(): String = collection
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    /**
+     * A list of objects.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun objects(): List<InlineObjectRequest> = body.objects()
+
+    /**
+     * Returns the raw JSON value of [objects].
+     *
+     * Unlike [objects], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _objects(): JsonField<List<InlineObjectRequest>> = body._objects()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -38,6 +64,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .collection()
+         * .objects()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -47,19 +74,66 @@ private constructor(
     class Builder internal constructor() {
 
         private var collection: String? = null
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(bulkSetParams: BulkSetParams) = apply {
             collection = bulkSetParams.collection
+            body = bulkSetParams.body.toBuilder()
             additionalHeaders = bulkSetParams.additionalHeaders.toBuilder()
             additionalQueryParams = bulkSetParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = bulkSetParams.additionalBodyProperties.toMutableMap()
         }
 
         fun collection(collection: String) = apply { this.collection = collection }
+
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [objects]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /** A list of objects. */
+        fun objects(objects: List<InlineObjectRequest>) = apply { body.objects(objects) }
+
+        /**
+         * Sets [Builder.objects] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.objects] with a well-typed `List<InlineObjectRequest>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun objects(objects: JsonField<List<InlineObjectRequest>>) = apply { body.objects(objects) }
+
+        /**
+         * Adds a single [InlineObjectRequest] to [objects].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addObject(object_: InlineObjectRequest) = apply { body.addObject(object_) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
+        }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -159,28 +233,6 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
-        }
-
         /**
          * Returns an immutable instance of [BulkSetParams].
          *
@@ -189,6 +241,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .collection()
+         * .objects()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -196,14 +249,13 @@ private constructor(
         fun build(): BulkSetParams =
             BulkSetParams(
                 checkRequired("collection", collection),
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
-    fun _body(): Optional<Map<String, JsonValue>> =
-        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -215,16 +267,195 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
+    /** A request to set objects in bulk. */
+    class Body
+    private constructor(
+        private val objects: JsonField<List<InlineObjectRequest>>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("objects")
+            @ExcludeMissing
+            objects: JsonField<List<InlineObjectRequest>> = JsonMissing.of()
+        ) : this(objects, mutableMapOf())
+
+        /**
+         * A list of objects.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun objects(): List<InlineObjectRequest> = objects.getRequired("objects")
+
+        /**
+         * Returns the raw JSON value of [objects].
+         *
+         * Unlike [objects], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("objects")
+        @ExcludeMissing
+        fun _objects(): JsonField<List<InlineObjectRequest>> = objects
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .objects()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var objects: JsonField<MutableList<InlineObjectRequest>>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(body: Body) = apply {
+                objects = body.objects.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
+            }
+
+            /** A list of objects. */
+            fun objects(objects: List<InlineObjectRequest>) = objects(JsonField.of(objects))
+
+            /**
+             * Sets [Builder.objects] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.objects] with a well-typed
+             * `List<InlineObjectRequest>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun objects(objects: JsonField<List<InlineObjectRequest>>) = apply {
+                this.objects = objects.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [InlineObjectRequest] to [objects].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addObject(object_: InlineObjectRequest) = apply {
+                objects =
+                    (objects ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("objects", it).add(object_)
+                    }
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .objects()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Body =
+                Body(
+                    checkRequired("objects", objects).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            objects().forEach { it.validate() }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (objects.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && objects == other.objects && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(objects, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{objects=$objects, additionalProperties=$additionalProperties}"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is BulkSetParams && collection == other.collection && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is BulkSetParams && collection == other.collection && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "BulkSetParams{collection=$collection, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "BulkSetParams{collection=$collection, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

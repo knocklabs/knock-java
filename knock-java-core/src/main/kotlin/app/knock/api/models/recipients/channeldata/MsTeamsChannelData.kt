@@ -30,7 +30,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Microsoft Teams channel data */
+/** Microsoft Teams channel connection. */
 class MsTeamsChannelData
 private constructor(
     private val connections: JsonField<List<Connection>>,
@@ -49,13 +49,15 @@ private constructor(
     ) : this(connections, msTeamsTenantId, mutableMapOf())
 
     /**
+     * List of Microsoft Teams connections.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun connections(): List<Connection> = connections.getRequired("connections")
 
     /**
-     * The Microsoft Teams tenant ID
+     * Microsoft Teams tenant ID.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -119,6 +121,7 @@ private constructor(
             additionalProperties = msTeamsChannelData.additionalProperties.toMutableMap()
         }
 
+        /** List of Microsoft Teams connections. */
         fun connections(connections: List<Connection>) = connections(JsonField.of(connections))
 
         /**
@@ -144,17 +147,18 @@ private constructor(
                 }
         }
 
-        /** Alias for calling [addConnection] with `Connection.ofToken(token)`. */
-        fun addConnection(token: Connection.TokenConnection) =
-            addConnection(Connection.ofToken(token))
+        /** Alias for calling [addConnection] with `Connection.ofMsTeamsToken(msTeamsToken)`. */
+        fun addConnection(msTeamsToken: Connection.MsTeamsTokenConnection) =
+            addConnection(Connection.ofMsTeamsToken(msTeamsToken))
 
         /**
-         * Alias for calling [addConnection] with `Connection.ofIncomingWebhook(incomingWebhook)`.
+         * Alias for calling [addConnection] with
+         * `Connection.ofMsTeamsIncomingWebhook(msTeamsIncomingWebhook)`.
          */
-        fun addConnection(incomingWebhook: Connection.IncomingWebhookConnection) =
-            addConnection(Connection.ofIncomingWebhook(incomingWebhook))
+        fun addConnection(msTeamsIncomingWebhook: Connection.MsTeamsIncomingWebhookConnection) =
+            addConnection(Connection.ofMsTeamsIncomingWebhook(msTeamsIncomingWebhook))
 
-        /** The Microsoft Teams tenant ID */
+        /** Microsoft Teams tenant ID. */
         fun msTeamsTenantId(msTeamsTenantId: String?) =
             msTeamsTenantId(JsonField.ofNullable(msTeamsTenantId))
 
@@ -242,40 +246,41 @@ private constructor(
         (connections.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (msTeamsTenantId.asKnown().isPresent) 1 else 0)
 
-    /** A Slack connection, which either includes a channel_id or a user_id */
+    /** Microsoft Teams token connection. */
     @JsonDeserialize(using = Connection.Deserializer::class)
     @JsonSerialize(using = Connection.Serializer::class)
     class Connection
     private constructor(
-        private val token: TokenConnection? = null,
-        private val incomingWebhook: IncomingWebhookConnection? = null,
+        private val msTeamsToken: MsTeamsTokenConnection? = null,
+        private val msTeamsIncomingWebhook: MsTeamsIncomingWebhookConnection? = null,
         private val _json: JsonValue? = null,
     ) {
 
-        /** A Slack connection, which either includes a channel_id or a user_id */
-        fun token(): Optional<TokenConnection> = Optional.ofNullable(token)
+        /** Microsoft Teams token connection. */
+        fun msTeamsToken(): Optional<MsTeamsTokenConnection> = Optional.ofNullable(msTeamsToken)
 
-        /** An incoming webhook Slack connection */
-        fun incomingWebhook(): Optional<IncomingWebhookConnection> =
-            Optional.ofNullable(incomingWebhook)
+        /** Microsoft Teams incoming webhook connection. */
+        fun msTeamsIncomingWebhook(): Optional<MsTeamsIncomingWebhookConnection> =
+            Optional.ofNullable(msTeamsIncomingWebhook)
 
-        fun isToken(): Boolean = token != null
+        fun isMsTeamsToken(): Boolean = msTeamsToken != null
 
-        fun isIncomingWebhook(): Boolean = incomingWebhook != null
+        fun isMsTeamsIncomingWebhook(): Boolean = msTeamsIncomingWebhook != null
 
-        /** A Slack connection, which either includes a channel_id or a user_id */
-        fun asToken(): TokenConnection = token.getOrThrow("token")
+        /** Microsoft Teams token connection. */
+        fun asMsTeamsToken(): MsTeamsTokenConnection = msTeamsToken.getOrThrow("msTeamsToken")
 
-        /** An incoming webhook Slack connection */
-        fun asIncomingWebhook(): IncomingWebhookConnection =
-            incomingWebhook.getOrThrow("incomingWebhook")
+        /** Microsoft Teams incoming webhook connection. */
+        fun asMsTeamsIncomingWebhook(): MsTeamsIncomingWebhookConnection =
+            msTeamsIncomingWebhook.getOrThrow("msTeamsIncomingWebhook")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
-                token != null -> visitor.visitToken(token)
-                incomingWebhook != null -> visitor.visitIncomingWebhook(incomingWebhook)
+                msTeamsToken != null -> visitor.visitMsTeamsToken(msTeamsToken)
+                msTeamsIncomingWebhook != null ->
+                    visitor.visitMsTeamsIncomingWebhook(msTeamsIncomingWebhook)
                 else -> visitor.unknown(_json)
             }
 
@@ -288,12 +293,14 @@ private constructor(
 
             accept(
                 object : Visitor<Unit> {
-                    override fun visitToken(token: TokenConnection) {
-                        token.validate()
+                    override fun visitMsTeamsToken(msTeamsToken: MsTeamsTokenConnection) {
+                        msTeamsToken.validate()
                     }
 
-                    override fun visitIncomingWebhook(incomingWebhook: IncomingWebhookConnection) {
-                        incomingWebhook.validate()
+                    override fun visitMsTeamsIncomingWebhook(
+                        msTeamsIncomingWebhook: MsTeamsIncomingWebhookConnection
+                    ) {
+                        msTeamsIncomingWebhook.validate()
                     }
                 }
             )
@@ -318,10 +325,12 @@ private constructor(
         internal fun validity(): Int =
             accept(
                 object : Visitor<Int> {
-                    override fun visitToken(token: TokenConnection) = token.validity()
+                    override fun visitMsTeamsToken(msTeamsToken: MsTeamsTokenConnection) =
+                        msTeamsToken.validity()
 
-                    override fun visitIncomingWebhook(incomingWebhook: IncomingWebhookConnection) =
-                        incomingWebhook.validity()
+                    override fun visitMsTeamsIncomingWebhook(
+                        msTeamsIncomingWebhook: MsTeamsIncomingWebhookConnection
+                    ) = msTeamsIncomingWebhook.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -332,28 +341,31 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Connection && token == other.token && incomingWebhook == other.incomingWebhook /* spotless:on */
+            return /* spotless:off */ other is Connection && msTeamsToken == other.msTeamsToken && msTeamsIncomingWebhook == other.msTeamsIncomingWebhook /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(token, incomingWebhook) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(msTeamsToken, msTeamsIncomingWebhook) /* spotless:on */
 
         override fun toString(): String =
             when {
-                token != null -> "Connection{token=$token}"
-                incomingWebhook != null -> "Connection{incomingWebhook=$incomingWebhook}"
+                msTeamsToken != null -> "Connection{msTeamsToken=$msTeamsToken}"
+                msTeamsIncomingWebhook != null ->
+                    "Connection{msTeamsIncomingWebhook=$msTeamsIncomingWebhook}"
                 _json != null -> "Connection{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Connection")
             }
 
         companion object {
 
-            /** A Slack connection, which either includes a channel_id or a user_id */
-            @JvmStatic fun ofToken(token: TokenConnection) = Connection(token = token)
-
-            /** An incoming webhook Slack connection */
+            /** Microsoft Teams token connection. */
             @JvmStatic
-            fun ofIncomingWebhook(incomingWebhook: IncomingWebhookConnection) =
-                Connection(incomingWebhook = incomingWebhook)
+            fun ofMsTeamsToken(msTeamsToken: MsTeamsTokenConnection) =
+                Connection(msTeamsToken = msTeamsToken)
+
+            /** Microsoft Teams incoming webhook connection. */
+            @JvmStatic
+            fun ofMsTeamsIncomingWebhook(msTeamsIncomingWebhook: MsTeamsIncomingWebhookConnection) =
+                Connection(msTeamsIncomingWebhook = msTeamsIncomingWebhook)
         }
 
         /**
@@ -361,11 +373,13 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            /** A Slack connection, which either includes a channel_id or a user_id */
-            fun visitToken(token: TokenConnection): T
+            /** Microsoft Teams token connection. */
+            fun visitMsTeamsToken(msTeamsToken: MsTeamsTokenConnection): T
 
-            /** An incoming webhook Slack connection */
-            fun visitIncomingWebhook(incomingWebhook: IncomingWebhookConnection): T
+            /** Microsoft Teams incoming webhook connection. */
+            fun visitMsTeamsIncomingWebhook(
+                msTeamsIncomingWebhook: MsTeamsIncomingWebhookConnection
+            ): T
 
             /**
              * Maps an unknown variant of [Connection] to a value of type [T].
@@ -389,12 +403,11 @@ private constructor(
 
                 val bestMatches =
                     sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<TokenConnection>())?.let {
-                                Connection(token = it, _json = json)
+                            tryDeserialize(node, jacksonTypeRef<MsTeamsTokenConnection>())?.let {
+                                Connection(msTeamsToken = it, _json = json)
                             },
-                            tryDeserialize(node, jacksonTypeRef<IncomingWebhookConnection>())?.let {
-                                Connection(incomingWebhook = it, _json = json)
-                            },
+                            tryDeserialize(node, jacksonTypeRef<MsTeamsIncomingWebhookConnection>())
+                                ?.let { Connection(msTeamsIncomingWebhook = it, _json = json) },
                         )
                         .filterNotNull()
                         .allMaxBy { it.validity() }
@@ -420,80 +433,120 @@ private constructor(
                 provider: SerializerProvider,
             ) {
                 when {
-                    value.token != null -> generator.writeObject(value.token)
-                    value.incomingWebhook != null -> generator.writeObject(value.incomingWebhook)
+                    value.msTeamsToken != null -> generator.writeObject(value.msTeamsToken)
+                    value.msTeamsIncomingWebhook != null ->
+                        generator.writeObject(value.msTeamsIncomingWebhook)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Connection")
                 }
             }
         }
 
-        /** A Slack connection, which either includes a channel_id or a user_id */
-        class TokenConnection
+        /** Microsoft Teams token connection. */
+        class MsTeamsTokenConnection
         private constructor(
-            private val accessToken: JsonField<String>,
-            private val channelId: JsonField<String>,
-            private val userId: JsonField<String>,
+            private val msTeamsChannelId: JsonField<String>,
+            private val msTeamsTeamId: JsonField<String>,
+            private val msTeamsTenantId: JsonField<String>,
+            private val msTeamsUserId: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("access_token")
+                @JsonProperty("ms_teams_channel_id")
                 @ExcludeMissing
-                accessToken: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("channel_id")
+                msTeamsChannelId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("ms_teams_team_id")
                 @ExcludeMissing
-                channelId: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("user_id")
+                msTeamsTeamId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("ms_teams_tenant_id")
                 @ExcludeMissing
-                userId: JsonField<String> = JsonMissing.of(),
-            ) : this(accessToken, channelId, userId, mutableMapOf())
+                msTeamsTenantId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("ms_teams_user_id")
+                @ExcludeMissing
+                msTeamsUserId: JsonField<String> = JsonMissing.of(),
+            ) : this(
+                msTeamsChannelId,
+                msTeamsTeamId,
+                msTeamsTenantId,
+                msTeamsUserId,
+                mutableMapOf(),
+            )
 
             /**
-             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
-             *   the server responded with an unexpected value).
-             */
-            fun accessToken(): Optional<String> = accessToken.getOptional("access_token")
-
-            /**
-             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
-             *   the server responded with an unexpected value).
-             */
-            fun channelId(): Optional<String> = channelId.getOptional("channel_id")
-
-            /**
-             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
-             *   the server responded with an unexpected value).
-             */
-            fun userId(): Optional<String> = userId.getOptional("user_id")
-
-            /**
-             * Returns the raw JSON value of [accessToken].
+             * Microsoft Teams channel ID.
              *
-             * Unlike [accessToken], this method doesn't throw if the JSON field has an unexpected
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun msTeamsChannelId(): Optional<String> =
+                msTeamsChannelId.getOptional("ms_teams_channel_id")
+
+            /**
+             * Microsoft Teams team ID.
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun msTeamsTeamId(): Optional<String> = msTeamsTeamId.getOptional("ms_teams_team_id")
+
+            /**
+             * Microsoft Teams tenant ID.
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun msTeamsTenantId(): Optional<String> =
+                msTeamsTenantId.getOptional("ms_teams_tenant_id")
+
+            /**
+             * Microsoft Teams user ID.
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun msTeamsUserId(): Optional<String> = msTeamsUserId.getOptional("ms_teams_user_id")
+
+            /**
+             * Returns the raw JSON value of [msTeamsChannelId].
+             *
+             * Unlike [msTeamsChannelId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("ms_teams_channel_id")
+            @ExcludeMissing
+            fun _msTeamsChannelId(): JsonField<String> = msTeamsChannelId
+
+            /**
+             * Returns the raw JSON value of [msTeamsTeamId].
+             *
+             * Unlike [msTeamsTeamId], this method doesn't throw if the JSON field has an unexpected
              * type.
              */
-            @JsonProperty("access_token")
+            @JsonProperty("ms_teams_team_id")
             @ExcludeMissing
-            fun _accessToken(): JsonField<String> = accessToken
+            fun _msTeamsTeamId(): JsonField<String> = msTeamsTeamId
 
             /**
-             * Returns the raw JSON value of [channelId].
+             * Returns the raw JSON value of [msTeamsTenantId].
              *
-             * Unlike [channelId], this method doesn't throw if the JSON field has an unexpected
+             * Unlike [msTeamsTenantId], this method doesn't throw if the JSON field has an
+             * unexpected type.
+             */
+            @JsonProperty("ms_teams_tenant_id")
+            @ExcludeMissing
+            fun _msTeamsTenantId(): JsonField<String> = msTeamsTenantId
+
+            /**
+             * Returns the raw JSON value of [msTeamsUserId].
+             *
+             * Unlike [msTeamsUserId], this method doesn't throw if the JSON field has an unexpected
              * type.
              */
-            @JsonProperty("channel_id")
+            @JsonProperty("ms_teams_user_id")
             @ExcludeMissing
-            fun _channelId(): JsonField<String> = channelId
-
-            /**
-             * Returns the raw JSON value of [userId].
-             *
-             * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("user_id") @ExcludeMissing fun _userId(): JsonField<String> = userId
+            fun _msTeamsUserId(): JsonField<String> = msTeamsUserId
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -509,71 +562,112 @@ private constructor(
 
             companion object {
 
-                /** Returns a mutable builder for constructing an instance of [TokenConnection]. */
+                /**
+                 * Returns a mutable builder for constructing an instance of
+                 * [MsTeamsTokenConnection].
+                 */
                 @JvmStatic fun builder() = Builder()
             }
 
-            /** A builder for [TokenConnection]. */
+            /** A builder for [MsTeamsTokenConnection]. */
             class Builder internal constructor() {
 
-                private var accessToken: JsonField<String> = JsonMissing.of()
-                private var channelId: JsonField<String> = JsonMissing.of()
-                private var userId: JsonField<String> = JsonMissing.of()
+                private var msTeamsChannelId: JsonField<String> = JsonMissing.of()
+                private var msTeamsTeamId: JsonField<String> = JsonMissing.of()
+                private var msTeamsTenantId: JsonField<String> = JsonMissing.of()
+                private var msTeamsUserId: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(tokenConnection: TokenConnection) = apply {
-                    accessToken = tokenConnection.accessToken
-                    channelId = tokenConnection.channelId
-                    userId = tokenConnection.userId
-                    additionalProperties = tokenConnection.additionalProperties.toMutableMap()
+                internal fun from(msTeamsTokenConnection: MsTeamsTokenConnection) = apply {
+                    msTeamsChannelId = msTeamsTokenConnection.msTeamsChannelId
+                    msTeamsTeamId = msTeamsTokenConnection.msTeamsTeamId
+                    msTeamsTenantId = msTeamsTokenConnection.msTeamsTenantId
+                    msTeamsUserId = msTeamsTokenConnection.msTeamsUserId
+                    additionalProperties =
+                        msTeamsTokenConnection.additionalProperties.toMutableMap()
                 }
 
-                fun accessToken(accessToken: String?) =
-                    accessToken(JsonField.ofNullable(accessToken))
-
-                /** Alias for calling [Builder.accessToken] with `accessToken.orElse(null)`. */
-                fun accessToken(accessToken: Optional<String>) =
-                    accessToken(accessToken.getOrNull())
+                /** Microsoft Teams channel ID. */
+                fun msTeamsChannelId(msTeamsChannelId: String?) =
+                    msTeamsChannelId(JsonField.ofNullable(msTeamsChannelId))
 
                 /**
-                 * Sets [Builder.accessToken] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.accessToken] with a well-typed [String] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
+                 * Alias for calling [Builder.msTeamsChannelId] with
+                 * `msTeamsChannelId.orElse(null)`.
                  */
-                fun accessToken(accessToken: JsonField<String>) = apply {
-                    this.accessToken = accessToken
+                fun msTeamsChannelId(msTeamsChannelId: Optional<String>) =
+                    msTeamsChannelId(msTeamsChannelId.getOrNull())
+
+                /**
+                 * Sets [Builder.msTeamsChannelId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.msTeamsChannelId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun msTeamsChannelId(msTeamsChannelId: JsonField<String>) = apply {
+                    this.msTeamsChannelId = msTeamsChannelId
                 }
 
-                fun channelId(channelId: String?) = channelId(JsonField.ofNullable(channelId))
+                /** Microsoft Teams team ID. */
+                fun msTeamsTeamId(msTeamsTeamId: String?) =
+                    msTeamsTeamId(JsonField.ofNullable(msTeamsTeamId))
 
-                /** Alias for calling [Builder.channelId] with `channelId.orElse(null)`. */
-                fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
+                /** Alias for calling [Builder.msTeamsTeamId] with `msTeamsTeamId.orElse(null)`. */
+                fun msTeamsTeamId(msTeamsTeamId: Optional<String>) =
+                    msTeamsTeamId(msTeamsTeamId.getOrNull())
 
                 /**
-                 * Sets [Builder.channelId] to an arbitrary JSON value.
+                 * Sets [Builder.msTeamsTeamId] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.channelId] with a well-typed [String] value
+                 * You should usually call [Builder.msTeamsTeamId] with a well-typed [String] value
                  * instead. This method is primarily for setting the field to an undocumented or not
                  * yet supported value.
                  */
-                fun channelId(channelId: JsonField<String>) = apply { this.channelId = channelId }
+                fun msTeamsTeamId(msTeamsTeamId: JsonField<String>) = apply {
+                    this.msTeamsTeamId = msTeamsTeamId
+                }
 
-                fun userId(userId: String?) = userId(JsonField.ofNullable(userId))
-
-                /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
-                fun userId(userId: Optional<String>) = userId(userId.getOrNull())
+                /** Microsoft Teams tenant ID. */
+                fun msTeamsTenantId(msTeamsTenantId: String?) =
+                    msTeamsTenantId(JsonField.ofNullable(msTeamsTenantId))
 
                 /**
-                 * Sets [Builder.userId] to an arbitrary JSON value.
+                 * Alias for calling [Builder.msTeamsTenantId] with `msTeamsTenantId.orElse(null)`.
+                 */
+                fun msTeamsTenantId(msTeamsTenantId: Optional<String>) =
+                    msTeamsTenantId(msTeamsTenantId.getOrNull())
+
+                /**
+                 * Sets [Builder.msTeamsTenantId] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.userId] with a well-typed [String] value
+                 * You should usually call [Builder.msTeamsTenantId] with a well-typed [String]
+                 * value instead. This method is primarily for setting the field to an undocumented
+                 * or not yet supported value.
+                 */
+                fun msTeamsTenantId(msTeamsTenantId: JsonField<String>) = apply {
+                    this.msTeamsTenantId = msTeamsTenantId
+                }
+
+                /** Microsoft Teams user ID. */
+                fun msTeamsUserId(msTeamsUserId: String?) =
+                    msTeamsUserId(JsonField.ofNullable(msTeamsUserId))
+
+                /** Alias for calling [Builder.msTeamsUserId] with `msTeamsUserId.orElse(null)`. */
+                fun msTeamsUserId(msTeamsUserId: Optional<String>) =
+                    msTeamsUserId(msTeamsUserId.getOrNull())
+
+                /**
+                 * Sets [Builder.msTeamsUserId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.msTeamsUserId] with a well-typed [String] value
                  * instead. This method is primarily for setting the field to an undocumented or not
                  * yet supported value.
                  */
-                fun userId(userId: JsonField<String>) = apply { this.userId = userId }
+                fun msTeamsUserId(msTeamsUserId: JsonField<String>) = apply {
+                    this.msTeamsUserId = msTeamsUserId
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -598,29 +692,31 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [TokenConnection].
+                 * Returns an immutable instance of [MsTeamsTokenConnection].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
-                fun build(): TokenConnection =
-                    TokenConnection(
-                        accessToken,
-                        channelId,
-                        userId,
+                fun build(): MsTeamsTokenConnection =
+                    MsTeamsTokenConnection(
+                        msTeamsChannelId,
+                        msTeamsTeamId,
+                        msTeamsTenantId,
+                        msTeamsUserId,
                         additionalProperties.toMutableMap(),
                     )
             }
 
             private var validated: Boolean = false
 
-            fun validate(): TokenConnection = apply {
+            fun validate(): MsTeamsTokenConnection = apply {
                 if (validated) {
                     return@apply
                 }
 
-                accessToken()
-                channelId()
-                userId()
+                msTeamsChannelId()
+                msTeamsTeamId()
+                msTeamsTenantId()
+                msTeamsUserId()
                 validated = true
             }
 
@@ -640,53 +736,61 @@ private constructor(
              */
             @JvmSynthetic
             internal fun validity(): Int =
-                (if (accessToken.asKnown().isPresent) 1 else 0) +
-                    (if (channelId.asKnown().isPresent) 1 else 0) +
-                    (if (userId.asKnown().isPresent) 1 else 0)
+                (if (msTeamsChannelId.asKnown().isPresent) 1 else 0) +
+                    (if (msTeamsTeamId.asKnown().isPresent) 1 else 0) +
+                    (if (msTeamsTenantId.asKnown().isPresent) 1 else 0) +
+                    (if (msTeamsUserId.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is TokenConnection && accessToken == other.accessToken && channelId == other.channelId && userId == other.userId && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is MsTeamsTokenConnection && msTeamsChannelId == other.msTeamsChannelId && msTeamsTeamId == other.msTeamsTeamId && msTeamsTenantId == other.msTeamsTenantId && msTeamsUserId == other.msTeamsUserId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(accessToken, channelId, userId, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(msTeamsChannelId, msTeamsTeamId, msTeamsTenantId, msTeamsUserId, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "TokenConnection{accessToken=$accessToken, channelId=$channelId, userId=$userId, additionalProperties=$additionalProperties}"
+                "MsTeamsTokenConnection{msTeamsChannelId=$msTeamsChannelId, msTeamsTeamId=$msTeamsTeamId, msTeamsTenantId=$msTeamsTenantId, msTeamsUserId=$msTeamsUserId, additionalProperties=$additionalProperties}"
         }
 
-        /** An incoming webhook Slack connection */
-        class IncomingWebhookConnection
+        /** Microsoft Teams incoming webhook connection. */
+        class MsTeamsIncomingWebhookConnection
         private constructor(
-            private val url: JsonField<String>,
+            private val incomingWebhook: JsonField<IncomingWebhook>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of()
-            ) : this(url, mutableMapOf())
+                @JsonProperty("incoming_webhook")
+                @ExcludeMissing
+                incomingWebhook: JsonField<IncomingWebhook> = JsonMissing.of()
+            ) : this(incomingWebhook, mutableMapOf())
 
             /**
+             * Microsoft Teams incoming webhook.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
-            fun url(): String = url.getRequired("url")
+            fun incomingWebhook(): IncomingWebhook = incomingWebhook.getRequired("incoming_webhook")
 
             /**
-             * Returns the raw JSON value of [url].
+             * Returns the raw JSON value of [incomingWebhook].
              *
-             * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+             * Unlike [incomingWebhook], this method doesn't throw if the JSON field has an
+             * unexpected type.
              */
-            @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+            @JsonProperty("incoming_webhook")
+            @ExcludeMissing
+            fun _incomingWebhook(): JsonField<IncomingWebhook> = incomingWebhook
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -704,39 +808,45 @@ private constructor(
 
                 /**
                  * Returns a mutable builder for constructing an instance of
-                 * [IncomingWebhookConnection].
+                 * [MsTeamsIncomingWebhookConnection].
                  *
                  * The following fields are required:
                  * ```java
-                 * .url()
+                 * .incomingWebhook()
                  * ```
                  */
                 @JvmStatic fun builder() = Builder()
             }
 
-            /** A builder for [IncomingWebhookConnection]. */
+            /** A builder for [MsTeamsIncomingWebhookConnection]. */
             class Builder internal constructor() {
 
-                private var url: JsonField<String>? = null
+                private var incomingWebhook: JsonField<IncomingWebhook>? = null
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(incomingWebhookConnection: IncomingWebhookConnection) = apply {
-                    url = incomingWebhookConnection.url
+                internal fun from(
+                    msTeamsIncomingWebhookConnection: MsTeamsIncomingWebhookConnection
+                ) = apply {
+                    incomingWebhook = msTeamsIncomingWebhookConnection.incomingWebhook
                     additionalProperties =
-                        incomingWebhookConnection.additionalProperties.toMutableMap()
+                        msTeamsIncomingWebhookConnection.additionalProperties.toMutableMap()
                 }
 
-                fun url(url: String) = url(JsonField.of(url))
+                /** Microsoft Teams incoming webhook. */
+                fun incomingWebhook(incomingWebhook: IncomingWebhook) =
+                    incomingWebhook(JsonField.of(incomingWebhook))
 
                 /**
-                 * Sets [Builder.url] to an arbitrary JSON value.
+                 * Sets [Builder.incomingWebhook] to an arbitrary JSON value.
                  *
-                 * You should usually call [Builder.url] with a well-typed [String] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
+                 * You should usually call [Builder.incomingWebhook] with a well-typed
+                 * [IncomingWebhook] value instead. This method is primarily for setting the field
+                 * to an undocumented or not yet supported value.
                  */
-                fun url(url: JsonField<String>) = apply { this.url = url }
+                fun incomingWebhook(incomingWebhook: JsonField<IncomingWebhook>) = apply {
+                    this.incomingWebhook = incomingWebhook
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -761,32 +871,32 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [IncomingWebhookConnection].
+                 * Returns an immutable instance of [MsTeamsIncomingWebhookConnection].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
                  * The following fields are required:
                  * ```java
-                 * .url()
+                 * .incomingWebhook()
                  * ```
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): IncomingWebhookConnection =
-                    IncomingWebhookConnection(
-                        checkRequired("url", url),
+                fun build(): MsTeamsIncomingWebhookConnection =
+                    MsTeamsIncomingWebhookConnection(
+                        checkRequired("incomingWebhook", incomingWebhook),
                         additionalProperties.toMutableMap(),
                     )
             }
 
             private var validated: Boolean = false
 
-            fun validate(): IncomingWebhookConnection = apply {
+            fun validate(): MsTeamsIncomingWebhookConnection = apply {
                 if (validated) {
                     return@apply
                 }
 
-                url()
+                incomingWebhook().validate()
                 validated = true
             }
 
@@ -804,24 +914,188 @@ private constructor(
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic internal fun validity(): Int = (if (url.asKnown().isPresent) 1 else 0)
+            @JvmSynthetic
+            internal fun validity(): Int = (incomingWebhook.asKnown().getOrNull()?.validity() ?: 0)
+
+            /** Microsoft Teams incoming webhook. */
+            class IncomingWebhook
+            private constructor(
+                private val url: JsonField<String>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of()
+                ) : this(url, mutableMapOf())
+
+                /**
+                 * Microsoft Teams incoming webhook URL.
+                 *
+                 * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+                 *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+                 *   value).
+                 */
+                fun url(): String = url.getRequired("url")
+
+                /**
+                 * Returns the raw JSON value of [url].
+                 *
+                 * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
+                 */
+                @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /**
+                     * Returns a mutable builder for constructing an instance of [IncomingWebhook].
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .url()
+                     * ```
+                     */
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                /** A builder for [IncomingWebhook]. */
+                class Builder internal constructor() {
+
+                    private var url: JsonField<String>? = null
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(incomingWebhook: IncomingWebhook) = apply {
+                        url = incomingWebhook.url
+                        additionalProperties = incomingWebhook.additionalProperties.toMutableMap()
+                    }
+
+                    /** Microsoft Teams incoming webhook URL. */
+                    fun url(url: String) = url(JsonField.of(url))
+
+                    /**
+                     * Sets [Builder.url] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.url] with a well-typed [String] value
+                     * instead. This method is primarily for setting the field to an undocumented or
+                     * not yet supported value.
+                     */
+                    fun url(url: JsonField<String>) = apply { this.url = url }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [IncomingWebhook].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     *
+                     * The following fields are required:
+                     * ```java
+                     * .url()
+                     * ```
+                     *
+                     * @throws IllegalStateException if any required field is unset.
+                     */
+                    fun build(): IncomingWebhook =
+                        IncomingWebhook(
+                            checkRequired("url", url),
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): IncomingWebhook = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    url()
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: KnockInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic internal fun validity(): Int = (if (url.asKnown().isPresent) 1 else 0)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is IncomingWebhook && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                /* spotless:off */
+                private val hashCode: Int by lazy { Objects.hash(url, additionalProperties) }
+                /* spotless:on */
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "IncomingWebhook{url=$url, additionalProperties=$additionalProperties}"
+            }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is IncomingWebhookConnection && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is MsTeamsIncomingWebhookConnection && incomingWebhook == other.incomingWebhook && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(url, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(incomingWebhook, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "IncomingWebhookConnection{url=$url, additionalProperties=$additionalProperties}"
+                "MsTeamsIncomingWebhookConnection{incomingWebhook=$incomingWebhook, additionalProperties=$additionalProperties}"
         }
     }
 

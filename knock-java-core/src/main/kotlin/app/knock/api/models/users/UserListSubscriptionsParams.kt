@@ -2,22 +2,30 @@
 
 package app.knock.api.models.users
 
+import app.knock.api.core.Enum
+import app.knock.api.core.JsonField
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.getOrThrow
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
+import com.fasterxml.jackson.annotation.JsonCreator
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** List subscriptions for a user */
+/**
+ * Retrieves a paginated list of subscriptions for a specific user. Allows filtering by objects and
+ * includes optional preference data.
+ */
 class UserListSubscriptionsParams
 private constructor(
     private val userId: String,
     private val after: String?,
     private val before: String?,
+    private val include: List<Include>?,
     private val objects: List<Object>?,
     private val pageSize: Long?,
     private val additionalHeaders: Headers,
@@ -26,16 +34,19 @@ private constructor(
 
     fun userId(): String = userId
 
-    /** The cursor to fetch entries after */
+    /** The cursor to fetch entries after. */
     fun after(): Optional<String> = Optional.ofNullable(after)
 
-    /** The cursor to fetch entries before */
+    /** The cursor to fetch entries before. */
     fun before(): Optional<String> = Optional.ofNullable(before)
 
-    /** Objects to filter by */
+    /** Includes preferences of the recipient subscribers in the response. */
+    fun include(): Optional<List<Include>> = Optional.ofNullable(include)
+
+    /** Objects to filter by. */
     fun objects(): Optional<List<Object>> = Optional.ofNullable(objects)
 
-    /** The page size to fetch */
+    /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -63,6 +74,7 @@ private constructor(
         private var userId: String? = null
         private var after: String? = null
         private var before: String? = null
+        private var include: MutableList<Include>? = null
         private var objects: MutableList<Object>? = null
         private var pageSize: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -73,6 +85,7 @@ private constructor(
             userId = userListSubscriptionsParams.userId
             after = userListSubscriptionsParams.after
             before = userListSubscriptionsParams.before
+            include = userListSubscriptionsParams.include?.toMutableList()
             objects = userListSubscriptionsParams.objects?.toMutableList()
             pageSize = userListSubscriptionsParams.pageSize
             additionalHeaders = userListSubscriptionsParams.additionalHeaders.toBuilder()
@@ -81,19 +94,34 @@ private constructor(
 
         fun userId(userId: String) = apply { this.userId = userId }
 
-        /** The cursor to fetch entries after */
+        /** The cursor to fetch entries after. */
         fun after(after: String?) = apply { this.after = after }
 
         /** Alias for calling [Builder.after] with `after.orElse(null)`. */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
-        /** The cursor to fetch entries before */
+        /** The cursor to fetch entries before. */
         fun before(before: String?) = apply { this.before = before }
 
         /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
-        /** Objects to filter by */
+        /** Includes preferences of the recipient subscribers in the response. */
+        fun include(include: List<Include>?) = apply { this.include = include?.toMutableList() }
+
+        /** Alias for calling [Builder.include] with `include.orElse(null)`. */
+        fun include(include: Optional<List<Include>>) = include(include.getOrNull())
+
+        /**
+         * Adds a single [Include] to [Builder.include].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addInclude(include: Include) = apply {
+            this.include = (this.include ?: mutableListOf()).apply { add(include) }
+        }
+
+        /** Objects to filter by. */
         fun objects(objects: List<Object>?) = apply { this.objects = objects?.toMutableList() }
 
         /** Alias for calling [Builder.objects] with `objects.orElse(null)`. */
@@ -111,11 +139,10 @@ private constructor(
         /** Alias for calling [addObject] with `Object.ofString(string)`. */
         fun addObject(string: String) = addObject(Object.ofString(string))
 
-        /** Alias for calling [addObject] with `Object.ofUnionMember1(unionMember1)`. */
-        fun addObject(unionMember1: Object.UnionMember1) =
-            addObject(Object.ofUnionMember1(unionMember1))
+        /** Alias for calling [addObject] with `Object.ofReference(reference)`. */
+        fun addObject(reference: Object.ObjectReference) = addObject(Object.ofReference(reference))
 
-        /** The page size to fetch */
+        /** The number of items per page. */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**
@@ -243,6 +270,7 @@ private constructor(
                 checkRequired("userId", userId),
                 after,
                 before,
+                include?.toImmutable(),
                 objects?.toImmutable(),
                 pageSize,
                 additionalHeaders.build(),
@@ -263,6 +291,7 @@ private constructor(
             .apply {
                 after?.let { put("after", it) }
                 before?.let { put("before", it) }
+                include?.forEach { put("include[]", it.toString()) }
                 objects?.forEach {
                     it.accept(
                         object : Object.Visitor<Unit> {
@@ -270,12 +299,11 @@ private constructor(
                                 put("objects[]", string)
                             }
 
-                            override fun visitUnionMember1(unionMember1: Object.UnionMember1) {
-                                put("objects[][id]", unionMember1.id())
-                                put("objects[][collection]", unionMember1.collection())
-                                unionMember1._additionalProperties().keys().forEach { key ->
-                                    unionMember1._additionalProperties().values(key).forEach { value
-                                        ->
+                            override fun visitReference(reference: Object.ObjectReference) {
+                                put("objects[][id]", reference.id())
+                                put("objects[][collection]", reference.collection())
+                                reference._additionalProperties().keys().forEach { key ->
+                                    reference._additionalProperties().values(key).forEach { value ->
                                         put("objects[][$key]", value)
                                     }
                                 }
@@ -288,6 +316,124 @@ private constructor(
             }
             .build()
 
+    class Include @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val PREFERENCES = of("preferences")
+
+            @JvmStatic fun of(value: String) = Include(JsonField.of(value))
+        }
+
+        /** An enum containing [Include]'s known values. */
+        enum class Known {
+            PREFERENCES
+        }
+
+        /**
+         * An enum containing [Include]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Include] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            PREFERENCES,
+            /** An enum member indicating that [Include] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                PREFERENCES -> Value.PREFERENCES
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
+         */
+        fun known(): Known =
+            when (this) {
+                PREFERENCES -> Known.PREFERENCES
+                else -> throw KnockInvalidDataException("Unknown Include: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws KnockInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): Include = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Include && value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
     /**
      * A reference to a recipient, either a user identifier (string) or an object reference (id,
      * collection).
@@ -295,29 +441,29 @@ private constructor(
     class Object
     private constructor(
         private val string: String? = null,
-        private val unionMember1: UnionMember1? = null,
+        private val reference: ObjectReference? = null,
     ) {
 
-        /** A user identifier */
+        /** An identifier for a user recipient. */
         fun string(): Optional<String> = Optional.ofNullable(string)
 
-        /** An object reference to a recipient */
-        fun unionMember1(): Optional<UnionMember1> = Optional.ofNullable(unionMember1)
+        /** An object reference to a recipient. */
+        fun reference(): Optional<ObjectReference> = Optional.ofNullable(reference)
 
         fun isString(): Boolean = string != null
 
-        fun isUnionMember1(): Boolean = unionMember1 != null
+        fun isReference(): Boolean = reference != null
 
-        /** A user identifier */
+        /** An identifier for a user recipient. */
         fun asString(): String = string.getOrThrow("string")
 
-        /** An object reference to a recipient */
-        fun asUnionMember1(): UnionMember1 = unionMember1.getOrThrow("unionMember1")
+        /** An object reference to a recipient. */
+        fun asReference(): ObjectReference = reference.getOrThrow("reference")
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 string != null -> visitor.visitString(string)
-                unionMember1 != null -> visitor.visitUnionMember1(unionMember1)
+                reference != null -> visitor.visitReference(reference)
                 else -> throw IllegalStateException("Invalid Object")
             }
 
@@ -326,46 +472,45 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Object && string == other.string && unionMember1 == other.unionMember1 /* spotless:on */
+            return /* spotless:off */ other is Object && string == other.string && reference == other.reference /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, unionMember1) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, reference) /* spotless:on */
 
         override fun toString(): String =
             when {
                 string != null -> "Object{string=$string}"
-                unionMember1 != null -> "Object{unionMember1=$unionMember1}"
+                reference != null -> "Object{reference=$reference}"
                 else -> throw IllegalStateException("Invalid Object")
             }
 
         companion object {
 
-            /** A user identifier */
+            /** An identifier for a user recipient. */
             @JvmStatic fun ofString(string: String) = Object(string = string)
 
-            /** An object reference to a recipient */
-            @JvmStatic
-            fun ofUnionMember1(unionMember1: UnionMember1) = Object(unionMember1 = unionMember1)
+            /** An object reference to a recipient. */
+            @JvmStatic fun ofReference(reference: ObjectReference) = Object(reference = reference)
         }
 
         /** An interface that defines how to map each variant of [Object] to a value of type [T]. */
         interface Visitor<out T> {
 
-            /** A user identifier */
+            /** An identifier for a user recipient. */
             fun visitString(string: String): T
 
-            /** An object reference to a recipient */
-            fun visitUnionMember1(unionMember1: UnionMember1): T
+            /** An object reference to a recipient. */
+            fun visitReference(reference: ObjectReference): T
         }
 
-        /** An object reference to a recipient */
-        class UnionMember1
+        /** An object reference to a recipient. */
+        class ObjectReference
         private constructor(private val id: String, private val collection: String) {
 
-            /** An object identifier */
+            /** An identifier for the recipient object. */
             fun id(): String = id
 
-            /** The collection the object belongs to */
+            /** The collection the recipient object belongs to. */
             fun collection(): String = collection
 
             fun toBuilder() = Builder().from(this)
@@ -373,7 +518,7 @@ private constructor(
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of [UnionMember1].
+                 * Returns a mutable builder for constructing an instance of [ObjectReference].
                  *
                  * The following fields are required:
                  * ```java
@@ -384,26 +529,26 @@ private constructor(
                 @JvmStatic fun builder() = Builder()
             }
 
-            /** A builder for [UnionMember1]. */
+            /** A builder for [ObjectReference]. */
             class Builder internal constructor() {
 
                 private var id: String? = null
                 private var collection: String? = null
 
                 @JvmSynthetic
-                internal fun from(unionMember1: UnionMember1) = apply {
-                    id = unionMember1.id
-                    collection = unionMember1.collection
+                internal fun from(objectReference: ObjectReference) = apply {
+                    id = objectReference.id
+                    collection = objectReference.collection
                 }
 
-                /** An object identifier */
+                /** An identifier for the recipient object. */
                 fun id(id: String) = apply { this.id = id }
 
-                /** The collection the object belongs to */
+                /** The collection the recipient object belongs to. */
                 fun collection(collection: String) = apply { this.collection = collection }
 
                 /**
-                 * Returns an immutable instance of [UnionMember1].
+                 * Returns an immutable instance of [ObjectReference].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  *
@@ -415,8 +560,11 @@ private constructor(
                  *
                  * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): UnionMember1 =
-                    UnionMember1(checkRequired("id", id), checkRequired("collection", collection))
+                fun build(): ObjectReference =
+                    ObjectReference(
+                        checkRequired("id", id),
+                        checkRequired("collection", collection),
+                    )
             }
 
             override fun equals(other: Any?): Boolean {
@@ -424,7 +572,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is UnionMember1 && id == other.id && collection == other.collection /* spotless:on */
+                return /* spotless:off */ other is ObjectReference && id == other.id && collection == other.collection /* spotless:on */
             }
 
             /* spotless:off */
@@ -433,7 +581,7 @@ private constructor(
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() = "UnionMember1{id=$id, collection=$collection}"
+            override fun toString() = "ObjectReference{id=$id, collection=$collection}"
         }
     }
 
@@ -442,11 +590,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is UserListSubscriptionsParams && userId == other.userId && after == other.after && before == other.before && objects == other.objects && pageSize == other.pageSize && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is UserListSubscriptionsParams && userId == other.userId && after == other.after && before == other.before && include == other.include && objects == other.objects && pageSize == other.pageSize && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, after, before, objects, pageSize, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, after, before, include, objects, pageSize, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "UserListSubscriptionsParams{userId=$userId, after=$after, before=$before, objects=$objects, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserListSubscriptionsParams{userId=$userId, after=$after, before=$before, include=$include, objects=$objects, pageSize=$pageSize, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

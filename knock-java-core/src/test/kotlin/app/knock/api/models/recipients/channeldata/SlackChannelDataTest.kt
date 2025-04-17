@@ -14,7 +14,7 @@ internal class SlackChannelDataTest {
         val slackChannelData =
             SlackChannelData.builder()
                 .addConnection(
-                    SlackChannelData.Connection.TokenConnection.builder()
+                    SlackChannelData.Connection.SlackTokenConnection.builder()
                         .accessToken("xoxb-1234567890")
                         .channelId("C01234567890")
                         .userId("U01234567890")
@@ -25,8 +25,8 @@ internal class SlackChannelDataTest {
 
         assertThat(slackChannelData.connections())
             .containsExactly(
-                SlackChannelData.Connection.ofToken(
-                    SlackChannelData.Connection.TokenConnection.builder()
+                SlackChannelData.Connection.ofSlackToken(
+                    SlackChannelData.Connection.SlackTokenConnection.builder()
                         .accessToken("xoxb-1234567890")
                         .channelId("C01234567890")
                         .userId("U01234567890")
@@ -43,7 +43,7 @@ internal class SlackChannelDataTest {
         val slackChannelData =
             SlackChannelData.builder()
                 .addConnection(
-                    SlackChannelData.Connection.TokenConnection.builder()
+                    SlackChannelData.Connection.SlackTokenConnection.builder()
                         .accessToken("xoxb-1234567890")
                         .channelId("C01234567890")
                         .userId("U01234567890")

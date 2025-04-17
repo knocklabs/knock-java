@@ -11,8 +11,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Get a list of the Microsoft Teams channels within a team. By default, archived and private
- * channels are excluded from the results.
+ * List the Microsoft Teams channels within a team. By default, archived and private channels are
+ * excluded from the results.
  */
 class MsTeamListChannelsParams
 private constructor(
@@ -26,10 +26,10 @@ private constructor(
 
     fun channelId(): String = channelId
 
-    /** A JSON encoded string containing the Microsoft Teams tenant object reference */
+    /** A JSON encoded string containing the Microsoft Teams tenant object reference. */
     fun msTeamsTenantObject(): String = msTeamsTenantObject
 
-    /** The ID of the Microsoft Teams team to list channels from */
+    /** Microsoft Teams team ID. */
     fun teamId(): String = teamId
 
     fun queryOptions(): Optional<QueryOptions> = Optional.ofNullable(queryOptions)
@@ -77,12 +77,12 @@ private constructor(
 
         fun channelId(channelId: String) = apply { this.channelId = channelId }
 
-        /** A JSON encoded string containing the Microsoft Teams tenant object reference */
+        /** A JSON encoded string containing the Microsoft Teams tenant object reference. */
         fun msTeamsTenantObject(msTeamsTenantObject: String) = apply {
             this.msTeamsTenantObject = msTeamsTenantObject
         }
 
-        /** The ID of the Microsoft Teams team to list channels from */
+        /** Microsoft Teams team ID. */
         fun teamId(teamId: String) = apply { this.teamId = teamId }
 
         fun queryOptions(queryOptions: QueryOptions?) = apply { this.queryOptions = queryOptions }
@@ -249,13 +249,13 @@ private constructor(
 
         /**
          * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-         * Microsoft Graph API to filter channels
+         * Microsoft Graph API to filter channels.
          */
         fun filter(): Optional<String> = Optional.ofNullable(filter)
 
         /**
          * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-         * Microsoft Graph API to select fields on a channel
+         * Microsoft Graph API to select specific properties.
          */
         fun select(): Optional<String> = Optional.ofNullable(select)
 
@@ -285,7 +285,7 @@ private constructor(
 
             /**
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-             * Microsoft Graph API to filter channels
+             * Microsoft Graph API to filter channels.
              */
             fun filter(filter: String?) = apply { this.filter = filter }
 
@@ -294,7 +294,7 @@ private constructor(
 
             /**
              * [OData param](https://learn.microsoft.com/en-us/graph/query-parameters) passed to the
-             * Microsoft Graph API to select fields on a channel
+             * Microsoft Graph API to select specific properties.
              */
             fun select(select: String?) = apply { this.select = select }
 

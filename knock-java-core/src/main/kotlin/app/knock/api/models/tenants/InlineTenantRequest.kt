@@ -18,7 +18,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.Objects
 import java.util.Optional
 
-/** An inline tenant request */
+/** An request to set a tenant inline. */
 @JsonDeserialize(using = InlineTenantRequest.Deserializer::class)
 @JsonSerialize(using = InlineTenantRequest.Serializer::class)
 class InlineTenantRequest
@@ -28,20 +28,20 @@ private constructor(
     private val _json: JsonValue? = null,
 ) {
 
-    /** A tenant identifier */
+    /** The unique identifier for the tenant. */
     fun string(): Optional<String> = Optional.ofNullable(string)
 
-    /** A tenant to be set in the system */
+    /** A request to get a tenant. */
     fun tenantRequest(): Optional<TenantRequest> = Optional.ofNullable(tenantRequest)
 
     fun isString(): Boolean = string != null
 
     fun isTenantRequest(): Boolean = tenantRequest != null
 
-    /** A tenant identifier */
+    /** The unique identifier for the tenant. */
     fun asString(): String = string.getOrThrow("string")
 
-    /** A tenant to be set in the system */
+    /** A request to get a tenant. */
     fun asTenantRequest(): TenantRequest = tenantRequest.getOrThrow("tenantRequest")
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
@@ -118,10 +118,10 @@ private constructor(
 
     companion object {
 
-        /** A tenant identifier */
+        /** The unique identifier for the tenant. */
         @JvmStatic fun ofString(string: String) = InlineTenantRequest(string = string)
 
-        /** A tenant to be set in the system */
+        /** A request to get a tenant. */
         @JvmStatic
         fun ofTenantRequest(tenantRequest: TenantRequest) =
             InlineTenantRequest(tenantRequest = tenantRequest)
@@ -133,10 +133,10 @@ private constructor(
      */
     interface Visitor<out T> {
 
-        /** A tenant identifier */
+        /** The unique identifier for the tenant. */
         fun visitString(string: String): T
 
-        /** A tenant to be set in the system */
+        /** A request to get a tenant. */
         fun visitTenantRequest(tenantRequest: TenantRequest): T
 
         /**

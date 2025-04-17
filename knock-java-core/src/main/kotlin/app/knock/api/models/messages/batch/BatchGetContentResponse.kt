@@ -32,7 +32,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** The contents of a message */
+/** The content of a message. */
 class BatchGetContentResponse
 private constructor(
     private val _typename: JsonField<String>,
@@ -53,13 +53,15 @@ private constructor(
     ) : this(_typename, data, insertedAt, messageId, mutableMapOf())
 
     /**
+     * The type name of the schema.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun _typename(): String = _typename.getRequired("__typename")
 
     /**
-     * The contents of an email message
+     * Content data specific to the channel type.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -67,12 +69,16 @@ private constructor(
     fun data(): Data = data.getRequired("data")
 
     /**
+     * Timestamp when the message content was created.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun insertedAt(): OffsetDateTime = insertedAt.getRequired("inserted_at")
 
     /**
+     * The unique identifier for the message content.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -154,6 +160,7 @@ private constructor(
             additionalProperties = batchGetContentResponse.additionalProperties.toMutableMap()
         }
 
+        /** The type name of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -165,7 +172,7 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
-        /** The contents of an email message */
+        /** Content data specific to the channel type. */
         fun data(data: Data) = data(JsonField.of(data))
 
         /**
@@ -198,6 +205,7 @@ private constructor(
         fun data(messageInAppFeedContent: Data.MessageInAppFeedContent) =
             data(Data.ofMessageInAppFeedContent(messageInAppFeedContent))
 
+        /** Timestamp when the message content was created. */
         fun insertedAt(insertedAt: OffsetDateTime) = insertedAt(JsonField.of(insertedAt))
 
         /**
@@ -211,6 +219,7 @@ private constructor(
             this.insertedAt = insertedAt
         }
 
+        /** The unique identifier for the message content. */
         fun messageId(messageId: String) = messageId(JsonField.of(messageId))
 
         /**
@@ -300,7 +309,7 @@ private constructor(
             (if (insertedAt.asKnown().isPresent) 1 else 0) +
             (if (messageId.asKnown().isPresent) 1 else 0)
 
-    /** The contents of an email message */
+    /** Content data specific to the channel type. */
     @JsonDeserialize(using = Data.Deserializer::class)
     @JsonSerialize(using = Data.Serializer::class)
     class Data
@@ -313,23 +322,23 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** The contents of an email message */
+        /** The content of an email message. */
         fun messageEmailContent(): Optional<MessageEmailContent> =
             Optional.ofNullable(messageEmailContent)
 
-        /** The contents of an SMS message */
+        /** The content of an SMS message. */
         fun messageSmsContent(): Optional<MessageSmsContent> =
             Optional.ofNullable(messageSmsContent)
 
-        /** The contents of a push message */
+        /** The content of a push notification. */
         fun messagePushContent(): Optional<MessagePushContent> =
             Optional.ofNullable(messagePushContent)
 
-        /** The contents of a chat message */
+        /** The content of a chat message. */
         fun messageChatContent(): Optional<MessageChatContent> =
             Optional.ofNullable(messageChatContent)
 
-        /** The contents of a message in an app feed */
+        /** The content of an in-app feed message. */
         fun messageInAppFeedContent(): Optional<MessageInAppFeedContent> =
             Optional.ofNullable(messageInAppFeedContent)
 
@@ -343,23 +352,23 @@ private constructor(
 
         fun isMessageInAppFeedContent(): Boolean = messageInAppFeedContent != null
 
-        /** The contents of an email message */
+        /** The content of an email message. */
         fun asMessageEmailContent(): MessageEmailContent =
             messageEmailContent.getOrThrow("messageEmailContent")
 
-        /** The contents of an SMS message */
+        /** The content of an SMS message. */
         fun asMessageSmsContent(): MessageSmsContent =
             messageSmsContent.getOrThrow("messageSmsContent")
 
-        /** The contents of a push message */
+        /** The content of a push notification. */
         fun asMessagePushContent(): MessagePushContent =
             messagePushContent.getOrThrow("messagePushContent")
 
-        /** The contents of a chat message */
+        /** The content of a chat message. */
         fun asMessageChatContent(): MessageChatContent =
             messageChatContent.getOrThrow("messageChatContent")
 
-        /** The contents of a message in an app feed */
+        /** The content of an in-app feed message. */
         fun asMessageInAppFeedContent(): MessageInAppFeedContent =
             messageInAppFeedContent.getOrThrow("messageInAppFeedContent")
 
@@ -476,27 +485,27 @@ private constructor(
 
         companion object {
 
-            /** The contents of an email message */
+            /** The content of an email message. */
             @JvmStatic
             fun ofMessageEmailContent(messageEmailContent: MessageEmailContent) =
                 Data(messageEmailContent = messageEmailContent)
 
-            /** The contents of an SMS message */
+            /** The content of an SMS message. */
             @JvmStatic
             fun ofMessageSmsContent(messageSmsContent: MessageSmsContent) =
                 Data(messageSmsContent = messageSmsContent)
 
-            /** The contents of a push message */
+            /** The content of a push notification. */
             @JvmStatic
             fun ofMessagePushContent(messagePushContent: MessagePushContent) =
                 Data(messagePushContent = messagePushContent)
 
-            /** The contents of a chat message */
+            /** The content of a chat message. */
             @JvmStatic
             fun ofMessageChatContent(messageChatContent: MessageChatContent) =
                 Data(messageChatContent = messageChatContent)
 
-            /** The contents of a message in an app feed */
+            /** The content of an in-app feed message. */
             @JvmStatic
             fun ofMessageInAppFeedContent(messageInAppFeedContent: MessageInAppFeedContent) =
                 Data(messageInAppFeedContent = messageInAppFeedContent)
@@ -505,19 +514,19 @@ private constructor(
         /** An interface that defines how to map each variant of [Data] to a value of type [T]. */
         interface Visitor<out T> {
 
-            /** The contents of an email message */
+            /** The content of an email message. */
             fun visitMessageEmailContent(messageEmailContent: MessageEmailContent): T
 
-            /** The contents of an SMS message */
+            /** The content of an SMS message. */
             fun visitMessageSmsContent(messageSmsContent: MessageSmsContent): T
 
-            /** The contents of a push message */
+            /** The content of a push notification. */
             fun visitMessagePushContent(messagePushContent: MessagePushContent): T
 
-            /** The contents of a chat message */
+            /** The content of a chat message. */
             fun visitMessageChatContent(messageChatContent: MessageChatContent): T
 
-            /** The contents of a message in an app feed */
+            /** The content of an in-app feed message. */
             fun visitMessageInAppFeedContent(messageInAppFeedContent: MessageInAppFeedContent): T
 
             /**
@@ -597,7 +606,7 @@ private constructor(
             }
         }
 
-        /** The contents of an email message */
+        /** The content of an email message. */
         class MessageEmailContent
         private constructor(
             private val _typename: JsonField<String>,
@@ -647,6 +656,8 @@ private constructor(
             )
 
             /**
+             * The type name of the schema.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -654,6 +665,8 @@ private constructor(
             fun _typename(): String = _typename.getRequired("__typename")
 
             /**
+             * The sender's email address.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -661,6 +674,8 @@ private constructor(
             fun from(): String = from.getRequired("from")
 
             /**
+             * The HTML body of the email message.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -668,6 +683,8 @@ private constructor(
             fun htmlBody(): String = htmlBody.getRequired("html_body")
 
             /**
+             * The subject line of the email message.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -675,6 +692,8 @@ private constructor(
             fun subjectLine(): String = subjectLine.getRequired("subject_line")
 
             /**
+             * The text body of the email message.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -682,6 +701,8 @@ private constructor(
             fun textBody(): String = textBody.getRequired("text_body")
 
             /**
+             * The recipient's email address.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -689,18 +710,24 @@ private constructor(
             fun to(): String = to.getRequired("to")
 
             /**
+             * The BCC email addresses.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
             fun bcc(): Optional<String> = bcc.getOptional("bcc")
 
             /**
+             * The CC email addresses.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
             fun cc(): Optional<String> = cc.getOptional("cc")
 
             /**
+             * The reply-to email address.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
              */
@@ -835,6 +862,7 @@ private constructor(
                     additionalProperties = messageEmailContent.additionalProperties.toMutableMap()
                 }
 
+                /** The type name of the schema. */
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
                 /**
@@ -846,6 +874,7 @@ private constructor(
                  */
                 fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
+                /** The sender's email address. */
                 fun from(from: String) = from(JsonField.of(from))
 
                 /**
@@ -857,6 +886,7 @@ private constructor(
                  */
                 fun from(from: JsonField<String>) = apply { this.from = from }
 
+                /** The HTML body of the email message. */
                 fun htmlBody(htmlBody: String) = htmlBody(JsonField.of(htmlBody))
 
                 /**
@@ -868,6 +898,7 @@ private constructor(
                  */
                 fun htmlBody(htmlBody: JsonField<String>) = apply { this.htmlBody = htmlBody }
 
+                /** The subject line of the email message. */
                 fun subjectLine(subjectLine: String) = subjectLine(JsonField.of(subjectLine))
 
                 /**
@@ -881,6 +912,7 @@ private constructor(
                     this.subjectLine = subjectLine
                 }
 
+                /** The text body of the email message. */
                 fun textBody(textBody: String) = textBody(JsonField.of(textBody))
 
                 /**
@@ -892,6 +924,7 @@ private constructor(
                  */
                 fun textBody(textBody: JsonField<String>) = apply { this.textBody = textBody }
 
+                /** The recipient's email address. */
                 fun to(to: String) = to(JsonField.of(to))
 
                 /**
@@ -903,6 +936,7 @@ private constructor(
                  */
                 fun to(to: JsonField<String>) = apply { this.to = to }
 
+                /** The BCC email addresses. */
                 fun bcc(bcc: String?) = bcc(JsonField.ofNullable(bcc))
 
                 /** Alias for calling [Builder.bcc] with `bcc.orElse(null)`. */
@@ -917,6 +951,7 @@ private constructor(
                  */
                 fun bcc(bcc: JsonField<String>) = apply { this.bcc = bcc }
 
+                /** The CC email addresses. */
                 fun cc(cc: String?) = cc(JsonField.ofNullable(cc))
 
                 /** Alias for calling [Builder.cc] with `cc.orElse(null)`. */
@@ -931,6 +966,7 @@ private constructor(
                  */
                 fun cc(cc: JsonField<String>) = apply { this.cc = cc }
 
+                /** The reply-to email address. */
                 fun replyTo(replyTo: String?) = replyTo(JsonField.ofNullable(replyTo))
 
                 /** Alias for calling [Builder.replyTo] with `replyTo.orElse(null)`. */
@@ -1062,7 +1098,7 @@ private constructor(
                 "MessageEmailContent{_typename=$_typename, from=$from, htmlBody=$htmlBody, subjectLine=$subjectLine, textBody=$textBody, to=$to, bcc=$bcc, cc=$cc, replyTo=$replyTo, additionalProperties=$additionalProperties}"
         }
 
-        /** The contents of an SMS message */
+        /** The content of an SMS message. */
         class MessageSmsContent
         private constructor(
             private val _typename: JsonField<String>,
@@ -1081,6 +1117,8 @@ private constructor(
             ) : this(_typename, body, to, mutableMapOf())
 
             /**
+             * The type name of the schema.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -1088,6 +1126,8 @@ private constructor(
             fun _typename(): String = _typename.getRequired("__typename")
 
             /**
+             * The content body of the SMS message.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -1095,6 +1135,8 @@ private constructor(
             fun body(): String = body.getRequired("body")
 
             /**
+             * The phone number the SMS was sent to.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -1168,6 +1210,7 @@ private constructor(
                     additionalProperties = messageSmsContent.additionalProperties.toMutableMap()
                 }
 
+                /** The type name of the schema. */
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
                 /**
@@ -1179,6 +1222,7 @@ private constructor(
                  */
                 fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
+                /** The content body of the SMS message. */
                 fun body(body: String) = body(JsonField.of(body))
 
                 /**
@@ -1190,6 +1234,7 @@ private constructor(
                  */
                 fun body(body: JsonField<String>) = apply { this.body = body }
 
+                /** The phone number the SMS was sent to. */
                 fun to(to: String) = to(JsonField.of(to))
 
                 /**
@@ -1297,14 +1342,14 @@ private constructor(
                 "MessageSmsContent{_typename=$_typename, body=$body, to=$to, additionalProperties=$additionalProperties}"
         }
 
-        /** The contents of a push message */
+        /** The content of a push notification. */
         class MessagePushContent
         private constructor(
             private val token: JsonField<String>,
             private val _typename: JsonField<String>,
             private val body: JsonField<String>,
             private val title: JsonField<String>,
-            private val data: JsonValue,
+            private val data: JsonField<InnerData>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -1316,10 +1361,12 @@ private constructor(
                 _typename: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("body") @ExcludeMissing body: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("title") @ExcludeMissing title: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("data") @ExcludeMissing data: JsonValue = JsonMissing.of(),
+                @JsonProperty("data") @ExcludeMissing data: JsonField<InnerData> = JsonMissing.of(),
             ) : this(token, _typename, body, title, data, mutableMapOf())
 
             /**
+             * The device token to send the push notification to.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -1327,6 +1374,8 @@ private constructor(
             fun token(): String = token.getRequired("token")
 
             /**
+             * The type name of the schema.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -1334,6 +1383,8 @@ private constructor(
             fun _typename(): String = _typename.getRequired("__typename")
 
             /**
+             * The content body of the push notification.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -1341,13 +1392,21 @@ private constructor(
             fun body(): String = body.getRequired("body")
 
             /**
+             * The title of the push notification.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
             fun title(): String = title.getRequired("title")
 
-            @JsonProperty("data") @ExcludeMissing fun _data(): JsonValue = data
+            /**
+             * Additional data payload for the push notification.
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun data(): Optional<InnerData> = data.getOptional("data")
 
             /**
              * Returns the raw JSON value of [token].
@@ -1379,6 +1438,13 @@ private constructor(
              * Unlike [title], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("title") @ExcludeMissing fun _title(): JsonField<String> = title
+
+            /**
+             * Returns the raw JSON value of [data].
+             *
+             * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<InnerData> = data
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -1415,7 +1481,7 @@ private constructor(
                 private var _typename: JsonField<String>? = null
                 private var body: JsonField<String>? = null
                 private var title: JsonField<String>? = null
-                private var data: JsonValue = JsonMissing.of()
+                private var data: JsonField<InnerData> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -1428,6 +1494,7 @@ private constructor(
                     additionalProperties = messagePushContent.additionalProperties.toMutableMap()
                 }
 
+                /** The device token to send the push notification to. */
                 fun token(token: String) = token(JsonField.of(token))
 
                 /**
@@ -1439,6 +1506,7 @@ private constructor(
                  */
                 fun token(token: JsonField<String>) = apply { this.token = token }
 
+                /** The type name of the schema. */
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
                 /**
@@ -1450,6 +1518,7 @@ private constructor(
                  */
                 fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
+                /** The content body of the push notification. */
                 fun body(body: String) = body(JsonField.of(body))
 
                 /**
@@ -1461,6 +1530,7 @@ private constructor(
                  */
                 fun body(body: JsonField<String>) = apply { this.body = body }
 
+                /** The title of the push notification. */
                 fun title(title: String) = title(JsonField.of(title))
 
                 /**
@@ -1472,7 +1542,20 @@ private constructor(
                  */
                 fun title(title: JsonField<String>) = apply { this.title = title }
 
-                fun data(data: JsonValue) = apply { this.data = data }
+                /** Additional data payload for the push notification. */
+                fun data(data: InnerData?) = data(JsonField.ofNullable(data))
+
+                /** Alias for calling [Builder.data] with `data.orElse(null)`. */
+                fun data(data: Optional<InnerData>) = data(data.getOrNull())
+
+                /**
+                 * Sets [Builder.data] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.data] with a well-typed [InnerData] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun data(data: JsonField<InnerData>) = apply { this.data = data }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -1533,6 +1616,7 @@ private constructor(
                 _typename()
                 body()
                 title()
+                data().ifPresent { it.validate() }
                 validated = true
             }
 
@@ -1555,7 +1639,115 @@ private constructor(
                 (if (token.asKnown().isPresent) 1 else 0) +
                     (if (_typename.asKnown().isPresent) 1 else 0) +
                     (if (body.asKnown().isPresent) 1 else 0) +
-                    (if (title.asKnown().isPresent) 1 else 0)
+                    (if (title.asKnown().isPresent) 1 else 0) +
+                    (data.asKnown().getOrNull()?.validity() ?: 0)
+
+            /** Additional data payload for the push notification. */
+            class InnerData
+            @JsonCreator
+            private constructor(
+                @com.fasterxml.jackson.annotation.JsonValue
+                private val additionalProperties: Map<String, JsonValue>
+            ) {
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [InnerData]. */
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                /** A builder for [InnerData]. */
+                class Builder internal constructor() {
+
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(innerData: InnerData) = apply {
+                        additionalProperties = innerData.additionalProperties.toMutableMap()
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [InnerData].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): InnerData = InnerData(additionalProperties.toImmutable())
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): InnerData = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: KnockInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    additionalProperties.count { (_, value) ->
+                        !value.isNull() && !value.isMissing()
+                    }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is InnerData && additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                /* spotless:off */
+                private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+                /* spotless:on */
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() = "InnerData{additionalProperties=$additionalProperties}"
+            }
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
@@ -1575,13 +1767,13 @@ private constructor(
                 "MessagePushContent{token=$token, _typename=$_typename, body=$body, title=$title, data=$data, additionalProperties=$additionalProperties}"
         }
 
-        /** The contents of a chat message */
+        /** The content of a chat message. */
         class MessageChatContent
         private constructor(
             private val _typename: JsonField<String>,
-            private val connection: JsonValue,
+            private val connection: JsonField<Connection>,
             private val template: JsonField<Template>,
-            private val metadata: JsonValue,
+            private val metadata: JsonField<Metadata>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -1592,31 +1784,49 @@ private constructor(
                 _typename: JsonField<String> = JsonMissing.of(),
                 @JsonProperty("connection")
                 @ExcludeMissing
-                connection: JsonValue = JsonMissing.of(),
+                connection: JsonField<Connection> = JsonMissing.of(),
                 @JsonProperty("template")
                 @ExcludeMissing
                 template: JsonField<Template> = JsonMissing.of(),
-                @JsonProperty("metadata") @ExcludeMissing metadata: JsonValue = JsonMissing.of(),
+                @JsonProperty("metadata")
+                @ExcludeMissing
+                metadata: JsonField<Metadata> = JsonMissing.of(),
             ) : this(_typename, connection, template, metadata, mutableMapOf())
 
             /**
+             * The type name of the schema.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
             fun _typename(): String = _typename.getRequired("__typename")
 
-            /** The channel data connection from the recipient to the underlying provider */
-            @JsonProperty("connection") @ExcludeMissing fun _connection(): JsonValue = connection
+            /**
+             * The channel data connection from the recipient to the underlying provider.
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
+             *   value).
+             */
+            fun connection(): Connection = connection.getRequired("connection")
 
             /**
+             * The template structure for the chat message.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
              */
             fun template(): Template = template.getRequired("template")
 
-            @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonValue = metadata
+            /**
+             * Additional metadata associated with the chat message.
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
             /**
              * Returns the raw JSON value of [_typename].
@@ -1629,6 +1839,16 @@ private constructor(
             fun __typename(): JsonField<String> = _typename
 
             /**
+             * Returns the raw JSON value of [connection].
+             *
+             * Unlike [connection], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("connection")
+            @ExcludeMissing
+            fun _connection(): JsonField<Connection> = connection
+
+            /**
              * Returns the raw JSON value of [template].
              *
              * Unlike [template], this method doesn't throw if the JSON field has an unexpected
@@ -1637,6 +1857,16 @@ private constructor(
             @JsonProperty("template")
             @ExcludeMissing
             fun _template(): JsonField<Template> = template
+
+            /**
+             * Returns the raw JSON value of [metadata].
+             *
+             * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            fun _metadata(): JsonField<Metadata> = metadata
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -1669,9 +1899,9 @@ private constructor(
             class Builder internal constructor() {
 
                 private var _typename: JsonField<String>? = null
-                private var connection: JsonValue? = null
+                private var connection: JsonField<Connection>? = null
                 private var template: JsonField<Template>? = null
-                private var metadata: JsonValue = JsonMissing.of()
+                private var metadata: JsonField<Metadata> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -1683,6 +1913,7 @@ private constructor(
                     additionalProperties = messageChatContent.additionalProperties.toMutableMap()
                 }
 
+                /** The type name of the schema. */
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
                 /**
@@ -1694,9 +1925,21 @@ private constructor(
                  */
                 fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
-                /** The channel data connection from the recipient to the underlying provider */
-                fun connection(connection: JsonValue) = apply { this.connection = connection }
+                /** The channel data connection from the recipient to the underlying provider. */
+                fun connection(connection: Connection) = connection(JsonField.of(connection))
 
+                /**
+                 * Sets [Builder.connection] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.connection] with a well-typed [Connection] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun connection(connection: JsonField<Connection>) = apply {
+                    this.connection = connection
+                }
+
+                /** The template structure for the chat message. */
                 fun template(template: Template) = template(JsonField.of(template))
 
                 /**
@@ -1708,7 +1951,20 @@ private constructor(
                  */
                 fun template(template: JsonField<Template>) = apply { this.template = template }
 
-                fun metadata(metadata: JsonValue) = apply { this.metadata = metadata }
+                /** Additional metadata associated with the chat message. */
+                fun metadata(metadata: Metadata?) = metadata(JsonField.ofNullable(metadata))
+
+                /** Alias for calling [Builder.metadata] with `metadata.orElse(null)`. */
+                fun metadata(metadata: Optional<Metadata>) = metadata(metadata.getOrNull())
+
+                /**
+                 * Sets [Builder.metadata] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -1764,7 +2020,9 @@ private constructor(
                 }
 
                 _typename()
+                connection().validate()
                 template().validate()
+                metadata().ifPresent { it.validate() }
                 validated = true
             }
 
@@ -1785,12 +2043,122 @@ private constructor(
             @JvmSynthetic
             internal fun validity(): Int =
                 (if (_typename.asKnown().isPresent) 1 else 0) +
-                    (template.asKnown().getOrNull()?.validity() ?: 0)
+                    (connection.asKnown().getOrNull()?.validity() ?: 0) +
+                    (template.asKnown().getOrNull()?.validity() ?: 0) +
+                    (metadata.asKnown().getOrNull()?.validity() ?: 0)
 
+            /** The channel data connection from the recipient to the underlying provider. */
+            class Connection
+            @JsonCreator
+            private constructor(
+                @com.fasterxml.jackson.annotation.JsonValue
+                private val additionalProperties: Map<String, JsonValue>
+            ) {
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [Connection]. */
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                /** A builder for [Connection]. */
+                class Builder internal constructor() {
+
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(connection: Connection) = apply {
+                        additionalProperties = connection.additionalProperties.toMutableMap()
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Connection].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): Connection = Connection(additionalProperties.toImmutable())
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): Connection = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: KnockInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    additionalProperties.count { (_, value) ->
+                        !value.isNull() && !value.isMissing()
+                    }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Connection && additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                /* spotless:off */
+                private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+                /* spotless:on */
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() = "Connection{additionalProperties=$additionalProperties}"
+            }
+
+            /** The template structure for the chat message. */
             class Template
             private constructor(
                 private val blocks: JsonField<List<Block>>,
-                private val jsonContent: JsonValue,
+                private val jsonContent: JsonField<JsonContent>,
                 private val summary: JsonField<String>,
                 private val additionalProperties: MutableMap<String, JsonValue>,
             ) {
@@ -1802,26 +2170,31 @@ private constructor(
                     blocks: JsonField<List<Block>> = JsonMissing.of(),
                     @JsonProperty("json_content")
                     @ExcludeMissing
-                    jsonContent: JsonValue = JsonMissing.of(),
+                    jsonContent: JsonField<JsonContent> = JsonMissing.of(),
                     @JsonProperty("summary")
                     @ExcludeMissing
                     summary: JsonField<String> = JsonMissing.of(),
                 ) : this(blocks, jsonContent, summary, mutableMapOf())
 
                 /**
-                 * The structured blocks of the message
+                 * The blocks of the message in a chat.
                  *
                  * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g.
                  *   if the server responded with an unexpected value).
                  */
                 fun blocks(): Optional<List<Block>> = blocks.getOptional("blocks")
 
-                /** The JSON content of the message */
-                @JsonProperty("json_content")
-                @ExcludeMissing
-                fun _jsonContent(): JsonValue = jsonContent
+                /**
+                 * The JSON content of the message.
+                 *
+                 * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g.
+                 *   if the server responded with an unexpected value).
+                 */
+                fun jsonContent(): Optional<JsonContent> = jsonContent.getOptional("json_content")
 
                 /**
+                 * The summary of the chat message.
+                 *
                  * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g.
                  *   if the server responded with an unexpected value).
                  */
@@ -1836,6 +2209,16 @@ private constructor(
                 @JsonProperty("blocks")
                 @ExcludeMissing
                 fun _blocks(): JsonField<List<Block>> = blocks
+
+                /**
+                 * Returns the raw JSON value of [jsonContent].
+                 *
+                 * Unlike [jsonContent], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("json_content")
+                @ExcludeMissing
+                fun _jsonContent(): JsonField<JsonContent> = jsonContent
 
                 /**
                  * Returns the raw JSON value of [summary].
@@ -1867,7 +2250,7 @@ private constructor(
                 class Builder internal constructor() {
 
                     private var blocks: JsonField<MutableList<Block>>? = null
-                    private var jsonContent: JsonValue = JsonMissing.of()
+                    private var jsonContent: JsonField<JsonContent> = JsonMissing.of()
                     private var summary: JsonField<String> = JsonMissing.of()
                     private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -1879,7 +2262,7 @@ private constructor(
                         additionalProperties = template.additionalProperties.toMutableMap()
                     }
 
-                    /** The structured blocks of the message */
+                    /** The blocks of the message in a chat. */
                     fun blocks(blocks: List<Block>?) = blocks(JsonField.ofNullable(blocks))
 
                     /** Alias for calling [Builder.blocks] with `blocks.orElse(null)`. */
@@ -1908,11 +2291,26 @@ private constructor(
                             }
                     }
 
-                    /** The JSON content of the message */
-                    fun jsonContent(jsonContent: JsonValue) = apply {
+                    /** The JSON content of the message. */
+                    fun jsonContent(jsonContent: JsonContent?) =
+                        jsonContent(JsonField.ofNullable(jsonContent))
+
+                    /** Alias for calling [Builder.jsonContent] with `jsonContent.orElse(null)`. */
+                    fun jsonContent(jsonContent: Optional<JsonContent>) =
+                        jsonContent(jsonContent.getOrNull())
+
+                    /**
+                     * Sets [Builder.jsonContent] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.jsonContent] with a well-typed [JsonContent]
+                     * value instead. This method is primarily for setting the field to an
+                     * undocumented or not yet supported value.
+                     */
+                    fun jsonContent(jsonContent: JsonField<JsonContent>) = apply {
                         this.jsonContent = jsonContent
                     }
 
+                    /** The summary of the chat message. */
                     fun summary(summary: String?) = summary(JsonField.ofNullable(summary))
 
                     /** Alias for calling [Builder.summary] with `summary.orElse(null)`. */
@@ -1971,6 +2369,7 @@ private constructor(
                     }
 
                     blocks().ifPresent { it.forEach { it.validate() } }
+                    jsonContent().ifPresent { it.validate() }
                     summary()
                     validated = true
                 }
@@ -1992,9 +2391,10 @@ private constructor(
                 @JvmSynthetic
                 internal fun validity(): Int =
                     (blocks.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                        (jsonContent.asKnown().getOrNull()?.validity() ?: 0) +
                         (if (summary.asKnown().isPresent) 1 else 0)
 
-                /** A block in a chat message */
+                /** A block in a message in a chat. */
                 class Block
                 private constructor(
                     private val content: JsonField<String>,
@@ -2017,6 +2417,8 @@ private constructor(
                     ) : this(content, name, type, mutableMapOf())
 
                     /**
+                     * The actual content of the block.
+                     *
                      * @throws KnockInvalidDataException if the JSON field has an unexpected type or
                      *   is unexpectedly missing or null (e.g. if the server responded with an
                      *   unexpected value).
@@ -2024,6 +2426,8 @@ private constructor(
                     fun content(): String = content.getRequired("content")
 
                     /**
+                     * The name of the block for identification.
+                     *
                      * @throws KnockInvalidDataException if the JSON field has an unexpected type or
                      *   is unexpectedly missing or null (e.g. if the server responded with an
                      *   unexpected value).
@@ -2031,6 +2435,8 @@ private constructor(
                     fun name(): String = name.getRequired("name")
 
                     /**
+                     * The type of block in a message in a chat (text or markdown).
+                     *
                      * @throws KnockInvalidDataException if the JSON field has an unexpected type or
                      *   is unexpectedly missing or null (e.g. if the server responded with an
                      *   unexpected value).
@@ -2107,6 +2513,7 @@ private constructor(
                             additionalProperties = block.additionalProperties.toMutableMap()
                         }
 
+                        /** The actual content of the block. */
                         fun content(content: String) = content(JsonField.of(content))
 
                         /**
@@ -2118,6 +2525,7 @@ private constructor(
                          */
                         fun content(content: JsonField<String>) = apply { this.content = content }
 
+                        /** The name of the block for identification. */
                         fun name(name: String) = name(JsonField.of(name))
 
                         /**
@@ -2129,6 +2537,7 @@ private constructor(
                          */
                         fun name(name: JsonField<String>) = apply { this.name = name }
 
+                        /** The type of block in a message in a chat (text or markdown). */
                         fun type(type: Type) = type(JsonField.of(type))
 
                         /**
@@ -2218,6 +2627,7 @@ private constructor(
                             (if (name.asKnown().isPresent) 1 else 0) +
                             (type.asKnown().getOrNull()?.validity() ?: 0)
 
+                    /** The type of block in a message in a chat (text or markdown). */
                     class Type
                     @JsonCreator
                     private constructor(private val value: JsonField<String>) : Enum {
@@ -2371,6 +2781,117 @@ private constructor(
                         "Block{content=$content, name=$name, type=$type, additionalProperties=$additionalProperties}"
                 }
 
+                /** The JSON content of the message. */
+                class JsonContent
+                @JsonCreator
+                private constructor(
+                    @com.fasterxml.jackson.annotation.JsonValue
+                    private val additionalProperties: Map<String, JsonValue>
+                ) {
+
+                    @JsonAnyGetter
+                    @ExcludeMissing
+                    fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                    fun toBuilder() = Builder().from(this)
+
+                    companion object {
+
+                        /**
+                         * Returns a mutable builder for constructing an instance of [JsonContent].
+                         */
+                        @JvmStatic fun builder() = Builder()
+                    }
+
+                    /** A builder for [JsonContent]. */
+                    class Builder internal constructor() {
+
+                        private var additionalProperties: MutableMap<String, JsonValue> =
+                            mutableMapOf()
+
+                        @JvmSynthetic
+                        internal fun from(jsonContent: JsonContent) = apply {
+                            additionalProperties = jsonContent.additionalProperties.toMutableMap()
+                        }
+
+                        fun additionalProperties(additionalProperties: Map<String, JsonValue>) =
+                            apply {
+                                this.additionalProperties.clear()
+                                putAllAdditionalProperties(additionalProperties)
+                            }
+
+                        fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                            additionalProperties.put(key, value)
+                        }
+
+                        fun putAllAdditionalProperties(
+                            additionalProperties: Map<String, JsonValue>
+                        ) = apply { this.additionalProperties.putAll(additionalProperties) }
+
+                        fun removeAdditionalProperty(key: String) = apply {
+                            additionalProperties.remove(key)
+                        }
+
+                        fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                            keys.forEach(::removeAdditionalProperty)
+                        }
+
+                        /**
+                         * Returns an immutable instance of [JsonContent].
+                         *
+                         * Further updates to this [Builder] will not mutate the returned instance.
+                         */
+                        fun build(): JsonContent = JsonContent(additionalProperties.toImmutable())
+                    }
+
+                    private var validated: Boolean = false
+
+                    fun validate(): JsonContent = apply {
+                        if (validated) {
+                            return@apply
+                        }
+
+                        validated = true
+                    }
+
+                    fun isValid(): Boolean =
+                        try {
+                            validate()
+                            true
+                        } catch (e: KnockInvalidDataException) {
+                            false
+                        }
+
+                    /**
+                     * Returns a score indicating how many valid values are contained in this object
+                     * recursively.
+                     *
+                     * Used for best match union deserialization.
+                     */
+                    @JvmSynthetic
+                    internal fun validity(): Int =
+                        additionalProperties.count { (_, value) ->
+                            !value.isNull() && !value.isMissing()
+                        }
+
+                    override fun equals(other: Any?): Boolean {
+                        if (this === other) {
+                            return true
+                        }
+
+                        return /* spotless:off */ other is JsonContent && additionalProperties == other.additionalProperties /* spotless:on */
+                    }
+
+                    /* spotless:off */
+                    private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+                    /* spotless:on */
+
+                    override fun hashCode(): Int = hashCode
+
+                    override fun toString() =
+                        "JsonContent{additionalProperties=$additionalProperties}"
+                }
+
                 override fun equals(other: Any?): Boolean {
                     if (this === other) {
                         return true
@@ -2387,6 +2908,113 @@ private constructor(
 
                 override fun toString() =
                     "Template{blocks=$blocks, jsonContent=$jsonContent, summary=$summary, additionalProperties=$additionalProperties}"
+            }
+
+            /** Additional metadata associated with the chat message. */
+            class Metadata
+            @JsonCreator
+            private constructor(
+                @com.fasterxml.jackson.annotation.JsonValue
+                private val additionalProperties: Map<String, JsonValue>
+            ) {
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /** Returns a mutable builder for constructing an instance of [Metadata]. */
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                /** A builder for [Metadata]. */
+                class Builder internal constructor() {
+
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(metadata: Metadata) = apply {
+                        additionalProperties = metadata.additionalProperties.toMutableMap()
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of [Metadata].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): Metadata = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: KnockInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    additionalProperties.count { (_, value) ->
+                        !value.isNull() && !value.isMissing()
+                    }
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                /* spotless:off */
+                private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+                /* spotless:on */
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
             }
 
             override fun equals(other: Any?): Boolean {
@@ -2407,7 +3035,7 @@ private constructor(
                 "MessageChatContent{_typename=$_typename, connection=$connection, template=$template, metadata=$metadata, additionalProperties=$additionalProperties}"
         }
 
-        /** The contents of a message in an app feed */
+        /** The content of an in-app feed message. */
         class MessageInAppFeedContent
         private constructor(
             private val _typename: JsonField<String>,
@@ -2426,6 +3054,8 @@ private constructor(
             ) : this(_typename, blocks, mutableMapOf())
 
             /**
+             * The type name of the schema.
+             *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
              *   value).
@@ -2433,7 +3063,7 @@ private constructor(
             fun _typename(): String = _typename.getRequired("__typename")
 
             /**
-             * The blocks of the message
+             * The blocks of the message in an app feed.
              *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -2500,6 +3130,7 @@ private constructor(
                         messageInAppFeedContent.additionalProperties.toMutableMap()
                 }
 
+                /** The type name of the schema. */
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
                 /**
@@ -2511,7 +3142,7 @@ private constructor(
                  */
                 fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
-                /** The blocks of the message */
+                /** The blocks of the message in an app feed. */
                 fun blocks(blocks: List<Block>) = blocks(JsonField.of(blocks))
 
                 /**
@@ -2537,12 +3168,19 @@ private constructor(
                         }
                 }
 
-                /** Alias for calling [addBlock] with `Block.ofContent(content)`. */
-                fun addBlock(content: Block.ContentBlock) = addBlock(Block.ofContent(content))
+                /**
+                 * Alias for calling [addBlock] with
+                 * `Block.ofMessageInAppFeedContent(messageInAppFeedContent)`.
+                 */
+                fun addBlock(messageInAppFeedContent: Block.MessageInAppFeedContentBlock) =
+                    addBlock(Block.ofMessageInAppFeedContent(messageInAppFeedContent))
 
-                /** Alias for calling [addBlock] with `Block.ofButtonSet(buttonSet)`. */
-                fun addBlock(buttonSet: Block.ButtonSetBlock) =
-                    addBlock(Block.ofButtonSet(buttonSet))
+                /**
+                 * Alias for calling [addBlock] with
+                 * `Block.ofMessageInAppFeedButtonSet(messageInAppFeedButtonSet)`.
+                 */
+                fun addBlock(messageInAppFeedButtonSet: Block.MessageInAppFeedButtonSetBlock) =
+                    addBlock(Block.ofMessageInAppFeedButtonSet(messageInAppFeedButtonSet))
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -2618,38 +3256,44 @@ private constructor(
                 (if (_typename.asKnown().isPresent) 1 else 0) +
                     (blocks.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
-            /** A content (text or markdown) block in a message in an app feed */
+            /** A block in a message in an app feed. */
             @JsonDeserialize(using = Block.Deserializer::class)
             @JsonSerialize(using = Block.Serializer::class)
             class Block
             private constructor(
-                private val content: ContentBlock? = null,
-                private val buttonSet: ButtonSetBlock? = null,
+                private val messageInAppFeedContent: MessageInAppFeedContentBlock? = null,
+                private val messageInAppFeedButtonSet: MessageInAppFeedButtonSetBlock? = null,
                 private val _json: JsonValue? = null,
             ) {
 
-                /** A content (text or markdown) block in a message in an app feed */
-                fun content(): Optional<ContentBlock> = Optional.ofNullable(content)
+                /** A block in a message in an app feed. */
+                fun messageInAppFeedContent(): Optional<MessageInAppFeedContentBlock> =
+                    Optional.ofNullable(messageInAppFeedContent)
 
-                /** A set of buttons in a message in an app feed */
-                fun buttonSet(): Optional<ButtonSetBlock> = Optional.ofNullable(buttonSet)
+                /** A button set block in a message in an app feed. */
+                fun messageInAppFeedButtonSet(): Optional<MessageInAppFeedButtonSetBlock> =
+                    Optional.ofNullable(messageInAppFeedButtonSet)
 
-                fun isContent(): Boolean = content != null
+                fun isMessageInAppFeedContent(): Boolean = messageInAppFeedContent != null
 
-                fun isButtonSet(): Boolean = buttonSet != null
+                fun isMessageInAppFeedButtonSet(): Boolean = messageInAppFeedButtonSet != null
 
-                /** A content (text or markdown) block in a message in an app feed */
-                fun asContent(): ContentBlock = content.getOrThrow("content")
+                /** A block in a message in an app feed. */
+                fun asMessageInAppFeedContent(): MessageInAppFeedContentBlock =
+                    messageInAppFeedContent.getOrThrow("messageInAppFeedContent")
 
-                /** A set of buttons in a message in an app feed */
-                fun asButtonSet(): ButtonSetBlock = buttonSet.getOrThrow("buttonSet")
+                /** A button set block in a message in an app feed. */
+                fun asMessageInAppFeedButtonSet(): MessageInAppFeedButtonSetBlock =
+                    messageInAppFeedButtonSet.getOrThrow("messageInAppFeedButtonSet")
 
                 fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
                 fun <T> accept(visitor: Visitor<T>): T =
                     when {
-                        content != null -> visitor.visitContent(content)
-                        buttonSet != null -> visitor.visitButtonSet(buttonSet)
+                        messageInAppFeedContent != null ->
+                            visitor.visitMessageInAppFeedContent(messageInAppFeedContent)
+                        messageInAppFeedButtonSet != null ->
+                            visitor.visitMessageInAppFeedButtonSet(messageInAppFeedButtonSet)
                         else -> visitor.unknown(_json)
                     }
 
@@ -2662,12 +3306,16 @@ private constructor(
 
                     accept(
                         object : Visitor<Unit> {
-                            override fun visitContent(content: ContentBlock) {
-                                content.validate()
+                            override fun visitMessageInAppFeedContent(
+                                messageInAppFeedContent: MessageInAppFeedContentBlock
+                            ) {
+                                messageInAppFeedContent.validate()
                             }
 
-                            override fun visitButtonSet(buttonSet: ButtonSetBlock) {
-                                buttonSet.validate()
+                            override fun visitMessageInAppFeedButtonSet(
+                                messageInAppFeedButtonSet: MessageInAppFeedButtonSetBlock
+                            ) {
+                                messageInAppFeedButtonSet.validate()
                             }
                         }
                     )
@@ -2692,10 +3340,13 @@ private constructor(
                 internal fun validity(): Int =
                     accept(
                         object : Visitor<Int> {
-                            override fun visitContent(content: ContentBlock) = content.validity()
+                            override fun visitMessageInAppFeedContent(
+                                messageInAppFeedContent: MessageInAppFeedContentBlock
+                            ) = messageInAppFeedContent.validity()
 
-                            override fun visitButtonSet(buttonSet: ButtonSetBlock) =
-                                buttonSet.validity()
+                            override fun visitMessageInAppFeedButtonSet(
+                                messageInAppFeedButtonSet: MessageInAppFeedButtonSetBlock
+                            ) = messageInAppFeedButtonSet.validity()
 
                             override fun unknown(json: JsonValue?) = 0
                         }
@@ -2706,27 +3357,34 @@ private constructor(
                         return true
                     }
 
-                    return /* spotless:off */ other is Block && content == other.content && buttonSet == other.buttonSet /* spotless:on */
+                    return /* spotless:off */ other is Block && messageInAppFeedContent == other.messageInAppFeedContent && messageInAppFeedButtonSet == other.messageInAppFeedButtonSet /* spotless:on */
                 }
 
-                override fun hashCode(): Int = /* spotless:off */ Objects.hash(content, buttonSet) /* spotless:on */
+                override fun hashCode(): Int = /* spotless:off */ Objects.hash(messageInAppFeedContent, messageInAppFeedButtonSet) /* spotless:on */
 
                 override fun toString(): String =
                     when {
-                        content != null -> "Block{content=$content}"
-                        buttonSet != null -> "Block{buttonSet=$buttonSet}"
+                        messageInAppFeedContent != null ->
+                            "Block{messageInAppFeedContent=$messageInAppFeedContent}"
+                        messageInAppFeedButtonSet != null ->
+                            "Block{messageInAppFeedButtonSet=$messageInAppFeedButtonSet}"
                         _json != null -> "Block{_unknown=$_json}"
                         else -> throw IllegalStateException("Invalid Block")
                     }
 
                 companion object {
 
-                    /** A content (text or markdown) block in a message in an app feed */
-                    @JvmStatic fun ofContent(content: ContentBlock) = Block(content = content)
-
-                    /** A set of buttons in a message in an app feed */
+                    /** A block in a message in an app feed. */
                     @JvmStatic
-                    fun ofButtonSet(buttonSet: ButtonSetBlock) = Block(buttonSet = buttonSet)
+                    fun ofMessageInAppFeedContent(
+                        messageInAppFeedContent: MessageInAppFeedContentBlock
+                    ) = Block(messageInAppFeedContent = messageInAppFeedContent)
+
+                    /** A button set block in a message in an app feed. */
+                    @JvmStatic
+                    fun ofMessageInAppFeedButtonSet(
+                        messageInAppFeedButtonSet: MessageInAppFeedButtonSetBlock
+                    ) = Block(messageInAppFeedButtonSet = messageInAppFeedButtonSet)
                 }
 
                 /**
@@ -2735,11 +3393,15 @@ private constructor(
                  */
                 interface Visitor<out T> {
 
-                    /** A content (text or markdown) block in a message in an app feed */
-                    fun visitContent(content: ContentBlock): T
+                    /** A block in a message in an app feed. */
+                    fun visitMessageInAppFeedContent(
+                        messageInAppFeedContent: MessageInAppFeedContentBlock
+                    ): T
 
-                    /** A set of buttons in a message in an app feed */
-                    fun visitButtonSet(buttonSet: ButtonSetBlock): T
+                    /** A button set block in a message in an app feed. */
+                    fun visitMessageInAppFeedButtonSet(
+                        messageInAppFeedButtonSet: MessageInAppFeedButtonSetBlock
+                    ): T
 
                     /**
                      * Maps an unknown variant of [Block] to a value of type [T].
@@ -2763,12 +3425,18 @@ private constructor(
 
                         val bestMatches =
                             sequenceOf(
-                                    tryDeserialize(node, jacksonTypeRef<ContentBlock>())?.let {
-                                        Block(content = it, _json = json)
-                                    },
-                                    tryDeserialize(node, jacksonTypeRef<ButtonSetBlock>())?.let {
-                                        Block(buttonSet = it, _json = json)
-                                    },
+                                    tryDeserialize(
+                                            node,
+                                            jacksonTypeRef<MessageInAppFeedContentBlock>(),
+                                        )
+                                        ?.let { Block(messageInAppFeedContent = it, _json = json) },
+                                    tryDeserialize(
+                                            node,
+                                            jacksonTypeRef<MessageInAppFeedButtonSetBlock>(),
+                                        )
+                                        ?.let {
+                                            Block(messageInAppFeedButtonSet = it, _json = json)
+                                        },
                                 )
                                 .filterNotNull()
                                 .allMaxBy { it.validity() }
@@ -2795,16 +3463,18 @@ private constructor(
                         provider: SerializerProvider,
                     ) {
                         when {
-                            value.content != null -> generator.writeObject(value.content)
-                            value.buttonSet != null -> generator.writeObject(value.buttonSet)
+                            value.messageInAppFeedContent != null ->
+                                generator.writeObject(value.messageInAppFeedContent)
+                            value.messageInAppFeedButtonSet != null ->
+                                generator.writeObject(value.messageInAppFeedButtonSet)
                             value._json != null -> generator.writeObject(value._json)
                             else -> throw IllegalStateException("Invalid Block")
                         }
                     }
                 }
 
-                /** A content (text or markdown) block in a message in an app feed */
-                class ContentBlock
+                /** A block in a message in an app feed. */
+                class MessageInAppFeedContentBlock
                 private constructor(
                     private val content: JsonField<String>,
                     private val name: JsonField<String>,
@@ -2830,6 +3500,8 @@ private constructor(
                     ) : this(content, name, rendered, type, mutableMapOf())
 
                     /**
+                     * The content of the block in a message in an app feed.
+                     *
                      * @throws KnockInvalidDataException if the JSON field has an unexpected type or
                      *   is unexpectedly missing or null (e.g. if the server responded with an
                      *   unexpected value).
@@ -2837,6 +3509,8 @@ private constructor(
                     fun content(): String = content.getRequired("content")
 
                     /**
+                     * The name of the block in a message in an app feed.
+                     *
                      * @throws KnockInvalidDataException if the JSON field has an unexpected type or
                      *   is unexpectedly missing or null (e.g. if the server responded with an
                      *   unexpected value).
@@ -2844,6 +3518,8 @@ private constructor(
                     fun name(): String = name.getRequired("name")
 
                     /**
+                     * The rendered HTML version of the content.
+                     *
                      * @throws KnockInvalidDataException if the JSON field has an unexpected type or
                      *   is unexpectedly missing or null (e.g. if the server responded with an
                      *   unexpected value).
@@ -2851,6 +3527,8 @@ private constructor(
                     fun rendered(): String = rendered.getRequired("rendered")
 
                     /**
+                     * The type of block in a message in an app feed.
+                     *
                      * @throws KnockInvalidDataException if the JSON field has an unexpected type or
                      *   is unexpectedly missing or null (e.g. if the server responded with an
                      *   unexpected value).
@@ -2908,7 +3586,8 @@ private constructor(
                     companion object {
 
                         /**
-                         * Returns a mutable builder for constructing an instance of [ContentBlock].
+                         * Returns a mutable builder for constructing an instance of
+                         * [MessageInAppFeedContentBlock].
                          *
                          * The following fields are required:
                          * ```java
@@ -2921,7 +3600,7 @@ private constructor(
                         @JvmStatic fun builder() = Builder()
                     }
 
-                    /** A builder for [ContentBlock]. */
+                    /** A builder for [MessageInAppFeedContentBlock]. */
                     class Builder internal constructor() {
 
                         private var content: JsonField<String>? = null
@@ -2932,14 +3611,18 @@ private constructor(
                             mutableMapOf()
 
                         @JvmSynthetic
-                        internal fun from(contentBlock: ContentBlock) = apply {
-                            content = contentBlock.content
-                            name = contentBlock.name
-                            rendered = contentBlock.rendered
-                            type = contentBlock.type
-                            additionalProperties = contentBlock.additionalProperties.toMutableMap()
+                        internal fun from(
+                            messageInAppFeedContentBlock: MessageInAppFeedContentBlock
+                        ) = apply {
+                            content = messageInAppFeedContentBlock.content
+                            name = messageInAppFeedContentBlock.name
+                            rendered = messageInAppFeedContentBlock.rendered
+                            type = messageInAppFeedContentBlock.type
+                            additionalProperties =
+                                messageInAppFeedContentBlock.additionalProperties.toMutableMap()
                         }
 
+                        /** The content of the block in a message in an app feed. */
                         fun content(content: String) = content(JsonField.of(content))
 
                         /**
@@ -2951,6 +3634,7 @@ private constructor(
                          */
                         fun content(content: JsonField<String>) = apply { this.content = content }
 
+                        /** The name of the block in a message in an app feed. */
                         fun name(name: String) = name(JsonField.of(name))
 
                         /**
@@ -2962,6 +3646,7 @@ private constructor(
                          */
                         fun name(name: JsonField<String>) = apply { this.name = name }
 
+                        /** The rendered HTML version of the content. */
                         fun rendered(rendered: String) = rendered(JsonField.of(rendered))
 
                         /**
@@ -2975,6 +3660,7 @@ private constructor(
                             this.rendered = rendered
                         }
 
+                        /** The type of block in a message in an app feed. */
                         fun type(type: Type) = type(JsonField.of(type))
 
                         /**
@@ -3009,7 +3695,7 @@ private constructor(
                         }
 
                         /**
-                         * Returns an immutable instance of [ContentBlock].
+                         * Returns an immutable instance of [MessageInAppFeedContentBlock].
                          *
                          * Further updates to this [Builder] will not mutate the returned instance.
                          *
@@ -3023,8 +3709,8 @@ private constructor(
                          *
                          * @throws IllegalStateException if any required field is unset.
                          */
-                        fun build(): ContentBlock =
-                            ContentBlock(
+                        fun build(): MessageInAppFeedContentBlock =
+                            MessageInAppFeedContentBlock(
                                 checkRequired("content", content),
                                 checkRequired("name", name),
                                 checkRequired("rendered", rendered),
@@ -3035,7 +3721,7 @@ private constructor(
 
                     private var validated: Boolean = false
 
-                    fun validate(): ContentBlock = apply {
+                    fun validate(): MessageInAppFeedContentBlock = apply {
                         if (validated) {
                             return@apply
                         }
@@ -3068,6 +3754,7 @@ private constructor(
                             (if (rendered.asKnown().isPresent) 1 else 0) +
                             (type.asKnown().getOrNull()?.validity() ?: 0)
 
+                    /** The type of block in a message in an app feed. */
                     class Type
                     @JsonCreator
                     private constructor(private val value: JsonField<String>) : Enum {
@@ -3208,7 +3895,7 @@ private constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is ContentBlock && content == other.content && name == other.name && rendered == other.rendered && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                        return /* spotless:off */ other is MessageInAppFeedContentBlock && content == other.content && name == other.name && rendered == other.rendered && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                     }
 
                     /* spotless:off */
@@ -3218,11 +3905,11 @@ private constructor(
                     override fun hashCode(): Int = hashCode
 
                     override fun toString() =
-                        "ContentBlock{content=$content, name=$name, rendered=$rendered, type=$type, additionalProperties=$additionalProperties}"
+                        "MessageInAppFeedContentBlock{content=$content, name=$name, rendered=$rendered, type=$type, additionalProperties=$additionalProperties}"
                 }
 
-                /** A set of buttons in a message in an app feed */
-                class ButtonSetBlock
+                /** A button set block in a message in an app feed. */
+                class MessageInAppFeedButtonSetBlock
                 private constructor(
                     private val buttons: JsonField<List<Button>>,
                     private val name: JsonField<String>,
@@ -3244,6 +3931,8 @@ private constructor(
                     ) : this(buttons, name, type, mutableMapOf())
 
                     /**
+                     * A list of buttons in an in app feed message.
+                     *
                      * @throws KnockInvalidDataException if the JSON field has an unexpected type or
                      *   is unexpectedly missing or null (e.g. if the server responded with an
                      *   unexpected value).
@@ -3251,6 +3940,8 @@ private constructor(
                     fun buttons(): List<Button> = buttons.getRequired("buttons")
 
                     /**
+                     * The name of the button set in a message in an app feed.
+                     *
                      * @throws KnockInvalidDataException if the JSON field has an unexpected type or
                      *   is unexpectedly missing or null (e.g. if the server responded with an
                      *   unexpected value).
@@ -3258,6 +3949,8 @@ private constructor(
                     fun name(): String = name.getRequired("name")
 
                     /**
+                     * The type of block in a message in an app feed.
+                     *
                      * @throws KnockInvalidDataException if the JSON field has an unexpected type or
                      *   is unexpectedly missing or null (e.g. if the server responded with an
                      *   unexpected value).
@@ -3306,7 +3999,7 @@ private constructor(
 
                         /**
                          * Returns a mutable builder for constructing an instance of
-                         * [ButtonSetBlock].
+                         * [MessageInAppFeedButtonSetBlock].
                          *
                          * The following fields are required:
                          * ```java
@@ -3318,7 +4011,7 @@ private constructor(
                         @JvmStatic fun builder() = Builder()
                     }
 
-                    /** A builder for [ButtonSetBlock]. */
+                    /** A builder for [MessageInAppFeedButtonSetBlock]. */
                     class Builder internal constructor() {
 
                         private var buttons: JsonField<MutableList<Button>>? = null
@@ -3328,14 +4021,18 @@ private constructor(
                             mutableMapOf()
 
                         @JvmSynthetic
-                        internal fun from(buttonSetBlock: ButtonSetBlock) = apply {
-                            buttons = buttonSetBlock.buttons.map { it.toMutableList() }
-                            name = buttonSetBlock.name
-                            type = buttonSetBlock.type
+                        internal fun from(
+                            messageInAppFeedButtonSetBlock: MessageInAppFeedButtonSetBlock
+                        ) = apply {
+                            buttons =
+                                messageInAppFeedButtonSetBlock.buttons.map { it.toMutableList() }
+                            name = messageInAppFeedButtonSetBlock.name
+                            type = messageInAppFeedButtonSetBlock.type
                             additionalProperties =
-                                buttonSetBlock.additionalProperties.toMutableMap()
+                                messageInAppFeedButtonSetBlock.additionalProperties.toMutableMap()
                         }
 
+                        /** A list of buttons in an in app feed message. */
                         fun buttons(buttons: List<Button>) = buttons(JsonField.of(buttons))
 
                         /**
@@ -3362,6 +4059,7 @@ private constructor(
                                 }
                         }
 
+                        /** The name of the button set in a message in an app feed. */
                         fun name(name: String) = name(JsonField.of(name))
 
                         /**
@@ -3373,6 +4071,7 @@ private constructor(
                          */
                         fun name(name: JsonField<String>) = apply { this.name = name }
 
+                        /** The type of block in a message in an app feed. */
                         fun type(type: Type) = type(JsonField.of(type))
 
                         /**
@@ -3407,7 +4106,7 @@ private constructor(
                         }
 
                         /**
-                         * Returns an immutable instance of [ButtonSetBlock].
+                         * Returns an immutable instance of [MessageInAppFeedButtonSetBlock].
                          *
                          * Further updates to this [Builder] will not mutate the returned instance.
                          *
@@ -3420,8 +4119,8 @@ private constructor(
                          *
                          * @throws IllegalStateException if any required field is unset.
                          */
-                        fun build(): ButtonSetBlock =
-                            ButtonSetBlock(
+                        fun build(): MessageInAppFeedButtonSetBlock =
+                            MessageInAppFeedButtonSetBlock(
                                 checkRequired("buttons", buttons).map { it.toImmutable() },
                                 checkRequired("name", name),
                                 checkRequired("type", type),
@@ -3431,7 +4130,7 @@ private constructor(
 
                     private var validated: Boolean = false
 
-                    fun validate(): ButtonSetBlock = apply {
+                    fun validate(): MessageInAppFeedButtonSetBlock = apply {
                         if (validated) {
                             return@apply
                         }
@@ -3462,7 +4161,7 @@ private constructor(
                             (if (name.asKnown().isPresent) 1 else 0) +
                             (type.asKnown().getOrNull()?.validity() ?: 0)
 
-                    /** A button in a set of buttons */
+                    /** A button in an in app feed message. */
                     class Button
                     private constructor(
                         private val action: JsonField<String>,
@@ -3485,6 +4184,8 @@ private constructor(
                         ) : this(action, label, name, mutableMapOf())
 
                         /**
+                         * The action to take when the button is clicked.
+                         *
                          * @throws KnockInvalidDataException if the JSON field has an unexpected
                          *   type or is unexpectedly missing or null (e.g. if the server responded
                          *   with an unexpected value).
@@ -3492,6 +4193,8 @@ private constructor(
                         fun action(): String = action.getRequired("action")
 
                         /**
+                         * The label of the button.
+                         *
                          * @throws KnockInvalidDataException if the JSON field has an unexpected
                          *   type or is unexpectedly missing or null (e.g. if the server responded
                          *   with an unexpected value).
@@ -3499,6 +4202,8 @@ private constructor(
                         fun label(): String = label.getRequired("label")
 
                         /**
+                         * The name of the button.
+                         *
                          * @throws KnockInvalidDataException if the JSON field has an unexpected
                          *   type or is unexpectedly missing or null (e.g. if the server responded
                          *   with an unexpected value).
@@ -3577,6 +4282,7 @@ private constructor(
                                 additionalProperties = button.additionalProperties.toMutableMap()
                             }
 
+                            /** The action to take when the button is clicked. */
                             fun action(action: String) = action(JsonField.of(action))
 
                             /**
@@ -3588,6 +4294,7 @@ private constructor(
                              */
                             fun action(action: JsonField<String>) = apply { this.action = action }
 
+                            /** The label of the button. */
                             fun label(label: String) = label(JsonField.of(label))
 
                             /**
@@ -3599,6 +4306,7 @@ private constructor(
                              */
                             fun label(label: JsonField<String>) = apply { this.label = label }
 
+                            /** The name of the button. */
                             fun name(name: String) = name(JsonField.of(name))
 
                             /**
@@ -3707,6 +4415,7 @@ private constructor(
                             "Button{action=$action, label=$label, name=$name, additionalProperties=$additionalProperties}"
                     }
 
+                    /** The type of block in a message in an app feed. */
                     class Type
                     @JsonCreator
                     private constructor(private val value: JsonField<String>) : Enum {
@@ -3841,7 +4550,7 @@ private constructor(
                             return true
                         }
 
-                        return /* spotless:off */ other is ButtonSetBlock && buttons == other.buttons && name == other.name && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+                        return /* spotless:off */ other is MessageInAppFeedButtonSetBlock && buttons == other.buttons && name == other.name && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
                     }
 
                     /* spotless:off */
@@ -3851,7 +4560,7 @@ private constructor(
                     override fun hashCode(): Int = hashCode
 
                     override fun toString() =
-                        "ButtonSetBlock{buttons=$buttons, name=$name, type=$type, additionalProperties=$additionalProperties}"
+                        "MessageInAppFeedButtonSetBlock{buttons=$buttons, name=$name, type=$type, additionalProperties=$additionalProperties}"
                 }
             }
 

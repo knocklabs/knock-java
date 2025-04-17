@@ -10,6 +10,7 @@ import app.knock.api.models.users.User
 import app.knock.api.models.users.UserDeleteParams
 import app.knock.api.models.users.UserGetChannelDataParams
 import app.knock.api.models.users.UserGetParams
+import app.knock.api.models.users.UserGetPreferencesParams
 import app.knock.api.models.users.UserListMessagesPage
 import app.knock.api.models.users.UserListMessagesParams
 import app.knock.api.models.users.UserListPage
@@ -21,6 +22,7 @@ import app.knock.api.models.users.UserListSubscriptionsPage
 import app.knock.api.models.users.UserListSubscriptionsParams
 import app.knock.api.models.users.UserMergeParams
 import app.knock.api.models.users.UserSetChannelDataParams
+import app.knock.api.models.users.UserSetPreferencesParams
 import app.knock.api.models.users.UserUnsetChannelDataParams
 import app.knock.api.models.users.UserUpdateParams
 import app.knock.api.services.blocking.users.BulkService
@@ -38,7 +40,7 @@ interface UserService {
 
     fun bulk(): BulkService
 
-    /** Identify a user */
+    /** Create or update a user with the provided identification data. */
     fun update(params: UserUpdateParams): User = update(params, RequestOptions.none())
 
     /** @see [update] */
@@ -47,7 +49,7 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): User
 
-    /** Returns a list of users */
+    /** Retrieve a paginated list of users in the environment. */
     fun list(): UserListPage = list(UserListParams.none())
 
     /** @see [list] */
@@ -64,7 +66,7 @@ interface UserService {
     fun list(requestOptions: RequestOptions): UserListPage =
         list(UserListParams.none(), requestOptions)
 
-    /** Deletes a user */
+    /** Permanently delete a user and all associated data. */
     fun delete(params: UserDeleteParams): String = delete(params, RequestOptions.none())
 
     /** @see [delete] */
@@ -73,13 +75,13 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): String
 
-    /** Returns a user */
+    /** Retrieve a specific user by their ID. */
     fun get(params: UserGetParams): User = get(params, RequestOptions.none())
 
     /** @see [get] */
     fun get(params: UserGetParams, requestOptions: RequestOptions = RequestOptions.none()): User
 
-    /** Get channel data for a user */
+    /** Retrieves the channel data for a specific user and channel ID. */
     fun getChannelData(params: UserGetChannelDataParams): ChannelData =
         getChannelData(params, RequestOptions.none())
 
@@ -89,7 +91,20 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ChannelData
 
-    /** Returns a paginated list of messages for a user */
+    /** Retrieves a specific preference set for a user identified by the preference set ID. */
+    fun getPreferences(params: UserGetPreferencesParams): PreferenceSet =
+        getPreferences(params, RequestOptions.none())
+
+    /** @see [getPreferences] */
+    fun getPreferences(
+        params: UserGetPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PreferenceSet
+
+    /**
+     * Returns a paginated list of messages for a specific user. Allows filtering by message status
+     * and provides various sorting options.
+     */
     fun listMessages(params: UserListMessagesParams): UserListMessagesPage =
         listMessages(params, RequestOptions.none())
 
@@ -99,7 +114,7 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): UserListMessagesPage
 
-    /** List preference sets for a user */
+    /** Retrieves a list of all preference sets for a specific user. */
     fun listPreferences(params: UserListPreferencesParams): List<PreferenceSet> =
         listPreferences(params, RequestOptions.none())
 
@@ -109,7 +124,10 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<PreferenceSet>
 
-    /** List schedules for a user */
+    /**
+     * Returns a paginated list of schedules for a specific user. Can be filtered by workflow and
+     * tenant.
+     */
     fun listSchedules(params: UserListSchedulesParams): UserListSchedulesPage =
         listSchedules(params, RequestOptions.none())
 
@@ -119,7 +137,10 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): UserListSchedulesPage
 
-    /** List subscriptions for a user */
+    /**
+     * Retrieves a paginated list of subscriptions for a specific user. Allows filtering by objects
+     * and includes optional preference data.
+     */
     fun listSubscriptions(params: UserListSubscriptionsParams): UserListSubscriptionsPage =
         listSubscriptions(params, RequestOptions.none())
 
@@ -129,13 +150,16 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): UserListSubscriptionsPage
 
-    /** Merges two users together */
+    /**
+     * Merge two users together, where the user specified with the `from_user_id` param will be
+     * merged into the user specified by `user_id`.
+     */
     fun merge(params: UserMergeParams): User = merge(params, RequestOptions.none())
 
     /** @see [merge] */
     fun merge(params: UserMergeParams, requestOptions: RequestOptions = RequestOptions.none()): User
 
-    /** Sets channel data for a user */
+    /** Updates or creates channel data for a specific user and channel ID. */
     fun setChannelData(params: UserSetChannelDataParams): ChannelData =
         setChannelData(params, RequestOptions.none())
 
@@ -145,7 +169,20 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ChannelData
 
-    /** Unsets channel data for a user */
+    /**
+     * Updates a complete preference set for a user. This is a destructive operation that will
+     * replace the existing preference set for the user.
+     */
+    fun setPreferences(params: UserSetPreferencesParams): PreferenceSet =
+        setPreferences(params, RequestOptions.none())
+
+    /** @see [setPreferences] */
+    fun setPreferences(
+        params: UserSetPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PreferenceSet
+
+    /** Deletes channel data for a specific user and channel ID. */
     fun unsetChannelData(params: UserUnsetChannelDataParams): String =
         unsetChannelData(params, RequestOptions.none())
 
@@ -245,6 +282,22 @@ interface UserService {
         ): HttpResponseFor<ChannelData>
 
         /**
+         * Returns a raw HTTP response for `get
+         * /v1/users/{user_id}/preferences/{preference_set_id}`, but is otherwise the same as
+         * [UserService.getPreferences].
+         */
+        @MustBeClosed
+        fun getPreferences(params: UserGetPreferencesParams): HttpResponseFor<PreferenceSet> =
+            getPreferences(params, RequestOptions.none())
+
+        /** @see [getPreferences] */
+        @MustBeClosed
+        fun getPreferences(
+            params: UserGetPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PreferenceSet>
+
+        /**
          * Returns a raw HTTP response for `get /v1/users/{user_id}/messages`, but is otherwise the
          * same as [UserService.listMessages].
          */
@@ -336,6 +389,22 @@ interface UserService {
             params: UserSetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ChannelData>
+
+        /**
+         * Returns a raw HTTP response for `put
+         * /v1/users/{user_id}/preferences/{preference_set_id}`, but is otherwise the same as
+         * [UserService.setPreferences].
+         */
+        @MustBeClosed
+        fun setPreferences(params: UserSetPreferencesParams): HttpResponseFor<PreferenceSet> =
+            setPreferences(params, RequestOptions.none())
+
+        /** @see [setPreferences] */
+        @MustBeClosed
+        fun setPreferences(
+            params: UserSetPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PreferenceSet>
 
         /**
          * Returns a raw HTTP response for `delete /v1/users/{user_id}/channel_data/{channel_id}`,

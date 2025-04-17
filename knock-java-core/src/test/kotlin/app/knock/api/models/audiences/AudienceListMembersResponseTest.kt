@@ -18,7 +18,7 @@ internal class AudienceListMembersResponseTest {
                 .addEntry(
                     AudienceMember.builder()
                         ._typename("AudienceMember")
-                        .addedAt("2021-01-01T00:00:00Z")
+                        .addedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                         .user(
                             User.builder()
                                 .id("jane")
@@ -50,7 +50,7 @@ internal class AudienceListMembersResponseTest {
             .containsExactly(
                 AudienceMember.builder()
                     ._typename("AudienceMember")
-                    .addedAt("2021-01-01T00:00:00Z")
+                    .addedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                     .user(
                         User.builder()
                             .id("jane")
@@ -87,7 +87,7 @@ internal class AudienceListMembersResponseTest {
                 .addEntry(
                     AudienceMember.builder()
                         ._typename("AudienceMember")
-                        .addedAt("2021-01-01T00:00:00Z")
+                        .addedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                         .user(
                             User.builder()
                                 .id("jane")

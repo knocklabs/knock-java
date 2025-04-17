@@ -35,7 +35,7 @@ interface MessageService {
 
     fun batch(): BatchService
 
-    /** Returns a paginated list of messages */
+    /** Returns a paginated list of messages for the current environment. */
     fun list(): MessageListPage = list(MessageListParams.none())
 
     /** @see [list] */
@@ -52,7 +52,10 @@ interface MessageService {
     fun list(requestOptions: RequestOptions): MessageListPage =
         list(MessageListParams.none(), requestOptions)
 
-    /** Archives a message */
+    /**
+     * Archives a message for the current user. Archived messages are hidden from the default
+     * message list but can still be accessed and unarchived later.
+     */
     fun archive(params: MessageArchiveParams): Message = archive(params, RequestOptions.none())
 
     /** @see [archive] */
@@ -61,7 +64,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Message
 
-    /** Retrieves a single message */
+    /** Retrieves a specific message by its ID. */
     fun get(params: MessageGetParams): Message = get(params, RequestOptions.none())
 
     /** @see [get] */
@@ -70,7 +73,10 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Message
 
-    /** Get the contents of a message */
+    /**
+     * Returns the fully rendered contents of a message, where the response depends on which channel
+     * the message was sent through.
+     */
     fun getContent(params: MessageGetContentParams): MessageGetContentResponse =
         getContent(params, RequestOptions.none())
 
@@ -80,7 +86,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): MessageGetContentResponse
 
-    /** Get activities for a message */
+    /** Returns a paginated list of activities for the specified message. */
     fun listActivities(params: MessageListActivitiesParams): MessageListActivitiesPage =
         listActivities(params, RequestOptions.none())
 
@@ -90,7 +96,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): MessageListActivitiesPage
 
-    /** Get delivery logs for a message */
+    /** Returns a paginated list of delivery logs for the specified message. */
     fun listDeliveryLogs(params: MessageListDeliveryLogsParams): MessageListDeliveryLogsPage =
         listDeliveryLogs(params, RequestOptions.none())
 
@@ -100,7 +106,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): MessageListDeliveryLogsPage
 
-    /** Get events for a message */
+    /** Returns a paginated list of events for the specified message. */
     fun listEvents(params: MessageListEventsParams): MessageListEventsPage =
         listEvents(params, RequestOptions.none())
 
@@ -110,7 +116,10 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): MessageListEventsPage
 
-    /** Marks a message as interacted with */
+    /**
+     * Marks a message as interacted with by the current user. This can include any user action on
+     * the message, with optional metadata about the specific interaction.
+     */
     fun markAsInteracted(params: MessageMarkAsInteractedParams): Message =
         markAsInteracted(params, RequestOptions.none())
 
@@ -120,7 +129,10 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Message
 
-    /** Marks a message as read */
+    /**
+     * Marks a message as read for the current user. This indicates that the user has read the
+     * message content.
+     */
     fun markAsRead(params: MessageMarkAsReadParams): Message =
         markAsRead(params, RequestOptions.none())
 
@@ -130,7 +142,10 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Message
 
-    /** Marks a message as seen */
+    /**
+     * Marks a message as seen for the current user. This indicates that the user has viewed the
+     * message in their feed or inbox.
+     */
     fun markAsSeen(params: MessageMarkAsSeenParams): Message =
         markAsSeen(params, RequestOptions.none())
 
@@ -140,7 +155,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Message
 
-    /** Marks a message as unread */
+    /** Marks a message as unread for the current user, reversing the read state. */
     fun markAsUnread(params: MessageMarkAsUnreadParams): Message =
         markAsUnread(params, RequestOptions.none())
 
@@ -150,7 +165,7 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Message
 
-    /** Marks a message as unseen */
+    /** Marks a message as unseen for the current user, reversing the seen state. */
     fun markAsUnseen(params: MessageMarkAsUnseenParams): Message =
         markAsUnseen(params, RequestOptions.none())
 
@@ -160,7 +175,10 @@ interface MessageService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): Message
 
-    /** Unarchives a message */
+    /**
+     * Removes a message from the archived state, making it visible in the default message list
+     * again.
+     */
     fun unarchive(params: MessageUnarchiveParams): Message =
         unarchive(params, RequestOptions.none())
 

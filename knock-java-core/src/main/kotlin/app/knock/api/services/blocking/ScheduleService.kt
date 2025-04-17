@@ -19,41 +19,34 @@ interface ScheduleService {
      */
     fun withRawResponse(): WithRawResponse
 
-    /** Create schedules */
-    fun create(): List<Schedule> = create(ScheduleCreateParams.none())
+    /**
+     * Creates one or more schedules for a workflow with the specified recipients, timing, and data.
+     * Schedules can be one-time or recurring.
+     */
+    fun create(params: ScheduleCreateParams): List<Schedule> = create(params, RequestOptions.none())
 
     /** @see [create] */
     fun create(
-        params: ScheduleCreateParams = ScheduleCreateParams.none(),
+        params: ScheduleCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Schedule>
 
-    /** @see [create] */
-    fun create(params: ScheduleCreateParams = ScheduleCreateParams.none()): List<Schedule> =
-        create(params, RequestOptions.none())
-
-    /** @see [create] */
-    fun create(requestOptions: RequestOptions): List<Schedule> =
-        create(ScheduleCreateParams.none(), requestOptions)
-
-    /** Update schedules */
-    fun update(): List<Schedule> = update(ScheduleUpdateParams.none())
+    /**
+     * Updates one or more existing schedules with new timing, data, or other properties. All
+     * specified schedule IDs will be updated with the same values.
+     */
+    fun update(params: ScheduleUpdateParams): List<Schedule> = update(params, RequestOptions.none())
 
     /** @see [update] */
     fun update(
-        params: ScheduleUpdateParams = ScheduleUpdateParams.none(),
+        params: ScheduleUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Schedule>
 
-    /** @see [update] */
-    fun update(params: ScheduleUpdateParams = ScheduleUpdateParams.none()): List<Schedule> =
-        update(params, RequestOptions.none())
-
-    /** @see [update] */
-    fun update(requestOptions: RequestOptions): List<Schedule> =
-        update(ScheduleUpdateParams.none(), requestOptions)
-
-    /** List schedules */
+    /**
+     * Returns a paginated list of schedules for the current environment, filtered by workflow and
+     * optionally by recipients and tenant.
+     */
     fun list(params: ScheduleListParams): ScheduleListPage = list(params, RequestOptions.none())
 
     /** @see [list] */
@@ -62,22 +55,17 @@ interface ScheduleService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ScheduleListPage
 
-    /** Delete schedules */
-    fun delete(): List<Schedule> = delete(ScheduleDeleteParams.none())
+    /**
+     * Permanently deletes one or more schedules identified by the provided schedule IDs. This
+     * operation cannot be undone.
+     */
+    fun delete(params: ScheduleDeleteParams): List<Schedule> = delete(params, RequestOptions.none())
 
     /** @see [delete] */
     fun delete(
-        params: ScheduleDeleteParams = ScheduleDeleteParams.none(),
+        params: ScheduleDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Schedule>
-
-    /** @see [delete] */
-    fun delete(params: ScheduleDeleteParams = ScheduleDeleteParams.none()): List<Schedule> =
-        delete(params, RequestOptions.none())
-
-    /** @see [delete] */
-    fun delete(requestOptions: RequestOptions): List<Schedule> =
-        delete(ScheduleDeleteParams.none(), requestOptions)
 
     /** A view of [ScheduleService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -87,50 +75,30 @@ interface ScheduleService {
          * [ScheduleService.create].
          */
         @MustBeClosed
-        fun create(): HttpResponseFor<List<Schedule>> = create(ScheduleCreateParams.none())
+        fun create(params: ScheduleCreateParams): HttpResponseFor<List<Schedule>> =
+            create(params, RequestOptions.none())
 
         /** @see [create] */
         @MustBeClosed
         fun create(
-            params: ScheduleCreateParams = ScheduleCreateParams.none(),
+            params: ScheduleCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<List<Schedule>>
-
-        /** @see [create] */
-        @MustBeClosed
-        fun create(
-            params: ScheduleCreateParams = ScheduleCreateParams.none()
-        ): HttpResponseFor<List<Schedule>> = create(params, RequestOptions.none())
-
-        /** @see [create] */
-        @MustBeClosed
-        fun create(requestOptions: RequestOptions): HttpResponseFor<List<Schedule>> =
-            create(ScheduleCreateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `put /v1/schedules`, but is otherwise the same as
          * [ScheduleService.update].
          */
         @MustBeClosed
-        fun update(): HttpResponseFor<List<Schedule>> = update(ScheduleUpdateParams.none())
+        fun update(params: ScheduleUpdateParams): HttpResponseFor<List<Schedule>> =
+            update(params, RequestOptions.none())
 
         /** @see [update] */
         @MustBeClosed
         fun update(
-            params: ScheduleUpdateParams = ScheduleUpdateParams.none(),
+            params: ScheduleUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<List<Schedule>>
-
-        /** @see [update] */
-        @MustBeClosed
-        fun update(
-            params: ScheduleUpdateParams = ScheduleUpdateParams.none()
-        ): HttpResponseFor<List<Schedule>> = update(params, RequestOptions.none())
-
-        /** @see [update] */
-        @MustBeClosed
-        fun update(requestOptions: RequestOptions): HttpResponseFor<List<Schedule>> =
-            update(ScheduleUpdateParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /v1/schedules`, but is otherwise the same as
@@ -152,24 +120,14 @@ interface ScheduleService {
          * [ScheduleService.delete].
          */
         @MustBeClosed
-        fun delete(): HttpResponseFor<List<Schedule>> = delete(ScheduleDeleteParams.none())
+        fun delete(params: ScheduleDeleteParams): HttpResponseFor<List<Schedule>> =
+            delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
-            params: ScheduleDeleteParams = ScheduleDeleteParams.none(),
+            params: ScheduleDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<List<Schedule>>
-
-        /** @see [delete] */
-        @MustBeClosed
-        fun delete(
-            params: ScheduleDeleteParams = ScheduleDeleteParams.none()
-        ): HttpResponseFor<List<Schedule>> = delete(params, RequestOptions.none())
-
-        /** @see [delete] */
-        @MustBeClosed
-        fun delete(requestOptions: RequestOptions): HttpResponseFor<List<Schedule>> =
-            delete(ScheduleDeleteParams.none(), requestOptions)
     }
 }

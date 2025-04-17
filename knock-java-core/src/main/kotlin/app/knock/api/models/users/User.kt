@@ -18,7 +18,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A user object */
+/** A user object. */
 class User
 private constructor(
     private val id: JsonField<String>,
@@ -64,54 +64,72 @@ private constructor(
     )
 
     /**
+     * The unique identifier for the user.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
 
     /**
+     * The type name of the schema.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun _typename(): String = _typename.getRequired("__typename")
 
     /**
+     * The timestamp when the resource was last updated.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
     /**
+     * URL to the user's avatar image.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun avatar(): Optional<String> = avatar.getOptional("avatar")
 
     /**
+     * Timestamp when the resource was created.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun createdAt(): Optional<OffsetDateTime> = createdAt.getOptional("created_at")
 
     /**
+     * The email address of the user.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun email(): Optional<String> = email.getOptional("email")
 
     /**
+     * Display name of the user.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun name(): Optional<String> = name.getOptional("name")
 
     /**
+     * Phone number of the user.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun phoneNumber(): Optional<String> = phoneNumber.getOptional("phone_number")
 
     /**
+     * Timezone of the user.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -241,6 +259,7 @@ private constructor(
             additionalProperties = user.additionalProperties.toMutableMap()
         }
 
+        /** The unique identifier for the user. */
         fun id(id: String) = id(JsonField.of(id))
 
         /**
@@ -251,6 +270,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
+        /** The type name of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -262,6 +282,7 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
+        /** The timestamp when the resource was last updated. */
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
         /**
@@ -273,6 +294,7 @@ private constructor(
          */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
+        /** URL to the user's avatar image. */
         fun avatar(avatar: String?) = avatar(JsonField.ofNullable(avatar))
 
         /** Alias for calling [Builder.avatar] with `avatar.orElse(null)`. */
@@ -286,6 +308,7 @@ private constructor(
          */
         fun avatar(avatar: JsonField<String>) = apply { this.avatar = avatar }
 
+        /** Timestamp when the resource was created. */
         fun createdAt(createdAt: OffsetDateTime?) = createdAt(JsonField.ofNullable(createdAt))
 
         /** Alias for calling [Builder.createdAt] with `createdAt.orElse(null)`. */
@@ -300,6 +323,7 @@ private constructor(
          */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
+        /** The email address of the user. */
         fun email(email: String?) = email(JsonField.ofNullable(email))
 
         /** Alias for calling [Builder.email] with `email.orElse(null)`. */
@@ -313,6 +337,7 @@ private constructor(
          */
         fun email(email: JsonField<String>) = apply { this.email = email }
 
+        /** Display name of the user. */
         fun name(name: String?) = name(JsonField.ofNullable(name))
 
         /** Alias for calling [Builder.name] with `name.orElse(null)`. */
@@ -326,6 +351,7 @@ private constructor(
          */
         fun name(name: JsonField<String>) = apply { this.name = name }
 
+        /** Phone number of the user. */
         fun phoneNumber(phoneNumber: String?) = phoneNumber(JsonField.ofNullable(phoneNumber))
 
         /** Alias for calling [Builder.phoneNumber] with `phoneNumber.orElse(null)`. */
@@ -340,6 +366,7 @@ private constructor(
          */
         fun phoneNumber(phoneNumber: JsonField<String>) = apply { this.phoneNumber = phoneNumber }
 
+        /** Timezone of the user. */
         fun timezone(timezone: String?) = timezone(JsonField.ofNullable(timezone))
 
         /** Alias for calling [Builder.timezone] with `timezone.orElse(null)`. */

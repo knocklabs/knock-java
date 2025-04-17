@@ -21,7 +21,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Marks a message as interacted with */
+/**
+ * Marks a message as interacted with by the current user. This can include any user action on the
+ * message, with optional metadata about the specific interaction.
+ */
 class MessageMarkAsInteractedParams
 private constructor(
     private val messageId: String,
@@ -33,7 +36,7 @@ private constructor(
     fun messageId(): String = messageId
 
     /**
-     * Metadata about the interaction
+     * Metadata about the interaction.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -96,7 +99,7 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /** Metadata about the interaction */
+        /** Metadata about the interaction. */
         fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
 
         /**
@@ -258,7 +261,7 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    /** A request to mark a message as interacted with */
+    /** A request to mark a message as interacted with. */
     class Body
     private constructor(
         private val metadata: JsonField<Metadata>,
@@ -273,7 +276,7 @@ private constructor(
         ) : this(metadata, mutableMapOf())
 
         /**
-         * Metadata about the interaction
+         * Metadata about the interaction.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -317,7 +320,7 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /** Metadata about the interaction */
+            /** Metadata about the interaction. */
             fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
             /**
@@ -402,7 +405,7 @@ private constructor(
             "Body{metadata=$metadata, additionalProperties=$additionalProperties}"
     }
 
-    /** Metadata about the interaction */
+    /** Metadata about the interaction. */
     class Metadata
     @JsonCreator
     private constructor(

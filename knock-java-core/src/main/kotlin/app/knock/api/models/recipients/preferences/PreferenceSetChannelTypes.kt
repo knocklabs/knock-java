@@ -9,12 +9,8 @@ import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
 import app.knock.api.core.allMaxBy
-import app.knock.api.core.checkKnown
-import app.knock.api.core.checkRequired
 import app.knock.api.core.getOrThrow
-import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
-import app.knock.api.models.Condition
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -31,7 +27,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Channel type preferences */
+/** Channel type preferences. */
 class PreferenceSetChannelTypes
 private constructor(
     private val chat: JsonField<Chat>,
@@ -56,36 +52,48 @@ private constructor(
     ) : this(chat, email, http, inAppFeed, push, sms, mutableMapOf())
 
     /**
+     * Whether the channel type is enabled for the preference set.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun chat(): Optional<Chat> = chat.getOptional("chat")
 
     /**
+     * Whether the channel type is enabled for the preference set.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun email(): Optional<Email> = email.getOptional("email")
 
     /**
+     * Whether the channel type is enabled for the preference set.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun http(): Optional<Http> = http.getOptional("http")
 
     /**
+     * Whether the channel type is enabled for the preference set.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun inAppFeed(): Optional<InAppFeed> = inAppFeed.getOptional("in_app_feed")
 
     /**
+     * Whether the channel type is enabled for the preference set.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun push(): Optional<Push> = push.getOptional("push")
 
     /**
+     * Whether the channel type is enabled for the preference set.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -175,6 +183,7 @@ private constructor(
             additionalProperties = preferenceSetChannelTypes.additionalProperties.toMutableMap()
         }
 
+        /** Whether the channel type is enabled for the preference set. */
         fun chat(chat: Chat) = chat(JsonField.of(chat))
 
         /**
@@ -188,9 +197,14 @@ private constructor(
         /** Alias for calling [chat] with `Chat.ofBool(bool)`. */
         fun chat(bool: Boolean) = chat(Chat.ofBool(bool))
 
-        /** Alias for calling [chat] with `Chat.ofConditions(conditions)`. */
-        fun chat(conditions: Chat.Conditions) = chat(Chat.ofConditions(conditions))
+        /**
+         * Alias for calling [chat] with
+         * `Chat.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)`.
+         */
+        fun chat(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
+            chat(Chat.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
 
+        /** Whether the channel type is enabled for the preference set. */
         fun email(email: Email) = email(JsonField.of(email))
 
         /**
@@ -204,9 +218,14 @@ private constructor(
         /** Alias for calling [email] with `Email.ofBool(bool)`. */
         fun email(bool: Boolean) = email(Email.ofBool(bool))
 
-        /** Alias for calling [email] with `Email.ofConditions(conditions)`. */
-        fun email(conditions: Email.Conditions) = email(Email.ofConditions(conditions))
+        /**
+         * Alias for calling [email] with
+         * `Email.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)`.
+         */
+        fun email(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
+            email(Email.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
 
+        /** Whether the channel type is enabled for the preference set. */
         fun http(http: Http) = http(JsonField.of(http))
 
         /**
@@ -220,9 +239,14 @@ private constructor(
         /** Alias for calling [http] with `Http.ofBool(bool)`. */
         fun http(bool: Boolean) = http(Http.ofBool(bool))
 
-        /** Alias for calling [http] with `Http.ofConditions(conditions)`. */
-        fun http(conditions: Http.Conditions) = http(Http.ofConditions(conditions))
+        /**
+         * Alias for calling [http] with
+         * `Http.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)`.
+         */
+        fun http(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
+            http(Http.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
 
+        /** Whether the channel type is enabled for the preference set. */
         fun inAppFeed(inAppFeed: InAppFeed) = inAppFeed(JsonField.of(inAppFeed))
 
         /**
@@ -237,10 +261,14 @@ private constructor(
         /** Alias for calling [inAppFeed] with `InAppFeed.ofBool(bool)`. */
         fun inAppFeed(bool: Boolean) = inAppFeed(InAppFeed.ofBool(bool))
 
-        /** Alias for calling [inAppFeed] with `InAppFeed.ofConditions(conditions)`. */
-        fun inAppFeed(conditions: InAppFeed.Conditions) =
-            inAppFeed(InAppFeed.ofConditions(conditions))
+        /**
+         * Alias for calling [inAppFeed] with
+         * `InAppFeed.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)`.
+         */
+        fun inAppFeed(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
+            inAppFeed(InAppFeed.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
 
+        /** Whether the channel type is enabled for the preference set. */
         fun push(push: Push) = push(JsonField.of(push))
 
         /**
@@ -254,9 +282,14 @@ private constructor(
         /** Alias for calling [push] with `Push.ofBool(bool)`. */
         fun push(bool: Boolean) = push(Push.ofBool(bool))
 
-        /** Alias for calling [push] with `Push.ofConditions(conditions)`. */
-        fun push(conditions: Push.Conditions) = push(Push.ofConditions(conditions))
+        /**
+         * Alias for calling [push] with
+         * `Push.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)`.
+         */
+        fun push(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
+            push(Push.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
 
+        /** Whether the channel type is enabled for the preference set. */
         fun sms(sms: Sms) = sms(JsonField.of(sms))
 
         /**
@@ -270,8 +303,12 @@ private constructor(
         /** Alias for calling [sms] with `Sms.ofBool(bool)`. */
         fun sms(bool: Boolean) = sms(Sms.ofBool(bool))
 
-        /** Alias for calling [sms] with `Sms.ofConditions(conditions)`. */
-        fun sms(conditions: Sms.Conditions) = sms(Sms.ofConditions(conditions))
+        /**
+         * Alias for calling [sms] with
+         * `Sms.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)`.
+         */
+        fun sms(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
+            sms(Sms.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -347,33 +384,45 @@ private constructor(
             (push.asKnown().getOrNull()?.validity() ?: 0) +
             (sms.asKnown().getOrNull()?.validity() ?: 0)
 
+    /** Whether the channel type is enabled for the preference set. */
     @JsonDeserialize(using = Chat.Deserializer::class)
     @JsonSerialize(using = Chat.Serializer::class)
     class Chat
     private constructor(
         private val bool: Boolean? = null,
-        private val conditions: Conditions? = null,
+        private val preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting? = null,
         private val _json: JsonValue? = null,
     ) {
 
         fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
 
-        fun conditions(): Optional<Conditions> = Optional.ofNullable(conditions)
+        /**
+         * A set of settings for a channel type. Currently, this can only be a list of conditions to
+         * apply.
+         */
+        fun preferenceSetChannelTypeSetting(): Optional<PreferenceSetChannelTypeSetting> =
+            Optional.ofNullable(preferenceSetChannelTypeSetting)
 
         fun isBool(): Boolean = bool != null
 
-        fun isConditions(): Boolean = conditions != null
+        fun isPreferenceSetChannelTypeSetting(): Boolean = preferenceSetChannelTypeSetting != null
 
         fun asBool(): Boolean = bool.getOrThrow("bool")
 
-        fun asConditions(): Conditions = conditions.getOrThrow("conditions")
+        /**
+         * A set of settings for a channel type. Currently, this can only be a list of conditions to
+         * apply.
+         */
+        fun asPreferenceSetChannelTypeSetting(): PreferenceSetChannelTypeSetting =
+            preferenceSetChannelTypeSetting.getOrThrow("preferenceSetChannelTypeSetting")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 bool != null -> visitor.visitBool(bool)
-                conditions != null -> visitor.visitConditions(conditions)
+                preferenceSetChannelTypeSetting != null ->
+                    visitor.visitPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)
                 else -> visitor.unknown(_json)
             }
 
@@ -388,8 +437,10 @@ private constructor(
                 object : Visitor<Unit> {
                     override fun visitBool(bool: Boolean) {}
 
-                    override fun visitConditions(conditions: Conditions) {
-                        conditions.validate()
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) {
+                        preferenceSetChannelTypeSetting.validate()
                     }
                 }
             )
@@ -416,7 +467,9 @@ private constructor(
                 object : Visitor<Int> {
                     override fun visitBool(bool: Boolean) = 1
 
-                    override fun visitConditions(conditions: Conditions) = conditions.validity()
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) = preferenceSetChannelTypeSetting.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -427,15 +480,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Chat && bool == other.bool && conditions == other.conditions /* spotless:on */
+            return /* spotless:off */ other is Chat && bool == other.bool && preferenceSetChannelTypeSetting == other.preferenceSetChannelTypeSetting /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(bool, conditions) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(bool, preferenceSetChannelTypeSetting) /* spotless:on */
 
         override fun toString(): String =
             when {
                 bool != null -> "Chat{bool=$bool}"
-                conditions != null -> "Chat{conditions=$conditions}"
+                preferenceSetChannelTypeSetting != null ->
+                    "Chat{preferenceSetChannelTypeSetting=$preferenceSetChannelTypeSetting}"
                 _json != null -> "Chat{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Chat")
             }
@@ -444,7 +498,14 @@ private constructor(
 
             @JvmStatic fun ofBool(bool: Boolean) = Chat(bool = bool)
 
-            @JvmStatic fun ofConditions(conditions: Conditions) = Chat(conditions = conditions)
+            /**
+             * A set of settings for a channel type. Currently, this can only be a list of
+             * conditions to apply.
+             */
+            @JvmStatic
+            fun ofPreferenceSetChannelTypeSetting(
+                preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+            ) = Chat(preferenceSetChannelTypeSetting = preferenceSetChannelTypeSetting)
         }
 
         /** An interface that defines how to map each variant of [Chat] to a value of type [T]. */
@@ -452,7 +513,13 @@ private constructor(
 
             fun visitBool(bool: Boolean): T
 
-            fun visitConditions(conditions: Conditions): T
+            /**
+             * A set of settings for a channel type. Currently, this can only be a list of
+             * conditions to apply.
+             */
+            fun visitPreferenceSetChannelTypeSetting(
+                preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+            ): T
 
             /**
              * Maps an unknown variant of [Chat] to a value of type [T].
@@ -475,9 +542,8 @@ private constructor(
 
                 val bestMatches =
                     sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<Conditions>())?.let {
-                                Chat(conditions = it, _json = json)
-                            },
+                            tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>())
+                                ?.let { Chat(preferenceSetChannelTypeSetting = it, _json = json) },
                             tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
                                 Chat(bool = it, _json = json)
                             },
@@ -507,221 +573,54 @@ private constructor(
             ) {
                 when {
                     value.bool != null -> generator.writeObject(value.bool)
-                    value.conditions != null -> generator.writeObject(value.conditions)
+                    value.preferenceSetChannelTypeSetting != null ->
+                        generator.writeObject(value.preferenceSetChannelTypeSetting)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Chat")
                 }
             }
         }
-
-        class Conditions
-        private constructor(
-            private val conditions: JsonField<List<Condition>>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("conditions")
-                @ExcludeMissing
-                conditions: JsonField<List<Condition>> = JsonMissing.of()
-            ) : this(conditions, mutableMapOf())
-
-            /**
-             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun conditions(): List<Condition> = conditions.getRequired("conditions")
-
-            /**
-             * Returns the raw JSON value of [conditions].
-             *
-             * Unlike [conditions], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("conditions")
-            @ExcludeMissing
-            fun _conditions(): JsonField<List<Condition>> = conditions
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [Conditions].
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .conditions()
-                 * ```
-                 */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [Conditions]. */
-            class Builder internal constructor() {
-
-                private var conditions: JsonField<MutableList<Condition>>? = null
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(conditions: Conditions) = apply {
-                    this.conditions = conditions.conditions.map { it.toMutableList() }
-                    additionalProperties = conditions.additionalProperties.toMutableMap()
-                }
-
-                fun conditions(conditions: List<Condition>) = conditions(JsonField.of(conditions))
-
-                /**
-                 * Sets [Builder.conditions] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.conditions] with a well-typed `List<Condition>`
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
-                 */
-                fun conditions(conditions: JsonField<List<Condition>>) = apply {
-                    this.conditions = conditions.map { it.toMutableList() }
-                }
-
-                /**
-                 * Adds a single [Condition] to [conditions].
-                 *
-                 * @throws IllegalStateException if the field was previously set to a non-list.
-                 */
-                fun addCondition(condition: Condition) = apply {
-                    conditions =
-                        (conditions ?: JsonField.of(mutableListOf())).also {
-                            checkKnown("conditions", it).add(condition)
-                        }
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Conditions].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .conditions()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
-                 */
-                fun build(): Conditions =
-                    Conditions(
-                        checkRequired("conditions", conditions).map { it.toImmutable() },
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            fun validate(): Conditions = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                conditions().forEach { it.validate() }
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: KnockInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                (conditions.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is Conditions && conditions == other.conditions && additionalProperties == other.additionalProperties /* spotless:on */
-            }
-
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(conditions, additionalProperties) }
-            /* spotless:on */
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Conditions{conditions=$conditions, additionalProperties=$additionalProperties}"
-        }
     }
 
+    /** Whether the channel type is enabled for the preference set. */
     @JsonDeserialize(using = Email.Deserializer::class)
     @JsonSerialize(using = Email.Serializer::class)
     class Email
     private constructor(
         private val bool: Boolean? = null,
-        private val conditions: Conditions? = null,
+        private val preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting? = null,
         private val _json: JsonValue? = null,
     ) {
 
         fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
 
-        fun conditions(): Optional<Conditions> = Optional.ofNullable(conditions)
+        /**
+         * A set of settings for a channel type. Currently, this can only be a list of conditions to
+         * apply.
+         */
+        fun preferenceSetChannelTypeSetting(): Optional<PreferenceSetChannelTypeSetting> =
+            Optional.ofNullable(preferenceSetChannelTypeSetting)
 
         fun isBool(): Boolean = bool != null
 
-        fun isConditions(): Boolean = conditions != null
+        fun isPreferenceSetChannelTypeSetting(): Boolean = preferenceSetChannelTypeSetting != null
 
         fun asBool(): Boolean = bool.getOrThrow("bool")
 
-        fun asConditions(): Conditions = conditions.getOrThrow("conditions")
+        /**
+         * A set of settings for a channel type. Currently, this can only be a list of conditions to
+         * apply.
+         */
+        fun asPreferenceSetChannelTypeSetting(): PreferenceSetChannelTypeSetting =
+            preferenceSetChannelTypeSetting.getOrThrow("preferenceSetChannelTypeSetting")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 bool != null -> visitor.visitBool(bool)
-                conditions != null -> visitor.visitConditions(conditions)
+                preferenceSetChannelTypeSetting != null ->
+                    visitor.visitPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)
                 else -> visitor.unknown(_json)
             }
 
@@ -736,8 +635,10 @@ private constructor(
                 object : Visitor<Unit> {
                     override fun visitBool(bool: Boolean) {}
 
-                    override fun visitConditions(conditions: Conditions) {
-                        conditions.validate()
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) {
+                        preferenceSetChannelTypeSetting.validate()
                     }
                 }
             )
@@ -764,7 +665,9 @@ private constructor(
                 object : Visitor<Int> {
                     override fun visitBool(bool: Boolean) = 1
 
-                    override fun visitConditions(conditions: Conditions) = conditions.validity()
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) = preferenceSetChannelTypeSetting.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -775,15 +678,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Email && bool == other.bool && conditions == other.conditions /* spotless:on */
+            return /* spotless:off */ other is Email && bool == other.bool && preferenceSetChannelTypeSetting == other.preferenceSetChannelTypeSetting /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(bool, conditions) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(bool, preferenceSetChannelTypeSetting) /* spotless:on */
 
         override fun toString(): String =
             when {
                 bool != null -> "Email{bool=$bool}"
-                conditions != null -> "Email{conditions=$conditions}"
+                preferenceSetChannelTypeSetting != null ->
+                    "Email{preferenceSetChannelTypeSetting=$preferenceSetChannelTypeSetting}"
                 _json != null -> "Email{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Email")
             }
@@ -792,7 +696,14 @@ private constructor(
 
             @JvmStatic fun ofBool(bool: Boolean) = Email(bool = bool)
 
-            @JvmStatic fun ofConditions(conditions: Conditions) = Email(conditions = conditions)
+            /**
+             * A set of settings for a channel type. Currently, this can only be a list of
+             * conditions to apply.
+             */
+            @JvmStatic
+            fun ofPreferenceSetChannelTypeSetting(
+                preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+            ) = Email(preferenceSetChannelTypeSetting = preferenceSetChannelTypeSetting)
         }
 
         /** An interface that defines how to map each variant of [Email] to a value of type [T]. */
@@ -800,7 +711,13 @@ private constructor(
 
             fun visitBool(bool: Boolean): T
 
-            fun visitConditions(conditions: Conditions): T
+            /**
+             * A set of settings for a channel type. Currently, this can only be a list of
+             * conditions to apply.
+             */
+            fun visitPreferenceSetChannelTypeSetting(
+                preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+            ): T
 
             /**
              * Maps an unknown variant of [Email] to a value of type [T].
@@ -824,9 +741,8 @@ private constructor(
 
                 val bestMatches =
                     sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<Conditions>())?.let {
-                                Email(conditions = it, _json = json)
-                            },
+                            tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>())
+                                ?.let { Email(preferenceSetChannelTypeSetting = it, _json = json) },
                             tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
                                 Email(bool = it, _json = json)
                             },
@@ -856,221 +772,54 @@ private constructor(
             ) {
                 when {
                     value.bool != null -> generator.writeObject(value.bool)
-                    value.conditions != null -> generator.writeObject(value.conditions)
+                    value.preferenceSetChannelTypeSetting != null ->
+                        generator.writeObject(value.preferenceSetChannelTypeSetting)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Email")
                 }
             }
         }
-
-        class Conditions
-        private constructor(
-            private val conditions: JsonField<List<Condition>>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("conditions")
-                @ExcludeMissing
-                conditions: JsonField<List<Condition>> = JsonMissing.of()
-            ) : this(conditions, mutableMapOf())
-
-            /**
-             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun conditions(): List<Condition> = conditions.getRequired("conditions")
-
-            /**
-             * Returns the raw JSON value of [conditions].
-             *
-             * Unlike [conditions], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("conditions")
-            @ExcludeMissing
-            fun _conditions(): JsonField<List<Condition>> = conditions
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [Conditions].
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .conditions()
-                 * ```
-                 */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [Conditions]. */
-            class Builder internal constructor() {
-
-                private var conditions: JsonField<MutableList<Condition>>? = null
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(conditions: Conditions) = apply {
-                    this.conditions = conditions.conditions.map { it.toMutableList() }
-                    additionalProperties = conditions.additionalProperties.toMutableMap()
-                }
-
-                fun conditions(conditions: List<Condition>) = conditions(JsonField.of(conditions))
-
-                /**
-                 * Sets [Builder.conditions] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.conditions] with a well-typed `List<Condition>`
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
-                 */
-                fun conditions(conditions: JsonField<List<Condition>>) = apply {
-                    this.conditions = conditions.map { it.toMutableList() }
-                }
-
-                /**
-                 * Adds a single [Condition] to [conditions].
-                 *
-                 * @throws IllegalStateException if the field was previously set to a non-list.
-                 */
-                fun addCondition(condition: Condition) = apply {
-                    conditions =
-                        (conditions ?: JsonField.of(mutableListOf())).also {
-                            checkKnown("conditions", it).add(condition)
-                        }
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Conditions].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .conditions()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
-                 */
-                fun build(): Conditions =
-                    Conditions(
-                        checkRequired("conditions", conditions).map { it.toImmutable() },
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            fun validate(): Conditions = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                conditions().forEach { it.validate() }
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: KnockInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                (conditions.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is Conditions && conditions == other.conditions && additionalProperties == other.additionalProperties /* spotless:on */
-            }
-
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(conditions, additionalProperties) }
-            /* spotless:on */
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Conditions{conditions=$conditions, additionalProperties=$additionalProperties}"
-        }
     }
 
+    /** Whether the channel type is enabled for the preference set. */
     @JsonDeserialize(using = Http.Deserializer::class)
     @JsonSerialize(using = Http.Serializer::class)
     class Http
     private constructor(
         private val bool: Boolean? = null,
-        private val conditions: Conditions? = null,
+        private val preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting? = null,
         private val _json: JsonValue? = null,
     ) {
 
         fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
 
-        fun conditions(): Optional<Conditions> = Optional.ofNullable(conditions)
+        /**
+         * A set of settings for a channel type. Currently, this can only be a list of conditions to
+         * apply.
+         */
+        fun preferenceSetChannelTypeSetting(): Optional<PreferenceSetChannelTypeSetting> =
+            Optional.ofNullable(preferenceSetChannelTypeSetting)
 
         fun isBool(): Boolean = bool != null
 
-        fun isConditions(): Boolean = conditions != null
+        fun isPreferenceSetChannelTypeSetting(): Boolean = preferenceSetChannelTypeSetting != null
 
         fun asBool(): Boolean = bool.getOrThrow("bool")
 
-        fun asConditions(): Conditions = conditions.getOrThrow("conditions")
+        /**
+         * A set of settings for a channel type. Currently, this can only be a list of conditions to
+         * apply.
+         */
+        fun asPreferenceSetChannelTypeSetting(): PreferenceSetChannelTypeSetting =
+            preferenceSetChannelTypeSetting.getOrThrow("preferenceSetChannelTypeSetting")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 bool != null -> visitor.visitBool(bool)
-                conditions != null -> visitor.visitConditions(conditions)
+                preferenceSetChannelTypeSetting != null ->
+                    visitor.visitPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)
                 else -> visitor.unknown(_json)
             }
 
@@ -1085,8 +834,10 @@ private constructor(
                 object : Visitor<Unit> {
                     override fun visitBool(bool: Boolean) {}
 
-                    override fun visitConditions(conditions: Conditions) {
-                        conditions.validate()
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) {
+                        preferenceSetChannelTypeSetting.validate()
                     }
                 }
             )
@@ -1113,7 +864,9 @@ private constructor(
                 object : Visitor<Int> {
                     override fun visitBool(bool: Boolean) = 1
 
-                    override fun visitConditions(conditions: Conditions) = conditions.validity()
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) = preferenceSetChannelTypeSetting.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -1124,15 +877,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Http && bool == other.bool && conditions == other.conditions /* spotless:on */
+            return /* spotless:off */ other is Http && bool == other.bool && preferenceSetChannelTypeSetting == other.preferenceSetChannelTypeSetting /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(bool, conditions) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(bool, preferenceSetChannelTypeSetting) /* spotless:on */
 
         override fun toString(): String =
             when {
                 bool != null -> "Http{bool=$bool}"
-                conditions != null -> "Http{conditions=$conditions}"
+                preferenceSetChannelTypeSetting != null ->
+                    "Http{preferenceSetChannelTypeSetting=$preferenceSetChannelTypeSetting}"
                 _json != null -> "Http{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Http")
             }
@@ -1141,7 +895,14 @@ private constructor(
 
             @JvmStatic fun ofBool(bool: Boolean) = Http(bool = bool)
 
-            @JvmStatic fun ofConditions(conditions: Conditions) = Http(conditions = conditions)
+            /**
+             * A set of settings for a channel type. Currently, this can only be a list of
+             * conditions to apply.
+             */
+            @JvmStatic
+            fun ofPreferenceSetChannelTypeSetting(
+                preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+            ) = Http(preferenceSetChannelTypeSetting = preferenceSetChannelTypeSetting)
         }
 
         /** An interface that defines how to map each variant of [Http] to a value of type [T]. */
@@ -1149,7 +910,13 @@ private constructor(
 
             fun visitBool(bool: Boolean): T
 
-            fun visitConditions(conditions: Conditions): T
+            /**
+             * A set of settings for a channel type. Currently, this can only be a list of
+             * conditions to apply.
+             */
+            fun visitPreferenceSetChannelTypeSetting(
+                preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+            ): T
 
             /**
              * Maps an unknown variant of [Http] to a value of type [T].
@@ -1172,9 +939,8 @@ private constructor(
 
                 val bestMatches =
                     sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<Conditions>())?.let {
-                                Http(conditions = it, _json = json)
-                            },
+                            tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>())
+                                ?.let { Http(preferenceSetChannelTypeSetting = it, _json = json) },
                             tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
                                 Http(bool = it, _json = json)
                             },
@@ -1204,221 +970,54 @@ private constructor(
             ) {
                 when {
                     value.bool != null -> generator.writeObject(value.bool)
-                    value.conditions != null -> generator.writeObject(value.conditions)
+                    value.preferenceSetChannelTypeSetting != null ->
+                        generator.writeObject(value.preferenceSetChannelTypeSetting)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Http")
                 }
             }
         }
-
-        class Conditions
-        private constructor(
-            private val conditions: JsonField<List<Condition>>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("conditions")
-                @ExcludeMissing
-                conditions: JsonField<List<Condition>> = JsonMissing.of()
-            ) : this(conditions, mutableMapOf())
-
-            /**
-             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun conditions(): List<Condition> = conditions.getRequired("conditions")
-
-            /**
-             * Returns the raw JSON value of [conditions].
-             *
-             * Unlike [conditions], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("conditions")
-            @ExcludeMissing
-            fun _conditions(): JsonField<List<Condition>> = conditions
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [Conditions].
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .conditions()
-                 * ```
-                 */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [Conditions]. */
-            class Builder internal constructor() {
-
-                private var conditions: JsonField<MutableList<Condition>>? = null
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(conditions: Conditions) = apply {
-                    this.conditions = conditions.conditions.map { it.toMutableList() }
-                    additionalProperties = conditions.additionalProperties.toMutableMap()
-                }
-
-                fun conditions(conditions: List<Condition>) = conditions(JsonField.of(conditions))
-
-                /**
-                 * Sets [Builder.conditions] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.conditions] with a well-typed `List<Condition>`
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
-                 */
-                fun conditions(conditions: JsonField<List<Condition>>) = apply {
-                    this.conditions = conditions.map { it.toMutableList() }
-                }
-
-                /**
-                 * Adds a single [Condition] to [conditions].
-                 *
-                 * @throws IllegalStateException if the field was previously set to a non-list.
-                 */
-                fun addCondition(condition: Condition) = apply {
-                    conditions =
-                        (conditions ?: JsonField.of(mutableListOf())).also {
-                            checkKnown("conditions", it).add(condition)
-                        }
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Conditions].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .conditions()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
-                 */
-                fun build(): Conditions =
-                    Conditions(
-                        checkRequired("conditions", conditions).map { it.toImmutable() },
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            fun validate(): Conditions = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                conditions().forEach { it.validate() }
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: KnockInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                (conditions.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is Conditions && conditions == other.conditions && additionalProperties == other.additionalProperties /* spotless:on */
-            }
-
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(conditions, additionalProperties) }
-            /* spotless:on */
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Conditions{conditions=$conditions, additionalProperties=$additionalProperties}"
-        }
     }
 
+    /** Whether the channel type is enabled for the preference set. */
     @JsonDeserialize(using = InAppFeed.Deserializer::class)
     @JsonSerialize(using = InAppFeed.Serializer::class)
     class InAppFeed
     private constructor(
         private val bool: Boolean? = null,
-        private val conditions: Conditions? = null,
+        private val preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting? = null,
         private val _json: JsonValue? = null,
     ) {
 
         fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
 
-        fun conditions(): Optional<Conditions> = Optional.ofNullable(conditions)
+        /**
+         * A set of settings for a channel type. Currently, this can only be a list of conditions to
+         * apply.
+         */
+        fun preferenceSetChannelTypeSetting(): Optional<PreferenceSetChannelTypeSetting> =
+            Optional.ofNullable(preferenceSetChannelTypeSetting)
 
         fun isBool(): Boolean = bool != null
 
-        fun isConditions(): Boolean = conditions != null
+        fun isPreferenceSetChannelTypeSetting(): Boolean = preferenceSetChannelTypeSetting != null
 
         fun asBool(): Boolean = bool.getOrThrow("bool")
 
-        fun asConditions(): Conditions = conditions.getOrThrow("conditions")
+        /**
+         * A set of settings for a channel type. Currently, this can only be a list of conditions to
+         * apply.
+         */
+        fun asPreferenceSetChannelTypeSetting(): PreferenceSetChannelTypeSetting =
+            preferenceSetChannelTypeSetting.getOrThrow("preferenceSetChannelTypeSetting")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 bool != null -> visitor.visitBool(bool)
-                conditions != null -> visitor.visitConditions(conditions)
+                preferenceSetChannelTypeSetting != null ->
+                    visitor.visitPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)
                 else -> visitor.unknown(_json)
             }
 
@@ -1433,8 +1032,10 @@ private constructor(
                 object : Visitor<Unit> {
                     override fun visitBool(bool: Boolean) {}
 
-                    override fun visitConditions(conditions: Conditions) {
-                        conditions.validate()
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) {
+                        preferenceSetChannelTypeSetting.validate()
                     }
                 }
             )
@@ -1461,7 +1062,9 @@ private constructor(
                 object : Visitor<Int> {
                     override fun visitBool(bool: Boolean) = 1
 
-                    override fun visitConditions(conditions: Conditions) = conditions.validity()
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) = preferenceSetChannelTypeSetting.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -1472,15 +1075,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is InAppFeed && bool == other.bool && conditions == other.conditions /* spotless:on */
+            return /* spotless:off */ other is InAppFeed && bool == other.bool && preferenceSetChannelTypeSetting == other.preferenceSetChannelTypeSetting /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(bool, conditions) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(bool, preferenceSetChannelTypeSetting) /* spotless:on */
 
         override fun toString(): String =
             when {
                 bool != null -> "InAppFeed{bool=$bool}"
-                conditions != null -> "InAppFeed{conditions=$conditions}"
+                preferenceSetChannelTypeSetting != null ->
+                    "InAppFeed{preferenceSetChannelTypeSetting=$preferenceSetChannelTypeSetting}"
                 _json != null -> "InAppFeed{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid InAppFeed")
             }
@@ -1489,7 +1093,14 @@ private constructor(
 
             @JvmStatic fun ofBool(bool: Boolean) = InAppFeed(bool = bool)
 
-            @JvmStatic fun ofConditions(conditions: Conditions) = InAppFeed(conditions = conditions)
+            /**
+             * A set of settings for a channel type. Currently, this can only be a list of
+             * conditions to apply.
+             */
+            @JvmStatic
+            fun ofPreferenceSetChannelTypeSetting(
+                preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+            ) = InAppFeed(preferenceSetChannelTypeSetting = preferenceSetChannelTypeSetting)
         }
 
         /**
@@ -1499,7 +1110,13 @@ private constructor(
 
             fun visitBool(bool: Boolean): T
 
-            fun visitConditions(conditions: Conditions): T
+            /**
+             * A set of settings for a channel type. Currently, this can only be a list of
+             * conditions to apply.
+             */
+            fun visitPreferenceSetChannelTypeSetting(
+                preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+            ): T
 
             /**
              * Maps an unknown variant of [InAppFeed] to a value of type [T].
@@ -1523,9 +1140,10 @@ private constructor(
 
                 val bestMatches =
                     sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<Conditions>())?.let {
-                                InAppFeed(conditions = it, _json = json)
-                            },
+                            tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>())
+                                ?.let {
+                                    InAppFeed(preferenceSetChannelTypeSetting = it, _json = json)
+                                },
                             tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
                                 InAppFeed(bool = it, _json = json)
                             },
@@ -1555,221 +1173,54 @@ private constructor(
             ) {
                 when {
                     value.bool != null -> generator.writeObject(value.bool)
-                    value.conditions != null -> generator.writeObject(value.conditions)
+                    value.preferenceSetChannelTypeSetting != null ->
+                        generator.writeObject(value.preferenceSetChannelTypeSetting)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid InAppFeed")
                 }
             }
         }
-
-        class Conditions
-        private constructor(
-            private val conditions: JsonField<List<Condition>>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("conditions")
-                @ExcludeMissing
-                conditions: JsonField<List<Condition>> = JsonMissing.of()
-            ) : this(conditions, mutableMapOf())
-
-            /**
-             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun conditions(): List<Condition> = conditions.getRequired("conditions")
-
-            /**
-             * Returns the raw JSON value of [conditions].
-             *
-             * Unlike [conditions], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("conditions")
-            @ExcludeMissing
-            fun _conditions(): JsonField<List<Condition>> = conditions
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [Conditions].
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .conditions()
-                 * ```
-                 */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [Conditions]. */
-            class Builder internal constructor() {
-
-                private var conditions: JsonField<MutableList<Condition>>? = null
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(conditions: Conditions) = apply {
-                    this.conditions = conditions.conditions.map { it.toMutableList() }
-                    additionalProperties = conditions.additionalProperties.toMutableMap()
-                }
-
-                fun conditions(conditions: List<Condition>) = conditions(JsonField.of(conditions))
-
-                /**
-                 * Sets [Builder.conditions] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.conditions] with a well-typed `List<Condition>`
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
-                 */
-                fun conditions(conditions: JsonField<List<Condition>>) = apply {
-                    this.conditions = conditions.map { it.toMutableList() }
-                }
-
-                /**
-                 * Adds a single [Condition] to [conditions].
-                 *
-                 * @throws IllegalStateException if the field was previously set to a non-list.
-                 */
-                fun addCondition(condition: Condition) = apply {
-                    conditions =
-                        (conditions ?: JsonField.of(mutableListOf())).also {
-                            checkKnown("conditions", it).add(condition)
-                        }
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Conditions].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .conditions()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
-                 */
-                fun build(): Conditions =
-                    Conditions(
-                        checkRequired("conditions", conditions).map { it.toImmutable() },
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            fun validate(): Conditions = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                conditions().forEach { it.validate() }
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: KnockInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                (conditions.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is Conditions && conditions == other.conditions && additionalProperties == other.additionalProperties /* spotless:on */
-            }
-
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(conditions, additionalProperties) }
-            /* spotless:on */
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Conditions{conditions=$conditions, additionalProperties=$additionalProperties}"
-        }
     }
 
+    /** Whether the channel type is enabled for the preference set. */
     @JsonDeserialize(using = Push.Deserializer::class)
     @JsonSerialize(using = Push.Serializer::class)
     class Push
     private constructor(
         private val bool: Boolean? = null,
-        private val conditions: Conditions? = null,
+        private val preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting? = null,
         private val _json: JsonValue? = null,
     ) {
 
         fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
 
-        fun conditions(): Optional<Conditions> = Optional.ofNullable(conditions)
+        /**
+         * A set of settings for a channel type. Currently, this can only be a list of conditions to
+         * apply.
+         */
+        fun preferenceSetChannelTypeSetting(): Optional<PreferenceSetChannelTypeSetting> =
+            Optional.ofNullable(preferenceSetChannelTypeSetting)
 
         fun isBool(): Boolean = bool != null
 
-        fun isConditions(): Boolean = conditions != null
+        fun isPreferenceSetChannelTypeSetting(): Boolean = preferenceSetChannelTypeSetting != null
 
         fun asBool(): Boolean = bool.getOrThrow("bool")
 
-        fun asConditions(): Conditions = conditions.getOrThrow("conditions")
+        /**
+         * A set of settings for a channel type. Currently, this can only be a list of conditions to
+         * apply.
+         */
+        fun asPreferenceSetChannelTypeSetting(): PreferenceSetChannelTypeSetting =
+            preferenceSetChannelTypeSetting.getOrThrow("preferenceSetChannelTypeSetting")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 bool != null -> visitor.visitBool(bool)
-                conditions != null -> visitor.visitConditions(conditions)
+                preferenceSetChannelTypeSetting != null ->
+                    visitor.visitPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)
                 else -> visitor.unknown(_json)
             }
 
@@ -1784,8 +1235,10 @@ private constructor(
                 object : Visitor<Unit> {
                     override fun visitBool(bool: Boolean) {}
 
-                    override fun visitConditions(conditions: Conditions) {
-                        conditions.validate()
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) {
+                        preferenceSetChannelTypeSetting.validate()
                     }
                 }
             )
@@ -1812,7 +1265,9 @@ private constructor(
                 object : Visitor<Int> {
                     override fun visitBool(bool: Boolean) = 1
 
-                    override fun visitConditions(conditions: Conditions) = conditions.validity()
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) = preferenceSetChannelTypeSetting.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -1823,15 +1278,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Push && bool == other.bool && conditions == other.conditions /* spotless:on */
+            return /* spotless:off */ other is Push && bool == other.bool && preferenceSetChannelTypeSetting == other.preferenceSetChannelTypeSetting /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(bool, conditions) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(bool, preferenceSetChannelTypeSetting) /* spotless:on */
 
         override fun toString(): String =
             when {
                 bool != null -> "Push{bool=$bool}"
-                conditions != null -> "Push{conditions=$conditions}"
+                preferenceSetChannelTypeSetting != null ->
+                    "Push{preferenceSetChannelTypeSetting=$preferenceSetChannelTypeSetting}"
                 _json != null -> "Push{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Push")
             }
@@ -1840,7 +1296,14 @@ private constructor(
 
             @JvmStatic fun ofBool(bool: Boolean) = Push(bool = bool)
 
-            @JvmStatic fun ofConditions(conditions: Conditions) = Push(conditions = conditions)
+            /**
+             * A set of settings for a channel type. Currently, this can only be a list of
+             * conditions to apply.
+             */
+            @JvmStatic
+            fun ofPreferenceSetChannelTypeSetting(
+                preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+            ) = Push(preferenceSetChannelTypeSetting = preferenceSetChannelTypeSetting)
         }
 
         /** An interface that defines how to map each variant of [Push] to a value of type [T]. */
@@ -1848,7 +1311,13 @@ private constructor(
 
             fun visitBool(bool: Boolean): T
 
-            fun visitConditions(conditions: Conditions): T
+            /**
+             * A set of settings for a channel type. Currently, this can only be a list of
+             * conditions to apply.
+             */
+            fun visitPreferenceSetChannelTypeSetting(
+                preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+            ): T
 
             /**
              * Maps an unknown variant of [Push] to a value of type [T].
@@ -1871,9 +1340,8 @@ private constructor(
 
                 val bestMatches =
                     sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<Conditions>())?.let {
-                                Push(conditions = it, _json = json)
-                            },
+                            tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>())
+                                ?.let { Push(preferenceSetChannelTypeSetting = it, _json = json) },
                             tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
                                 Push(bool = it, _json = json)
                             },
@@ -1903,221 +1371,54 @@ private constructor(
             ) {
                 when {
                     value.bool != null -> generator.writeObject(value.bool)
-                    value.conditions != null -> generator.writeObject(value.conditions)
+                    value.preferenceSetChannelTypeSetting != null ->
+                        generator.writeObject(value.preferenceSetChannelTypeSetting)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Push")
                 }
             }
         }
-
-        class Conditions
-        private constructor(
-            private val conditions: JsonField<List<Condition>>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("conditions")
-                @ExcludeMissing
-                conditions: JsonField<List<Condition>> = JsonMissing.of()
-            ) : this(conditions, mutableMapOf())
-
-            /**
-             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun conditions(): List<Condition> = conditions.getRequired("conditions")
-
-            /**
-             * Returns the raw JSON value of [conditions].
-             *
-             * Unlike [conditions], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("conditions")
-            @ExcludeMissing
-            fun _conditions(): JsonField<List<Condition>> = conditions
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [Conditions].
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .conditions()
-                 * ```
-                 */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [Conditions]. */
-            class Builder internal constructor() {
-
-                private var conditions: JsonField<MutableList<Condition>>? = null
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(conditions: Conditions) = apply {
-                    this.conditions = conditions.conditions.map { it.toMutableList() }
-                    additionalProperties = conditions.additionalProperties.toMutableMap()
-                }
-
-                fun conditions(conditions: List<Condition>) = conditions(JsonField.of(conditions))
-
-                /**
-                 * Sets [Builder.conditions] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.conditions] with a well-typed `List<Condition>`
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
-                 */
-                fun conditions(conditions: JsonField<List<Condition>>) = apply {
-                    this.conditions = conditions.map { it.toMutableList() }
-                }
-
-                /**
-                 * Adds a single [Condition] to [conditions].
-                 *
-                 * @throws IllegalStateException if the field was previously set to a non-list.
-                 */
-                fun addCondition(condition: Condition) = apply {
-                    conditions =
-                        (conditions ?: JsonField.of(mutableListOf())).also {
-                            checkKnown("conditions", it).add(condition)
-                        }
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Conditions].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .conditions()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
-                 */
-                fun build(): Conditions =
-                    Conditions(
-                        checkRequired("conditions", conditions).map { it.toImmutable() },
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            fun validate(): Conditions = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                conditions().forEach { it.validate() }
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: KnockInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                (conditions.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is Conditions && conditions == other.conditions && additionalProperties == other.additionalProperties /* spotless:on */
-            }
-
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(conditions, additionalProperties) }
-            /* spotless:on */
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Conditions{conditions=$conditions, additionalProperties=$additionalProperties}"
-        }
     }
 
+    /** Whether the channel type is enabled for the preference set. */
     @JsonDeserialize(using = Sms.Deserializer::class)
     @JsonSerialize(using = Sms.Serializer::class)
     class Sms
     private constructor(
         private val bool: Boolean? = null,
-        private val conditions: Conditions? = null,
+        private val preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting? = null,
         private val _json: JsonValue? = null,
     ) {
 
         fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
 
-        fun conditions(): Optional<Conditions> = Optional.ofNullable(conditions)
+        /**
+         * A set of settings for a channel type. Currently, this can only be a list of conditions to
+         * apply.
+         */
+        fun preferenceSetChannelTypeSetting(): Optional<PreferenceSetChannelTypeSetting> =
+            Optional.ofNullable(preferenceSetChannelTypeSetting)
 
         fun isBool(): Boolean = bool != null
 
-        fun isConditions(): Boolean = conditions != null
+        fun isPreferenceSetChannelTypeSetting(): Boolean = preferenceSetChannelTypeSetting != null
 
         fun asBool(): Boolean = bool.getOrThrow("bool")
 
-        fun asConditions(): Conditions = conditions.getOrThrow("conditions")
+        /**
+         * A set of settings for a channel type. Currently, this can only be a list of conditions to
+         * apply.
+         */
+        fun asPreferenceSetChannelTypeSetting(): PreferenceSetChannelTypeSetting =
+            preferenceSetChannelTypeSetting.getOrThrow("preferenceSetChannelTypeSetting")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 bool != null -> visitor.visitBool(bool)
-                conditions != null -> visitor.visitConditions(conditions)
+                preferenceSetChannelTypeSetting != null ->
+                    visitor.visitPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting)
                 else -> visitor.unknown(_json)
             }
 
@@ -2132,8 +1433,10 @@ private constructor(
                 object : Visitor<Unit> {
                     override fun visitBool(bool: Boolean) {}
 
-                    override fun visitConditions(conditions: Conditions) {
-                        conditions.validate()
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) {
+                        preferenceSetChannelTypeSetting.validate()
                     }
                 }
             )
@@ -2160,7 +1463,9 @@ private constructor(
                 object : Visitor<Int> {
                     override fun visitBool(bool: Boolean) = 1
 
-                    override fun visitConditions(conditions: Conditions) = conditions.validity()
+                    override fun visitPreferenceSetChannelTypeSetting(
+                        preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+                    ) = preferenceSetChannelTypeSetting.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -2171,15 +1476,16 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Sms && bool == other.bool && conditions == other.conditions /* spotless:on */
+            return /* spotless:off */ other is Sms && bool == other.bool && preferenceSetChannelTypeSetting == other.preferenceSetChannelTypeSetting /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(bool, conditions) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(bool, preferenceSetChannelTypeSetting) /* spotless:on */
 
         override fun toString(): String =
             when {
                 bool != null -> "Sms{bool=$bool}"
-                conditions != null -> "Sms{conditions=$conditions}"
+                preferenceSetChannelTypeSetting != null ->
+                    "Sms{preferenceSetChannelTypeSetting=$preferenceSetChannelTypeSetting}"
                 _json != null -> "Sms{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Sms")
             }
@@ -2188,7 +1494,14 @@ private constructor(
 
             @JvmStatic fun ofBool(bool: Boolean) = Sms(bool = bool)
 
-            @JvmStatic fun ofConditions(conditions: Conditions) = Sms(conditions = conditions)
+            /**
+             * A set of settings for a channel type. Currently, this can only be a list of
+             * conditions to apply.
+             */
+            @JvmStatic
+            fun ofPreferenceSetChannelTypeSetting(
+                preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+            ) = Sms(preferenceSetChannelTypeSetting = preferenceSetChannelTypeSetting)
         }
 
         /** An interface that defines how to map each variant of [Sms] to a value of type [T]. */
@@ -2196,7 +1509,13 @@ private constructor(
 
             fun visitBool(bool: Boolean): T
 
-            fun visitConditions(conditions: Conditions): T
+            /**
+             * A set of settings for a channel type. Currently, this can only be a list of
+             * conditions to apply.
+             */
+            fun visitPreferenceSetChannelTypeSetting(
+                preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting
+            ): T
 
             /**
              * Maps an unknown variant of [Sms] to a value of type [T].
@@ -2219,9 +1538,8 @@ private constructor(
 
                 val bestMatches =
                     sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<Conditions>())?.let {
-                                Sms(conditions = it, _json = json)
-                            },
+                            tryDeserialize(node, jacksonTypeRef<PreferenceSetChannelTypeSetting>())
+                                ?.let { Sms(preferenceSetChannelTypeSetting = it, _json = json) },
                             tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
                                 Sms(bool = it, _json = json)
                             },
@@ -2251,191 +1569,12 @@ private constructor(
             ) {
                 when {
                     value.bool != null -> generator.writeObject(value.bool)
-                    value.conditions != null -> generator.writeObject(value.conditions)
+                    value.preferenceSetChannelTypeSetting != null ->
+                        generator.writeObject(value.preferenceSetChannelTypeSetting)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Sms")
                 }
             }
-        }
-
-        class Conditions
-        private constructor(
-            private val conditions: JsonField<List<Condition>>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("conditions")
-                @ExcludeMissing
-                conditions: JsonField<List<Condition>> = JsonMissing.of()
-            ) : this(conditions, mutableMapOf())
-
-            /**
-             * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-             *   unexpectedly missing or null (e.g. if the server responded with an unexpected
-             *   value).
-             */
-            fun conditions(): List<Condition> = conditions.getRequired("conditions")
-
-            /**
-             * Returns the raw JSON value of [conditions].
-             *
-             * Unlike [conditions], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("conditions")
-            @ExcludeMissing
-            fun _conditions(): JsonField<List<Condition>> = conditions
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /**
-                 * Returns a mutable builder for constructing an instance of [Conditions].
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .conditions()
-                 * ```
-                 */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [Conditions]. */
-            class Builder internal constructor() {
-
-                private var conditions: JsonField<MutableList<Condition>>? = null
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(conditions: Conditions) = apply {
-                    this.conditions = conditions.conditions.map { it.toMutableList() }
-                    additionalProperties = conditions.additionalProperties.toMutableMap()
-                }
-
-                fun conditions(conditions: List<Condition>) = conditions(JsonField.of(conditions))
-
-                /**
-                 * Sets [Builder.conditions] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.conditions] with a well-typed `List<Condition>`
-                 * value instead. This method is primarily for setting the field to an undocumented
-                 * or not yet supported value.
-                 */
-                fun conditions(conditions: JsonField<List<Condition>>) = apply {
-                    this.conditions = conditions.map { it.toMutableList() }
-                }
-
-                /**
-                 * Adds a single [Condition] to [conditions].
-                 *
-                 * @throws IllegalStateException if the field was previously set to a non-list.
-                 */
-                fun addCondition(condition: Condition) = apply {
-                    conditions =
-                        (conditions ?: JsonField.of(mutableListOf())).also {
-                            checkKnown("conditions", it).add(condition)
-                        }
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Conditions].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .conditions()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
-                 */
-                fun build(): Conditions =
-                    Conditions(
-                        checkRequired("conditions", conditions).map { it.toImmutable() },
-                        additionalProperties.toMutableMap(),
-                    )
-            }
-
-            private var validated: Boolean = false
-
-            fun validate(): Conditions = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                conditions().forEach { it.validate() }
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: KnockInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                (conditions.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is Conditions && conditions == other.conditions && additionalProperties == other.additionalProperties /* spotless:on */
-            }
-
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(conditions, additionalProperties) }
-            /* spotless:on */
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "Conditions{conditions=$conditions, additionalProperties=$additionalProperties}"
         }
     }
 

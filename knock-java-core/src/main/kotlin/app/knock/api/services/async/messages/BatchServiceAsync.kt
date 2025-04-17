@@ -24,7 +24,7 @@ interface BatchServiceAsync {
      */
     fun withRawResponse(): WithRawResponse
 
-    /** Marks one or more messages as archived */
+    /** Marks the given messages as archived. */
     fun archive(): CompletableFuture<List<Message>> = archive(BatchArchiveParams.none())
 
     /** @see [archive] */
@@ -42,7 +42,7 @@ interface BatchServiceAsync {
     fun archive(requestOptions: RequestOptions): CompletableFuture<List<Message>> =
         archive(BatchArchiveParams.none(), requestOptions)
 
-    /** Get the contents of multiple messages */
+    /** Get the contents of multiple messages in a single request. */
     fun getContent(
         params: BatchGetContentParams
     ): CompletableFuture<List<BatchGetContentResponse>> = getContent(params, RequestOptions.none())
@@ -53,26 +53,17 @@ interface BatchServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<List<BatchGetContentResponse>>
 
-    /** Marks one or more messages as interacted */
-    fun markAsInteracted(): CompletableFuture<List<Message>> =
-        markAsInteracted(BatchMarkAsInteractedParams.none())
+    /** Marks the given messages as interacted with. */
+    fun markAsInteracted(params: BatchMarkAsInteractedParams): CompletableFuture<List<Message>> =
+        markAsInteracted(params, RequestOptions.none())
 
     /** @see [markAsInteracted] */
     fun markAsInteracted(
-        params: BatchMarkAsInteractedParams = BatchMarkAsInteractedParams.none(),
+        params: BatchMarkAsInteractedParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<List<Message>>
 
-    /** @see [markAsInteracted] */
-    fun markAsInteracted(
-        params: BatchMarkAsInteractedParams = BatchMarkAsInteractedParams.none()
-    ): CompletableFuture<List<Message>> = markAsInteracted(params, RequestOptions.none())
-
-    /** @see [markAsInteracted] */
-    fun markAsInteracted(requestOptions: RequestOptions): CompletableFuture<List<Message>> =
-        markAsInteracted(BatchMarkAsInteractedParams.none(), requestOptions)
-
-    /** Marks one or more messages as read */
+    /** Marks the given messages as read. */
     fun markAsRead(): CompletableFuture<List<Message>> = markAsRead(BatchMarkAsReadParams.none())
 
     /** @see [markAsRead] */
@@ -90,7 +81,7 @@ interface BatchServiceAsync {
     fun markAsRead(requestOptions: RequestOptions): CompletableFuture<List<Message>> =
         markAsRead(BatchMarkAsReadParams.none(), requestOptions)
 
-    /** Marks one or more messages as seen */
+    /** Marks the given messages as seen. */
     fun markAsSeen(): CompletableFuture<List<Message>> = markAsSeen(BatchMarkAsSeenParams.none())
 
     /** @see [markAsSeen] */
@@ -108,7 +99,7 @@ interface BatchServiceAsync {
     fun markAsSeen(requestOptions: RequestOptions): CompletableFuture<List<Message>> =
         markAsSeen(BatchMarkAsSeenParams.none(), requestOptions)
 
-    /** Marks one or more messages as unread */
+    /** Marks the given messages as unread. */
     fun markAsUnread(): CompletableFuture<List<Message>> =
         markAsUnread(BatchMarkAsUnreadParams.none())
 
@@ -127,7 +118,7 @@ interface BatchServiceAsync {
     fun markAsUnread(requestOptions: RequestOptions): CompletableFuture<List<Message>> =
         markAsUnread(BatchMarkAsUnreadParams.none(), requestOptions)
 
-    /** Marks one or more messages as unseen */
+    /** Marks the given messages as unseen. */
     fun markAsUnseen(): CompletableFuture<List<Message>> =
         markAsUnseen(BatchMarkAsUnseenParams.none())
 
@@ -146,7 +137,7 @@ interface BatchServiceAsync {
     fun markAsUnseen(requestOptions: RequestOptions): CompletableFuture<List<Message>> =
         markAsUnseen(BatchMarkAsUnseenParams.none(), requestOptions)
 
-    /** Marks one or more messages as unarchived */
+    /** Marks the given messages as unarchived. */
     fun unarchive(): CompletableFuture<List<Message>> = unarchive(BatchUnarchiveParams.none())
 
     /** @see [unarchive] */
@@ -218,29 +209,17 @@ interface BatchServiceAsync {
          * the same as [BatchServiceAsync.markAsInteracted].
          */
         @MustBeClosed
-        fun markAsInteracted(): CompletableFuture<HttpResponseFor<List<Message>>> =
-            markAsInteracted(BatchMarkAsInteractedParams.none())
-
-        /** @see [markAsInteracted] */
-        @MustBeClosed
         fun markAsInteracted(
-            params: BatchMarkAsInteractedParams = BatchMarkAsInteractedParams.none(),
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<List<Message>>>
-
-        /** @see [markAsInteracted] */
-        @MustBeClosed
-        fun markAsInteracted(
-            params: BatchMarkAsInteractedParams = BatchMarkAsInteractedParams.none()
+            params: BatchMarkAsInteractedParams
         ): CompletableFuture<HttpResponseFor<List<Message>>> =
             markAsInteracted(params, RequestOptions.none())
 
         /** @see [markAsInteracted] */
         @MustBeClosed
         fun markAsInteracted(
-            requestOptions: RequestOptions
-        ): CompletableFuture<HttpResponseFor<List<Message>>> =
-            markAsInteracted(BatchMarkAsInteractedParams.none(), requestOptions)
+            params: BatchMarkAsInteractedParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<List<Message>>>
 
         /**
          * Returns a raw HTTP response for `post /v1/messages/batch/read`, but is otherwise the same

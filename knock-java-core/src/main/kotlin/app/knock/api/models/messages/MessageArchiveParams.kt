@@ -11,7 +11,10 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Archives a message */
+/**
+ * Archives a message for the current user. Archived messages are hidden from the default message
+ * list but can still be accessed and unarchived later.
+ */
 class MessageArchiveParams
 private constructor(
     private val messageId: String,

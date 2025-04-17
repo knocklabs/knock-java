@@ -11,7 +11,9 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Unarchives a message */
+/**
+ * Removes a message from the archived state, making it visible in the default message list again.
+ */
 class MessageUnarchiveParams
 private constructor(
     private val messageId: String,

@@ -62,7 +62,7 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
                     .addPathSegments("v1", "users", "bulk", "delete")
-                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -89,7 +89,7 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
                     .addPathSegments("v1", "users", "bulk", "identify")
-                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -116,7 +116,7 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
                     .addPathSegments("v1", "users", "bulk", "preferences")
-                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))

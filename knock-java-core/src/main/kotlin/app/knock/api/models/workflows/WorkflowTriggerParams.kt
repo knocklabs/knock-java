@@ -27,7 +27,11 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Triggers a workflow */
+/**
+ * Trigger a workflow specified by the key to run for the given recipients, using the parameters
+ * provided. Returns an identifier for the workflow run request. All workflow runs are executed
+ * asynchronously.
+ */
 class WorkflowTriggerParams
 private constructor(
     private val key: String,
@@ -49,8 +53,8 @@ private constructor(
     fun actor(): Optional<RecipientRequest> = body.actor()
 
     /**
-     * An optional key that is used in the workflow cancellation endpoint to target a cancellation
-     * of any workflow runs associated with this trigger.
+     * The cancellation key provided during the initial notify call. If used in a cancel request,
+     * will cancel the notification for the recipients specified in the cancel request.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -58,8 +62,7 @@ private constructor(
     fun cancellationKey(): Optional<String> = body.cancellationKey()
 
     /**
-     * An optional map of data to be used in the workflow. This data will be available to the
-     * workflow as a map in the `data` field.
+     * An optional map of data to pass into the workflow execution.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -67,7 +70,8 @@ private constructor(
     fun data(): Optional<Data> = body.data()
 
     /**
-     * The recipients to trigger the workflow for.
+     * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
+     * trigger.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -75,7 +79,7 @@ private constructor(
     fun recipients(): Optional<List<RecipientRequest>> = body.recipients()
 
     /**
-     * An inline tenant request
+     * An request to set a tenant inline.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -204,8 +208,8 @@ private constructor(
         fun actor(inlineObject: InlineObjectRequest) = apply { body.actor(inlineObject) }
 
         /**
-         * An optional key that is used in the workflow cancellation endpoint to target a
-         * cancellation of any workflow runs associated with this trigger.
+         * The cancellation key provided during the initial notify call. If used in a cancel
+         * request, will cancel the notification for the recipients specified in the cancel request.
          */
         fun cancellationKey(cancellationKey: String?) = apply {
             body.cancellationKey(cancellationKey)
@@ -226,10 +230,7 @@ private constructor(
             body.cancellationKey(cancellationKey)
         }
 
-        /**
-         * An optional map of data to be used in the workflow. This data will be available to the
-         * workflow as a map in the `data` field.
-         */
+        /** An optional map of data to pass into the workflow execution. */
         fun data(data: Data?) = apply { body.data(data) }
 
         /** Alias for calling [Builder.data] with `data.orElse(null)`. */
@@ -243,7 +244,10 @@ private constructor(
          */
         fun data(data: JsonField<Data>) = apply { body.data(data) }
 
-        /** The recipients to trigger the workflow for. */
+        /**
+         * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
+         * trigger.
+         */
         fun recipients(recipients: List<RecipientRequest>) = apply { body.recipients(recipients) }
 
         /**
@@ -282,7 +286,7 @@ private constructor(
             body.addRecipient(inlineObject)
         }
 
-        /** An inline tenant request */
+        /** An request to set a tenant inline. */
         fun tenant(tenant: InlineTenantRequest?) = apply { body.tenant(tenant) }
 
         /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
@@ -453,7 +457,7 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    /** A set of parameters to trigger a workflow with. */
+    /** A request to trigger a notification workflow. */
     class Body
     private constructor(
         private val actor: JsonField<RecipientRequest>,
@@ -492,8 +496,8 @@ private constructor(
         fun actor(): Optional<RecipientRequest> = actor.getOptional("actor")
 
         /**
-         * An optional key that is used in the workflow cancellation endpoint to target a
-         * cancellation of any workflow runs associated with this trigger.
+         * The cancellation key provided during the initial notify call. If used in a cancel
+         * request, will cancel the notification for the recipients specified in the cancel request.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -501,8 +505,7 @@ private constructor(
         fun cancellationKey(): Optional<String> = cancellationKey.getOptional("cancellation_key")
 
         /**
-         * An optional map of data to be used in the workflow. This data will be available to the
-         * workflow as a map in the `data` field.
+         * An optional map of data to pass into the workflow execution.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -510,7 +513,8 @@ private constructor(
         fun data(): Optional<Data> = data.getOptional("data")
 
         /**
-         * The recipients to trigger the workflow for.
+         * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
+         * trigger.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -518,7 +522,7 @@ private constructor(
         fun recipients(): Optional<List<RecipientRequest>> = recipients.getOptional("recipients")
 
         /**
-         * An inline tenant request
+         * An request to set a tenant inline.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -639,8 +643,9 @@ private constructor(
                 actor(RecipientRequest.ofInlineObject(inlineObject))
 
             /**
-             * An optional key that is used in the workflow cancellation endpoint to target a
-             * cancellation of any workflow runs associated with this trigger.
+             * The cancellation key provided during the initial notify call. If used in a cancel
+             * request, will cancel the notification for the recipients specified in the cancel
+             * request.
              */
             fun cancellationKey(cancellationKey: String?) =
                 cancellationKey(JsonField.ofNullable(cancellationKey))
@@ -660,10 +665,7 @@ private constructor(
                 this.cancellationKey = cancellationKey
             }
 
-            /**
-             * An optional map of data to be used in the workflow. This data will be available to
-             * the workflow as a map in the `data` field.
-             */
+            /** An optional map of data to pass into the workflow execution. */
             fun data(data: Data?) = data(JsonField.ofNullable(data))
 
             /** Alias for calling [Builder.data] with `data.orElse(null)`. */
@@ -678,7 +680,10 @@ private constructor(
              */
             fun data(data: JsonField<Data>) = apply { this.data = data }
 
-            /** The recipients to trigger the workflow for. */
+            /**
+             * The recipients to trigger the workflow for. Cannot exceed 1000 recipients in a single
+             * trigger.
+             */
             fun recipients(recipients: List<RecipientRequest>) =
                 recipients(JsonField.of(recipients))
 
@@ -722,7 +727,7 @@ private constructor(
             fun addRecipient(inlineObject: InlineObjectRequest) =
                 addRecipient(RecipientRequest.ofInlineObject(inlineObject))
 
-            /** An inline tenant request */
+            /** An request to set a tenant inline. */
             fun tenant(tenant: InlineTenantRequest?) = tenant(JsonField.ofNullable(tenant))
 
             /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
@@ -836,10 +841,7 @@ private constructor(
             "Body{actor=$actor, cancellationKey=$cancellationKey, data=$data, recipients=$recipients, tenant=$tenant, additionalProperties=$additionalProperties}"
     }
 
-    /**
-     * An optional map of data to be used in the workflow. This data will be available to the
-     * workflow as a map in the `data` field.
-     */
+    /** An optional map of data to pass into the workflow execution. */
     class Data
     @JsonCreator
     private constructor(

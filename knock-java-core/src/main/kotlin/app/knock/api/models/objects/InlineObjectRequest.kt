@@ -20,7 +20,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Inline identifies a custom object belonging to a collection */
+/** A custom object entity which belongs to a collection. */
 class InlineObjectRequest
 private constructor(
     private val id: JsonField<String>,
@@ -49,19 +49,23 @@ private constructor(
     ) : this(id, collection, channelData, createdAt, preferences, mutableMapOf())
 
     /**
+     * Unique identifier for the object.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
 
     /**
+     * The collection this object belongs to.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun collection(): String = collection.getRequired("collection")
 
     /**
-     * Allows inline setting channel data for a recipient
+     * A request to set channel data for a type of channel inline.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -69,6 +73,8 @@ private constructor(
     fun channelData(): Optional<InlineChannelDataRequest> = channelData.getOptional("channel_data")
 
     /**
+     * Timestamp when the resource was created.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
@@ -169,6 +175,7 @@ private constructor(
             additionalProperties = inlineObjectRequest.additionalProperties.toMutableMap()
         }
 
+        /** Unique identifier for the object. */
         fun id(id: String) = id(JsonField.of(id))
 
         /**
@@ -179,6 +186,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
+        /** The collection this object belongs to. */
         fun collection(collection: String) = collection(JsonField.of(collection))
 
         /**
@@ -190,7 +198,7 @@ private constructor(
          */
         fun collection(collection: JsonField<String>) = apply { this.collection = collection }
 
-        /** Allows inline setting channel data for a recipient */
+        /** A request to set channel data for a type of channel inline. */
         fun channelData(channelData: InlineChannelDataRequest?) =
             channelData(JsonField.ofNullable(channelData))
 
@@ -209,6 +217,7 @@ private constructor(
             this.channelData = channelData
         }
 
+        /** Timestamp when the resource was created. */
         fun createdAt(createdAt: OffsetDateTime?) = createdAt(JsonField.ofNullable(createdAt))
 
         /** Alias for calling [Builder.createdAt] with `createdAt.orElse(null)`. */

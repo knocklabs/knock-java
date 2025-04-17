@@ -19,7 +19,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** The response from a channels for Microsoft Teams provider request */
+/** The response from a Microsoft Teams provider request, containing a list of channels. */
 class MsTeamListChannelsResponse
 private constructor(
     private val msTeamsChannels: JsonField<List<MsTeamsChannel>>,
@@ -34,6 +34,8 @@ private constructor(
     ) : this(msTeamsChannels, mutableMapOf())
 
     /**
+     * List of Microsoft Teams channels.
+     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
@@ -85,6 +87,7 @@ private constructor(
             additionalProperties = msTeamListChannelsResponse.additionalProperties.toMutableMap()
         }
 
+        /** List of Microsoft Teams channels. */
         fun msTeamsChannels(msTeamsChannels: List<MsTeamsChannel>) =
             msTeamsChannels(JsonField.of(msTeamsChannels))
 
@@ -217,36 +220,48 @@ private constructor(
         )
 
         /**
+         * Microsoft Teams channel ID.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun id(): String = id.getRequired("id")
 
         /**
+         * Microsoft Teams channel name.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun displayName(): String = displayName.getRequired("displayName")
 
         /**
+         * Microsoft Teams channel created date and time.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun createdDateTime(): Optional<String> = createdDateTime.getOptional("createdDateTime")
 
         /**
+         * Microsoft Teams channel description.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun description(): Optional<String> = description.getOptional("description")
 
         /**
+         * Whether the Microsoft Teams channel is archived.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun isArchived(): Optional<Boolean> = isArchived.getOptional("isArchived")
 
         /**
+         * Microsoft Teams channel membership type.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
@@ -354,6 +369,7 @@ private constructor(
                 additionalProperties = msTeamsChannel.additionalProperties.toMutableMap()
             }
 
+            /** Microsoft Teams channel ID. */
             fun id(id: String) = id(JsonField.of(id))
 
             /**
@@ -365,6 +381,7 @@ private constructor(
              */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
+            /** Microsoft Teams channel name. */
             fun displayName(displayName: String) = displayName(JsonField.of(displayName))
 
             /**
@@ -378,6 +395,7 @@ private constructor(
                 this.displayName = displayName
             }
 
+            /** Microsoft Teams channel created date and time. */
             fun createdDateTime(createdDateTime: String) =
                 createdDateTime(JsonField.of(createdDateTime))
 
@@ -392,6 +410,7 @@ private constructor(
                 this.createdDateTime = createdDateTime
             }
 
+            /** Microsoft Teams channel description. */
             fun description(description: String?) = description(JsonField.ofNullable(description))
 
             /** Alias for calling [Builder.description] with `description.orElse(null)`. */
@@ -408,6 +427,7 @@ private constructor(
                 this.description = description
             }
 
+            /** Whether the Microsoft Teams channel is archived. */
             fun isArchived(isArchived: Boolean) = isArchived(JsonField.of(isArchived))
 
             /**
@@ -419,6 +439,7 @@ private constructor(
              */
             fun isArchived(isArchived: JsonField<Boolean>) = apply { this.isArchived = isArchived }
 
+            /** Microsoft Teams channel membership type. */
             fun membershipType(membershipType: String) =
                 membershipType(JsonField.of(membershipType))
 
