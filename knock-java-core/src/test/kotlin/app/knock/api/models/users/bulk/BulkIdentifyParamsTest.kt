@@ -287,12 +287,11 @@ internal class BulkIdentifyParamsTest {
     fun bodyWithoutOptionalFields() {
         val params =
             BulkIdentifyParams.builder()
-                .addUser(InlineIdentifyUserRequest.builder().id("user_1").build())
+                .addUser(InlineIdentifyUserRequest.builder().build())
                 .build()
 
         val body = params._body()
 
-        assertThat(body.users())
-            .containsExactly(InlineIdentifyUserRequest.builder().id("user_1").build())
+        assertThat(body.users()).containsExactly(InlineIdentifyUserRequest.builder().build())
     }
 }

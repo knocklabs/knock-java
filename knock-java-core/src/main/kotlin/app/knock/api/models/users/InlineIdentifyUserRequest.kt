@@ -6,7 +6,6 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.checkRequired
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
@@ -51,10 +50,10 @@ private constructor(
     /**
      * The unique identifier for the user.
      *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
-     *   missing or null (e.g. if the server responded with an unexpected value).
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    fun id(): String = id.getRequired("id")
+    fun id(): Optional<String> = id.getOptional("id")
 
     /**
      * A request to set channel data for a type of channel inline.
@@ -130,11 +129,6 @@ private constructor(
 
         /**
          * Returns a mutable builder for constructing an instance of [InlineIdentifyUserRequest].
-         *
-         * The following fields are required:
-         * ```java
-         * .id()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -142,7 +136,7 @@ private constructor(
     /** A builder for [InlineIdentifyUserRequest]. */
     class Builder internal constructor() {
 
-        private var id: JsonField<String>? = null
+        private var id: JsonField<String> = JsonMissing.of()
         private var channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of()
         private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of()
@@ -244,17 +238,10 @@ private constructor(
          * Returns an immutable instance of [InlineIdentifyUserRequest].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .id()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): InlineIdentifyUserRequest =
             InlineIdentifyUserRequest(
-                checkRequired("id", id),
+                id,
                 channelData,
                 createdAt,
                 preferences,

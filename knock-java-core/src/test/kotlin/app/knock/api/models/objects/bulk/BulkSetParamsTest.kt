@@ -19,7 +19,6 @@ internal class BulkSetParamsTest {
             .addObject(
                 InlineObjectRequest.builder()
                     .id("project_1")
-                    .collection("projects")
                     .channelData(
                         InlineChannelDataRequest.builder()
                             .putAdditionalProperty(
@@ -30,6 +29,7 @@ internal class BulkSetParamsTest {
                             )
                             .build()
                     )
+                    .collection("projects")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .preferences(
                         InlinePreferenceSetRequest.builder()
@@ -109,9 +109,7 @@ internal class BulkSetParamsTest {
         val params =
             BulkSetParams.builder()
                 .collection("collection")
-                .addObject(
-                    InlineObjectRequest.builder().id("project_1").collection("projects").build()
-                )
+                .addObject(InlineObjectRequest.builder().build())
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("collection")
@@ -127,7 +125,6 @@ internal class BulkSetParamsTest {
                 .addObject(
                     InlineObjectRequest.builder()
                         .id("project_1")
-                        .collection("projects")
                         .channelData(
                             InlineChannelDataRequest.builder()
                                 .putAdditionalProperty(
@@ -138,6 +135,7 @@ internal class BulkSetParamsTest {
                                 )
                                 .build()
                         )
+                        .collection("projects")
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .preferences(
                             InlinePreferenceSetRequest.builder()
@@ -219,7 +217,6 @@ internal class BulkSetParamsTest {
             .containsExactly(
                 InlineObjectRequest.builder()
                     .id("project_1")
-                    .collection("projects")
                     .channelData(
                         InlineChannelDataRequest.builder()
                             .putAdditionalProperty(
@@ -230,6 +227,7 @@ internal class BulkSetParamsTest {
                             )
                             .build()
                     )
+                    .collection("projects")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .preferences(
                         InlinePreferenceSetRequest.builder()
@@ -308,16 +306,11 @@ internal class BulkSetParamsTest {
         val params =
             BulkSetParams.builder()
                 .collection("collection")
-                .addObject(
-                    InlineObjectRequest.builder().id("project_1").collection("projects").build()
-                )
+                .addObject(InlineObjectRequest.builder().build())
                 .build()
 
         val body = params._body()
 
-        assertThat(body.objects())
-            .containsExactly(
-                InlineObjectRequest.builder().id("project_1").collection("projects").build()
-            )
+        assertThat(body.objects()).containsExactly(InlineObjectRequest.builder().build())
     }
 }

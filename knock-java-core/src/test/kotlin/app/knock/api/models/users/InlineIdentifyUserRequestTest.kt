@@ -97,7 +97,7 @@ internal class InlineIdentifyUserRequestTest {
                 )
                 .build()
 
-        assertThat(inlineIdentifyUserRequest.id()).isEqualTo("user_1")
+        assertThat(inlineIdentifyUserRequest.id()).contains("user_1")
         assertThat(inlineIdentifyUserRequest.channelData())
             .contains(
                 InlineChannelDataRequest.builder()

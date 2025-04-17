@@ -186,7 +186,6 @@ internal class BulkServiceTest {
                     .addObject(
                         InlineObjectRequest.builder()
                             .id("project_1")
-                            .collection("projects")
                             .channelData(
                                 InlineChannelDataRequest.builder()
                                     .putAdditionalProperty(
@@ -200,6 +199,7 @@ internal class BulkServiceTest {
                                     )
                                     .build()
                             )
+                            .collection("projects")
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .preferences(
                                 InlinePreferenceSetRequest.builder()

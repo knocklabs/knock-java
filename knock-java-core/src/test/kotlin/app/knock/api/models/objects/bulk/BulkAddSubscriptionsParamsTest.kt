@@ -128,7 +128,7 @@ internal class BulkAddSubscriptionsParamsTest {
                 .addSubscription(
                     BulkAddSubscriptionsParams.Subscription.builder()
                         .id("project-1")
-                        .addRecipient(InlineIdentifyUserRequest.builder().id("user_1").build())
+                        .addRecipient(InlineIdentifyUserRequest.builder().build())
                         .build()
                 )
                 .build()
@@ -360,7 +360,7 @@ internal class BulkAddSubscriptionsParamsTest {
                 .addSubscription(
                     BulkAddSubscriptionsParams.Subscription.builder()
                         .id("project-1")
-                        .addRecipient(InlineIdentifyUserRequest.builder().id("user_1").build())
+                        .addRecipient(InlineIdentifyUserRequest.builder().build())
                         .build()
                 )
                 .build()
@@ -371,7 +371,7 @@ internal class BulkAddSubscriptionsParamsTest {
             .containsExactly(
                 BulkAddSubscriptionsParams.Subscription.builder()
                     .id("project-1")
-                    .addRecipient(InlineIdentifyUserRequest.builder().id("user_1").build())
+                    .addRecipient(InlineIdentifyUserRequest.builder().build())
                     .build()
             )
     }

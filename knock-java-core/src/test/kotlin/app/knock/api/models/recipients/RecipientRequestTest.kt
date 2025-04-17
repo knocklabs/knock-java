@@ -236,7 +236,6 @@ internal class RecipientRequestTest {
         val inlineObject =
             InlineObjectRequest.builder()
                 .id("project_1")
-                .collection("projects")
                 .channelData(
                     InlineChannelDataRequest.builder()
                         .putAdditionalProperty(
@@ -247,6 +246,7 @@ internal class RecipientRequestTest {
                         )
                         .build()
                 )
+                .collection("projects")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .preferences(
                     InlinePreferenceSetRequest.builder()
@@ -330,7 +330,6 @@ internal class RecipientRequestTest {
             RecipientRequest.ofInlineObject(
                 InlineObjectRequest.builder()
                     .id("project_1")
-                    .collection("projects")
                     .channelData(
                         InlineChannelDataRequest.builder()
                             .putAdditionalProperty(
@@ -341,6 +340,7 @@ internal class RecipientRequestTest {
                             )
                             .build()
                     )
+                    .collection("projects")
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .preferences(
                         InlinePreferenceSetRequest.builder()
