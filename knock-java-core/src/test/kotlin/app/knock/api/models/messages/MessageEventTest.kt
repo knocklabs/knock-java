@@ -31,7 +31,8 @@ internal class MessageEventTest {
         assertThat(messageEvent._typename()).isEqualTo("MessageEvent")
         assertThat(messageEvent.insertedAt())
             .isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
-        assertThat(messageEvent.recipient()).isEqualTo(MessageEvent.Recipient.ofString("user_123"))
+        assertThat(messageEvent.recipient())
+            .isEqualTo(MessageEvent.Recipient.ofUserReference("user_123"))
         assertThat(messageEvent.type()).isEqualTo(MessageEvent.Type.MESSAGE_SENT)
         assertThat(messageEvent.data())
             .contains(

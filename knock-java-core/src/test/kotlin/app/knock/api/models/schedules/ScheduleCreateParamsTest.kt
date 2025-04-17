@@ -86,7 +86,7 @@ internal class ScheduleCreateParamsTest {
         val body = params._body()
 
         assertThat(body.recipients())
-            .containsExactly(ScheduleCreateParams.Recipient.ofString("user_123"))
+            .containsExactly(ScheduleCreateParams.Recipient.ofUserReference("user_123"))
         assertThat(body.repeats())
             .containsExactly(
                 ScheduleRepeatRule.builder()
@@ -138,7 +138,7 @@ internal class ScheduleCreateParamsTest {
         val body = params._body()
 
         assertThat(body.recipients())
-            .containsExactly(ScheduleCreateParams.Recipient.ofString("user_123"))
+            .containsExactly(ScheduleCreateParams.Recipient.ofUserReference("user_123"))
         assertThat(body.repeats())
             .containsExactly(
                 ScheduleRepeatRule.builder()

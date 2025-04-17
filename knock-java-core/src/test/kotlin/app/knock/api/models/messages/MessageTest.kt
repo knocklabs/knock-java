@@ -57,7 +57,8 @@ internal class MessageTest {
 
         assertThat(message.id()).contains("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
         assertThat(message._typename()).contains("Message")
-        assertThat(message.actors().getOrNull()).containsExactly(Message.Actor.ofString("user_123"))
+        assertThat(message.actors().getOrNull())
+            .containsExactly(Message.Actor.ofUserReference("user_123"))
         assertThat(message.archivedAt()).isEmpty
         assertThat(message.channelId()).contains("123e4567-e89b-12d3-a456-426614174000")
         assertThat(message.clickedAt()).isEmpty
@@ -77,7 +78,7 @@ internal class MessageTest {
                     .build()
             )
         assertThat(message.readAt()).isEmpty
-        assertThat(message.recipient()).contains(Message.Recipient.ofString("user_123"))
+        assertThat(message.recipient()).contains(Message.Recipient.ofUserReference("user_123"))
         assertThat(message.scheduledAt()).isEmpty
         assertThat(message.seenAt()).isEmpty
         assertThat(message.source())

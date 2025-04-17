@@ -228,12 +228,12 @@ private constructor(
          */
         fun addRecipient(recipient: Recipient) = apply { body.addRecipient(recipient) }
 
-        /** Alias for calling [addRecipient] with `Recipient.ofString(string)`. */
-        fun addRecipient(string: String) = apply { body.addRecipient(string) }
+        /** Alias for calling [addRecipient] with `Recipient.ofUserReference(userReference)`. */
+        fun addRecipient(userReference: String) = apply { body.addRecipient(userReference) }
 
-        /** Alias for calling [addRecipient] with `Recipient.ofReference(reference)`. */
-        fun addRecipient(reference: Recipient.RecipientReference) = apply {
-            body.addRecipient(reference)
+        /** Alias for calling [addRecipient] with `Recipient.ofObjectReference(objectReference)`. */
+        fun addRecipient(objectReference: Recipient.ObjectReference) = apply {
+            body.addRecipient(objectReference)
         }
 
         /** The repeat rule for the schedule. */
@@ -711,12 +711,15 @@ private constructor(
                     }
             }
 
-            /** Alias for calling [addRecipient] with `Recipient.ofString(string)`. */
-            fun addRecipient(string: String) = addRecipient(Recipient.ofString(string))
+            /** Alias for calling [addRecipient] with `Recipient.ofUserReference(userReference)`. */
+            fun addRecipient(userReference: String) =
+                addRecipient(Recipient.ofUserReference(userReference))
 
-            /** Alias for calling [addRecipient] with `Recipient.ofReference(reference)`. */
-            fun addRecipient(reference: Recipient.RecipientReference) =
-                addRecipient(Recipient.ofReference(reference))
+            /**
+             * Alias for calling [addRecipient] with `Recipient.ofObjectReference(objectReference)`.
+             */
+            fun addRecipient(objectReference: Recipient.ObjectReference) =
+                addRecipient(Recipient.ofObjectReference(objectReference))
 
             /** The repeat rule for the schedule. */
             fun repeats(repeats: List<ScheduleRepeatRule>) = repeats(JsonField.of(repeats))
@@ -942,39 +945,33 @@ private constructor(
     @JsonSerialize(using = Recipient.Serializer::class)
     class Recipient
     private constructor(
-        private val string: String? = null,
-        private val reference: RecipientReference? = null,
+        private val userReference: String? = null,
+        private val objectReference: ObjectReference? = null,
         private val _json: JsonValue? = null,
     ) {
 
         /** An identifier for a user recipient. */
-        fun string(): Optional<String> = Optional.ofNullable(string)
+        fun userReference(): Optional<String> = Optional.ofNullable(userReference)
 
-        /**
-         * A reference to a recipient, either a user identifier (string) or an object reference (id,
-         * collection).
-         */
-        fun reference(): Optional<RecipientReference> = Optional.ofNullable(reference)
+        /** A reference to a recipient object. */
+        fun objectReference(): Optional<ObjectReference> = Optional.ofNullable(objectReference)
 
-        fun isString(): Boolean = string != null
+        fun isUserReference(): Boolean = userReference != null
 
-        fun isReference(): Boolean = reference != null
+        fun isObjectReference(): Boolean = objectReference != null
 
         /** An identifier for a user recipient. */
-        fun asString(): String = string.getOrThrow("string")
+        fun asUserReference(): String = userReference.getOrThrow("userReference")
 
-        /**
-         * A reference to a recipient, either a user identifier (string) or an object reference (id,
-         * collection).
-         */
-        fun asReference(): RecipientReference = reference.getOrThrow("reference")
+        /** A reference to a recipient object. */
+        fun asObjectReference(): ObjectReference = objectReference.getOrThrow("objectReference")
 
         fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
-                string != null -> visitor.visitString(string)
-                reference != null -> visitor.visitReference(reference)
+                userReference != null -> visitor.visitUserReference(userReference)
+                objectReference != null -> visitor.visitObjectReference(objectReference)
                 else -> visitor.unknown(_json)
             }
 
@@ -987,10 +984,10 @@ private constructor(
 
             accept(
                 object : Visitor<Unit> {
-                    override fun visitString(string: String) {}
+                    override fun visitUserReference(userReference: String) {}
 
-                    override fun visitReference(reference: RecipientReference) {
-                        reference.validate()
+                    override fun visitObjectReference(objectReference: ObjectReference) {
+                        objectReference.validate()
                     }
                 }
             )
@@ -1015,10 +1012,10 @@ private constructor(
         internal fun validity(): Int =
             accept(
                 object : Visitor<Int> {
-                    override fun visitString(string: String) = 1
+                    override fun visitUserReference(userReference: String) = 1
 
-                    override fun visitReference(reference: RecipientReference) =
-                        reference.validity()
+                    override fun visitObjectReference(objectReference: ObjectReference) =
+                        objectReference.validity()
 
                     override fun unknown(json: JsonValue?) = 0
                 }
@@ -1029,15 +1026,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Recipient && string == other.string && reference == other.reference /* spotless:on */
+            return /* spotless:off */ other is Recipient && userReference == other.userReference && objectReference == other.objectReference /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, reference) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(userReference, objectReference) /* spotless:on */
 
         override fun toString(): String =
             when {
-                string != null -> "Recipient{string=$string}"
-                reference != null -> "Recipient{reference=$reference}"
+                userReference != null -> "Recipient{userReference=$userReference}"
+                objectReference != null -> "Recipient{objectReference=$objectReference}"
                 _json != null -> "Recipient{_unknown=$_json}"
                 else -> throw IllegalStateException("Invalid Recipient")
             }
@@ -1045,14 +1042,13 @@ private constructor(
         companion object {
 
             /** An identifier for a user recipient. */
-            @JvmStatic fun ofString(string: String) = Recipient(string = string)
-
-            /**
-             * A reference to a recipient, either a user identifier (string) or an object reference
-             * (id, collection).
-             */
             @JvmStatic
-            fun ofReference(reference: RecipientReference) = Recipient(reference = reference)
+            fun ofUserReference(userReference: String) = Recipient(userReference = userReference)
+
+            /** A reference to a recipient object. */
+            @JvmStatic
+            fun ofObjectReference(objectReference: ObjectReference) =
+                Recipient(objectReference = objectReference)
         }
 
         /**
@@ -1061,13 +1057,10 @@ private constructor(
         interface Visitor<out T> {
 
             /** An identifier for a user recipient. */
-            fun visitString(string: String): T
+            fun visitUserReference(userReference: String): T
 
-            /**
-             * A reference to a recipient, either a user identifier (string) or an object reference
-             * (id, collection).
-             */
-            fun visitReference(reference: RecipientReference): T
+            /** A reference to a recipient object. */
+            fun visitObjectReference(objectReference: ObjectReference): T
 
             /**
              * Maps an unknown variant of [Recipient] to a value of type [T].
@@ -1091,11 +1084,11 @@ private constructor(
 
                 val bestMatches =
                     sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<RecipientReference>())?.let {
-                                Recipient(reference = it, _json = json)
+                            tryDeserialize(node, jacksonTypeRef<ObjectReference>())?.let {
+                                Recipient(objectReference = it, _json = json)
                             },
                             tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                                Recipient(string = it, _json = json)
+                                Recipient(userReference = it, _json = json)
                             },
                         )
                         .filterNotNull()
@@ -1122,19 +1115,16 @@ private constructor(
                 provider: SerializerProvider,
             ) {
                 when {
-                    value.string != null -> generator.writeObject(value.string)
-                    value.reference != null -> generator.writeObject(value.reference)
+                    value.userReference != null -> generator.writeObject(value.userReference)
+                    value.objectReference != null -> generator.writeObject(value.objectReference)
                     value._json != null -> generator.writeObject(value._json)
                     else -> throw IllegalStateException("Invalid Recipient")
                 }
             }
         }
 
-        /**
-         * A reference to a recipient, either a user identifier (string) or an object reference (id,
-         * collection).
-         */
-        class RecipientReference
+        /** A reference to a recipient object. */
+        class ObjectReference
         private constructor(
             private val id: JsonField<String>,
             private val collection: JsonField<String>,
@@ -1196,13 +1186,11 @@ private constructor(
 
             companion object {
 
-                /**
-                 * Returns a mutable builder for constructing an instance of [RecipientReference].
-                 */
+                /** Returns a mutable builder for constructing an instance of [ObjectReference]. */
                 @JvmStatic fun builder() = Builder()
             }
 
-            /** A builder for [RecipientReference]. */
+            /** A builder for [ObjectReference]. */
             class Builder internal constructor() {
 
                 private var id: JsonField<String> = JsonMissing.of()
@@ -1210,10 +1198,10 @@ private constructor(
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
-                internal fun from(recipientReference: RecipientReference) = apply {
-                    id = recipientReference.id
-                    collection = recipientReference.collection
-                    additionalProperties = recipientReference.additionalProperties.toMutableMap()
+                internal fun from(objectReference: ObjectReference) = apply {
+                    id = objectReference.id
+                    collection = objectReference.collection
+                    additionalProperties = objectReference.additionalProperties.toMutableMap()
                 }
 
                 /** An identifier for the recipient object. */
@@ -1265,17 +1253,17 @@ private constructor(
                 }
 
                 /**
-                 * Returns an immutable instance of [RecipientReference].
+                 * Returns an immutable instance of [ObjectReference].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
                  */
-                fun build(): RecipientReference =
-                    RecipientReference(id, collection, additionalProperties.toMutableMap())
+                fun build(): ObjectReference =
+                    ObjectReference(id, collection, additionalProperties.toMutableMap())
             }
 
             private var validated: Boolean = false
 
-            fun validate(): RecipientReference = apply {
+            fun validate(): ObjectReference = apply {
                 if (validated) {
                     return@apply
                 }
@@ -1309,7 +1297,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is RecipientReference && id == other.id && collection == other.collection && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is ObjectReference && id == other.id && collection == other.collection && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
@@ -1319,7 +1307,7 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "RecipientReference{id=$id, collection=$collection, additionalProperties=$additionalProperties}"
+                "ObjectReference{id=$id, collection=$collection, additionalProperties=$additionalProperties}"
         }
     }
 

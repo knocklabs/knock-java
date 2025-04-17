@@ -40,37 +40,46 @@ private constructor(
     /** The cursor to fetch entries before. */
     fun before(): Optional<String> = Optional.ofNullable(before)
 
-    /** The unique identifier for the channel. */
+    /** Limits the results to items with the corresponding channel id. */
     fun channelId(): Optional<String> = Optional.ofNullable(channelId)
 
-    /** The engagement status to filter messages by. */
+    /**
+     * One or more of `read`, `seen`, `interacted`, `link_clicked`, `archived`. Limits results to
+     * messages with the given engagement status(es).
+     */
     fun engagementStatus(): Optional<List<EngagementStatus>> = Optional.ofNullable(engagementStatus)
 
-    /** The message IDs to filter messages by. */
+    /**
+     * Limits the results to only the message ids given (max 50). Note: when using this option, the
+     * results will be subject to any other filters applied to the query.
+     */
     fun messageIds(): Optional<List<String>> = Optional.ofNullable(messageIds)
 
     /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
-    /** The source of the message (workflow key). */
+    /** Limits the results to only items of the source workflow. */
     fun source(): Optional<String> = Optional.ofNullable(source)
 
-    /** The delivery status to filter messages by. */
+    /**
+     * One or more of `queued`, `sent`, `delivered`, `delivery_attempted`, `undelivered`, `bounced`,
+     * `not_sent`. Limits results to messages with the given delivery status(es).
+     */
     fun status(): Optional<List<Status>> = Optional.ofNullable(status)
 
-    /** The unique identifier for the tenant. */
+    /** Limits the results to items with the corresponding tenant, or where the tenant is empty. */
     fun tenant(): Optional<String> = Optional.ofNullable(tenant)
 
-    /** The trigger data to filter messages by. Must be a valid JSON object. */
+    /** Limits the results to only items that were generated with the given data. */
     fun triggerData(): Optional<String> = Optional.ofNullable(triggerData)
 
-    /** The workflow categories to filter messages by. */
+    /** Limits the results to only items related to any of the provided categories. */
     fun workflowCategories(): Optional<List<String>> = Optional.ofNullable(workflowCategories)
 
-    /** The workflow recipient run ID to filter messages by. */
+    /** Limits the results to messages for a specific recipient's workflow run. */
     fun workflowRecipientRunId(): Optional<String> = Optional.ofNullable(workflowRecipientRunId)
 
-    /** The workflow run ID to filter messages by. */
+    /** Limits the results to messages triggered by the top-level workflow run ID. */
     fun workflowRunId(): Optional<String> = Optional.ofNullable(workflowRunId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -137,13 +146,16 @@ private constructor(
         /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
-        /** The unique identifier for the channel. */
+        /** Limits the results to items with the corresponding channel id. */
         fun channelId(channelId: String?) = apply { this.channelId = channelId }
 
         /** Alias for calling [Builder.channelId] with `channelId.orElse(null)`. */
         fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
-        /** The engagement status to filter messages by. */
+        /**
+         * One or more of `read`, `seen`, `interacted`, `link_clicked`, `archived`. Limits results
+         * to messages with the given engagement status(es).
+         */
         fun engagementStatus(engagementStatus: List<EngagementStatus>?) = apply {
             this.engagementStatus = engagementStatus?.toMutableList()
         }
@@ -162,7 +174,10 @@ private constructor(
                 (this.engagementStatus ?: mutableListOf()).apply { add(engagementStatus) }
         }
 
-        /** The message IDs to filter messages by. */
+        /**
+         * Limits the results to only the message ids given (max 50). Note: when using this option,
+         * the results will be subject to any other filters applied to the query.
+         */
         fun messageIds(messageIds: List<String>?) = apply {
             this.messageIds = messageIds?.toMutableList()
         }
@@ -192,13 +207,16 @@ private constructor(
         /** Alias for calling [Builder.pageSize] with `pageSize.orElse(null)`. */
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
-        /** The source of the message (workflow key). */
+        /** Limits the results to only items of the source workflow. */
         fun source(source: String?) = apply { this.source = source }
 
         /** Alias for calling [Builder.source] with `source.orElse(null)`. */
         fun source(source: Optional<String>) = source(source.getOrNull())
 
-        /** The delivery status to filter messages by. */
+        /**
+         * One or more of `queued`, `sent`, `delivered`, `delivery_attempted`, `undelivered`,
+         * `bounced`, `not_sent`. Limits results to messages with the given delivery status(es).
+         */
         fun status(status: List<Status>?) = apply { this.status = status?.toMutableList() }
 
         /** Alias for calling [Builder.status] with `status.orElse(null)`. */
@@ -213,19 +231,21 @@ private constructor(
             this.status = (this.status ?: mutableListOf()).apply { add(status) }
         }
 
-        /** The unique identifier for the tenant. */
+        /**
+         * Limits the results to items with the corresponding tenant, or where the tenant is empty.
+         */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
         /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
-        /** The trigger data to filter messages by. Must be a valid JSON object. */
+        /** Limits the results to only items that were generated with the given data. */
         fun triggerData(triggerData: String?) = apply { this.triggerData = triggerData }
 
         /** Alias for calling [Builder.triggerData] with `triggerData.orElse(null)`. */
         fun triggerData(triggerData: Optional<String>) = triggerData(triggerData.getOrNull())
 
-        /** The workflow categories to filter messages by. */
+        /** Limits the results to only items related to any of the provided categories. */
         fun workflowCategories(workflowCategories: List<String>?) = apply {
             this.workflowCategories = workflowCategories?.toMutableList()
         }
@@ -246,7 +266,7 @@ private constructor(
                 (workflowCategories ?: mutableListOf()).apply { add(workflowCategory) }
         }
 
-        /** The workflow recipient run ID to filter messages by. */
+        /** Limits the results to messages for a specific recipient's workflow run. */
         fun workflowRecipientRunId(workflowRecipientRunId: String?) = apply {
             this.workflowRecipientRunId = workflowRecipientRunId
         }
@@ -258,7 +278,7 @@ private constructor(
         fun workflowRecipientRunId(workflowRecipientRunId: Optional<String>) =
             workflowRecipientRunId(workflowRecipientRunId.getOrNull())
 
-        /** The workflow run ID to filter messages by. */
+        /** Limits the results to messages triggered by the top-level workflow run ID. */
         fun workflowRunId(workflowRunId: String?) = apply { this.workflowRunId = workflowRunId }
 
         /** Alias for calling [Builder.workflowRunId] with `workflowRunId.orElse(null)`. */
