@@ -6,6 +6,7 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
+import app.knock.api.core.checkRequired
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
@@ -23,8 +24,8 @@ import kotlin.jvm.optionals.getOrNull
 class InlineObjectRequest
 private constructor(
     private val id: JsonField<String>,
-    private val channelData: JsonField<InlineChannelDataRequest>,
     private val collection: JsonField<String>,
+    private val channelData: JsonField<InlineChannelDataRequest>,
     private val createdAt: JsonField<OffsetDateTime>,
     private val preferences: JsonField<InlinePreferenceSetRequest>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -33,27 +34,35 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("channel_data")
-        @ExcludeMissing
-        channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of(),
         @JsonProperty("collection")
         @ExcludeMissing
         collection: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("channel_data")
+        @ExcludeMissing
+        channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of(),
         @JsonProperty("created_at")
         @ExcludeMissing
         createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("preferences")
         @ExcludeMissing
         preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of(),
-    ) : this(id, channelData, collection, createdAt, preferences, mutableMapOf())
+    ) : this(id, collection, channelData, createdAt, preferences, mutableMapOf())
 
     /**
      * Unique identifier for the object.
      *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun id(): Optional<String> = id.getOptional("id")
+    fun id(): String = id.getRequired("id")
+
+    /**
+     * The collection this object belongs to.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun collection(): String = collection.getRequired("collection")
 
     /**
      * A request to set channel data for a type of channel inline.
@@ -62,14 +71,6 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun channelData(): Optional<InlineChannelDataRequest> = channelData.getOptional("channel_data")
-
-    /**
-     * The collection this object belongs to.
-     *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun collection(): Optional<String> = collection.getOptional("collection")
 
     /**
      * Timestamp when the resource was created.
@@ -95,6 +96,13 @@ private constructor(
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
     /**
+     * Returns the raw JSON value of [collection].
+     *
+     * Unlike [collection], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("collection") @ExcludeMissing fun _collection(): JsonField<String> = collection
+
+    /**
      * Returns the raw JSON value of [channelData].
      *
      * Unlike [channelData], this method doesn't throw if the JSON field has an unexpected type.
@@ -102,13 +110,6 @@ private constructor(
     @JsonProperty("channel_data")
     @ExcludeMissing
     fun _channelData(): JsonField<InlineChannelDataRequest> = channelData
-
-    /**
-     * Returns the raw JSON value of [collection].
-     *
-     * Unlike [collection], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("collection") @ExcludeMissing fun _collection(): JsonField<String> = collection
 
     /**
      * Returns the raw JSON value of [createdAt].
@@ -142,16 +143,24 @@ private constructor(
 
     companion object {
 
-        /** Returns a mutable builder for constructing an instance of [InlineObjectRequest]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [InlineObjectRequest].
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .collection()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [InlineObjectRequest]. */
     class Builder internal constructor() {
 
-        private var id: JsonField<String> = JsonMissing.of()
+        private var id: JsonField<String>? = null
+        private var collection: JsonField<String>? = null
         private var channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of()
-        private var collection: JsonField<String> = JsonMissing.of()
         private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -159,8 +168,8 @@ private constructor(
         @JvmSynthetic
         internal fun from(inlineObjectRequest: InlineObjectRequest) = apply {
             id = inlineObjectRequest.id
-            channelData = inlineObjectRequest.channelData
             collection = inlineObjectRequest.collection
+            channelData = inlineObjectRequest.channelData
             createdAt = inlineObjectRequest.createdAt
             preferences = inlineObjectRequest.preferences
             additionalProperties = inlineObjectRequest.additionalProperties.toMutableMap()
@@ -176,6 +185,18 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
+
+        /** The collection this object belongs to. */
+        fun collection(collection: String) = collection(JsonField.of(collection))
+
+        /**
+         * Sets [Builder.collection] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.collection] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun collection(collection: JsonField<String>) = apply { this.collection = collection }
 
         /** A request to set channel data for a type of channel inline. */
         fun channelData(channelData: InlineChannelDataRequest?) =
@@ -195,18 +216,6 @@ private constructor(
         fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
             this.channelData = channelData
         }
-
-        /** The collection this object belongs to. */
-        fun collection(collection: String) = collection(JsonField.of(collection))
-
-        /**
-         * Sets [Builder.collection] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.collection] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun collection(collection: JsonField<String>) = apply { this.collection = collection }
 
         /** Timestamp when the resource was created. */
         fun createdAt(createdAt: OffsetDateTime?) = createdAt(JsonField.ofNullable(createdAt))
@@ -265,12 +274,20 @@ private constructor(
          * Returns an immutable instance of [InlineObjectRequest].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .id()
+         * .collection()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): InlineObjectRequest =
             InlineObjectRequest(
-                id,
+                checkRequired("id", id),
+                checkRequired("collection", collection),
                 channelData,
-                collection,
                 createdAt,
                 preferences,
                 additionalProperties.toMutableMap(),
@@ -285,8 +302,8 @@ private constructor(
         }
 
         id()
-        channelData().ifPresent { it.validate() }
         collection()
+        channelData().ifPresent { it.validate() }
         createdAt()
         preferences().ifPresent { it.validate() }
         validated = true
@@ -308,8 +325,8 @@ private constructor(
     @JvmSynthetic
     internal fun validity(): Int =
         (if (id.asKnown().isPresent) 1 else 0) +
-            (channelData.asKnown().getOrNull()?.validity() ?: 0) +
             (if (collection.asKnown().isPresent) 1 else 0) +
+            (channelData.asKnown().getOrNull()?.validity() ?: 0) +
             (if (createdAt.asKnown().isPresent) 1 else 0) +
             (preferences.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -318,15 +335,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is InlineObjectRequest && id == other.id && channelData == other.channelData && collection == other.collection && createdAt == other.createdAt && preferences == other.preferences && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is InlineObjectRequest && id == other.id && collection == other.collection && channelData == other.channelData && createdAt == other.createdAt && preferences == other.preferences && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, channelData, collection, createdAt, preferences, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, collection, channelData, createdAt, preferences, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "InlineObjectRequest{id=$id, channelData=$channelData, collection=$collection, createdAt=$createdAt, preferences=$preferences, additionalProperties=$additionalProperties}"
+        "InlineObjectRequest{id=$id, collection=$collection, channelData=$channelData, createdAt=$createdAt, preferences=$preferences, additionalProperties=$additionalProperties}"
 }

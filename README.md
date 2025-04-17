@@ -45,10 +45,10 @@ KnockClient client = KnockOkHttpClient.fromEnv();
 
 WorkflowTriggerParams params = WorkflowTriggerParams.builder()
     .key("dinosaurs-loose")
+    .addRecipient("dnedry")
     .data(WorkflowTriggerParams.Data.builder()
         .putAdditionalProperty("dinosaur", JsonValue.from("triceratops"))
         .build())
-    .addRecipient("dnedry")
     .build();
 WorkflowTriggerResponse response = client.workflows().trigger(params);
 ```
@@ -131,10 +131,10 @@ KnockClient client = KnockOkHttpClient.fromEnv();
 
 WorkflowTriggerParams params = WorkflowTriggerParams.builder()
     .key("dinosaurs-loose")
+    .addRecipient("dnedry")
     .data(WorkflowTriggerParams.Data.builder()
         .putAdditionalProperty("dinosaur", JsonValue.from("triceratops"))
         .build())
-    .addRecipient("dnedry")
     .build();
 CompletableFuture<WorkflowTriggerResponse> response = client.async().workflows().trigger(params);
 ```
@@ -154,10 +154,10 @@ KnockClientAsync client = KnockOkHttpClientAsync.fromEnv();
 
 WorkflowTriggerParams params = WorkflowTriggerParams.builder()
     .key("dinosaurs-loose")
+    .addRecipient("dnedry")
     .data(WorkflowTriggerParams.Data.builder()
         .putAdditionalProperty("dinosaur", JsonValue.from("triceratops"))
         .build())
-    .addRecipient("dnedry")
     .build();
 CompletableFuture<WorkflowTriggerResponse> response = client.workflows().trigger(params);
 ```
@@ -437,10 +437,10 @@ import app.knock.api.models.workflows.WorkflowTriggerParams;
 
 WorkflowTriggerParams params = WorkflowTriggerParams.builder()
     .key("dinosaurs-loose")
+    .recipients(JsonValue.from(42))
     .data(WorkflowTriggerParams.Data.builder()
         .putAdditionalProperty("dinosaur", JsonValue.from("triceratops"))
         .build())
-    .recipients(JsonValue.from(42))
     .build();
 ```
 
@@ -492,6 +492,7 @@ import app.knock.api.core.JsonMissing;
 import app.knock.api.models.workflows.WorkflowTriggerParams;
 
 WorkflowTriggerParams params = WorkflowTriggerParams.builder()
+    .addRecipient("jhammond")
     .key(JsonMissing.of())
     .build();
 ```
@@ -535,19 +536,19 @@ import app.knock.api.core.JsonField;
 import app.knock.api.models.recipients.RecipientRequest;
 import java.util.Optional;
 
-JsonField<RecipientRequest> actor = client.workflows().trigger(params)._actor();
+JsonField<List<RecipientRequest>> recipients = client.workflows().trigger(params)._recipients();
 
-if (actor.isMissing()) {
+if (recipients.isMissing()) {
   // The property is absent from the JSON response
-} else if (actor.isNull()) {
+} else if (recipients.isNull()) {
   // The property was set to literal null
 } else {
   // Check if value was provided as a string
   // Other methods include `asNumber()`, `asBoolean()`, etc.
-  Optional<String> jsonString = actor.asString();
+  Optional<String> jsonString = recipients.asString();
 
   // Try to deserialize into a custom type
-  MyClass myObject = actor.asUnknown().orElseThrow().convert(MyClass.class);
+  MyClass myObject = recipients.asUnknown().orElseThrow().convert(MyClass.class);
 }
 ```
 

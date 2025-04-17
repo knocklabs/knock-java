@@ -111,7 +111,7 @@ internal class ObjectDeleteSubscriptionsParamsTest {
             ObjectDeleteSubscriptionsParams.builder()
                 .collection("collection")
                 .objectId("object_id")
-                .addRecipient(InlineIdentifyUserRequest.builder().build())
+                .addRecipient(InlineIdentifyUserRequest.builder().id("user_1").build())
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("collection")
@@ -313,14 +313,16 @@ internal class ObjectDeleteSubscriptionsParamsTest {
             ObjectDeleteSubscriptionsParams.builder()
                 .collection("collection")
                 .objectId("object_id")
-                .addRecipient(InlineIdentifyUserRequest.builder().build())
+                .addRecipient(InlineIdentifyUserRequest.builder().id("user_1").build())
                 .build()
 
         val body = params._body()
 
         assertThat(body.recipients())
             .containsExactly(
-                RecipientRequest.ofInlineIdentifyUser(InlineIdentifyUserRequest.builder().build())
+                RecipientRequest.ofInlineIdentifyUser(
+                    InlineIdentifyUserRequest.builder().id("user_1").build()
+                )
             )
     }
 }

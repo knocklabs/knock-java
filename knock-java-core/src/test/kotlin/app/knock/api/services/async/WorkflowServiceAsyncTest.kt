@@ -55,6 +55,7 @@ internal class WorkflowServiceAsyncTest {
             workflowServiceAsync.trigger(
                 WorkflowTriggerParams.builder()
                     .key("key")
+                    .addRecipient("jhammond")
                     .actor("string")
                     .cancellationKey(null)
                     .data(
@@ -66,7 +67,6 @@ internal class WorkflowServiceAsyncTest {
                             .putAdditionalProperty("welcome_message", JsonValue.from("bar"))
                             .build()
                     )
-                    .addRecipient("jhammond")
                     .tenant("acme_corp")
                     .build()
             )

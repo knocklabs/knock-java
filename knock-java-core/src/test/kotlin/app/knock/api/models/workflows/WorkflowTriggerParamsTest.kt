@@ -5,7 +5,6 @@ package app.knock.api.models.workflows
 import app.knock.api.core.JsonValue
 import app.knock.api.models.recipients.RecipientRequest
 import app.knock.api.models.tenants.InlineTenantRequest
-import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -15,6 +14,7 @@ internal class WorkflowTriggerParamsTest {
     fun create() {
         WorkflowTriggerParams.builder()
             .key("key")
+            .addRecipient("jhammond")
             .actor("string")
             .cancellationKey(null)
             .data(
@@ -26,14 +26,13 @@ internal class WorkflowTriggerParamsTest {
                     .putAdditionalProperty("welcome_message", JsonValue.from("bar"))
                     .build()
             )
-            .addRecipient("jhammond")
             .tenant("acme_corp")
             .build()
     }
 
     @Test
     fun pathParams() {
-        val params = WorkflowTriggerParams.builder().key("key").build()
+        val params = WorkflowTriggerParams.builder().key("key").addRecipient("jhammond").build()
 
         assertThat(params._pathParam(0)).isEqualTo("key")
         // out-of-bound path param
@@ -45,6 +44,7 @@ internal class WorkflowTriggerParamsTest {
         val params =
             WorkflowTriggerParams.builder()
                 .key("key")
+                .addRecipient("jhammond")
                 .actor("string")
                 .cancellationKey(null)
                 .data(
@@ -56,12 +56,12 @@ internal class WorkflowTriggerParamsTest {
                         .putAdditionalProperty("welcome_message", JsonValue.from("bar"))
                         .build()
                 )
-                .addRecipient("jhammond")
                 .tenant("acme_corp")
                 .build()
 
         val body = params._body()
 
+        assertThat(body.recipients()).containsExactly(RecipientRequest.ofString("jhammond"))
         assertThat(body.actor()).contains(RecipientRequest.ofString("string"))
         assertThat(body.cancellationKey()).isEmpty
         assertThat(body.data())
@@ -74,15 +74,15 @@ internal class WorkflowTriggerParamsTest {
                     .putAdditionalProperty("welcome_message", JsonValue.from("bar"))
                     .build()
             )
-        assertThat(body.recipients().getOrNull())
-            .containsExactly(RecipientRequest.ofString("jhammond"))
         assertThat(body.tenant()).contains(InlineTenantRequest.ofString("acme_corp"))
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = WorkflowTriggerParams.builder().key("key").build()
+        val params = WorkflowTriggerParams.builder().key("key").addRecipient("jhammond").build()
 
         val body = params._body()
+
+        assertThat(body.recipients()).containsExactly(RecipientRequest.ofString("jhammond"))
     }
 }

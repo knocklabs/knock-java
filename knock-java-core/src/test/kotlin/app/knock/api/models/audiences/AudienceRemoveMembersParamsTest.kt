@@ -122,7 +122,7 @@ internal class AudienceRemoveMembersParamsTest {
                 .key("key")
                 .addMember(
                     AudienceRemoveMembersParams.Member.builder()
-                        .user(InlineIdentifyUserRequest.builder().build())
+                        .user(InlineIdentifyUserRequest.builder().id("user_1").build())
                         .build()
                 )
                 .build()
@@ -343,7 +343,7 @@ internal class AudienceRemoveMembersParamsTest {
                 .key("key")
                 .addMember(
                     AudienceRemoveMembersParams.Member.builder()
-                        .user(InlineIdentifyUserRequest.builder().build())
+                        .user(InlineIdentifyUserRequest.builder().id("user_1").build())
                         .build()
                 )
                 .build()
@@ -353,7 +353,7 @@ internal class AudienceRemoveMembersParamsTest {
         assertThat(body.members())
             .containsExactly(
                 AudienceRemoveMembersParams.Member.builder()
-                    .user(InlineIdentifyUserRequest.builder().build())
+                    .user(InlineIdentifyUserRequest.builder().id("user_1").build())
                     .build()
             )
     }

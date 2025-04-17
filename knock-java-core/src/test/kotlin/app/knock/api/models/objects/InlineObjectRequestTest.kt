@@ -18,6 +18,7 @@ internal class InlineObjectRequestTest {
         val inlineObjectRequest =
             InlineObjectRequest.builder()
                 .id("project_1")
+                .collection("projects")
                 .channelData(
                     InlineChannelDataRequest.builder()
                         .putAdditionalProperty(
@@ -28,7 +29,6 @@ internal class InlineObjectRequestTest {
                         )
                         .build()
                 )
-                .collection("projects")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .preferences(
                     InlinePreferenceSetRequest.builder()
@@ -98,7 +98,8 @@ internal class InlineObjectRequestTest {
                 )
                 .build()
 
-        assertThat(inlineObjectRequest.id()).contains("project_1")
+        assertThat(inlineObjectRequest.id()).isEqualTo("project_1")
+        assertThat(inlineObjectRequest.collection()).isEqualTo("projects")
         assertThat(inlineObjectRequest.channelData())
             .contains(
                 InlineChannelDataRequest.builder()
@@ -108,7 +109,6 @@ internal class InlineObjectRequestTest {
                     )
                     .build()
             )
-        assertThat(inlineObjectRequest.collection()).contains("projects")
         assertThat(inlineObjectRequest.createdAt())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(inlineObjectRequest.preferences())
@@ -186,6 +186,7 @@ internal class InlineObjectRequestTest {
         val inlineObjectRequest =
             InlineObjectRequest.builder()
                 .id("project_1")
+                .collection("projects")
                 .channelData(
                     InlineChannelDataRequest.builder()
                         .putAdditionalProperty(
@@ -196,7 +197,6 @@ internal class InlineObjectRequestTest {
                         )
                         .build()
                 )
-                .collection("projects")
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .preferences(
                     InlinePreferenceSetRequest.builder()

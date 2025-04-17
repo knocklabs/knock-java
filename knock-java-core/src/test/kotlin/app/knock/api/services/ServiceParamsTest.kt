@@ -73,6 +73,7 @@ internal class ServiceParamsTest {
         workflowService.trigger(
             WorkflowTriggerParams.builder()
                 .key("key")
+                .addRecipient("jhammond")
                 .actor("string")
                 .cancellationKey(null)
                 .data(
@@ -84,7 +85,6 @@ internal class ServiceParamsTest {
                         .putAdditionalProperty("welcome_message", JsonValue.from("bar"))
                         .build()
                 )
-                .addRecipient("jhammond")
                 .tenant("acme_corp")
                 .putAdditionalHeader("Secret-Header", "42")
                 .putAdditionalQueryParam("secret_query_param", "42")
