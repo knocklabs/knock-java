@@ -54,8 +54,8 @@ private constructor(
     fun channelId(): Optional<String> = Optional.ofNullable(channelId)
 
     /**
-     * One or more of `read`, `seen`, `interacted`, `link_clicked`, `archived`. Limits results to
-     * messages with the given engagement status(es).
+     * One or more engagement statuses. Limits results to messages with the given engagement
+     * status(es).
      */
     fun engagementStatus(): Optional<List<EngagementStatus>> = Optional.ofNullable(engagementStatus)
 
@@ -72,8 +72,7 @@ private constructor(
     fun source(): Optional<String> = Optional.ofNullable(source)
 
     /**
-     * One or more of `queued`, `sent`, `delivered`, `delivery_attempted`, `undelivered`, `bounced`,
-     * `not_sent`. Limits results to messages with the given delivery status(es).
+     * One or more delivery statuses. Limits results to messages with the given delivery status(es).
      */
     fun status(): Optional<List<Status>> = Optional.ofNullable(status)
 
@@ -177,8 +176,8 @@ private constructor(
         fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
         /**
-         * One or more of `read`, `seen`, `interacted`, `link_clicked`, `archived`. Limits results
-         * to messages with the given engagement status(es).
+         * One or more engagement statuses. Limits results to messages with the given engagement
+         * status(es).
          */
         fun engagementStatus(engagementStatus: List<EngagementStatus>?) = apply {
             this.engagementStatus = engagementStatus?.toMutableList()
@@ -238,8 +237,8 @@ private constructor(
         fun source(source: Optional<String>) = source(source.getOrNull())
 
         /**
-         * One or more of `queued`, `sent`, `delivered`, `delivery_attempted`, `undelivered`,
-         * `bounced`, `not_sent`. Limits results to messages with the given delivery status(es).
+         * One or more delivery statuses. Limits results to messages with the given delivery
+         * status(es).
          */
         fun status(status: List<Status>?) = apply { this.status = status?.toMutableList() }
 

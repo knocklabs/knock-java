@@ -102,7 +102,7 @@ private constructor(
     fun id(): String = id.getRequired("id")
 
     /**
-     * The type name of the schema.
+     * The typename of the schema.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -142,7 +142,7 @@ private constructor(
     fun processedRows(): Long = processedRows.getRequired("processed_rows")
 
     /**
-     * The status of the bulk operation. One of: queued, processing, completed, failed.
+     * The status of the bulk operation.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -402,7 +402,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        /** The type name of the schema. */
+        /** The typename of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -468,7 +468,7 @@ private constructor(
             this.processedRows = processedRows
         }
 
-        /** The status of the bulk operation. One of: queued, processing, completed, failed. */
+        /** The status of the bulk operation. */
         fun status(status: Status) = status(JsonField.of(status))
 
         /**
@@ -702,7 +702,7 @@ private constructor(
             (if (failedAt.asKnown().isPresent) 1 else 0) +
             (if (startedAt.asKnown().isPresent) 1 else 0)
 
-    /** The status of the bulk operation. One of: queued, processing, completed, failed. */
+    /** The status of the bulk operation. */
     class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**

@@ -235,8 +235,8 @@ private constructor(
          */
         fun actor(actor: JsonField<RecipientRequest>) = apply { body.actor(actor) }
 
-        /** Alias for calling [actor] with `RecipientRequest.ofString(string)`. */
-        fun actor(string: String) = apply { body.actor(string) }
+        /** Alias for calling [actor] with `RecipientRequest.ofUserRecipient(userRecipient)`. */
+        fun actor(userRecipient: String) = apply { body.actor(userRecipient) }
 
         /**
          * Alias for calling [actor] with
@@ -726,8 +726,9 @@ private constructor(
              */
             fun actor(actor: JsonField<RecipientRequest>) = apply { this.actor = actor }
 
-            /** Alias for calling [actor] with `RecipientRequest.ofString(string)`. */
-            fun actor(string: String) = actor(RecipientRequest.ofString(string))
+            /** Alias for calling [actor] with `RecipientRequest.ofUserRecipient(userRecipient)`. */
+            fun actor(userRecipient: String) =
+                actor(RecipientRequest.ofUserRecipient(userRecipient))
 
             /**
              * Alias for calling [actor] with

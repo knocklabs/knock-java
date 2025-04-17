@@ -31,7 +31,10 @@ private constructor(
     /** The unique identifier for the tenant. */
     fun string(): Optional<String> = Optional.ofNullable(string)
 
-    /** A request to get a tenant. */
+    /**
+     * A tenant to be set in the system. You can supply any additional properties on the tenant
+     * object.
+     */
     fun tenantRequest(): Optional<TenantRequest> = Optional.ofNullable(tenantRequest)
 
     fun isString(): Boolean = string != null
@@ -41,7 +44,10 @@ private constructor(
     /** The unique identifier for the tenant. */
     fun asString(): String = string.getOrThrow("string")
 
-    /** A request to get a tenant. */
+    /**
+     * A tenant to be set in the system. You can supply any additional properties on the tenant
+     * object.
+     */
     fun asTenantRequest(): TenantRequest = tenantRequest.getOrThrow("tenantRequest")
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
@@ -121,7 +127,10 @@ private constructor(
         /** The unique identifier for the tenant. */
         @JvmStatic fun ofString(string: String) = InlineTenantRequest(string = string)
 
-        /** A request to get a tenant. */
+        /**
+         * A tenant to be set in the system. You can supply any additional properties on the tenant
+         * object.
+         */
         @JvmStatic
         fun ofTenantRequest(tenantRequest: TenantRequest) =
             InlineTenantRequest(tenantRequest = tenantRequest)
@@ -136,7 +145,10 @@ private constructor(
         /** The unique identifier for the tenant. */
         fun visitString(string: String): T
 
-        /** A request to get a tenant. */
+        /**
+         * A tenant to be set in the system. You can supply any additional properties on the tenant
+         * object.
+         */
         fun visitTenantRequest(tenantRequest: TenantRequest): T
 
         /**

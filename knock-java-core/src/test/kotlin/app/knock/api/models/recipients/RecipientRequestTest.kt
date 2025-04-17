@@ -18,20 +18,20 @@ import org.junit.jupiter.api.assertThrows
 internal class RecipientRequestTest {
 
     @Test
-    fun ofString() {
-        val string = "string"
+    fun ofUserRecipient() {
+        val userRecipient = "string"
 
-        val recipientRequest = RecipientRequest.ofString(string)
+        val recipientRequest = RecipientRequest.ofUserRecipient(userRecipient)
 
-        assertThat(recipientRequest.string()).contains(string)
+        assertThat(recipientRequest.userRecipient()).contains(userRecipient)
         assertThat(recipientRequest.inlineIdentifyUser()).isEmpty
         assertThat(recipientRequest.inlineObject()).isEmpty
     }
 
     @Test
-    fun ofStringRoundtrip() {
+    fun ofUserRecipientRoundtrip() {
         val jsonMapper = jsonMapper()
-        val recipientRequest = RecipientRequest.ofString("string")
+        val recipientRequest = RecipientRequest.ofUserRecipient("string")
 
         val roundtrippedRecipientRequest =
             jsonMapper.readValue(
@@ -128,7 +128,7 @@ internal class RecipientRequestTest {
 
         val recipientRequest = RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)
 
-        assertThat(recipientRequest.string()).isEmpty
+        assertThat(recipientRequest.userRecipient()).isEmpty
         assertThat(recipientRequest.inlineIdentifyUser()).contains(inlineIdentifyUser)
         assertThat(recipientRequest.inlineObject()).isEmpty
     }
@@ -318,7 +318,7 @@ internal class RecipientRequestTest {
 
         val recipientRequest = RecipientRequest.ofInlineObject(inlineObject)
 
-        assertThat(recipientRequest.string()).isEmpty
+        assertThat(recipientRequest.userRecipient()).isEmpty
         assertThat(recipientRequest.inlineIdentifyUser()).isEmpty
         assertThat(recipientRequest.inlineObject()).contains(inlineObject)
     }

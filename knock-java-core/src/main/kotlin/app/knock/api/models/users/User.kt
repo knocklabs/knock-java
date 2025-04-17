@@ -18,7 +18,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A user object. */
+/**
+ * A user who can receive notifications in Knock. They are always referenced by your internal
+ * identifier.
+ */
 class User
 private constructor(
     private val id: JsonField<String>,
@@ -64,7 +67,7 @@ private constructor(
     )
 
     /**
-     * The unique identifier for the user.
+     * The ID for the user that you set when identifying them in Knock.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -72,7 +75,7 @@ private constructor(
     fun id(): String = id.getRequired("id")
 
     /**
-     * The type name of the schema.
+     * The typename of the schema.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -96,7 +99,7 @@ private constructor(
     fun avatar(): Optional<String> = avatar.getOptional("avatar")
 
     /**
-     * Timestamp when the resource was created.
+     * The creation date of the user from your system.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -259,7 +262,7 @@ private constructor(
             additionalProperties = user.additionalProperties.toMutableMap()
         }
 
-        /** The unique identifier for the user. */
+        /** The ID for the user that you set when identifying them in Knock. */
         fun id(id: String) = id(JsonField.of(id))
 
         /**
@@ -270,7 +273,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        /** The type name of the schema. */
+        /** The typename of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -308,7 +311,7 @@ private constructor(
          */
         fun avatar(avatar: JsonField<String>) = apply { this.avatar = avatar }
 
-        /** Timestamp when the resource was created. */
+        /** The creation date of the user from your system. */
         fun createdAt(createdAt: OffsetDateTime?) = createdAt(JsonField.ofNullable(createdAt))
 
         /** Alias for calling [Builder.createdAt] with `createdAt.orElse(null)`. */

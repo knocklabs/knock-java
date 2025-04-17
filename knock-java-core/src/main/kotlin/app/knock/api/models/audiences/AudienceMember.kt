@@ -42,7 +42,7 @@ private constructor(
     ) : this(_typename, addedAt, user, userId, tenant, mutableMapOf())
 
     /**
-     * The type name of the schema.
+     * The typename of the schema.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -58,7 +58,8 @@ private constructor(
     fun addedAt(): OffsetDateTime = addedAt.getRequired("added_at")
 
     /**
-     * A user object.
+     * A user who can receive notifications in Knock. They are always referenced by your internal
+     * identifier.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -66,7 +67,7 @@ private constructor(
     fun user(): User = user.getRequired("user")
 
     /**
-     * The unique identifier for the user.
+     * The ID for the user that you set when identifying them in Knock.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -164,7 +165,7 @@ private constructor(
             additionalProperties = audienceMember.additionalProperties.toMutableMap()
         }
 
-        /** The type name of the schema. */
+        /** The typename of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -188,7 +189,10 @@ private constructor(
          */
         fun addedAt(addedAt: JsonField<OffsetDateTime>) = apply { this.addedAt = addedAt }
 
-        /** A user object. */
+        /**
+         * A user who can receive notifications in Knock. They are always referenced by your
+         * internal identifier.
+         */
         fun user(user: User) = user(JsonField.of(user))
 
         /**
@@ -199,7 +203,7 @@ private constructor(
          */
         fun user(user: JsonField<User>) = apply { this.user = user }
 
-        /** The unique identifier for the user. */
+        /** The ID for the user that you set when identifying them in Knock. */
         fun userId(userId: String) = userId(JsonField.of(userId))
 
         /**

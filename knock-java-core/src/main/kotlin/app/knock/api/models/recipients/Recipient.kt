@@ -20,7 +20,7 @@ import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.util.Objects
 import java.util.Optional
 
-/** A recipient, which is either a user or an object. */
+/** A recipient of a notification, which is either a user or an object. */
 @JsonDeserialize(using = Recipient.Deserializer::class)
 @JsonSerialize(using = Recipient.Serializer::class)
 class Recipient
@@ -30,7 +30,10 @@ private constructor(
     private val _json: JsonValue? = null,
 ) {
 
-    /** A user object. */
+    /**
+     * A user who can receive notifications in Knock. They are always referenced by your internal
+     * identifier.
+     */
     fun user(): Optional<User> = Optional.ofNullable(user)
 
     /** A custom object entity which belongs to a collection. */
@@ -40,7 +43,10 @@ private constructor(
 
     fun isObject(): Boolean = object_ != null
 
-    /** A user object. */
+    /**
+     * A user who can receive notifications in Knock. They are always referenced by your internal
+     * identifier.
+     */
     fun asUser(): User = user.getOrThrow("user")
 
     /** A custom object entity which belongs to a collection. */
@@ -121,7 +127,10 @@ private constructor(
 
     companion object {
 
-        /** A user object. */
+        /**
+         * A user who can receive notifications in Knock. They are always referenced by your
+         * internal identifier.
+         */
         @JvmStatic fun ofUser(user: User) = Recipient(user = user)
 
         /** A custom object entity which belongs to a collection. */
@@ -131,7 +140,10 @@ private constructor(
     /** An interface that defines how to map each variant of [Recipient] to a value of type [T]. */
     interface Visitor<out T> {
 
-        /** A user object. */
+        /**
+         * A user who can receive notifications in Knock. They are always referenced by your
+         * internal identifier.
+         */
         fun visitUser(user: User): T
 
         /** A custom object entity which belongs to a collection. */

@@ -126,7 +126,7 @@ private constructor(
     fun id(): String = id.getRequired("id")
 
     /**
-     * The type name of the schema.
+     * The typename of the schema.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -488,7 +488,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        /** The type name of the schema. */
+        /** The typename of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -2287,7 +2287,7 @@ private constructor(
         ) : this(_typename, categories, key, versionId, mutableMapOf())
 
         /**
-         * The type name of the schema.
+         * The typename of the schema.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -2394,7 +2394,7 @@ private constructor(
                 additionalProperties = source.additionalProperties.toMutableMap()
             }
 
-            /** The type name of the schema. */
+            /** The typename of the schema. */
             fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
             /**

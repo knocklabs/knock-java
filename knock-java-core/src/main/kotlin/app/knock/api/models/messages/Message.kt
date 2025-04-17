@@ -138,7 +138,7 @@ private constructor(
     fun id(): Optional<String> = id.getOptional("id")
 
     /**
-     * The type name of the schema.
+     * The typename of the schema.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -179,7 +179,7 @@ private constructor(
     fun clickedAt(): Optional<OffsetDateTime> = clickedAt.getOptional("clicked_at")
 
     /**
-     * The data associated with the message.
+     * Data from the activities linked to the message
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -269,8 +269,7 @@ private constructor(
     fun source(): Optional<Source> = source.getOptional("source")
 
     /**
-     * The message delivery status. Can be one of: queued, sent, delivered, delivery_attempted,
-     * undelivered, not_sent, bounced.
+     * The message delivery status.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -549,7 +548,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        /** The type name of the schema. */
+        /** The typename of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -641,7 +640,7 @@ private constructor(
          */
         fun clickedAt(clickedAt: JsonField<OffsetDateTime>) = apply { this.clickedAt = clickedAt }
 
-        /** The data associated with the message. */
+        /** Data from the activities linked to the message */
         fun data(data: Data?) = data(JsonField.ofNullable(data))
 
         /** Alias for calling [Builder.data] with `data.orElse(null)`. */
@@ -831,10 +830,7 @@ private constructor(
          */
         fun source(source: JsonField<Source>) = apply { this.source = source }
 
-        /**
-         * The message delivery status. Can be one of: queued, sent, delivered, delivery_attempted,
-         * undelivered, not_sent, bounced.
-         */
+        /** The message delivery status. */
         fun status(status: Status) = status(JsonField.of(status))
 
         /**
@@ -1020,7 +1016,7 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** An identifier for a user recipient. */
+        /** The id of the user. */
         fun userReference(): Optional<String> = Optional.ofNullable(userReference)
 
         /** A reference to a recipient object. */
@@ -1030,7 +1026,7 @@ private constructor(
 
         fun isObjectReference(): Boolean = objectReference != null
 
-        /** An identifier for a user recipient. */
+        /** The id of the user. */
         fun asUserReference(): String = userReference.getOrThrow("userReference")
 
         /** A reference to a recipient object. */
@@ -1111,7 +1107,7 @@ private constructor(
 
         companion object {
 
-            /** An identifier for a user recipient. */
+            /** The id of the user. */
             @JvmStatic
             fun ofUserReference(userReference: String) = Actor(userReference = userReference)
 
@@ -1124,7 +1120,7 @@ private constructor(
         /** An interface that defines how to map each variant of [Actor] to a value of type [T]. */
         interface Visitor<out T> {
 
-            /** An identifier for a user recipient. */
+            /** The id of the user. */
             fun visitUserReference(userReference: String): T
 
             /** A reference to a recipient object. */
@@ -1379,7 +1375,7 @@ private constructor(
         }
     }
 
-    /** The data associated with the message. */
+    /** Data from the activities linked to the message */
     class Data
     @JsonCreator
     private constructor(
@@ -1746,7 +1742,7 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** An identifier for a user recipient. */
+        /** The id of the user. */
         fun userReference(): Optional<String> = Optional.ofNullable(userReference)
 
         /** A reference to a recipient object. */
@@ -1756,7 +1752,7 @@ private constructor(
 
         fun isObjectReference(): Boolean = objectReference != null
 
-        /** An identifier for a user recipient. */
+        /** The id of the user. */
         fun asUserReference(): String = userReference.getOrThrow("userReference")
 
         /** A reference to a recipient object. */
@@ -1837,7 +1833,7 @@ private constructor(
 
         companion object {
 
-            /** An identifier for a user recipient. */
+            /** The id of the user. */
             @JvmStatic
             fun ofUserReference(userReference: String) = Recipient(userReference = userReference)
 
@@ -1852,7 +1848,7 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            /** An identifier for a user recipient. */
+            /** The id of the user. */
             fun visitUserReference(userReference: String): T
 
             /** A reference to a recipient object. */
@@ -2395,10 +2391,7 @@ private constructor(
             "Source{_typename=$_typename, categories=$categories, key=$key, versionId=$versionId, additionalProperties=$additionalProperties}"
     }
 
-    /**
-     * The message delivery status. Can be one of: queued, sent, delivered, delivery_attempted,
-     * undelivered, not_sent, bounced.
-     */
+    /** The message delivery status. */
     class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**

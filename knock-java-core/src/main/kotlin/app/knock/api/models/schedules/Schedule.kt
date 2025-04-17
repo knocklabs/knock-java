@@ -23,7 +23,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A schedule that represents a recurring workflow execution. */
+/** A schedule represents a recurring workflow execution. */
 class Schedule
 private constructor(
     private val id: JsonField<String>,
@@ -100,7 +100,7 @@ private constructor(
     fun insertedAt(): OffsetDateTime = insertedAt.getRequired("inserted_at")
 
     /**
-     * A recipient, which is either a user or an object.
+     * A recipient of a notification, which is either a user or an object.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -132,7 +132,7 @@ private constructor(
     fun workflow(): String = workflow.getRequired("workflow")
 
     /**
-     * The type name of the schema.
+     * The typename of the schema.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -140,7 +140,7 @@ private constructor(
     fun _typename(): Optional<String> = _typename.getOptional("__typename")
 
     /**
-     * A recipient, which is either a user or an object.
+     * A recipient of a notification, which is either a user or an object.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -368,7 +368,7 @@ private constructor(
             this.insertedAt = insertedAt
         }
 
-        /** A recipient, which is either a user or an object. */
+        /** A recipient of a notification, which is either a user or an object. */
         fun recipient(recipient: Recipient) = recipient(JsonField.of(recipient))
 
         /**
@@ -435,7 +435,7 @@ private constructor(
          */
         fun workflow(workflow: JsonField<String>) = apply { this.workflow = workflow }
 
-        /** The type name of the schema. */
+        /** The typename of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -447,7 +447,7 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
-        /** A recipient, which is either a user or an object. */
+        /** A recipient of a notification, which is either a user or an object. */
         fun actor(actor: Recipient?) = actor(JsonField.ofNullable(actor))
 
         /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */

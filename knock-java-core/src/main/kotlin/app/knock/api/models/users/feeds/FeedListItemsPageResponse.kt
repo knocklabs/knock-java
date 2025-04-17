@@ -312,7 +312,7 @@ private constructor(
         ) : this(_typename, totalCount, unreadCount, unseenCount, mutableMapOf())
 
         /**
-         * The type name of the schema.
+         * The typename of the schema.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -421,7 +421,7 @@ private constructor(
                 additionalProperties = meta.additionalProperties.toMutableMap()
             }
 
-            /** The type name of the schema. */
+            /** The typename of the schema. */
             fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
             /**
@@ -587,7 +587,7 @@ private constructor(
         ) : this(_typename, pageSize, after, before, mutableMapOf())
 
         /**
-         * The type name of the schema.
+         * The typename of the schema.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -690,7 +690,7 @@ private constructor(
                 additionalProperties = pageInfo.additionalProperties.toMutableMap()
             }
 
-            /** The type name of the schema. */
+            /** The typename of the schema. */
             fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
             /**

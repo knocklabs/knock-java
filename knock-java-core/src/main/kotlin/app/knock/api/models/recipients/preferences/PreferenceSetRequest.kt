@@ -40,8 +40,8 @@ private constructor(
     ) : this(categories, channelTypes, workflows, mutableMapOf())
 
     /**
-     * A setting for a preference set, where the key in the object is the category, and the values
-     * are the preference settings for that category.
+     * An object where the key is the category and the values are the preference settings for that
+     * category.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -58,8 +58,8 @@ private constructor(
         channelTypes.getOptional("channel_types")
 
     /**
-     * A setting for a preference set, where the key in the object is the workflow key, and the
-     * values are the preference settings for that workflow.
+     * An object where the key is the workflow key and the values are the preference settings for
+     * that workflow.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -126,8 +126,8 @@ private constructor(
         }
 
         /**
-         * A setting for a preference set, where the key in the object is the category, and the
-         * values are the preference settings for that category.
+         * An object where the key is the category and the values are the preference settings for
+         * that category.
          */
         fun categories(categories: Categories?) = categories(JsonField.ofNullable(categories))
 
@@ -163,8 +163,8 @@ private constructor(
         }
 
         /**
-         * A setting for a preference set, where the key in the object is the workflow key, and the
-         * values are the preference settings for that workflow.
+         * An object where the key is the workflow key and the values are the preference settings
+         * for that workflow.
          */
         fun workflows(workflows: Workflows?) = workflows(JsonField.ofNullable(workflows))
 
@@ -246,8 +246,8 @@ private constructor(
             (workflows.asKnown().getOrNull()?.validity() ?: 0)
 
     /**
-     * A setting for a preference set, where the key in the object is the category, and the values
-     * are the preference settings for that category.
+     * An object where the key is the category and the values are the preference settings for that
+     * category.
      */
     class Categories
     @JsonCreator
@@ -351,8 +351,8 @@ private constructor(
     }
 
     /**
-     * A setting for a preference set, where the key in the object is the workflow key, and the
-     * values are the preference settings for that workflow.
+     * An object where the key is the workflow key and the values are the preference settings for
+     * that workflow.
      */
     class Workflows
     @JsonCreator

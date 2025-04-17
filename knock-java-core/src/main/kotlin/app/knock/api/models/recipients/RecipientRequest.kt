@@ -29,19 +29,19 @@ import java.util.Optional
 @JsonSerialize(using = RecipientRequest.Serializer::class)
 class RecipientRequest
 private constructor(
-    private val string: String? = null,
+    private val userRecipient: String? = null,
     private val inlineIdentifyUser: InlineIdentifyUserRequest? = null,
     private val inlineObject: InlineObjectRequest? = null,
     private val _json: JsonValue? = null,
 ) {
 
-    /** An identifier for a user recipient. */
-    fun string(): Optional<String> = Optional.ofNullable(string)
+    /** The id of the user. */
+    fun userRecipient(): Optional<String> = Optional.ofNullable(userRecipient)
 
     /**
      * A set of parameters to inline-identify a user with. Inline identifying the user will ensure
      * that the user is available before the request is executed in Knock. It will perform an upsert
-     * against the user you're supplying, replacing any properties specified.
+     * for the user you're supplying, replacing any properties specified.
      */
     fun inlineIdentifyUser(): Optional<InlineIdentifyUserRequest> =
         Optional.ofNullable(inlineIdentifyUser)
@@ -49,19 +49,19 @@ private constructor(
     /** A custom object entity which belongs to a collection. */
     fun inlineObject(): Optional<InlineObjectRequest> = Optional.ofNullable(inlineObject)
 
-    fun isString(): Boolean = string != null
+    fun isUserRecipient(): Boolean = userRecipient != null
 
     fun isInlineIdentifyUser(): Boolean = inlineIdentifyUser != null
 
     fun isInlineObject(): Boolean = inlineObject != null
 
-    /** An identifier for a user recipient. */
-    fun asString(): String = string.getOrThrow("string")
+    /** The id of the user. */
+    fun asUserRecipient(): String = userRecipient.getOrThrow("userRecipient")
 
     /**
      * A set of parameters to inline-identify a user with. Inline identifying the user will ensure
      * that the user is available before the request is executed in Knock. It will perform an upsert
-     * against the user you're supplying, replacing any properties specified.
+     * for the user you're supplying, replacing any properties specified.
      */
     fun asInlineIdentifyUser(): InlineIdentifyUserRequest =
         inlineIdentifyUser.getOrThrow("inlineIdentifyUser")
@@ -73,7 +73,7 @@ private constructor(
 
     fun <T> accept(visitor: Visitor<T>): T =
         when {
-            string != null -> visitor.visitString(string)
+            userRecipient != null -> visitor.visitUserRecipient(userRecipient)
             inlineIdentifyUser != null -> visitor.visitInlineIdentifyUser(inlineIdentifyUser)
             inlineObject != null -> visitor.visitInlineObject(inlineObject)
             else -> visitor.unknown(_json)
@@ -88,7 +88,7 @@ private constructor(
 
         accept(
             object : Visitor<Unit> {
-                override fun visitString(string: String) {}
+                override fun visitUserRecipient(userRecipient: String) {}
 
                 override fun visitInlineIdentifyUser(
                     inlineIdentifyUser: InlineIdentifyUserRequest
@@ -121,7 +121,7 @@ private constructor(
     internal fun validity(): Int =
         accept(
             object : Visitor<Int> {
-                override fun visitString(string: String) = 1
+                override fun visitUserRecipient(userRecipient: String) = 1
 
                 override fun visitInlineIdentifyUser(
                     inlineIdentifyUser: InlineIdentifyUserRequest
@@ -139,14 +139,14 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is RecipientRequest && string == other.string && inlineIdentifyUser == other.inlineIdentifyUser && inlineObject == other.inlineObject /* spotless:on */
+        return /* spotless:off */ other is RecipientRequest && userRecipient == other.userRecipient && inlineIdentifyUser == other.inlineIdentifyUser && inlineObject == other.inlineObject /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, inlineIdentifyUser, inlineObject) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userRecipient, inlineIdentifyUser, inlineObject) /* spotless:on */
 
     override fun toString(): String =
         when {
-            string != null -> "RecipientRequest{string=$string}"
+            userRecipient != null -> "RecipientRequest{userRecipient=$userRecipient}"
             inlineIdentifyUser != null -> "RecipientRequest{inlineIdentifyUser=$inlineIdentifyUser}"
             inlineObject != null -> "RecipientRequest{inlineObject=$inlineObject}"
             _json != null -> "RecipientRequest{_unknown=$_json}"
@@ -155,13 +155,14 @@ private constructor(
 
     companion object {
 
-        /** An identifier for a user recipient. */
-        @JvmStatic fun ofString(string: String) = RecipientRequest(string = string)
+        /** The id of the user. */
+        @JvmStatic
+        fun ofUserRecipient(userRecipient: String) = RecipientRequest(userRecipient = userRecipient)
 
         /**
          * A set of parameters to inline-identify a user with. Inline identifying the user will
          * ensure that the user is available before the request is executed in Knock. It will
-         * perform an upsert against the user you're supplying, replacing any properties specified.
+         * perform an upsert for the user you're supplying, replacing any properties specified.
          */
         @JvmStatic
         fun ofInlineIdentifyUser(inlineIdentifyUser: InlineIdentifyUserRequest) =
@@ -179,13 +180,13 @@ private constructor(
      */
     interface Visitor<out T> {
 
-        /** An identifier for a user recipient. */
-        fun visitString(string: String): T
+        /** The id of the user. */
+        fun visitUserRecipient(userRecipient: String): T
 
         /**
          * A set of parameters to inline-identify a user with. Inline identifying the user will
          * ensure that the user is available before the request is executed in Knock. It will
-         * perform an upsert against the user you're supplying, replacing any properties specified.
+         * perform an upsert for the user you're supplying, replacing any properties specified.
          */
         fun visitInlineIdentifyUser(inlineIdentifyUser: InlineIdentifyUserRequest): T
 
@@ -221,7 +222,7 @@ private constructor(
                             RecipientRequest(inlineObject = it, _json = json)
                         },
                         tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                            RecipientRequest(string = it, _json = json)
+                            RecipientRequest(userRecipient = it, _json = json)
                         },
                     )
                     .filterNotNull()
@@ -247,7 +248,7 @@ private constructor(
             provider: SerializerProvider,
         ) {
             when {
-                value.string != null -> generator.writeObject(value.string)
+                value.userRecipient != null -> generator.writeObject(value.userRecipient)
                 value.inlineIdentifyUser != null -> generator.writeObject(value.inlineIdentifyUser)
                 value.inlineObject != null -> generator.writeObject(value.inlineObject)
                 value._json != null -> generator.writeObject(value._json)

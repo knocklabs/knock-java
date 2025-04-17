@@ -66,7 +66,7 @@ private constructor(
     fun id(): String = id.getRequired("id")
 
     /**
-     * The type name of the schema.
+     * The typename of the schema.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -212,7 +212,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        /** The type name of the schema. */
+        /** The typename of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -383,7 +383,7 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** An identifier for a user recipient. */
+        /** The id of the user. */
         fun userReference(): Optional<String> = Optional.ofNullable(userReference)
 
         /** A reference to a recipient object. */
@@ -393,7 +393,7 @@ private constructor(
 
         fun isObjectReference(): Boolean = objectReference != null
 
-        /** An identifier for a user recipient. */
+        /** The id of the user. */
         fun asUserReference(): String = userReference.getOrThrow("userReference")
 
         /** A reference to a recipient object. */
@@ -474,7 +474,7 @@ private constructor(
 
         companion object {
 
-            /** An identifier for a user recipient. */
+            /** The id of the user. */
             @JvmStatic
             fun ofUserReference(userReference: String) = Recipient(userReference = userReference)
 
@@ -489,7 +489,7 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            /** An identifier for a user recipient. */
+            /** The id of the user. */
             fun visitUserReference(userReference: String): T
 
             /** A reference to a recipient object. */

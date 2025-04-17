@@ -22,8 +22,8 @@ import kotlin.jvm.optionals.getOrNull
 
 /**
  * A set of parameters to inline-identify a user with. Inline identifying the user will ensure that
- * the user is available before the request is executed in Knock. It will perform an upsert against
- * the user you're supplying, replacing any properties specified.
+ * the user is available before the request is executed in Knock. It will perform an upsert for the
+ * user you're supplying, replacing any properties specified.
  */
 class InlineIdentifyUserRequest
 private constructor(
@@ -49,7 +49,7 @@ private constructor(
     ) : this(id, channelData, createdAt, preferences, mutableMapOf())
 
     /**
-     * The unique identifier for the user.
+     * The ID for the user that you set when identifying them in Knock.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -157,7 +157,7 @@ private constructor(
             additionalProperties = inlineIdentifyUserRequest.additionalProperties.toMutableMap()
         }
 
-        /** The unique identifier for the user. */
+        /** The ID for the user that you set when identifying them in Knock. */
         fun id(id: String) = id(JsonField.of(id))
 
         /**

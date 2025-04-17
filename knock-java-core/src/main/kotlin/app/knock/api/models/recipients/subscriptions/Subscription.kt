@@ -53,7 +53,7 @@ private constructor(
     ) : this(_typename, insertedAt, object_, recipient, updatedAt, properties, mutableMapOf())
 
     /**
-     * The type name of the schema.
+     * The typename of the schema.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -77,7 +77,7 @@ private constructor(
     fun object_(): Object = object_.getRequired("object")
 
     /**
-     * A recipient, which is either a user or an object.
+     * A recipient of a notification, which is either a user or an object.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -199,7 +199,7 @@ private constructor(
             additionalProperties = subscription.additionalProperties.toMutableMap()
         }
 
-        /** The type name of the schema. */
+        /** The typename of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -236,7 +236,7 @@ private constructor(
          */
         fun object_(object_: JsonField<Object>) = apply { this.object_ = object_ }
 
-        /** A recipient, which is either a user or an object. */
+        /** A recipient of a notification, which is either a user or an object. */
         fun recipient(recipient: Recipient) = recipient(JsonField.of(recipient))
 
         /**

@@ -61,8 +61,8 @@ internal class WorkflowTriggerParamsTest {
 
         val body = params._body()
 
-        assertThat(body.recipients()).containsExactly(RecipientRequest.ofString("jhammond"))
-        assertThat(body.actor()).contains(RecipientRequest.ofString("string"))
+        assertThat(body.recipients()).containsExactly(RecipientRequest.ofUserRecipient("jhammond"))
+        assertThat(body.actor()).contains(RecipientRequest.ofUserRecipient("string"))
         assertThat(body.cancellationKey()).isEmpty
         assertThat(body.data())
             .contains(
@@ -83,6 +83,6 @@ internal class WorkflowTriggerParamsTest {
 
         val body = params._body()
 
-        assertThat(body.recipients()).containsExactly(RecipientRequest.ofString("jhammond"))
+        assertThat(body.recipients()).containsExactly(RecipientRequest.ofUserRecipient("jhammond"))
     }
 }

@@ -144,8 +144,10 @@ private constructor(
          */
         fun addRecipient(recipient: RecipientRequest) = apply { body.addRecipient(recipient) }
 
-        /** Alias for calling [addRecipient] with `RecipientRequest.ofString(string)`. */
-        fun addRecipient(string: String) = apply { body.addRecipient(string) }
+        /**
+         * Alias for calling [addRecipient] with `RecipientRequest.ofUserRecipient(userRecipient)`.
+         */
+        fun addRecipient(userRecipient: String) = apply { body.addRecipient(userRecipient) }
 
         /**
          * Alias for calling [addRecipient] with
@@ -449,8 +451,12 @@ private constructor(
                     }
             }
 
-            /** Alias for calling [addRecipient] with `RecipientRequest.ofString(string)`. */
-            fun addRecipient(string: String) = addRecipient(RecipientRequest.ofString(string))
+            /**
+             * Alias for calling [addRecipient] with
+             * `RecipientRequest.ofUserRecipient(userRecipient)`.
+             */
+            fun addRecipient(userRecipient: String) =
+                addRecipient(RecipientRequest.ofUserRecipient(userRecipient))
 
             /**
              * Alias for calling [addRecipient] with

@@ -25,16 +25,16 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    /** The cursor to fetch entries after.. */
+    /** The cursor to fetch entries after. */
     fun after(): Optional<String> = Optional.ofNullable(after)
 
-    /** The cursor to fetch entries before.. */
+    /** The cursor to fetch entries before. */
     fun before(): Optional<String> = Optional.ofNullable(before)
 
-    /** Includes preferences of the users in the response. */
+    /** Associated resources to include in the response. */
     fun include(): Optional<List<Include>> = Optional.ofNullable(include)
 
-    /** The number of items per page.. */
+    /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -71,19 +71,19 @@ private constructor(
             additionalQueryParams = userListParams.additionalQueryParams.toBuilder()
         }
 
-        /** The cursor to fetch entries after.. */
+        /** The cursor to fetch entries after. */
         fun after(after: String?) = apply { this.after = after }
 
         /** Alias for calling [Builder.after] with `after.orElse(null)`. */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
-        /** The cursor to fetch entries before.. */
+        /** The cursor to fetch entries before. */
         fun before(before: String?) = apply { this.before = before }
 
         /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
-        /** Includes preferences of the users in the response. */
+        /** Associated resources to include in the response. */
         fun include(include: List<Include>?) = apply { this.include = include?.toMutableList() }
 
         /** Alias for calling [Builder.include] with `include.orElse(null)`. */
@@ -98,7 +98,7 @@ private constructor(
             this.include = (this.include ?: mutableListOf()).apply { add(include) }
         }
 
-        /** The number of items per page.. */
+        /** The number of items per page. */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**

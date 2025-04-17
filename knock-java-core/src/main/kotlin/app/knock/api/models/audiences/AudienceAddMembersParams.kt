@@ -464,7 +464,7 @@ private constructor(
         /**
          * A set of parameters to inline-identify a user with. Inline identifying the user will
          * ensure that the user is available before the request is executed in Knock. It will
-         * perform an upsert against the user you're supplying, replacing any properties specified.
+         * perform an upsert for the user you're supplying, replacing any properties specified.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -537,8 +537,7 @@ private constructor(
             /**
              * A set of parameters to inline-identify a user with. Inline identifying the user will
              * ensure that the user is available before the request is executed in Knock. It will
-             * perform an upsert against the user you're supplying, replacing any properties
-             * specified.
+             * perform an upsert for the user you're supplying, replacing any properties specified.
              */
             fun user(user: InlineIdentifyUserRequest) = user(JsonField.of(user))
 

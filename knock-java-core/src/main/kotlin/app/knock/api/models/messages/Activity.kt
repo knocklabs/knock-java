@@ -60,7 +60,7 @@ private constructor(
     fun id(): Optional<String> = id.getOptional("id")
 
     /**
-     * The type name of the schema.
+     * The typename of the schema.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -68,7 +68,7 @@ private constructor(
     fun _typename(): Optional<String> = _typename.getOptional("__typename")
 
     /**
-     * A recipient, which is either a user or an object.
+     * A recipient of a notification, which is either a user or an object.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -92,7 +92,7 @@ private constructor(
     fun insertedAt(): Optional<OffsetDateTime> = insertedAt.getOptional("inserted_at")
 
     /**
-     * A recipient, which is either a user or an object.
+     * A recipient of a notification, which is either a user or an object.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -213,7 +213,7 @@ private constructor(
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
 
-        /** The type name of the schema. */
+        /** The typename of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -225,7 +225,7 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
-        /** A recipient, which is either a user or an object. */
+        /** A recipient of a notification, which is either a user or an object. */
         fun actor(actor: Recipient?) = actor(JsonField.ofNullable(actor))
 
         /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
@@ -273,7 +273,7 @@ private constructor(
             this.insertedAt = insertedAt
         }
 
-        /** A recipient, which is either a user or an object. */
+        /** A recipient of a notification, which is either a user or an object. */
         fun recipient(recipient: Recipient) = recipient(JsonField.of(recipient))
 
         /**

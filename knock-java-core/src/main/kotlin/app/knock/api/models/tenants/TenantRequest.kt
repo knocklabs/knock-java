@@ -20,7 +20,9 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A request to get a tenant. */
+/**
+ * A tenant to be set in the system. You can supply any additional properties on the tenant object.
+ */
 class TenantRequest
 private constructor(
     private val id: JsonField<String>,

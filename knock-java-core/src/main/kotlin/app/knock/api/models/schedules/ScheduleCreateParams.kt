@@ -950,7 +950,7 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** An identifier for a user recipient. */
+        /** The id of the user. */
         fun userReference(): Optional<String> = Optional.ofNullable(userReference)
 
         /** A reference to a recipient object. */
@@ -960,7 +960,7 @@ private constructor(
 
         fun isObjectReference(): Boolean = objectReference != null
 
-        /** An identifier for a user recipient. */
+        /** The id of the user. */
         fun asUserReference(): String = userReference.getOrThrow("userReference")
 
         /** A reference to a recipient object. */
@@ -1041,7 +1041,7 @@ private constructor(
 
         companion object {
 
-            /** An identifier for a user recipient. */
+            /** The id of the user. */
             @JvmStatic
             fun ofUserReference(userReference: String) = Recipient(userReference = userReference)
 
@@ -1056,7 +1056,7 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            /** An identifier for a user recipient. */
+            /** The id of the user. */
             fun visitUserReference(userReference: String): T
 
             /** A reference to a recipient object. */

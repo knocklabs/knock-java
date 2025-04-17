@@ -26,8 +26,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Add subscriptions for a set of objects in a single collection. If a subscription already exists,
- * it will be updated.
+ * Add subscriptions for all objects in a single collection. If a subscription for an object in the
+ * collectionalready exists, it will be updated.
  */
 class BulkAddSubscriptionsParams
 private constructor(
@@ -609,8 +609,12 @@ private constructor(
                     }
             }
 
-            /** Alias for calling [addRecipient] with `RecipientRequest.ofString(string)`. */
-            fun addRecipient(string: String) = addRecipient(RecipientRequest.ofString(string))
+            /**
+             * Alias for calling [addRecipient] with
+             * `RecipientRequest.ofUserRecipient(userRecipient)`.
+             */
+            fun addRecipient(userRecipient: String) =
+                addRecipient(RecipientRequest.ofUserRecipient(userRecipient))
 
             /**
              * Alias for calling [addRecipient] with

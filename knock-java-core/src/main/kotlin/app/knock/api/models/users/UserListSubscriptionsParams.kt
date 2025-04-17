@@ -40,10 +40,10 @@ private constructor(
     /** The cursor to fetch entries before. */
     fun before(): Optional<String> = Optional.ofNullable(before)
 
-    /** Includes preferences of the recipient subscribers in the response. */
+    /** Associated resources to include in the response. */
     fun include(): Optional<List<Include>> = Optional.ofNullable(include)
 
-    /** Objects to filter by. */
+    /** Only return subscriptions for the given recipients. */
     fun objects(): Optional<List<Object>> = Optional.ofNullable(objects)
 
     /** The number of items per page. */
@@ -106,7 +106,7 @@ private constructor(
         /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
-        /** Includes preferences of the recipient subscribers in the response. */
+        /** Associated resources to include in the response. */
         fun include(include: List<Include>?) = apply { this.include = include?.toMutableList() }
 
         /** Alias for calling [Builder.include] with `include.orElse(null)`. */
@@ -121,7 +121,7 @@ private constructor(
             this.include = (this.include ?: mutableListOf()).apply { add(include) }
         }
 
-        /** Objects to filter by. */
+        /** Only return subscriptions for the given recipients. */
         fun objects(objects: List<Object>?) = apply { this.objects = objects?.toMutableList() }
 
         /** Alias for calling [Builder.objects] with `objects.orElse(null)`. */
@@ -446,7 +446,7 @@ private constructor(
         private val reference: ObjectReference? = null,
     ) {
 
-        /** An identifier for a user recipient. */
+        /** The id of the user. */
         fun userReference(): Optional<String> = Optional.ofNullable(userReference)
 
         /** A reference to a recipient object. */
@@ -456,7 +456,7 @@ private constructor(
 
         fun isReference(): Boolean = reference != null
 
-        /** An identifier for a user recipient. */
+        /** The id of the user. */
         fun asUserReference(): String = userReference.getOrThrow("userReference")
 
         /** A reference to a recipient object. */
@@ -488,7 +488,7 @@ private constructor(
 
         companion object {
 
-            /** An identifier for a user recipient. */
+            /** The id of the user. */
             @JvmStatic
             fun ofUserReference(userReference: String) = Object(userReference = userReference)
 
@@ -499,7 +499,7 @@ private constructor(
         /** An interface that defines how to map each variant of [Object] to a value of type [T]. */
         interface Visitor<out T> {
 
-            /** An identifier for a user recipient. */
+            /** The id of the user. */
             fun visitUserReference(userReference: String): T
 
             /** A reference to a recipient object. */

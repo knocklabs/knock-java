@@ -59,8 +59,8 @@ internal class ObjectAddSubscriptionsParamsTest {
 
         assertThat(body.recipients())
             .containsExactly(
-                RecipientRequest.ofString("user_1"),
-                RecipientRequest.ofString("user_2"),
+                RecipientRequest.ofUserRecipient("user_1"),
+                RecipientRequest.ofUserRecipient("user_2"),
             )
         assertThat(body.properties())
             .contains(
@@ -84,8 +84,8 @@ internal class ObjectAddSubscriptionsParamsTest {
 
         assertThat(body.recipients())
             .containsExactly(
-                RecipientRequest.ofString("user_1"),
-                RecipientRequest.ofString("user_2"),
+                RecipientRequest.ofUserRecipient("user_1"),
+                RecipientRequest.ofUserRecipient("user_2"),
             )
     }
 }

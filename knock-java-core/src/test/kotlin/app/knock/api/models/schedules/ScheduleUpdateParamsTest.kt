@@ -88,7 +88,7 @@ internal class ScheduleUpdateParamsTest {
         val body = params._body()
 
         assertThat(body.scheduleIds()).containsExactly("123e4567-e89b-12d3-a456-426614174000")
-        assertThat(body.actor()).contains(RecipientRequest.ofString("string"))
+        assertThat(body.actor()).contains(RecipientRequest.ofUserRecipient("string"))
         assertThat(body.data())
             .contains(
                 ScheduleUpdateParams.Data.builder()

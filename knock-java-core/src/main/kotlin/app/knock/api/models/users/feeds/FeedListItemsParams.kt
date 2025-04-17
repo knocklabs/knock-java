@@ -41,7 +41,7 @@ private constructor(
     /** The cursor to fetch entries after. */
     fun after(): Optional<String> = Optional.ofNullable(after)
 
-    /** The archived status of the feed items to return. */
+    /** The archived status of the feed items. */
     fun archived(): Optional<Archived> = Optional.ofNullable(archived)
 
     /** The cursor to fetch entries before. */
@@ -53,19 +53,19 @@ private constructor(
     /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
-    /** The source of the feed items to return. */
+    /** The source of the feed items. */
     fun source(): Optional<String> = Optional.ofNullable(source)
 
-    /** The status of the feed items to return. */
+    /** The status of the feed items. */
     fun status(): Optional<Status> = Optional.ofNullable(status)
 
-    /** The tenant of the feed items to return. */
+    /** The tenant associated with the feed items. */
     fun tenant(): Optional<String> = Optional.ofNullable(tenant)
 
-    /** The trigger data of the feed items to return (as a JSON string). */
+    /** The trigger data of the feed items (as a JSON string). */
     fun triggerData(): Optional<String> = Optional.ofNullable(triggerData)
 
-    /** The workflow categories of the feed items to return. */
+    /** The workflow categories of the feed items. */
     fun workflowCategories(): Optional<List<String>> = Optional.ofNullable(workflowCategories)
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -134,7 +134,7 @@ private constructor(
         /** Alias for calling [Builder.after] with `after.orElse(null)`. */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
-        /** The archived status of the feed items to return. */
+        /** The archived status of the feed items. */
         fun archived(archived: Archived?) = apply { this.archived = archived }
 
         /** Alias for calling [Builder.archived] with `archived.orElse(null)`. */
@@ -172,31 +172,31 @@ private constructor(
         /** Alias for calling [Builder.pageSize] with `pageSize.orElse(null)`. */
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
-        /** The source of the feed items to return. */
+        /** The source of the feed items. */
         fun source(source: String?) = apply { this.source = source }
 
         /** Alias for calling [Builder.source] with `source.orElse(null)`. */
         fun source(source: Optional<String>) = source(source.getOrNull())
 
-        /** The status of the feed items to return. */
+        /** The status of the feed items. */
         fun status(status: Status?) = apply { this.status = status }
 
         /** Alias for calling [Builder.status] with `status.orElse(null)`. */
         fun status(status: Optional<Status>) = status(status.getOrNull())
 
-        /** The tenant of the feed items to return. */
+        /** The tenant associated with the feed items. */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
         /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
-        /** The trigger data of the feed items to return (as a JSON string). */
+        /** The trigger data of the feed items (as a JSON string). */
         fun triggerData(triggerData: String?) = apply { this.triggerData = triggerData }
 
         /** Alias for calling [Builder.triggerData] with `triggerData.orElse(null)`. */
         fun triggerData(triggerData: Optional<String>) = triggerData(triggerData.getOrNull())
 
-        /** The workflow categories of the feed items to return. */
+        /** The workflow categories of the feed items. */
         fun workflowCategories(workflowCategories: List<String>?) = apply {
             this.workflowCategories = workflowCategories?.toMutableList()
         }
@@ -373,7 +373,7 @@ private constructor(
             }
             .build()
 
-    /** The archived status of the feed items to return. */
+    /** The archived status of the feed items. */
     class Archived @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
@@ -504,7 +504,7 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    /** The status of the feed items to return. */
+    /** The status of the feed items. */
     class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**

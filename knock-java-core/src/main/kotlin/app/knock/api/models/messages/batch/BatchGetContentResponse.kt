@@ -53,7 +53,7 @@ private constructor(
     ) : this(_typename, data, insertedAt, messageId, mutableMapOf())
 
     /**
-     * The type name of the schema.
+     * The typename of the schema.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -160,7 +160,7 @@ private constructor(
             additionalProperties = batchGetContentResponse.additionalProperties.toMutableMap()
         }
 
-        /** The type name of the schema. */
+        /** The typename of the schema. */
         fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
         /**
@@ -656,7 +656,7 @@ private constructor(
             )
 
             /**
-             * The type name of the schema.
+             * The typename of the schema.
              *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -862,7 +862,7 @@ private constructor(
                     additionalProperties = messageEmailContent.additionalProperties.toMutableMap()
                 }
 
-                /** The type name of the schema. */
+                /** The typename of the schema. */
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
                 /**
@@ -1117,7 +1117,7 @@ private constructor(
             ) : this(_typename, body, to, mutableMapOf())
 
             /**
-             * The type name of the schema.
+             * The typename of the schema.
              *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -1210,7 +1210,7 @@ private constructor(
                     additionalProperties = messageSmsContent.additionalProperties.toMutableMap()
                 }
 
-                /** The type name of the schema. */
+                /** The typename of the schema. */
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
                 /**
@@ -1374,7 +1374,7 @@ private constructor(
             fun token(): String = token.getRequired("token")
 
             /**
-             * The type name of the schema.
+             * The typename of the schema.
              *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -1506,7 +1506,7 @@ private constructor(
                  */
                 fun token(token: JsonField<String>) = apply { this.token = token }
 
-                /** The type name of the schema. */
+                /** The typename of the schema. */
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
                 /**
@@ -1794,7 +1794,7 @@ private constructor(
             ) : this(_typename, connection, template, metadata, mutableMapOf())
 
             /**
-             * The type name of the schema.
+             * The typename of the schema.
              *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -1913,7 +1913,7 @@ private constructor(
                     additionalProperties = messageChatContent.additionalProperties.toMutableMap()
                 }
 
-                /** The type name of the schema. */
+                /** The typename of the schema. */
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
                 /**
@@ -3054,7 +3054,7 @@ private constructor(
             ) : this(_typename, blocks, mutableMapOf())
 
             /**
-             * The type name of the schema.
+             * The typename of the schema.
              *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
              *   unexpectedly missing or null (e.g. if the server responded with an unexpected
@@ -3130,7 +3130,7 @@ private constructor(
                         messageInAppFeedContent.additionalProperties.toMutableMap()
                 }
 
-                /** The type name of the schema. */
+                /** The typename of the schema. */
                 fun _typename(_typename: String) = _typename(JsonField.of(_typename))
 
                 /**
