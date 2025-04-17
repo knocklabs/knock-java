@@ -139,8 +139,9 @@ private constructor(
         /** Alias for calling [addObject] with `Object.ofString(string)`. */
         fun addObject(string: String) = addObject(Object.ofString(string))
 
-        /** Alias for calling [addObject] with `Object.ofReference(reference)`. */
-        fun addObject(reference: Object.ObjectReference) = addObject(Object.ofReference(reference))
+        /** Alias for calling [addObject] with `Object.ofRecipientReference(recipientReference)`. */
+        fun addObject(recipientReference: Object.RecipientReference) =
+            addObject(Object.ofRecipientReference(recipientReference))
 
         /** The number of items per page. */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
@@ -299,13 +300,18 @@ private constructor(
                                 put("objects[]", string)
                             }
 
-                            override fun visitReference(reference: Object.ObjectReference) {
-                                put("objects[][id]", reference.id())
-                                put("objects[][collection]", reference.collection())
-                                reference._additionalProperties().keys().forEach { key ->
-                                    reference._additionalProperties().values(key).forEach { value ->
-                                        put("objects[][$key]", value)
-                                    }
+                            override fun visitRecipientReference(
+                                recipientReference: Object.RecipientReference
+                            ) {
+                                recipientReference.id().ifPresent { put("objects[][id]", it) }
+                                recipientReference.collection().ifPresent {
+                                    put("objects[][collection]", it)
+                                }
+                                recipientReference._additionalProperties().keys().forEach { key ->
+                                    recipientReference
+                                        ._additionalProperties()
+                                        .values(key)
+                                        .forEach { value -> put("objects[][$key]", value) }
                                 }
                             }
                         }
@@ -441,29 +447,37 @@ private constructor(
     class Object
     private constructor(
         private val string: String? = null,
-        private val reference: ObjectReference? = null,
+        private val recipientReference: RecipientReference? = null,
     ) {
 
         /** An identifier for a user recipient. */
         fun string(): Optional<String> = Optional.ofNullable(string)
 
-        /** An object reference to a recipient. */
-        fun reference(): Optional<ObjectReference> = Optional.ofNullable(reference)
+        /**
+         * A reference to a recipient, either a user identifier (string) or an object reference (id,
+         * collection).
+         */
+        fun recipientReference(): Optional<RecipientReference> =
+            Optional.ofNullable(recipientReference)
 
         fun isString(): Boolean = string != null
 
-        fun isReference(): Boolean = reference != null
+        fun isRecipientReference(): Boolean = recipientReference != null
 
         /** An identifier for a user recipient. */
         fun asString(): String = string.getOrThrow("string")
 
-        /** An object reference to a recipient. */
-        fun asReference(): ObjectReference = reference.getOrThrow("reference")
+        /**
+         * A reference to a recipient, either a user identifier (string) or an object reference (id,
+         * collection).
+         */
+        fun asRecipientReference(): RecipientReference =
+            recipientReference.getOrThrow("recipientReference")
 
         fun <T> accept(visitor: Visitor<T>): T =
             when {
                 string != null -> visitor.visitString(string)
-                reference != null -> visitor.visitReference(reference)
+                recipientReference != null -> visitor.visitRecipientReference(recipientReference)
                 else -> throw IllegalStateException("Invalid Object")
             }
 
@@ -472,15 +486,15 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Object && string == other.string && reference == other.reference /* spotless:on */
+            return /* spotless:off */ other is Object && string == other.string && recipientReference == other.recipientReference /* spotless:on */
         }
 
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, reference) /* spotless:on */
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, recipientReference) /* spotless:on */
 
         override fun toString(): String =
             when {
                 string != null -> "Object{string=$string}"
-                reference != null -> "Object{reference=$reference}"
+                recipientReference != null -> "Object{recipientReference=$recipientReference}"
                 else -> throw IllegalStateException("Invalid Object")
             }
 
@@ -489,8 +503,13 @@ private constructor(
             /** An identifier for a user recipient. */
             @JvmStatic fun ofString(string: String) = Object(string = string)
 
-            /** An object reference to a recipient. */
-            @JvmStatic fun ofReference(reference: ObjectReference) = Object(reference = reference)
+            /**
+             * A reference to a recipient, either a user identifier (string) or an object reference
+             * (id, collection).
+             */
+            @JvmStatic
+            fun ofRecipientReference(recipientReference: RecipientReference) =
+                Object(recipientReference = recipientReference)
         }
 
         /** An interface that defines how to map each variant of [Object] to a value of type [T]. */
@@ -499,72 +518,66 @@ private constructor(
             /** An identifier for a user recipient. */
             fun visitString(string: String): T
 
-            /** An object reference to a recipient. */
-            fun visitReference(reference: ObjectReference): T
+            /**
+             * A reference to a recipient, either a user identifier (string) or an object reference
+             * (id, collection).
+             */
+            fun visitRecipientReference(recipientReference: RecipientReference): T
         }
 
-        /** An object reference to a recipient. */
-        class ObjectReference
-        private constructor(private val id: String, private val collection: String) {
+        /**
+         * A reference to a recipient, either a user identifier (string) or an object reference (id,
+         * collection).
+         */
+        class RecipientReference
+        private constructor(private val id: String?, private val collection: String?) {
 
             /** An identifier for the recipient object. */
-            fun id(): String = id
+            fun id(): Optional<String> = Optional.ofNullable(id)
 
             /** The collection the recipient object belongs to. */
-            fun collection(): String = collection
+            fun collection(): Optional<String> = Optional.ofNullable(collection)
 
             fun toBuilder() = Builder().from(this)
 
             companion object {
 
                 /**
-                 * Returns a mutable builder for constructing an instance of [ObjectReference].
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .id()
-                 * .collection()
-                 * ```
+                 * Returns a mutable builder for constructing an instance of [RecipientReference].
                  */
                 @JvmStatic fun builder() = Builder()
             }
 
-            /** A builder for [ObjectReference]. */
+            /** A builder for [RecipientReference]. */
             class Builder internal constructor() {
 
                 private var id: String? = null
                 private var collection: String? = null
 
                 @JvmSynthetic
-                internal fun from(objectReference: ObjectReference) = apply {
-                    id = objectReference.id
-                    collection = objectReference.collection
+                internal fun from(recipientReference: RecipientReference) = apply {
+                    id = recipientReference.id
+                    collection = recipientReference.collection
                 }
 
                 /** An identifier for the recipient object. */
-                fun id(id: String) = apply { this.id = id }
+                fun id(id: String?) = apply { this.id = id }
+
+                /** Alias for calling [Builder.id] with `id.orElse(null)`. */
+                fun id(id: Optional<String>) = id(id.getOrNull())
 
                 /** The collection the recipient object belongs to. */
-                fun collection(collection: String) = apply { this.collection = collection }
+                fun collection(collection: String?) = apply { this.collection = collection }
+
+                /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+                fun collection(collection: Optional<String>) = collection(collection.getOrNull())
 
                 /**
-                 * Returns an immutable instance of [ObjectReference].
+                 * Returns an immutable instance of [RecipientReference].
                  *
                  * Further updates to this [Builder] will not mutate the returned instance.
-                 *
-                 * The following fields are required:
-                 * ```java
-                 * .id()
-                 * .collection()
-                 * ```
-                 *
-                 * @throws IllegalStateException if any required field is unset.
                  */
-                fun build(): ObjectReference =
-                    ObjectReference(
-                        checkRequired("id", id),
-                        checkRequired("collection", collection),
-                    )
+                fun build(): RecipientReference = RecipientReference(id, collection)
             }
 
             override fun equals(other: Any?): Boolean {
@@ -572,7 +585,7 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is ObjectReference && id == other.id && collection == other.collection /* spotless:on */
+                return /* spotless:off */ other is RecipientReference && id == other.id && collection == other.collection /* spotless:on */
             }
 
             /* spotless:off */
@@ -581,7 +594,7 @@ private constructor(
 
             override fun hashCode(): Int = hashCode
 
-            override fun toString() = "ObjectReference{id=$id, collection=$collection}"
+            override fun toString() = "RecipientReference{id=$id, collection=$collection}"
         }
     }
 
