@@ -10,6 +10,8 @@ import app.knock.api.services.async.BulkOperationServiceAsync
 import app.knock.api.services.async.BulkOperationServiceAsyncImpl
 import app.knock.api.services.async.ChannelServiceAsync
 import app.knock.api.services.async.ChannelServiceAsyncImpl
+import app.knock.api.services.async.IntegrationServiceAsync
+import app.knock.api.services.async.IntegrationServiceAsyncImpl
 import app.knock.api.services.async.MessageServiceAsync
 import app.knock.api.services.async.MessageServiceAsyncImpl
 import app.knock.api.services.async.ObjectServiceAsync
@@ -70,6 +72,10 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
         ProviderServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val integrations: IntegrationServiceAsync by lazy {
+        IntegrationServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
     private val workflows: WorkflowServiceAsync by lazy {
         WorkflowServiceAsyncImpl(clientOptionsWithUserAgent)
     }
@@ -103,6 +109,8 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
     override fun messages(): MessageServiceAsync = messages
 
     override fun providers(): ProviderServiceAsync = providers
+
+    override fun integrations(): IntegrationServiceAsync = integrations
 
     override fun workflows(): WorkflowServiceAsync = workflows
 
@@ -145,6 +153,10 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
             ProviderServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val integrations: IntegrationServiceAsync.WithRawResponse by lazy {
+            IntegrationServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val workflows: WorkflowServiceAsync.WithRawResponse by lazy {
             WorkflowServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
@@ -174,6 +186,8 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
         override fun messages(): MessageServiceAsync.WithRawResponse = messages
 
         override fun providers(): ProviderServiceAsync.WithRawResponse = providers
+
+        override fun integrations(): IntegrationServiceAsync.WithRawResponse = integrations
 
         override fun workflows(): WorkflowServiceAsync.WithRawResponse = workflows
 

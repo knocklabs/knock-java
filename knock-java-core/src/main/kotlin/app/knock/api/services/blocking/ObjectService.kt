@@ -15,6 +15,7 @@ import app.knock.api.models.objects.ObjectListMessagesPage
 import app.knock.api.models.objects.ObjectListMessagesParams
 import app.knock.api.models.objects.ObjectListPage
 import app.knock.api.models.objects.ObjectListParams
+import app.knock.api.models.objects.ObjectListPreferencesParams
 import app.knock.api.models.objects.ObjectListSchedulesPage
 import app.knock.api.models.objects.ObjectListSchedulesParams
 import app.knock.api.models.objects.ObjectListSubscriptionsPage
@@ -125,6 +126,16 @@ interface ObjectService {
         params: ObjectListMessagesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ObjectListMessagesPage
+
+    /** Returns a paginated list of preference sets for the specified object. */
+    fun listPreferences(params: ObjectListPreferencesParams): List<PreferenceSet> =
+        listPreferences(params, RequestOptions.none())
+
+    /** @see [listPreferences] */
+    fun listPreferences(
+        params: ObjectListPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): List<PreferenceSet>
 
     /** Returns a paginated list of schedules for an object. */
     fun listSchedules(params: ObjectListSchedulesParams): ObjectListSchedulesPage =
@@ -319,6 +330,22 @@ interface ObjectService {
             params: ObjectListMessagesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ObjectListMessagesPage>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/objects/{collection}/{object_id}/preferences`,
+         * but is otherwise the same as [ObjectService.listPreferences].
+         */
+        @MustBeClosed
+        fun listPreferences(
+            params: ObjectListPreferencesParams
+        ): HttpResponseFor<List<PreferenceSet>> = listPreferences(params, RequestOptions.none())
+
+        /** @see [listPreferences] */
+        @MustBeClosed
+        fun listPreferences(
+            params: ObjectListPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<List<PreferenceSet>>
 
         /**
          * Returns a raw HTTP response for `get /v1/objects/{collection}/{object_id}/schedules`, but

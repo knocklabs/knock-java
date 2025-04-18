@@ -380,8 +380,8 @@ interface MessageServiceAsync {
         ): CompletableFuture<HttpResponseFor<Message>>
 
         /**
-         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unread`, but is
-         * otherwise the same as [MessageServiceAsync.markAsUnread].
+         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/read`, but is otherwise
+         * the same as [MessageServiceAsync.markAsUnread].
          */
         @MustBeClosed
         fun markAsUnread(
@@ -396,8 +396,8 @@ interface MessageServiceAsync {
         ): CompletableFuture<HttpResponseFor<Message>>
 
         /**
-         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unseen`, but is
-         * otherwise the same as [MessageServiceAsync.markAsUnseen].
+         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/seen`, but is otherwise
+         * the same as [MessageServiceAsync.markAsUnseen].
          */
         @MustBeClosed
         fun markAsUnseen(
@@ -412,7 +412,7 @@ interface MessageServiceAsync {
         ): CompletableFuture<HttpResponseFor<Message>>
 
         /**
-         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unarchived`, but is
+         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/archived`, but is
          * otherwise the same as [MessageServiceAsync.unarchive].
          */
         @MustBeClosed

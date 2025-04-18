@@ -10,6 +10,8 @@ import app.knock.api.services.blocking.BulkOperationService
 import app.knock.api.services.blocking.BulkOperationServiceImpl
 import app.knock.api.services.blocking.ChannelService
 import app.knock.api.services.blocking.ChannelServiceImpl
+import app.knock.api.services.blocking.IntegrationService
+import app.knock.api.services.blocking.IntegrationServiceImpl
 import app.knock.api.services.blocking.MessageService
 import app.knock.api.services.blocking.MessageServiceImpl
 import app.knock.api.services.blocking.ObjectService
@@ -64,6 +66,10 @@ class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
         ProviderServiceImpl(clientOptionsWithUserAgent)
     }
 
+    private val integrations: IntegrationService by lazy {
+        IntegrationServiceImpl(clientOptionsWithUserAgent)
+    }
+
     private val workflows: WorkflowService by lazy {
         WorkflowServiceImpl(clientOptionsWithUserAgent)
     }
@@ -95,6 +101,8 @@ class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
     override fun messages(): MessageService = messages
 
     override fun providers(): ProviderService = providers
+
+    override fun integrations(): IntegrationService = integrations
 
     override fun workflows(): WorkflowService = workflows
 
@@ -137,6 +145,10 @@ class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
             ProviderServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val integrations: IntegrationService.WithRawResponse by lazy {
+            IntegrationServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val workflows: WorkflowService.WithRawResponse by lazy {
             WorkflowServiceImpl.WithRawResponseImpl(clientOptions)
         }
@@ -166,6 +178,8 @@ class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
         override fun messages(): MessageService.WithRawResponse = messages
 
         override fun providers(): ProviderService.WithRawResponse = providers
+
+        override fun integrations(): IntegrationService.WithRawResponse = integrations
 
         override fun workflows(): WorkflowService.WithRawResponse = workflows
 

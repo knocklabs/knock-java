@@ -27,6 +27,7 @@ import app.knock.api.models.users.UserUnsetChannelDataParams
 import app.knock.api.models.users.UserUpdateParams
 import app.knock.api.services.async.users.BulkServiceAsync
 import app.knock.api.services.async.users.FeedServiceAsync
+import app.knock.api.services.async.users.GuideServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
@@ -38,6 +39,8 @@ interface UserServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     fun feeds(): FeedServiceAsync
+
+    fun guides(): GuideServiceAsync
 
     fun bulk(): BulkServiceAsync
 
@@ -209,6 +212,8 @@ interface UserServiceAsync {
     interface WithRawResponse {
 
         fun feeds(): FeedServiceAsync.WithRawResponse
+
+        fun guides(): GuideServiceAsync.WithRawResponse
 
         fun bulk(): BulkServiceAsync.WithRawResponse
 

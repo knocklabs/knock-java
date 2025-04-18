@@ -27,6 +27,7 @@ import app.knock.api.models.users.UserUnsetChannelDataParams
 import app.knock.api.models.users.UserUpdateParams
 import app.knock.api.services.blocking.users.BulkService
 import app.knock.api.services.blocking.users.FeedService
+import app.knock.api.services.blocking.users.GuideService
 import com.google.errorprone.annotations.MustBeClosed
 
 interface UserService {
@@ -37,6 +38,8 @@ interface UserService {
     fun withRawResponse(): WithRawResponse
 
     fun feeds(): FeedService
+
+    fun guides(): GuideService
 
     fun bulk(): BulkService
 
@@ -196,6 +199,8 @@ interface UserService {
     interface WithRawResponse {
 
         fun feeds(): FeedService.WithRawResponse
+
+        fun guides(): GuideService.WithRawResponse
 
         fun bulk(): BulkService.WithRawResponse
 

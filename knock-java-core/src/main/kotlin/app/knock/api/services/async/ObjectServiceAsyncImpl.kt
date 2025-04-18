@@ -29,6 +29,7 @@ import app.knock.api.models.objects.ObjectListMessagesParams
 import app.knock.api.models.objects.ObjectListPageAsync
 import app.knock.api.models.objects.ObjectListPageResponse
 import app.knock.api.models.objects.ObjectListParams
+import app.knock.api.models.objects.ObjectListPreferencesParams
 import app.knock.api.models.objects.ObjectListSchedulesPageAsync
 import app.knock.api.models.objects.ObjectListSchedulesPageResponse
 import app.knock.api.models.objects.ObjectListSchedulesParams
@@ -114,6 +115,13 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
     ): CompletableFuture<ObjectListMessagesPageAsync> =
         // get /v1/objects/{collection}/{object_id}/messages
         withRawResponse().listMessages(params, requestOptions).thenApply { it.parse() }
+
+    override fun listPreferences(
+        params: ObjectListPreferencesParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<List<PreferenceSet>> =
+        // get /v1/objects/{collection}/{object_id}/preferences
+        withRawResponse().listPreferences(params, requestOptions).thenApply { it.parse() }
 
     override fun listSchedules(
         params: ObjectListSchedulesParams,
@@ -437,6 +445,42 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                                     .params(params)
                                     .response(it)
                                     .build()
+                            }
+                    }
+                }
+        }
+
+        private val listPreferencesHandler: Handler<List<PreferenceSet>> =
+            jsonHandler<List<PreferenceSet>>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun listPreferences(
+            params: ObjectListPreferencesParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<List<PreferenceSet>>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments(
+                        "v1",
+                        "objects",
+                        params._pathParam(0),
+                        params._pathParam(1),
+                        "preferences",
+                    )
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { listPreferencesHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.forEach { it.validate() }
+                                }
                             }
                     }
                 }

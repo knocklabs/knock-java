@@ -45,6 +45,8 @@ import app.knock.api.services.blocking.users.BulkService
 import app.knock.api.services.blocking.users.BulkServiceImpl
 import app.knock.api.services.blocking.users.FeedService
 import app.knock.api.services.blocking.users.FeedServiceImpl
+import app.knock.api.services.blocking.users.GuideService
+import app.knock.api.services.blocking.users.GuideServiceImpl
 
 class UserServiceImpl internal constructor(private val clientOptions: ClientOptions) : UserService {
 
@@ -54,11 +56,15 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
 
     private val feeds: FeedService by lazy { FeedServiceImpl(clientOptions) }
 
+    private val guides: GuideService by lazy { GuideServiceImpl(clientOptions) }
+
     private val bulk: BulkService by lazy { BulkServiceImpl(clientOptions) }
 
     override fun withRawResponse(): UserService.WithRawResponse = withRawResponse
 
     override fun feeds(): FeedService = feeds
+
+    override fun guides(): GuideService = guides
 
     override fun bulk(): BulkService = bulk
 
@@ -154,11 +160,17 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             FeedServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val guides: GuideService.WithRawResponse by lazy {
+            GuideServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val bulk: BulkService.WithRawResponse by lazy {
             BulkServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
         override fun feeds(): FeedService.WithRawResponse = feeds
+
+        override fun guides(): GuideService.WithRawResponse = guides
 
         override fun bulk(): BulkService.WithRawResponse = bulk
 

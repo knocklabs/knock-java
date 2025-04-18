@@ -358,8 +358,8 @@ interface MessageService {
         ): HttpResponseFor<Message>
 
         /**
-         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unread`, but is
-         * otherwise the same as [MessageService.markAsUnread].
+         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/read`, but is otherwise
+         * the same as [MessageService.markAsUnread].
          */
         @MustBeClosed
         fun markAsUnread(params: MessageMarkAsUnreadParams): HttpResponseFor<Message> =
@@ -373,8 +373,8 @@ interface MessageService {
         ): HttpResponseFor<Message>
 
         /**
-         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unseen`, but is
-         * otherwise the same as [MessageService.markAsUnseen].
+         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/seen`, but is otherwise
+         * the same as [MessageService.markAsUnseen].
          */
         @MustBeClosed
         fun markAsUnseen(params: MessageMarkAsUnseenParams): HttpResponseFor<Message> =
@@ -388,7 +388,7 @@ interface MessageService {
         ): HttpResponseFor<Message>
 
         /**
-         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/unarchived`, but is
+         * Returns a raw HTTP response for `delete /v1/messages/{message_id}/archived`, but is
          * otherwise the same as [MessageService.unarchive].
          */
         @MustBeClosed

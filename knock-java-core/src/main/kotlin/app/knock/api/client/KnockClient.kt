@@ -5,6 +5,7 @@ package app.knock.api.client
 import app.knock.api.services.blocking.AudienceService
 import app.knock.api.services.blocking.BulkOperationService
 import app.knock.api.services.blocking.ChannelService
+import app.knock.api.services.blocking.IntegrationService
 import app.knock.api.services.blocking.MessageService
 import app.knock.api.services.blocking.ObjectService
 import app.knock.api.services.blocking.ProviderService
@@ -57,6 +58,8 @@ interface KnockClient {
 
     fun providers(): ProviderService
 
+    fun integrations(): IntegrationService
+
     fun workflows(): WorkflowService
 
     fun schedules(): ScheduleService
@@ -94,6 +97,8 @@ interface KnockClient {
         fun messages(): MessageService.WithRawResponse
 
         fun providers(): ProviderService.WithRawResponse
+
+        fun integrations(): IntegrationService.WithRawResponse
 
         fun workflows(): WorkflowService.WithRawResponse
 

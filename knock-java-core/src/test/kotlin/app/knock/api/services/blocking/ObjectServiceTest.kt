@@ -13,6 +13,7 @@ import app.knock.api.models.objects.ObjectGetParams
 import app.knock.api.models.objects.ObjectGetPreferencesParams
 import app.knock.api.models.objects.ObjectListMessagesParams
 import app.knock.api.models.objects.ObjectListParams
+import app.knock.api.models.objects.ObjectListPreferencesParams
 import app.knock.api.models.objects.ObjectListSchedulesParams
 import app.knock.api.models.objects.ObjectListSubscriptionsParams
 import app.knock.api.models.objects.ObjectSetChannelDataParams
@@ -304,6 +305,29 @@ internal class ObjectServiceTest {
             )
 
         page.response().validate()
+    }
+
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
+    @Test
+    fun listPreferences() {
+        val client =
+            KnockOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .bearerToken("My Bearer Token")
+                .build()
+        val objectService = client.objects()
+
+        val preferenceSets =
+            objectService.listPreferences(
+                ObjectListPreferencesParams.builder()
+                    .collection("collection")
+                    .objectId("object_id")
+                    .build()
+            )
+
+        preferenceSets.forEach { it.validate() }
     }
 
     @Disabled(

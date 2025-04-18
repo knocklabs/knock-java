@@ -15,6 +15,7 @@ import app.knock.api.models.objects.ObjectListMessagesPageAsync
 import app.knock.api.models.objects.ObjectListMessagesParams
 import app.knock.api.models.objects.ObjectListPageAsync
 import app.knock.api.models.objects.ObjectListParams
+import app.knock.api.models.objects.ObjectListPreferencesParams
 import app.knock.api.models.objects.ObjectListSchedulesPageAsync
 import app.knock.api.models.objects.ObjectListSchedulesParams
 import app.knock.api.models.objects.ObjectListSubscriptionsPageAsync
@@ -134,6 +135,17 @@ interface ObjectServiceAsync {
         params: ObjectListMessagesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ObjectListMessagesPageAsync>
+
+    /** Returns a paginated list of preference sets for the specified object. */
+    fun listPreferences(
+        params: ObjectListPreferencesParams
+    ): CompletableFuture<List<PreferenceSet>> = listPreferences(params, RequestOptions.none())
+
+    /** @see [listPreferences] */
+    fun listPreferences(
+        params: ObjectListPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<List<PreferenceSet>>
 
     /** Returns a paginated list of schedules for an object. */
     fun listSchedules(
@@ -346,6 +358,23 @@ interface ObjectServiceAsync {
             params: ObjectListMessagesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<ObjectListMessagesPageAsync>>
+
+        /**
+         * Returns a raw HTTP response for `get /v1/objects/{collection}/{object_id}/preferences`,
+         * but is otherwise the same as [ObjectServiceAsync.listPreferences].
+         */
+        @MustBeClosed
+        fun listPreferences(
+            params: ObjectListPreferencesParams
+        ): CompletableFuture<HttpResponseFor<List<PreferenceSet>>> =
+            listPreferences(params, RequestOptions.none())
+
+        /** @see [listPreferences] */
+        @MustBeClosed
+        fun listPreferences(
+            params: ObjectListPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<List<PreferenceSet>>>
 
         /**
          * Returns a raw HTTP response for `get /v1/objects/{collection}/{object_id}/schedules`, but

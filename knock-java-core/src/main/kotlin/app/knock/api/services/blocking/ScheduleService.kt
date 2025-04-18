@@ -10,6 +10,7 @@ import app.knock.api.models.schedules.ScheduleDeleteParams
 import app.knock.api.models.schedules.ScheduleListPage
 import app.knock.api.models.schedules.ScheduleListParams
 import app.knock.api.models.schedules.ScheduleUpdateParams
+import app.knock.api.services.blocking.schedules.BulkService
 import com.google.errorprone.annotations.MustBeClosed
 
 interface ScheduleService {
@@ -18,6 +19,8 @@ interface ScheduleService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    fun bulk(): BulkService
 
     /**
      * Creates one or more schedules for a workflow with the specified recipients, timing, and data.
@@ -69,6 +72,8 @@ interface ScheduleService {
 
     /** A view of [ScheduleService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        fun bulk(): BulkService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /v1/schedules`, but is otherwise the same as

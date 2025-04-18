@@ -22,6 +22,8 @@ import app.knock.api.models.schedules.ScheduleListPage
 import app.knock.api.models.schedules.ScheduleListPageResponse
 import app.knock.api.models.schedules.ScheduleListParams
 import app.knock.api.models.schedules.ScheduleUpdateParams
+import app.knock.api.services.blocking.schedules.BulkService
+import app.knock.api.services.blocking.schedules.BulkServiceImpl
 
 class ScheduleServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ScheduleService {
@@ -30,7 +32,11 @@ class ScheduleServiceImpl internal constructor(private val clientOptions: Client
         WithRawResponseImpl(clientOptions)
     }
 
+    private val bulk: BulkService by lazy { BulkServiceImpl(clientOptions) }
+
     override fun withRawResponse(): ScheduleService.WithRawResponse = withRawResponse
+
+    override fun bulk(): BulkService = bulk
 
     override fun create(
         params: ScheduleCreateParams,
@@ -64,6 +70,12 @@ class ScheduleServiceImpl internal constructor(private val clientOptions: Client
         ScheduleService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        private val bulk: BulkService.WithRawResponse by lazy {
+            BulkServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        override fun bulk(): BulkService.WithRawResponse = bulk
 
         private val createHandler: Handler<List<Schedule>> =
             jsonHandler<List<Schedule>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

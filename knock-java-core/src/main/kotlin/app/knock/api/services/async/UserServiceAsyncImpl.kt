@@ -45,6 +45,8 @@ import app.knock.api.services.async.users.BulkServiceAsync
 import app.knock.api.services.async.users.BulkServiceAsyncImpl
 import app.knock.api.services.async.users.FeedServiceAsync
 import app.knock.api.services.async.users.FeedServiceAsyncImpl
+import app.knock.api.services.async.users.GuideServiceAsync
+import app.knock.api.services.async.users.GuideServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 
 class UserServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -56,11 +58,15 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
 
     private val feeds: FeedServiceAsync by lazy { FeedServiceAsyncImpl(clientOptions) }
 
+    private val guides: GuideServiceAsync by lazy { GuideServiceAsyncImpl(clientOptions) }
+
     private val bulk: BulkServiceAsync by lazy { BulkServiceAsyncImpl(clientOptions) }
 
     override fun withRawResponse(): UserServiceAsync.WithRawResponse = withRawResponse
 
     override fun feeds(): FeedServiceAsync = feeds
+
+    override fun guides(): GuideServiceAsync = guides
 
     override fun bulk(): BulkServiceAsync = bulk
 
@@ -171,11 +177,17 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             FeedServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val guides: GuideServiceAsync.WithRawResponse by lazy {
+            GuideServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val bulk: BulkServiceAsync.WithRawResponse by lazy {
             BulkServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         override fun feeds(): FeedServiceAsync.WithRawResponse = feeds
+
+        override fun guides(): GuideServiceAsync.WithRawResponse = guides
 
         override fun bulk(): BulkServiceAsync.WithRawResponse = bulk
 

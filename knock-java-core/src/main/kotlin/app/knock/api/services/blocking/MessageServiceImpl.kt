@@ -119,21 +119,21 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
         params: MessageMarkAsUnreadParams,
         requestOptions: RequestOptions,
     ): Message =
-        // delete /v1/messages/{message_id}/unread
+        // delete /v1/messages/{message_id}/read
         withRawResponse().markAsUnread(params, requestOptions).parse()
 
     override fun markAsUnseen(
         params: MessageMarkAsUnseenParams,
         requestOptions: RequestOptions,
     ): Message =
-        // delete /v1/messages/{message_id}/unseen
+        // delete /v1/messages/{message_id}/seen
         withRawResponse().markAsUnseen(params, requestOptions).parse()
 
     override fun unarchive(
         params: MessageUnarchiveParams,
         requestOptions: RequestOptions,
     ): Message =
-        // delete /v1/messages/{message_id}/unarchived
+        // delete /v1/messages/{message_id}/archived
         withRawResponse().unarchive(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -454,7 +454,7 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
-                    .addPathSegments("v1", "messages", params._pathParam(0), "unread")
+                    .addPathSegments("v1", "messages", params._pathParam(0), "read")
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepare(clientOptions, params)
@@ -481,7 +481,7 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
-                    .addPathSegments("v1", "messages", params._pathParam(0), "unseen")
+                    .addPathSegments("v1", "messages", params._pathParam(0), "seen")
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepare(clientOptions, params)
@@ -508,7 +508,7 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
-                    .addPathSegments("v1", "messages", params._pathParam(0), "unarchived")
+                    .addPathSegments("v1", "messages", params._pathParam(0), "archived")
                     .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
                     .build()
                     .prepare(clientOptions, params)
