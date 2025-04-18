@@ -17,10 +17,12 @@ internal class GuideMarkMessageAsInteractedParamsTest {
             .guideId("323e4567-e89b-12d3-a456-426614174000")
             .guideKey("guide_12345")
             .guideStepRef("step_12345")
-            .content(JsonValue.from("content_12345"))
-            .data(JsonValue.from("data_12345"))
+            .content(
+                JsonValue.from(mapOf("body" to "Guide content body", "title" to "Guide Title"))
+            )
+            .data(JsonValue.from(mapOf("product_id" to "product_123")))
             .isFinal(true)
-            .metadata(JsonValue.from("metadata_12345"))
+            .metadata(JsonValue.from(mapOf("source" to "onboarding")))
             .tenant("tenant_12345")
             .build()
     }
@@ -53,10 +55,12 @@ internal class GuideMarkMessageAsInteractedParamsTest {
                 .guideId("323e4567-e89b-12d3-a456-426614174000")
                 .guideKey("guide_12345")
                 .guideStepRef("step_12345")
-                .content(JsonValue.from("content_12345"))
-                .data(JsonValue.from("data_12345"))
+                .content(
+                    JsonValue.from(mapOf("body" to "Guide content body", "title" to "Guide Title"))
+                )
+                .data(JsonValue.from(mapOf("product_id" to "product_123")))
                 .isFinal(true)
-                .metadata(JsonValue.from("metadata_12345"))
+                .metadata(JsonValue.from(mapOf("source" to "onboarding")))
                 .tenant("tenant_12345")
                 .build()
 
@@ -66,10 +70,13 @@ internal class GuideMarkMessageAsInteractedParamsTest {
         assertThat(body.guideId()).isEqualTo("323e4567-e89b-12d3-a456-426614174000")
         assertThat(body.guideKey()).isEqualTo("guide_12345")
         assertThat(body.guideStepRef()).isEqualTo("step_12345")
-        assertThat(body._content()).isEqualTo(JsonValue.from("content_12345"))
-        assertThat(body._data()).isEqualTo(JsonValue.from("data_12345"))
+        assertThat(body._content())
+            .isEqualTo(
+                JsonValue.from(mapOf("body" to "Guide content body", "title" to "Guide Title"))
+            )
+        assertThat(body._data()).isEqualTo(JsonValue.from(mapOf("product_id" to "product_123")))
         assertThat(body.isFinal()).contains(true)
-        assertThat(body._metadata()).isEqualTo(JsonValue.from("metadata_12345"))
+        assertThat(body._metadata()).isEqualTo(JsonValue.from(mapOf("source" to "onboarding")))
         assertThat(body.tenant()).contains("tenant_12345")
     }
 
