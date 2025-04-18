@@ -5,6 +5,7 @@ package app.knock.api.services.blocking
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClient
 import app.knock.api.core.JsonValue
+import app.knock.api.models.Condition
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
 import app.knock.api.models.UnnamedSchemaWithArrayParent1
 import app.knock.api.models.recipients.channeldata.ChannelDataRequest
@@ -67,35 +68,25 @@ internal class UserServiceTest {
                                 UnnamedSchemaWithArrayParent1.builder()
                                     .id("default")
                                     .categories(
-                                        UnnamedSchemaWithArrayParent1.Categories.builder()
-                                            .putAdditionalProperty(
-                                                "marketing",
-                                                JsonValue.from(
-                                                    mapOf(
-                                                        "channel_types" to
-                                                            mapOf(
-                                                                "chat" to true,
-                                                                "email" to false,
-                                                                "http" to true,
-                                                                "in_app_feed" to true,
-                                                                "push" to true,
-                                                                "sms" to true,
-                                                            ),
-                                                        "conditions" to
-                                                            listOf(
-                                                                mapOf(
-                                                                    "argument" to "some_property",
-                                                                    "operator" to "equal_to",
-                                                                    "variable" to
-                                                                        "recipient.property",
-                                                                )
-                                                            ),
-                                                    )
-                                                ),
+                                        UnnamedSchemaWithArrayParent1.Categories
+                                            .PreferenceSetWorkflowCategorySettingObject
+                                            .builder()
+                                            .channelTypes(
+                                                PreferenceSetChannelTypes.builder()
+                                                    .chat(true)
+                                                    .email(false)
+                                                    .http(true)
+                                                    .inAppFeed(true)
+                                                    .push(true)
+                                                    .sms(true)
+                                                    .build()
                                             )
-                                            .putAdditionalProperty(
-                                                "transactional",
-                                                JsonValue.from(true),
+                                            .addCondition(
+                                                Condition.builder()
+                                                    .argument("some_property")
+                                                    .operator(Condition.Operator.EQUAL_TO)
+                                                    .variable("recipient.property")
+                                                    .build()
                                             )
                                             .build()
                                     )

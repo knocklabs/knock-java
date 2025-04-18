@@ -14,6 +14,7 @@ import app.knock.api.core.checkRequired
 import app.knock.api.core.getOrThrow
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
+import app.knock.api.models.Condition
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
 import app.knock.api.models.UnnamedSchemaWithArrayParent1
 import app.knock.api.models.recipients.channeldata.DiscordChannelData
@@ -874,8 +875,7 @@ private constructor(
         fun id(): String = id.getRequired("id")
 
         /**
-         * An object where the key is the category and the values are the preference settings for
-         * that category.
+         * Workflow or category preferences within a preference set
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -993,14 +993,8 @@ private constructor(
              */
             fun id(id: JsonField<String>) = apply { this.id = id }
 
-            /**
-             * An object where the key is the category and the values are the preference settings
-             * for that category.
-             */
-            fun categories(categories: Categories?) = categories(JsonField.ofNullable(categories))
-
-            /** Alias for calling [Builder.categories] with `categories.orElse(null)`. */
-            fun categories(categories: Optional<Categories>) = categories(categories.getOrNull())
+            /** Workflow or category preferences within a preference set */
+            fun categories(categories: Categories) = categories(JsonField.of(categories))
 
             /**
              * Sets [Builder.categories] to an arbitrary JSON value.
@@ -1012,6 +1006,23 @@ private constructor(
             fun categories(categories: JsonField<Categories>) = apply {
                 this.categories = categories
             }
+
+            /** Alias for calling [categories] with `Categories.ofBool(bool)`. */
+            fun categories(bool: Boolean) = categories(Categories.ofBool(bool))
+
+            /**
+             * Alias for calling [categories] with
+             * `Categories.ofPreferenceSetWorkflowCategorySettingObject(preferenceSetWorkflowCategorySettingObject)`.
+             */
+            fun categories(
+                preferenceSetWorkflowCategorySettingObject:
+                    Categories.PreferenceSetWorkflowCategorySettingObject
+            ) =
+                categories(
+                    Categories.ofPreferenceSetWorkflowCategorySettingObject(
+                        preferenceSetWorkflowCategorySettingObject
+                    )
+                )
 
             /** Channel type preferences. */
             fun channelTypes(channelTypes: PreferenceSetChannelTypes?) =
@@ -1126,68 +1137,56 @@ private constructor(
                 (channelTypes.asKnown().getOrNull()?.validity() ?: 0) +
                 (workflows.asKnown().getOrNull()?.validity() ?: 0)
 
-        /**
-         * An object where the key is the category and the values are the preference settings for
-         * that category.
-         */
+        /** Workflow or category preferences within a preference set */
+        @JsonDeserialize(using = Categories.Deserializer::class)
+        @JsonSerialize(using = Categories.Serializer::class)
         class Categories
-        @JsonCreator
         private constructor(
-            @com.fasterxml.jackson.annotation.JsonValue
-            private val additionalProperties: Map<String, JsonValue>
+            private val bool: Boolean? = null,
+            private val preferenceSetWorkflowCategorySettingObject:
+                PreferenceSetWorkflowCategorySettingObject? =
+                null,
+            private val _json: JsonValue? = null,
         ) {
 
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+            fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
 
-            fun toBuilder() = Builder().from(this)
+            /**
+             * The settings object for a workflow or category, where you can specify channel types
+             * or conditions.
+             */
+            fun preferenceSetWorkflowCategorySettingObject():
+                Optional<PreferenceSetWorkflowCategorySettingObject> =
+                Optional.ofNullable(preferenceSetWorkflowCategorySettingObject)
 
-            companion object {
+            fun isBool(): Boolean = bool != null
 
-                /** Returns a mutable builder for constructing an instance of [Categories]. */
-                @JvmStatic fun builder() = Builder()
-            }
+            fun isPreferenceSetWorkflowCategorySettingObject(): Boolean =
+                preferenceSetWorkflowCategorySettingObject != null
 
-            /** A builder for [Categories]. */
-            class Builder internal constructor() {
+            fun asBool(): Boolean = bool.getOrThrow("bool")
 
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+            /**
+             * The settings object for a workflow or category, where you can specify channel types
+             * or conditions.
+             */
+            fun asPreferenceSetWorkflowCategorySettingObject():
+                PreferenceSetWorkflowCategorySettingObject =
+                preferenceSetWorkflowCategorySettingObject.getOrThrow(
+                    "preferenceSetWorkflowCategorySettingObject"
+                )
 
-                @JvmSynthetic
-                internal fun from(categories: Categories) = apply {
-                    additionalProperties = categories.additionalProperties.toMutableMap()
+            fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
+
+            fun <T> accept(visitor: Visitor<T>): T =
+                when {
+                    bool != null -> visitor.visitBool(bool)
+                    preferenceSetWorkflowCategorySettingObject != null ->
+                        visitor.visitPreferenceSetWorkflowCategorySettingObject(
+                            preferenceSetWorkflowCategorySettingObject
+                        )
+                    else -> visitor.unknown(_json)
                 }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [Categories].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): Categories = Categories(additionalProperties.toImmutable())
-            }
 
             private var validated: Boolean = false
 
@@ -1196,6 +1195,18 @@ private constructor(
                     return@apply
                 }
 
+                accept(
+                    object : Visitor<Unit> {
+                        override fun visitBool(bool: Boolean) {}
+
+                        override fun visitPreferenceSetWorkflowCategorySettingObject(
+                            preferenceSetWorkflowCategorySettingObject:
+                                PreferenceSetWorkflowCategorySettingObject
+                        ) {
+                            preferenceSetWorkflowCategorySettingObject.validate()
+                        }
+                    }
+                )
                 validated = true
             }
 
@@ -1215,23 +1226,381 @@ private constructor(
              */
             @JvmSynthetic
             internal fun validity(): Int =
-                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+                accept(
+                    object : Visitor<Int> {
+                        override fun visitBool(bool: Boolean) = 1
+
+                        override fun visitPreferenceSetWorkflowCategorySettingObject(
+                            preferenceSetWorkflowCategorySettingObject:
+                                PreferenceSetWorkflowCategorySettingObject
+                        ) = preferenceSetWorkflowCategorySettingObject.validity()
+
+                        override fun unknown(json: JsonValue?) = 0
+                    }
+                )
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is Categories && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is Categories && bool == other.bool && preferenceSetWorkflowCategorySettingObject == other.preferenceSetWorkflowCategorySettingObject /* spotless:on */
             }
 
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-            /* spotless:on */
+            override fun hashCode(): Int = /* spotless:off */ Objects.hash(bool, preferenceSetWorkflowCategorySettingObject) /* spotless:on */
 
-            override fun hashCode(): Int = hashCode
+            override fun toString(): String =
+                when {
+                    bool != null -> "Categories{bool=$bool}"
+                    preferenceSetWorkflowCategorySettingObject != null ->
+                        "Categories{preferenceSetWorkflowCategorySettingObject=$preferenceSetWorkflowCategorySettingObject}"
+                    _json != null -> "Categories{_unknown=$_json}"
+                    else -> throw IllegalStateException("Invalid Categories")
+                }
 
-            override fun toString() = "Categories{additionalProperties=$additionalProperties}"
+            companion object {
+
+                @JvmStatic fun ofBool(bool: Boolean) = Categories(bool = bool)
+
+                /**
+                 * The settings object for a workflow or category, where you can specify channel
+                 * types or conditions.
+                 */
+                @JvmStatic
+                fun ofPreferenceSetWorkflowCategorySettingObject(
+                    preferenceSetWorkflowCategorySettingObject:
+                        PreferenceSetWorkflowCategorySettingObject
+                ) =
+                    Categories(
+                        preferenceSetWorkflowCategorySettingObject =
+                            preferenceSetWorkflowCategorySettingObject
+                    )
+            }
+
+            /**
+             * An interface that defines how to map each variant of [Categories] to a value of type
+             * [T].
+             */
+            interface Visitor<out T> {
+
+                fun visitBool(bool: Boolean): T
+
+                /**
+                 * The settings object for a workflow or category, where you can specify channel
+                 * types or conditions.
+                 */
+                fun visitPreferenceSetWorkflowCategorySettingObject(
+                    preferenceSetWorkflowCategorySettingObject:
+                        PreferenceSetWorkflowCategorySettingObject
+                ): T
+
+                /**
+                 * Maps an unknown variant of [Categories] to a value of type [T].
+                 *
+                 * An instance of [Categories] can contain an unknown variant if it was deserialized
+                 * from data that doesn't match any known variant. For example, if the SDK is on an
+                 * older version than the API, then the API may respond with new variants that the
+                 * SDK is unaware of.
+                 *
+                 * @throws KnockInvalidDataException in the default implementation.
+                 */
+                fun unknown(json: JsonValue?): T {
+                    throw KnockInvalidDataException("Unknown Categories: $json")
+                }
+            }
+
+            internal class Deserializer : BaseDeserializer<Categories>(Categories::class) {
+
+                override fun ObjectCodec.deserialize(node: JsonNode): Categories {
+                    val json = JsonValue.fromJsonNode(node)
+
+                    val bestMatches =
+                        sequenceOf(
+                                tryDeserialize(
+                                        node,
+                                        jacksonTypeRef<PreferenceSetWorkflowCategorySettingObject>(),
+                                    )
+                                    ?.let {
+                                        Categories(
+                                            preferenceSetWorkflowCategorySettingObject = it,
+                                            _json = json,
+                                        )
+                                    },
+                                tryDeserialize(node, jacksonTypeRef<Boolean>())?.let {
+                                    Categories(bool = it, _json = json)
+                                },
+                            )
+                            .filterNotNull()
+                            .allMaxBy { it.validity() }
+                            .toList()
+                    return when (bestMatches.size) {
+                        // This can happen if what we're deserializing is completely incompatible
+                        // with all the possible variants (e.g. deserializing from string).
+                        0 -> Categories(_json = json)
+                        1 -> bestMatches.single()
+                        // If there's more than one match with the highest validity, then use the
+                        // first completely valid match, or simply the first match if none are
+                        // completely valid.
+                        else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+                    }
+                }
+            }
+
+            internal class Serializer : BaseSerializer<Categories>(Categories::class) {
+
+                override fun serialize(
+                    value: Categories,
+                    generator: JsonGenerator,
+                    provider: SerializerProvider,
+                ) {
+                    when {
+                        value.bool != null -> generator.writeObject(value.bool)
+                        value.preferenceSetWorkflowCategorySettingObject != null ->
+                            generator.writeObject(value.preferenceSetWorkflowCategorySettingObject)
+                        value._json != null -> generator.writeObject(value._json)
+                        else -> throw IllegalStateException("Invalid Categories")
+                    }
+                }
+            }
+
+            /**
+             * The settings object for a workflow or category, where you can specify channel types
+             * or conditions.
+             */
+            class PreferenceSetWorkflowCategorySettingObject
+            private constructor(
+                private val channelTypes: JsonField<PreferenceSetChannelTypes>,
+                private val conditions: JsonField<List<Condition>>,
+                private val additionalProperties: MutableMap<String, JsonValue>,
+            ) {
+
+                @JsonCreator
+                private constructor(
+                    @JsonProperty("channel_types")
+                    @ExcludeMissing
+                    channelTypes: JsonField<PreferenceSetChannelTypes> = JsonMissing.of(),
+                    @JsonProperty("conditions")
+                    @ExcludeMissing
+                    conditions: JsonField<List<Condition>> = JsonMissing.of(),
+                ) : this(channelTypes, conditions, mutableMapOf())
+
+                /**
+                 * Channel type preferences.
+                 *
+                 * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g.
+                 *   if the server responded with an unexpected value).
+                 */
+                fun channelTypes(): Optional<PreferenceSetChannelTypes> =
+                    channelTypes.getOptional("channel_types")
+
+                /**
+                 * A list of conditions to apply to a channel type.
+                 *
+                 * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g.
+                 *   if the server responded with an unexpected value).
+                 */
+                fun conditions(): Optional<List<Condition>> = conditions.getOptional("conditions")
+
+                /**
+                 * Returns the raw JSON value of [channelTypes].
+                 *
+                 * Unlike [channelTypes], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("channel_types")
+                @ExcludeMissing
+                fun _channelTypes(): JsonField<PreferenceSetChannelTypes> = channelTypes
+
+                /**
+                 * Returns the raw JSON value of [conditions].
+                 *
+                 * Unlike [conditions], this method doesn't throw if the JSON field has an
+                 * unexpected type.
+                 */
+                @JsonProperty("conditions")
+                @ExcludeMissing
+                fun _conditions(): JsonField<List<Condition>> = conditions
+
+                @JsonAnySetter
+                private fun putAdditionalProperty(key: String, value: JsonValue) {
+                    additionalProperties.put(key, value)
+                }
+
+                @JsonAnyGetter
+                @ExcludeMissing
+                fun _additionalProperties(): Map<String, JsonValue> =
+                    Collections.unmodifiableMap(additionalProperties)
+
+                fun toBuilder() = Builder().from(this)
+
+                companion object {
+
+                    /**
+                     * Returns a mutable builder for constructing an instance of
+                     * [PreferenceSetWorkflowCategorySettingObject].
+                     */
+                    @JvmStatic fun builder() = Builder()
+                }
+
+                /** A builder for [PreferenceSetWorkflowCategorySettingObject]. */
+                class Builder internal constructor() {
+
+                    private var channelTypes: JsonField<PreferenceSetChannelTypes> =
+                        JsonMissing.of()
+                    private var conditions: JsonField<MutableList<Condition>>? = null
+                    private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                    @JvmSynthetic
+                    internal fun from(
+                        preferenceSetWorkflowCategorySettingObject:
+                            PreferenceSetWorkflowCategorySettingObject
+                    ) = apply {
+                        channelTypes = preferenceSetWorkflowCategorySettingObject.channelTypes
+                        conditions =
+                            preferenceSetWorkflowCategorySettingObject.conditions.map {
+                                it.toMutableList()
+                            }
+                        additionalProperties =
+                            preferenceSetWorkflowCategorySettingObject.additionalProperties
+                                .toMutableMap()
+                    }
+
+                    /** Channel type preferences. */
+                    fun channelTypes(channelTypes: PreferenceSetChannelTypes?) =
+                        channelTypes(JsonField.ofNullable(channelTypes))
+
+                    /**
+                     * Alias for calling [Builder.channelTypes] with `channelTypes.orElse(null)`.
+                     */
+                    fun channelTypes(channelTypes: Optional<PreferenceSetChannelTypes>) =
+                        channelTypes(channelTypes.getOrNull())
+
+                    /**
+                     * Sets [Builder.channelTypes] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.channelTypes] with a well-typed
+                     * [PreferenceSetChannelTypes] value instead. This method is primarily for
+                     * setting the field to an undocumented or not yet supported value.
+                     */
+                    fun channelTypes(channelTypes: JsonField<PreferenceSetChannelTypes>) = apply {
+                        this.channelTypes = channelTypes
+                    }
+
+                    /** A list of conditions to apply to a channel type. */
+                    fun conditions(conditions: List<Condition>?) =
+                        conditions(JsonField.ofNullable(conditions))
+
+                    /** Alias for calling [Builder.conditions] with `conditions.orElse(null)`. */
+                    fun conditions(conditions: Optional<List<Condition>>) =
+                        conditions(conditions.getOrNull())
+
+                    /**
+                     * Sets [Builder.conditions] to an arbitrary JSON value.
+                     *
+                     * You should usually call [Builder.conditions] with a well-typed
+                     * `List<Condition>` value instead. This method is primarily for setting the
+                     * field to an undocumented or not yet supported value.
+                     */
+                    fun conditions(conditions: JsonField<List<Condition>>) = apply {
+                        this.conditions = conditions.map { it.toMutableList() }
+                    }
+
+                    /**
+                     * Adds a single [Condition] to [conditions].
+                     *
+                     * @throws IllegalStateException if the field was previously set to a non-list.
+                     */
+                    fun addCondition(condition: Condition) = apply {
+                        conditions =
+                            (conditions ?: JsonField.of(mutableListOf())).also {
+                                checkKnown("conditions", it).add(condition)
+                            }
+                    }
+
+                    fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                        this.additionalProperties.clear()
+                        putAllAdditionalProperties(additionalProperties)
+                    }
+
+                    fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                        additionalProperties.put(key, value)
+                    }
+
+                    fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                        apply {
+                            this.additionalProperties.putAll(additionalProperties)
+                        }
+
+                    fun removeAdditionalProperty(key: String) = apply {
+                        additionalProperties.remove(key)
+                    }
+
+                    fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                        keys.forEach(::removeAdditionalProperty)
+                    }
+
+                    /**
+                     * Returns an immutable instance of
+                     * [PreferenceSetWorkflowCategorySettingObject].
+                     *
+                     * Further updates to this [Builder] will not mutate the returned instance.
+                     */
+                    fun build(): PreferenceSetWorkflowCategorySettingObject =
+                        PreferenceSetWorkflowCategorySettingObject(
+                            channelTypes,
+                            (conditions ?: JsonMissing.of()).map { it.toImmutable() },
+                            additionalProperties.toMutableMap(),
+                        )
+                }
+
+                private var validated: Boolean = false
+
+                fun validate(): PreferenceSetWorkflowCategorySettingObject = apply {
+                    if (validated) {
+                        return@apply
+                    }
+
+                    channelTypes().ifPresent { it.validate() }
+                    conditions().ifPresent { it.forEach { it.validate() } }
+                    validated = true
+                }
+
+                fun isValid(): Boolean =
+                    try {
+                        validate()
+                        true
+                    } catch (e: KnockInvalidDataException) {
+                        false
+                    }
+
+                /**
+                 * Returns a score indicating how many valid values are contained in this object
+                 * recursively.
+                 *
+                 * Used for best match union deserialization.
+                 */
+                @JvmSynthetic
+                internal fun validity(): Int =
+                    (channelTypes.asKnown().getOrNull()?.validity() ?: 0) +
+                        (conditions.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+
+                override fun equals(other: Any?): Boolean {
+                    if (this === other) {
+                        return true
+                    }
+
+                    return /* spotless:off */ other is PreferenceSetWorkflowCategorySettingObject && channelTypes == other.channelTypes && conditions == other.conditions && additionalProperties == other.additionalProperties /* spotless:on */
+                }
+
+                /* spotless:off */
+                private val hashCode: Int by lazy { Objects.hash(channelTypes, conditions, additionalProperties) }
+                /* spotless:on */
+
+                override fun hashCode(): Int = hashCode
+
+                override fun toString() =
+                    "PreferenceSetWorkflowCategorySettingObject{channelTypes=$channelTypes, conditions=$conditions, additionalProperties=$additionalProperties}"
+            }
         }
 
         /**
