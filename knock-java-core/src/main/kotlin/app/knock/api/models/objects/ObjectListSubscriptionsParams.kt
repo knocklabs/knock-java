@@ -17,8 +17,9 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * List subscriptions for an object. Either list all subscriptions that belong to the object, or all
- * subscriptions that this object has. Determined by the `mode` query parameter.
+ * List subscriptions for an object. Eitherlist the recipients that subscribe to the provided
+ * object, or list the objects that the provided object is subscribed to. Determined by the `mode`
+ * query parameter.
  */
 class ObjectListSubscriptionsParams
 private constructor(
