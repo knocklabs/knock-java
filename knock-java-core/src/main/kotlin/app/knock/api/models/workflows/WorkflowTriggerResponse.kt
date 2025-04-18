@@ -15,7 +15,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
 
-/** The response from triggering a workflow */
+/** The response from triggering a workflow. */
 class WorkflowTriggerResponse
 private constructor(
     private val workflowRunId: JsonField<String>,

@@ -5,8 +5,14 @@ package app.knock.api.services.async.messages
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClientAsync
 import app.knock.api.core.JsonValue
+import app.knock.api.models.messages.batch.BatchArchiveParams
 import app.knock.api.models.messages.batch.BatchGetContentParams
 import app.knock.api.models.messages.batch.BatchMarkAsInteractedParams
+import app.knock.api.models.messages.batch.BatchMarkAsReadParams
+import app.knock.api.models.messages.batch.BatchMarkAsSeenParams
+import app.knock.api.models.messages.batch.BatchMarkAsUnreadParams
+import app.knock.api.models.messages.batch.BatchMarkAsUnseenParams
+import app.knock.api.models.messages.batch.BatchUnarchiveParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -26,7 +32,13 @@ internal class BatchServiceAsyncTest {
                 .build()
         val batchServiceAsync = client.messages().batch()
 
-        val messagesFuture = batchServiceAsync.archive()
+        val messagesFuture =
+            batchServiceAsync.archive(
+                BatchArchiveParams.builder()
+                    .addMessageId("11111111-1111-1111-1111-111111111111")
+                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .build()
+            )
 
         val messages = messagesFuture.get()
         messages.forEach { it.validate() }
@@ -93,7 +105,13 @@ internal class BatchServiceAsyncTest {
                 .build()
         val batchServiceAsync = client.messages().batch()
 
-        val messagesFuture = batchServiceAsync.markAsRead()
+        val messagesFuture =
+            batchServiceAsync.markAsRead(
+                BatchMarkAsReadParams.builder()
+                    .addMessageId("11111111-1111-1111-1111-111111111111")
+                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .build()
+            )
 
         val messages = messagesFuture.get()
         messages.forEach { it.validate() }
@@ -111,7 +129,13 @@ internal class BatchServiceAsyncTest {
                 .build()
         val batchServiceAsync = client.messages().batch()
 
-        val messagesFuture = batchServiceAsync.markAsSeen()
+        val messagesFuture =
+            batchServiceAsync.markAsSeen(
+                BatchMarkAsSeenParams.builder()
+                    .addMessageId("11111111-1111-1111-1111-111111111111")
+                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .build()
+            )
 
         val messages = messagesFuture.get()
         messages.forEach { it.validate() }
@@ -129,7 +153,13 @@ internal class BatchServiceAsyncTest {
                 .build()
         val batchServiceAsync = client.messages().batch()
 
-        val messagesFuture = batchServiceAsync.markAsUnread()
+        val messagesFuture =
+            batchServiceAsync.markAsUnread(
+                BatchMarkAsUnreadParams.builder()
+                    .addMessageId("11111111-1111-1111-1111-111111111111")
+                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .build()
+            )
 
         val messages = messagesFuture.get()
         messages.forEach { it.validate() }
@@ -147,7 +177,13 @@ internal class BatchServiceAsyncTest {
                 .build()
         val batchServiceAsync = client.messages().batch()
 
-        val messagesFuture = batchServiceAsync.markAsUnseen()
+        val messagesFuture =
+            batchServiceAsync.markAsUnseen(
+                BatchMarkAsUnseenParams.builder()
+                    .addMessageId("11111111-1111-1111-1111-111111111111")
+                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .build()
+            )
 
         val messages = messagesFuture.get()
         messages.forEach { it.validate() }
@@ -165,7 +201,13 @@ internal class BatchServiceAsyncTest {
                 .build()
         val batchServiceAsync = client.messages().batch()
 
-        val messagesFuture = batchServiceAsync.unarchive()
+        val messagesFuture =
+            batchServiceAsync.unarchive(
+                BatchUnarchiveParams.builder()
+                    .addMessageId("11111111-1111-1111-1111-111111111111")
+                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .build()
+            )
 
         val messages = messagesFuture.get()
         messages.forEach { it.validate() }

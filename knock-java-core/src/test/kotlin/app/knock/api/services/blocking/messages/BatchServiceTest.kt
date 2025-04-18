@@ -5,8 +5,14 @@ package app.knock.api.services.blocking.messages
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClient
 import app.knock.api.core.JsonValue
+import app.knock.api.models.messages.batch.BatchArchiveParams
 import app.knock.api.models.messages.batch.BatchGetContentParams
 import app.knock.api.models.messages.batch.BatchMarkAsInteractedParams
+import app.knock.api.models.messages.batch.BatchMarkAsReadParams
+import app.knock.api.models.messages.batch.BatchMarkAsSeenParams
+import app.knock.api.models.messages.batch.BatchMarkAsUnreadParams
+import app.knock.api.models.messages.batch.BatchMarkAsUnseenParams
+import app.knock.api.models.messages.batch.BatchUnarchiveParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -26,7 +32,13 @@ internal class BatchServiceTest {
                 .build()
         val batchService = client.messages().batch()
 
-        val messages = batchService.archive()
+        val messages =
+            batchService.archive(
+                BatchArchiveParams.builder()
+                    .addMessageId("11111111-1111-1111-1111-111111111111")
+                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .build()
+            )
 
         messages.forEach { it.validate() }
     }
@@ -88,7 +100,13 @@ internal class BatchServiceTest {
                 .build()
         val batchService = client.messages().batch()
 
-        val messages = batchService.markAsRead()
+        val messages =
+            batchService.markAsRead(
+                BatchMarkAsReadParams.builder()
+                    .addMessageId("11111111-1111-1111-1111-111111111111")
+                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .build()
+            )
 
         messages.forEach { it.validate() }
     }
@@ -105,7 +123,13 @@ internal class BatchServiceTest {
                 .build()
         val batchService = client.messages().batch()
 
-        val messages = batchService.markAsSeen()
+        val messages =
+            batchService.markAsSeen(
+                BatchMarkAsSeenParams.builder()
+                    .addMessageId("11111111-1111-1111-1111-111111111111")
+                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .build()
+            )
 
         messages.forEach { it.validate() }
     }
@@ -122,7 +146,13 @@ internal class BatchServiceTest {
                 .build()
         val batchService = client.messages().batch()
 
-        val messages = batchService.markAsUnread()
+        val messages =
+            batchService.markAsUnread(
+                BatchMarkAsUnreadParams.builder()
+                    .addMessageId("11111111-1111-1111-1111-111111111111")
+                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .build()
+            )
 
         messages.forEach { it.validate() }
     }
@@ -139,7 +169,13 @@ internal class BatchServiceTest {
                 .build()
         val batchService = client.messages().batch()
 
-        val messages = batchService.markAsUnseen()
+        val messages =
+            batchService.markAsUnseen(
+                BatchMarkAsUnseenParams.builder()
+                    .addMessageId("11111111-1111-1111-1111-111111111111")
+                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .build()
+            )
 
         messages.forEach { it.validate() }
     }
@@ -156,7 +192,13 @@ internal class BatchServiceTest {
                 .build()
         val batchService = client.messages().batch()
 
-        val messages = batchService.unarchive()
+        val messages =
+            batchService.unarchive(
+                BatchUnarchiveParams.builder()
+                    .addMessageId("11111111-1111-1111-1111-111111111111")
+                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .build()
+            )
 
         messages.forEach { it.validate() }
     }

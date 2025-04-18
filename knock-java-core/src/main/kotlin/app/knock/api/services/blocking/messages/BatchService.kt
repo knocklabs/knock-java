@@ -24,21 +24,13 @@ interface BatchService {
     fun withRawResponse(): WithRawResponse
 
     /** Marks the given messages as archived. */
-    fun archive(): List<Message> = archive(BatchArchiveParams.none())
+    fun archive(params: BatchArchiveParams): List<Message> = archive(params, RequestOptions.none())
 
     /** @see [archive] */
     fun archive(
-        params: BatchArchiveParams = BatchArchiveParams.none(),
+        params: BatchArchiveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Message>
-
-    /** @see [archive] */
-    fun archive(params: BatchArchiveParams = BatchArchiveParams.none()): List<Message> =
-        archive(params, RequestOptions.none())
-
-    /** @see [archive] */
-    fun archive(requestOptions: RequestOptions): List<Message> =
-        archive(BatchArchiveParams.none(), requestOptions)
 
     /** Get the contents of multiple messages in a single request. */
     fun getContent(params: BatchGetContentParams): List<BatchGetContentResponse> =
@@ -61,91 +53,54 @@ interface BatchService {
     ): List<Message>
 
     /** Marks the given messages as read. */
-    fun markAsRead(): List<Message> = markAsRead(BatchMarkAsReadParams.none())
-
-    /** @see [markAsRead] */
-    fun markAsRead(
-        params: BatchMarkAsReadParams = BatchMarkAsReadParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): List<Message>
-
-    /** @see [markAsRead] */
-    fun markAsRead(params: BatchMarkAsReadParams = BatchMarkAsReadParams.none()): List<Message> =
+    fun markAsRead(params: BatchMarkAsReadParams): List<Message> =
         markAsRead(params, RequestOptions.none())
 
     /** @see [markAsRead] */
-    fun markAsRead(requestOptions: RequestOptions): List<Message> =
-        markAsRead(BatchMarkAsReadParams.none(), requestOptions)
-
-    /** Marks the given messages as seen. */
-    fun markAsSeen(): List<Message> = markAsSeen(BatchMarkAsSeenParams.none())
-
-    /** @see [markAsSeen] */
-    fun markAsSeen(
-        params: BatchMarkAsSeenParams = BatchMarkAsSeenParams.none(),
+    fun markAsRead(
+        params: BatchMarkAsReadParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Message>
 
-    /** @see [markAsSeen] */
-    fun markAsSeen(params: BatchMarkAsSeenParams = BatchMarkAsSeenParams.none()): List<Message> =
+    /** Marks the given messages as seen. */
+    fun markAsSeen(params: BatchMarkAsSeenParams): List<Message> =
         markAsSeen(params, RequestOptions.none())
 
     /** @see [markAsSeen] */
-    fun markAsSeen(requestOptions: RequestOptions): List<Message> =
-        markAsSeen(BatchMarkAsSeenParams.none(), requestOptions)
+    fun markAsSeen(
+        params: BatchMarkAsSeenParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): List<Message>
 
     /** Marks the given messages as unread. */
-    fun markAsUnread(): List<Message> = markAsUnread(BatchMarkAsUnreadParams.none())
+    fun markAsUnread(params: BatchMarkAsUnreadParams): List<Message> =
+        markAsUnread(params, RequestOptions.none())
 
     /** @see [markAsUnread] */
     fun markAsUnread(
-        params: BatchMarkAsUnreadParams = BatchMarkAsUnreadParams.none(),
+        params: BatchMarkAsUnreadParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Message>
-
-    /** @see [markAsUnread] */
-    fun markAsUnread(
-        params: BatchMarkAsUnreadParams = BatchMarkAsUnreadParams.none()
-    ): List<Message> = markAsUnread(params, RequestOptions.none())
-
-    /** @see [markAsUnread] */
-    fun markAsUnread(requestOptions: RequestOptions): List<Message> =
-        markAsUnread(BatchMarkAsUnreadParams.none(), requestOptions)
 
     /** Marks the given messages as unseen. */
-    fun markAsUnseen(): List<Message> = markAsUnseen(BatchMarkAsUnseenParams.none())
+    fun markAsUnseen(params: BatchMarkAsUnseenParams): List<Message> =
+        markAsUnseen(params, RequestOptions.none())
 
     /** @see [markAsUnseen] */
     fun markAsUnseen(
-        params: BatchMarkAsUnseenParams = BatchMarkAsUnseenParams.none(),
+        params: BatchMarkAsUnseenParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Message>
-
-    /** @see [markAsUnseen] */
-    fun markAsUnseen(
-        params: BatchMarkAsUnseenParams = BatchMarkAsUnseenParams.none()
-    ): List<Message> = markAsUnseen(params, RequestOptions.none())
-
-    /** @see [markAsUnseen] */
-    fun markAsUnseen(requestOptions: RequestOptions): List<Message> =
-        markAsUnseen(BatchMarkAsUnseenParams.none(), requestOptions)
 
     /** Marks the given messages as unarchived. */
-    fun unarchive(): List<Message> = unarchive(BatchUnarchiveParams.none())
-
-    /** @see [unarchive] */
-    fun unarchive(
-        params: BatchUnarchiveParams = BatchUnarchiveParams.none(),
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): List<Message>
-
-    /** @see [unarchive] */
-    fun unarchive(params: BatchUnarchiveParams = BatchUnarchiveParams.none()): List<Message> =
+    fun unarchive(params: BatchUnarchiveParams): List<Message> =
         unarchive(params, RequestOptions.none())
 
     /** @see [unarchive] */
-    fun unarchive(requestOptions: RequestOptions): List<Message> =
-        unarchive(BatchUnarchiveParams.none(), requestOptions)
+    fun unarchive(
+        params: BatchUnarchiveParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): List<Message>
 
     /** A view of [BatchService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -155,25 +110,15 @@ interface BatchService {
          * same as [BatchService.archive].
          */
         @MustBeClosed
-        fun archive(): HttpResponseFor<List<Message>> = archive(BatchArchiveParams.none())
+        fun archive(params: BatchArchiveParams): HttpResponseFor<List<Message>> =
+            archive(params, RequestOptions.none())
 
         /** @see [archive] */
         @MustBeClosed
         fun archive(
-            params: BatchArchiveParams = BatchArchiveParams.none(),
+            params: BatchArchiveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<List<Message>>
-
-        /** @see [archive] */
-        @MustBeClosed
-        fun archive(
-            params: BatchArchiveParams = BatchArchiveParams.none()
-        ): HttpResponseFor<List<Message>> = archive(params, RequestOptions.none())
-
-        /** @see [archive] */
-        @MustBeClosed
-        fun archive(requestOptions: RequestOptions): HttpResponseFor<List<Message>> =
-            archive(BatchArchiveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /v1/messages/batch/content`, but is otherwise the
@@ -212,126 +157,74 @@ interface BatchService {
          * as [BatchService.markAsRead].
          */
         @MustBeClosed
-        fun markAsRead(): HttpResponseFor<List<Message>> = markAsRead(BatchMarkAsReadParams.none())
+        fun markAsRead(params: BatchMarkAsReadParams): HttpResponseFor<List<Message>> =
+            markAsRead(params, RequestOptions.none())
 
         /** @see [markAsRead] */
         @MustBeClosed
         fun markAsRead(
-            params: BatchMarkAsReadParams = BatchMarkAsReadParams.none(),
+            params: BatchMarkAsReadParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<List<Message>>
-
-        /** @see [markAsRead] */
-        @MustBeClosed
-        fun markAsRead(
-            params: BatchMarkAsReadParams = BatchMarkAsReadParams.none()
-        ): HttpResponseFor<List<Message>> = markAsRead(params, RequestOptions.none())
-
-        /** @see [markAsRead] */
-        @MustBeClosed
-        fun markAsRead(requestOptions: RequestOptions): HttpResponseFor<List<Message>> =
-            markAsRead(BatchMarkAsReadParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /v1/messages/batch/seen`, but is otherwise the same
          * as [BatchService.markAsSeen].
          */
         @MustBeClosed
-        fun markAsSeen(): HttpResponseFor<List<Message>> = markAsSeen(BatchMarkAsSeenParams.none())
+        fun markAsSeen(params: BatchMarkAsSeenParams): HttpResponseFor<List<Message>> =
+            markAsSeen(params, RequestOptions.none())
 
         /** @see [markAsSeen] */
         @MustBeClosed
         fun markAsSeen(
-            params: BatchMarkAsSeenParams = BatchMarkAsSeenParams.none(),
+            params: BatchMarkAsSeenParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<List<Message>>
-
-        /** @see [markAsSeen] */
-        @MustBeClosed
-        fun markAsSeen(
-            params: BatchMarkAsSeenParams = BatchMarkAsSeenParams.none()
-        ): HttpResponseFor<List<Message>> = markAsSeen(params, RequestOptions.none())
-
-        /** @see [markAsSeen] */
-        @MustBeClosed
-        fun markAsSeen(requestOptions: RequestOptions): HttpResponseFor<List<Message>> =
-            markAsSeen(BatchMarkAsSeenParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /v1/messages/batch/unread`, but is otherwise the
          * same as [BatchService.markAsUnread].
          */
         @MustBeClosed
-        fun markAsUnread(): HttpResponseFor<List<Message>> =
-            markAsUnread(BatchMarkAsUnreadParams.none())
+        fun markAsUnread(params: BatchMarkAsUnreadParams): HttpResponseFor<List<Message>> =
+            markAsUnread(params, RequestOptions.none())
 
         /** @see [markAsUnread] */
         @MustBeClosed
         fun markAsUnread(
-            params: BatchMarkAsUnreadParams = BatchMarkAsUnreadParams.none(),
+            params: BatchMarkAsUnreadParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<List<Message>>
-
-        /** @see [markAsUnread] */
-        @MustBeClosed
-        fun markAsUnread(
-            params: BatchMarkAsUnreadParams = BatchMarkAsUnreadParams.none()
-        ): HttpResponseFor<List<Message>> = markAsUnread(params, RequestOptions.none())
-
-        /** @see [markAsUnread] */
-        @MustBeClosed
-        fun markAsUnread(requestOptions: RequestOptions): HttpResponseFor<List<Message>> =
-            markAsUnread(BatchMarkAsUnreadParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /v1/messages/batch/unseen`, but is otherwise the
          * same as [BatchService.markAsUnseen].
          */
         @MustBeClosed
-        fun markAsUnseen(): HttpResponseFor<List<Message>> =
-            markAsUnseen(BatchMarkAsUnseenParams.none())
+        fun markAsUnseen(params: BatchMarkAsUnseenParams): HttpResponseFor<List<Message>> =
+            markAsUnseen(params, RequestOptions.none())
 
         /** @see [markAsUnseen] */
         @MustBeClosed
         fun markAsUnseen(
-            params: BatchMarkAsUnseenParams = BatchMarkAsUnseenParams.none(),
+            params: BatchMarkAsUnseenParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<List<Message>>
-
-        /** @see [markAsUnseen] */
-        @MustBeClosed
-        fun markAsUnseen(
-            params: BatchMarkAsUnseenParams = BatchMarkAsUnseenParams.none()
-        ): HttpResponseFor<List<Message>> = markAsUnseen(params, RequestOptions.none())
-
-        /** @see [markAsUnseen] */
-        @MustBeClosed
-        fun markAsUnseen(requestOptions: RequestOptions): HttpResponseFor<List<Message>> =
-            markAsUnseen(BatchMarkAsUnseenParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /v1/messages/batch/unarchived`, but is otherwise
          * the same as [BatchService.unarchive].
          */
         @MustBeClosed
-        fun unarchive(): HttpResponseFor<List<Message>> = unarchive(BatchUnarchiveParams.none())
+        fun unarchive(params: BatchUnarchiveParams): HttpResponseFor<List<Message>> =
+            unarchive(params, RequestOptions.none())
 
         /** @see [unarchive] */
         @MustBeClosed
         fun unarchive(
-            params: BatchUnarchiveParams = BatchUnarchiveParams.none(),
+            params: BatchUnarchiveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<List<Message>>
-
-        /** @see [unarchive] */
-        @MustBeClosed
-        fun unarchive(
-            params: BatchUnarchiveParams = BatchUnarchiveParams.none()
-        ): HttpResponseFor<List<Message>> = unarchive(params, RequestOptions.none())
-
-        /** @see [unarchive] */
-        @MustBeClosed
-        fun unarchive(requestOptions: RequestOptions): HttpResponseFor<List<Message>> =
-            unarchive(BatchUnarchiveParams.none(), requestOptions)
     }
 }
