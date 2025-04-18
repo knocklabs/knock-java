@@ -37,10 +37,10 @@ private constructor(
     /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
-    /** The ID of the tenant to list schedules for. */
+    /** Filter schedules by tenant id. */
     fun tenant(): Optional<String> = Optional.ofNullable(tenant)
 
-    /** The ID of the workflow to list schedules for. */
+    /** Filter schedules by workflow id. */
     fun workflow(): Optional<String> = Optional.ofNullable(workflow)
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -118,13 +118,13 @@ private constructor(
         /** Alias for calling [Builder.pageSize] with `pageSize.orElse(null)`. */
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
-        /** The ID of the tenant to list schedules for. */
+        /** Filter schedules by tenant id. */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
         /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
-        /** The ID of the workflow to list schedules for. */
+        /** Filter schedules by workflow id. */
         fun workflow(workflow: String?) = apply { this.workflow = workflow }
 
         /** Alias for calling [Builder.workflow] with `workflow.orElse(null)`. */

@@ -58,7 +58,10 @@ internal class UserServiceAsyncTest {
                                         JsonValue.from(
                                             mapOf(
                                                 "data" to
-                                                    mapOf("tokens" to listOf("push_token_xxx"))
+                                                    mapOf(
+                                                        "__typename" to "PushChannelData",
+                                                        "tokens" to listOf("push_token_xxx"),
+                                                    )
                                             )
                                         ),
                                     )
@@ -373,7 +376,12 @@ internal class UserServiceAsyncTest {
                     .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .channelDataRequest(
                         ChannelDataRequest.builder()
-                            .data(PushChannelData.builder().addToken("push_token_1").build())
+                            .data(
+                                PushChannelData.builder()
+                                    ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                    .addToken("push_token_1")
+                                    .build()
+                            )
                             .build()
                     )
                     .build()

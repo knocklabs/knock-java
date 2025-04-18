@@ -36,6 +36,7 @@ internal class BulkServiceTest {
                     .hasTenant(true)
                     .newerThan(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
                     .olderThan(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
+                    .addRecipientGid("string")
                     .addRecipientId("recipient1")
                     .addRecipientId("recipient2")
                     .addTenant("tenant1")

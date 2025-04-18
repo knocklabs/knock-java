@@ -67,7 +67,10 @@ internal class BulkServiceAsyncTest {
                                         JsonValue.from(
                                             mapOf(
                                                 "data" to
-                                                    mapOf("tokens" to listOf("push_token_xxx"))
+                                                    mapOf(
+                                                        "__typename" to "PushChannelData",
+                                                        "tokens" to listOf("push_token_xxx"),
+                                                    )
                                             )
                                         ),
                                     )

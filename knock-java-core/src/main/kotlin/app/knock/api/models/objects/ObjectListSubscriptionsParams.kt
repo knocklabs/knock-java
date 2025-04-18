@@ -45,7 +45,7 @@ private constructor(
     /** The cursor to fetch entries before. */
     fun before(): Optional<String> = Optional.ofNullable(before)
 
-    /** Includes preferences of the recipient subscribers in the response. */
+    /** Additional fields to include in the response. */
     fun include(): Optional<List<Include>> = Optional.ofNullable(include)
 
     /** Mode of the request. */
@@ -127,7 +127,7 @@ private constructor(
         /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
-        /** Includes preferences of the recipient subscribers in the response. */
+        /** Additional fields to include in the response. */
         fun include(include: List<Include>?) = apply { this.include = include?.toMutableList() }
 
         /** Alias for calling [Builder.include] with `include.orElse(null)`. */

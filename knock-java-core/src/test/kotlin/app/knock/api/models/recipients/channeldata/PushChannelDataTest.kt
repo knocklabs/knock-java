@@ -11,15 +11,25 @@ internal class PushChannelDataTest {
 
     @Test
     fun create() {
-        val pushChannelData = PushChannelData.builder().addToken("push_token_1").build()
+        val pushChannelData =
+            PushChannelData.builder()
+                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                .addToken("push_token_1")
+                .build()
 
+        assertThat(pushChannelData._typename())
+            .isEqualTo(PushChannelData._Typename.PUSH_CHANNEL_DATA)
         assertThat(pushChannelData.tokens()).containsExactly("push_token_1")
     }
 
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val pushChannelData = PushChannelData.builder().addToken("push_token_1").build()
+        val pushChannelData =
+            PushChannelData.builder()
+                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                .addToken("push_token_1")
+                .build()
 
         val roundtrippedPushChannelData =
             jsonMapper.readValue(

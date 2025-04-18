@@ -7,8 +7,6 @@ import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
-import java.util.Optional
-import kotlin.jvm.optionals.getOrNull
 
 /** Returns the preference set for the specified object. */
 class ObjectGetPreferencesParams
@@ -16,7 +14,6 @@ private constructor(
     private val collection: String,
     private val objectId: String,
     private val preferenceSetId: String,
-    private val tenant: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -26,9 +23,6 @@ private constructor(
     fun objectId(): String = objectId
 
     fun preferenceSetId(): String = preferenceSetId
-
-    /** The unique identifier for the tenant. */
-    fun tenant(): Optional<String> = Optional.ofNullable(tenant)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -57,7 +51,6 @@ private constructor(
         private var collection: String? = null
         private var objectId: String? = null
         private var preferenceSetId: String? = null
-        private var tenant: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -66,7 +59,6 @@ private constructor(
             collection = objectGetPreferencesParams.collection
             objectId = objectGetPreferencesParams.objectId
             preferenceSetId = objectGetPreferencesParams.preferenceSetId
-            tenant = objectGetPreferencesParams.tenant
             additionalHeaders = objectGetPreferencesParams.additionalHeaders.toBuilder()
             additionalQueryParams = objectGetPreferencesParams.additionalQueryParams.toBuilder()
         }
@@ -78,12 +70,6 @@ private constructor(
         fun preferenceSetId(preferenceSetId: String) = apply {
             this.preferenceSetId = preferenceSetId
         }
-
-        /** The unique identifier for the tenant. */
-        fun tenant(tenant: String?) = apply { this.tenant = tenant }
-
-        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
-        fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -202,7 +188,6 @@ private constructor(
                 checkRequired("collection", collection),
                 checkRequired("objectId", objectId),
                 checkRequired("preferenceSetId", preferenceSetId),
-                tenant,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -218,24 +203,18 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                tenant?.let { put("tenant", it) }
-                putAll(additionalQueryParams)
-            }
-            .build()
+    override fun _queryParams(): QueryParams = additionalQueryParams
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is ObjectGetPreferencesParams && collection == other.collection && objectId == other.objectId && preferenceSetId == other.preferenceSetId && tenant == other.tenant && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ObjectGetPreferencesParams && collection == other.collection && objectId == other.objectId && preferenceSetId == other.preferenceSetId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, preferenceSetId, tenant, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, preferenceSetId, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ObjectGetPreferencesParams{collection=$collection, objectId=$objectId, preferenceSetId=$preferenceSetId, tenant=$tenant, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ObjectGetPreferencesParams{collection=$collection, objectId=$objectId, preferenceSetId=$preferenceSetId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

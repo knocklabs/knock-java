@@ -19,7 +19,7 @@ internal class RecipientRequestTest {
 
     @Test
     fun ofUserRecipient() {
-        val userRecipient = "string"
+        val userRecipient = "user_123"
 
         val recipientRequest = RecipientRequest.ofUserRecipient(userRecipient)
 
@@ -31,7 +31,7 @@ internal class RecipientRequestTest {
     @Test
     fun ofUserRecipientRoundtrip() {
         val jsonMapper = jsonMapper()
-        val recipientRequest = RecipientRequest.ofUserRecipient("string")
+        val recipientRequest = RecipientRequest.ofUserRecipient("user_123")
 
         val roundtrippedRecipientRequest =
             jsonMapper.readValue(
@@ -52,7 +52,13 @@ internal class RecipientRequestTest {
                         .putAdditionalProperty(
                             "97c5837d-c65c-4d54-aa39-080eeb81c69d",
                             JsonValue.from(
-                                mapOf("data" to mapOf("tokens" to listOf("push_token_xxx")))
+                                mapOf(
+                                    "data" to
+                                        mapOf(
+                                            "__typename" to "PushChannelData",
+                                            "tokens" to listOf("push_token_xxx"),
+                                        )
+                                )
                             ),
                         )
                         .build()
@@ -145,7 +151,13 @@ internal class RecipientRequestTest {
                             .putAdditionalProperty(
                                 "97c5837d-c65c-4d54-aa39-080eeb81c69d",
                                 JsonValue.from(
-                                    mapOf("data" to mapOf("tokens" to listOf("push_token_xxx")))
+                                    mapOf(
+                                        "data" to
+                                            mapOf(
+                                                "__typename" to "PushChannelData",
+                                                "tokens" to listOf("push_token_xxx"),
+                                            )
+                                    )
                                 ),
                             )
                             .build()
@@ -242,7 +254,13 @@ internal class RecipientRequestTest {
                         .putAdditionalProperty(
                             "97c5837d-c65c-4d54-aa39-080eeb81c69d",
                             JsonValue.from(
-                                mapOf("data" to mapOf("tokens" to listOf("push_token_xxx")))
+                                mapOf(
+                                    "data" to
+                                        mapOf(
+                                            "__typename" to "PushChannelData",
+                                            "tokens" to listOf("push_token_xxx"),
+                                        )
+                                )
                             ),
                         )
                         .build()
@@ -336,7 +354,13 @@ internal class RecipientRequestTest {
                             .putAdditionalProperty(
                                 "97c5837d-c65c-4d54-aa39-080eeb81c69d",
                                 JsonValue.from(
-                                    mapOf("data" to mapOf("tokens" to listOf("push_token_xxx")))
+                                    mapOf(
+                                        "data" to
+                                            mapOf(
+                                                "__typename" to "PushChannelData",
+                                                "tokens" to listOf("push_token_xxx"),
+                                            )
+                                    )
                                 ),
                             )
                             .build()

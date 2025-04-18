@@ -91,6 +91,14 @@ private constructor(
     fun olderThan(): Optional<OffsetDateTime> = body.olderThan()
 
     /**
+     * The recipient GIDs to filter messages by.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun recipientGids(): Optional<List<String>> = body.recipientGids()
+
+    /**
      * The recipient IDs to filter messages by.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -164,6 +172,13 @@ private constructor(
      * Unlike [olderThan], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _olderThan(): JsonField<OffsetDateTime> = body._olderThan()
+
+    /**
+     * Returns the raw JSON value of [recipientGids].
+     *
+     * Unlike [recipientGids], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _recipientGids(): JsonField<List<String>> = body._recipientGids()
 
     /**
      * Returns the raw JSON value of [recipientIds].
@@ -335,6 +350,27 @@ private constructor(
          * supported value.
          */
         fun olderThan(olderThan: JsonField<OffsetDateTime>) = apply { body.olderThan(olderThan) }
+
+        /** The recipient GIDs to filter messages by. */
+        fun recipientGids(recipientGids: List<String>) = apply { body.recipientGids(recipientGids) }
+
+        /**
+         * Sets [Builder.recipientGids] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.recipientGids] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun recipientGids(recipientGids: JsonField<List<String>>) = apply {
+            body.recipientGids(recipientGids)
+        }
+
+        /**
+         * Adds a single [String] to [recipientGids].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addRecipientGid(recipientGid: String) = apply { body.addRecipientGid(recipientGid) }
 
         /** The recipient IDs to filter messages by. */
         fun recipientIds(recipientIds: List<String>) = apply { body.recipientIds(recipientIds) }
@@ -569,6 +605,7 @@ private constructor(
         private val hasTenant: JsonField<Boolean>,
         private val newerThan: JsonField<OffsetDateTime>,
         private val olderThan: JsonField<OffsetDateTime>,
+        private val recipientGids: JsonField<List<String>>,
         private val recipientIds: JsonField<List<String>>,
         private val tenants: JsonField<List<String>>,
         private val triggerData: JsonField<String>,
@@ -596,6 +633,9 @@ private constructor(
             @JsonProperty("older_than")
             @ExcludeMissing
             olderThan: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("recipient_gids")
+            @ExcludeMissing
+            recipientGids: JsonField<List<String>> = JsonMissing.of(),
             @JsonProperty("recipient_ids")
             @ExcludeMissing
             recipientIds: JsonField<List<String>> = JsonMissing.of(),
@@ -615,6 +655,7 @@ private constructor(
             hasTenant,
             newerThan,
             olderThan,
+            recipientGids,
             recipientIds,
             tenants,
             triggerData,
@@ -671,6 +712,14 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun olderThan(): Optional<OffsetDateTime> = olderThan.getOptional("older_than")
+
+        /**
+         * The recipient GIDs to filter messages by.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun recipientGids(): Optional<List<String>> = recipientGids.getOptional("recipient_gids")
 
         /**
          * The recipient IDs to filter messages by.
@@ -757,6 +806,16 @@ private constructor(
         fun _olderThan(): JsonField<OffsetDateTime> = olderThan
 
         /**
+         * Returns the raw JSON value of [recipientGids].
+         *
+         * Unlike [recipientGids], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("recipient_gids")
+        @ExcludeMissing
+        fun _recipientGids(): JsonField<List<String>> = recipientGids
+
+        /**
          * Returns the raw JSON value of [recipientIds].
          *
          * Unlike [recipientIds], this method doesn't throw if the JSON field has an unexpected
@@ -818,6 +877,7 @@ private constructor(
             private var hasTenant: JsonField<Boolean> = JsonMissing.of()
             private var newerThan: JsonField<OffsetDateTime> = JsonMissing.of()
             private var olderThan: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var recipientGids: JsonField<MutableList<String>>? = null
             private var recipientIds: JsonField<MutableList<String>>? = null
             private var tenants: JsonField<MutableList<String>>? = null
             private var triggerData: JsonField<String> = JsonMissing.of()
@@ -832,6 +892,7 @@ private constructor(
                 hasTenant = body.hasTenant
                 newerThan = body.newerThan
                 olderThan = body.olderThan
+                recipientGids = body.recipientGids.map { it.toMutableList() }
                 recipientIds = body.recipientIds.map { it.toMutableList() }
                 tenants = body.tenants.map { it.toMutableList() }
                 triggerData = body.triggerData
@@ -925,6 +986,33 @@ private constructor(
              */
             fun olderThan(olderThan: JsonField<OffsetDateTime>) = apply {
                 this.olderThan = olderThan
+            }
+
+            /** The recipient GIDs to filter messages by. */
+            fun recipientGids(recipientGids: List<String>) =
+                recipientGids(JsonField.of(recipientGids))
+
+            /**
+             * Sets [Builder.recipientGids] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.recipientGids] with a well-typed `List<String>`
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun recipientGids(recipientGids: JsonField<List<String>>) = apply {
+                this.recipientGids = recipientGids.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [String] to [recipientGids].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addRecipientGid(recipientGid: String) = apply {
+                recipientGids =
+                    (recipientGids ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("recipientGids", it).add(recipientGid)
+                    }
             }
 
             /** The recipient IDs to filter messages by. */
@@ -1051,6 +1139,7 @@ private constructor(
                     hasTenant,
                     newerThan,
                     olderThan,
+                    (recipientGids ?: JsonMissing.of()).map { it.toImmutable() },
                     (recipientIds ?: JsonMissing.of()).map { it.toImmutable() },
                     (tenants ?: JsonMissing.of()).map { it.toImmutable() },
                     triggerData,
@@ -1072,6 +1161,7 @@ private constructor(
             hasTenant()
             newerThan()
             olderThan()
+            recipientGids()
             recipientIds()
             tenants()
             triggerData()
@@ -1101,6 +1191,7 @@ private constructor(
                 (if (hasTenant.asKnown().isPresent) 1 else 0) +
                 (if (newerThan.asKnown().isPresent) 1 else 0) +
                 (if (olderThan.asKnown().isPresent) 1 else 0) +
+                (recipientGids.asKnown().getOrNull()?.size ?: 0) +
                 (recipientIds.asKnown().getOrNull()?.size ?: 0) +
                 (tenants.asKnown().getOrNull()?.size ?: 0) +
                 (if (triggerData.asKnown().isPresent) 1 else 0) +
@@ -1111,17 +1202,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && archived == other.archived && deliveryStatus == other.deliveryStatus && engagementStatus == other.engagementStatus && hasTenant == other.hasTenant && newerThan == other.newerThan && olderThan == other.olderThan && recipientIds == other.recipientIds && tenants == other.tenants && triggerData == other.triggerData && workflows == other.workflows && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && archived == other.archived && deliveryStatus == other.deliveryStatus && engagementStatus == other.engagementStatus && hasTenant == other.hasTenant && newerThan == other.newerThan && olderThan == other.olderThan && recipientGids == other.recipientGids && recipientIds == other.recipientIds && tenants == other.tenants && triggerData == other.triggerData && workflows == other.workflows && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(archived, deliveryStatus, engagementStatus, hasTenant, newerThan, olderThan, recipientIds, tenants, triggerData, workflows, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(archived, deliveryStatus, engagementStatus, hasTenant, newerThan, olderThan, recipientGids, recipientIds, tenants, triggerData, workflows, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{archived=$archived, deliveryStatus=$deliveryStatus, engagementStatus=$engagementStatus, hasTenant=$hasTenant, newerThan=$newerThan, olderThan=$olderThan, recipientIds=$recipientIds, tenants=$tenants, triggerData=$triggerData, workflows=$workflows, additionalProperties=$additionalProperties}"
+            "Body{archived=$archived, deliveryStatus=$deliveryStatus, engagementStatus=$engagementStatus, hasTenant=$hasTenant, newerThan=$newerThan, olderThan=$olderThan, recipientGids=$recipientGids, recipientIds=$recipientIds, tenants=$tenants, triggerData=$triggerData, workflows=$workflows, additionalProperties=$additionalProperties}"
     }
 
     /** The archived status to filter messages by. */

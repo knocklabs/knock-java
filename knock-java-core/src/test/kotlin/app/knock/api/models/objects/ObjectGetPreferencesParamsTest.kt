@@ -2,7 +2,6 @@
 
 package app.knock.api.models.objects
 
-import app.knock.api.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -14,7 +13,6 @@ internal class ObjectGetPreferencesParamsTest {
             .collection("collection")
             .objectId("object_id")
             .preferenceSetId("default")
-            .tenant("tenant")
             .build()
     }
 
@@ -32,34 +30,5 @@ internal class ObjectGetPreferencesParamsTest {
         assertThat(params._pathParam(2)).isEqualTo("default")
         // out-of-bound path param
         assertThat(params._pathParam(3)).isEqualTo("")
-    }
-
-    @Test
-    fun queryParams() {
-        val params =
-            ObjectGetPreferencesParams.builder()
-                .collection("collection")
-                .objectId("object_id")
-                .preferenceSetId("default")
-                .tenant("tenant")
-                .build()
-
-        val queryParams = params._queryParams()
-
-        assertThat(queryParams).isEqualTo(QueryParams.builder().put("tenant", "tenant").build())
-    }
-
-    @Test
-    fun queryParamsWithoutOptionalFields() {
-        val params =
-            ObjectGetPreferencesParams.builder()
-                .collection("collection")
-                .objectId("object_id")
-                .preferenceSetId("default")
-                .build()
-
-        val queryParams = params._queryParams()
-
-        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
     }
 }

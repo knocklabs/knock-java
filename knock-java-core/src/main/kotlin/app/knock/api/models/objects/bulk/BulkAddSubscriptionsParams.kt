@@ -27,7 +27,7 @@ import kotlin.jvm.optionals.getOrNull
 
 /**
  * Add subscriptions for all objects in a single collection. If a subscription for an object in the
- * collectionalready exists, it will be updated.
+ * collection already exists, it will be updated.
  */
 class BulkAddSubscriptionsParams
 private constructor(

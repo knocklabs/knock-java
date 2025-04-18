@@ -68,7 +68,7 @@ private constructor(
     /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
-    /** Limits the results to only items of the source workflow. */
+    /** Key of the source that triggered the message to limit results to. */
     fun source(): Optional<String> = Optional.ofNullable(source)
 
     /**
@@ -230,7 +230,7 @@ private constructor(
         /** Alias for calling [Builder.pageSize] with `pageSize.orElse(null)`. */
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
-        /** Limits the results to only items of the source workflow. */
+        /** Key of the source that triggered the message to limit results to. */
         fun source(source: String?) = apply { this.source = source }
 
         /** Alias for calling [Builder.source] with `source.orElse(null)`. */

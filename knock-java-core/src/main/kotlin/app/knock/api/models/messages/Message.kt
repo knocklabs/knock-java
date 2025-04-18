@@ -179,7 +179,7 @@ private constructor(
     fun clickedAt(): Optional<OffsetDateTime> = clickedAt.getOptional("clicked_at")
 
     /**
-     * Data from the activities linked to the message
+     * Data from the activities linked to the message.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -293,7 +293,7 @@ private constructor(
     fun updatedAt(): Optional<OffsetDateTime> = updatedAt.getOptional("updated_at")
 
     /**
-     * The key of the worklfow that generated the message.
+     * The key of the workflow that generated the message.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -640,7 +640,7 @@ private constructor(
          */
         fun clickedAt(clickedAt: JsonField<OffsetDateTime>) = apply { this.clickedAt = clickedAt }
 
-        /** Data from the activities linked to the message */
+        /** Data from the activities linked to the message. */
         fun data(data: Data?) = data(JsonField.ofNullable(data))
 
         /** Alias for calling [Builder.data] with `data.orElse(null)`. */
@@ -867,7 +867,7 @@ private constructor(
          */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
-        /** The key of the worklfow that generated the message. */
+        /** The key of the workflow that generated the message. */
         @Deprecated("deprecated")
         fun workflow(workflow: String?) = workflow(JsonField.ofNullable(workflow))
 
@@ -1375,7 +1375,7 @@ private constructor(
         }
     }
 
-    /** Data from the activities linked to the message */
+    /** Data from the activities linked to the message. */
     class Data
     @JsonCreator
     private constructor(

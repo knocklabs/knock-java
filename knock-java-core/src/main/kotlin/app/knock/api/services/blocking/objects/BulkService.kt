@@ -28,7 +28,7 @@ interface BulkService {
 
     /**
      * Add subscriptions for all objects in a single collection. If a subscription for an object in
-     * the collectionalready exists, it will be updated.
+     * the collection already exists, it will be updated.
      */
     fun addSubscriptions(params: BulkAddSubscriptionsParams): BulkOperation =
         addSubscriptions(params, RequestOptions.none())
