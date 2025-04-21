@@ -4,6 +4,7 @@ package app.knock.api.models.messages
 
 import app.knock.api.core.JsonValue
 import app.knock.api.core.jsonMapper
+import app.knock.api.models.recipients.RecipientReference
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -31,8 +32,7 @@ internal class MessageEventTest {
         assertThat(messageEvent._typename()).isEqualTo("MessageEvent")
         assertThat(messageEvent.insertedAt())
             .isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
-        assertThat(messageEvent.recipient())
-            .isEqualTo(MessageEvent.Recipient.ofUserReference("user_123"))
+        assertThat(messageEvent.recipient()).isEqualTo(RecipientReference.ofUser("user_123"))
         assertThat(messageEvent.type()).isEqualTo(MessageEvent.Type.MESSAGE_SENT)
         assertThat(messageEvent.data())
             .contains(

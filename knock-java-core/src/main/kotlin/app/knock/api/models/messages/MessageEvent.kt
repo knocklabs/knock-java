@@ -2,29 +2,19 @@
 
 package app.knock.api.models.messages
 
-import app.knock.api.core.BaseDeserializer
-import app.knock.api.core.BaseSerializer
 import app.knock.api.core.Enum
 import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.allMaxBy
 import app.knock.api.core.checkRequired
-import app.knock.api.core.getOrThrow
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
+import app.knock.api.models.recipients.RecipientReference
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.ObjectCodec
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
@@ -37,7 +27,7 @@ private constructor(
     private val id: JsonField<String>,
     private val _typename: JsonField<String>,
     private val insertedAt: JsonField<OffsetDateTime>,
-    private val recipient: JsonField<Recipient>,
+    private val recipient: JsonField<RecipientReference>,
     private val type: JsonField<Type>,
     private val data: JsonField<Data>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -52,7 +42,7 @@ private constructor(
         insertedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
         @JsonProperty("recipient")
         @ExcludeMissing
-        recipient: JsonField<Recipient> = JsonMissing.of(),
+        recipient: JsonField<RecipientReference> = JsonMissing.of(),
         @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
         @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
     ) : this(id, _typename, insertedAt, recipient, type, data, mutableMapOf())
@@ -88,7 +78,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun recipient(): Recipient = recipient.getRequired("recipient")
+    fun recipient(): RecipientReference = recipient.getRequired("recipient")
 
     /**
      * The type of event that occurred.
@@ -134,7 +124,9 @@ private constructor(
      *
      * Unlike [recipient], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("recipient") @ExcludeMissing fun _recipient(): JsonField<Recipient> = recipient
+    @JsonProperty("recipient")
+    @ExcludeMissing
+    fun _recipient(): JsonField<RecipientReference> = recipient
 
     /**
      * Returns the raw JSON value of [type].
@@ -185,7 +177,7 @@ private constructor(
         private var id: JsonField<String>? = null
         private var _typename: JsonField<String>? = null
         private var insertedAt: JsonField<OffsetDateTime>? = null
-        private var recipient: JsonField<Recipient>? = null
+        private var recipient: JsonField<RecipientReference>? = null
         private var type: JsonField<Type>? = null
         private var data: JsonField<Data> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -242,23 +234,28 @@ private constructor(
          * A reference to a recipient, either a user identifier (string) or an object reference (ID,
          * collection).
          */
-        fun recipient(recipient: Recipient) = recipient(JsonField.of(recipient))
+        fun recipient(recipient: RecipientReference) = recipient(JsonField.of(recipient))
 
         /**
          * Sets [Builder.recipient] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.recipient] with a well-typed [Recipient] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
+         * You should usually call [Builder.recipient] with a well-typed [RecipientReference] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun recipient(recipient: JsonField<Recipient>) = apply { this.recipient = recipient }
+        fun recipient(recipient: JsonField<RecipientReference>) = apply {
+            this.recipient = recipient
+        }
 
-        /** Alias for calling [recipient] with `Recipient.ofUserReference(userReference)`. */
-        fun recipient(userReference: String) = recipient(Recipient.ofUserReference(userReference))
+        /** Alias for calling [recipient] with `RecipientReference.ofUser(user)`. */
+        fun recipient(user: String) = recipient(RecipientReference.ofUser(user))
 
-        /** Alias for calling [recipient] with `Recipient.ofObjectReference(objectReference)`. */
-        fun recipient(objectReference: Recipient.ObjectReference) =
-            recipient(Recipient.ofObjectReference(objectReference))
+        /**
+         * Alias for calling [recipient] with
+         * `RecipientReference.ofObjectReference(objectReference)`.
+         */
+        fun recipient(objectReference: RecipientReference.ObjectReference) =
+            recipient(RecipientReference.ofObjectReference(objectReference))
 
         /** The type of event that occurred. */
         fun type(type: Type) = type(JsonField.of(type))
@@ -369,380 +366,6 @@ private constructor(
             (recipient.asKnown().getOrNull()?.validity() ?: 0) +
             (type.asKnown().getOrNull()?.validity() ?: 0) +
             (data.asKnown().getOrNull()?.validity() ?: 0)
-
-    /**
-     * A reference to a recipient, either a user identifier (string) or an object reference (ID,
-     * collection).
-     */
-    @JsonDeserialize(using = Recipient.Deserializer::class)
-    @JsonSerialize(using = Recipient.Serializer::class)
-    class Recipient
-    private constructor(
-        private val userReference: String? = null,
-        private val objectReference: ObjectReference? = null,
-        private val _json: JsonValue? = null,
-    ) {
-
-        /** The ID of the user. */
-        fun userReference(): Optional<String> = Optional.ofNullable(userReference)
-
-        /** A reference to a recipient object. */
-        fun objectReference(): Optional<ObjectReference> = Optional.ofNullable(objectReference)
-
-        fun isUserReference(): Boolean = userReference != null
-
-        fun isObjectReference(): Boolean = objectReference != null
-
-        /** The ID of the user. */
-        fun asUserReference(): String = userReference.getOrThrow("userReference")
-
-        /** A reference to a recipient object. */
-        fun asObjectReference(): ObjectReference = objectReference.getOrThrow("objectReference")
-
-        fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
-
-        fun <T> accept(visitor: Visitor<T>): T =
-            when {
-                userReference != null -> visitor.visitUserReference(userReference)
-                objectReference != null -> visitor.visitObjectReference(objectReference)
-                else -> visitor.unknown(_json)
-            }
-
-        private var validated: Boolean = false
-
-        fun validate(): Recipient = apply {
-            if (validated) {
-                return@apply
-            }
-
-            accept(
-                object : Visitor<Unit> {
-                    override fun visitUserReference(userReference: String) {}
-
-                    override fun visitObjectReference(objectReference: ObjectReference) {
-                        objectReference.validate()
-                    }
-                }
-            )
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: KnockInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            accept(
-                object : Visitor<Int> {
-                    override fun visitUserReference(userReference: String) = 1
-
-                    override fun visitObjectReference(objectReference: ObjectReference) =
-                        objectReference.validity()
-
-                    override fun unknown(json: JsonValue?) = 0
-                }
-            )
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Recipient && userReference == other.userReference && objectReference == other.objectReference /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(userReference, objectReference) /* spotless:on */
-
-        override fun toString(): String =
-            when {
-                userReference != null -> "Recipient{userReference=$userReference}"
-                objectReference != null -> "Recipient{objectReference=$objectReference}"
-                _json != null -> "Recipient{_unknown=$_json}"
-                else -> throw IllegalStateException("Invalid Recipient")
-            }
-
-        companion object {
-
-            /** The ID of the user. */
-            @JvmStatic
-            fun ofUserReference(userReference: String) = Recipient(userReference = userReference)
-
-            /** A reference to a recipient object. */
-            @JvmStatic
-            fun ofObjectReference(objectReference: ObjectReference) =
-                Recipient(objectReference = objectReference)
-        }
-
-        /**
-         * An interface that defines how to map each variant of [Recipient] to a value of type [T].
-         */
-        interface Visitor<out T> {
-
-            /** The ID of the user. */
-            fun visitUserReference(userReference: String): T
-
-            /** A reference to a recipient object. */
-            fun visitObjectReference(objectReference: ObjectReference): T
-
-            /**
-             * Maps an unknown variant of [Recipient] to a value of type [T].
-             *
-             * An instance of [Recipient] can contain an unknown variant if it was deserialized from
-             * data that doesn't match any known variant. For example, if the SDK is on an older
-             * version than the API, then the API may respond with new variants that the SDK is
-             * unaware of.
-             *
-             * @throws KnockInvalidDataException in the default implementation.
-             */
-            fun unknown(json: JsonValue?): T {
-                throw KnockInvalidDataException("Unknown Recipient: $json")
-            }
-        }
-
-        internal class Deserializer : BaseDeserializer<Recipient>(Recipient::class) {
-
-            override fun ObjectCodec.deserialize(node: JsonNode): Recipient {
-                val json = JsonValue.fromJsonNode(node)
-
-                val bestMatches =
-                    sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<ObjectReference>())?.let {
-                                Recipient(objectReference = it, _json = json)
-                            },
-                            tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                                Recipient(userReference = it, _json = json)
-                            },
-                        )
-                        .filterNotNull()
-                        .allMaxBy { it.validity() }
-                        .toList()
-                return when (bestMatches.size) {
-                    // This can happen if what we're deserializing is completely incompatible with
-                    // all the possible variants (e.g. deserializing from array).
-                    0 -> Recipient(_json = json)
-                    1 -> bestMatches.single()
-                    // If there's more than one match with the highest validity, then use the first
-                    // completely valid match, or simply the first match if none are completely
-                    // valid.
-                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
-                }
-            }
-        }
-
-        internal class Serializer : BaseSerializer<Recipient>(Recipient::class) {
-
-            override fun serialize(
-                value: Recipient,
-                generator: JsonGenerator,
-                provider: SerializerProvider,
-            ) {
-                when {
-                    value.userReference != null -> generator.writeObject(value.userReference)
-                    value.objectReference != null -> generator.writeObject(value.objectReference)
-                    value._json != null -> generator.writeObject(value._json)
-                    else -> throw IllegalStateException("Invalid Recipient")
-                }
-            }
-        }
-
-        /** A reference to a recipient object. */
-        class ObjectReference
-        private constructor(
-            private val id: JsonField<String>,
-            private val collection: JsonField<String>,
-            private val additionalProperties: MutableMap<String, JsonValue>,
-        ) {
-
-            @JsonCreator
-            private constructor(
-                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-                @JsonProperty("collection")
-                @ExcludeMissing
-                collection: JsonField<String> = JsonMissing.of(),
-            ) : this(id, collection, mutableMapOf())
-
-            /**
-             * An identifier for the recipient object.
-             *
-             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
-             *   the server responded with an unexpected value).
-             */
-            fun id(): Optional<String> = id.getOptional("id")
-
-            /**
-             * The collection the recipient object belongs to.
-             *
-             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
-             *   the server responded with an unexpected value).
-             */
-            fun collection(): Optional<String> = collection.getOptional("collection")
-
-            /**
-             * Returns the raw JSON value of [id].
-             *
-             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-             */
-            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-            /**
-             * Returns the raw JSON value of [collection].
-             *
-             * Unlike [collection], this method doesn't throw if the JSON field has an unexpected
-             * type.
-             */
-            @JsonProperty("collection")
-            @ExcludeMissing
-            fun _collection(): JsonField<String> = collection
-
-            @JsonAnySetter
-            private fun putAdditionalProperty(key: String, value: JsonValue) {
-                additionalProperties.put(key, value)
-            }
-
-            @JsonAnyGetter
-            @ExcludeMissing
-            fun _additionalProperties(): Map<String, JsonValue> =
-                Collections.unmodifiableMap(additionalProperties)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [ObjectReference]. */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [ObjectReference]. */
-            class Builder internal constructor() {
-
-                private var id: JsonField<String> = JsonMissing.of()
-                private var collection: JsonField<String> = JsonMissing.of()
-                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-                @JvmSynthetic
-                internal fun from(objectReference: ObjectReference) = apply {
-                    id = objectReference.id
-                    collection = objectReference.collection
-                    additionalProperties = objectReference.additionalProperties.toMutableMap()
-                }
-
-                /** An identifier for the recipient object. */
-                fun id(id: String) = id(JsonField.of(id))
-
-                /**
-                 * Sets [Builder.id] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.id] with a well-typed [String] value instead.
-                 * This method is primarily for setting the field to an undocumented or not yet
-                 * supported value.
-                 */
-                fun id(id: JsonField<String>) = apply { this.id = id }
-
-                /** The collection the recipient object belongs to. */
-                fun collection(collection: String) = collection(JsonField.of(collection))
-
-                /**
-                 * Sets [Builder.collection] to an arbitrary JSON value.
-                 *
-                 * You should usually call [Builder.collection] with a well-typed [String] value
-                 * instead. This method is primarily for setting the field to an undocumented or not
-                 * yet supported value.
-                 */
-                fun collection(collection: JsonField<String>) = apply {
-                    this.collection = collection
-                }
-
-                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                    this.additionalProperties.clear()
-                    putAllAdditionalProperties(additionalProperties)
-                }
-
-                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                    additionalProperties.put(key, value)
-                }
-
-                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
-                    apply {
-                        this.additionalProperties.putAll(additionalProperties)
-                    }
-
-                fun removeAdditionalProperty(key: String) = apply {
-                    additionalProperties.remove(key)
-                }
-
-                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                    keys.forEach(::removeAdditionalProperty)
-                }
-
-                /**
-                 * Returns an immutable instance of [ObjectReference].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): ObjectReference =
-                    ObjectReference(id, collection, additionalProperties.toMutableMap())
-            }
-
-            private var validated: Boolean = false
-
-            fun validate(): ObjectReference = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                id()
-                collection()
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: KnockInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                (if (id.asKnown().isPresent) 1 else 0) +
-                    (if (collection.asKnown().isPresent) 1 else 0)
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is ObjectReference && id == other.id && collection == other.collection && additionalProperties == other.additionalProperties /* spotless:on */
-            }
-
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(id, collection, additionalProperties) }
-            /* spotless:on */
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() =
-                "ObjectReference{id=$id, collection=$collection, additionalProperties=$additionalProperties}"
-        }
-    }
 
     /** The type of event that occurred. */
     class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {

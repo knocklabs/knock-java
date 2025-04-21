@@ -6,11 +6,11 @@ import app.knock.api.core.Enum
 import app.knock.api.core.JsonField
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
-import app.knock.api.core.getOrThrow
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
+import app.knock.api.models.recipients.RecipientReference
 import com.fasterxml.jackson.annotation.JsonCreator
 import java.util.Objects
 import java.util.Optional
@@ -29,9 +29,9 @@ private constructor(
     private val before: String?,
     private val include: List<Include>?,
     private val mode: Mode?,
-    private val objects: List<Object>?,
+    private val objects: List<RecipientReference>?,
     private val pageSize: Long?,
-    private val recipients: List<Recipient>?,
+    private val recipients: List<RecipientReference>?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
@@ -53,13 +53,13 @@ private constructor(
     fun mode(): Optional<Mode> = Optional.ofNullable(mode)
 
     /** Objects to filter by (only used if mode is `recipient`). */
-    fun objects(): Optional<List<Object>> = Optional.ofNullable(objects)
+    fun objects(): Optional<List<RecipientReference>> = Optional.ofNullable(objects)
 
     /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
     /** Recipients to filter by (only used if mode is `object`). */
-    fun recipients(): Optional<List<Recipient>> = Optional.ofNullable(recipients)
+    fun recipients(): Optional<List<RecipientReference>> = Optional.ofNullable(recipients)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -91,9 +91,9 @@ private constructor(
         private var before: String? = null
         private var include: MutableList<Include>? = null
         private var mode: Mode? = null
-        private var objects: MutableList<Object>? = null
+        private var objects: MutableList<RecipientReference>? = null
         private var pageSize: Long? = null
-        private var recipients: MutableList<Recipient>? = null
+        private var recipients: MutableList<RecipientReference>? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
@@ -150,25 +150,31 @@ private constructor(
         fun mode(mode: Optional<Mode>) = mode(mode.getOrNull())
 
         /** Objects to filter by (only used if mode is `recipient`). */
-        fun objects(objects: List<Object>?) = apply { this.objects = objects?.toMutableList() }
+        fun objects(objects: List<RecipientReference>?) = apply {
+            this.objects = objects?.toMutableList()
+        }
 
         /** Alias for calling [Builder.objects] with `objects.orElse(null)`. */
-        fun objects(objects: Optional<List<Object>>) = objects(objects.getOrNull())
+        fun objects(objects: Optional<List<RecipientReference>>) = objects(objects.getOrNull())
 
         /**
-         * Adds a single [Object] to [objects].
+         * Adds a single [RecipientReference] to [objects].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addObject(object_: Object) = apply {
+        fun addObject(object_: RecipientReference) = apply {
             objects = (objects ?: mutableListOf()).apply { add(object_) }
         }
 
-        /** Alias for calling [addObject] with `Object.ofUserReference(userReference)`. */
-        fun addObject(userReference: String) = addObject(Object.ofUserReference(userReference))
+        /** Alias for calling [addObject] with `RecipientReference.ofUser(user)`. */
+        fun addObject(user: String) = addObject(RecipientReference.ofUser(user))
 
-        /** Alias for calling [addObject] with `Object.ofReference(reference)`. */
-        fun addObject(reference: Object.ObjectReference) = addObject(Object.ofReference(reference))
+        /**
+         * Alias for calling [addObject] with
+         * `RecipientReference.ofObjectReference(objectReference)`.
+         */
+        fun addObject(objectReference: RecipientReference.ObjectReference) =
+            addObject(RecipientReference.ofObjectReference(objectReference))
 
         /** The number of items per page. */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
@@ -184,29 +190,32 @@ private constructor(
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
         /** Recipients to filter by (only used if mode is `object`). */
-        fun recipients(recipients: List<Recipient>?) = apply {
+        fun recipients(recipients: List<RecipientReference>?) = apply {
             this.recipients = recipients?.toMutableList()
         }
 
         /** Alias for calling [Builder.recipients] with `recipients.orElse(null)`. */
-        fun recipients(recipients: Optional<List<Recipient>>) = recipients(recipients.getOrNull())
+        fun recipients(recipients: Optional<List<RecipientReference>>) =
+            recipients(recipients.getOrNull())
 
         /**
-         * Adds a single [Recipient] to [recipients].
+         * Adds a single [RecipientReference] to [recipients].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addRecipient(recipient: Recipient) = apply {
+        fun addRecipient(recipient: RecipientReference) = apply {
             recipients = (recipients ?: mutableListOf()).apply { add(recipient) }
         }
 
-        /** Alias for calling [addRecipient] with `Recipient.ofUserReference(userReference)`. */
-        fun addRecipient(userReference: String) =
-            addRecipient(Recipient.ofUserReference(userReference))
+        /** Alias for calling [addRecipient] with `RecipientReference.ofUser(user)`. */
+        fun addRecipient(user: String) = addRecipient(RecipientReference.ofUser(user))
 
-        /** Alias for calling [addRecipient] with `Recipient.ofObjectReference(objectReference)`. */
-        fun addRecipient(objectReference: Recipient.ObjectReference) =
-            addRecipient(Recipient.ofObjectReference(objectReference))
+        /**
+         * Alias for calling [addRecipient] with
+         * `RecipientReference.ofObjectReference(objectReference)`.
+         */
+        fun addRecipient(objectReference: RecipientReference.ObjectReference) =
+            addRecipient(RecipientReference.ofObjectReference(objectReference))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -353,18 +362,21 @@ private constructor(
                 mode?.let { put("mode", it.toString()) }
                 objects?.forEach {
                     it.accept(
-                        object : Object.Visitor<Unit> {
-                            override fun visitUserReference(userReference: String) {
-                                put("objects[]", userReference)
+                        object : RecipientReference.Visitor<Unit> {
+                            override fun visitUser(user: String) {
+                                put("objects[]", user)
                             }
 
-                            override fun visitReference(reference: Object.ObjectReference) {
-                                reference.id().ifPresent { put("objects[][id]", it) }
-                                reference.collection().ifPresent {
+                            override fun visitObjectReference(
+                                objectReference: RecipientReference.ObjectReference
+                            ) {
+                                objectReference.id().ifPresent { put("objects[][id]", it) }
+                                objectReference.collection().ifPresent {
                                     put("objects[][collection]", it)
                                 }
-                                reference._additionalProperties().keys().forEach { key ->
-                                    reference._additionalProperties().values(key).forEach { value ->
+                                objectReference._additionalProperties().keys().forEach { key ->
+                                    objectReference._additionalProperties().values(key).forEach {
+                                        value ->
                                         put("objects[][$key]", value)
                                     }
                                 }
@@ -375,13 +387,13 @@ private constructor(
                 pageSize?.let { put("page_size", it.toString()) }
                 recipients?.forEach {
                     it.accept(
-                        object : Recipient.Visitor<Unit> {
-                            override fun visitUserReference(userReference: String) {
-                                put("recipients[]", userReference)
+                        object : RecipientReference.Visitor<Unit> {
+                            override fun visitUser(user: String) {
+                                put("recipients[]", user)
                             }
 
                             override fun visitObjectReference(
-                                objectReference: Recipient.ObjectReference
+                                objectReference: RecipientReference.ObjectReference
                             ) {
                                 objectReference.id().ifPresent { put("recipients[][id]", it) }
                                 objectReference.collection().ifPresent {
@@ -642,286 +654,6 @@ private constructor(
         override fun hashCode() = value.hashCode()
 
         override fun toString() = value.toString()
-    }
-
-    /**
-     * A reference to a recipient, either a user identifier (string) or an object reference (ID,
-     * collection).
-     */
-    class Object
-    private constructor(
-        private val userReference: String? = null,
-        private val reference: ObjectReference? = null,
-    ) {
-
-        /** The ID of the user. */
-        fun userReference(): Optional<String> = Optional.ofNullable(userReference)
-
-        /** A reference to a recipient object. */
-        fun reference(): Optional<ObjectReference> = Optional.ofNullable(reference)
-
-        fun isUserReference(): Boolean = userReference != null
-
-        fun isReference(): Boolean = reference != null
-
-        /** The ID of the user. */
-        fun asUserReference(): String = userReference.getOrThrow("userReference")
-
-        /** A reference to a recipient object. */
-        fun asReference(): ObjectReference = reference.getOrThrow("reference")
-
-        fun <T> accept(visitor: Visitor<T>): T =
-            when {
-                userReference != null -> visitor.visitUserReference(userReference)
-                reference != null -> visitor.visitReference(reference)
-                else -> throw IllegalStateException("Invalid Object")
-            }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Object && userReference == other.userReference && reference == other.reference /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(userReference, reference) /* spotless:on */
-
-        override fun toString(): String =
-            when {
-                userReference != null -> "Object{userReference=$userReference}"
-                reference != null -> "Object{reference=$reference}"
-                else -> throw IllegalStateException("Invalid Object")
-            }
-
-        companion object {
-
-            /** The ID of the user. */
-            @JvmStatic
-            fun ofUserReference(userReference: String) = Object(userReference = userReference)
-
-            /** A reference to a recipient object. */
-            @JvmStatic fun ofReference(reference: ObjectReference) = Object(reference = reference)
-        }
-
-        /** An interface that defines how to map each variant of [Object] to a value of type [T]. */
-        interface Visitor<out T> {
-
-            /** The ID of the user. */
-            fun visitUserReference(userReference: String): T
-
-            /** A reference to a recipient object. */
-            fun visitReference(reference: ObjectReference): T
-        }
-
-        /** A reference to a recipient object. */
-        class ObjectReference
-        private constructor(private val id: String?, private val collection: String?) {
-
-            /** An identifier for the recipient object. */
-            fun id(): Optional<String> = Optional.ofNullable(id)
-
-            /** The collection the recipient object belongs to. */
-            fun collection(): Optional<String> = Optional.ofNullable(collection)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [ObjectReference]. */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [ObjectReference]. */
-            class Builder internal constructor() {
-
-                private var id: String? = null
-                private var collection: String? = null
-
-                @JvmSynthetic
-                internal fun from(objectReference: ObjectReference) = apply {
-                    id = objectReference.id
-                    collection = objectReference.collection
-                }
-
-                /** An identifier for the recipient object. */
-                fun id(id: String?) = apply { this.id = id }
-
-                /** Alias for calling [Builder.id] with `id.orElse(null)`. */
-                fun id(id: Optional<String>) = id(id.getOrNull())
-
-                /** The collection the recipient object belongs to. */
-                fun collection(collection: String?) = apply { this.collection = collection }
-
-                /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
-                fun collection(collection: Optional<String>) = collection(collection.getOrNull())
-
-                /**
-                 * Returns an immutable instance of [ObjectReference].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): ObjectReference = ObjectReference(id, collection)
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is ObjectReference && id == other.id && collection == other.collection /* spotless:on */
-            }
-
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(id, collection) }
-            /* spotless:on */
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() = "ObjectReference{id=$id, collection=$collection}"
-        }
-    }
-
-    /**
-     * A reference to a recipient, either a user identifier (string) or an object reference (ID,
-     * collection).
-     */
-    class Recipient
-    private constructor(
-        private val userReference: String? = null,
-        private val objectReference: ObjectReference? = null,
-    ) {
-
-        /** The ID of the user. */
-        fun userReference(): Optional<String> = Optional.ofNullable(userReference)
-
-        /** A reference to a recipient object. */
-        fun objectReference(): Optional<ObjectReference> = Optional.ofNullable(objectReference)
-
-        fun isUserReference(): Boolean = userReference != null
-
-        fun isObjectReference(): Boolean = objectReference != null
-
-        /** The ID of the user. */
-        fun asUserReference(): String = userReference.getOrThrow("userReference")
-
-        /** A reference to a recipient object. */
-        fun asObjectReference(): ObjectReference = objectReference.getOrThrow("objectReference")
-
-        fun <T> accept(visitor: Visitor<T>): T =
-            when {
-                userReference != null -> visitor.visitUserReference(userReference)
-                objectReference != null -> visitor.visitObjectReference(objectReference)
-                else -> throw IllegalStateException("Invalid Recipient")
-            }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Recipient && userReference == other.userReference && objectReference == other.objectReference /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(userReference, objectReference) /* spotless:on */
-
-        override fun toString(): String =
-            when {
-                userReference != null -> "Recipient{userReference=$userReference}"
-                objectReference != null -> "Recipient{objectReference=$objectReference}"
-                else -> throw IllegalStateException("Invalid Recipient")
-            }
-
-        companion object {
-
-            /** The ID of the user. */
-            @JvmStatic
-            fun ofUserReference(userReference: String) = Recipient(userReference = userReference)
-
-            /** A reference to a recipient object. */
-            @JvmStatic
-            fun ofObjectReference(objectReference: ObjectReference) =
-                Recipient(objectReference = objectReference)
-        }
-
-        /**
-         * An interface that defines how to map each variant of [Recipient] to a value of type [T].
-         */
-        interface Visitor<out T> {
-
-            /** The ID of the user. */
-            fun visitUserReference(userReference: String): T
-
-            /** A reference to a recipient object. */
-            fun visitObjectReference(objectReference: ObjectReference): T
-        }
-
-        /** A reference to a recipient object. */
-        class ObjectReference
-        private constructor(private val id: String?, private val collection: String?) {
-
-            /** An identifier for the recipient object. */
-            fun id(): Optional<String> = Optional.ofNullable(id)
-
-            /** The collection the recipient object belongs to. */
-            fun collection(): Optional<String> = Optional.ofNullable(collection)
-
-            fun toBuilder() = Builder().from(this)
-
-            companion object {
-
-                /** Returns a mutable builder for constructing an instance of [ObjectReference]. */
-                @JvmStatic fun builder() = Builder()
-            }
-
-            /** A builder for [ObjectReference]. */
-            class Builder internal constructor() {
-
-                private var id: String? = null
-                private var collection: String? = null
-
-                @JvmSynthetic
-                internal fun from(objectReference: ObjectReference) = apply {
-                    id = objectReference.id
-                    collection = objectReference.collection
-                }
-
-                /** An identifier for the recipient object. */
-                fun id(id: String?) = apply { this.id = id }
-
-                /** Alias for calling [Builder.id] with `id.orElse(null)`. */
-                fun id(id: Optional<String>) = id(id.getOrNull())
-
-                /** The collection the recipient object belongs to. */
-                fun collection(collection: String?) = apply { this.collection = collection }
-
-                /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
-                fun collection(collection: Optional<String>) = collection(collection.getOrNull())
-
-                /**
-                 * Returns an immutable instance of [ObjectReference].
-                 *
-                 * Further updates to this [Builder] will not mutate the returned instance.
-                 */
-                fun build(): ObjectReference = ObjectReference(id, collection)
-            }
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is ObjectReference && id == other.id && collection == other.collection /* spotless:on */
-            }
-
-            /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(id, collection) }
-            /* spotless:on */
-
-            override fun hashCode(): Int = hashCode
-
-            override fun toString() = "ObjectReference{id=$id, collection=$collection}"
-        }
     }
 
     override fun equals(other: Any?): Boolean {
