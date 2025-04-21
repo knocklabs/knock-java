@@ -46,7 +46,7 @@ private constructor(
 
     /**
      * The recipients to trigger the workflow for. Can inline identify users, objects, or use a list
-     * of user IDs. Limited to 1,000 recipients in a single trigger.
+     * of user IDs. Limited to 1,000 recipients.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -181,7 +181,7 @@ private constructor(
 
         /**
          * The recipients to trigger the workflow for. Can inline identify users, objects, or use a
-         * list of user IDs. Limited to 1,000 recipients in a single trigger.
+         * list of user IDs. Limited to 1,000 recipients.
          */
         fun recipients(recipients: List<RecipientRequest>) = apply { body.recipients(recipients) }
 
@@ -497,7 +497,7 @@ private constructor(
 
         /**
          * The recipients to trigger the workflow for. Can inline identify users, objects, or use a
-         * list of user IDs. Limited to 1,000 recipients in a single trigger.
+         * list of user IDs. Limited to 1,000 recipients.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -630,7 +630,7 @@ private constructor(
 
             /**
              * The recipients to trigger the workflow for. Can inline identify users, objects, or
-             * use a list of user IDs. Limited to 1,000 recipients in a single trigger.
+             * use a list of user IDs. Limited to 1,000 recipients.
              */
             fun recipients(recipients: List<RecipientRequest>) =
                 recipients(JsonField.of(recipients))
