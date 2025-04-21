@@ -28,7 +28,9 @@ import kotlin.jvm.optionals.getOrNull
 
 /**
  * Updates one or more existing schedules with new timing, data, or other properties. All specified
- * schedule IDs will be updated with the same values.
+ * schedule IDs will be updated with the same values. This endpoint also handles
+ * [inline identifications](/managing-recipients/identifying-recipients#inline-identifying-recipients)
+ * for the `actor`, `recipient`, and `tenant` fields.
  */
 class ScheduleUpdateParams
 private constructor(

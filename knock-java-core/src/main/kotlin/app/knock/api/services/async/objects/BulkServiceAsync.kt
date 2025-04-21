@@ -30,7 +30,9 @@ interface BulkServiceAsync {
 
     /**
      * Add subscriptions for all objects in a single collection. If a subscription for an object in
-     * the collection already exists, it will be updated.
+     * the collection already exists, it will be updated. This endpoint also handles
+     * [inline identifications](/managing-recipients/identifying-recipients#inline-identifying-recipients)
+     * for the `recipient` field.
      */
     fun addSubscriptions(params: BulkAddSubscriptionsParams): CompletableFuture<BulkOperation> =
         addSubscriptions(params, RequestOptions.none())

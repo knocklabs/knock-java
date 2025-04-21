@@ -25,8 +25,10 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Add subscriptions for an object. If a subscription already exists, it will be updated. Can accept
- * inline-identifications for recipients.
+ * Add subscriptions for an object. If a subscription already exists, it will be updated. This
+ * endpoint also handles
+ * [inline identifications](/managing-recipients/identifying-recipients#inline-identifying-recipients)
+ * for the `recipient`
  */
 class ObjectAddSubscriptionsParams
 private constructor(

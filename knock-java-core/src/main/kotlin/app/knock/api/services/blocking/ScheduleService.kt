@@ -24,7 +24,9 @@ interface ScheduleService {
 
     /**
      * Creates one or more schedules for a workflow with the specified recipients, timing, and data.
-     * Schedules can be one-time or recurring.
+     * Schedules can be one-time or recurring. This endpoint also handles
+     * [inline identifications](/managing-recipients/identifying-recipients#inline-identifying-recipients)
+     * for the `actor`, `recipient`, and `tenant` fields.
      */
     fun create(params: ScheduleCreateParams): List<Schedule> = create(params, RequestOptions.none())
 
@@ -36,7 +38,9 @@ interface ScheduleService {
 
     /**
      * Updates one or more existing schedules with new timing, data, or other properties. All
-     * specified schedule IDs will be updated with the same values.
+     * specified schedule IDs will be updated with the same values. This endpoint also handles
+     * [inline identifications](/managing-recipients/identifying-recipients#inline-identifying-recipients)
+     * for the `actor`, `recipient`, and `tenant` fields.
      */
     fun update(params: ScheduleUpdateParams): List<Schedule> = update(params, RequestOptions.none())
 
