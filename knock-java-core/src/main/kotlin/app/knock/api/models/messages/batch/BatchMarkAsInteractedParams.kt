@@ -22,7 +22,12 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Marks the given messages as interacted with. */
+/**
+ * Marks the given messages as interacted with by the user. This can include any user action on the
+ * message, with optional metadata about the specific interaction. Cannot include more than 5
+ * key-value pairs, must not contain nested data. Read more about message engagement statuses
+ * [here](/send-notifications/message-statuses#engagement-status).
+ */
 class BatchMarkAsInteractedParams
 private constructor(
     private val body: Body,

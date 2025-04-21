@@ -16,7 +16,7 @@ internal class AudienceMemberTest {
         val audienceMember =
             AudienceMember.builder()
                 ._typename("AudienceMember")
-                .addedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                .addedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
                 .user(
                     User.builder()
                         .id("jane")
@@ -35,7 +35,7 @@ internal class AudienceMemberTest {
                 .build()
 
         assertThat(audienceMember._typename()).isEqualTo("AudienceMember")
-        assertThat(audienceMember.addedAt()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+        assertThat(audienceMember.addedAt()).isEqualTo(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
         assertThat(audienceMember.user())
             .isEqualTo(
                 User.builder()
@@ -60,7 +60,7 @@ internal class AudienceMemberTest {
         val audienceMember =
             AudienceMember.builder()
                 ._typename("AudienceMember")
-                .addedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                .addedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
                 .user(
                     User.builder()
                         .id("jane")

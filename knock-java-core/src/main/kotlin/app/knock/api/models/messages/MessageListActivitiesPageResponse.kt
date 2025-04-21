@@ -19,7 +19,11 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/** A paginated list of activities. */
+/**
+ * Returns a paginated list of `activities` associated with a given message. For messages produced
+ * after a [batch step](/designing-workflows/batch-function), this will contain one or more
+ * activities. Non-batched messages will always return a single activity.
+ */
 class MessageListActivitiesPageResponse
 private constructor(
     private val entries: JsonField<List<Activity>>,

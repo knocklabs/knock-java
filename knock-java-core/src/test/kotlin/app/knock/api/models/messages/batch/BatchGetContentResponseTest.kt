@@ -22,7 +22,7 @@ internal class BatchGetContentResponseTest {
                         .to("user_123")
                         .build()
                 )
-                .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
                 .messageId("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                 .build()
 
@@ -38,7 +38,7 @@ internal class BatchGetContentResponseTest {
                 )
             )
         assertThat(batchGetContentResponse.insertedAt())
-            .isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+            .isEqualTo(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
         assertThat(batchGetContentResponse.messageId()).isEqualTo("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
     }
 
@@ -55,7 +55,7 @@ internal class BatchGetContentResponseTest {
                         .to("user_123")
                         .build()
                 )
-                .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
                 .messageId("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                 .build()
 

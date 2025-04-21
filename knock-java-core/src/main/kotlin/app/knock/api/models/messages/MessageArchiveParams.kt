@@ -12,8 +12,8 @@ import java.util.Objects
 import java.util.Optional
 
 /**
- * Archives a message for the current user. Archived messages are hidden from the default message
- * list but can still be accessed and unarchived later.
+ * Archives a message for the user. Archived messages are hidden from the default message list in
+ * the feed but can still be accessed and unarchived later.
  */
 class MessageArchiveParams
 private constructor(

@@ -36,7 +36,8 @@ private constructor(
     ) : this(entries, pageInfo, mutableMapOf())
 
     /**
-     * A list of message delivery logs.
+     * Returns a paginated list of delivery logs from the downstream provider for the specified
+     * message. For Knock in-app channels, the delivery logs will always be an empty list.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -111,7 +112,10 @@ private constructor(
                 messageListDeliveryLogsPageResponse.additionalProperties.toMutableMap()
         }
 
-        /** A list of message delivery logs. */
+        /**
+         * Returns a paginated list of delivery logs from the downstream provider for the specified
+         * message. For Knock in-app channels, the delivery logs will always be an empty list.
+         */
         fun entries(entries: List<MessageDeliveryLog>) = entries(JsonField.of(entries))
 
         /**

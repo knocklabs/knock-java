@@ -12,7 +12,8 @@ import java.util.Objects
 import java.util.Optional
 
 /**
- * Removes a message from the archived state, making it visible in the default message list again.
+ * Removes a message from the archived state, making it visible in the default message list in the
+ * feed again.
  */
 class MessageUnarchiveParams
 private constructor(

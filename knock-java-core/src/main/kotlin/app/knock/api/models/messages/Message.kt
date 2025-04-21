@@ -171,7 +171,11 @@ private constructor(
     fun clickedAt(): Optional<OffsetDateTime> = clickedAt.getOptional("clicked_at")
 
     /**
-     * Data from the activities linked to the message.
+     * Data associated with the message’s workflow run. Includes the workflow trigger request’s
+     * `data` payload merged with any additional data returned by a
+     * [fetch function](/designing-workflows/fetch-function). For messages produced after a
+     * [batch step](/designing-workflows/batch-function), includes the payload `data` from the
+     * most-recent trigger request (the final `activity` in the batch).
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -253,7 +257,7 @@ private constructor(
     fun seenAt(): Optional<OffsetDateTime> = seenAt.getOptional("seen_at")
 
     /**
-     * The source that triggered the message.
+     * The workflow that triggered the message.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -639,7 +643,13 @@ private constructor(
          */
         fun clickedAt(clickedAt: JsonField<OffsetDateTime>) = apply { this.clickedAt = clickedAt }
 
-        /** Data from the activities linked to the message. */
+        /**
+         * Data associated with the message’s workflow run. Includes the workflow trigger request’s
+         * `data` payload merged with any additional data returned by a
+         * [fetch function](/designing-workflows/fetch-function). For messages produced after a
+         * [batch step](/designing-workflows/batch-function), includes the payload `data` from the
+         * most-recent trigger request (the final `activity` in the batch).
+         */
         fun data(data: Data?) = data(JsonField.ofNullable(data))
 
         /** Alias for calling [Builder.data] with `data.orElse(null)`. */
@@ -823,7 +833,7 @@ private constructor(
          */
         fun seenAt(seenAt: JsonField<OffsetDateTime>) = apply { this.seenAt = seenAt }
 
-        /** The source that triggered the message. */
+        /** The workflow that triggered the message. */
         fun source(source: Source) = source(JsonField.of(source))
 
         /**
@@ -1007,7 +1017,13 @@ private constructor(
             (if (updatedAt.asKnown().isPresent) 1 else 0) +
             (if (workflow.asKnown().isPresent) 1 else 0)
 
-    /** Data from the activities linked to the message. */
+    /**
+     * Data associated with the message’s workflow run. Includes the workflow trigger request’s
+     * `data` payload merged with any additional data returned by a
+     * [fetch function](/designing-workflows/fetch-function). For messages produced after a
+     * [batch step](/designing-workflows/batch-function), includes the payload `data` from the
+     * most-recent trigger request (the final `activity` in the batch).
+     */
     class Data
     @JsonCreator
     private constructor(
@@ -1361,7 +1377,7 @@ private constructor(
         override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
     }
 
-    /** The source that triggered the message. */
+    /** The workflow that triggered the message. */
     class Source
     private constructor(
         private val _typename: JsonField<String>,
@@ -1400,7 +1416,7 @@ private constructor(
         fun categories(): List<String> = categories.getRequired("categories")
 
         /**
-         * The key of the source that triggered the message.
+         * The key of the workflow that triggered the message.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -1408,7 +1424,7 @@ private constructor(
         fun key(): String = key.getRequired("key")
 
         /**
-         * The ID of the version of the source that triggered the message.
+         * The ID of the version of the workflow that triggered the message.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -1528,7 +1544,7 @@ private constructor(
                     }
             }
 
-            /** The key of the source that triggered the message. */
+            /** The key of the workflow that triggered the message. */
             fun key(key: String) = key(JsonField.of(key))
 
             /**
@@ -1540,7 +1556,7 @@ private constructor(
              */
             fun key(key: JsonField<String>) = apply { this.key = key }
 
-            /** The ID of the version of the source that triggered the message. */
+            /** The ID of the version of the workflow that triggered the message. */
             fun versionId(versionId: String) = versionId(JsonField.of(versionId))
 
             /**

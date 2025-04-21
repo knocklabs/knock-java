@@ -21,7 +21,11 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/** Marks the given messages as seen. */
+/**
+ * Marks the given messages as `seen`. This indicates that the user has viewed the message in their
+ * feed or inbox. Read more about message engagement statuses
+ * [here](/send-notifications/message-statuses#engagement-status).
+ */
 class BatchMarkAsSeenParams
 private constructor(
     private val body: Body,

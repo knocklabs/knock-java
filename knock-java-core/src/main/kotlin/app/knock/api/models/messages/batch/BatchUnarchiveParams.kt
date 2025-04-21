@@ -21,7 +21,10 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/** Marks the given messages as unarchived. */
+/**
+ * Marks the given messages as unarchived. This reverses the `archived` state. Archived messages are
+ * hidden from the default message list in the feed but can still be accessed and unarchived later.
+ */
 class BatchUnarchiveParams
 private constructor(
     private val body: Body,

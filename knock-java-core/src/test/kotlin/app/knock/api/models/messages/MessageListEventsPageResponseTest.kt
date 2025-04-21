@@ -20,7 +20,7 @@ internal class MessageListEventsPageResponseTest {
                     MessageEvent.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                         ._typename("MessageEvent")
-                        .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                        .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
                         .recipient("user_123")
                         .type(MessageEvent.Type.MESSAGE_SENT)
                         .data(
@@ -45,7 +45,7 @@ internal class MessageListEventsPageResponseTest {
                 MessageEvent.builder()
                     .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                     ._typename("MessageEvent")
-                    .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                    .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
                     .recipient("user_123")
                     .type(MessageEvent.Type.MESSAGE_SENT)
                     .data(
@@ -75,7 +75,7 @@ internal class MessageListEventsPageResponseTest {
                     MessageEvent.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                         ._typename("MessageEvent")
-                        .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                        .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
                         .recipient("user_123")
                         .type(MessageEvent.Type.MESSAGE_SENT)
                         .data(

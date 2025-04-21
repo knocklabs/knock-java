@@ -26,10 +26,10 @@ private constructor(
 
     fun channelId(): String = channelId
 
-    /** The data to filter guides by. */
+    /** The data (JSON encoded object) to use for targeting and rendering guides. */
     fun data(): Optional<String> = Optional.ofNullable(data)
 
-    /** The tenant ID to filter guides by. */
+    /** The tenant ID to use for targeting and rendering guides. */
     fun tenant(): Optional<String> = Optional.ofNullable(tenant)
 
     /** The type of guides to filter by. */
@@ -81,13 +81,13 @@ private constructor(
 
         fun channelId(channelId: String) = apply { this.channelId = channelId }
 
-        /** The data to filter guides by. */
+        /** The data (JSON encoded object) to use for targeting and rendering guides. */
         fun data(data: String?) = apply { this.data = data }
 
         /** Alias for calling [Builder.data] with `data.orElse(null)`. */
         fun data(data: Optional<String>) = data(data.getOrNull())
 
-        /** The tenant ID to filter guides by. */
+        /** The tenant ID to use for targeting and rendering guides. */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
         /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */

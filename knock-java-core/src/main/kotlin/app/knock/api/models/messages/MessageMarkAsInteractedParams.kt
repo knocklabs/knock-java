@@ -22,8 +22,10 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Marks a message as interacted with by the current user. This can include any user action on the
- * message, with optional metadata about the specific interaction.
+ * Marks a message as `interacted` with by the user. This can include any user action on the
+ * message, with optional metadata about the specific interaction. Cannot include more than 5
+ * key-value pairs, must not contain nested data. Read more about message engagement statuses
+ * [here](/send-notifications/message-statuses#engagement-status).
  */
 class MessageMarkAsInteractedParams
 private constructor(

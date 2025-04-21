@@ -43,7 +43,7 @@ private constructor(
     fun action(): Action = action
 
     /**
-     * The archived status to filter messages by.
+     * Limits the results to messages with the given archived status.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -51,7 +51,7 @@ private constructor(
     fun archived(): Optional<Archived> = body.archived()
 
     /**
-     * The delivery status to filter messages by.
+     * Limits the results to messages with the given delivery status.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -59,7 +59,7 @@ private constructor(
     fun deliveryStatus(): Optional<DeliveryStatus> = body.deliveryStatus()
 
     /**
-     * The engagement status to filter messages by.
+     * Limits the results to messages with the given engagement status.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -67,7 +67,7 @@ private constructor(
     fun engagementStatus(): Optional<EngagementStatus> = body.engagementStatus()
 
     /**
-     * Whether to include only messages that have a tenant or not.
+     * Limits the results to messages that have a tenant or not.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -75,23 +75,19 @@ private constructor(
     fun hasTenant(): Optional<Boolean> = body.hasTenant()
 
     /**
-     * The timestamp to filter messages by. Only include messages created after this timestamp.
-     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun newerThan(): Optional<OffsetDateTime> = body.newerThan()
 
     /**
-     * The timestamp to filter messages by. Only include messages created before this timestamp.
-     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun olderThan(): Optional<OffsetDateTime> = body.olderThan()
 
     /**
-     * The recipient GIDs to filter messages by.
+     * Limits the results to messages with the given recipient GIDs.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -99,7 +95,7 @@ private constructor(
     fun recipientGids(): Optional<List<String>> = body.recipientGids()
 
     /**
-     * The recipient IDs to filter messages by.
+     * Limits the results to messages with the given recipient IDs.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -107,7 +103,7 @@ private constructor(
     fun recipientIds(): Optional<List<String>> = body.recipientIds()
 
     /**
-     * The tenant IDs to filter messages by.
+     * Limits the results to messages with the given tenant IDs.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -115,7 +111,9 @@ private constructor(
     fun tenants(): Optional<List<String>> = body.tenants()
 
     /**
-     * The trigger data to filter messages by. Must be a valid JSON object.
+     * Limits the results to only messages that were generated with the given data. See
+     * [trigger data filtering](/api-reference/overview/trigger-data-filtering) for more
+     * information.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -123,7 +121,7 @@ private constructor(
     fun triggerData(): Optional<String> = body.triggerData()
 
     /**
-     * The workflow keys to filter messages by.
+     * Limits the results to messages with the given workflow keys.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -267,7 +265,7 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /** The archived status to filter messages by. */
+        /** Limits the results to messages with the given archived status. */
         fun archived(archived: Archived) = apply { body.archived(archived) }
 
         /**
@@ -279,7 +277,7 @@ private constructor(
          */
         fun archived(archived: JsonField<Archived>) = apply { body.archived(archived) }
 
-        /** The delivery status to filter messages by. */
+        /** Limits the results to messages with the given delivery status. */
         fun deliveryStatus(deliveryStatus: DeliveryStatus) = apply {
             body.deliveryStatus(deliveryStatus)
         }
@@ -295,7 +293,7 @@ private constructor(
             body.deliveryStatus(deliveryStatus)
         }
 
-        /** The engagement status to filter messages by. */
+        /** Limits the results to messages with the given engagement status. */
         fun engagementStatus(engagementStatus: EngagementStatus) = apply {
             body.engagementStatus(engagementStatus)
         }
@@ -311,7 +309,7 @@ private constructor(
             body.engagementStatus(engagementStatus)
         }
 
-        /** Whether to include only messages that have a tenant or not. */
+        /** Limits the results to messages that have a tenant or not. */
         fun hasTenant(hasTenant: Boolean) = apply { body.hasTenant(hasTenant) }
 
         /**
@@ -323,9 +321,6 @@ private constructor(
          */
         fun hasTenant(hasTenant: JsonField<Boolean>) = apply { body.hasTenant(hasTenant) }
 
-        /**
-         * The timestamp to filter messages by. Only include messages created after this timestamp.
-         */
         fun newerThan(newerThan: OffsetDateTime) = apply { body.newerThan(newerThan) }
 
         /**
@@ -337,9 +332,6 @@ private constructor(
          */
         fun newerThan(newerThan: JsonField<OffsetDateTime>) = apply { body.newerThan(newerThan) }
 
-        /**
-         * The timestamp to filter messages by. Only include messages created before this timestamp.
-         */
         fun olderThan(olderThan: OffsetDateTime) = apply { body.olderThan(olderThan) }
 
         /**
@@ -351,7 +343,7 @@ private constructor(
          */
         fun olderThan(olderThan: JsonField<OffsetDateTime>) = apply { body.olderThan(olderThan) }
 
-        /** The recipient GIDs to filter messages by. */
+        /** Limits the results to messages with the given recipient GIDs. */
         fun recipientGids(recipientGids: List<String>) = apply { body.recipientGids(recipientGids) }
 
         /**
@@ -372,7 +364,7 @@ private constructor(
          */
         fun addRecipientGid(recipientGid: String) = apply { body.addRecipientGid(recipientGid) }
 
-        /** The recipient IDs to filter messages by. */
+        /** Limits the results to messages with the given recipient IDs. */
         fun recipientIds(recipientIds: List<String>) = apply { body.recipientIds(recipientIds) }
 
         /**
@@ -393,7 +385,7 @@ private constructor(
          */
         fun addRecipientId(recipientId: String) = apply { body.addRecipientId(recipientId) }
 
-        /** The tenant IDs to filter messages by. */
+        /** Limits the results to messages with the given tenant IDs. */
         fun tenants(tenants: List<String>) = apply { body.tenants(tenants) }
 
         /**
@@ -412,7 +404,11 @@ private constructor(
          */
         fun addTenant(tenant: String) = apply { body.addTenant(tenant) }
 
-        /** The trigger data to filter messages by. Must be a valid JSON object. */
+        /**
+         * Limits the results to only messages that were generated with the given data. See
+         * [trigger data filtering](/api-reference/overview/trigger-data-filtering) for more
+         * information.
+         */
         fun triggerData(triggerData: String) = apply { body.triggerData(triggerData) }
 
         /**
@@ -424,7 +420,7 @@ private constructor(
          */
         fun triggerData(triggerData: JsonField<String>) = apply { body.triggerData(triggerData) }
 
-        /** The workflow keys to filter messages by. */
+        /** Limits the results to messages with the given workflow keys. */
         fun workflows(workflows: List<String>) = apply { body.workflows(workflows) }
 
         /**
@@ -664,7 +660,7 @@ private constructor(
         )
 
         /**
-         * The archived status to filter messages by.
+         * Limits the results to messages with the given archived status.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -672,7 +668,7 @@ private constructor(
         fun archived(): Optional<Archived> = archived.getOptional("archived")
 
         /**
-         * The delivery status to filter messages by.
+         * Limits the results to messages with the given delivery status.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -681,7 +677,7 @@ private constructor(
             deliveryStatus.getOptional("delivery_status")
 
         /**
-         * The engagement status to filter messages by.
+         * Limits the results to messages with the given engagement status.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -690,7 +686,7 @@ private constructor(
             engagementStatus.getOptional("engagement_status")
 
         /**
-         * Whether to include only messages that have a tenant or not.
+         * Limits the results to messages that have a tenant or not.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -698,23 +694,19 @@ private constructor(
         fun hasTenant(): Optional<Boolean> = hasTenant.getOptional("has_tenant")
 
         /**
-         * The timestamp to filter messages by. Only include messages created after this timestamp.
-         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun newerThan(): Optional<OffsetDateTime> = newerThan.getOptional("newer_than")
 
         /**
-         * The timestamp to filter messages by. Only include messages created before this timestamp.
-         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun olderThan(): Optional<OffsetDateTime> = olderThan.getOptional("older_than")
 
         /**
-         * The recipient GIDs to filter messages by.
+         * Limits the results to messages with the given recipient GIDs.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -722,7 +714,7 @@ private constructor(
         fun recipientGids(): Optional<List<String>> = recipientGids.getOptional("recipient_gids")
 
         /**
-         * The recipient IDs to filter messages by.
+         * Limits the results to messages with the given recipient IDs.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -730,7 +722,7 @@ private constructor(
         fun recipientIds(): Optional<List<String>> = recipientIds.getOptional("recipient_ids")
 
         /**
-         * The tenant IDs to filter messages by.
+         * Limits the results to messages with the given tenant IDs.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -738,7 +730,9 @@ private constructor(
         fun tenants(): Optional<List<String>> = tenants.getOptional("tenants")
 
         /**
-         * The trigger data to filter messages by. Must be a valid JSON object.
+         * Limits the results to only messages that were generated with the given data. See
+         * [trigger data filtering](/api-reference/overview/trigger-data-filtering) for more
+         * information.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -746,7 +740,7 @@ private constructor(
         fun triggerData(): Optional<String> = triggerData.getOptional("trigger_data")
 
         /**
-         * The workflow keys to filter messages by.
+         * Limits the results to messages with the given workflow keys.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -900,7 +894,7 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /** The archived status to filter messages by. */
+            /** Limits the results to messages with the given archived status. */
             fun archived(archived: Archived) = archived(JsonField.of(archived))
 
             /**
@@ -912,7 +906,7 @@ private constructor(
              */
             fun archived(archived: JsonField<Archived>) = apply { this.archived = archived }
 
-            /** The delivery status to filter messages by. */
+            /** Limits the results to messages with the given delivery status. */
             fun deliveryStatus(deliveryStatus: DeliveryStatus) =
                 deliveryStatus(JsonField.of(deliveryStatus))
 
@@ -927,7 +921,7 @@ private constructor(
                 this.deliveryStatus = deliveryStatus
             }
 
-            /** The engagement status to filter messages by. */
+            /** Limits the results to messages with the given engagement status. */
             fun engagementStatus(engagementStatus: EngagementStatus) =
                 engagementStatus(JsonField.of(engagementStatus))
 
@@ -942,7 +936,7 @@ private constructor(
                 this.engagementStatus = engagementStatus
             }
 
-            /** Whether to include only messages that have a tenant or not. */
+            /** Limits the results to messages that have a tenant or not. */
             fun hasTenant(hasTenant: Boolean) = hasTenant(JsonField.of(hasTenant))
 
             /**
@@ -954,10 +948,6 @@ private constructor(
              */
             fun hasTenant(hasTenant: JsonField<Boolean>) = apply { this.hasTenant = hasTenant }
 
-            /**
-             * The timestamp to filter messages by. Only include messages created after this
-             * timestamp.
-             */
             fun newerThan(newerThan: OffsetDateTime) = newerThan(JsonField.of(newerThan))
 
             /**
@@ -971,10 +961,6 @@ private constructor(
                 this.newerThan = newerThan
             }
 
-            /**
-             * The timestamp to filter messages by. Only include messages created before this
-             * timestamp.
-             */
             fun olderThan(olderThan: OffsetDateTime) = olderThan(JsonField.of(olderThan))
 
             /**
@@ -988,7 +974,7 @@ private constructor(
                 this.olderThan = olderThan
             }
 
-            /** The recipient GIDs to filter messages by. */
+            /** Limits the results to messages with the given recipient GIDs. */
             fun recipientGids(recipientGids: List<String>) =
                 recipientGids(JsonField.of(recipientGids))
 
@@ -1015,7 +1001,7 @@ private constructor(
                     }
             }
 
-            /** The recipient IDs to filter messages by. */
+            /** Limits the results to messages with the given recipient IDs. */
             fun recipientIds(recipientIds: List<String>) = recipientIds(JsonField.of(recipientIds))
 
             /**
@@ -1041,7 +1027,7 @@ private constructor(
                     }
             }
 
-            /** The tenant IDs to filter messages by. */
+            /** Limits the results to messages with the given tenant IDs. */
             fun tenants(tenants: List<String>) = tenants(JsonField.of(tenants))
 
             /**
@@ -1067,7 +1053,11 @@ private constructor(
                     }
             }
 
-            /** The trigger data to filter messages by. Must be a valid JSON object. */
+            /**
+             * Limits the results to only messages that were generated with the given data. See
+             * [trigger data filtering](/api-reference/overview/trigger-data-filtering) for more
+             * information.
+             */
             fun triggerData(triggerData: String) = triggerData(JsonField.of(triggerData))
 
             /**
@@ -1081,7 +1071,7 @@ private constructor(
                 this.triggerData = triggerData
             }
 
-            /** The workflow keys to filter messages by. */
+            /** Limits the results to messages with the given workflow keys. */
             fun workflows(workflows: List<String>) = workflows(JsonField.of(workflows))
 
             /**
@@ -1215,7 +1205,7 @@ private constructor(
             "Body{archived=$archived, deliveryStatus=$deliveryStatus, engagementStatus=$engagementStatus, hasTenant=$hasTenant, newerThan=$newerThan, olderThan=$olderThan, recipientGids=$recipientGids, recipientIds=$recipientIds, tenants=$tenants, triggerData=$triggerData, workflows=$workflows, additionalProperties=$additionalProperties}"
     }
 
-    /** The archived status to filter messages by. */
+    /** Limits the results to messages with the given archived status. */
     class Archived @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
@@ -1346,7 +1336,7 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    /** The delivery status to filter messages by. */
+    /** Limits the results to messages with the given delivery status. */
     class DeliveryStatus @JsonCreator private constructor(private val value: JsonField<String>) :
         Enum {
 
@@ -1505,7 +1495,7 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    /** The engagement status to filter messages by. */
+    /** Limits the results to messages with the given engagement status. */
     class EngagementStatus @JsonCreator private constructor(private val value: JsonField<String>) :
         Enum {
 

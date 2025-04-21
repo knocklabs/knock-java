@@ -19,7 +19,7 @@ internal class SubscriptionTest {
         val subscription =
             Subscription.builder()
                 ._typename("Subscription")
-                .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
                 .object_(
                     Object.builder()
                         .id("project_1")
@@ -42,7 +42,7 @@ internal class SubscriptionTest {
                         .timezone(null)
                         .build()
                 )
-                .updatedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                .updatedAt(OffsetDateTime.parse("2025-01-05T00:00:00Z"))
                 .properties(
                     Subscription.Properties.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -52,7 +52,7 @@ internal class SubscriptionTest {
 
         assertThat(subscription._typename()).isEqualTo("Subscription")
         assertThat(subscription.insertedAt())
-            .isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+            .isEqualTo(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
         assertThat(subscription.object_())
             .isEqualTo(
                 Object.builder()
@@ -79,7 +79,7 @@ internal class SubscriptionTest {
                         .build()
                 )
             )
-        assertThat(subscription.updatedAt()).isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+        assertThat(subscription.updatedAt()).isEqualTo(OffsetDateTime.parse("2025-01-05T00:00:00Z"))
         assertThat(subscription.properties())
             .contains(
                 Subscription.Properties.builder()
@@ -94,7 +94,7 @@ internal class SubscriptionTest {
         val subscription =
             Subscription.builder()
                 ._typename("Subscription")
-                .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
                 .object_(
                     Object.builder()
                         .id("project_1")
@@ -117,7 +117,7 @@ internal class SubscriptionTest {
                         .timezone(null)
                         .build()
                 )
-                .updatedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                .updatedAt(OffsetDateTime.parse("2025-01-05T00:00:00Z"))
                 .properties(
                     Subscription.Properties.builder()
                         .putAdditionalProperty("foo", JsonValue.from("bar"))

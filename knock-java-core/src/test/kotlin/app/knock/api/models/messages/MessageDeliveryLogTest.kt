@@ -17,7 +17,7 @@ internal class MessageDeliveryLogTest {
                 .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                 ._typename("MessageDeliveryLog")
                 .environmentId("123e4567-e89b-12d3-a456-426614174000")
-                .insertedAt("2021-01-01T00:00:00Z")
+                .insertedAt("2025-01-01T00:00:00Z")
                 .request(
                     MessageDeliveryLog.Request.builder()
                         .body(
@@ -58,7 +58,7 @@ internal class MessageDeliveryLogTest {
         assertThat(messageDeliveryLog._typename()).isEqualTo("MessageDeliveryLog")
         assertThat(messageDeliveryLog.environmentId())
             .isEqualTo("123e4567-e89b-12d3-a456-426614174000")
-        assertThat(messageDeliveryLog.insertedAt()).isEqualTo("2021-01-01T00:00:00Z")
+        assertThat(messageDeliveryLog.insertedAt()).isEqualTo("2025-01-01T00:00:00Z")
         assertThat(messageDeliveryLog.request())
             .isEqualTo(
                 MessageDeliveryLog.Request.builder()
@@ -105,7 +105,7 @@ internal class MessageDeliveryLogTest {
                 .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                 ._typename("MessageDeliveryLog")
                 .environmentId("123e4567-e89b-12d3-a456-426614174000")
-                .insertedAt("2021-01-01T00:00:00Z")
+                .insertedAt("2025-01-01T00:00:00Z")
                 .request(
                     MessageDeliveryLog.Request.builder()
                         .body(

@@ -18,7 +18,7 @@ internal class MessageEventTest {
             MessageEvent.builder()
                 .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                 ._typename("MessageEvent")
-                .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
                 .recipient("user_123")
                 .type(MessageEvent.Type.MESSAGE_SENT)
                 .data(
@@ -31,7 +31,7 @@ internal class MessageEventTest {
         assertThat(messageEvent.id()).isEqualTo("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
         assertThat(messageEvent._typename()).isEqualTo("MessageEvent")
         assertThat(messageEvent.insertedAt())
-            .isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+            .isEqualTo(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
         assertThat(messageEvent.recipient()).isEqualTo(RecipientReference.ofUser("user_123"))
         assertThat(messageEvent.type()).isEqualTo(MessageEvent.Type.MESSAGE_SENT)
         assertThat(messageEvent.data())
@@ -49,7 +49,7 @@ internal class MessageEventTest {
             MessageEvent.builder()
                 .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                 ._typename("MessageEvent")
-                .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
+                .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
                 .recipient("user_123")
                 .type(MessageEvent.Type.MESSAGE_SENT)
                 .data(

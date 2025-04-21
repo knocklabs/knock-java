@@ -269,8 +269,8 @@ private constructor(
     override fun _queryParams(): QueryParams = additionalQueryParams
 
     /**
-     * MERYL A request to bulk create schedules. Accepts a list of schedules to create. Each
-     * schedule must have a single recipient. The recipients do not have to be unique.
+     * A request to bulk create schedules. Accepts a list of schedules to create. Each schedule must
+     * have a single recipient. The recipients do not have to be unique.
      */
     class Body
     private constructor(

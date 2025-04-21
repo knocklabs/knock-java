@@ -55,8 +55,8 @@ interface MessageServiceAsync {
         list(MessageListParams.none(), requestOptions)
 
     /**
-     * Archives a message for the current user. Archived messages are hidden from the default
-     * message list but can still be accessed and unarchived later.
+     * Archives a message for the user. Archived messages are hidden from the default message list
+     * in the feed but can still be accessed and unarchived later.
      */
     fun archive(params: MessageArchiveParams): CompletableFuture<Message> =
         archive(params, RequestOptions.none())
@@ -125,8 +125,10 @@ interface MessageServiceAsync {
     ): CompletableFuture<MessageListEventsPageAsync>
 
     /**
-     * Marks a message as interacted with by the current user. This can include any user action on
-     * the message, with optional metadata about the specific interaction.
+     * Marks a message as `interacted` with by the user. This can include any user action on the
+     * message, with optional metadata about the specific interaction. Cannot include more than 5
+     * key-value pairs, must not contain nested data. Read more about message engagement statuses
+     * [here](/send-notifications/message-statuses#engagement-status).
      */
     fun markAsInteracted(params: MessageMarkAsInteractedParams): CompletableFuture<Message> =
         markAsInteracted(params, RequestOptions.none())
@@ -138,8 +140,9 @@ interface MessageServiceAsync {
     ): CompletableFuture<Message>
 
     /**
-     * Marks a message as read for the current user. This indicates that the user has read the
-     * message content.
+     * Marks a message as `read`. This indicates that the user has read the message content. Read
+     * more about message engagement statuses
+     * [here](/send-notifications/message-statuses#engagement-status).
      */
     fun markAsRead(params: MessageMarkAsReadParams): CompletableFuture<Message> =
         markAsRead(params, RequestOptions.none())
@@ -151,8 +154,9 @@ interface MessageServiceAsync {
     ): CompletableFuture<Message>
 
     /**
-     * Marks a message as seen for the current user. This indicates that the user has viewed the
-     * message in their feed or inbox.
+     * Marks a message as `seen`. This indicates that the user has viewed the message in their feed
+     * or inbox. Read more about message engagement statuses
+     * [here](/send-notifications/message-statuses#engagement-status).
      */
     fun markAsSeen(params: MessageMarkAsSeenParams): CompletableFuture<Message> =
         markAsSeen(params, RequestOptions.none())
@@ -163,7 +167,10 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Marks a message as unread for the current user, reversing the read state. */
+    /**
+     * Marks a message as `unread`. This reverses the `read` state. Read more about message
+     * engagement statuses [here](/send-notifications/message-statuses#engagement-status).
+     */
     fun markAsUnread(params: MessageMarkAsUnreadParams): CompletableFuture<Message> =
         markAsUnread(params, RequestOptions.none())
 
@@ -173,7 +180,10 @@ interface MessageServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Message>
 
-    /** Marks a message as unseen for the current user, reversing the seen state. */
+    /**
+     * Marks a message as `unseen`. This reverses the `seen` state. Read more about message
+     * engagement statuses [here](/send-notifications/message-statuses#engagement-status).
+     */
     fun markAsUnseen(params: MessageMarkAsUnseenParams): CompletableFuture<Message> =
         markAsUnseen(params, RequestOptions.none())
 
@@ -184,8 +194,8 @@ interface MessageServiceAsync {
     ): CompletableFuture<Message>
 
     /**
-     * Removes a message from the archived state, making it visible in the default message list
-     * again.
+     * Removes a message from the archived state, making it visible in the default message list in
+     * the feed again.
      */
     fun unarchive(params: MessageUnarchiveParams): CompletableFuture<Message> =
         unarchive(params, RequestOptions.none())

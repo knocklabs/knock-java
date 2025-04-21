@@ -12,8 +12,8 @@ import java.util.Objects
 import java.util.Optional
 
 /**
- * Marks a message as read for the current user. This indicates that the user has read the message
- * content.
+ * Marks a message as `read`. This indicates that the user has read the message content. Read more
+ * about message engagement statuses [here](/send-notifications/message-statuses#engagement-status).
  */
 class MessageMarkAsReadParams
 private constructor(

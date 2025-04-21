@@ -11,7 +11,10 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Marks a message as unseen for the current user, reversing the seen state. */
+/**
+ * Marks a message as `unseen`. This reverses the `seen` state. Read more about message engagement
+ * statuses [here](/send-notifications/message-statuses#engagement-status).
+ */
 class MessageMarkAsUnseenParams
 private constructor(
     private val messageId: String,

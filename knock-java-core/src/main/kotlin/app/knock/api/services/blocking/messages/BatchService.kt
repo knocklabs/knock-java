@@ -23,7 +23,10 @@ interface BatchService {
      */
     fun withRawResponse(): WithRawResponse
 
-    /** Marks the given messages as archived. */
+    /**
+     * Marks the given messages as archived. Archived messages are hidden from the default message
+     * list in the feed but can still be accessed and unarchived later.
+     */
     fun archive(params: BatchArchiveParams): List<Message> = archive(params, RequestOptions.none())
 
     /** @see [archive] */
@@ -42,7 +45,12 @@ interface BatchService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<BatchGetContentResponse>
 
-    /** Marks the given messages as interacted with. */
+    /**
+     * Marks the given messages as interacted with by the user. This can include any user action on
+     * the message, with optional metadata about the specific interaction. Cannot include more than
+     * 5 key-value pairs, must not contain nested data. Read more about message engagement statuses
+     * [here](/send-notifications/message-statuses#engagement-status).
+     */
     fun markAsInteracted(params: BatchMarkAsInteractedParams): List<Message> =
         markAsInteracted(params, RequestOptions.none())
 
@@ -52,7 +60,10 @@ interface BatchService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Message>
 
-    /** Marks the given messages as read. */
+    /**
+     * Marks the given messages as `read`. Read more about message engagement statuses
+     * [here](/send-notifications/message-statuses#engagement-status).
+     */
     fun markAsRead(params: BatchMarkAsReadParams): List<Message> =
         markAsRead(params, RequestOptions.none())
 
@@ -62,7 +73,11 @@ interface BatchService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Message>
 
-    /** Marks the given messages as seen. */
+    /**
+     * Marks the given messages as `seen`. This indicates that the user has viewed the message in
+     * their feed or inbox. Read more about message engagement statuses
+     * [here](/send-notifications/message-statuses#engagement-status).
+     */
     fun markAsSeen(params: BatchMarkAsSeenParams): List<Message> =
         markAsSeen(params, RequestOptions.none())
 
@@ -72,7 +87,10 @@ interface BatchService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Message>
 
-    /** Marks the given messages as unread. */
+    /**
+     * Marks the given messages as `unread`. This reverses the `read` state. Read more about message
+     * engagement statuses [here](/send-notifications/message-statuses#engagement-status).
+     */
     fun markAsUnread(params: BatchMarkAsUnreadParams): List<Message> =
         markAsUnread(params, RequestOptions.none())
 
@@ -82,7 +100,10 @@ interface BatchService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Message>
 
-    /** Marks the given messages as unseen. */
+    /**
+     * Marks the given messages as `unseen`. This reverses the `seen` state. Read more about message
+     * engagement statuses [here](/send-notifications/message-statuses#engagement-status).
+     */
     fun markAsUnseen(params: BatchMarkAsUnseenParams): List<Message> =
         markAsUnseen(params, RequestOptions.none())
 
@@ -92,7 +113,11 @@ interface BatchService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<Message>
 
-    /** Marks the given messages as unarchived. */
+    /**
+     * Marks the given messages as unarchived. This reverses the `archived` state. Archived messages
+     * are hidden from the default message list in the feed but can still be accessed and unarchived
+     * later.
+     */
     fun unarchive(params: BatchUnarchiveParams): List<Message> =
         unarchive(params, RequestOptions.none())
 

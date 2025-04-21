@@ -12,8 +12,9 @@ import java.util.Objects
 import java.util.Optional
 
 /**
- * Marks a message as seen for the current user. This indicates that the user has viewed the message
- * in their feed or inbox.
+ * Marks a message as `seen`. This indicates that the user has viewed the message in their feed or
+ * inbox. Read more about message engagement statuses
+ * [here](/send-notifications/message-statuses#engagement-status).
  */
 class MessageMarkAsSeenParams
 private constructor(

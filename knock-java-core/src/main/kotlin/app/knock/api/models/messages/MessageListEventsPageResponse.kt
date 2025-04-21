@@ -19,7 +19,10 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/** A paginated list of message events. */
+/**
+ * Returns a paginated list of [delivery and engagement](/send-notifications/message-statuses)
+ * events for the specified message.
+ */
 class MessageListEventsPageResponse
 private constructor(
     private val entries: JsonField<List<MessageEvent>>,

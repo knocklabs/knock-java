@@ -21,7 +21,10 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/** Marks the given messages as unseen. */
+/**
+ * Marks the given messages as `unseen`. This reverses the `seen` state. Read more about message
+ * engagement statuses [here](/send-notifications/message-statuses#engagement-status).
+ */
 class BatchMarkAsUnseenParams
 private constructor(
     private val body: Body,
