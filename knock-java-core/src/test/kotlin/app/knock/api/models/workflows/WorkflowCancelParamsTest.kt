@@ -39,7 +39,8 @@ internal class WorkflowCancelParamsTest {
         val body = params._body()
 
         assertThat(body.cancellationKey()).isEqualTo("cancel-workflow-123")
-        assertThat(body.recipients().getOrNull()).containsExactly("jhammond")
+        assertThat(body.recipients().getOrNull())
+            .containsExactly(WorkflowCancelParams.Recipient.ofUser("jhammond"))
     }
 
     @Test

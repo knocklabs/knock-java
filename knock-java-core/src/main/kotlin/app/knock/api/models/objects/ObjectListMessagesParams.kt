@@ -50,7 +50,7 @@ private constructor(
     /** The cursor to fetch entries before. */
     fun before(): Optional<String> = Optional.ofNullable(before)
 
-    /** Limits the results to items with the corresponding channel id. */
+    /** Limits the results to items with the corresponding channel ID. */
     fun channelId(): Optional<String> = Optional.ofNullable(channelId)
 
     /**
@@ -169,7 +169,7 @@ private constructor(
         /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
-        /** Limits the results to items with the corresponding channel id. */
+        /** Limits the results to items with the corresponding channel ID. */
         fun channelId(channelId: String?) = apply { this.channelId = channelId }
 
         /** Alias for calling [Builder.channelId] with `channelId.orElse(null)`. */

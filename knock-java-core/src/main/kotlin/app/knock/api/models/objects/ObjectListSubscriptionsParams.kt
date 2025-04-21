@@ -645,7 +645,7 @@ private constructor(
     }
 
     /**
-     * A reference to a recipient, either a user identifier (string) or an object reference (id,
+     * A reference to a recipient, either a user identifier (string) or an object reference (ID,
      * collection).
      */
     class Object
@@ -654,7 +654,7 @@ private constructor(
         private val reference: ObjectReference? = null,
     ) {
 
-        /** The id of the user. */
+        /** The ID of the user. */
         fun userReference(): Optional<String> = Optional.ofNullable(userReference)
 
         /** A reference to a recipient object. */
@@ -664,7 +664,7 @@ private constructor(
 
         fun isReference(): Boolean = reference != null
 
-        /** The id of the user. */
+        /** The ID of the user. */
         fun asUserReference(): String = userReference.getOrThrow("userReference")
 
         /** A reference to a recipient object. */
@@ -696,7 +696,7 @@ private constructor(
 
         companion object {
 
-            /** The id of the user. */
+            /** The ID of the user. */
             @JvmStatic
             fun ofUserReference(userReference: String) = Object(userReference = userReference)
 
@@ -707,7 +707,7 @@ private constructor(
         /** An interface that defines how to map each variant of [Object] to a value of type [T]. */
         interface Visitor<out T> {
 
-            /** The id of the user. */
+            /** The ID of the user. */
             fun visitUserReference(userReference: String): T
 
             /** A reference to a recipient object. */
@@ -783,7 +783,7 @@ private constructor(
     }
 
     /**
-     * A reference to a recipient, either a user identifier (string) or an object reference (id,
+     * A reference to a recipient, either a user identifier (string) or an object reference (ID,
      * collection).
      */
     class Recipient
@@ -792,7 +792,7 @@ private constructor(
         private val objectReference: ObjectReference? = null,
     ) {
 
-        /** The id of the user. */
+        /** The ID of the user. */
         fun userReference(): Optional<String> = Optional.ofNullable(userReference)
 
         /** A reference to a recipient object. */
@@ -802,7 +802,7 @@ private constructor(
 
         fun isObjectReference(): Boolean = objectReference != null
 
-        /** The id of the user. */
+        /** The ID of the user. */
         fun asUserReference(): String = userReference.getOrThrow("userReference")
 
         /** A reference to a recipient object. */
@@ -834,7 +834,7 @@ private constructor(
 
         companion object {
 
-            /** The id of the user. */
+            /** The ID of the user. */
             @JvmStatic
             fun ofUserReference(userReference: String) = Recipient(userReference = userReference)
 
@@ -849,7 +849,7 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            /** The id of the user. */
+            /** The ID of the user. */
             fun visitUserReference(userReference: String): T
 
             /** A reference to a recipient object. */

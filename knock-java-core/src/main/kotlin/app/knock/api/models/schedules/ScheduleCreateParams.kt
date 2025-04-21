@@ -49,7 +49,7 @@ private constructor(
 
     /**
      * The recipients to trigger the workflow for. Can inline identify users, objects, or use a list
-     * of user ids. Cannot exceed 1000 recipients in a single trigger.
+     * of user IDs. Limited to 1,000 recipients in a single trigger.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -206,7 +206,7 @@ private constructor(
 
         /**
          * The recipients to trigger the workflow for. Can inline identify users, objects, or use a
-         * list of user ids. Cannot exceed 1000 recipients in a single trigger.
+         * list of user IDs. Limited to 1,000 recipients in a single trigger.
          */
         fun recipients(recipients: List<Recipient>) = apply { body.recipients(recipients) }
 
@@ -517,7 +517,7 @@ private constructor(
 
         /**
          * The recipients to trigger the workflow for. Can inline identify users, objects, or use a
-         * list of user ids. Cannot exceed 1000 recipients in a single trigger.
+         * list of user IDs. Limited to 1,000 recipients in a single trigger.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -684,7 +684,7 @@ private constructor(
 
             /**
              * The recipients to trigger the workflow for. Can inline identify users, objects, or
-             * use a list of user ids. Cannot exceed 1000 recipients in a single trigger.
+             * use a list of user IDs. Limited to 1,000 recipients in a single trigger.
              */
             fun recipients(recipients: List<Recipient>) = recipients(JsonField.of(recipients))
 
@@ -938,7 +938,7 @@ private constructor(
     }
 
     /**
-     * A reference to a recipient, either a user identifier (string) or an object reference (id,
+     * A reference to a recipient, either a user identifier (string) or an object reference (ID,
      * collection).
      */
     @JsonDeserialize(using = Recipient.Deserializer::class)
@@ -950,7 +950,7 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** The id of the user. */
+        /** The ID of the user. */
         fun userReference(): Optional<String> = Optional.ofNullable(userReference)
 
         /** A reference to a recipient object. */
@@ -960,7 +960,7 @@ private constructor(
 
         fun isObjectReference(): Boolean = objectReference != null
 
-        /** The id of the user. */
+        /** The ID of the user. */
         fun asUserReference(): String = userReference.getOrThrow("userReference")
 
         /** A reference to a recipient object. */
@@ -1041,7 +1041,7 @@ private constructor(
 
         companion object {
 
-            /** The id of the user. */
+            /** The ID of the user. */
             @JvmStatic
             fun ofUserReference(userReference: String) = Recipient(userReference = userReference)
 
@@ -1056,7 +1056,7 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            /** The id of the user. */
+            /** The ID of the user. */
             fun visitUserReference(userReference: String): T
 
             /** A reference to a recipient object. */

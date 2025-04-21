@@ -236,7 +236,7 @@ private constructor(
     fun readAt(): Optional<OffsetDateTime> = readAt.getOptional("read_at")
 
     /**
-     * A reference to a recipient, either a user identifier (string) or an object reference (id,
+     * A reference to a recipient, either a user identifier (string) or an object reference (ID,
      * collection).
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -764,7 +764,7 @@ private constructor(
         fun readAt(readAt: JsonField<OffsetDateTime>) = apply { this.readAt = readAt }
 
         /**
-         * A reference to a recipient, either a user identifier (string) or an object reference (id,
+         * A reference to a recipient, either a user identifier (string) or an object reference (ID,
          * collection).
          */
         fun recipient(recipient: Recipient) = recipient(JsonField.of(recipient))
@@ -1004,7 +1004,7 @@ private constructor(
             (if (workflow.asKnown().isPresent) 1 else 0)
 
     /**
-     * A reference to a recipient, either a user identifier (string) or an object reference (id,
+     * A reference to a recipient, either a user identifier (string) or an object reference (ID,
      * collection).
      */
     @JsonDeserialize(using = Actor.Deserializer::class)
@@ -1016,7 +1016,7 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** The id of the user. */
+        /** The ID of the user. */
         fun userReference(): Optional<String> = Optional.ofNullable(userReference)
 
         /** A reference to a recipient object. */
@@ -1026,7 +1026,7 @@ private constructor(
 
         fun isObjectReference(): Boolean = objectReference != null
 
-        /** The id of the user. */
+        /** The ID of the user. */
         fun asUserReference(): String = userReference.getOrThrow("userReference")
 
         /** A reference to a recipient object. */
@@ -1107,7 +1107,7 @@ private constructor(
 
         companion object {
 
-            /** The id of the user. */
+            /** The ID of the user. */
             @JvmStatic
             fun ofUserReference(userReference: String) = Actor(userReference = userReference)
 
@@ -1120,7 +1120,7 @@ private constructor(
         /** An interface that defines how to map each variant of [Actor] to a value of type [T]. */
         interface Visitor<out T> {
 
-            /** The id of the user. */
+            /** The ID of the user. */
             fun visitUserReference(userReference: String): T
 
             /** A reference to a recipient object. */
@@ -1730,7 +1730,7 @@ private constructor(
     }
 
     /**
-     * A reference to a recipient, either a user identifier (string) or an object reference (id,
+     * A reference to a recipient, either a user identifier (string) or an object reference (ID,
      * collection).
      */
     @JsonDeserialize(using = Recipient.Deserializer::class)
@@ -1742,7 +1742,7 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** The id of the user. */
+        /** The ID of the user. */
         fun userReference(): Optional<String> = Optional.ofNullable(userReference)
 
         /** A reference to a recipient object. */
@@ -1752,7 +1752,7 @@ private constructor(
 
         fun isObjectReference(): Boolean = objectReference != null
 
-        /** The id of the user. */
+        /** The ID of the user. */
         fun asUserReference(): String = userReference.getOrThrow("userReference")
 
         /** A reference to a recipient object. */
@@ -1833,7 +1833,7 @@ private constructor(
 
         companion object {
 
-            /** The id of the user. */
+            /** The ID of the user. */
             @JvmStatic
             fun ofUserReference(userReference: String) = Recipient(userReference = userReference)
 
@@ -1848,7 +1848,7 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            /** The id of the user. */
+            /** The ID of the user. */
             fun visitUserReference(userReference: String): T
 
             /** A reference to a recipient object. */
@@ -2150,7 +2150,7 @@ private constructor(
         fun key(): String = key.getRequired("key")
 
         /**
-         * The id of the version of the source that triggered the message.
+         * The ID of the version of the source that triggered the message.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -2282,7 +2282,7 @@ private constructor(
              */
             fun key(key: JsonField<String>) = apply { this.key = key }
 
-            /** The id of the version of the source that triggered the message. */
+            /** The ID of the version of the source that triggered the message. */
             fun versionId(versionId: String) = versionId(JsonField.of(versionId))
 
             /**

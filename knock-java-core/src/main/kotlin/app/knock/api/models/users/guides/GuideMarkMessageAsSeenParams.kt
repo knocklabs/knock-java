@@ -84,7 +84,7 @@ private constructor(
     fun _metadata(): JsonValue = body._metadata()
 
     /**
-     * The tenant id of the guide.
+     * The tenant ID of the guide.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -263,7 +263,7 @@ private constructor(
         /** The metadata of the guide. */
         fun metadata(metadata: JsonValue) = apply { body.metadata(metadata) }
 
-        /** The tenant id of the guide. */
+        /** The tenant ID of the guide. */
         fun tenant(tenant: String?) = apply { body.tenant(tenant) }
 
         /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
@@ -531,7 +531,7 @@ private constructor(
         @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonValue = metadata
 
         /**
-         * The tenant id of the guide.
+         * The tenant ID of the guide.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -710,7 +710,7 @@ private constructor(
             /** The metadata of the guide. */
             fun metadata(metadata: JsonValue) = apply { this.metadata = metadata }
 
-            /** The tenant id of the guide. */
+            /** The tenant ID of the guide. */
             fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
 
             /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */

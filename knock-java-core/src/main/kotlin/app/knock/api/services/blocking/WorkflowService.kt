@@ -30,9 +30,9 @@ interface WorkflowService {
     ): String
 
     /**
-     * Trigger a workflow specified by the key to run for the given recipients, using the parameters
-     * provided. Returns an identifier for the workflow run request. All workflow runs are executed
-     * asynchronously.
+     * Trigger a workflow (specified by the key) to run for the given recipients, using the
+     * parameters provided. Returns an identifier for the workflow run request. All workflow runs
+     * are executed asynchronously.
      */
     fun trigger(params: WorkflowTriggerParams): WorkflowTriggerResponse =
         trigger(params, RequestOptions.none())

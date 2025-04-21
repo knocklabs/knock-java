@@ -30,8 +30,7 @@ private constructor(
     ) : this(workflowRunId, mutableMapOf())
 
     /**
-     * The ID of the workflow trigger. This value allows you to track individual workflow runs
-     * associated with this trigger request.
+     * This value allows you to track individual messages associated with this trigger request.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -85,8 +84,7 @@ private constructor(
         }
 
         /**
-         * The ID of the workflow trigger. This value allows you to track individual workflow runs
-         * associated with this trigger request.
+         * This value allows you to track individual messages associated with this trigger request.
          */
         fun workflowRunId(workflowRunId: String) = workflowRunId(JsonField.of(workflowRunId))
 
