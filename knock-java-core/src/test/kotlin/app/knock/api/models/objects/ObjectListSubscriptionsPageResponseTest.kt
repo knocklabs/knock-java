@@ -21,7 +21,7 @@ internal class ObjectListSubscriptionsPageResponseTest {
                 .addEntry(
                     Subscription.builder()
                         ._typename("Subscription")
-                        .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
+                        .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                         .object_(
                             Object.builder()
                                 .id("project_1")
@@ -44,7 +44,7 @@ internal class ObjectListSubscriptionsPageResponseTest {
                                 .timezone(null)
                                 .build()
                         )
-                        .updatedAt(OffsetDateTime.parse("2025-01-05T00:00:00Z"))
+                        .updatedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                         .properties(
                             Subscription.Properties.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -66,7 +66,7 @@ internal class ObjectListSubscriptionsPageResponseTest {
             .containsExactly(
                 Subscription.builder()
                     ._typename("Subscription")
-                    .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
+                    .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                     .object_(
                         Object.builder()
                             .id("project_1")
@@ -89,7 +89,7 @@ internal class ObjectListSubscriptionsPageResponseTest {
                             .timezone(null)
                             .build()
                     )
-                    .updatedAt(OffsetDateTime.parse("2025-01-05T00:00:00Z"))
+                    .updatedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                     .properties(
                         Subscription.Properties.builder()
                             .putAdditionalProperty("foo", JsonValue.from("bar"))
@@ -116,7 +116,7 @@ internal class ObjectListSubscriptionsPageResponseTest {
                 .addEntry(
                     Subscription.builder()
                         ._typename("Subscription")
-                        .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
+                        .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                         .object_(
                             Object.builder()
                                 .id("project_1")
@@ -139,7 +139,7 @@ internal class ObjectListSubscriptionsPageResponseTest {
                                 .timezone(null)
                                 .build()
                         )
-                        .updatedAt(OffsetDateTime.parse("2025-01-05T00:00:00Z"))
+                        .updatedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                         .properties(
                             Subscription.Properties.builder()
                                 .putAdditionalProperty("foo", JsonValue.from("bar"))

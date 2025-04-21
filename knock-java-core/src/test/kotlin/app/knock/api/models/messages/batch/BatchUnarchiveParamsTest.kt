@@ -10,8 +10,8 @@ internal class BatchUnarchiveParamsTest {
     @Test
     fun create() {
         BatchUnarchiveParams.builder()
-            .addMessageId("11111111-1111-1111-1111-111111111111")
-            .addMessageId("22222222-2222-2222-2222-222222222222")
+            .addMessageId("2w3YUpTTOxuDvZFji8OMsKrG176")
+            .addMessageId("2w3YVRbPXMIh8Zq6oBFcVDA5xes")
             .build()
     }
 
@@ -19,16 +19,13 @@ internal class BatchUnarchiveParamsTest {
     fun body() {
         val params =
             BatchUnarchiveParams.builder()
-                .addMessageId("11111111-1111-1111-1111-111111111111")
-                .addMessageId("22222222-2222-2222-2222-222222222222")
+                .addMessageId("2w3YUpTTOxuDvZFji8OMsKrG176")
+                .addMessageId("2w3YVRbPXMIh8Zq6oBFcVDA5xes")
                 .build()
 
         val body = params._body()
 
         assertThat(body.messageIds())
-            .containsExactly(
-                "11111111-1111-1111-1111-111111111111",
-                "22222222-2222-2222-2222-222222222222",
-            )
+            .containsExactly("2w3YUpTTOxuDvZFji8OMsKrG176", "2w3YVRbPXMIh8Zq6oBFcVDA5xes")
     }
 }

@@ -35,8 +35,8 @@ internal class BatchServiceAsyncTest {
         val messagesFuture =
             batchServiceAsync.archive(
                 BatchArchiveParams.builder()
-                    .addMessageId("11111111-1111-1111-1111-111111111111")
-                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .addMessageId("2w3YUpTTOxuDvZFji8OMsKrG176")
+                    .addMessageId("2w3YVRbPXMIh8Zq6oBFcVDA5xes")
                     .build()
             )
 
@@ -108,8 +108,8 @@ internal class BatchServiceAsyncTest {
         val messagesFuture =
             batchServiceAsync.markAsRead(
                 BatchMarkAsReadParams.builder()
-                    .addMessageId("11111111-1111-1111-1111-111111111111")
-                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .addMessageId("2w3YUpTTOxuDvZFji8OMsKrG176")
+                    .addMessageId("2w3YVRbPXMIh8Zq6oBFcVDA5xes")
                     .build()
             )
 
@@ -132,8 +132,8 @@ internal class BatchServiceAsyncTest {
         val messagesFuture =
             batchServiceAsync.markAsSeen(
                 BatchMarkAsSeenParams.builder()
-                    .addMessageId("11111111-1111-1111-1111-111111111111")
-                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .addMessageId("2w3YUpTTOxuDvZFji8OMsKrG176")
+                    .addMessageId("2w3YVRbPXMIh8Zq6oBFcVDA5xes")
                     .build()
             )
 
@@ -156,8 +156,8 @@ internal class BatchServiceAsyncTest {
         val messagesFuture =
             batchServiceAsync.markAsUnread(
                 BatchMarkAsUnreadParams.builder()
-                    .addMessageId("11111111-1111-1111-1111-111111111111")
-                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .addMessageId("2w3YUpTTOxuDvZFji8OMsKrG176")
+                    .addMessageId("2w3YVRbPXMIh8Zq6oBFcVDA5xes")
                     .build()
             )
 
@@ -180,8 +180,8 @@ internal class BatchServiceAsyncTest {
         val messagesFuture =
             batchServiceAsync.markAsUnseen(
                 BatchMarkAsUnseenParams.builder()
-                    .addMessageId("11111111-1111-1111-1111-111111111111")
-                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .addMessageId("2w3YUpTTOxuDvZFji8OMsKrG176")
+                    .addMessageId("2w3YVRbPXMIh8Zq6oBFcVDA5xes")
                     .build()
             )
 
@@ -204,8 +204,8 @@ internal class BatchServiceAsyncTest {
         val messagesFuture =
             batchServiceAsync.unarchive(
                 BatchUnarchiveParams.builder()
-                    .addMessageId("11111111-1111-1111-1111-111111111111")
-                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .addMessageId("2w3YUpTTOxuDvZFji8OMsKrG176")
+                    .addMessageId("2w3YVRbPXMIh8Zq6oBFcVDA5xes")
                     .build()
             )
 

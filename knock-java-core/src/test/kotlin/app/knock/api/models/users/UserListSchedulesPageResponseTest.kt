@@ -21,7 +21,7 @@ internal class UserListSchedulesPageResponseTest {
                 .addEntry(
                     Schedule.builder()
                         .id("123e4567-e89b-12d3-a456-426614174000")
-                        .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
+                        .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                         .recipient(
                             User.builder()
                                 .id("jane")
@@ -56,7 +56,7 @@ internal class UserListSchedulesPageResponseTest {
                                 .minutes(null)
                                 .build()
                         )
-                        .updatedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
+                        .updatedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                         .workflow("workflow_123")
                         ._typename("Schedule")
                         .actor(
@@ -96,7 +96,7 @@ internal class UserListSchedulesPageResponseTest {
             .containsExactly(
                 Schedule.builder()
                     .id("123e4567-e89b-12d3-a456-426614174000")
-                    .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
+                    .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                     .recipient(
                         User.builder()
                             .id("jane")
@@ -131,7 +131,7 @@ internal class UserListSchedulesPageResponseTest {
                             .minutes(null)
                             .build()
                     )
-                    .updatedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
+                    .updatedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                     .workflow("workflow_123")
                     ._typename("Schedule")
                     .actor(
@@ -176,7 +176,7 @@ internal class UserListSchedulesPageResponseTest {
                 .addEntry(
                     Schedule.builder()
                         .id("123e4567-e89b-12d3-a456-426614174000")
-                        .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
+                        .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                         .recipient(
                             User.builder()
                                 .id("jane")
@@ -211,7 +211,7 @@ internal class UserListSchedulesPageResponseTest {
                                 .minutes(null)
                                 .build()
                         )
-                        .updatedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
+                        .updatedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                         .workflow("workflow_123")
                         ._typename("Schedule")
                         .actor(

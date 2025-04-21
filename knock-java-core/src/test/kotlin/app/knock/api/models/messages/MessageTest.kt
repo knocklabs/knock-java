@@ -30,7 +30,7 @@ internal class MessageTest {
                 )
                 .addEngagementStatus(Message.EngagementStatus.READ)
                 .addEngagementStatus(Message.EngagementStatus.SEEN)
-                .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
+                .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .interactedAt(null)
                 .linkClickedAt(null)
                 .metadata(
@@ -52,7 +52,7 @@ internal class MessageTest {
                 )
                 .status(Message.Status.SENT)
                 .tenant("tenant_123")
-                .updatedAt(OffsetDateTime.parse("2025-01-05T00:00:00Z"))
+                .updatedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .workflow("comment-created")
                 .build()
 
@@ -69,7 +69,7 @@ internal class MessageTest {
             )
         assertThat(message.engagementStatuses().getOrNull())
             .containsExactly(Message.EngagementStatus.READ, Message.EngagementStatus.SEEN)
-        assertThat(message.insertedAt()).contains(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
+        assertThat(message.insertedAt()).contains(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
         assertThat(message.interactedAt()).isEmpty
         assertThat(message.linkClickedAt()).isEmpty
         assertThat(message.metadata())
@@ -93,7 +93,7 @@ internal class MessageTest {
             )
         assertThat(message.status()).contains(Message.Status.SENT)
         assertThat(message.tenant()).contains("tenant_123")
-        assertThat(message.updatedAt()).contains(OffsetDateTime.parse("2025-01-05T00:00:00Z"))
+        assertThat(message.updatedAt()).contains(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
         assertThat(message.workflow()).contains("comment-created")
     }
 
@@ -115,7 +115,7 @@ internal class MessageTest {
                 )
                 .addEngagementStatus(Message.EngagementStatus.READ)
                 .addEngagementStatus(Message.EngagementStatus.SEEN)
-                .insertedAt(OffsetDateTime.parse("2025-01-01T00:00:00Z"))
+                .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .interactedAt(null)
                 .linkClickedAt(null)
                 .metadata(
@@ -137,7 +137,7 @@ internal class MessageTest {
                 )
                 .status(Message.Status.SENT)
                 .tenant("tenant_123")
-                .updatedAt(OffsetDateTime.parse("2025-01-05T00:00:00Z"))
+                .updatedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
                 .workflow("comment-created")
                 .build()
 

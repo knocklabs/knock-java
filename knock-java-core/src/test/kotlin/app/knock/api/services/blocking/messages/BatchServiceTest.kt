@@ -35,8 +35,8 @@ internal class BatchServiceTest {
         val messages =
             batchService.archive(
                 BatchArchiveParams.builder()
-                    .addMessageId("11111111-1111-1111-1111-111111111111")
-                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .addMessageId("2w3YUpTTOxuDvZFji8OMsKrG176")
+                    .addMessageId("2w3YVRbPXMIh8Zq6oBFcVDA5xes")
                     .build()
             )
 
@@ -103,8 +103,8 @@ internal class BatchServiceTest {
         val messages =
             batchService.markAsRead(
                 BatchMarkAsReadParams.builder()
-                    .addMessageId("11111111-1111-1111-1111-111111111111")
-                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .addMessageId("2w3YUpTTOxuDvZFji8OMsKrG176")
+                    .addMessageId("2w3YVRbPXMIh8Zq6oBFcVDA5xes")
                     .build()
             )
 
@@ -126,8 +126,8 @@ internal class BatchServiceTest {
         val messages =
             batchService.markAsSeen(
                 BatchMarkAsSeenParams.builder()
-                    .addMessageId("11111111-1111-1111-1111-111111111111")
-                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .addMessageId("2w3YUpTTOxuDvZFji8OMsKrG176")
+                    .addMessageId("2w3YVRbPXMIh8Zq6oBFcVDA5xes")
                     .build()
             )
 
@@ -149,8 +149,8 @@ internal class BatchServiceTest {
         val messages =
             batchService.markAsUnread(
                 BatchMarkAsUnreadParams.builder()
-                    .addMessageId("11111111-1111-1111-1111-111111111111")
-                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .addMessageId("2w3YUpTTOxuDvZFji8OMsKrG176")
+                    .addMessageId("2w3YVRbPXMIh8Zq6oBFcVDA5xes")
                     .build()
             )
 
@@ -172,8 +172,8 @@ internal class BatchServiceTest {
         val messages =
             batchService.markAsUnseen(
                 BatchMarkAsUnseenParams.builder()
-                    .addMessageId("11111111-1111-1111-1111-111111111111")
-                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .addMessageId("2w3YUpTTOxuDvZFji8OMsKrG176")
+                    .addMessageId("2w3YVRbPXMIh8Zq6oBFcVDA5xes")
                     .build()
             )
 
@@ -195,8 +195,8 @@ internal class BatchServiceTest {
         val messages =
             batchService.unarchive(
                 BatchUnarchiveParams.builder()
-                    .addMessageId("11111111-1111-1111-1111-111111111111")
-                    .addMessageId("22222222-2222-2222-2222-222222222222")
+                    .addMessageId("2w3YUpTTOxuDvZFji8OMsKrG176")
+                    .addMessageId("2w3YVRbPXMIh8Zq6oBFcVDA5xes")
                     .build()
             )
 
