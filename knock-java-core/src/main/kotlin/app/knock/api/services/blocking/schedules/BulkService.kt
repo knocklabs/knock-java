@@ -16,9 +16,9 @@ interface BulkService {
     fun withRawResponse(): WithRawResponse
 
     /**
-     * Creates up to 1,000 schedules in a single asynchronous bulk operation. The list of schedules
-     * can include inline-identifications for each recipient, tenant, and actor specified on a
-     * schedule.
+     * Bulk creates up to 1,000 schedules at a time. This endpoint also handles
+     * [inline identifications](/managing-recipients/identifying-recipients#inline-identifying-recipients)
+     * for the `actor`, `recipient`, and `tenant` fields.
      */
     fun create(): BulkOperation = create(BulkCreateParams.none())
 

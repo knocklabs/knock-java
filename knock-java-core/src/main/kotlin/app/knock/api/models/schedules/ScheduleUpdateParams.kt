@@ -13,11 +13,9 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
-import app.knock.api.models.objects.InlineObjectRequest
-import app.knock.api.models.recipients.RecipientRequest
+import app.knock.api.models.recipients.RecipientReference
 import app.knock.api.models.tenants.InlineTenantRequest
 import app.knock.api.models.tenants.TenantRequest
-import app.knock.api.models.users.InlineIdentifyUserRequest
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -48,14 +46,13 @@ private constructor(
     fun scheduleIds(): List<String> = body.scheduleIds()
 
     /**
-     * Specifies a recipient in a request. This can either be a user identifier (string), an inline
-     * user request (object), or an inline object request, which is determined by the presence of a
-     * `collection` property.
+     * A reference to a recipient, either a user identifier (string) or an object reference (ID,
+     * collection).
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun actor(): Optional<RecipientRequest> = body.actor()
+    fun actor(): Optional<RecipientReference> = body.actor()
 
     /**
      * An optional map of data to pass into the workflow execution.
@@ -109,7 +106,7 @@ private constructor(
      *
      * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _actor(): JsonField<RecipientRequest> = body._actor()
+    fun _actor(): JsonField<RecipientReference> = body._actor()
 
     /**
      * Returns the raw JSON value of [data].
@@ -217,37 +214,32 @@ private constructor(
         fun addScheduleId(scheduleId: String) = apply { body.addScheduleId(scheduleId) }
 
         /**
-         * Specifies a recipient in a request. This can either be a user identifier (string), an
-         * inline user request (object), or an inline object request, which is determined by the
-         * presence of a `collection` property.
+         * A reference to a recipient, either a user identifier (string) or an object reference (ID,
+         * collection).
          */
-        fun actor(actor: RecipientRequest?) = apply { body.actor(actor) }
+        fun actor(actor: RecipientReference?) = apply { body.actor(actor) }
 
         /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
-        fun actor(actor: Optional<RecipientRequest>) = actor(actor.getOrNull())
+        fun actor(actor: Optional<RecipientReference>) = actor(actor.getOrNull())
 
         /**
          * Sets [Builder.actor] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.actor] with a well-typed [RecipientRequest] value
+         * You should usually call [Builder.actor] with a well-typed [RecipientReference] value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun actor(actor: JsonField<RecipientRequest>) = apply { body.actor(actor) }
+        fun actor(actor: JsonField<RecipientReference>) = apply { body.actor(actor) }
 
-        /** Alias for calling [actor] with `RecipientRequest.ofUserRecipient(userRecipient)`. */
-        fun actor(userRecipient: String) = apply { body.actor(userRecipient) }
+        /** Alias for calling [actor] with `RecipientReference.ofUser(user)`. */
+        fun actor(user: String) = apply { body.actor(user) }
 
         /**
-         * Alias for calling [actor] with
-         * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
+         * Alias for calling [actor] with `RecipientReference.ofObjectReference(objectReference)`.
          */
-        fun actor(inlineIdentifyUser: InlineIdentifyUserRequest) = apply {
-            body.actor(inlineIdentifyUser)
+        fun actor(objectReference: RecipientReference.ObjectReference) = apply {
+            body.actor(objectReference)
         }
-
-        /** Alias for calling [actor] with `RecipientRequest.ofInlineObject(inlineObject)`. */
-        fun actor(inlineObject: InlineObjectRequest) = apply { body.actor(inlineObject) }
 
         /** An optional map of data to pass into the workflow execution. */
         fun data(data: Data?) = apply { body.data(data) }
@@ -483,7 +475,7 @@ private constructor(
     class Body
     private constructor(
         private val scheduleIds: JsonField<List<String>>,
-        private val actor: JsonField<RecipientRequest>,
+        private val actor: JsonField<RecipientReference>,
         private val data: JsonField<Data>,
         private val endingAt: JsonField<OffsetDateTime>,
         private val repeats: JsonField<List<ScheduleRepeatRule>>,
@@ -499,7 +491,7 @@ private constructor(
             scheduleIds: JsonField<List<String>> = JsonMissing.of(),
             @JsonProperty("actor")
             @ExcludeMissing
-            actor: JsonField<RecipientRequest> = JsonMissing.of(),
+            actor: JsonField<RecipientReference> = JsonMissing.of(),
             @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
             @JsonProperty("ending_at")
             @ExcludeMissing
@@ -524,14 +516,13 @@ private constructor(
         fun scheduleIds(): List<String> = scheduleIds.getRequired("schedule_ids")
 
         /**
-         * Specifies a recipient in a request. This can either be a user identifier (string), an
-         * inline user request (object), or an inline object request, which is determined by the
-         * presence of a `collection` property.
+         * A reference to a recipient, either a user identifier (string) or an object reference (ID,
+         * collection).
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun actor(): Optional<RecipientRequest> = actor.getOptional("actor")
+        fun actor(): Optional<RecipientReference> = actor.getOptional("actor")
 
         /**
          * An optional map of data to pass into the workflow execution.
@@ -587,7 +578,7 @@ private constructor(
          *
          * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("actor") @ExcludeMissing fun _actor(): JsonField<RecipientRequest> = actor
+        @JsonProperty("actor") @ExcludeMissing fun _actor(): JsonField<RecipientReference> = actor
 
         /**
          * Returns the raw JSON value of [data].
@@ -661,7 +652,7 @@ private constructor(
         class Builder internal constructor() {
 
             private var scheduleIds: JsonField<MutableList<String>>? = null
-            private var actor: JsonField<RecipientRequest> = JsonMissing.of()
+            private var actor: JsonField<RecipientReference> = JsonMissing.of()
             private var data: JsonField<Data> = JsonMissing.of()
             private var endingAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var repeats: JsonField<MutableList<ScheduleRepeatRule>>? = null
@@ -708,38 +699,32 @@ private constructor(
             }
 
             /**
-             * Specifies a recipient in a request. This can either be a user identifier (string), an
-             * inline user request (object), or an inline object request, which is determined by the
-             * presence of a `collection` property.
+             * A reference to a recipient, either a user identifier (string) or an object reference
+             * (ID, collection).
              */
-            fun actor(actor: RecipientRequest?) = actor(JsonField.ofNullable(actor))
+            fun actor(actor: RecipientReference?) = actor(JsonField.ofNullable(actor))
 
             /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
-            fun actor(actor: Optional<RecipientRequest>) = actor(actor.getOrNull())
+            fun actor(actor: Optional<RecipientReference>) = actor(actor.getOrNull())
 
             /**
              * Sets [Builder.actor] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.actor] with a well-typed [RecipientRequest] value
+             * You should usually call [Builder.actor] with a well-typed [RecipientReference] value
              * instead. This method is primarily for setting the field to an undocumented or not yet
              * supported value.
              */
-            fun actor(actor: JsonField<RecipientRequest>) = apply { this.actor = actor }
+            fun actor(actor: JsonField<RecipientReference>) = apply { this.actor = actor }
 
-            /** Alias for calling [actor] with `RecipientRequest.ofUserRecipient(userRecipient)`. */
-            fun actor(userRecipient: String) =
-                actor(RecipientRequest.ofUserRecipient(userRecipient))
+            /** Alias for calling [actor] with `RecipientReference.ofUser(user)`. */
+            fun actor(user: String) = actor(RecipientReference.ofUser(user))
 
             /**
              * Alias for calling [actor] with
-             * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
+             * `RecipientReference.ofObjectReference(objectReference)`.
              */
-            fun actor(inlineIdentifyUser: InlineIdentifyUserRequest) =
-                actor(RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser))
-
-            /** Alias for calling [actor] with `RecipientRequest.ofInlineObject(inlineObject)`. */
-            fun actor(inlineObject: InlineObjectRequest) =
-                actor(RecipientRequest.ofInlineObject(inlineObject))
+            fun actor(objectReference: RecipientReference.ObjectReference) =
+                actor(RecipientReference.ofObjectReference(objectReference))
 
             /** An optional map of data to pass into the workflow execution. */
             fun data(data: Data?) = data(JsonField.ofNullable(data))
