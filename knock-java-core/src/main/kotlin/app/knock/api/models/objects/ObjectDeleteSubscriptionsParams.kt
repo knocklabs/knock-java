@@ -13,8 +13,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
-import app.knock.api.models.recipients.RecipientRequest
-import app.knock.api.models.users.InlineIdentifyUserRequest
+import app.knock.api.models.recipients.RecipientReference
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -46,14 +45,14 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun recipients(): List<RecipientRequest> = body.recipients()
+    fun recipients(): List<RecipientReference> = body.recipients()
 
     /**
      * Returns the raw JSON value of [recipients].
      *
      * Unlike [recipients], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _recipients(): JsonField<List<RecipientRequest>> = body._recipients()
+    fun _recipients(): JsonField<List<RecipientReference>> = body._recipients()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -113,44 +112,35 @@ private constructor(
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
         /** The recipients of the subscription. */
-        fun recipients(recipients: List<RecipientRequest>) = apply { body.recipients(recipients) }
+        fun recipients(recipients: List<RecipientReference>) = apply { body.recipients(recipients) }
 
         /**
          * Sets [Builder.recipients] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.recipients] with a well-typed `List<RecipientRequest>`
+         * You should usually call [Builder.recipients] with a well-typed `List<RecipientReference>`
          * value instead. This method is primarily for setting the field to an undocumented or not
          * yet supported value.
          */
-        fun recipients(recipients: JsonField<List<RecipientRequest>>) = apply {
+        fun recipients(recipients: JsonField<List<RecipientReference>>) = apply {
             body.recipients(recipients)
         }
 
         /**
-         * Adds a single [RecipientRequest] to [recipients].
+         * Adds a single [RecipientReference] to [recipients].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addRecipient(recipient: RecipientRequest) = apply { body.addRecipient(recipient) }
+        fun addRecipient(recipient: RecipientReference) = apply { body.addRecipient(recipient) }
 
-        /**
-         * Alias for calling [addRecipient] with `RecipientRequest.ofUserRecipient(userRecipient)`.
-         */
-        fun addRecipient(userRecipient: String) = apply { body.addRecipient(userRecipient) }
+        /** Alias for calling [addRecipient] with `RecipientReference.ofUser(user)`. */
+        fun addRecipient(user: String) = apply { body.addRecipient(user) }
 
         /**
          * Alias for calling [addRecipient] with
-         * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
+         * `RecipientReference.ofObjectReference(objectReference)`.
          */
-        fun addRecipient(inlineIdentifyUser: InlineIdentifyUserRequest) = apply {
-            body.addRecipient(inlineIdentifyUser)
-        }
-
-        /**
-         * Alias for calling [addRecipient] with `RecipientRequest.ofInlineObject(inlineObject)`.
-         */
-        fun addRecipient(inlineObject: InlineObjectRequest) = apply {
-            body.addRecipient(inlineObject)
+        fun addRecipient(objectReference: RecipientReference.ObjectReference) = apply {
+            body.addRecipient(objectReference)
         }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
@@ -310,7 +300,7 @@ private constructor(
     /** A request to delete subscriptions for a set of recipients. */
     class Body
     private constructor(
-        private val recipients: JsonField<List<RecipientRequest>>,
+        private val recipients: JsonField<List<RecipientReference>>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -318,7 +308,7 @@ private constructor(
         private constructor(
             @JsonProperty("recipients")
             @ExcludeMissing
-            recipients: JsonField<List<RecipientRequest>> = JsonMissing.of()
+            recipients: JsonField<List<RecipientReference>> = JsonMissing.of()
         ) : this(recipients, mutableMapOf())
 
         /**
@@ -327,7 +317,7 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun recipients(): List<RecipientRequest> = recipients.getRequired("recipients")
+        fun recipients(): List<RecipientReference> = recipients.getRequired("recipients")
 
         /**
          * Returns the raw JSON value of [recipients].
@@ -336,7 +326,7 @@ private constructor(
          */
         @JsonProperty("recipients")
         @ExcludeMissing
-        fun _recipients(): JsonField<List<RecipientRequest>> = recipients
+        fun _recipients(): JsonField<List<RecipientReference>> = recipients
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -366,7 +356,7 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
-            private var recipients: JsonField<MutableList<RecipientRequest>>? = null
+            private var recipients: JsonField<MutableList<RecipientReference>>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -376,52 +366,41 @@ private constructor(
             }
 
             /** The recipients of the subscription. */
-            fun recipients(recipients: List<RecipientRequest>) =
+            fun recipients(recipients: List<RecipientReference>) =
                 recipients(JsonField.of(recipients))
 
             /**
              * Sets [Builder.recipients] to an arbitrary JSON value.
              *
              * You should usually call [Builder.recipients] with a well-typed
-             * `List<RecipientRequest>` value instead. This method is primarily for setting the
+             * `List<RecipientReference>` value instead. This method is primarily for setting the
              * field to an undocumented or not yet supported value.
              */
-            fun recipients(recipients: JsonField<List<RecipientRequest>>) = apply {
+            fun recipients(recipients: JsonField<List<RecipientReference>>) = apply {
                 this.recipients = recipients.map { it.toMutableList() }
             }
 
             /**
-             * Adds a single [RecipientRequest] to [recipients].
+             * Adds a single [RecipientReference] to [recipients].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addRecipient(recipient: RecipientRequest) = apply {
+            fun addRecipient(recipient: RecipientReference) = apply {
                 recipients =
                     (recipients ?: JsonField.of(mutableListOf())).also {
                         checkKnown("recipients", it).add(recipient)
                     }
             }
 
-            /**
-             * Alias for calling [addRecipient] with
-             * `RecipientRequest.ofUserRecipient(userRecipient)`.
-             */
-            fun addRecipient(userRecipient: String) =
-                addRecipient(RecipientRequest.ofUserRecipient(userRecipient))
+            /** Alias for calling [addRecipient] with `RecipientReference.ofUser(user)`. */
+            fun addRecipient(user: String) = addRecipient(RecipientReference.ofUser(user))
 
             /**
              * Alias for calling [addRecipient] with
-             * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
+             * `RecipientReference.ofObjectReference(objectReference)`.
              */
-            fun addRecipient(inlineIdentifyUser: InlineIdentifyUserRequest) =
-                addRecipient(RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser))
-
-            /**
-             * Alias for calling [addRecipient] with
-             * `RecipientRequest.ofInlineObject(inlineObject)`.
-             */
-            fun addRecipient(inlineObject: InlineObjectRequest) =
-                addRecipient(RecipientRequest.ofInlineObject(inlineObject))
+            fun addRecipient(objectReference: RecipientReference.ObjectReference) =
+                addRecipient(RecipientReference.ofObjectReference(objectReference))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()

@@ -2,7 +2,7 @@
 
 package app.knock.api.models.workflows
 
-import app.knock.api.models.recipients.RecipientRequest
+import app.knock.api.models.recipients.RecipientReference
 import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -41,7 +41,7 @@ internal class WorkflowCancelParamsTest {
 
         assertThat(body.cancellationKey()).isEqualTo("cancel-workflow-123")
         assertThat(body.recipients().getOrNull())
-            .containsExactly(RecipientRequest.ofUserRecipient("jhammond"))
+            .containsExactly(RecipientReference.ofUser("jhammond"))
     }
 
     @Test

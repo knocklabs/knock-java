@@ -65,7 +65,10 @@ interface ObjectServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<String>
 
-    /** Add subscriptions for an object. If a subscription already exists, it will be updated. */
+    /**
+     * Add subscriptions for an object. If a subscription already exists, it will be updated. Can
+     * accept inline-identifications for recipients.
+     */
     fun addSubscriptions(
         params: ObjectAddSubscriptionsParams
     ): CompletableFuture<List<Subscription>> = addSubscriptions(params, RequestOptions.none())
@@ -160,7 +163,7 @@ interface ObjectServiceAsync {
     ): CompletableFuture<ObjectListSchedulesPageAsync>
 
     /**
-     * List subscriptions for an object. Eitherlist the recipients that subscribe to the provided
+     * List subscriptions for an object. Either list the recipients that subscribe to the provided
      * object, or list the objects that the provided object is subscribed to. Determined by the
      * `mode` query parameter.
      */
