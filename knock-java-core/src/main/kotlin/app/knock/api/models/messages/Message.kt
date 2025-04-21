@@ -139,7 +139,8 @@ private constructor(
 
     /**
      * One or more actors that are associated with this message. Note: this is a list that can
-     * contain up to 10 actors if the message is produced from a batch.
+     * contain up to 10 actors if the message is produced from a
+     * [batch](/designing-workflows/batch-function).
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -155,7 +156,7 @@ private constructor(
     fun archivedAt(): Optional<OffsetDateTime> = archivedAt.getOptional("archived_at")
 
     /**
-     * The id for the channel the message was sent through.
+     * The ID for the channel the message was sent through.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -273,7 +274,8 @@ private constructor(
     fun status(): Optional<Status> = status.getOptional("status")
 
     /**
-     * The id for the tenant set for the message.
+     * The ID of the `tenant` associated with the message. Only present when a `tenant` is provided
+     * on a workflow trigger request.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -562,7 +564,8 @@ private constructor(
 
         /**
          * One or more actors that are associated with this message. Note: this is a list that can
-         * contain up to 10 actors if the message is produced from a batch.
+         * contain up to 10 actors if the message is produced from a
+         * [batch](/designing-workflows/batch-function).
          */
         fun actors(actors: List<RecipientReference>) = actors(JsonField.of(actors))
 
@@ -616,7 +619,7 @@ private constructor(
             this.archivedAt = archivedAt
         }
 
-        /** The id for the channel the message was sent through. */
+        /** The ID for the channel the message was sent through. */
         fun channelId(channelId: String) = channelId(JsonField.of(channelId))
 
         /**
@@ -855,7 +858,10 @@ private constructor(
          */
         fun status(status: JsonField<Status>) = apply { this.status = status }
 
-        /** The id for the tenant set for the message. */
+        /**
+         * The ID of the `tenant` associated with the message. Only present when a `tenant` is
+         * provided on a workflow trigger request.
+         */
         fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
 
         /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
