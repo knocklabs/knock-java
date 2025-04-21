@@ -7,7 +7,6 @@ import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
-import app.knock.api.core.handlers.stringHandler
 import app.knock.api.core.handlers.withErrorHandler
 import app.knock.api.core.http.HttpMethod
 import app.knock.api.core.http.HttpRequest
@@ -23,6 +22,7 @@ import app.knock.api.models.providers.msteams.MsTeamListChannelsResponse
 import app.knock.api.models.providers.msteams.MsTeamListTeamsParams
 import app.knock.api.models.providers.msteams.MsTeamListTeamsResponse
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessParams
+import app.knock.api.models.providers.msteams.MsTeamRevokeAccessResponse
 
 class MsTeamServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     MsTeamService {
@@ -57,7 +57,7 @@ class MsTeamServiceImpl internal constructor(private val clientOptions: ClientOp
     override fun revokeAccess(
         params: MsTeamRevokeAccessParams,
         requestOptions: RequestOptions,
-    ): String =
+    ): MsTeamRevokeAccessResponse =
         // put /v1/providers/ms-teams/{channel_id}/revoke_access
         withRawResponse().revokeAccess(params, requestOptions).parse()
 
@@ -159,13 +159,14 @@ class MsTeamServiceImpl internal constructor(private val clientOptions: ClientOp
             }
         }
 
-        private val revokeAccessHandler: Handler<String> =
-            stringHandler().withErrorHandler(errorHandler)
+        private val revokeAccessHandler: Handler<MsTeamRevokeAccessResponse> =
+            jsonHandler<MsTeamRevokeAccessResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
         override fun revokeAccess(
             params: MsTeamRevokeAccessParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<String> {
+        ): HttpResponseFor<MsTeamRevokeAccessResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -181,7 +182,15 @@ class MsTeamServiceImpl internal constructor(private val clientOptions: ClientOp
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable { response.use { revokeAccessHandler.handle(it) } }
+            return response.parseable {
+                response
+                    .use { revokeAccessHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
         }
     }
 }

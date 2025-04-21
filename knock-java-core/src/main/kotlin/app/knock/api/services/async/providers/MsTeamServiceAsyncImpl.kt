@@ -7,7 +7,6 @@ import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
-import app.knock.api.core.handlers.stringHandler
 import app.knock.api.core.handlers.withErrorHandler
 import app.knock.api.core.http.HttpMethod
 import app.knock.api.core.http.HttpRequest
@@ -23,6 +22,7 @@ import app.knock.api.models.providers.msteams.MsTeamListChannelsResponse
 import app.knock.api.models.providers.msteams.MsTeamListTeamsParams
 import app.knock.api.models.providers.msteams.MsTeamListTeamsResponse
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessParams
+import app.knock.api.models.providers.msteams.MsTeamRevokeAccessResponse
 import java.util.concurrent.CompletableFuture
 
 class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -58,7 +58,7 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
     override fun revokeAccess(
         params: MsTeamRevokeAccessParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
+    ): CompletableFuture<MsTeamRevokeAccessResponse> =
         // put /v1/providers/ms-teams/{channel_id}/revoke_access
         withRawResponse().revokeAccess(params, requestOptions).thenApply { it.parse() }
 
@@ -169,13 +169,14 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val revokeAccessHandler: Handler<String> =
-            stringHandler().withErrorHandler(errorHandler)
+        private val revokeAccessHandler: Handler<MsTeamRevokeAccessResponse> =
+            jsonHandler<MsTeamRevokeAccessResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
         override fun revokeAccess(
             params: MsTeamRevokeAccessParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> {
+        ): CompletableFuture<HttpResponseFor<MsTeamRevokeAccessResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -193,7 +194,15 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable { response.use { revokeAccessHandler.handle(it) } }
+                    response.parseable {
+                        response
+                            .use { revokeAccessHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
                 }
         }
     }

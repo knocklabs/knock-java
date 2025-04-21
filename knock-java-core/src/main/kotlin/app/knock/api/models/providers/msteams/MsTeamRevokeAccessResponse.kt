@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package app.knock.api.models.providers.slack
+package app.knock.api.models.providers.msteams
 
 import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
@@ -16,7 +16,7 @@ import java.util.Objects
 import java.util.Optional
 
 /** A response indicating the operation was successful. */
-class SlackRevokeAccessResponse
+class MsTeamRevokeAccessResponse
 private constructor(
     private val ok: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -57,21 +57,21 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [SlackRevokeAccessResponse].
+         * Returns a mutable builder for constructing an instance of [MsTeamRevokeAccessResponse].
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [SlackRevokeAccessResponse]. */
+    /** A builder for [MsTeamRevokeAccessResponse]. */
     class Builder internal constructor() {
 
         private var ok: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(slackRevokeAccessResponse: SlackRevokeAccessResponse) = apply {
-            ok = slackRevokeAccessResponse.ok
-            additionalProperties = slackRevokeAccessResponse.additionalProperties.toMutableMap()
+        internal fun from(msTeamRevokeAccessResponse: MsTeamRevokeAccessResponse) = apply {
+            ok = msTeamRevokeAccessResponse.ok
+            additionalProperties = msTeamRevokeAccessResponse.additionalProperties.toMutableMap()
         }
 
         /** OK response. */
@@ -105,17 +105,17 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [SlackRevokeAccessResponse].
+         * Returns an immutable instance of [MsTeamRevokeAccessResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          */
-        fun build(): SlackRevokeAccessResponse =
-            SlackRevokeAccessResponse(ok, additionalProperties.toMutableMap())
+        fun build(): MsTeamRevokeAccessResponse =
+            MsTeamRevokeAccessResponse(ok, additionalProperties.toMutableMap())
     }
 
     private var validated: Boolean = false
 
-    fun validate(): SlackRevokeAccessResponse = apply {
+    fun validate(): MsTeamRevokeAccessResponse = apply {
         if (validated) {
             return@apply
         }
@@ -144,7 +144,7 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is SlackRevokeAccessResponse && ok == other.ok && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is MsTeamRevokeAccessResponse && ok == other.ok && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -154,5 +154,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SlackRevokeAccessResponse{ok=$ok, additionalProperties=$additionalProperties}"
+        "MsTeamRevokeAccessResponse{ok=$ok, additionalProperties=$additionalProperties}"
 }

@@ -111,11 +111,14 @@ internal class MsTeamServiceTest {
                 .build()
         val msTeamService = client.providers().msTeams()
 
-        msTeamService.revokeAccess(
-            MsTeamRevokeAccessParams.builder()
-                .channelId("channel_id")
-                .msTeamsTenantObject("ms_teams_tenant_object")
-                .build()
-        )
+        val response =
+            msTeamService.revokeAccess(
+                MsTeamRevokeAccessParams.builder()
+                    .channelId("channel_id")
+                    .msTeamsTenantObject("ms_teams_tenant_object")
+                    .build()
+            )
+
+        response.validate()
     }
 }

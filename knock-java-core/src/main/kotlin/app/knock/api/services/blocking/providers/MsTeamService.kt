@@ -11,6 +11,7 @@ import app.knock.api.models.providers.msteams.MsTeamListChannelsResponse
 import app.knock.api.models.providers.msteams.MsTeamListTeamsParams
 import app.knock.api.models.providers.msteams.MsTeamListTeamsResponse
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessParams
+import app.knock.api.models.providers.msteams.MsTeamRevokeAccessResponse
 import com.google.errorprone.annotations.MustBeClosed
 
 interface MsTeamService {
@@ -60,14 +61,14 @@ interface MsTeamService {
     ): MsTeamListTeamsResponse
 
     /** Remove a Microsoft Entra tenant ID from a Microsoft Teams tenant object. */
-    fun revokeAccess(params: MsTeamRevokeAccessParams): String =
+    fun revokeAccess(params: MsTeamRevokeAccessParams): MsTeamRevokeAccessResponse =
         revokeAccess(params, RequestOptions.none())
 
     /** @see [revokeAccess] */
     fun revokeAccess(
         params: MsTeamRevokeAccessParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): String
+    ): MsTeamRevokeAccessResponse
 
     /** A view of [MsTeamService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -123,14 +124,15 @@ interface MsTeamService {
          * but is otherwise the same as [MsTeamService.revokeAccess].
          */
         @MustBeClosed
-        fun revokeAccess(params: MsTeamRevokeAccessParams): HttpResponseFor<String> =
-            revokeAccess(params, RequestOptions.none())
+        fun revokeAccess(
+            params: MsTeamRevokeAccessParams
+        ): HttpResponseFor<MsTeamRevokeAccessResponse> = revokeAccess(params, RequestOptions.none())
 
         /** @see [revokeAccess] */
         @MustBeClosed
         fun revokeAccess(
             params: MsTeamRevokeAccessParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String>
+        ): HttpResponseFor<MsTeamRevokeAccessResponse>
     }
 }

@@ -123,5 +123,6 @@ internal class MsTeamServiceAsyncTest {
             )
 
         val response = responseFuture.get()
+        response.validate()
     }
 }

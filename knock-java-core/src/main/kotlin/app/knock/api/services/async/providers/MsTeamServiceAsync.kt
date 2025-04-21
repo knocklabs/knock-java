@@ -11,6 +11,7 @@ import app.knock.api.models.providers.msteams.MsTeamListChannelsResponse
 import app.knock.api.models.providers.msteams.MsTeamListTeamsParams
 import app.knock.api.models.providers.msteams.MsTeamListTeamsResponse
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessParams
+import app.knock.api.models.providers.msteams.MsTeamRevokeAccessResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
@@ -62,14 +63,15 @@ interface MsTeamServiceAsync {
     ): CompletableFuture<MsTeamListTeamsResponse>
 
     /** Remove a Microsoft Entra tenant ID from a Microsoft Teams tenant object. */
-    fun revokeAccess(params: MsTeamRevokeAccessParams): CompletableFuture<String> =
-        revokeAccess(params, RequestOptions.none())
+    fun revokeAccess(
+        params: MsTeamRevokeAccessParams
+    ): CompletableFuture<MsTeamRevokeAccessResponse> = revokeAccess(params, RequestOptions.none())
 
     /** @see [revokeAccess] */
     fun revokeAccess(
         params: MsTeamRevokeAccessParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String>
+    ): CompletableFuture<MsTeamRevokeAccessResponse>
 
     /**
      * A view of [MsTeamServiceAsync] that provides access to raw HTTP responses for each method.
@@ -134,13 +136,14 @@ interface MsTeamServiceAsync {
         @MustBeClosed
         fun revokeAccess(
             params: MsTeamRevokeAccessParams
-        ): CompletableFuture<HttpResponseFor<String>> = revokeAccess(params, RequestOptions.none())
+        ): CompletableFuture<HttpResponseFor<MsTeamRevokeAccessResponse>> =
+            revokeAccess(params, RequestOptions.none())
 
         /** @see [revokeAccess] */
         @MustBeClosed
         fun revokeAccess(
             params: MsTeamRevokeAccessParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>>
+        ): CompletableFuture<HttpResponseFor<MsTeamRevokeAccessResponse>>
     }
 }
