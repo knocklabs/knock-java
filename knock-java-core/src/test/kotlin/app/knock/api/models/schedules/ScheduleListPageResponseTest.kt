@@ -4,6 +4,7 @@ package app.knock.api.models.schedules
 
 import app.knock.api.core.JsonValue
 import app.knock.api.core.jsonMapper
+import app.knock.api.models.shared.PageInfo
 import app.knock.api.models.users.User
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -81,7 +82,7 @@ internal class ScheduleListPageResponseTest {
                         .build()
                 )
                 .pageInfo(
-                    ScheduleListPageResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)
@@ -157,7 +158,7 @@ internal class ScheduleListPageResponseTest {
             )
         assertThat(scheduleListPageResponse.pageInfo())
             .isEqualTo(
-                ScheduleListPageResponse.PageInfo.builder()
+                PageInfo.builder()
                     ._typename("PageInfo")
                     .pageSize(25L)
                     .after(null)
@@ -236,7 +237,7 @@ internal class ScheduleListPageResponseTest {
                         .build()
                 )
                 .pageInfo(
-                    ScheduleListPageResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)

@@ -3,6 +3,7 @@
 package app.knock.api.models.tenants
 
 import app.knock.api.core.jsonMapper
+import app.knock.api.models.shared.PageInfo
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -15,7 +16,7 @@ internal class TenantListPageResponseTest {
             TenantListPageResponse.builder()
                 .addEntry(Tenant.builder().id("tenant_123")._typename("Tenant").build())
                 .pageInfo(
-                    TenantListPageResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)
@@ -28,7 +29,7 @@ internal class TenantListPageResponseTest {
             .containsExactly(Tenant.builder().id("tenant_123")._typename("Tenant").build())
         assertThat(tenantListPageResponse.pageInfo())
             .isEqualTo(
-                TenantListPageResponse.PageInfo.builder()
+                PageInfo.builder()
                     ._typename("PageInfo")
                     .pageSize(25L)
                     .after(null)
@@ -44,7 +45,7 @@ internal class TenantListPageResponseTest {
             TenantListPageResponse.builder()
                 .addEntry(Tenant.builder().id("tenant_123")._typename("Tenant").build())
                 .pageInfo(
-                    TenantListPageResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)

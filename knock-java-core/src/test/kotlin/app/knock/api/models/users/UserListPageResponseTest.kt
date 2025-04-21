@@ -3,6 +3,7 @@
 package app.knock.api.models.users
 
 import app.knock.api.core.jsonMapper
+import app.knock.api.models.shared.PageInfo
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import kotlin.jvm.optionals.getOrNull
@@ -29,7 +30,7 @@ internal class UserListPageResponseTest {
                         .build()
                 )
                 .pageInfo(
-                    UserListPageResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)
@@ -54,7 +55,7 @@ internal class UserListPageResponseTest {
             )
         assertThat(userListPageResponse.pageInfo())
             .contains(
-                UserListPageResponse.PageInfo.builder()
+                PageInfo.builder()
                     ._typename("PageInfo")
                     .pageSize(25L)
                     .after(null)
@@ -82,7 +83,7 @@ internal class UserListPageResponseTest {
                         .build()
                 )
                 .pageInfo(
-                    UserListPageResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)

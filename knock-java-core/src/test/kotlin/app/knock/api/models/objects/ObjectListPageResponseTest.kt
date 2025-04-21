@@ -3,6 +3,7 @@
 package app.knock.api.models.objects
 
 import app.knock.api.core.jsonMapper
+import app.knock.api.models.shared.PageInfo
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -24,7 +25,7 @@ internal class ObjectListPageResponseTest {
                         .build()
                 )
                 .pageInfo(
-                    ObjectListPageResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)
@@ -45,7 +46,7 @@ internal class ObjectListPageResponseTest {
             )
         assertThat(objectListPageResponse.pageInfo())
             .isEqualTo(
-                ObjectListPageResponse.PageInfo.builder()
+                PageInfo.builder()
                     ._typename("PageInfo")
                     .pageSize(25L)
                     .after(null)
@@ -69,7 +70,7 @@ internal class ObjectListPageResponseTest {
                         .build()
                 )
                 .pageInfo(
-                    ObjectListPageResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)

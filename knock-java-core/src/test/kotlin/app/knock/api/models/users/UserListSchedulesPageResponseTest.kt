@@ -6,6 +6,7 @@ import app.knock.api.core.JsonValue
 import app.knock.api.core.jsonMapper
 import app.knock.api.models.schedules.Schedule
 import app.knock.api.models.schedules.ScheduleRepeatRule
+import app.knock.api.models.shared.PageInfo
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -82,7 +83,7 @@ internal class UserListSchedulesPageResponseTest {
                         .build()
                 )
                 .pageInfo(
-                    UserListSchedulesPageResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)
@@ -158,7 +159,7 @@ internal class UserListSchedulesPageResponseTest {
             )
         assertThat(userListSchedulesPageResponse.pageInfo())
             .isEqualTo(
-                UserListSchedulesPageResponse.PageInfo.builder()
+                PageInfo.builder()
                     ._typename("PageInfo")
                     .pageSize(25L)
                     .after(null)
@@ -237,7 +238,7 @@ internal class UserListSchedulesPageResponseTest {
                         .build()
                 )
                 .pageInfo(
-                    UserListSchedulesPageResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)

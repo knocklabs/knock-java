@@ -4,6 +4,7 @@ package app.knock.api.models.users
 
 import app.knock.api.core.checkRequired
 import app.knock.api.models.messages.Message
+import app.knock.api.models.shared.PageInfo
 import app.knock.api.services.async.UserServiceAsync
 import java.util.Objects
 import java.util.Optional
@@ -33,8 +34,7 @@ private constructor(
      *
      * @see [UserListMessagesPageResponse.pageInfo]
      */
-    fun pageInfo(): Optional<UserListMessagesPageResponse.PageInfo> =
-        response._pageInfo().getOptional("page_info")
+    fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
 
     fun hasNextPage(): Boolean =
         entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent

@@ -4,6 +4,7 @@ package app.knock.api.models.users
 
 import app.knock.api.core.checkRequired
 import app.knock.api.models.recipients.subscriptions.Subscription
+import app.knock.api.models.shared.PageInfo
 import app.knock.api.services.blocking.UserService
 import java.util.Objects
 import java.util.Optional
@@ -32,8 +33,7 @@ private constructor(
      *
      * @see [UserListSubscriptionsPageResponse.pageInfo]
      */
-    fun pageInfo(): Optional<UserListSubscriptionsPageResponse.PageInfo> =
-        response._pageInfo().getOptional("page_info")
+    fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
 
     fun hasNextPage(): Boolean =
         entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent

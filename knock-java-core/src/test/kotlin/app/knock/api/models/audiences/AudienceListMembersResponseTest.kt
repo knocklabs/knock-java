@@ -3,6 +3,7 @@
 package app.knock.api.models.audiences
 
 import app.knock.api.core.jsonMapper
+import app.knock.api.models.shared.PageInfo
 import app.knock.api.models.users.User
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
@@ -37,7 +38,7 @@ internal class AudienceListMembersResponseTest {
                         .build()
                 )
                 .pageInfo(
-                    AudienceListMembersResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)
@@ -70,7 +71,7 @@ internal class AudienceListMembersResponseTest {
             )
         assertThat(audienceListMembersResponse.pageInfo())
             .isEqualTo(
-                AudienceListMembersResponse.PageInfo.builder()
+                PageInfo.builder()
                     ._typename("PageInfo")
                     .pageSize(25L)
                     .after(null)
@@ -106,7 +107,7 @@ internal class AudienceListMembersResponseTest {
                         .build()
                 )
                 .pageInfo(
-                    AudienceListMembersResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)

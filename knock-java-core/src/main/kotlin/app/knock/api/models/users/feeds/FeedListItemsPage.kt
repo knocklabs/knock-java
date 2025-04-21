@@ -3,6 +3,7 @@
 package app.knock.api.models.users.feeds
 
 import app.knock.api.core.checkRequired
+import app.knock.api.models.shared.PageInfo
 import app.knock.api.services.blocking.users.FeedService
 import java.util.Objects
 import java.util.Optional
@@ -31,8 +32,7 @@ private constructor(
      *
      * @see [FeedListItemsPageResponse.pageInfo]
      */
-    fun pageInfo(): Optional<FeedListItemsPageResponse.PageInfo> =
-        response._pageInfo().getOptional("page_info")
+    fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
 
     fun hasNextPage(): Boolean =
         entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent

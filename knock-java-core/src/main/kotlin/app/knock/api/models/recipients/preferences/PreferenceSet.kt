@@ -19,9 +19,8 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * A preference set determines whether a recipient should receive a particular type of notification.
- * By default all preferences are opted in unless a preference explicitly opts the recipient out of
- * the notification
+ * A preference set represents a specific set of notification preferences for a recipient. A
+ * recipient can have multiple preference sets.
  */
 class PreferenceSet
 private constructor(

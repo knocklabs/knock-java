@@ -6,6 +6,7 @@ import app.knock.api.core.JsonValue
 import app.knock.api.core.jsonMapper
 import app.knock.api.models.objects.Object
 import app.knock.api.models.recipients.subscriptions.Subscription
+import app.knock.api.models.shared.PageInfo
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -52,7 +53,7 @@ internal class UserListSubscriptionsPageResponseTest {
                         .build()
                 )
                 .pageInfo(
-                    UserListSubscriptionsPageResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)
@@ -98,7 +99,7 @@ internal class UserListSubscriptionsPageResponseTest {
             )
         assertThat(userListSubscriptionsPageResponse.pageInfo())
             .isEqualTo(
-                UserListSubscriptionsPageResponse.PageInfo.builder()
+                PageInfo.builder()
                     ._typename("PageInfo")
                     .pageSize(25L)
                     .after(null)
@@ -147,7 +148,7 @@ internal class UserListSubscriptionsPageResponseTest {
                         .build()
                 )
                 .pageInfo(
-                    UserListSubscriptionsPageResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)

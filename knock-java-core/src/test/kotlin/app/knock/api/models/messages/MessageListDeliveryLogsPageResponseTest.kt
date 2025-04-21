@@ -4,6 +4,7 @@ package app.knock.api.models.messages
 
 import app.knock.api.core.JsonValue
 import app.knock.api.core.jsonMapper
+import app.knock.api.models.shared.PageInfo
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -66,7 +67,7 @@ internal class MessageListDeliveryLogsPageResponseTest {
                         .build()
                 )
                 .pageInfo(
-                    MessageListDeliveryLogsPageResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)
@@ -120,7 +121,7 @@ internal class MessageListDeliveryLogsPageResponseTest {
             )
         assertThat(messageListDeliveryLogsPageResponse.pageInfo())
             .isEqualTo(
-                MessageListDeliveryLogsPageResponse.PageInfo.builder()
+                PageInfo.builder()
                     ._typename("PageInfo")
                     .pageSize(25L)
                     .after(null)
@@ -186,7 +187,7 @@ internal class MessageListDeliveryLogsPageResponseTest {
                         .build()
                 )
                 .pageInfo(
-                    MessageListDeliveryLogsPageResponse.PageInfo.builder()
+                    PageInfo.builder()
                         ._typename("PageInfo")
                         .pageSize(25L)
                         .after(null)
