@@ -11,7 +11,6 @@ import app.knock.api.models.recipients.channeldata.PushChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.schedules.ScheduleRepeatRule
 import app.knock.api.models.schedules.bulk.BulkCreateParams
-import app.knock.api.models.schedules.bulk.BulkCreateSchedulesRequest
 import app.knock.api.models.users.InlineIdentifyUserRequest
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Disabled
@@ -36,288 +35,266 @@ internal class BulkServiceTest {
         val bulkOperation =
             bulkService.create(
                 BulkCreateParams.builder()
-                    .bulkCreateSchedulesRequest(
-                        BulkCreateSchedulesRequest.builder()
-                            .addSchedule(
-                                BulkCreateSchedulesRequest.Schedule.builder()
-                                    .workflow("comment-created")
-                                    .actor(
-                                        InlineIdentifyUserRequest.builder()
-                                            .id("user_1")
-                                            .addChannelData(
-                                                UnnamedSchemaWithArrayParent0.builder()
-                                                    .channelId(
-                                                        "97c5837d-c65c-4d54-aa39-080eeb81c69d"
+                    .addSchedule(
+                        BulkCreateParams.Schedule.builder()
+                            .workflow("comment-created")
+                            .actor(
+                                InlineIdentifyUserRequest.builder()
+                                    .id("user_1")
+                                    .addChannelData(
+                                        UnnamedSchemaWithArrayParent0.builder()
+                                            .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
+                                            .data(
+                                                PushChannelData.builder()
+                                                    ._typename(
+                                                        PushChannelData._Typename.PUSH_CHANNEL_DATA
                                                     )
-                                                    .data(
-                                                        PushChannelData.builder()
-                                                            ._typename(
-                                                                PushChannelData._Typename
-                                                                    .PUSH_CHANNEL_DATA
+                                                    .addToken("push_token_xxx")
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
+                                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .addPreference(
+                                        UnnamedSchemaWithArrayParent1.builder()
+                                            .id("default")
+                                            .categories(
+                                                UnnamedSchemaWithArrayParent1.Categories.builder()
+                                                    .putAdditionalProperty(
+                                                        "transactional",
+                                                        JsonValue.from(
+                                                            mapOf(
+                                                                "channel_types" to
+                                                                    mapOf(
+                                                                        "chat" to true,
+                                                                        "email" to false,
+                                                                        "http" to true,
+                                                                        "in_app_feed" to true,
+                                                                        "push" to true,
+                                                                        "sms" to true,
+                                                                    ),
+                                                                "conditions" to
+                                                                    listOf(
+                                                                        mapOf(
+                                                                            "argument" to
+                                                                                "some_property",
+                                                                            "operator" to
+                                                                                "equal_to",
+                                                                            "variable" to
+                                                                                "recipient.property",
+                                                                        )
+                                                                    ),
                                                             )
-                                                            .addToken("push_token_xxx")
-                                                            .build()
+                                                        ),
                                                     )
                                                     .build()
                                             )
-                                            .createdAt(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
+                                            .channelTypes(
+                                                PreferenceSetChannelTypes.builder()
+                                                    .chat(true)
+                                                    .email(true)
+                                                    .http(true)
+                                                    .inAppFeed(true)
+                                                    .push(true)
+                                                    .sms(true)
+                                                    .build()
                                             )
-                                            .addPreference(
-                                                UnnamedSchemaWithArrayParent1.builder()
-                                                    .id("default")
-                                                    .categories(
-                                                        UnnamedSchemaWithArrayParent1.Categories
-                                                            .builder()
-                                                            .putAdditionalProperty(
-                                                                "transactional",
-                                                                JsonValue.from(
+                                            .workflows(
+                                                UnnamedSchemaWithArrayParent1.Workflows.builder()
+                                                    .putAdditionalProperty(
+                                                        "dinosaurs-loose",
+                                                        JsonValue.from(
+                                                            mapOf(
+                                                                "channel_types" to
                                                                     mapOf(
-                                                                        "channel_types" to
-                                                                            mapOf(
-                                                                                "chat" to true,
-                                                                                "email" to false,
-                                                                                "http" to true,
-                                                                                "in_app_feed" to
-                                                                                    true,
-                                                                                "push" to true,
-                                                                                "sms" to true,
-                                                                            ),
-                                                                        "conditions" to
-                                                                            listOf(
-                                                                                mapOf(
-                                                                                    "argument" to
-                                                                                        "some_property",
-                                                                                    "operator" to
-                                                                                        "equal_to",
-                                                                                    "variable" to
-                                                                                        "recipient.property",
-                                                                                )
-                                                                            ),
-                                                                    )
-                                                                ),
+                                                                        "chat" to true,
+                                                                        "email" to true,
+                                                                        "http" to true,
+                                                                        "in_app_feed" to true,
+                                                                        "push" to true,
+                                                                        "sms" to true,
+                                                                    ),
+                                                                "conditions" to
+                                                                    listOf(
+                                                                        mapOf(
+                                                                            "argument" to
+                                                                                "some_property",
+                                                                            "operator" to
+                                                                                "equal_to",
+                                                                            "variable" to
+                                                                                "recipient.property",
+                                                                        )
+                                                                    ),
                                                             )
-                                                            .build()
-                                                    )
-                                                    .channelTypes(
-                                                        PreferenceSetChannelTypes.builder()
-                                                            .chat(true)
-                                                            .email(true)
-                                                            .http(true)
-                                                            .inAppFeed(true)
-                                                            .push(true)
-                                                            .sms(true)
-                                                            .build()
-                                                    )
-                                                    .workflows(
-                                                        UnnamedSchemaWithArrayParent1.Workflows
-                                                            .builder()
-                                                            .putAdditionalProperty(
-                                                                "dinosaurs-loose",
-                                                                JsonValue.from(
-                                                                    mapOf(
-                                                                        "channel_types" to
-                                                                            mapOf(
-                                                                                "chat" to true,
-                                                                                "email" to true,
-                                                                                "http" to true,
-                                                                                "in_app_feed" to
-                                                                                    true,
-                                                                                "push" to true,
-                                                                                "sms" to true,
-                                                                            ),
-                                                                        "conditions" to
-                                                                            listOf(
-                                                                                mapOf(
-                                                                                    "argument" to
-                                                                                        "some_property",
-                                                                                    "operator" to
-                                                                                        "equal_to",
-                                                                                    "variable" to
-                                                                                        "recipient.property",
-                                                                                )
-                                                                            ),
-                                                                    )
-                                                                ),
-                                                            )
-                                                            .build()
+                                                        ),
                                                     )
                                                     .build()
                                             )
                                             .build()
                                     )
-                                    .data(
-                                        BulkCreateSchedulesRequest.Schedule.Data.builder()
-                                            .putAdditionalProperty("key", JsonValue.from("bar"))
-                                            .build()
-                                    )
-                                    .endingAt(null)
-                                    .recipient("dnedry")
-                                    .addRepeat(
-                                        ScheduleRepeatRule.builder()
-                                            ._typename("ScheduleRepeat")
-                                            .frequency(ScheduleRepeatRule.Frequency.DAILY)
-                                            .dayOfMonth(null)
-                                            .days(
-                                                listOf(
-                                                    ScheduleRepeatRule.Day.MON,
-                                                    ScheduleRepeatRule.Day.TUE,
-                                                    ScheduleRepeatRule.Day.WED,
-                                                    ScheduleRepeatRule.Day.THU,
-                                                    ScheduleRepeatRule.Day.FRI,
-                                                    ScheduleRepeatRule.Day.SAT,
-                                                    ScheduleRepeatRule.Day.SUN,
-                                                )
-                                            )
-                                            .hours(null)
-                                            .interval(1L)
-                                            .minutes(null)
-                                            .build()
-                                    )
-                                    .scheduledAt(null)
-                                    .tenant("acme_corp")
                                     .build()
                             )
-                            .addSchedule(
-                                BulkCreateSchedulesRequest.Schedule.builder()
-                                    .workflow("comment-created")
-                                    .actor(
-                                        InlineIdentifyUserRequest.builder()
-                                            .id("user_1")
-                                            .addChannelData(
-                                                UnnamedSchemaWithArrayParent0.builder()
-                                                    .channelId(
-                                                        "97c5837d-c65c-4d54-aa39-080eeb81c69d"
-                                                    )
-                                                    .data(
-                                                        PushChannelData.builder()
-                                                            ._typename(
-                                                                PushChannelData._Typename
-                                                                    .PUSH_CHANNEL_DATA
-                                                            )
-                                                            .addToken("push_token_xxx")
-                                                            .build()
-                                                    )
-                                                    .build()
-                                            )
-                                            .createdAt(
-                                                OffsetDateTime.parse("2019-12-27T18:11:19.117Z")
-                                            )
-                                            .addPreference(
-                                                UnnamedSchemaWithArrayParent1.builder()
-                                                    .id("default")
-                                                    .categories(
-                                                        UnnamedSchemaWithArrayParent1.Categories
-                                                            .builder()
-                                                            .putAdditionalProperty(
-                                                                "transactional",
-                                                                JsonValue.from(
-                                                                    mapOf(
-                                                                        "channel_types" to
-                                                                            mapOf(
-                                                                                "chat" to true,
-                                                                                "email" to false,
-                                                                                "http" to true,
-                                                                                "in_app_feed" to
-                                                                                    true,
-                                                                                "push" to true,
-                                                                                "sms" to true,
-                                                                            ),
-                                                                        "conditions" to
-                                                                            listOf(
-                                                                                mapOf(
-                                                                                    "argument" to
-                                                                                        "some_property",
-                                                                                    "operator" to
-                                                                                        "equal_to",
-                                                                                    "variable" to
-                                                                                        "recipient.property",
-                                                                                )
-                                                                            ),
-                                                                    )
-                                                                ),
-                                                            )
-                                                            .build()
-                                                    )
-                                                    .channelTypes(
-                                                        PreferenceSetChannelTypes.builder()
-                                                            .chat(true)
-                                                            .email(true)
-                                                            .http(true)
-                                                            .inAppFeed(true)
-                                                            .push(true)
-                                                            .sms(true)
-                                                            .build()
-                                                    )
-                                                    .workflows(
-                                                        UnnamedSchemaWithArrayParent1.Workflows
-                                                            .builder()
-                                                            .putAdditionalProperty(
-                                                                "dinosaurs-loose",
-                                                                JsonValue.from(
-                                                                    mapOf(
-                                                                        "channel_types" to
-                                                                            mapOf(
-                                                                                "chat" to true,
-                                                                                "email" to true,
-                                                                                "http" to true,
-                                                                                "in_app_feed" to
-                                                                                    true,
-                                                                                "push" to true,
-                                                                                "sms" to true,
-                                                                            ),
-                                                                        "conditions" to
-                                                                            listOf(
-                                                                                mapOf(
-                                                                                    "argument" to
-                                                                                        "some_property",
-                                                                                    "operator" to
-                                                                                        "equal_to",
-                                                                                    "variable" to
-                                                                                        "recipient.property",
-                                                                                )
-                                                                            ),
-                                                                    )
-                                                                ),
-                                                            )
-                                                            .build()
-                                                    )
-                                                    .build()
-                                            )
-                                            .build()
-                                    )
-                                    .data(
-                                        BulkCreateSchedulesRequest.Schedule.Data.builder()
-                                            .putAdditionalProperty("key", JsonValue.from("bar"))
-                                            .build()
-                                    )
-                                    .endingAt(null)
-                                    .recipient("esattler")
-                                    .addRepeat(
-                                        ScheduleRepeatRule.builder()
-                                            ._typename("ScheduleRepeat")
-                                            .frequency(ScheduleRepeatRule.Frequency.DAILY)
-                                            .dayOfMonth(null)
-                                            .days(
-                                                listOf(
-                                                    ScheduleRepeatRule.Day.MON,
-                                                    ScheduleRepeatRule.Day.TUE,
-                                                    ScheduleRepeatRule.Day.WED,
-                                                    ScheduleRepeatRule.Day.THU,
-                                                    ScheduleRepeatRule.Day.FRI,
-                                                    ScheduleRepeatRule.Day.SAT,
-                                                    ScheduleRepeatRule.Day.SUN,
-                                                )
-                                            )
-                                            .hours(null)
-                                            .interval(1L)
-                                            .minutes(null)
-                                            .build()
-                                    )
-                                    .scheduledAt(null)
-                                    .tenant("acme_corp")
+                            .data(
+                                BulkCreateParams.Schedule.Data.builder()
+                                    .putAdditionalProperty("key", JsonValue.from("bar"))
                                     .build()
                             )
+                            .endingAt(null)
+                            .recipient("dnedry")
+                            .addRepeat(
+                                ScheduleRepeatRule.builder()
+                                    ._typename("ScheduleRepeat")
+                                    .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                                    .dayOfMonth(null)
+                                    .days(
+                                        listOf(
+                                            ScheduleRepeatRule.Day.MON,
+                                            ScheduleRepeatRule.Day.TUE,
+                                            ScheduleRepeatRule.Day.WED,
+                                            ScheduleRepeatRule.Day.THU,
+                                            ScheduleRepeatRule.Day.FRI,
+                                            ScheduleRepeatRule.Day.SAT,
+                                            ScheduleRepeatRule.Day.SUN,
+                                        )
+                                    )
+                                    .hours(null)
+                                    .interval(1L)
+                                    .minutes(null)
+                                    .build()
+                            )
+                            .scheduledAt(null)
+                            .tenant("acme_corp")
+                            .build()
+                    )
+                    .addSchedule(
+                        BulkCreateParams.Schedule.builder()
+                            .workflow("comment-created")
+                            .actor(
+                                InlineIdentifyUserRequest.builder()
+                                    .id("user_1")
+                                    .addChannelData(
+                                        UnnamedSchemaWithArrayParent0.builder()
+                                            .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
+                                            .data(
+                                                PushChannelData.builder()
+                                                    ._typename(
+                                                        PushChannelData._Typename.PUSH_CHANNEL_DATA
+                                                    )
+                                                    .addToken("push_token_xxx")
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
+                                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .addPreference(
+                                        UnnamedSchemaWithArrayParent1.builder()
+                                            .id("default")
+                                            .categories(
+                                                UnnamedSchemaWithArrayParent1.Categories.builder()
+                                                    .putAdditionalProperty(
+                                                        "transactional",
+                                                        JsonValue.from(
+                                                            mapOf(
+                                                                "channel_types" to
+                                                                    mapOf(
+                                                                        "chat" to true,
+                                                                        "email" to false,
+                                                                        "http" to true,
+                                                                        "in_app_feed" to true,
+                                                                        "push" to true,
+                                                                        "sms" to true,
+                                                                    ),
+                                                                "conditions" to
+                                                                    listOf(
+                                                                        mapOf(
+                                                                            "argument" to
+                                                                                "some_property",
+                                                                            "operator" to
+                                                                                "equal_to",
+                                                                            "variable" to
+                                                                                "recipient.property",
+                                                                        )
+                                                                    ),
+                                                            )
+                                                        ),
+                                                    )
+                                                    .build()
+                                            )
+                                            .channelTypes(
+                                                PreferenceSetChannelTypes.builder()
+                                                    .chat(true)
+                                                    .email(true)
+                                                    .http(true)
+                                                    .inAppFeed(true)
+                                                    .push(true)
+                                                    .sms(true)
+                                                    .build()
+                                            )
+                                            .workflows(
+                                                UnnamedSchemaWithArrayParent1.Workflows.builder()
+                                                    .putAdditionalProperty(
+                                                        "dinosaurs-loose",
+                                                        JsonValue.from(
+                                                            mapOf(
+                                                                "channel_types" to
+                                                                    mapOf(
+                                                                        "chat" to true,
+                                                                        "email" to true,
+                                                                        "http" to true,
+                                                                        "in_app_feed" to true,
+                                                                        "push" to true,
+                                                                        "sms" to true,
+                                                                    ),
+                                                                "conditions" to
+                                                                    listOf(
+                                                                        mapOf(
+                                                                            "argument" to
+                                                                                "some_property",
+                                                                            "operator" to
+                                                                                "equal_to",
+                                                                            "variable" to
+                                                                                "recipient.property",
+                                                                        )
+                                                                    ),
+                                                            )
+                                                        ),
+                                                    )
+                                                    .build()
+                                            )
+                                            .build()
+                                    )
+                                    .build()
+                            )
+                            .data(
+                                BulkCreateParams.Schedule.Data.builder()
+                                    .putAdditionalProperty("key", JsonValue.from("bar"))
+                                    .build()
+                            )
+                            .endingAt(null)
+                            .recipient("esattler")
+                            .addRepeat(
+                                ScheduleRepeatRule.builder()
+                                    ._typename("ScheduleRepeat")
+                                    .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                                    .dayOfMonth(null)
+                                    .days(
+                                        listOf(
+                                            ScheduleRepeatRule.Day.MON,
+                                            ScheduleRepeatRule.Day.TUE,
+                                            ScheduleRepeatRule.Day.WED,
+                                            ScheduleRepeatRule.Day.THU,
+                                            ScheduleRepeatRule.Day.FRI,
+                                            ScheduleRepeatRule.Day.SAT,
+                                            ScheduleRepeatRule.Day.SUN,
+                                        )
+                                    )
+                                    .hours(null)
+                                    .interval(1L)
+                                    .minutes(null)
+                                    .build()
+                            )
+                            .scheduledAt(null)
+                            .tenant("acme_corp")
                             .build()
                     )
                     .build()

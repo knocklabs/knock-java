@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package app.knock.api.models
+package app.knock.api.models.shared
 
 import app.knock.api.core.Enum
 import app.knock.api.core.ExcludeMissing

@@ -11,6 +11,7 @@ import app.knock.api.services.blocking.ObjectService
 import app.knock.api.services.blocking.ProviderService
 import app.knock.api.services.blocking.RecipientService
 import app.knock.api.services.blocking.ScheduleService
+import app.knock.api.services.blocking.SharedService
 import app.knock.api.services.blocking.TenantService
 import app.knock.api.services.blocking.UserService
 import app.knock.api.services.blocking.WorkflowService
@@ -43,6 +44,8 @@ interface KnockClient {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    fun shared(): SharedService
 
     fun recipients(): RecipientService
 
@@ -83,6 +86,8 @@ interface KnockClient {
 
     /** A view of [KnockClient] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        fun shared(): SharedService.WithRawResponse
 
         fun recipients(): RecipientService.WithRawResponse
 

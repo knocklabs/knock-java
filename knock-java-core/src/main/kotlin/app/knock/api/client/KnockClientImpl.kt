@@ -22,6 +22,8 @@ import app.knock.api.services.blocking.RecipientService
 import app.knock.api.services.blocking.RecipientServiceImpl
 import app.knock.api.services.blocking.ScheduleService
 import app.knock.api.services.blocking.ScheduleServiceImpl
+import app.knock.api.services.blocking.SharedService
+import app.knock.api.services.blocking.SharedServiceImpl
 import app.knock.api.services.blocking.TenantService
 import app.knock.api.services.blocking.TenantServiceImpl
 import app.knock.api.services.blocking.UserService
@@ -45,6 +47,8 @@ class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
     private val withRawResponse: KnockClient.WithRawResponse by lazy {
         WithRawResponseImpl(clientOptions)
     }
+
+    private val shared: SharedService by lazy { SharedServiceImpl(clientOptionsWithUserAgent) }
 
     private val recipients: RecipientService by lazy {
         RecipientServiceImpl(clientOptionsWithUserAgent)
@@ -88,6 +92,8 @@ class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
 
     override fun withRawResponse(): KnockClient.WithRawResponse = withRawResponse
 
+    override fun shared(): SharedService = shared
+
     override fun recipients(): RecipientService = recipients
 
     override fun users(): UserService = users
@@ -116,6 +122,10 @@ class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         KnockClient.WithRawResponse {
+
+        private val shared: SharedService.WithRawResponse by lazy {
+            SharedServiceImpl.WithRawResponseImpl(clientOptions)
+        }
 
         private val recipients: RecipientService.WithRawResponse by lazy {
             RecipientServiceImpl.WithRawResponseImpl(clientOptions)
@@ -164,6 +174,8 @@ class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
         private val audiences: AudienceService.WithRawResponse by lazy {
             AudienceServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun shared(): SharedService.WithRawResponse = shared
 
         override fun recipients(): RecipientService.WithRawResponse = recipients
 
