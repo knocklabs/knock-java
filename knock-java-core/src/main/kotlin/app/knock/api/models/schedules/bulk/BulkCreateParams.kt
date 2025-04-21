@@ -4,11 +4,10 @@ package app.knock.api.models.schedules.bulk
 
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
+import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
-import app.knock.api.core.toImmutable
 import java.util.Objects
-import java.util.Optional
 
 /**
  * Bulk creates up to 1,000 schedules at a time. This endpoint also handles
@@ -17,12 +16,19 @@ import java.util.Optional
  */
 class BulkCreateParams
 private constructor(
+    private val bulkCreateSchedulesRequest: BulkCreateSchedulesRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    /**
+     * MERYL A request to bulk create schedules. Accepts a list of schedules to create. Each
+     * schedule must have a single recipient. The recipients do not have to be unique.
+     */
+    fun bulkCreateSchedulesRequest(): BulkCreateSchedulesRequest = bulkCreateSchedulesRequest
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> =
+        bulkCreateSchedulesRequest._additionalProperties()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -32,25 +38,39 @@ private constructor(
 
     companion object {
 
-        @JvmStatic fun none(): BulkCreateParams = builder().build()
-
-        /** Returns a mutable builder for constructing an instance of [BulkCreateParams]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [BulkCreateParams].
+         *
+         * The following fields are required:
+         * ```java
+         * .bulkCreateSchedulesRequest()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [BulkCreateParams]. */
     class Builder internal constructor() {
 
+        private var bulkCreateSchedulesRequest: BulkCreateSchedulesRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(bulkCreateParams: BulkCreateParams) = apply {
+            bulkCreateSchedulesRequest = bulkCreateParams.bulkCreateSchedulesRequest
             additionalHeaders = bulkCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = bulkCreateParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = bulkCreateParams.additionalBodyProperties.toMutableMap()
         }
+
+        /**
+         * MERYL A request to bulk create schedules. Accepts a list of schedules to create. Each
+         * schedule must have a single recipient. The recipients do not have to be unique.
+         */
+        fun bulkCreateSchedulesRequest(bulkCreateSchedulesRequest: BulkCreateSchedulesRequest) =
+            apply {
+                this.bulkCreateSchedulesRequest = bulkCreateSchedulesRequest
+            }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -150,43 +170,27 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
-        }
-
         /**
          * Returns an immutable instance of [BulkCreateParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * .bulkCreateSchedulesRequest()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): BulkCreateParams =
             BulkCreateParams(
+                checkRequired("bulkCreateSchedulesRequest", bulkCreateSchedulesRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
-    fun _body(): Optional<Map<String, JsonValue>> =
-        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+    fun _body(): BulkCreateSchedulesRequest = bulkCreateSchedulesRequest
 
     override fun _headers(): Headers = additionalHeaders
 
@@ -197,11 +201,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is BulkCreateParams && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is BulkCreateParams && bulkCreateSchedulesRequest == other.bulkCreateSchedulesRequest && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(bulkCreateSchedulesRequest, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "BulkCreateParams{additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "BulkCreateParams{bulkCreateSchedulesRequest=$bulkCreateSchedulesRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

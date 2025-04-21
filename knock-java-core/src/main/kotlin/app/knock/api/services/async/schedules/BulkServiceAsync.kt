@@ -21,22 +21,14 @@ interface BulkServiceAsync {
      * [inline identifications](/managing-recipients/identifying-recipients#inline-identifying-recipients)
      * for the `actor`, `recipient`, and `tenant` fields.
      */
-    fun create(): CompletableFuture<BulkOperation> = create(BulkCreateParams.none())
+    fun create(params: BulkCreateParams): CompletableFuture<BulkOperation> =
+        create(params, RequestOptions.none())
 
     /** @see [create] */
     fun create(
-        params: BulkCreateParams = BulkCreateParams.none(),
+        params: BulkCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
-
-    /** @see [create] */
-    fun create(
-        params: BulkCreateParams = BulkCreateParams.none()
-    ): CompletableFuture<BulkOperation> = create(params, RequestOptions.none())
-
-    /** @see [create] */
-    fun create(requestOptions: RequestOptions): CompletableFuture<BulkOperation> =
-        create(BulkCreateParams.none(), requestOptions)
 
     /** A view of [BulkServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -46,27 +38,14 @@ interface BulkServiceAsync {
          * same as [BulkServiceAsync.create].
          */
         @MustBeClosed
-        fun create(): CompletableFuture<HttpResponseFor<BulkOperation>> =
-            create(BulkCreateParams.none())
+        fun create(params: BulkCreateParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            create(params, RequestOptions.none())
 
         /** @see [create] */
         @MustBeClosed
         fun create(
-            params: BulkCreateParams = BulkCreateParams.none(),
+            params: BulkCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
-
-        /** @see [create] */
-        @MustBeClosed
-        fun create(
-            params: BulkCreateParams = BulkCreateParams.none()
-        ): CompletableFuture<HttpResponseFor<BulkOperation>> = create(params, RequestOptions.none())
-
-        /** @see [create] */
-        @MustBeClosed
-        fun create(
-            requestOptions: RequestOptions
-        ): CompletableFuture<HttpResponseFor<BulkOperation>> =
-            create(BulkCreateParams.none(), requestOptions)
     }
 }
