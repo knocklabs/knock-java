@@ -72,11 +72,14 @@ internal class SlackServiceTest {
                 .build()
         val slackService = client.providers().slack()
 
-        slackService.revokeAccess(
-            SlackRevokeAccessParams.builder()
-                .channelId("channel_id")
-                .accessTokenObject("access_token_object")
-                .build()
-        )
+        val response =
+            slackService.revokeAccess(
+                SlackRevokeAccessParams.builder()
+                    .channelId("channel_id")
+                    .accessTokenObject("access_token_object")
+                    .build()
+            )
+
+        response.validate()
     }
 }

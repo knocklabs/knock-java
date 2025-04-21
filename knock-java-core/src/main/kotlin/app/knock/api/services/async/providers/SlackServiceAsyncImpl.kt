@@ -7,7 +7,6 @@ import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
-import app.knock.api.core.handlers.stringHandler
 import app.knock.api.core.handlers.withErrorHandler
 import app.knock.api.core.http.HttpMethod
 import app.knock.api.core.http.HttpRequest
@@ -22,6 +21,7 @@ import app.knock.api.models.providers.slack.SlackListChannelsPageAsync
 import app.knock.api.models.providers.slack.SlackListChannelsPageResponse
 import app.knock.api.models.providers.slack.SlackListChannelsParams
 import app.knock.api.models.providers.slack.SlackRevokeAccessParams
+import app.knock.api.models.providers.slack.SlackRevokeAccessResponse
 import java.util.concurrent.CompletableFuture
 
 class SlackServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -50,7 +50,7 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override fun revokeAccess(
         params: SlackRevokeAccessParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
+    ): CompletableFuture<SlackRevokeAccessResponse> =
         // put /v1/providers/slack/{channel_id}/revoke_access
         withRawResponse().revokeAccess(params, requestOptions).thenApply { it.parse() }
 
@@ -126,13 +126,14 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val revokeAccessHandler: Handler<String> =
-            stringHandler().withErrorHandler(errorHandler)
+        private val revokeAccessHandler: Handler<SlackRevokeAccessResponse> =
+            jsonHandler<SlackRevokeAccessResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
         override fun revokeAccess(
             params: SlackRevokeAccessParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> {
+        ): CompletableFuture<HttpResponseFor<SlackRevokeAccessResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -150,7 +151,15 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable { response.use { revokeAccessHandler.handle(it) } }
+                    response.parseable {
+                        response
+                            .use { revokeAccessHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
                 }
         }
     }

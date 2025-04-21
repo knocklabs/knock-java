@@ -9,6 +9,7 @@ import app.knock.api.models.providers.slack.SlackCheckAuthResponse
 import app.knock.api.models.providers.slack.SlackListChannelsPageAsync
 import app.knock.api.models.providers.slack.SlackListChannelsParams
 import app.knock.api.models.providers.slack.SlackRevokeAccessParams
+import app.knock.api.models.providers.slack.SlackRevokeAccessResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
@@ -41,14 +42,15 @@ interface SlackServiceAsync {
     ): CompletableFuture<SlackListChannelsPageAsync>
 
     /** Revoke access for a Slack channel. */
-    fun revokeAccess(params: SlackRevokeAccessParams): CompletableFuture<String> =
-        revokeAccess(params, RequestOptions.none())
+    fun revokeAccess(
+        params: SlackRevokeAccessParams
+    ): CompletableFuture<SlackRevokeAccessResponse> = revokeAccess(params, RequestOptions.none())
 
     /** @see [revokeAccess] */
     fun revokeAccess(
         params: SlackRevokeAccessParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String>
+    ): CompletableFuture<SlackRevokeAccessResponse>
 
     /** A view of [SlackServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -94,13 +96,14 @@ interface SlackServiceAsync {
         @MustBeClosed
         fun revokeAccess(
             params: SlackRevokeAccessParams
-        ): CompletableFuture<HttpResponseFor<String>> = revokeAccess(params, RequestOptions.none())
+        ): CompletableFuture<HttpResponseFor<SlackRevokeAccessResponse>> =
+            revokeAccess(params, RequestOptions.none())
 
         /** @see [revokeAccess] */
         @MustBeClosed
         fun revokeAccess(
             params: SlackRevokeAccessParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>>
+        ): CompletableFuture<HttpResponseFor<SlackRevokeAccessResponse>>
     }
 }

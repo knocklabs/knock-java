@@ -9,6 +9,7 @@ import app.knock.api.models.providers.slack.SlackCheckAuthResponse
 import app.knock.api.models.providers.slack.SlackListChannelsPage
 import app.knock.api.models.providers.slack.SlackListChannelsParams
 import app.knock.api.models.providers.slack.SlackRevokeAccessParams
+import app.knock.api.models.providers.slack.SlackRevokeAccessResponse
 import com.google.errorprone.annotations.MustBeClosed
 
 interface SlackService {
@@ -39,14 +40,14 @@ interface SlackService {
     ): SlackListChannelsPage
 
     /** Revoke access for a Slack channel. */
-    fun revokeAccess(params: SlackRevokeAccessParams): String =
+    fun revokeAccess(params: SlackRevokeAccessParams): SlackRevokeAccessResponse =
         revokeAccess(params, RequestOptions.none())
 
     /** @see [revokeAccess] */
     fun revokeAccess(
         params: SlackRevokeAccessParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): String
+    ): SlackRevokeAccessResponse
 
     /** A view of [SlackService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -86,14 +87,15 @@ interface SlackService {
          * is otherwise the same as [SlackService.revokeAccess].
          */
         @MustBeClosed
-        fun revokeAccess(params: SlackRevokeAccessParams): HttpResponseFor<String> =
-            revokeAccess(params, RequestOptions.none())
+        fun revokeAccess(
+            params: SlackRevokeAccessParams
+        ): HttpResponseFor<SlackRevokeAccessResponse> = revokeAccess(params, RequestOptions.none())
 
         /** @see [revokeAccess] */
         @MustBeClosed
         fun revokeAccess(
             params: SlackRevokeAccessParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String>
+        ): HttpResponseFor<SlackRevokeAccessResponse>
     }
 }

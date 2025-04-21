@@ -83,5 +83,6 @@ internal class SlackServiceAsyncTest {
             )
 
         val response = responseFuture.get()
+        response.validate()
     }
 }

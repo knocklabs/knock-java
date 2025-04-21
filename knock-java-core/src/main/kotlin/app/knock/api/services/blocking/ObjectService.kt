@@ -66,7 +66,7 @@ interface ObjectService {
      * Add subscriptions for an object. If a subscription already exists, it will be updated. This
      * endpoint also handles
      * [inline identifications](/managing-recipients/identifying-recipients#inline-identifying-recipients)
-     * for the `recipient`
+     * for the `recipient`.
      */
     fun addSubscriptions(params: ObjectAddSubscriptionsParams): List<Subscription> =
         addSubscriptions(params, RequestOptions.none())
