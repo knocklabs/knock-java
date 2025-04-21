@@ -3,6 +3,7 @@
 package app.knock.api.models.workflows
 
 import app.knock.api.core.JsonValue
+import app.knock.api.models.recipients.RecipientRequest
 import app.knock.api.models.tenants.InlineTenantRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -60,9 +61,8 @@ internal class WorkflowTriggerParamsTest {
 
         val body = params._body()
 
-        assertThat(body.recipients())
-            .containsExactly(WorkflowTriggerParams.Recipient.ofUser("jhammond"))
-        assertThat(body.actor()).contains(WorkflowTriggerParams.Actor.ofUserRecipient("string"))
+        assertThat(body.recipients()).containsExactly(RecipientRequest.ofUserRecipient("jhammond"))
+        assertThat(body.actor()).contains(RecipientRequest.ofUserRecipient("string"))
         assertThat(body.cancellationKey()).isEmpty
         assertThat(body.data())
             .contains(
@@ -83,7 +83,6 @@ internal class WorkflowTriggerParamsTest {
 
         val body = params._body()
 
-        assertThat(body.recipients())
-            .containsExactly(WorkflowTriggerParams.Recipient.ofUser("jhammond"))
+        assertThat(body.recipients()).containsExactly(RecipientRequest.ofUserRecipient("jhammond"))
     }
 }

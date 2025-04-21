@@ -3,6 +3,7 @@
 package app.knock.api.models.schedules
 
 import app.knock.api.core.JsonValue
+import app.knock.api.models.recipients.RecipientRequest
 import app.knock.api.models.tenants.InlineTenantRequest
 import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
@@ -87,7 +88,7 @@ internal class ScheduleUpdateParamsTest {
         val body = params._body()
 
         assertThat(body.scheduleIds()).containsExactly("123e4567-e89b-12d3-a456-426614174000")
-        assertThat(body.actor()).contains(ScheduleUpdateParams.Actor.ofUserRecipient("string"))
+        assertThat(body.actor()).contains(RecipientRequest.ofUserRecipient("string"))
         assertThat(body.data())
             .contains(
                 ScheduleUpdateParams.Data.builder()

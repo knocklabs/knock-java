@@ -533,10 +533,10 @@ To access a property's raw JSON value, which may be undocumented, call its `_` p
 
 ```java
 import app.knock.api.core.JsonField;
-import app.knock.api.models.workflows.WorkflowTriggerParams;
+import app.knock.api.models.recipients.RecipientRequest;
 import java.util.Optional;
 
-JsonField<List<WorkflowTriggerParams.Recipient>> recipients = client.workflows().trigger(params)._recipients();
+JsonField<List<RecipientRequest>> recipients = client.workflows().trigger(params)._recipients();
 
 if (recipients.isMissing()) {
   // The property is absent from the JSON response

@@ -5,6 +5,7 @@ package app.knock.api.models.objects
 import app.knock.api.core.JsonValue
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
 import app.knock.api.models.UnnamedSchemaWithArrayParent1
+import app.knock.api.models.recipients.RecipientRequest
 import app.knock.api.models.recipients.channeldata.PushChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.users.InlineIdentifyUserRequest
@@ -225,7 +226,7 @@ internal class ObjectDeleteSubscriptionsParamsTest {
 
         assertThat(body.recipients())
             .containsExactly(
-                ObjectDeleteSubscriptionsParams.Recipient.ofInlineIdentifyUserRequest(
+                RecipientRequest.ofInlineIdentifyUser(
                     InlineIdentifyUserRequest.builder()
                         .id("user_1")
                         .addChannelData(
@@ -329,7 +330,7 @@ internal class ObjectDeleteSubscriptionsParamsTest {
 
         assertThat(body.recipients())
             .containsExactly(
-                ObjectDeleteSubscriptionsParams.Recipient.ofInlineIdentifyUserRequest(
+                RecipientRequest.ofInlineIdentifyUser(
                     InlineIdentifyUserRequest.builder().id("user_1").build()
                 )
             )

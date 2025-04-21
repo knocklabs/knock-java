@@ -3,6 +3,7 @@
 package app.knock.api.models.objects
 
 import app.knock.api.core.JsonValue
+import app.knock.api.models.recipients.RecipientRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -58,8 +59,8 @@ internal class ObjectAddSubscriptionsParamsTest {
 
         assertThat(body.recipients())
             .containsExactly(
-                ObjectAddSubscriptionsParams.Recipient.ofUser("user_1"),
-                ObjectAddSubscriptionsParams.Recipient.ofUser("user_2"),
+                RecipientRequest.ofUserRecipient("user_1"),
+                RecipientRequest.ofUserRecipient("user_2"),
             )
         assertThat(body.properties())
             .contains(
@@ -83,8 +84,8 @@ internal class ObjectAddSubscriptionsParamsTest {
 
         assertThat(body.recipients())
             .containsExactly(
-                ObjectAddSubscriptionsParams.Recipient.ofUser("user_1"),
-                ObjectAddSubscriptionsParams.Recipient.ofUser("user_2"),
+                RecipientRequest.ofUserRecipient("user_1"),
+                RecipientRequest.ofUserRecipient("user_2"),
             )
     }
 }

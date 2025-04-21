@@ -2,22 +2,19 @@
 
 package app.knock.api.models.schedules
 
-import app.knock.api.core.BaseDeserializer
-import app.knock.api.core.BaseSerializer
 import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
-import app.knock.api.core.allMaxBy
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
-import app.knock.api.core.getOrThrow
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.objects.InlineObjectRequest
+import app.knock.api.models.recipients.RecipientRequest
 import app.knock.api.models.tenants.InlineTenantRequest
 import app.knock.api.models.tenants.TenantRequest
 import app.knock.api.models.users.InlineIdentifyUserRequest
@@ -25,13 +22,6 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.ObjectCodec
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
@@ -65,7 +55,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun actor(): Optional<Actor> = body.actor()
+    fun actor(): Optional<RecipientRequest> = body.actor()
 
     /**
      * An optional map of data to pass into the workflow execution.
@@ -119,7 +109,7 @@ private constructor(
      *
      * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _actor(): JsonField<Actor> = body._actor()
+    fun _actor(): JsonField<RecipientRequest> = body._actor()
 
     /**
      * Returns the raw JSON value of [data].
@@ -231,34 +221,33 @@ private constructor(
          * inline user request (object), or an inline object request, which is determined by the
          * presence of a `collection` property.
          */
-        fun actor(actor: Actor?) = apply { body.actor(actor) }
+        fun actor(actor: RecipientRequest?) = apply { body.actor(actor) }
 
         /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
-        fun actor(actor: Optional<Actor>) = actor(actor.getOrNull())
+        fun actor(actor: Optional<RecipientRequest>) = actor(actor.getOrNull())
 
         /**
          * Sets [Builder.actor] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.actor] with a well-typed [Actor] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder.actor] with a well-typed [RecipientRequest] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
          */
-        fun actor(actor: JsonField<Actor>) = apply { body.actor(actor) }
+        fun actor(actor: JsonField<RecipientRequest>) = apply { body.actor(actor) }
 
-        /** Alias for calling [actor] with `Actor.ofUserRecipient(userRecipient)`. */
+        /** Alias for calling [actor] with `RecipientRequest.ofUserRecipient(userRecipient)`. */
         fun actor(userRecipient: String) = apply { body.actor(userRecipient) }
 
         /**
          * Alias for calling [actor] with
-         * `Actor.ofInlineIdentifyUserRequest(inlineIdentifyUserRequest)`.
+         * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
          */
-        fun actor(inlineIdentifyUserRequest: InlineIdentifyUserRequest) = apply {
-            body.actor(inlineIdentifyUserRequest)
+        fun actor(inlineIdentifyUser: InlineIdentifyUserRequest) = apply {
+            body.actor(inlineIdentifyUser)
         }
 
-        /** Alias for calling [actor] with `Actor.ofInlineObjectRequest(inlineObjectRequest)`. */
-        fun actor(inlineObjectRequest: InlineObjectRequest) = apply {
-            body.actor(inlineObjectRequest)
-        }
+        /** Alias for calling [actor] with `RecipientRequest.ofInlineObject(inlineObject)`. */
+        fun actor(inlineObject: InlineObjectRequest) = apply { body.actor(inlineObject) }
 
         /** An optional map of data to pass into the workflow execution. */
         fun data(data: Data?) = apply { body.data(data) }
@@ -494,7 +483,7 @@ private constructor(
     class Body
     private constructor(
         private val scheduleIds: JsonField<List<String>>,
-        private val actor: JsonField<Actor>,
+        private val actor: JsonField<RecipientRequest>,
         private val data: JsonField<Data>,
         private val endingAt: JsonField<OffsetDateTime>,
         private val repeats: JsonField<List<ScheduleRepeatRule>>,
@@ -508,7 +497,9 @@ private constructor(
             @JsonProperty("schedule_ids")
             @ExcludeMissing
             scheduleIds: JsonField<List<String>> = JsonMissing.of(),
-            @JsonProperty("actor") @ExcludeMissing actor: JsonField<Actor> = JsonMissing.of(),
+            @JsonProperty("actor")
+            @ExcludeMissing
+            actor: JsonField<RecipientRequest> = JsonMissing.of(),
             @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
             @JsonProperty("ending_at")
             @ExcludeMissing
@@ -540,7 +531,7 @@ private constructor(
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun actor(): Optional<Actor> = actor.getOptional("actor")
+        fun actor(): Optional<RecipientRequest> = actor.getOptional("actor")
 
         /**
          * An optional map of data to pass into the workflow execution.
@@ -596,7 +587,7 @@ private constructor(
          *
          * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("actor") @ExcludeMissing fun _actor(): JsonField<Actor> = actor
+        @JsonProperty("actor") @ExcludeMissing fun _actor(): JsonField<RecipientRequest> = actor
 
         /**
          * Returns the raw JSON value of [data].
@@ -670,7 +661,7 @@ private constructor(
         class Builder internal constructor() {
 
             private var scheduleIds: JsonField<MutableList<String>>? = null
-            private var actor: JsonField<Actor> = JsonMissing.of()
+            private var actor: JsonField<RecipientRequest> = JsonMissing.of()
             private var data: JsonField<Data> = JsonMissing.of()
             private var endingAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var repeats: JsonField<MutableList<ScheduleRepeatRule>>? = null
@@ -721,35 +712,34 @@ private constructor(
              * inline user request (object), or an inline object request, which is determined by the
              * presence of a `collection` property.
              */
-            fun actor(actor: Actor?) = actor(JsonField.ofNullable(actor))
+            fun actor(actor: RecipientRequest?) = actor(JsonField.ofNullable(actor))
 
             /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
-            fun actor(actor: Optional<Actor>) = actor(actor.getOrNull())
+            fun actor(actor: Optional<RecipientRequest>) = actor(actor.getOrNull())
 
             /**
              * Sets [Builder.actor] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.actor] with a well-typed [Actor] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
+             * You should usually call [Builder.actor] with a well-typed [RecipientRequest] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
              */
-            fun actor(actor: JsonField<Actor>) = apply { this.actor = actor }
+            fun actor(actor: JsonField<RecipientRequest>) = apply { this.actor = actor }
 
-            /** Alias for calling [actor] with `Actor.ofUserRecipient(userRecipient)`. */
-            fun actor(userRecipient: String) = actor(Actor.ofUserRecipient(userRecipient))
+            /** Alias for calling [actor] with `RecipientRequest.ofUserRecipient(userRecipient)`. */
+            fun actor(userRecipient: String) =
+                actor(RecipientRequest.ofUserRecipient(userRecipient))
 
             /**
              * Alias for calling [actor] with
-             * `Actor.ofInlineIdentifyUserRequest(inlineIdentifyUserRequest)`.
+             * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
              */
-            fun actor(inlineIdentifyUserRequest: InlineIdentifyUserRequest) =
-                actor(Actor.ofInlineIdentifyUserRequest(inlineIdentifyUserRequest))
+            fun actor(inlineIdentifyUser: InlineIdentifyUserRequest) =
+                actor(RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser))
 
-            /**
-             * Alias for calling [actor] with `Actor.ofInlineObjectRequest(inlineObjectRequest)`.
-             */
-            fun actor(inlineObjectRequest: InlineObjectRequest) =
-                actor(Actor.ofInlineObjectRequest(inlineObjectRequest))
+            /** Alias for calling [actor] with `RecipientRequest.ofInlineObject(inlineObject)`. */
+            fun actor(inlineObject: InlineObjectRequest) =
+                actor(RecipientRequest.ofInlineObject(inlineObject))
 
             /** An optional map of data to pass into the workflow execution. */
             fun data(data: Data?) = data(JsonField.ofNullable(data))
@@ -951,254 +941,6 @@ private constructor(
 
         override fun toString() =
             "Body{scheduleIds=$scheduleIds, actor=$actor, data=$data, endingAt=$endingAt, repeats=$repeats, scheduledAt=$scheduledAt, tenant=$tenant, additionalProperties=$additionalProperties}"
-    }
-
-    /**
-     * Specifies a recipient in a request. This can either be a user identifier (string), an inline
-     * user request (object), or an inline object request, which is determined by the presence of a
-     * `collection` property.
-     */
-    @JsonDeserialize(using = Actor.Deserializer::class)
-    @JsonSerialize(using = Actor.Serializer::class)
-    class Actor
-    private constructor(
-        private val userRecipient: String? = null,
-        private val inlineIdentifyUserRequest: InlineIdentifyUserRequest? = null,
-        private val inlineObjectRequest: InlineObjectRequest? = null,
-        private val _json: JsonValue? = null,
-    ) {
-
-        /** The ID of the user. */
-        fun userRecipient(): Optional<String> = Optional.ofNullable(userRecipient)
-
-        /**
-         * A set of parameters to inline-identify a user with. Inline identifying the user will
-         * ensure that the user is available before the request is executed in Knock. It will
-         * perform an upsert for the user you're supplying, replacing any properties specified.
-         */
-        fun inlineIdentifyUserRequest(): Optional<InlineIdentifyUserRequest> =
-            Optional.ofNullable(inlineIdentifyUserRequest)
-
-        /** A custom object entity which belongs to a collection. */
-        fun inlineObjectRequest(): Optional<InlineObjectRequest> =
-            Optional.ofNullable(inlineObjectRequest)
-
-        fun isUserRecipient(): Boolean = userRecipient != null
-
-        fun isInlineIdentifyUserRequest(): Boolean = inlineIdentifyUserRequest != null
-
-        fun isInlineObjectRequest(): Boolean = inlineObjectRequest != null
-
-        /** The ID of the user. */
-        fun asUserRecipient(): String = userRecipient.getOrThrow("userRecipient")
-
-        /**
-         * A set of parameters to inline-identify a user with. Inline identifying the user will
-         * ensure that the user is available before the request is executed in Knock. It will
-         * perform an upsert for the user you're supplying, replacing any properties specified.
-         */
-        fun asInlineIdentifyUserRequest(): InlineIdentifyUserRequest =
-            inlineIdentifyUserRequest.getOrThrow("inlineIdentifyUserRequest")
-
-        /** A custom object entity which belongs to a collection. */
-        fun asInlineObjectRequest(): InlineObjectRequest =
-            inlineObjectRequest.getOrThrow("inlineObjectRequest")
-
-        fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
-
-        fun <T> accept(visitor: Visitor<T>): T =
-            when {
-                userRecipient != null -> visitor.visitUserRecipient(userRecipient)
-                inlineIdentifyUserRequest != null ->
-                    visitor.visitInlineIdentifyUserRequest(inlineIdentifyUserRequest)
-                inlineObjectRequest != null -> visitor.visitInlineObjectRequest(inlineObjectRequest)
-                else -> visitor.unknown(_json)
-            }
-
-        private var validated: Boolean = false
-
-        fun validate(): Actor = apply {
-            if (validated) {
-                return@apply
-            }
-
-            accept(
-                object : Visitor<Unit> {
-                    override fun visitUserRecipient(userRecipient: String) {}
-
-                    override fun visitInlineIdentifyUserRequest(
-                        inlineIdentifyUserRequest: InlineIdentifyUserRequest
-                    ) {
-                        inlineIdentifyUserRequest.validate()
-                    }
-
-                    override fun visitInlineObjectRequest(
-                        inlineObjectRequest: InlineObjectRequest
-                    ) {
-                        inlineObjectRequest.validate()
-                    }
-                }
-            )
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: KnockInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            accept(
-                object : Visitor<Int> {
-                    override fun visitUserRecipient(userRecipient: String) = 1
-
-                    override fun visitInlineIdentifyUserRequest(
-                        inlineIdentifyUserRequest: InlineIdentifyUserRequest
-                    ) = inlineIdentifyUserRequest.validity()
-
-                    override fun visitInlineObjectRequest(
-                        inlineObjectRequest: InlineObjectRequest
-                    ) = inlineObjectRequest.validity()
-
-                    override fun unknown(json: JsonValue?) = 0
-                }
-            )
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Actor && userRecipient == other.userRecipient && inlineIdentifyUserRequest == other.inlineIdentifyUserRequest && inlineObjectRequest == other.inlineObjectRequest /* spotless:on */
-        }
-
-        override fun hashCode(): Int = /* spotless:off */ Objects.hash(userRecipient, inlineIdentifyUserRequest, inlineObjectRequest) /* spotless:on */
-
-        override fun toString(): String =
-            when {
-                userRecipient != null -> "Actor{userRecipient=$userRecipient}"
-                inlineIdentifyUserRequest != null ->
-                    "Actor{inlineIdentifyUserRequest=$inlineIdentifyUserRequest}"
-                inlineObjectRequest != null -> "Actor{inlineObjectRequest=$inlineObjectRequest}"
-                _json != null -> "Actor{_unknown=$_json}"
-                else -> throw IllegalStateException("Invalid Actor")
-            }
-
-        companion object {
-
-            /** The ID of the user. */
-            @JvmStatic
-            fun ofUserRecipient(userRecipient: String) = Actor(userRecipient = userRecipient)
-
-            /**
-             * A set of parameters to inline-identify a user with. Inline identifying the user will
-             * ensure that the user is available before the request is executed in Knock. It will
-             * perform an upsert for the user you're supplying, replacing any properties specified.
-             */
-            @JvmStatic
-            fun ofInlineIdentifyUserRequest(inlineIdentifyUserRequest: InlineIdentifyUserRequest) =
-                Actor(inlineIdentifyUserRequest = inlineIdentifyUserRequest)
-
-            /** A custom object entity which belongs to a collection. */
-            @JvmStatic
-            fun ofInlineObjectRequest(inlineObjectRequest: InlineObjectRequest) =
-                Actor(inlineObjectRequest = inlineObjectRequest)
-        }
-
-        /** An interface that defines how to map each variant of [Actor] to a value of type [T]. */
-        interface Visitor<out T> {
-
-            /** The ID of the user. */
-            fun visitUserRecipient(userRecipient: String): T
-
-            /**
-             * A set of parameters to inline-identify a user with. Inline identifying the user will
-             * ensure that the user is available before the request is executed in Knock. It will
-             * perform an upsert for the user you're supplying, replacing any properties specified.
-             */
-            fun visitInlineIdentifyUserRequest(
-                inlineIdentifyUserRequest: InlineIdentifyUserRequest
-            ): T
-
-            /** A custom object entity which belongs to a collection. */
-            fun visitInlineObjectRequest(inlineObjectRequest: InlineObjectRequest): T
-
-            /**
-             * Maps an unknown variant of [Actor] to a value of type [T].
-             *
-             * An instance of [Actor] can contain an unknown variant if it was deserialized from
-             * data that doesn't match any known variant. For example, if the SDK is on an older
-             * version than the API, then the API may respond with new variants that the SDK is
-             * unaware of.
-             *
-             * @throws KnockInvalidDataException in the default implementation.
-             */
-            fun unknown(json: JsonValue?): T {
-                throw KnockInvalidDataException("Unknown Actor: $json")
-            }
-        }
-
-        internal class Deserializer : BaseDeserializer<Actor>(Actor::class) {
-
-            override fun ObjectCodec.deserialize(node: JsonNode): Actor {
-                val json = JsonValue.fromJsonNode(node)
-
-                val bestMatches =
-                    sequenceOf(
-                            tryDeserialize(node, jacksonTypeRef<InlineIdentifyUserRequest>())?.let {
-                                Actor(inlineIdentifyUserRequest = it, _json = json)
-                            },
-                            tryDeserialize(node, jacksonTypeRef<InlineObjectRequest>())?.let {
-                                Actor(inlineObjectRequest = it, _json = json)
-                            },
-                            tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                                Actor(userRecipient = it, _json = json)
-                            },
-                        )
-                        .filterNotNull()
-                        .allMaxBy { it.validity() }
-                        .toList()
-                return when (bestMatches.size) {
-                    // This can happen if what we're deserializing is completely incompatible with
-                    // all the possible variants (e.g. deserializing from array).
-                    0 -> Actor(_json = json)
-                    1 -> bestMatches.single()
-                    // If there's more than one match with the highest validity, then use the first
-                    // completely valid match, or simply the first match if none are completely
-                    // valid.
-                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
-                }
-            }
-        }
-
-        internal class Serializer : BaseSerializer<Actor>(Actor::class) {
-
-            override fun serialize(
-                value: Actor,
-                generator: JsonGenerator,
-                provider: SerializerProvider,
-            ) {
-                when {
-                    value.userRecipient != null -> generator.writeObject(value.userRecipient)
-                    value.inlineIdentifyUserRequest != null ->
-                        generator.writeObject(value.inlineIdentifyUserRequest)
-                    value.inlineObjectRequest != null ->
-                        generator.writeObject(value.inlineObjectRequest)
-                    value._json != null -> generator.writeObject(value._json)
-                    else -> throw IllegalStateException("Invalid Actor")
-                }
-            }
-        }
     }
 
     /** An optional map of data to pass into the workflow execution. */
