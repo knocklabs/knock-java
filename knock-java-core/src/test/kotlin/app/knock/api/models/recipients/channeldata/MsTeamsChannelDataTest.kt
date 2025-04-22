@@ -13,6 +13,7 @@ internal class MsTeamsChannelDataTest {
     fun create() {
         val msTeamsChannelData =
             MsTeamsChannelData.builder()
+                ._typename(MsTeamsChannelData._Typename.MS_TEAMS_CHANNEL_DATA)
                 .addConnection(
                     MsTeamsChannelData.Connection.MsTeamsTokenConnection.builder()
                         .msTeamsChannelId("123e4567-e89b-12d3-a456-426614174000")
@@ -24,6 +25,8 @@ internal class MsTeamsChannelDataTest {
                 .msTeamsTenantId(null)
                 .build()
 
+        assertThat(msTeamsChannelData._typename())
+            .isEqualTo(MsTeamsChannelData._Typename.MS_TEAMS_CHANNEL_DATA)
         assertThat(msTeamsChannelData.connections())
             .containsExactly(
                 MsTeamsChannelData.Connection.ofMsTeamsToken(
@@ -43,6 +46,7 @@ internal class MsTeamsChannelDataTest {
         val jsonMapper = jsonMapper()
         val msTeamsChannelData =
             MsTeamsChannelData.builder()
+                ._typename(MsTeamsChannelData._Typename.MS_TEAMS_CHANNEL_DATA)
                 .addConnection(
                     MsTeamsChannelData.Connection.MsTeamsTokenConnection.builder()
                         .msTeamsChannelId("123e4567-e89b-12d3-a456-426614174000")

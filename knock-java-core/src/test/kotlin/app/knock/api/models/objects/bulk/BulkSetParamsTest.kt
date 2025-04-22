@@ -6,7 +6,6 @@ import app.knock.api.core.JsonValue
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
 import app.knock.api.models.UnnamedSchemaWithArrayParent1
 import app.knock.api.models.objects.InlineObjectRequest
-import app.knock.api.models.recipients.channeldata.PushChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
@@ -25,12 +24,7 @@ internal class BulkSetParamsTest {
                     .addChannelData(
                         UnnamedSchemaWithArrayParent0.builder()
                             .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                            .data(
-                                PushChannelData.builder()
-                                    ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                                    .addToken("push_token_xxx")
-                                    .build()
-                            )
+                            .pushChannelData(listOf("push_token_xxx"))
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -137,12 +131,7 @@ internal class BulkSetParamsTest {
                         .addChannelData(
                             UnnamedSchemaWithArrayParent0.builder()
                                 .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                                .data(
-                                    PushChannelData.builder()
-                                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                                        .addToken("push_token_xxx")
-                                        .build()
-                                )
+                                .pushChannelData(listOf("push_token_xxx"))
                                 .build()
                         )
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -231,12 +220,7 @@ internal class BulkSetParamsTest {
                     .addChannelData(
                         UnnamedSchemaWithArrayParent0.builder()
                             .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                            .data(
-                                PushChannelData.builder()
-                                    ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                                    .addToken("push_token_xxx")
-                                    .build()
-                            )
+                            .pushChannelData(listOf("push_token_xxx"))
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

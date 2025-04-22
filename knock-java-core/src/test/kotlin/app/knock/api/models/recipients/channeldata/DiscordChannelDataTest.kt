@@ -13,6 +13,7 @@ internal class DiscordChannelDataTest {
     fun create() {
         val discordChannelData =
             DiscordChannelData.builder()
+                ._typename(DiscordChannelData._Typename.DISCORD_CHANNEL_DATA)
                 .addConnection(
                     DiscordChannelData.Connection.DiscordChannelConnection.builder()
                         .channelId("123456789012345678")
@@ -20,6 +21,8 @@ internal class DiscordChannelDataTest {
                 )
                 .build()
 
+        assertThat(discordChannelData._typename())
+            .isEqualTo(DiscordChannelData._Typename.DISCORD_CHANNEL_DATA)
         assertThat(discordChannelData.connections())
             .containsExactly(
                 DiscordChannelData.Connection.ofDiscordChannel(
@@ -35,6 +38,7 @@ internal class DiscordChannelDataTest {
         val jsonMapper = jsonMapper()
         val discordChannelData =
             DiscordChannelData.builder()
+                ._typename(DiscordChannelData._Typename.DISCORD_CHANNEL_DATA)
                 .addConnection(
                     DiscordChannelData.Connection.DiscordChannelConnection.builder()
                         .channelId("123456789012345678")

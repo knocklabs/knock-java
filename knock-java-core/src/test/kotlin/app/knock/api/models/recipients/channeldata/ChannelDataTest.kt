@@ -15,12 +15,7 @@ internal class ChannelDataTest {
             ChannelData.builder()
                 ._typename("ChannelData")
                 .channelId("123e4567-e89b-12d3-a456-426614174000")
-                .data(
-                    PushChannelData.builder()
-                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                        .addToken("push_token_1")
-                        .build()
-                )
+                .pushChannelData(listOf("push_token_1"))
                 .build()
 
         assertThat(channelData._typename()).isEqualTo("ChannelData")
@@ -43,12 +38,7 @@ internal class ChannelDataTest {
             ChannelData.builder()
                 ._typename("ChannelData")
                 .channelId("123e4567-e89b-12d3-a456-426614174000")
-                .data(
-                    PushChannelData.builder()
-                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                        .addToken("push_token_1")
-                        .build()
-                )
+                .pushChannelData(listOf("push_token_1"))
                 .build()
 
         val roundtrippedChannelData =

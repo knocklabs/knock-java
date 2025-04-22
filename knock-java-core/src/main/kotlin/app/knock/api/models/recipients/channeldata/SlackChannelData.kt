@@ -4,6 +4,7 @@ package app.knock.api.models.recipients.channeldata
 
 import app.knock.api.core.BaseDeserializer
 import app.knock.api.core.BaseSerializer
+import app.knock.api.core.Enum
 import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
@@ -33,18 +34,38 @@ import kotlin.jvm.optionals.getOrNull
 /** Slack channel data */
 class SlackChannelData
 private constructor(
-    private val token: JsonField<Token>,
+    private val _typename: JsonField<_Typename>,
     private val connections: JsonField<List<Connection>>,
+    private val token: JsonField<Token>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("token") @ExcludeMissing token: JsonField<Token> = JsonMissing.of(),
+        @JsonProperty("__typename")
+        @ExcludeMissing
+        _typename: JsonField<_Typename> = JsonMissing.of(),
         @JsonProperty("connections")
         @ExcludeMissing
         connections: JsonField<List<Connection>> = JsonMissing.of(),
-    ) : this(token, connections, mutableMapOf())
+        @JsonProperty("token") @ExcludeMissing token: JsonField<Token> = JsonMissing.of(),
+    ) : this(_typename, connections, token, mutableMapOf())
+
+    /**
+     * The typename of the schema.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun _typename(): _Typename = _typename.getRequired("__typename")
+
+    /**
+     * List of Slack channel connections.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun connections(): List<Connection> = connections.getRequired("connections")
 
     /**
      * A Slack connection token.
@@ -55,19 +76,11 @@ private constructor(
     fun token(): Optional<Token> = token.getOptional("token")
 
     /**
-     * List of Slack channel connections.
+     * Returns the raw JSON value of [_typename].
      *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
+     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun connections(): Optional<List<Connection>> = connections.getOptional("connections")
-
-    /**
-     * Returns the raw JSON value of [token].
-     *
-     * Unlike [token], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("token") @ExcludeMissing fun _token(): JsonField<Token> = token
+    @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<_Typename> = _typename
 
     /**
      * Returns the raw JSON value of [connections].
@@ -77,6 +90,13 @@ private constructor(
     @JsonProperty("connections")
     @ExcludeMissing
     fun _connections(): JsonField<List<Connection>> = connections
+
+    /**
+     * Returns the raw JSON value of [token].
+     *
+     * Unlike [token], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("token") @ExcludeMissing fun _token(): JsonField<Token> = token
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -92,37 +112,45 @@ private constructor(
 
     companion object {
 
-        /** Returns a mutable builder for constructing an instance of [SlackChannelData]. */
+        /**
+         * Returns a mutable builder for constructing an instance of [SlackChannelData].
+         *
+         * The following fields are required:
+         * ```java
+         * ._typename()
+         * .connections()
+         * ```
+         */
         @JvmStatic fun builder() = Builder()
     }
 
     /** A builder for [SlackChannelData]. */
     class Builder internal constructor() {
 
-        private var token: JsonField<Token> = JsonMissing.of()
+        private var _typename: JsonField<_Typename>? = null
         private var connections: JsonField<MutableList<Connection>>? = null
+        private var token: JsonField<Token> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(slackChannelData: SlackChannelData) = apply {
-            token = slackChannelData.token
+            _typename = slackChannelData._typename
             connections = slackChannelData.connections.map { it.toMutableList() }
+            token = slackChannelData.token
             additionalProperties = slackChannelData.additionalProperties.toMutableMap()
         }
 
-        /** A Slack connection token. */
-        fun token(token: Token?) = token(JsonField.ofNullable(token))
-
-        /** Alias for calling [Builder.token] with `token.orElse(null)`. */
-        fun token(token: Optional<Token>) = token(token.getOrNull())
+        /** The typename of the schema. */
+        fun _typename(_typename: _Typename) = _typename(JsonField.of(_typename))
 
         /**
-         * Sets [Builder.token] to an arbitrary JSON value.
+         * Sets [Builder._typename] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.token] with a well-typed [Token] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
+         * You should usually call [Builder._typename] with a well-typed [_Typename] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun token(token: JsonField<Token>) = apply { this.token = token }
+        fun _typename(_typename: JsonField<_Typename>) = apply { this._typename = _typename }
 
         /** List of Slack channel connections. */
         fun connections(connections: List<Connection>) = connections(JsonField.of(connections))
@@ -161,6 +189,20 @@ private constructor(
         fun addConnection(slackIncomingWebhook: Connection.SlackIncomingWebhookConnection) =
             addConnection(Connection.ofSlackIncomingWebhook(slackIncomingWebhook))
 
+        /** A Slack connection token. */
+        fun token(token: Token?) = token(JsonField.ofNullable(token))
+
+        /** Alias for calling [Builder.token] with `token.orElse(null)`. */
+        fun token(token: Optional<Token>) = token(token.getOrNull())
+
+        /**
+         * Sets [Builder.token] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.token] with a well-typed [Token] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun token(token: JsonField<Token>) = apply { this.token = token }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -184,11 +226,20 @@ private constructor(
          * Returns an immutable instance of [SlackChannelData].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
+         *
+         * The following fields are required:
+         * ```java
+         * ._typename()
+         * .connections()
+         * ```
+         *
+         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): SlackChannelData =
             SlackChannelData(
+                checkRequired("_typename", _typename),
+                checkRequired("connections", connections).map { it.toImmutable() },
                 token,
-                (connections ?: JsonMissing.of()).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
             )
     }
@@ -200,8 +251,9 @@ private constructor(
             return@apply
         }
 
+        _typename().validate()
+        connections().forEach { it.validate() }
         token().ifPresent { it.validate() }
-        connections().ifPresent { it.forEach { it.validate() } }
         validated = true
     }
 
@@ -220,140 +272,99 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (token.asKnown().getOrNull()?.validity() ?: 0) +
-            (connections.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+        (_typename.asKnown().getOrNull()?.validity() ?: 0) +
+            (connections.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (token.asKnown().getOrNull()?.validity() ?: 0)
 
-    /** A Slack connection token. */
-    class Token
-    private constructor(
-        private val accessToken: JsonField<String>,
-        private val additionalProperties: MutableMap<String, JsonValue>,
-    ) {
-
-        @JsonCreator
-        private constructor(
-            @JsonProperty("access_token")
-            @ExcludeMissing
-            accessToken: JsonField<String> = JsonMissing.of()
-        ) : this(accessToken, mutableMapOf())
+    /** The typename of the schema. */
+    class _Typename @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
-         * A Slack access token.
+         * Returns this class instance's raw value.
          *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
          */
-        fun accessToken(): Optional<String> = accessToken.getOptional("access_token")
-
-        /**
-         * Returns the raw JSON value of [accessToken].
-         *
-         * Unlike [accessToken], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("access_token")
-        @ExcludeMissing
-        fun _accessToken(): JsonField<String> = accessToken
-
-        @JsonAnySetter
-        private fun putAdditionalProperty(key: String, value: JsonValue) {
-            additionalProperties.put(key, value)
-        }
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> =
-            Collections.unmodifiableMap(additionalProperties)
-
-        fun toBuilder() = Builder().from(this)
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
 
         companion object {
 
-            /**
-             * Returns a mutable builder for constructing an instance of [Token].
-             *
-             * The following fields are required:
-             * ```java
-             * .accessToken()
-             * ```
-             */
-            @JvmStatic fun builder() = Builder()
+            @JvmField val SLACK_CHANNEL_DATA = of("SlackChannelData")
+
+            @JvmStatic fun of(value: String) = _Typename(JsonField.of(value))
         }
 
-        /** A builder for [Token]. */
-        class Builder internal constructor() {
-
-            private var accessToken: JsonField<String>? = null
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(token: Token) = apply {
-                accessToken = token.accessToken
-                additionalProperties = token.additionalProperties.toMutableMap()
-            }
-
-            /** A Slack access token. */
-            fun accessToken(accessToken: String?) = accessToken(JsonField.ofNullable(accessToken))
-
-            /** Alias for calling [Builder.accessToken] with `accessToken.orElse(null)`. */
-            fun accessToken(accessToken: Optional<String>) = accessToken(accessToken.getOrNull())
-
-            /**
-             * Sets [Builder.accessToken] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.accessToken] with a well-typed [String] value
-             * instead. This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun accessToken(accessToken: JsonField<String>) = apply {
-                this.accessToken = accessToken
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Token].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             *
-             * The following fields are required:
-             * ```java
-             * .accessToken()
-             * ```
-             *
-             * @throws IllegalStateException if any required field is unset.
-             */
-            fun build(): Token =
-                Token(
-                    checkRequired("accessToken", accessToken),
-                    additionalProperties.toMutableMap(),
-                )
+        /** An enum containing [_Typename]'s known values. */
+        enum class Known {
+            SLACK_CHANNEL_DATA
         }
+
+        /**
+         * An enum containing [_Typename]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [_Typename] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            SLACK_CHANNEL_DATA,
+            /**
+             * An enum member indicating that [_Typename] was instantiated with an unknown value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                SLACK_CHANNEL_DATA -> Value.SLACK_CHANNEL_DATA
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
+         */
+        fun known(): Known =
+            when (this) {
+                SLACK_CHANNEL_DATA -> Known.SLACK_CHANNEL_DATA
+                else -> throw KnockInvalidDataException("Unknown _Typename: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws KnockInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
 
         private var validated: Boolean = false
 
-        fun validate(): Token = apply {
+        fun validate(): _Typename = apply {
             if (validated) {
                 return@apply
             }
 
-            accessToken()
+            known()
             validated = true
         }
 
@@ -371,24 +382,19 @@ private constructor(
          *
          * Used for best match union deserialization.
          */
-        @JvmSynthetic internal fun validity(): Int = (if (accessToken.asKnown().isPresent) 1 else 0)
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Token && accessToken == other.accessToken && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is _Typename && value == other.value /* spotless:on */
         }
 
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(accessToken, additionalProperties) }
-        /* spotless:on */
+        override fun hashCode() = value.hashCode()
 
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() =
-            "Token{accessToken=$accessToken, additionalProperties=$additionalProperties}"
+        override fun toString() = value.toString()
     }
 
     /** A Slack connection, either an access token or an incoming webhook */
@@ -996,20 +1002,188 @@ private constructor(
         }
     }
 
+    /** A Slack connection token. */
+    class Token
+    private constructor(
+        private val accessToken: JsonField<String>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("access_token")
+            @ExcludeMissing
+            accessToken: JsonField<String> = JsonMissing.of()
+        ) : this(accessToken, mutableMapOf())
+
+        /**
+         * A Slack access token.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun accessToken(): Optional<String> = accessToken.getOptional("access_token")
+
+        /**
+         * Returns the raw JSON value of [accessToken].
+         *
+         * Unlike [accessToken], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("access_token")
+        @ExcludeMissing
+        fun _accessToken(): JsonField<String> = accessToken
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Token].
+             *
+             * The following fields are required:
+             * ```java
+             * .accessToken()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Token]. */
+        class Builder internal constructor() {
+
+            private var accessToken: JsonField<String>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(token: Token) = apply {
+                accessToken = token.accessToken
+                additionalProperties = token.additionalProperties.toMutableMap()
+            }
+
+            /** A Slack access token. */
+            fun accessToken(accessToken: String?) = accessToken(JsonField.ofNullable(accessToken))
+
+            /** Alias for calling [Builder.accessToken] with `accessToken.orElse(null)`. */
+            fun accessToken(accessToken: Optional<String>) = accessToken(accessToken.getOrNull())
+
+            /**
+             * Sets [Builder.accessToken] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.accessToken] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun accessToken(accessToken: JsonField<String>) = apply {
+                this.accessToken = accessToken
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Token].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .accessToken()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Token =
+                Token(
+                    checkRequired("accessToken", accessToken),
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Token = apply {
+            if (validated) {
+                return@apply
+            }
+
+            accessToken()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = (if (accessToken.asKnown().isPresent) 1 else 0)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Token && accessToken == other.accessToken && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(accessToken, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Token{accessToken=$accessToken, additionalProperties=$additionalProperties}"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is SlackChannelData && token == other.token && connections == other.connections && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is SlackChannelData && _typename == other._typename && connections == other.connections && token == other.token && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(token, connections, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(_typename, connections, token, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "SlackChannelData{token=$token, connections=$connections, additionalProperties=$additionalProperties}"
+        "SlackChannelData{_typename=$_typename, connections=$connections, token=$token, additionalProperties=$additionalProperties}"
 }

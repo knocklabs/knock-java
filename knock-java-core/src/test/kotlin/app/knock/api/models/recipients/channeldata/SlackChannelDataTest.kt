@@ -4,7 +4,6 @@ package app.knock.api.models.recipients.channeldata
 
 import app.knock.api.core.jsonMapper
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
-import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -14,7 +13,7 @@ internal class SlackChannelDataTest {
     fun create() {
         val slackChannelData =
             SlackChannelData.builder()
-                .token(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
+                ._typename(SlackChannelData._Typename.SLACK_CHANNEL_DATA)
                 .addConnection(
                     SlackChannelData.Connection.SlackTokenConnection.builder()
                         .accessToken("xoxb-1234567890")
@@ -22,11 +21,12 @@ internal class SlackChannelDataTest {
                         .userId("U01234567890")
                         .build()
                 )
+                .token(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
                 .build()
 
-        assertThat(slackChannelData.token())
-            .contains(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
-        assertThat(slackChannelData.connections().getOrNull())
+        assertThat(slackChannelData._typename())
+            .isEqualTo(SlackChannelData._Typename.SLACK_CHANNEL_DATA)
+        assertThat(slackChannelData.connections())
             .containsExactly(
                 SlackChannelData.Connection.ofSlackToken(
                     SlackChannelData.Connection.SlackTokenConnection.builder()
@@ -36,6 +36,8 @@ internal class SlackChannelDataTest {
                         .build()
                 )
             )
+        assertThat(slackChannelData.token())
+            .contains(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
     }
 
     @Test
@@ -43,7 +45,7 @@ internal class SlackChannelDataTest {
         val jsonMapper = jsonMapper()
         val slackChannelData =
             SlackChannelData.builder()
-                .token(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
+                ._typename(SlackChannelData._Typename.SLACK_CHANNEL_DATA)
                 .addConnection(
                     SlackChannelData.Connection.SlackTokenConnection.builder()
                         .accessToken("xoxb-1234567890")
@@ -51,6 +53,7 @@ internal class SlackChannelDataTest {
                         .userId("U01234567890")
                         .build()
                 )
+                .token(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
                 .build()
 
         val roundtrippedSlackChannelData =

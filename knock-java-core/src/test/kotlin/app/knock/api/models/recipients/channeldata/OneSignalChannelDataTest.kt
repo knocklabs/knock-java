@@ -13,9 +13,12 @@ internal class OneSignalChannelDataTest {
     fun create() {
         val oneSignalChannelData =
             OneSignalChannelData.builder()
+                ._typename(OneSignalChannelData._Typename.ONE_SIGNAL_CHANNEL_DATA)
                 .addPlayerId("123e4567-e89b-12d3-a456-426614174000")
                 .build()
 
+        assertThat(oneSignalChannelData._typename())
+            .isEqualTo(OneSignalChannelData._Typename.ONE_SIGNAL_CHANNEL_DATA)
         assertThat(oneSignalChannelData.playerIds())
             .containsExactly("123e4567-e89b-12d3-a456-426614174000")
     }
@@ -25,6 +28,7 @@ internal class OneSignalChannelDataTest {
         val jsonMapper = jsonMapper()
         val oneSignalChannelData =
             OneSignalChannelData.builder()
+                ._typename(OneSignalChannelData._Typename.ONE_SIGNAL_CHANNEL_DATA)
                 .addPlayerId("123e4567-e89b-12d3-a456-426614174000")
                 .build()
 

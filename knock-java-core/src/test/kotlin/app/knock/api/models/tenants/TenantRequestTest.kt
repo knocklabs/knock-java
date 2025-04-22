@@ -6,7 +6,6 @@ import app.knock.api.core.JsonValue
 import app.knock.api.core.jsonMapper
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
 import app.knock.api.models.UnnamedSchemaWithArrayParent1
-import app.knock.api.models.recipients.channeldata.PushChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -24,12 +23,7 @@ internal class TenantRequestTest {
                 .addChannelData(
                     UnnamedSchemaWithArrayParent0.builder()
                         .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                        .data(
-                            PushChannelData.builder()
-                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                                .addToken("push_token_xxx")
-                                .build()
-                        )
+                        .pushChannelData(listOf("push_token_xxx"))
                         .build()
                 )
                 .addPreference(
@@ -193,12 +187,7 @@ internal class TenantRequestTest {
             .containsExactly(
                 UnnamedSchemaWithArrayParent0.builder()
                     .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                    .data(
-                        PushChannelData.builder()
-                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                            .addToken("push_token_xxx")
-                            .build()
-                    )
+                    .pushChannelData(listOf("push_token_xxx"))
                     .build()
             )
         assertThat(tenantRequest.preferences().getOrNull())
@@ -368,12 +357,7 @@ internal class TenantRequestTest {
                 .addChannelData(
                     UnnamedSchemaWithArrayParent0.builder()
                         .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                        .data(
-                            PushChannelData.builder()
-                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                                .addToken("push_token_xxx")
-                                .build()
-                        )
+                        .pushChannelData(listOf("push_token_xxx"))
                         .build()
                 )
                 .addPreference(
