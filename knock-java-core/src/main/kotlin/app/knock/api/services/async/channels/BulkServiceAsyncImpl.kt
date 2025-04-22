@@ -32,7 +32,7 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
         params: BulkUpdateMessageStatusParams,
         requestOptions: RequestOptions,
     ): CompletableFuture<BulkOperation> =
-        // post /v1/channels/{channel_id}/messages/bulk/{status}
+        // post /v1/channels/{channel_id}/messages/bulk/{action}
         withRawResponse().updateMessageStatus(params, requestOptions).thenApply { it.parse() }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :

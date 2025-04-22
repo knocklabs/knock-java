@@ -30,7 +30,7 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
         params: BulkUpdateMessageStatusParams,
         requestOptions: RequestOptions,
     ): BulkOperation =
-        // post /v1/channels/{channel_id}/messages/bulk/{status}
+        // post /v1/channels/{channel_id}/messages/bulk/{action}
         withRawResponse().updateMessageStatus(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :

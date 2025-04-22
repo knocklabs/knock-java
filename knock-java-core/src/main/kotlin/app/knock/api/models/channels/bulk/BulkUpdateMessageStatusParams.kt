@@ -32,7 +32,7 @@ import kotlin.jvm.optionals.getOrNull
 class BulkUpdateMessageStatusParams
 private constructor(
     private val channelId: String,
-    private val status: Status,
+    private val action: Action,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -40,8 +40,7 @@ private constructor(
 
     fun channelId(): String = channelId
 
-    /** The target status to be applied to the messages. */
-    fun status(): Status = status
+    fun action(): Action = action
 
     /**
      * Limits the results to messages with the given archived status.
@@ -213,7 +212,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .channelId()
-         * .status()
+         * .action()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -223,7 +222,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var channelId: String? = null
-        private var status: Status? = null
+        private var action: Action? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -231,7 +230,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(bulkUpdateMessageStatusParams: BulkUpdateMessageStatusParams) = apply {
             channelId = bulkUpdateMessageStatusParams.channelId
-            status = bulkUpdateMessageStatusParams.status
+            action = bulkUpdateMessageStatusParams.action
             body = bulkUpdateMessageStatusParams.body.toBuilder()
             additionalHeaders = bulkUpdateMessageStatusParams.additionalHeaders.toBuilder()
             additionalQueryParams = bulkUpdateMessageStatusParams.additionalQueryParams.toBuilder()
@@ -239,8 +238,7 @@ private constructor(
 
         fun channelId(channelId: String) = apply { this.channelId = channelId }
 
-        /** The target status to be applied to the messages. */
-        fun status(status: Status) = apply { this.status = status }
+        fun action(action: Action) = apply { this.action = action }
 
         /**
          * Sets the entire request body.
@@ -536,7 +534,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .channelId()
-         * .status()
+         * .action()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -544,7 +542,7 @@ private constructor(
         fun build(): BulkUpdateMessageStatusParams =
             BulkUpdateMessageStatusParams(
                 checkRequired("channelId", channelId),
-                checkRequired("status", status),
+                checkRequired("action", action),
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -556,7 +554,7 @@ private constructor(
     fun _pathParam(index: Int): String =
         when (index) {
             0 -> channelId
-            1 -> status.toString()
+            1 -> action.toString()
             else -> ""
         }
 
@@ -1590,8 +1588,7 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    /** The target status to be applied to the messages. */
-    class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+    class Action @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -1625,10 +1622,10 @@ private constructor(
 
             @JvmField val DELETE = of("delete")
 
-            @JvmStatic fun of(value: String) = Status(JsonField.of(value))
+            @JvmStatic fun of(value: String) = Action(JsonField.of(value))
         }
 
-        /** An enum containing [Status]'s known values. */
+        /** An enum containing [Action]'s known values. */
         enum class Known {
             SEEN,
             UNSEEN,
@@ -1643,9 +1640,9 @@ private constructor(
         }
 
         /**
-         * An enum containing [Status]'s known values, as well as an [_UNKNOWN] member.
+         * An enum containing [Action]'s known values, as well as an [_UNKNOWN] member.
          *
-         * An instance of [Status] can contain an unknown value in a couple of cases:
+         * An instance of [Action] can contain an unknown value in a couple of cases:
          * - It was deserialized from data that doesn't match any known member. For example, if the
          *   SDK is on an older version than the API, then the API may respond with new members that
          *   the SDK is unaware of.
@@ -1662,7 +1659,7 @@ private constructor(
             ARCHIVE,
             UNARCHIVE,
             DELETE,
-            /** An enum member indicating that [Status] was instantiated with an unknown value. */
+            /** An enum member indicating that [Action] was instantiated with an unknown value. */
             _UNKNOWN,
         }
 
@@ -1708,7 +1705,7 @@ private constructor(
                 ARCHIVE -> Known.ARCHIVE
                 UNARCHIVE -> Known.UNARCHIVE
                 DELETE -> Known.DELETE
-                else -> throw KnockInvalidDataException("Unknown Status: $value")
+                else -> throw KnockInvalidDataException("Unknown Action: $value")
             }
 
         /**
@@ -1725,7 +1722,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Status = apply {
+        fun validate(): Action = apply {
             if (validated) {
                 return@apply
             }
@@ -1755,7 +1752,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
+            return /* spotless:off */ other is Action && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -1768,11 +1765,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is BulkUpdateMessageStatusParams && channelId == other.channelId && status == other.status && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is BulkUpdateMessageStatusParams && channelId == other.channelId && action == other.action && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(channelId, status, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(channelId, action, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "BulkUpdateMessageStatusParams{channelId=$channelId, status=$status, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "BulkUpdateMessageStatusParams{channelId=$channelId, action=$action, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

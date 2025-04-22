@@ -33,7 +33,7 @@ interface BulkService {
     interface WithRawResponse {
 
         /**
-         * Returns a raw HTTP response for `post /v1/channels/{channel_id}/messages/bulk/{status}`,
+         * Returns a raw HTTP response for `post /v1/channels/{channel_id}/messages/bulk/{action}`,
          * but is otherwise the same as [BulkService.updateMessageStatus].
          */
         @MustBeClosed

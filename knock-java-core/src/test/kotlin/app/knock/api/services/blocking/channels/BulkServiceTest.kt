@@ -29,7 +29,7 @@ internal class BulkServiceTest {
             bulkService.updateMessageStatus(
                 BulkUpdateMessageStatusParams.builder()
                     .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .status(BulkUpdateMessageStatusParams.Status.SEEN)
+                    .action(BulkUpdateMessageStatusParams.Action.SEEN)
                     .archived(BulkUpdateMessageStatusParams.Archived.INCLUDE)
                     .deliveryStatus(BulkUpdateMessageStatusParams.DeliveryStatus.DELIVERED)
                     .engagementStatus(BulkUpdateMessageStatusParams.EngagementStatus.SEEN)
