@@ -13,25 +13,14 @@ internal class MsTeamListTeamsResponseTest {
     fun create() {
         val msTeamListTeamsResponse =
             MsTeamListTeamsResponse.builder()
-                .addMsTeamsTeam(
-                    MsTeamListTeamsResponse.MsTeamsTeam.builder()
-                        .id("team-id-1")
-                        .displayName("Engineering Team")
-                        .description("description")
-                        .build()
-                )
-                .skipToken("token-for-next-page")
+                .id("id")
+                .displayName("displayName")
+                .description("description")
                 .build()
 
-        assertThat(msTeamListTeamsResponse.msTeamsTeams())
-            .containsExactly(
-                MsTeamListTeamsResponse.MsTeamsTeam.builder()
-                    .id("team-id-1")
-                    .displayName("Engineering Team")
-                    .description("description")
-                    .build()
-            )
-        assertThat(msTeamListTeamsResponse.skipToken()).contains("token-for-next-page")
+        assertThat(msTeamListTeamsResponse.id()).isEqualTo("id")
+        assertThat(msTeamListTeamsResponse.displayName()).isEqualTo("displayName")
+        assertThat(msTeamListTeamsResponse.description()).contains("description")
     }
 
     @Test
@@ -39,14 +28,9 @@ internal class MsTeamListTeamsResponseTest {
         val jsonMapper = jsonMapper()
         val msTeamListTeamsResponse =
             MsTeamListTeamsResponse.builder()
-                .addMsTeamsTeam(
-                    MsTeamListTeamsResponse.MsTeamsTeam.builder()
-                        .id("team-id-1")
-                        .displayName("Engineering Team")
-                        .description("description")
-                        .build()
-                )
-                .skipToken("token-for-next-page")
+                .id("id")
+                .displayName("displayName")
+                .description("description")
                 .build()
 
         val roundtrippedMsTeamListTeamsResponse =

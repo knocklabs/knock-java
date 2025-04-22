@@ -8,8 +8,8 @@ import app.knock.api.models.providers.msteams.MsTeamCheckAuthParams
 import app.knock.api.models.providers.msteams.MsTeamCheckAuthResponse
 import app.knock.api.models.providers.msteams.MsTeamListChannelsParams
 import app.knock.api.models.providers.msteams.MsTeamListChannelsResponse
+import app.knock.api.models.providers.msteams.MsTeamListTeamsPage
 import app.knock.api.models.providers.msteams.MsTeamListTeamsParams
-import app.knock.api.models.providers.msteams.MsTeamListTeamsResponse
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessParams
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessResponse
 import com.google.errorprone.annotations.MustBeClosed
@@ -51,14 +51,14 @@ interface MsTeamService {
      * Get a list of teams belonging to the Microsoft Entra tenant. By default, archived and private
      * channels are excluded from the results.
      */
-    fun listTeams(params: MsTeamListTeamsParams): MsTeamListTeamsResponse =
+    fun listTeams(params: MsTeamListTeamsParams): MsTeamListTeamsPage =
         listTeams(params, RequestOptions.none())
 
     /** @see [listTeams] */
     fun listTeams(
         params: MsTeamListTeamsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MsTeamListTeamsResponse
+    ): MsTeamListTeamsPage
 
     /** Remove a Microsoft Entra tenant ID from a Microsoft Teams tenant object. */
     fun revokeAccess(params: MsTeamRevokeAccessParams): MsTeamRevokeAccessResponse =
@@ -109,7 +109,7 @@ interface MsTeamService {
          * otherwise the same as [MsTeamService.listTeams].
          */
         @MustBeClosed
-        fun listTeams(params: MsTeamListTeamsParams): HttpResponseFor<MsTeamListTeamsResponse> =
+        fun listTeams(params: MsTeamListTeamsParams): HttpResponseFor<MsTeamListTeamsPage> =
             listTeams(params, RequestOptions.none())
 
         /** @see [listTeams] */
@@ -117,7 +117,7 @@ interface MsTeamService {
         fun listTeams(
             params: MsTeamListTeamsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MsTeamListTeamsResponse>
+        ): HttpResponseFor<MsTeamListTeamsPage>
 
         /**
          * Returns a raw HTTP response for `put /v1/providers/ms-teams/{channel_id}/revoke_access`,

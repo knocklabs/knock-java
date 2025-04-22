@@ -82,24 +82,16 @@ internal class MsTeamServiceAsyncTest {
                 .build()
         val msTeamServiceAsync = client.providers().msTeams()
 
-        val responseFuture =
+        val pageFuture =
             msTeamServiceAsync.listTeams(
                 MsTeamListTeamsParams.builder()
                     .channelId("channel_id")
                     .msTeamsTenantObject("ms_teams_tenant_object")
-                    .queryOptions(
-                        MsTeamListTeamsParams.QueryOptions.builder()
-                            .filter("\$filter")
-                            .select("\$select")
-                            .skiptoken("\$skiptoken")
-                            .top(0L)
-                            .build()
-                    )
                     .build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val page = pageFuture.get()
+        page.response().validate()
     }
 
     @Disabled(

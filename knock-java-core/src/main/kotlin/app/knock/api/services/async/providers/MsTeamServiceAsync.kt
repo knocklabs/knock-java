@@ -8,8 +8,8 @@ import app.knock.api.models.providers.msteams.MsTeamCheckAuthParams
 import app.knock.api.models.providers.msteams.MsTeamCheckAuthResponse
 import app.knock.api.models.providers.msteams.MsTeamListChannelsParams
 import app.knock.api.models.providers.msteams.MsTeamListChannelsResponse
+import app.knock.api.models.providers.msteams.MsTeamListTeamsPageAsync
 import app.knock.api.models.providers.msteams.MsTeamListTeamsParams
-import app.knock.api.models.providers.msteams.MsTeamListTeamsResponse
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessParams
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessResponse
 import com.google.errorprone.annotations.MustBeClosed
@@ -53,14 +53,14 @@ interface MsTeamServiceAsync {
      * Get a list of teams belonging to the Microsoft Entra tenant. By default, archived and private
      * channels are excluded from the results.
      */
-    fun listTeams(params: MsTeamListTeamsParams): CompletableFuture<MsTeamListTeamsResponse> =
+    fun listTeams(params: MsTeamListTeamsParams): CompletableFuture<MsTeamListTeamsPageAsync> =
         listTeams(params, RequestOptions.none())
 
     /** @see [listTeams] */
     fun listTeams(
         params: MsTeamListTeamsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<MsTeamListTeamsResponse>
+    ): CompletableFuture<MsTeamListTeamsPageAsync>
 
     /** Remove a Microsoft Entra tenant ID from a Microsoft Teams tenant object. */
     fun revokeAccess(
@@ -119,7 +119,7 @@ interface MsTeamServiceAsync {
         @MustBeClosed
         fun listTeams(
             params: MsTeamListTeamsParams
-        ): CompletableFuture<HttpResponseFor<MsTeamListTeamsResponse>> =
+        ): CompletableFuture<HttpResponseFor<MsTeamListTeamsPageAsync>> =
             listTeams(params, RequestOptions.none())
 
         /** @see [listTeams] */
@@ -127,7 +127,7 @@ interface MsTeamServiceAsync {
         fun listTeams(
             params: MsTeamListTeamsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<MsTeamListTeamsResponse>>
+        ): CompletableFuture<HttpResponseFor<MsTeamListTeamsPageAsync>>
 
         /**
          * Returns a raw HTTP response for `put /v1/providers/ms-teams/{channel_id}/revoke_access`,

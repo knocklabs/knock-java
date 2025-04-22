@@ -9,8 +9,8 @@ import app.knock.api.models.messages.MessageArchiveParams
 import app.knock.api.models.messages.MessageGetContentParams
 import app.knock.api.models.messages.MessageGetContentResponse
 import app.knock.api.models.messages.MessageGetParams
-import app.knock.api.models.messages.MessageListActivitiesPageAsync
 import app.knock.api.models.messages.MessageListActivitiesParams
+import app.knock.api.models.messages.MessageListActivitiesResponse
 import app.knock.api.models.messages.MessageListDeliveryLogsPageAsync
 import app.knock.api.models.messages.MessageListDeliveryLogsParams
 import app.knock.api.models.messages.MessageListEventsPageAsync
@@ -23,6 +23,7 @@ import app.knock.api.models.messages.MessageMarkAsSeenParams
 import app.knock.api.models.messages.MessageMarkAsUnreadParams
 import app.knock.api.models.messages.MessageMarkAsUnseenParams
 import app.knock.api.models.messages.MessageUnarchiveParams
+import app.knock.api.services.async.messages.ActivityServiceAsync
 import app.knock.api.services.async.messages.BatchServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
@@ -35,6 +36,8 @@ interface MessageServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     fun batch(): BatchServiceAsync
+
+    fun activities(): ActivityServiceAsync
 
     /** Returns a paginated list of messages for the current environment. */
     fun list(): CompletableFuture<MessageListPageAsync> = list(MessageListParams.none())
@@ -93,14 +96,14 @@ interface MessageServiceAsync {
     /** Returns a paginated list of activities for the specified message. */
     fun listActivities(
         params: MessageListActivitiesParams
-    ): CompletableFuture<MessageListActivitiesPageAsync> =
+    ): CompletableFuture<MessageListActivitiesResponse> =
         listActivities(params, RequestOptions.none())
 
     /** @see [listActivities] */
     fun listActivities(
         params: MessageListActivitiesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<MessageListActivitiesPageAsync>
+    ): CompletableFuture<MessageListActivitiesResponse>
 
     /** Returns a paginated list of delivery logs for the specified message. */
     fun listDeliveryLogs(
@@ -213,6 +216,8 @@ interface MessageServiceAsync {
 
         fun batch(): BatchServiceAsync.WithRawResponse
 
+        fun activities(): ActivityServiceAsync.WithRawResponse
+
         /**
          * Returns a raw HTTP response for `get /v1/messages`, but is otherwise the same as
          * [MessageServiceAsync.list].
@@ -296,7 +301,7 @@ interface MessageServiceAsync {
         @MustBeClosed
         fun listActivities(
             params: MessageListActivitiesParams
-        ): CompletableFuture<HttpResponseFor<MessageListActivitiesPageAsync>> =
+        ): CompletableFuture<HttpResponseFor<MessageListActivitiesResponse>> =
             listActivities(params, RequestOptions.none())
 
         /** @see [listActivities] */
@@ -304,7 +309,7 @@ interface MessageServiceAsync {
         fun listActivities(
             params: MessageListActivitiesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<MessageListActivitiesPageAsync>>
+        ): CompletableFuture<HttpResponseFor<MessageListActivitiesResponse>>
 
         /**
          * Returns a raw HTTP response for `get /v1/messages/{message_id}/delivery_logs`, but is

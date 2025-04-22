@@ -1,9 +1,10 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package app.knock.api.models.messages
+package app.knock.api.models.messages.activities
 
 import app.knock.api.core.JsonValue
 import app.knock.api.core.jsonMapper
+import app.knock.api.models.messages.Activity
 import app.knock.api.models.shared.PageInfo
 import app.knock.api.models.users.User
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -11,12 +12,12 @@ import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class MessageListActivitiesPageResponseTest {
+internal class ActivityListResponseTest {
 
     @Test
     fun create() {
-        val messageListActivitiesPageResponse =
-            MessageListActivitiesPageResponse.builder()
+        val activityListResponse =
+            ActivityListResponse.builder()
                 .addEntry(
                     Activity.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
@@ -66,7 +67,7 @@ internal class MessageListActivitiesPageResponseTest {
                 )
                 .build()
 
-        assertThat(messageListActivitiesPageResponse.entries())
+        assertThat(activityListResponse.entries())
             .containsExactly(
                 Activity.builder()
                     .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
@@ -106,7 +107,7 @@ internal class MessageListActivitiesPageResponseTest {
                     .updatedAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
                     .build()
             )
-        assertThat(messageListActivitiesPageResponse.pageInfo())
+        assertThat(activityListResponse.pageInfo())
             .isEqualTo(
                 PageInfo.builder()
                     ._typename("PageInfo")
@@ -120,8 +121,8 @@ internal class MessageListActivitiesPageResponseTest {
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val messageListActivitiesPageResponse =
-            MessageListActivitiesPageResponse.builder()
+        val activityListResponse =
+            ActivityListResponse.builder()
                 .addEntry(
                     Activity.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
@@ -171,13 +172,12 @@ internal class MessageListActivitiesPageResponseTest {
                 )
                 .build()
 
-        val roundtrippedMessageListActivitiesPageResponse =
+        val roundtrippedActivityListResponse =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(messageListActivitiesPageResponse),
-                jacksonTypeRef<MessageListActivitiesPageResponse>(),
+                jsonMapper.writeValueAsString(activityListResponse),
+                jacksonTypeRef<ActivityListResponse>(),
             )
 
-        assertThat(roundtrippedMessageListActivitiesPageResponse)
-            .isEqualTo(messageListActivitiesPageResponse)
+        assertThat(roundtrippedActivityListResponse).isEqualTo(activityListResponse)
     }
 }

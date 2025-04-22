@@ -117,13 +117,19 @@ internal class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val pageFuture =
+        val responseFuture =
             messageServiceAsync.listActivities(
-                MessageListActivitiesParams.builder().messageId("message_id").build()
+                MessageListActivitiesParams.builder()
+                    .messageId("message_id")
+                    .after("after")
+                    .before("before")
+                    .pageSize(0L)
+                    .triggerData("trigger_data")
+                    .build()
             )
 
-        val page = pageFuture.get()
-        page.response().validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
     @Disabled(

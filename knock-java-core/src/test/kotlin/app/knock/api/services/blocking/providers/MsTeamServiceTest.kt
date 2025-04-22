@@ -80,23 +80,15 @@ internal class MsTeamServiceTest {
                 .build()
         val msTeamService = client.providers().msTeams()
 
-        val response =
+        val page =
             msTeamService.listTeams(
                 MsTeamListTeamsParams.builder()
                     .channelId("channel_id")
                     .msTeamsTenantObject("ms_teams_tenant_object")
-                    .queryOptions(
-                        MsTeamListTeamsParams.QueryOptions.builder()
-                            .filter("\$filter")
-                            .select("\$select")
-                            .skiptoken("\$skiptoken")
-                            .top(0L)
-                            .build()
-                    )
                     .build()
             )
 
-        response.validate()
+        page.response().validate()
     }
 
     @Disabled(

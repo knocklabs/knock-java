@@ -24,7 +24,7 @@ import kotlin.jvm.optionals.getOrNull
  * after a [batch step](/designing-workflows/batch-function), this will contain one or more
  * activities. Non-batched messages will always return a single activity.
  */
-class MessageListActivitiesPageResponse
+class MessageListActivitiesResponse
 private constructor(
     private val entries: JsonField<List<Activity>>,
     private val pageInfo: JsonField<PageInfo>,
@@ -85,7 +85,7 @@ private constructor(
 
         /**
          * Returns a mutable builder for constructing an instance of
-         * [MessageListActivitiesPageResponse].
+         * [MessageListActivitiesResponse].
          *
          * The following fields are required:
          * ```java
@@ -96,7 +96,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [MessageListActivitiesPageResponse]. */
+    /** A builder for [MessageListActivitiesResponse]. */
     class Builder internal constructor() {
 
         private var entries: JsonField<MutableList<Activity>>? = null
@@ -104,13 +104,11 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(messageListActivitiesPageResponse: MessageListActivitiesPageResponse) =
-            apply {
-                entries = messageListActivitiesPageResponse.entries.map { it.toMutableList() }
-                pageInfo = messageListActivitiesPageResponse.pageInfo
-                additionalProperties =
-                    messageListActivitiesPageResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(messageListActivitiesResponse: MessageListActivitiesResponse) = apply {
+            entries = messageListActivitiesResponse.entries.map { it.toMutableList() }
+            pageInfo = messageListActivitiesResponse.pageInfo
+            additionalProperties = messageListActivitiesResponse.additionalProperties.toMutableMap()
+        }
 
         /** A list of activities. */
         fun entries(entries: List<Activity>) = entries(JsonField.of(entries))
@@ -170,7 +168,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [MessageListActivitiesPageResponse].
+         * Returns an immutable instance of [MessageListActivitiesResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -182,8 +180,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): MessageListActivitiesPageResponse =
-            MessageListActivitiesPageResponse(
+        fun build(): MessageListActivitiesResponse =
+            MessageListActivitiesResponse(
                 checkRequired("entries", entries).map { it.toImmutable() },
                 checkRequired("pageInfo", pageInfo),
                 additionalProperties.toMutableMap(),
@@ -192,7 +190,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): MessageListActivitiesPageResponse = apply {
+    fun validate(): MessageListActivitiesResponse = apply {
         if (validated) {
             return@apply
         }
@@ -225,7 +223,7 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is MessageListActivitiesPageResponse && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is MessageListActivitiesResponse && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -235,5 +233,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "MessageListActivitiesPageResponse{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
+        "MessageListActivitiesResponse{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
 }

@@ -19,8 +19,9 @@ import app.knock.api.models.providers.msteams.MsTeamCheckAuthParams
 import app.knock.api.models.providers.msteams.MsTeamCheckAuthResponse
 import app.knock.api.models.providers.msteams.MsTeamListChannelsParams
 import app.knock.api.models.providers.msteams.MsTeamListChannelsResponse
+import app.knock.api.models.providers.msteams.MsTeamListTeamsPageAsync
+import app.knock.api.models.providers.msteams.MsTeamListTeamsPageResponse
 import app.knock.api.models.providers.msteams.MsTeamListTeamsParams
-import app.knock.api.models.providers.msteams.MsTeamListTeamsResponse
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessParams
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessResponse
 import java.util.concurrent.CompletableFuture
@@ -51,7 +52,7 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
     override fun listTeams(
         params: MsTeamListTeamsParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<MsTeamListTeamsResponse> =
+    ): CompletableFuture<MsTeamListTeamsPageAsync> =
         // get /v1/providers/ms-teams/{channel_id}/teams
         withRawResponse().listTeams(params, requestOptions).thenApply { it.parse() }
 
@@ -139,14 +140,14 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val listTeamsHandler: Handler<MsTeamListTeamsResponse> =
-            jsonHandler<MsTeamListTeamsResponse>(clientOptions.jsonMapper)
+        private val listTeamsHandler: Handler<MsTeamListTeamsPageResponse> =
+            jsonHandler<MsTeamListTeamsPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listTeams(
             params: MsTeamListTeamsParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<MsTeamListTeamsResponse>> {
+        ): CompletableFuture<HttpResponseFor<MsTeamListTeamsPageAsync>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -164,6 +165,13 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()
                                 }
+                            }
+                            .let {
+                                MsTeamListTeamsPageAsync.builder()
+                                    .service(MsTeamServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }

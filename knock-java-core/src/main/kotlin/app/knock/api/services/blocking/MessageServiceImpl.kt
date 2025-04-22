@@ -20,9 +20,8 @@ import app.knock.api.models.messages.MessageArchiveParams
 import app.knock.api.models.messages.MessageGetContentParams
 import app.knock.api.models.messages.MessageGetContentResponse
 import app.knock.api.models.messages.MessageGetParams
-import app.knock.api.models.messages.MessageListActivitiesPage
-import app.knock.api.models.messages.MessageListActivitiesPageResponse
 import app.knock.api.models.messages.MessageListActivitiesParams
+import app.knock.api.models.messages.MessageListActivitiesResponse
 import app.knock.api.models.messages.MessageListDeliveryLogsPage
 import app.knock.api.models.messages.MessageListDeliveryLogsPageResponse
 import app.knock.api.models.messages.MessageListDeliveryLogsParams
@@ -38,6 +37,8 @@ import app.knock.api.models.messages.MessageMarkAsSeenParams
 import app.knock.api.models.messages.MessageMarkAsUnreadParams
 import app.knock.api.models.messages.MessageMarkAsUnseenParams
 import app.knock.api.models.messages.MessageUnarchiveParams
+import app.knock.api.services.blocking.messages.ActivityService
+import app.knock.api.services.blocking.messages.ActivityServiceImpl
 import app.knock.api.services.blocking.messages.BatchService
 import app.knock.api.services.blocking.messages.BatchServiceImpl
 
@@ -50,9 +51,13 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
 
     private val batch: BatchService by lazy { BatchServiceImpl(clientOptions) }
 
+    private val activities: ActivityService by lazy { ActivityServiceImpl(clientOptions) }
+
     override fun withRawResponse(): MessageService.WithRawResponse = withRawResponse
 
     override fun batch(): BatchService = batch
+
+    override fun activities(): ActivityService = activities
 
     override fun list(params: MessageListParams, requestOptions: RequestOptions): MessageListPage =
         // get /v1/messages
@@ -76,7 +81,7 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
     override fun listActivities(
         params: MessageListActivitiesParams,
         requestOptions: RequestOptions,
-    ): MessageListActivitiesPage =
+    ): MessageListActivitiesResponse =
         // get /v1/messages/{message_id}/activities
         withRawResponse().listActivities(params, requestOptions).parse()
 
@@ -145,7 +150,13 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             BatchServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val activities: ActivityService.WithRawResponse by lazy {
+            ActivityServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun batch(): BatchService.WithRawResponse = batch
+
+        override fun activities(): ActivityService.WithRawResponse = activities
 
         private val listHandler: Handler<MessageListPageResponse> =
             jsonHandler<MessageListPageResponse>(clientOptions.jsonMapper)
@@ -261,14 +272,14 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val listActivitiesHandler: Handler<MessageListActivitiesPageResponse> =
-            jsonHandler<MessageListActivitiesPageResponse>(clientOptions.jsonMapper)
+        private val listActivitiesHandler: Handler<MessageListActivitiesResponse> =
+            jsonHandler<MessageListActivitiesResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listActivities(
             params: MessageListActivitiesParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<MessageListActivitiesPage> {
+        ): HttpResponseFor<MessageListActivitiesResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -284,13 +295,6 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
                         if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
-                    }
-                    .let {
-                        MessageListActivitiesPage.builder()
-                            .service(MessageServiceImpl(clientOptions))
-                            .params(params)
-                            .response(it)
-                            .build()
                     }
             }
         }

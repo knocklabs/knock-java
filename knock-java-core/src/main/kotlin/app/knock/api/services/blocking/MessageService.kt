@@ -9,8 +9,8 @@ import app.knock.api.models.messages.MessageArchiveParams
 import app.knock.api.models.messages.MessageGetContentParams
 import app.knock.api.models.messages.MessageGetContentResponse
 import app.knock.api.models.messages.MessageGetParams
-import app.knock.api.models.messages.MessageListActivitiesPage
 import app.knock.api.models.messages.MessageListActivitiesParams
+import app.knock.api.models.messages.MessageListActivitiesResponse
 import app.knock.api.models.messages.MessageListDeliveryLogsPage
 import app.knock.api.models.messages.MessageListDeliveryLogsParams
 import app.knock.api.models.messages.MessageListEventsPage
@@ -23,6 +23,7 @@ import app.knock.api.models.messages.MessageMarkAsSeenParams
 import app.knock.api.models.messages.MessageMarkAsUnreadParams
 import app.knock.api.models.messages.MessageMarkAsUnseenParams
 import app.knock.api.models.messages.MessageUnarchiveParams
+import app.knock.api.services.blocking.messages.ActivityService
 import app.knock.api.services.blocking.messages.BatchService
 import com.google.errorprone.annotations.MustBeClosed
 
@@ -34,6 +35,8 @@ interface MessageService {
     fun withRawResponse(): WithRawResponse
 
     fun batch(): BatchService
+
+    fun activities(): ActivityService
 
     /** Returns a paginated list of messages for the current environment. */
     fun list(): MessageListPage = list(MessageListParams.none())
@@ -87,14 +90,14 @@ interface MessageService {
     ): MessageGetContentResponse
 
     /** Returns a paginated list of activities for the specified message. */
-    fun listActivities(params: MessageListActivitiesParams): MessageListActivitiesPage =
+    fun listActivities(params: MessageListActivitiesParams): MessageListActivitiesResponse =
         listActivities(params, RequestOptions.none())
 
     /** @see [listActivities] */
     fun listActivities(
         params: MessageListActivitiesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageListActivitiesPage
+    ): MessageListActivitiesResponse
 
     /** Returns a paginated list of delivery logs for the specified message. */
     fun listDeliveryLogs(params: MessageListDeliveryLogsParams): MessageListDeliveryLogsPage =
@@ -203,6 +206,8 @@ interface MessageService {
 
         fun batch(): BatchService.WithRawResponse
 
+        fun activities(): ActivityService.WithRawResponse
+
         /**
          * Returns a raw HTTP response for `get /v1/messages`, but is otherwise the same as
          * [MessageService.list].
@@ -280,7 +285,7 @@ interface MessageService {
         @MustBeClosed
         fun listActivities(
             params: MessageListActivitiesParams
-        ): HttpResponseFor<MessageListActivitiesPage> =
+        ): HttpResponseFor<MessageListActivitiesResponse> =
             listActivities(params, RequestOptions.none())
 
         /** @see [listActivities] */
@@ -288,7 +293,7 @@ interface MessageService {
         fun listActivities(
             params: MessageListActivitiesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageListActivitiesPage>
+        ): HttpResponseFor<MessageListActivitiesResponse>
 
         /**
          * Returns a raw HTTP response for `get /v1/messages/{message_id}/delivery_logs`, but is
