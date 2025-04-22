@@ -31,7 +31,11 @@ internal class CensusServiceAsyncTest {
                     .id("id")
                     .jsonrpc("jsonrpc")
                     .method("method")
-                    .params(JsonValue.from(mapOf<String, Any>()))
+                    .params(
+                        CensusCustomDestinationParams.Params.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .build()
             )
 

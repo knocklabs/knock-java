@@ -64,11 +64,16 @@ internal class GuideServiceTest {
                     .guideKey("guide_12345")
                     .guideStepRef("step_12345")
                     .content(
-                        JsonValue.from(
-                            mapOf("body" to "Guide content body", "title" to "Guide Title")
-                        )
+                        GuideMarkMessageAsArchivedParams.Content.builder()
+                            .putAdditionalProperty("body", JsonValue.from("bar"))
+                            .putAdditionalProperty("title", JsonValue.from("bar"))
+                            .build()
                     )
-                    .data(JsonValue.from(mapOf("product_id" to "product_123")))
+                    .data(
+                        GuideMarkMessageAsArchivedParams.Data.builder()
+                            .putAdditionalProperty("product_id", JsonValue.from("bar"))
+                            .build()
+                    )
                     .isFinal(true)
                     .metadata(
                         GuideMarkMessageAsArchivedParams.Metadata.builder()
@@ -104,11 +109,16 @@ internal class GuideServiceTest {
                     .guideKey("guide_12345")
                     .guideStepRef("step_12345")
                     .content(
-                        JsonValue.from(
-                            mapOf("body" to "Guide content body", "title" to "Guide Title")
-                        )
+                        GuideMarkMessageAsInteractedParams.Content.builder()
+                            .putAdditionalProperty("body", JsonValue.from("bar"))
+                            .putAdditionalProperty("title", JsonValue.from("bar"))
+                            .build()
                     )
-                    .data(JsonValue.from(mapOf("product_id" to "product_123")))
+                    .data(
+                        GuideMarkMessageAsInteractedParams.Data.builder()
+                            .putAdditionalProperty("product_id", JsonValue.from("bar"))
+                            .build()
+                    )
                     .isFinal(true)
                     .metadata(
                         GuideMarkMessageAsInteractedParams.Metadata.builder()
@@ -144,11 +154,16 @@ internal class GuideServiceTest {
                     .guideKey("guide_12345")
                     .guideStepRef("step_12345")
                     .content(
-                        JsonValue.from(
-                            mapOf("body" to "Guide content body", "title" to "Guide Title")
-                        )
+                        GuideMarkMessageAsSeenParams.Content.builder()
+                            .putAdditionalProperty("body", JsonValue.from("bar"))
+                            .putAdditionalProperty("title", JsonValue.from("bar"))
+                            .build()
                     )
-                    .data(JsonValue.from(mapOf("product_id" to "product_123")))
+                    .data(
+                        GuideMarkMessageAsSeenParams.Data.builder()
+                            .putAdditionalProperty("product_id", JsonValue.from("bar"))
+                            .build()
+                    )
                     .isFinal(true)
                     .metadata(
                         GuideMarkMessageAsSeenParams.Metadata.builder()

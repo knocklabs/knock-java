@@ -15,12 +15,20 @@ internal class CensusCustomDestinationResponseTest {
         val censusCustomDestinationResponse =
             CensusCustomDestinationResponse.builder()
                 .id("id")
-                .result(JsonValue.from(mapOf<String, Any>()))
+                .result(
+                    CensusCustomDestinationResponse.Result.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .build()
 
         assertThat(censusCustomDestinationResponse.id()).contains("id")
-        assertThat(censusCustomDestinationResponse._result())
-            .isEqualTo(JsonValue.from(mapOf<String, Any>()))
+        assertThat(censusCustomDestinationResponse.result())
+            .contains(
+                CensusCustomDestinationResponse.Result.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .build()
+            )
     }
 
     @Test
@@ -29,7 +37,11 @@ internal class CensusCustomDestinationResponseTest {
         val censusCustomDestinationResponse =
             CensusCustomDestinationResponse.builder()
                 .id("id")
-                .result(JsonValue.from(mapOf<String, Any>()))
+                .result(
+                    CensusCustomDestinationResponse.Result.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .build()
 
         val roundtrippedCensusCustomDestinationResponse =

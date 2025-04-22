@@ -14,7 +14,11 @@ internal class CensusCustomDestinationParamsTest {
             .id("id")
             .jsonrpc("jsonrpc")
             .method("method")
-            .params(JsonValue.from(mapOf<String, Any>()))
+            .params(
+                CensusCustomDestinationParams.Params.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .build()
+            )
             .build()
     }
 
@@ -25,7 +29,11 @@ internal class CensusCustomDestinationParamsTest {
                 .id("id")
                 .jsonrpc("jsonrpc")
                 .method("method")
-                .params(JsonValue.from(mapOf<String, Any>()))
+                .params(
+                    CensusCustomDestinationParams.Params.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .build()
 
         val body = params._body()
@@ -33,7 +41,12 @@ internal class CensusCustomDestinationParamsTest {
         assertThat(body.id()).isEqualTo("id")
         assertThat(body.jsonrpc()).isEqualTo("jsonrpc")
         assertThat(body.method()).isEqualTo("method")
-        assertThat(body._params()).isEqualTo(JsonValue.from(mapOf<String, Any>()))
+        assertThat(body.params())
+            .contains(
+                CensusCustomDestinationParams.Params.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .build()
+            )
     }
 
     @Test

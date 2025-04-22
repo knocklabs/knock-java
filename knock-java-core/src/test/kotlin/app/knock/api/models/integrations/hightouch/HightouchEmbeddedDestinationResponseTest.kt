@@ -15,12 +15,20 @@ internal class HightouchEmbeddedDestinationResponseTest {
         val hightouchEmbeddedDestinationResponse =
             HightouchEmbeddedDestinationResponse.builder()
                 .id("id")
-                .result(JsonValue.from(mapOf<String, Any>()))
+                .result(
+                    HightouchEmbeddedDestinationResponse.Result.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .build()
 
         assertThat(hightouchEmbeddedDestinationResponse.id()).contains("id")
-        assertThat(hightouchEmbeddedDestinationResponse._result())
-            .isEqualTo(JsonValue.from(mapOf<String, Any>()))
+        assertThat(hightouchEmbeddedDestinationResponse.result())
+            .contains(
+                HightouchEmbeddedDestinationResponse.Result.builder()
+                    .putAdditionalProperty("foo", JsonValue.from("bar"))
+                    .build()
+            )
     }
 
     @Test
@@ -29,7 +37,11 @@ internal class HightouchEmbeddedDestinationResponseTest {
         val hightouchEmbeddedDestinationResponse =
             HightouchEmbeddedDestinationResponse.builder()
                 .id("id")
-                .result(JsonValue.from(mapOf<String, Any>()))
+                .result(
+                    HightouchEmbeddedDestinationResponse.Result.builder()
+                        .putAdditionalProperty("foo", JsonValue.from("bar"))
+                        .build()
+                )
                 .build()
 
         val roundtrippedHightouchEmbeddedDestinationResponse =

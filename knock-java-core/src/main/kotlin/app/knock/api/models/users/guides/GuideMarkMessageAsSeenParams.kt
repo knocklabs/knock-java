@@ -67,11 +67,21 @@ private constructor(
      */
     fun guideStepRef(): String = body.guideStepRef()
 
-    /** The content of the guide. */
-    fun _content(): JsonValue = body._content()
+    /**
+     * The content of the guide.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun content(): Optional<Content> = body.content()
 
-    /** The data of the guide. */
-    fun _data(): JsonValue = body._data()
+    /**
+     * The data of the guide.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun data(): Optional<Data> = body.data()
 
     /**
      * Whether the guide is final.
@@ -124,6 +134,20 @@ private constructor(
      * Unlike [guideStepRef], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _guideStepRef(): JsonField<String> = body._guideStepRef()
+
+    /**
+     * Returns the raw JSON value of [content].
+     *
+     * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _content(): JsonField<Content> = body._content()
+
+    /**
+     * Returns the raw JSON value of [data].
+     *
+     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _data(): JsonField<Data> = body._data()
 
     /**
      * Returns the raw JSON value of [isFinal].
@@ -257,10 +281,26 @@ private constructor(
         }
 
         /** The content of the guide. */
-        fun content(content: JsonValue) = apply { body.content(content) }
+        fun content(content: Content) = apply { body.content(content) }
+
+        /**
+         * Sets [Builder.content] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.content] with a well-typed [Content] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun content(content: JsonField<Content>) = apply { body.content(content) }
 
         /** The data of the guide. */
-        fun data(data: JsonValue) = apply { body.data(data) }
+        fun data(data: Data) = apply { body.data(data) }
+
+        /**
+         * Sets [Builder.data] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun data(data: JsonField<Data>) = apply { body.data(data) }
 
         /** Whether the guide is final. */
         fun isFinal(isFinal: Boolean) = apply { body.isFinal(isFinal) }
@@ -463,8 +503,8 @@ private constructor(
         private val guideId: JsonField<String>,
         private val guideKey: JsonField<String>,
         private val guideStepRef: JsonField<String>,
-        private val content: JsonValue,
-        private val data: JsonValue,
+        private val content: JsonField<Content>,
+        private val data: JsonField<Data>,
         private val isFinal: JsonField<Boolean>,
         private val metadata: JsonField<Metadata>,
         private val tenant: JsonField<String>,
@@ -483,8 +523,8 @@ private constructor(
             @JsonProperty("guide_step_ref")
             @ExcludeMissing
             guideStepRef: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("content") @ExcludeMissing content: JsonValue = JsonMissing.of(),
-            @JsonProperty("data") @ExcludeMissing data: JsonValue = JsonMissing.of(),
+            @JsonProperty("content") @ExcludeMissing content: JsonField<Content> = JsonMissing.of(),
+            @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
             @JsonProperty("is_final")
             @ExcludeMissing
             isFinal: JsonField<Boolean> = JsonMissing.of(),
@@ -537,11 +577,21 @@ private constructor(
          */
         fun guideStepRef(): String = guideStepRef.getRequired("guide_step_ref")
 
-        /** The content of the guide. */
-        @JsonProperty("content") @ExcludeMissing fun _content(): JsonValue = content
+        /**
+         * The content of the guide.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun content(): Optional<Content> = content.getOptional("content")
 
-        /** The data of the guide. */
-        @JsonProperty("data") @ExcludeMissing fun _data(): JsonValue = data
+        /**
+         * The data of the guide.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun data(): Optional<Data> = data.getOptional("data")
 
         /**
          * Whether the guide is final.
@@ -599,6 +649,20 @@ private constructor(
         fun _guideStepRef(): JsonField<String> = guideStepRef
 
         /**
+         * Returns the raw JSON value of [content].
+         *
+         * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("content") @ExcludeMissing fun _content(): JsonField<Content> = content
+
+        /**
+         * Returns the raw JSON value of [data].
+         *
+         * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
+
+        /**
          * Returns the raw JSON value of [isFinal].
          *
          * Unlike [isFinal], this method doesn't throw if the JSON field has an unexpected type.
@@ -654,8 +718,8 @@ private constructor(
             private var guideId: JsonField<String>? = null
             private var guideKey: JsonField<String>? = null
             private var guideStepRef: JsonField<String>? = null
-            private var content: JsonValue = JsonMissing.of()
-            private var data: JsonValue = JsonMissing.of()
+            private var content: JsonField<Content> = JsonMissing.of()
+            private var data: JsonField<Data> = JsonMissing.of()
             private var isFinal: JsonField<Boolean> = JsonMissing.of()
             private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var tenant: JsonField<String> = JsonMissing.of()
@@ -726,10 +790,28 @@ private constructor(
             }
 
             /** The content of the guide. */
-            fun content(content: JsonValue) = apply { this.content = content }
+            fun content(content: Content) = content(JsonField.of(content))
+
+            /**
+             * Sets [Builder.content] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.content] with a well-typed [Content] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun content(content: JsonField<Content>) = apply { this.content = content }
 
             /** The data of the guide. */
-            fun data(data: JsonValue) = apply { this.data = data }
+            fun data(data: Data) = data(JsonField.of(data))
+
+            /**
+             * Sets [Builder.data] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.data] with a well-typed [Data] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun data(data: JsonField<Data>) = apply { this.data = data }
 
             /** Whether the guide is final. */
             fun isFinal(isFinal: Boolean) = isFinal(JsonField.of(isFinal))
@@ -830,6 +912,8 @@ private constructor(
             guideId()
             guideKey()
             guideStepRef()
+            content().ifPresent { it.validate() }
+            data().ifPresent { it.validate() }
             isFinal()
             metadata().ifPresent { it.validate() }
             tenant()
@@ -856,6 +940,8 @@ private constructor(
                 (if (guideId.asKnown().isPresent) 1 else 0) +
                 (if (guideKey.asKnown().isPresent) 1 else 0) +
                 (if (guideStepRef.asKnown().isPresent) 1 else 0) +
+                (content.asKnown().getOrNull()?.validity() ?: 0) +
+                (data.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (isFinal.asKnown().isPresent) 1 else 0) +
                 (metadata.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (tenant.asKnown().isPresent) 1 else 0)
@@ -876,6 +962,210 @@ private constructor(
 
         override fun toString() =
             "Body{channelId=$channelId, guideId=$guideId, guideKey=$guideKey, guideStepRef=$guideStepRef, content=$content, data=$data, isFinal=$isFinal, metadata=$metadata, tenant=$tenant, additionalProperties=$additionalProperties}"
+    }
+
+    /** The content of the guide. */
+    class Content
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Content]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Content]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(content: Content) = apply {
+                additionalProperties = content.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Content].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Content = Content(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Content = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Content && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Content{additionalProperties=$additionalProperties}"
+    }
+
+    /** The data of the guide. */
+    class Data
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Data]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Data]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(data: Data) = apply {
+                additionalProperties = data.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Data].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Data = Data(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Data = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Data && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Data{additionalProperties=$additionalProperties}"
     }
 
     /** The metadata of the guide. */

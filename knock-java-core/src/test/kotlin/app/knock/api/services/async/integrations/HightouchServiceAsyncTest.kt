@@ -31,7 +31,11 @@ internal class HightouchServiceAsyncTest {
                     .id("id")
                     .jsonrpc("jsonrpc")
                     .method("method")
-                    .params(JsonValue.from(mapOf<String, Any>()))
+                    .params(
+                        HightouchEmbeddedDestinationParams.Params.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
                     .build()
             )
 

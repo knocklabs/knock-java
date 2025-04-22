@@ -18,9 +18,16 @@ internal class GuideMarkMessageAsInteractedParamsTest {
             .guideKey("guide_12345")
             .guideStepRef("step_12345")
             .content(
-                JsonValue.from(mapOf("body" to "Guide content body", "title" to "Guide Title"))
+                GuideMarkMessageAsInteractedParams.Content.builder()
+                    .putAdditionalProperty("body", JsonValue.from("bar"))
+                    .putAdditionalProperty("title", JsonValue.from("bar"))
+                    .build()
             )
-            .data(JsonValue.from(mapOf("product_id" to "product_123")))
+            .data(
+                GuideMarkMessageAsInteractedParams.Data.builder()
+                    .putAdditionalProperty("product_id", JsonValue.from("bar"))
+                    .build()
+            )
             .isFinal(true)
             .metadata(
                 GuideMarkMessageAsInteractedParams.Metadata.builder()
@@ -60,9 +67,16 @@ internal class GuideMarkMessageAsInteractedParamsTest {
                 .guideKey("guide_12345")
                 .guideStepRef("step_12345")
                 .content(
-                    JsonValue.from(mapOf("body" to "Guide content body", "title" to "Guide Title"))
+                    GuideMarkMessageAsInteractedParams.Content.builder()
+                        .putAdditionalProperty("body", JsonValue.from("bar"))
+                        .putAdditionalProperty("title", JsonValue.from("bar"))
+                        .build()
                 )
-                .data(JsonValue.from(mapOf("product_id" to "product_123")))
+                .data(
+                    GuideMarkMessageAsInteractedParams.Data.builder()
+                        .putAdditionalProperty("product_id", JsonValue.from("bar"))
+                        .build()
+                )
                 .isFinal(true)
                 .metadata(
                     GuideMarkMessageAsInteractedParams.Metadata.builder()
@@ -78,11 +92,19 @@ internal class GuideMarkMessageAsInteractedParamsTest {
         assertThat(body.guideId()).isEqualTo("323e4567-e89b-12d3-a456-426614174000")
         assertThat(body.guideKey()).isEqualTo("guide_12345")
         assertThat(body.guideStepRef()).isEqualTo("step_12345")
-        assertThat(body._content())
-            .isEqualTo(
-                JsonValue.from(mapOf("body" to "Guide content body", "title" to "Guide Title"))
+        assertThat(body.content())
+            .contains(
+                GuideMarkMessageAsInteractedParams.Content.builder()
+                    .putAdditionalProperty("body", JsonValue.from("bar"))
+                    .putAdditionalProperty("title", JsonValue.from("bar"))
+                    .build()
             )
-        assertThat(body._data()).isEqualTo(JsonValue.from(mapOf("product_id" to "product_123")))
+        assertThat(body.data())
+            .contains(
+                GuideMarkMessageAsInteractedParams.Data.builder()
+                    .putAdditionalProperty("product_id", JsonValue.from("bar"))
+                    .build()
+            )
         assertThat(body.isFinal()).contains(true)
         assertThat(body.metadata())
             .contains(

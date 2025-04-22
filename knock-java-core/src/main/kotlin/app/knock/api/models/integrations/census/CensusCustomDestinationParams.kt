@@ -10,6 +10,7 @@ import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
+import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -17,6 +18,8 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Processes a Census custom destination RPC request. */
 class CensusCustomDestinationParams
@@ -50,8 +53,13 @@ private constructor(
      */
     fun method(): String = body.method()
 
-    /** The parameters for the method. */
-    fun _params(): JsonValue = body._params()
+    /**
+     * The parameters for the method.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun params(): Optional<Params> = body.params()
 
     /**
      * Returns the raw JSON value of [id].
@@ -73,6 +81,13 @@ private constructor(
      * Unlike [method], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _method(): JsonField<String> = body._method()
+
+    /**
+     * Returns the raw JSON value of [params].
+     *
+     * Unlike [params], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _params(): JsonField<Params> = body._params()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -158,7 +173,15 @@ private constructor(
         fun method(method: JsonField<String>) = apply { body.method(method) }
 
         /** The parameters for the method. */
-        fun params(params: JsonValue) = apply { body.params(params) }
+        fun params(params: Params) = apply { body.params(params) }
+
+        /**
+         * Sets [Builder.params] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.params] with a well-typed [Params] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun params(params: JsonField<Params>) = apply { body.params(params) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -310,7 +333,7 @@ private constructor(
         private val id: JsonField<String>,
         private val jsonrpc: JsonField<String>,
         private val method: JsonField<String>,
-        private val params: JsonValue,
+        private val params: JsonField<Params>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -319,7 +342,7 @@ private constructor(
             @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("jsonrpc") @ExcludeMissing jsonrpc: JsonField<String> = JsonMissing.of(),
             @JsonProperty("method") @ExcludeMissing method: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("params") @ExcludeMissing params: JsonValue = JsonMissing.of(),
+            @JsonProperty("params") @ExcludeMissing params: JsonField<Params> = JsonMissing.of(),
         ) : this(id, jsonrpc, method, params, mutableMapOf())
 
         /**
@@ -346,8 +369,13 @@ private constructor(
          */
         fun method(): String = method.getRequired("method")
 
-        /** The parameters for the method. */
-        @JsonProperty("params") @ExcludeMissing fun _params(): JsonValue = params
+        /**
+         * The parameters for the method.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun params(): Optional<Params> = params.getOptional("params")
 
         /**
          * Returns the raw JSON value of [id].
@@ -369,6 +397,13 @@ private constructor(
          * Unlike [method], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("method") @ExcludeMissing fun _method(): JsonField<String> = method
+
+        /**
+         * Returns the raw JSON value of [params].
+         *
+         * Unlike [params], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("params") @ExcludeMissing fun _params(): JsonField<Params> = params
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -403,7 +438,7 @@ private constructor(
             private var id: JsonField<String>? = null
             private var jsonrpc: JsonField<String>? = null
             private var method: JsonField<String>? = null
-            private var params: JsonValue = JsonMissing.of()
+            private var params: JsonField<Params> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -452,7 +487,16 @@ private constructor(
             fun method(method: JsonField<String>) = apply { this.method = method }
 
             /** The parameters for the method. */
-            fun params(params: JsonValue) = apply { this.params = params }
+            fun params(params: Params) = params(JsonField.of(params))
+
+            /**
+             * Sets [Builder.params] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.params] with a well-typed [Params] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun params(params: JsonField<Params>) = apply { this.params = params }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -507,6 +551,7 @@ private constructor(
             id()
             jsonrpc()
             method()
+            params().ifPresent { it.validate() }
             validated = true
         }
 
@@ -528,7 +573,8 @@ private constructor(
         internal fun validity(): Int =
             (if (id.asKnown().isPresent) 1 else 0) +
                 (if (jsonrpc.asKnown().isPresent) 1 else 0) +
-                (if (method.asKnown().isPresent) 1 else 0)
+                (if (method.asKnown().isPresent) 1 else 0) +
+                (params.asKnown().getOrNull()?.validity() ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -546,6 +592,108 @@ private constructor(
 
         override fun toString() =
             "Body{id=$id, jsonrpc=$jsonrpc, method=$method, params=$params, additionalProperties=$additionalProperties}"
+    }
+
+    /** The parameters for the method. */
+    class Params
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Params]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Params]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(params: Params) = apply {
+                additionalProperties = params.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Params].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Params = Params(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Params = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Params && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Params{additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
