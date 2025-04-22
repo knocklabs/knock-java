@@ -24,18 +24,10 @@ internal class ActivityServiceAsyncTest {
                 .build()
         val activityServiceAsync = client.messages().activities()
 
-        val activitiesFuture =
-            activityServiceAsync.list(
-                ActivityListParams.builder()
-                    .messageId("message_id")
-                    .after("after")
-                    .before("before")
-                    .pageSize(0L)
-                    .triggerData("trigger_data")
-                    .build()
-            )
+        val pageFuture =
+            activityServiceAsync.list(ActivityListParams.builder().messageId("message_id").build())
 
-        val activities = activitiesFuture.get()
-        activities.validate()
+        val page = pageFuture.get()
+        page.response().validate()
     }
 }

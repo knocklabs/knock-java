@@ -14,8 +14,9 @@ import app.knock.api.core.http.HttpResponse.Handler
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.parseable
 import app.knock.api.core.prepareAsync
+import app.knock.api.models.messages.activities.ActivityListPageAsync
+import app.knock.api.models.messages.activities.ActivityListPageResponse
 import app.knock.api.models.messages.activities.ActivityListParams
-import app.knock.api.models.messages.activities.ActivityListResponse
 import java.util.concurrent.CompletableFuture
 
 class ActivityServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -30,7 +31,7 @@ class ActivityServiceAsyncImpl internal constructor(private val clientOptions: C
     override fun list(
         params: ActivityListParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<ActivityListResponse> =
+    ): CompletableFuture<ActivityListPageAsync> =
         // get /v1/messages/{message_id}/activities
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
@@ -39,14 +40,14 @@ class ActivityServiceAsyncImpl internal constructor(private val clientOptions: C
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
-        private val listHandler: Handler<ActivityListResponse> =
-            jsonHandler<ActivityListResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<ActivityListPageResponse> =
+            jsonHandler<ActivityListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
             params: ActivityListParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<ActivityListResponse>> {
+        ): CompletableFuture<HttpResponseFor<ActivityListPageAsync>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -64,6 +65,13 @@ class ActivityServiceAsyncImpl internal constructor(private val clientOptions: C
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()
                                 }
+                            }
+                            .let {
+                                ActivityListPageAsync.builder()
+                                    .service(ActivityServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }

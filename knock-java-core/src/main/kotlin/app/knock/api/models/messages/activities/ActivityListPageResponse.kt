@@ -25,7 +25,7 @@ import kotlin.jvm.optionals.getOrNull
  * after a [batch step](/designing-workflows/batch-function), this will contain one or more
  * activities. Non-batched messages will always return a single activity.
  */
-class ActivityListResponse
+class ActivityListPageResponse
 private constructor(
     private val entries: JsonField<List<Activity>>,
     private val pageInfo: JsonField<PageInfo>,
@@ -85,7 +85,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ActivityListResponse].
+         * Returns a mutable builder for constructing an instance of [ActivityListPageResponse].
          *
          * The following fields are required:
          * ```java
@@ -96,7 +96,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ActivityListResponse]. */
+    /** A builder for [ActivityListPageResponse]. */
     class Builder internal constructor() {
 
         private var entries: JsonField<MutableList<Activity>>? = null
@@ -104,10 +104,10 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(activityListResponse: ActivityListResponse) = apply {
-            entries = activityListResponse.entries.map { it.toMutableList() }
-            pageInfo = activityListResponse.pageInfo
-            additionalProperties = activityListResponse.additionalProperties.toMutableMap()
+        internal fun from(activityListPageResponse: ActivityListPageResponse) = apply {
+            entries = activityListPageResponse.entries.map { it.toMutableList() }
+            pageInfo = activityListPageResponse.pageInfo
+            additionalProperties = activityListPageResponse.additionalProperties.toMutableMap()
         }
 
         /** A list of activities. */
@@ -168,7 +168,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ActivityListResponse].
+         * Returns an immutable instance of [ActivityListPageResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -180,8 +180,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ActivityListResponse =
-            ActivityListResponse(
+        fun build(): ActivityListPageResponse =
+            ActivityListPageResponse(
                 checkRequired("entries", entries).map { it.toImmutable() },
                 checkRequired("pageInfo", pageInfo),
                 additionalProperties.toMutableMap(),
@@ -190,7 +190,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): ActivityListResponse = apply {
+    fun validate(): ActivityListPageResponse = apply {
         if (validated) {
             return@apply
         }
@@ -223,7 +223,7 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ActivityListResponse && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ActivityListPageResponse && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -233,5 +233,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ActivityListResponse{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
+        "ActivityListPageResponse{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
 }

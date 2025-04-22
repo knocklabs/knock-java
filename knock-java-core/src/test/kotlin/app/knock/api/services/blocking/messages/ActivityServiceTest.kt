@@ -24,17 +24,9 @@ internal class ActivityServiceTest {
                 .build()
         val activityService = client.messages().activities()
 
-        val activities =
-            activityService.list(
-                ActivityListParams.builder()
-                    .messageId("message_id")
-                    .after("after")
-                    .before("before")
-                    .pageSize(0L)
-                    .triggerData("trigger_data")
-                    .build()
-            )
+        val page =
+            activityService.list(ActivityListParams.builder().messageId("message_id").build())
 
-        activities.validate()
+        page.response().validate()
     }
 }

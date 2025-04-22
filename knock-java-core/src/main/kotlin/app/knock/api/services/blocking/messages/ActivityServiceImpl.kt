@@ -14,8 +14,9 @@ import app.knock.api.core.http.HttpResponse.Handler
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.parseable
 import app.knock.api.core.prepare
+import app.knock.api.models.messages.activities.ActivityListPage
+import app.knock.api.models.messages.activities.ActivityListPageResponse
 import app.knock.api.models.messages.activities.ActivityListParams
-import app.knock.api.models.messages.activities.ActivityListResponse
 
 class ActivityServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ActivityService {
@@ -29,7 +30,7 @@ class ActivityServiceImpl internal constructor(private val clientOptions: Client
     override fun list(
         params: ActivityListParams,
         requestOptions: RequestOptions,
-    ): ActivityListResponse =
+    ): ActivityListPage =
         // get /v1/messages/{message_id}/activities
         withRawResponse().list(params, requestOptions).parse()
 
@@ -38,14 +39,14 @@ class ActivityServiceImpl internal constructor(private val clientOptions: Client
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
-        private val listHandler: Handler<ActivityListResponse> =
-            jsonHandler<ActivityListResponse>(clientOptions.jsonMapper)
+        private val listHandler: Handler<ActivityListPageResponse> =
+            jsonHandler<ActivityListPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun list(
             params: ActivityListParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<ActivityListResponse> {
+        ): HttpResponseFor<ActivityListPage> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -61,6 +62,13 @@ class ActivityServiceImpl internal constructor(private val clientOptions: Client
                         if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
+                    }
+                    .let {
+                        ActivityListPage.builder()
+                            .service(ActivityServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }

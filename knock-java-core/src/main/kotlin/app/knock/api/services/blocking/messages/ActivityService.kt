@@ -4,8 +4,8 @@ package app.knock.api.services.blocking.messages
 
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
+import app.knock.api.models.messages.activities.ActivityListPage
 import app.knock.api.models.messages.activities.ActivityListParams
-import app.knock.api.models.messages.activities.ActivityListResponse
 import com.google.errorprone.annotations.MustBeClosed
 
 interface ActivityService {
@@ -16,13 +16,13 @@ interface ActivityService {
     fun withRawResponse(): WithRawResponse
 
     /** Returns a paginated list of activities for the specified message. */
-    fun list(params: ActivityListParams): ActivityListResponse = list(params, RequestOptions.none())
+    fun list(params: ActivityListParams): ActivityListPage = list(params, RequestOptions.none())
 
     /** @see [list] */
     fun list(
         params: ActivityListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): ActivityListResponse
+    ): ActivityListPage
 
     /** A view of [ActivityService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -32,7 +32,7 @@ interface ActivityService {
          * otherwise the same as [ActivityService.list].
          */
         @MustBeClosed
-        fun list(params: ActivityListParams): HttpResponseFor<ActivityListResponse> =
+        fun list(params: ActivityListParams): HttpResponseFor<ActivityListPage> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
@@ -40,6 +40,6 @@ interface ActivityService {
         fun list(
             params: ActivityListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<ActivityListResponse>
+        ): HttpResponseFor<ActivityListPage>
     }
 }

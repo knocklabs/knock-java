@@ -4,8 +4,8 @@ package app.knock.api.services.async.messages
 
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
+import app.knock.api.models.messages.activities.ActivityListPageAsync
 import app.knock.api.models.messages.activities.ActivityListParams
-import app.knock.api.models.messages.activities.ActivityListResponse
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
@@ -17,14 +17,14 @@ interface ActivityServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** Returns a paginated list of activities for the specified message. */
-    fun list(params: ActivityListParams): CompletableFuture<ActivityListResponse> =
+    fun list(params: ActivityListParams): CompletableFuture<ActivityListPageAsync> =
         list(params, RequestOptions.none())
 
     /** @see [list] */
     fun list(
         params: ActivityListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<ActivityListResponse>
+    ): CompletableFuture<ActivityListPageAsync>
 
     /**
      * A view of [ActivityServiceAsync] that provides access to raw HTTP responses for each method.
@@ -38,7 +38,7 @@ interface ActivityServiceAsync {
         @MustBeClosed
         fun list(
             params: ActivityListParams
-        ): CompletableFuture<HttpResponseFor<ActivityListResponse>> =
+        ): CompletableFuture<HttpResponseFor<ActivityListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
@@ -46,6 +46,6 @@ interface ActivityServiceAsync {
         fun list(
             params: ActivityListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<ActivityListResponse>>
+        ): CompletableFuture<HttpResponseFor<ActivityListPageAsync>>
     }
 }

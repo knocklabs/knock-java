@@ -12,12 +12,12 @@ import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
-internal class ActivityListResponseTest {
+internal class ActivityListPageResponseTest {
 
     @Test
     fun create() {
-        val activityListResponse =
-            ActivityListResponse.builder()
+        val activityListPageResponse =
+            ActivityListPageResponse.builder()
                 .addEntry(
                     Activity.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
@@ -67,7 +67,7 @@ internal class ActivityListResponseTest {
                 )
                 .build()
 
-        assertThat(activityListResponse.entries())
+        assertThat(activityListPageResponse.entries())
             .containsExactly(
                 Activity.builder()
                     .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
@@ -107,7 +107,7 @@ internal class ActivityListResponseTest {
                     .updatedAt(OffsetDateTime.parse("2024-01-01T00:00:00Z"))
                     .build()
             )
-        assertThat(activityListResponse.pageInfo())
+        assertThat(activityListPageResponse.pageInfo())
             .isEqualTo(
                 PageInfo.builder()
                     ._typename("PageInfo")
@@ -121,8 +121,8 @@ internal class ActivityListResponseTest {
     @Test
     fun roundtrip() {
         val jsonMapper = jsonMapper()
-        val activityListResponse =
-            ActivityListResponse.builder()
+        val activityListPageResponse =
+            ActivityListPageResponse.builder()
                 .addEntry(
                     Activity.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
@@ -172,12 +172,12 @@ internal class ActivityListResponseTest {
                 )
                 .build()
 
-        val roundtrippedActivityListResponse =
+        val roundtrippedActivityListPageResponse =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(activityListResponse),
-                jacksonTypeRef<ActivityListResponse>(),
+                jsonMapper.writeValueAsString(activityListPageResponse),
+                jacksonTypeRef<ActivityListPageResponse>(),
             )
 
-        assertThat(roundtrippedActivityListResponse).isEqualTo(activityListResponse)
+        assertThat(roundtrippedActivityListPageResponse).isEqualTo(activityListPageResponse)
     }
 }
