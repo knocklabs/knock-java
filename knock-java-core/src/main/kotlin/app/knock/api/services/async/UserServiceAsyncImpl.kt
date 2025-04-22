@@ -41,7 +41,6 @@ import app.knock.api.models.users.UserSetChannelDataParams
 import app.knock.api.models.users.UserSetPreferencesParams
 import app.knock.api.models.users.UserUnsetChannelDataParams
 import app.knock.api.models.users.UserUpdateParams
-import app.knock.api.models.users.UserUpdateResponse
 import app.knock.api.services.async.users.BulkServiceAsync
 import app.knock.api.services.async.users.BulkServiceAsyncImpl
 import app.knock.api.services.async.users.FeedServiceAsync
@@ -74,7 +73,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun update(
         params: UserUpdateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<UserUpdateResponse> =
+    ): CompletableFuture<User> =
         // put /v1/users/{user_id}
         withRawResponse().update(params, requestOptions).thenApply { it.parse() }
 
@@ -192,13 +191,13 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
 
         override fun bulk(): BulkServiceAsync.WithRawResponse = bulk
 
-        private val updateHandler: Handler<UserUpdateResponse> =
-            jsonHandler<UserUpdateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateHandler: Handler<User> =
+            jsonHandler<User>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun update(
             params: UserUpdateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<UserUpdateResponse>> {
+        ): CompletableFuture<HttpResponseFor<User>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)

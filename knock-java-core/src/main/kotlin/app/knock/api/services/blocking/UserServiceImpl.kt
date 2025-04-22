@@ -41,7 +41,6 @@ import app.knock.api.models.users.UserSetChannelDataParams
 import app.knock.api.models.users.UserSetPreferencesParams
 import app.knock.api.models.users.UserUnsetChannelDataParams
 import app.knock.api.models.users.UserUpdateParams
-import app.knock.api.models.users.UserUpdateResponse
 import app.knock.api.services.blocking.users.BulkService
 import app.knock.api.services.blocking.users.BulkServiceImpl
 import app.knock.api.services.blocking.users.FeedService
@@ -69,10 +68,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
 
     override fun bulk(): BulkService = bulk
 
-    override fun update(
-        params: UserUpdateParams,
-        requestOptions: RequestOptions,
-    ): UserUpdateResponse =
+    override fun update(params: UserUpdateParams, requestOptions: RequestOptions): User =
         // put /v1/users/{user_id}
         withRawResponse().update(params, requestOptions).parse()
 
@@ -178,13 +174,13 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
 
         override fun bulk(): BulkService.WithRawResponse = bulk
 
-        private val updateHandler: Handler<UserUpdateResponse> =
-            jsonHandler<UserUpdateResponse>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val updateHandler: Handler<User> =
+            jsonHandler<User>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun update(
             params: UserUpdateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<UserUpdateResponse> {
+        ): HttpResponseFor<User> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)

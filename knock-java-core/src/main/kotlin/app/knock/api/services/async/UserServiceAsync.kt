@@ -25,7 +25,6 @@ import app.knock.api.models.users.UserSetChannelDataParams
 import app.knock.api.models.users.UserSetPreferencesParams
 import app.knock.api.models.users.UserUnsetChannelDataParams
 import app.knock.api.models.users.UserUpdateParams
-import app.knock.api.models.users.UserUpdateResponse
 import app.knock.api.services.async.users.BulkServiceAsync
 import app.knock.api.services.async.users.FeedServiceAsync
 import app.knock.api.services.async.users.GuideServiceAsync
@@ -50,14 +49,14 @@ interface UserServiceAsync {
      * user, the system merges the properties you specific with what is currently set on the user,
      * updating only the fields included in your requests.
      */
-    fun update(params: UserUpdateParams): CompletableFuture<UserUpdateResponse> =
+    fun update(params: UserUpdateParams): CompletableFuture<User> =
         update(params, RequestOptions.none())
 
     /** @see [update] */
     fun update(
         params: UserUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<UserUpdateResponse>
+    ): CompletableFuture<User>
 
     /** Retrieve a paginated list of users in the environment. Defaults to 50 users per page. */
     fun list(): CompletableFuture<UserListPageAsync> = list(UserListParams.none())
@@ -222,9 +221,7 @@ interface UserServiceAsync {
          * [UserServiceAsync.update].
          */
         @MustBeClosed
-        fun update(
-            params: UserUpdateParams
-        ): CompletableFuture<HttpResponseFor<UserUpdateResponse>> =
+        fun update(params: UserUpdateParams): CompletableFuture<HttpResponseFor<User>> =
             update(params, RequestOptions.none())
 
         /** @see [update] */
@@ -232,7 +229,7 @@ interface UserServiceAsync {
         fun update(
             params: UserUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<UserUpdateResponse>>
+        ): CompletableFuture<HttpResponseFor<User>>
 
         /**
          * Returns a raw HTTP response for `get /v1/users`, but is otherwise the same as

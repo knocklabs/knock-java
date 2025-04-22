@@ -253,7 +253,7 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    /** Request to update the status of multiple messages in batch */
+    /** Request to update the status of multiple messages in batch. */
     class Body
     private constructor(
         private val messageIds: JsonField<List<String>>,
