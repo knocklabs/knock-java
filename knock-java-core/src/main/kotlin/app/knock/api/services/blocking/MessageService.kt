@@ -9,8 +9,8 @@ import app.knock.api.models.messages.MessageArchiveParams
 import app.knock.api.models.messages.MessageGetContentParams
 import app.knock.api.models.messages.MessageGetContentResponse
 import app.knock.api.models.messages.MessageGetParams
+import app.knock.api.models.messages.MessageListActivitiesPage
 import app.knock.api.models.messages.MessageListActivitiesParams
-import app.knock.api.models.messages.MessageListActivitiesResponse
 import app.knock.api.models.messages.MessageListDeliveryLogsPage
 import app.knock.api.models.messages.MessageListDeliveryLogsParams
 import app.knock.api.models.messages.MessageListEventsPage
@@ -90,14 +90,14 @@ interface MessageService {
     ): MessageGetContentResponse
 
     /** Returns a paginated list of activities for the specified message. */
-    fun listActivities(params: MessageListActivitiesParams): MessageListActivitiesResponse =
+    fun listActivities(params: MessageListActivitiesParams): MessageListActivitiesPage =
         listActivities(params, RequestOptions.none())
 
     /** @see [listActivities] */
     fun listActivities(
         params: MessageListActivitiesParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): MessageListActivitiesResponse
+    ): MessageListActivitiesPage
 
     /** Returns a paginated list of delivery logs for the specified message. */
     fun listDeliveryLogs(params: MessageListDeliveryLogsParams): MessageListDeliveryLogsPage =
@@ -285,7 +285,7 @@ interface MessageService {
         @MustBeClosed
         fun listActivities(
             params: MessageListActivitiesParams
-        ): HttpResponseFor<MessageListActivitiesResponse> =
+        ): HttpResponseFor<MessageListActivitiesPage> =
             listActivities(params, RequestOptions.none())
 
         /** @see [listActivities] */
@@ -293,7 +293,7 @@ interface MessageService {
         fun listActivities(
             params: MessageListActivitiesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<MessageListActivitiesResponse>
+        ): HttpResponseFor<MessageListActivitiesPage>
 
         /**
          * Returns a raw HTTP response for `get /v1/messages/{message_id}/delivery_logs`, but is

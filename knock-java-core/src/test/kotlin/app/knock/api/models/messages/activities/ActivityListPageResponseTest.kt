@@ -18,7 +18,7 @@ internal class ActivityListPageResponseTest {
     fun create() {
         val activityListPageResponse =
             ActivityListPageResponse.builder()
-                .addEntry(
+                .addItem(
                     Activity.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                         ._typename("Activity")
@@ -67,7 +67,7 @@ internal class ActivityListPageResponseTest {
                 )
                 .build()
 
-        assertThat(activityListPageResponse.entries())
+        assertThat(activityListPageResponse.items())
             .containsExactly(
                 Activity.builder()
                     .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
@@ -123,7 +123,7 @@ internal class ActivityListPageResponseTest {
         val jsonMapper = jsonMapper()
         val activityListPageResponse =
             ActivityListPageResponse.builder()
-                .addEntry(
+                .addItem(
                     Activity.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                         ._typename("Activity")

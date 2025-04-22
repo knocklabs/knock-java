@@ -20,8 +20,9 @@ import app.knock.api.models.messages.MessageArchiveParams
 import app.knock.api.models.messages.MessageGetContentParams
 import app.knock.api.models.messages.MessageGetContentResponse
 import app.knock.api.models.messages.MessageGetParams
+import app.knock.api.models.messages.MessageListActivitiesPage
+import app.knock.api.models.messages.MessageListActivitiesPageResponse
 import app.knock.api.models.messages.MessageListActivitiesParams
-import app.knock.api.models.messages.MessageListActivitiesResponse
 import app.knock.api.models.messages.MessageListDeliveryLogsPage
 import app.knock.api.models.messages.MessageListDeliveryLogsPageResponse
 import app.knock.api.models.messages.MessageListDeliveryLogsParams
@@ -81,7 +82,7 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
     override fun listActivities(
         params: MessageListActivitiesParams,
         requestOptions: RequestOptions,
-    ): MessageListActivitiesResponse =
+    ): MessageListActivitiesPage =
         // get /v1/messages/{message_id}/activities
         withRawResponse().listActivities(params, requestOptions).parse()
 
@@ -272,14 +273,14 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val listActivitiesHandler: Handler<MessageListActivitiesResponse> =
-            jsonHandler<MessageListActivitiesResponse>(clientOptions.jsonMapper)
+        private val listActivitiesHandler: Handler<MessageListActivitiesPageResponse> =
+            jsonHandler<MessageListActivitiesPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listActivities(
             params: MessageListActivitiesParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<MessageListActivitiesResponse> {
+        ): HttpResponseFor<MessageListActivitiesPage> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -295,6 +296,13 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
                         if (requestOptions.responseValidation!!) {
                             it.validate()
                         }
+                    }
+                    .let {
+                        MessageListActivitiesPage.builder()
+                            .service(MessageServiceImpl(clientOptions))
+                            .params(params)
+                            .response(it)
+                            .build()
                     }
             }
         }

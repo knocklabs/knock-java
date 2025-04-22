@@ -1,43 +1,42 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package app.knock.api.models.messages.activities
+package app.knock.api.models.messages
 
 import app.knock.api.core.checkRequired
-import app.knock.api.models.messages.Activity
 import app.knock.api.models.shared.PageInfo
-import app.knock.api.services.blocking.messages.ActivityService
+import app.knock.api.services.blocking.MessageService
 import java.util.Objects
 import java.util.Optional
 import java.util.stream.Stream
 import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
-/** @see [ActivityService.list] */
-class ActivityListPage
+/** @see [MessageService.listActivities] */
+class MessageListActivitiesPage
 private constructor(
-    private val service: ActivityService,
-    private val params: ActivityListParams,
-    private val response: ActivityListPageResponse,
+    private val service: MessageService,
+    private val params: MessageListActivitiesParams,
+    private val response: MessageListActivitiesPageResponse,
 ) {
 
     /**
-     * Delegates to [ActivityListPageResponse], but gracefully handles missing data.
+     * Delegates to [MessageListActivitiesPageResponse], but gracefully handles missing data.
      *
-     * @see [ActivityListPageResponse.items]
+     * @see [MessageListActivitiesPageResponse.items]
      */
     fun items(): List<Activity> = response._items().getOptional("items").getOrNull() ?: emptyList()
 
     /**
-     * Delegates to [ActivityListPageResponse], but gracefully handles missing data.
+     * Delegates to [MessageListActivitiesPageResponse], but gracefully handles missing data.
      *
-     * @see [ActivityListPageResponse.pageInfo]
+     * @see [MessageListActivitiesPageResponse.pageInfo]
      */
     fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
 
     fun hasNextPage(): Boolean =
         items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
 
-    fun getNextPageParams(): Optional<ActivityListParams> {
+    fun getNextPageParams(): Optional<MessageListActivitiesParams> {
         if (!hasNextPage()) {
             return Optional.empty()
         }
@@ -52,22 +51,23 @@ private constructor(
         )
     }
 
-    fun getNextPage(): Optional<ActivityListPage> = getNextPageParams().map { service.list(it) }
+    fun getNextPage(): Optional<MessageListActivitiesPage> =
+        getNextPageParams().map { service.listActivities(it) }
 
     fun autoPager(): AutoPager = AutoPager(this)
 
     /** The parameters that were used to request this page. */
-    fun params(): ActivityListParams = params
+    fun params(): MessageListActivitiesParams = params
 
     /** The response that this page was parsed from. */
-    fun response(): ActivityListPageResponse = response
+    fun response(): MessageListActivitiesPageResponse = response
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ActivityListPage].
+         * Returns a mutable builder for constructing an instance of [MessageListActivitiesPage].
          *
          * The following fields are required:
          * ```java
@@ -79,30 +79,32 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ActivityListPage]. */
+    /** A builder for [MessageListActivitiesPage]. */
     class Builder internal constructor() {
 
-        private var service: ActivityService? = null
-        private var params: ActivityListParams? = null
-        private var response: ActivityListPageResponse? = null
+        private var service: MessageService? = null
+        private var params: MessageListActivitiesParams? = null
+        private var response: MessageListActivitiesPageResponse? = null
 
         @JvmSynthetic
-        internal fun from(activityListPage: ActivityListPage) = apply {
-            service = activityListPage.service
-            params = activityListPage.params
-            response = activityListPage.response
+        internal fun from(messageListActivitiesPage: MessageListActivitiesPage) = apply {
+            service = messageListActivitiesPage.service
+            params = messageListActivitiesPage.params
+            response = messageListActivitiesPage.response
         }
 
-        fun service(service: ActivityService) = apply { this.service = service }
+        fun service(service: MessageService) = apply { this.service = service }
 
         /** The parameters that were used to request this page. */
-        fun params(params: ActivityListParams) = apply { this.params = params }
+        fun params(params: MessageListActivitiesParams) = apply { this.params = params }
 
         /** The response that this page was parsed from. */
-        fun response(response: ActivityListPageResponse) = apply { this.response = response }
+        fun response(response: MessageListActivitiesPageResponse) = apply {
+            this.response = response
+        }
 
         /**
-         * Returns an immutable instance of [ActivityListPage].
+         * Returns an immutable instance of [MessageListActivitiesPage].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -115,15 +117,15 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ActivityListPage =
-            ActivityListPage(
+        fun build(): MessageListActivitiesPage =
+            MessageListActivitiesPage(
                 checkRequired("service", service),
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
     }
 
-    class AutoPager(private val firstPage: ActivityListPage) : Iterable<Activity> {
+    class AutoPager(private val firstPage: MessageListActivitiesPage) : Iterable<Activity> {
 
         override fun iterator(): Iterator<Activity> = iterator {
             var page = firstPage
@@ -147,11 +149,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ActivityListPage && service == other.service && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is MessageListActivitiesPage && service == other.service && params == other.params && response == other.response /* spotless:on */
     }
 
     override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
 
     override fun toString() =
-        "ActivityListPage{service=$service, params=$params, response=$response}"
+        "MessageListActivitiesPage{service=$service, params=$params, response=$response}"
 }

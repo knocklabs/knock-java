@@ -20,8 +20,9 @@ import app.knock.api.models.messages.MessageArchiveParams
 import app.knock.api.models.messages.MessageGetContentParams
 import app.knock.api.models.messages.MessageGetContentResponse
 import app.knock.api.models.messages.MessageGetParams
+import app.knock.api.models.messages.MessageListActivitiesPageAsync
+import app.knock.api.models.messages.MessageListActivitiesPageResponse
 import app.knock.api.models.messages.MessageListActivitiesParams
-import app.knock.api.models.messages.MessageListActivitiesResponse
 import app.knock.api.models.messages.MessageListDeliveryLogsPageAsync
 import app.knock.api.models.messages.MessageListDeliveryLogsPageResponse
 import app.knock.api.models.messages.MessageListDeliveryLogsParams
@@ -91,7 +92,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override fun listActivities(
         params: MessageListActivitiesParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<MessageListActivitiesResponse> =
+    ): CompletableFuture<MessageListActivitiesPageAsync> =
         // get /v1/messages/{message_id}/activities
         withRawResponse().listActivities(params, requestOptions).thenApply { it.parse() }
 
@@ -294,14 +295,14 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val listActivitiesHandler: Handler<MessageListActivitiesResponse> =
-            jsonHandler<MessageListActivitiesResponse>(clientOptions.jsonMapper)
+        private val listActivitiesHandler: Handler<MessageListActivitiesPageResponse> =
+            jsonHandler<MessageListActivitiesPageResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun listActivities(
             params: MessageListActivitiesParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<MessageListActivitiesResponse>> {
+        ): CompletableFuture<HttpResponseFor<MessageListActivitiesPageAsync>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -319,6 +320,13 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()
                                 }
+                            }
+                            .let {
+                                MessageListActivitiesPageAsync.builder()
+                                    .service(MessageServiceAsyncImpl(clientOptions))
+                                    .params(params)
+                                    .response(it)
+                                    .build()
                             }
                     }
                 }

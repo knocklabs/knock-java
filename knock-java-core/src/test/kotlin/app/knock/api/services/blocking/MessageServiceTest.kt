@@ -113,18 +113,12 @@ internal class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val response =
+        val page =
             messageService.listActivities(
-                MessageListActivitiesParams.builder()
-                    .messageId("message_id")
-                    .after("after")
-                    .before("before")
-                    .pageSize(0L)
-                    .triggerData("trigger_data")
-                    .build()
+                MessageListActivitiesParams.builder().messageId("message_id").build()
             )
 
-        response.validate()
+        page.response().validate()
     }
 
     @Disabled(
