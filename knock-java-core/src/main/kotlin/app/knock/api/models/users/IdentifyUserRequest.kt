@@ -45,24 +45,57 @@ import kotlin.jvm.optionals.getOrNull
  */
 class IdentifyUserRequest
 private constructor(
+    private val avatar: JsonField<String>,
     private val channelData: JsonField<List<UnnamedSchemaWithArrayParent0>>,
     private val createdAt: JsonField<OffsetDateTime>,
+    private val email: JsonField<String>,
+    private val locale: JsonField<String>,
+    private val name: JsonField<String>,
+    private val phoneNumber: JsonField<String>,
     private val preferences: JsonField<List<UnnamedSchemaWithArrayParent1>>,
+    private val timezone: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
+        @JsonProperty("avatar") @ExcludeMissing avatar: JsonField<String> = JsonMissing.of(),
         @JsonProperty("channel_data")
         @ExcludeMissing
         channelData: JsonField<List<UnnamedSchemaWithArrayParent0>> = JsonMissing.of(),
         @JsonProperty("created_at")
         @ExcludeMissing
         createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("email") @ExcludeMissing email: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("locale") @ExcludeMissing locale: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("phone_number")
+        @ExcludeMissing
+        phoneNumber: JsonField<String> = JsonMissing.of(),
         @JsonProperty("preferences")
         @ExcludeMissing
         preferences: JsonField<List<UnnamedSchemaWithArrayParent1>> = JsonMissing.of(),
-    ) : this(channelData, createdAt, preferences, mutableMapOf())
+        @JsonProperty("timezone") @ExcludeMissing timezone: JsonField<String> = JsonMissing.of(),
+    ) : this(
+        avatar,
+        channelData,
+        createdAt,
+        email,
+        locale,
+        name,
+        phoneNumber,
+        preferences,
+        timezone,
+        mutableMapOf(),
+    )
+
+    /**
+     * URL to the user's avatar image.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun avatar(): Optional<String> = avatar.getOptional("avatar")
 
     /**
      * A request to set channel data for a type of channel inline.
@@ -82,6 +115,39 @@ private constructor(
     fun createdAt(): Optional<OffsetDateTime> = createdAt.getOptional("created_at")
 
     /**
+     * The primary email address for the user.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun email(): Optional<String> = email.getOptional("email")
+
+    /**
+     * The locale of the user. Used for [message localization](/concepts/translations)
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun locale(): Optional<String> = locale.getOptional("locale")
+
+    /**
+     * Display name of the user.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun name(): Optional<String> = name.getOptional("name")
+
+    /**
+     * The [E.164](https://www.twilio.com/docs/glossary/what-e164) phone number of the user
+     * (required for SMS channels).
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun phoneNumber(): Optional<String> = phoneNumber.getOptional("phone_number")
+
+    /**
      * Inline set preferences for a recipient, where the key is the preference set name
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -89,6 +155,24 @@ private constructor(
      */
     fun preferences(): Optional<List<UnnamedSchemaWithArrayParent1>> =
         preferences.getOptional("preferences")
+
+    /**
+     * The timezone of the user. Must be a valid
+     * [tz database time zone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+     * Used for
+     * [recurring schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients)
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun timezone(): Optional<String> = timezone.getOptional("timezone")
+
+    /**
+     * Returns the raw JSON value of [avatar].
+     *
+     * Unlike [avatar], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("avatar") @ExcludeMissing fun _avatar(): JsonField<String> = avatar
 
     /**
      * Returns the raw JSON value of [channelData].
@@ -109,6 +193,36 @@ private constructor(
     fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
     /**
+     * Returns the raw JSON value of [email].
+     *
+     * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
+
+    /**
+     * Returns the raw JSON value of [locale].
+     *
+     * Unlike [locale], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("locale") @ExcludeMissing fun _locale(): JsonField<String> = locale
+
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+    /**
+     * Returns the raw JSON value of [phoneNumber].
+     *
+     * Unlike [phoneNumber], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("phone_number")
+    @ExcludeMissing
+    fun _phoneNumber(): JsonField<String> = phoneNumber
+
+    /**
      * Returns the raw JSON value of [preferences].
      *
      * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
@@ -116,6 +230,13 @@ private constructor(
     @JsonProperty("preferences")
     @ExcludeMissing
     fun _preferences(): JsonField<List<UnnamedSchemaWithArrayParent1>> = preferences
+
+    /**
+     * Returns the raw JSON value of [timezone].
+     *
+     * Unlike [timezone], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("timezone") @ExcludeMissing fun _timezone(): JsonField<String> = timezone
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -138,18 +259,44 @@ private constructor(
     /** A builder for [IdentifyUserRequest]. */
     class Builder internal constructor() {
 
+        private var avatar: JsonField<String> = JsonMissing.of()
         private var channelData: JsonField<MutableList<UnnamedSchemaWithArrayParent0>>? = null
         private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var email: JsonField<String> = JsonMissing.of()
+        private var locale: JsonField<String> = JsonMissing.of()
+        private var name: JsonField<String> = JsonMissing.of()
+        private var phoneNumber: JsonField<String> = JsonMissing.of()
         private var preferences: JsonField<MutableList<UnnamedSchemaWithArrayParent1>>? = null
+        private var timezone: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(identifyUserRequest: IdentifyUserRequest) = apply {
+            avatar = identifyUserRequest.avatar
             channelData = identifyUserRequest.channelData.map { it.toMutableList() }
             createdAt = identifyUserRequest.createdAt
+            email = identifyUserRequest.email
+            locale = identifyUserRequest.locale
+            name = identifyUserRequest.name
+            phoneNumber = identifyUserRequest.phoneNumber
             preferences = identifyUserRequest.preferences.map { it.toMutableList() }
+            timezone = identifyUserRequest.timezone
             additionalProperties = identifyUserRequest.additionalProperties.toMutableMap()
         }
+
+        /** URL to the user's avatar image. */
+        fun avatar(avatar: String?) = avatar(JsonField.ofNullable(avatar))
+
+        /** Alias for calling [Builder.avatar] with `avatar.orElse(null)`. */
+        fun avatar(avatar: Optional<String>) = avatar(avatar.getOrNull())
+
+        /**
+         * Sets [Builder.avatar] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.avatar] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun avatar(avatar: JsonField<String>) = apply { this.avatar = avatar }
 
         /** A request to set channel data for a type of channel inline. */
         fun channelData(channelData: List<UnnamedSchemaWithArrayParent0>?) =
@@ -197,6 +344,66 @@ private constructor(
          */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
+        /** The primary email address for the user. */
+        fun email(email: String?) = email(JsonField.ofNullable(email))
+
+        /** Alias for calling [Builder.email] with `email.orElse(null)`. */
+        fun email(email: Optional<String>) = email(email.getOrNull())
+
+        /**
+         * Sets [Builder.email] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.email] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun email(email: JsonField<String>) = apply { this.email = email }
+
+        /** The locale of the user. Used for [message localization](/concepts/translations) */
+        fun locale(locale: String?) = locale(JsonField.ofNullable(locale))
+
+        /** Alias for calling [Builder.locale] with `locale.orElse(null)`. */
+        fun locale(locale: Optional<String>) = locale(locale.getOrNull())
+
+        /**
+         * Sets [Builder.locale] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.locale] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun locale(locale: JsonField<String>) = apply { this.locale = locale }
+
+        /** Display name of the user. */
+        fun name(name: String?) = name(JsonField.ofNullable(name))
+
+        /** Alias for calling [Builder.name] with `name.orElse(null)`. */
+        fun name(name: Optional<String>) = name(name.getOrNull())
+
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun name(name: JsonField<String>) = apply { this.name = name }
+
+        /**
+         * The [E.164](https://www.twilio.com/docs/glossary/what-e164) phone number of the user
+         * (required for SMS channels).
+         */
+        fun phoneNumber(phoneNumber: String?) = phoneNumber(JsonField.ofNullable(phoneNumber))
+
+        /** Alias for calling [Builder.phoneNumber] with `phoneNumber.orElse(null)`. */
+        fun phoneNumber(phoneNumber: Optional<String>) = phoneNumber(phoneNumber.getOrNull())
+
+        /**
+         * Sets [Builder.phoneNumber] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.phoneNumber] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun phoneNumber(phoneNumber: JsonField<String>) = apply { this.phoneNumber = phoneNumber }
+
         /** Inline set preferences for a recipient, where the key is the preference set name */
         fun preferences(preferences: List<UnnamedSchemaWithArrayParent1>?) =
             preferences(JsonField.ofNullable(preferences))
@@ -228,6 +435,25 @@ private constructor(
                 }
         }
 
+        /**
+         * The timezone of the user. Must be a valid
+         * [tz database time zone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+         * Used for
+         * [recurring schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients)
+         */
+        fun timezone(timezone: String?) = timezone(JsonField.ofNullable(timezone))
+
+        /** Alias for calling [Builder.timezone] with `timezone.orElse(null)`. */
+        fun timezone(timezone: Optional<String>) = timezone(timezone.getOrNull())
+
+        /**
+         * Sets [Builder.timezone] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.timezone] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun timezone(timezone: JsonField<String>) = apply { this.timezone = timezone }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -254,9 +480,15 @@ private constructor(
          */
         fun build(): IdentifyUserRequest =
             IdentifyUserRequest(
+                avatar,
                 (channelData ?: JsonMissing.of()).map { it.toImmutable() },
                 createdAt,
+                email,
+                locale,
+                name,
+                phoneNumber,
                 (preferences ?: JsonMissing.of()).map { it.toImmutable() },
+                timezone,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -268,9 +500,15 @@ private constructor(
             return@apply
         }
 
+        avatar()
         channelData().ifPresent { it.forEach { it.validate() } }
         createdAt()
+        email()
+        locale()
+        name()
+        phoneNumber()
         preferences().ifPresent { it.forEach { it.validate() } }
+        timezone()
         validated = true
     }
 
@@ -289,9 +527,15 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (channelData.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+        (if (avatar.asKnown().isPresent) 1 else 0) +
+            (channelData.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (createdAt.asKnown().isPresent) 1 else 0) +
-            (preferences.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+            (if (email.asKnown().isPresent) 1 else 0) +
+            (if (locale.asKnown().isPresent) 1 else 0) +
+            (if (name.asKnown().isPresent) 1 else 0) +
+            (if (phoneNumber.asKnown().isPresent) 1 else 0) +
+            (preferences.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (if (timezone.asKnown().isPresent) 1 else 0)
 
     /** A request to set channel data for a type of channel inline. */
     class UnnamedSchemaWithArrayParent0
@@ -1402,15 +1646,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is IdentifyUserRequest && channelData == other.channelData && createdAt == other.createdAt && preferences == other.preferences && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is IdentifyUserRequest && avatar == other.avatar && channelData == other.channelData && createdAt == other.createdAt && email == other.email && locale == other.locale && name == other.name && phoneNumber == other.phoneNumber && preferences == other.preferences && timezone == other.timezone && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(channelData, createdAt, preferences, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(avatar, channelData, createdAt, email, locale, name, phoneNumber, preferences, timezone, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "IdentifyUserRequest{channelData=$channelData, createdAt=$createdAt, preferences=$preferences, additionalProperties=$additionalProperties}"
+        "IdentifyUserRequest{avatar=$avatar, channelData=$channelData, createdAt=$createdAt, email=$email, locale=$locale, name=$name, phoneNumber=$phoneNumber, preferences=$preferences, timezone=$timezone, additionalProperties=$additionalProperties}"
 }

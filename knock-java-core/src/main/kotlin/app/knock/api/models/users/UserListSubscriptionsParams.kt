@@ -10,23 +10,19 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
-import app.knock.api.models.recipients.RecipientReference
 import com.fasterxml.jackson.annotation.JsonCreator
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * Retrieves a paginated list of subscriptions for a specific user. Allows filtering by objects and
- * includes optional preference data.
- */
+/** Retrieves a paginated list of subscriptions for a specific user, in descending order. */
 class UserListSubscriptionsParams
 private constructor(
     private val userId: String,
     private val after: String?,
     private val before: String?,
     private val include: List<Include>?,
-    private val objects: List<RecipientReference>?,
+    private val objects: List<String>?,
     private val pageSize: Long?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -43,8 +39,8 @@ private constructor(
     /** Associated resources to include in the response. */
     fun include(): Optional<List<Include>> = Optional.ofNullable(include)
 
-    /** Only return subscriptions for the given recipients. */
-    fun objects(): Optional<List<RecipientReference>> = Optional.ofNullable(objects)
+    /** Only returns subscriptions for the specified object GIDs. */
+    fun objects(): Optional<List<String>> = Optional.ofNullable(objects)
 
     /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
@@ -75,7 +71,7 @@ private constructor(
         private var after: String? = null
         private var before: String? = null
         private var include: MutableList<Include>? = null
-        private var objects: MutableList<RecipientReference>? = null
+        private var objects: MutableList<String>? = null
         private var pageSize: Long? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -121,32 +117,20 @@ private constructor(
             this.include = (this.include ?: mutableListOf()).apply { add(include) }
         }
 
-        /** Only return subscriptions for the given recipients. */
-        fun objects(objects: List<RecipientReference>?) = apply {
-            this.objects = objects?.toMutableList()
-        }
+        /** Only returns subscriptions for the specified object GIDs. */
+        fun objects(objects: List<String>?) = apply { this.objects = objects?.toMutableList() }
 
         /** Alias for calling [Builder.objects] with `objects.orElse(null)`. */
-        fun objects(objects: Optional<List<RecipientReference>>) = objects(objects.getOrNull())
+        fun objects(objects: Optional<List<String>>) = objects(objects.getOrNull())
 
         /**
-         * Adds a single [RecipientReference] to [objects].
+         * Adds a single [String] to [objects].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addObject(object_: RecipientReference) = apply {
+        fun addObject(object_: String) = apply {
             objects = (objects ?: mutableListOf()).apply { add(object_) }
         }
-
-        /** Alias for calling [addObject] with `RecipientReference.ofUser(user)`. */
-        fun addObject(user: String) = addObject(RecipientReference.ofUser(user))
-
-        /**
-         * Alias for calling [addObject] with
-         * `RecipientReference.ofObjectReference(objectReference)`.
-         */
-        fun addObject(objectReference: RecipientReference.ObjectReference) =
-            addObject(RecipientReference.ofObjectReference(objectReference))
 
         /** The number of items per page. */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
@@ -298,30 +282,7 @@ private constructor(
                 after?.let { put("after", it) }
                 before?.let { put("before", it) }
                 include?.forEach { put("include[]", it.toString()) }
-                objects?.forEach {
-                    it.accept(
-                        object : RecipientReference.Visitor<Unit> {
-                            override fun visitUser(user: String) {
-                                put("objects[]", user)
-                            }
-
-                            override fun visitObjectReference(
-                                objectReference: RecipientReference.ObjectReference
-                            ) {
-                                objectReference.id().ifPresent { put("objects[][id]", it) }
-                                objectReference.collection().ifPresent {
-                                    put("objects[][collection]", it)
-                                }
-                                objectReference._additionalProperties().keys().forEach { key ->
-                                    objectReference._additionalProperties().values(key).forEach {
-                                        value ->
-                                        put("objects[][$key]", value)
-                                    }
-                                }
-                            }
-                        }
-                    )
-                }
+                objects?.forEach { put("objects[]", it) }
                 pageSize?.let { put("page_size", it.toString()) }
                 putAll(additionalQueryParams)
             }

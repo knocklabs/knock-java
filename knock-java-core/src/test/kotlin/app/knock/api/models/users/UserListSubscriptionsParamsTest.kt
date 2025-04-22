@@ -15,7 +15,7 @@ internal class UserListSubscriptionsParamsTest {
             .after("after")
             .before("before")
             .addInclude(UserListSubscriptionsParams.Include.PREFERENCES)
-            .addObject("user_123")
+            .addObject("string")
             .pageSize(0L)
             .build()
     }
@@ -37,7 +37,7 @@ internal class UserListSubscriptionsParamsTest {
                 .after("after")
                 .before("before")
                 .addInclude(UserListSubscriptionsParams.Include.PREFERENCES)
-                .addObject("user_123")
+                .addObject("string")
                 .pageSize(0L)
                 .build()
 
@@ -49,7 +49,7 @@ internal class UserListSubscriptionsParamsTest {
                     .put("after", "after")
                     .put("before", "before")
                     .put("include[]", "preferences")
-                    .put("objects[]", "user_123")
+                    .put("objects[]", "string")
                     .put("page_size", "0")
                     .build()
             )

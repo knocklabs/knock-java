@@ -30,6 +30,9 @@ internal class BulkOperationTest {
                     BulkOperation.ErrorItem.builder().id("id").collection("collection").build()
                 )
                 .failedAt(null)
+                .progressPath(
+                    "https://api.switchboard.com/v1/bulk_operations/123e4567-e89b-12d3-a456-426614174000"
+                )
                 .startedAt(null)
                 .build()
 
@@ -51,6 +54,10 @@ internal class BulkOperationTest {
                 BulkOperation.ErrorItem.builder().id("id").collection("collection").build()
             )
         assertThat(bulkOperation.failedAt()).isEmpty
+        assertThat(bulkOperation.progressPath())
+            .contains(
+                "https://api.switchboard.com/v1/bulk_operations/123e4567-e89b-12d3-a456-426614174000"
+            )
         assertThat(bulkOperation.startedAt()).isEmpty
     }
 
@@ -74,6 +81,9 @@ internal class BulkOperationTest {
                     BulkOperation.ErrorItem.builder().id("id").collection("collection").build()
                 )
                 .failedAt(null)
+                .progressPath(
+                    "https://api.switchboard.com/v1/bulk_operations/123e4567-e89b-12d3-a456-426614174000"
+                )
                 .startedAt(null)
                 .build()
 

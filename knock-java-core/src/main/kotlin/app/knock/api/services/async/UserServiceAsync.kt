@@ -25,6 +25,7 @@ import app.knock.api.models.users.UserSetChannelDataParams
 import app.knock.api.models.users.UserSetPreferencesParams
 import app.knock.api.models.users.UserUnsetChannelDataParams
 import app.knock.api.models.users.UserUpdateParams
+import app.knock.api.models.users.UserUpdateResponse
 import app.knock.api.services.async.users.BulkServiceAsync
 import app.knock.api.services.async.users.FeedServiceAsync
 import app.knock.api.services.async.users.GuideServiceAsync
@@ -44,17 +45,21 @@ interface UserServiceAsync {
 
     fun bulk(): BulkServiceAsync
 
-    /** Create or update a user with the provided identification data. */
-    fun update(params: UserUpdateParams): CompletableFuture<User> =
+    /**
+     * Create or update a user with the provided identification data. When you identify an existing
+     * user, the system merges the properties you specific with what is currently set on the user,
+     * updating only the fields included in your requests.
+     */
+    fun update(params: UserUpdateParams): CompletableFuture<UserUpdateResponse> =
         update(params, RequestOptions.none())
 
     /** @see [update] */
     fun update(
         params: UserUpdateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<User>
+    ): CompletableFuture<UserUpdateResponse>
 
-    /** Retrieve a paginated list of users in the environment. */
+    /** Retrieve a paginated list of users in the environment. Defaults to 50 users per page. */
     fun list(): CompletableFuture<UserListPageAsync> = list(UserListParams.none())
 
     /** @see [list] */
@@ -112,7 +117,8 @@ interface UserServiceAsync {
 
     /**
      * Returns a paginated list of messages for a specific user. Allows filtering by message status
-     * and provides various sorting options.
+     * and provides various sorting options. Messages outside the account's retention window will
+     * not be included in the results.
      */
     fun listMessages(params: UserListMessagesParams): CompletableFuture<UserListMessagesPageAsync> =
         listMessages(params, RequestOptions.none())
@@ -133,10 +139,7 @@ interface UserServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<List<PreferenceSet>>
 
-    /**
-     * Returns a paginated list of schedules for a specific user. Can be filtered by workflow and
-     * tenant.
-     */
+    /** Returns a paginated list of schedules for a specific user, in descending order. */
     fun listSchedules(
         params: UserListSchedulesParams
     ): CompletableFuture<UserListSchedulesPageAsync> = listSchedules(params, RequestOptions.none())
@@ -147,10 +150,7 @@ interface UserServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<UserListSchedulesPageAsync>
 
-    /**
-     * Retrieves a paginated list of subscriptions for a specific user. Allows filtering by objects
-     * and includes optional preference data.
-     */
+    /** Retrieves a paginated list of subscriptions for a specific user, in descending order. */
     fun listSubscriptions(
         params: UserListSubscriptionsParams
     ): CompletableFuture<UserListSubscriptionsPageAsync> =
@@ -222,7 +222,9 @@ interface UserServiceAsync {
          * [UserServiceAsync.update].
          */
         @MustBeClosed
-        fun update(params: UserUpdateParams): CompletableFuture<HttpResponseFor<User>> =
+        fun update(
+            params: UserUpdateParams
+        ): CompletableFuture<HttpResponseFor<UserUpdateResponse>> =
             update(params, RequestOptions.none())
 
         /** @see [update] */
@@ -230,7 +232,7 @@ interface UserServiceAsync {
         fun update(
             params: UserUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<User>>
+        ): CompletableFuture<HttpResponseFor<UserUpdateResponse>>
 
         /**
          * Returns a raw HTTP response for `get /v1/users`, but is otherwise the same as

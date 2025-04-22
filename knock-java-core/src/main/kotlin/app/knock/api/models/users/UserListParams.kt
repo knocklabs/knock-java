@@ -14,7 +14,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Retrieve a paginated list of users in the environment. */
+/** Retrieve a paginated list of users in the environment. Defaults to 50 users per page. */
 class UserListParams
 private constructor(
     private val after: String?,

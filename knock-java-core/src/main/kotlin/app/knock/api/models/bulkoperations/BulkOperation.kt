@@ -37,6 +37,7 @@ private constructor(
     private val errorCount: JsonField<Long>,
     private val errorItems: JsonField<List<ErrorItem>>,
     private val failedAt: JsonField<OffsetDateTime>,
+    private val progressPath: JsonField<String>,
     private val startedAt: JsonField<OffsetDateTime>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -72,6 +73,9 @@ private constructor(
         @JsonProperty("failed_at")
         @ExcludeMissing
         failedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("progress_path")
+        @ExcludeMissing
+        progressPath: JsonField<String> = JsonMissing.of(),
         @JsonProperty("started_at")
         @ExcludeMissing
         startedAt: JsonField<OffsetDateTime> = JsonMissing.of(),
@@ -89,6 +93,7 @@ private constructor(
         errorCount,
         errorItems,
         failedAt,
+        progressPath,
         startedAt,
         mutableMapOf(),
     )
@@ -196,6 +201,14 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun failedAt(): Optional<OffsetDateTime> = failedAt.getOptional("failed_at")
+
+    /**
+     * The URI to the bulk operation's progress.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun progressPath(): Optional<String> = progressPath.getOptional("progress_path")
 
     /**
      * Timestamp when the bulk operation was started.
@@ -312,6 +325,15 @@ private constructor(
     @JsonProperty("failed_at") @ExcludeMissing fun _failedAt(): JsonField<OffsetDateTime> = failedAt
 
     /**
+     * Returns the raw JSON value of [progressPath].
+     *
+     * Unlike [progressPath], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("progress_path")
+    @ExcludeMissing
+    fun _progressPath(): JsonField<String> = progressPath
+
+    /**
      * Returns the raw JSON value of [startedAt].
      *
      * Unlike [startedAt], this method doesn't throw if the JSON field has an unexpected type.
@@ -369,6 +391,7 @@ private constructor(
         private var errorCount: JsonField<Long> = JsonMissing.of()
         private var errorItems: JsonField<MutableList<ErrorItem>>? = null
         private var failedAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var progressPath: JsonField<String> = JsonMissing.of()
         private var startedAt: JsonField<OffsetDateTime> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -387,6 +410,7 @@ private constructor(
             errorCount = bulkOperation.errorCount
             errorItems = bulkOperation.errorItems.map { it.toMutableList() }
             failedAt = bulkOperation.failedAt
+            progressPath = bulkOperation.progressPath
             startedAt = bulkOperation.startedAt
             additionalProperties = bulkOperation.additionalProperties.toMutableMap()
         }
@@ -574,6 +598,20 @@ private constructor(
          */
         fun failedAt(failedAt: JsonField<OffsetDateTime>) = apply { this.failedAt = failedAt }
 
+        /** The URI to the bulk operation's progress. */
+        fun progressPath(progressPath: String) = progressPath(JsonField.of(progressPath))
+
+        /**
+         * Sets [Builder.progressPath] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.progressPath] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun progressPath(progressPath: JsonField<String>) = apply {
+            this.progressPath = progressPath
+        }
+
         /** Timestamp when the bulk operation was started. */
         fun startedAt(startedAt: OffsetDateTime?) = startedAt(JsonField.ofNullable(startedAt))
 
@@ -643,6 +681,7 @@ private constructor(
                 errorCount,
                 (errorItems ?: JsonMissing.of()).map { it.toImmutable() },
                 failedAt,
+                progressPath,
                 startedAt,
                 additionalProperties.toMutableMap(),
             )
@@ -668,6 +707,7 @@ private constructor(
         errorCount()
         errorItems().ifPresent { it.forEach { it.validate() } }
         failedAt()
+        progressPath()
         startedAt()
         validated = true
     }
@@ -700,6 +740,7 @@ private constructor(
             (if (errorCount.asKnown().isPresent) 1 else 0) +
             (errorItems.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (failedAt.asKnown().isPresent) 1 else 0) +
+            (if (progressPath.asKnown().isPresent) 1 else 0) +
             (if (startedAt.asKnown().isPresent) 1 else 0)
 
     /** The status of the bulk operation. */
@@ -1040,15 +1081,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is BulkOperation && id == other.id && _typename == other._typename && estimatedTotalRows == other.estimatedTotalRows && insertedAt == other.insertedAt && name == other.name && processedRows == other.processedRows && status == other.status && successCount == other.successCount && updatedAt == other.updatedAt && completedAt == other.completedAt && errorCount == other.errorCount && errorItems == other.errorItems && failedAt == other.failedAt && startedAt == other.startedAt && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is BulkOperation && id == other.id && _typename == other._typename && estimatedTotalRows == other.estimatedTotalRows && insertedAt == other.insertedAt && name == other.name && processedRows == other.processedRows && status == other.status && successCount == other.successCount && updatedAt == other.updatedAt && completedAt == other.completedAt && errorCount == other.errorCount && errorItems == other.errorItems && failedAt == other.failedAt && progressPath == other.progressPath && startedAt == other.startedAt && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, _typename, estimatedTotalRows, insertedAt, name, processedRows, status, successCount, updatedAt, completedAt, errorCount, errorItems, failedAt, startedAt, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, _typename, estimatedTotalRows, insertedAt, name, processedRows, status, successCount, updatedAt, completedAt, errorCount, errorItems, failedAt, progressPath, startedAt, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "BulkOperation{id=$id, _typename=$_typename, estimatedTotalRows=$estimatedTotalRows, insertedAt=$insertedAt, name=$name, processedRows=$processedRows, status=$status, successCount=$successCount, updatedAt=$updatedAt, completedAt=$completedAt, errorCount=$errorCount, errorItems=$errorItems, failedAt=$failedAt, startedAt=$startedAt, additionalProperties=$additionalProperties}"
+        "BulkOperation{id=$id, _typename=$_typename, estimatedTotalRows=$estimatedTotalRows, insertedAt=$insertedAt, name=$name, processedRows=$processedRows, status=$status, successCount=$successCount, updatedAt=$updatedAt, completedAt=$completedAt, errorCount=$errorCount, errorItems=$errorItems, failedAt=$failedAt, progressPath=$progressPath, startedAt=$startedAt, additionalProperties=$additionalProperties}"
 }

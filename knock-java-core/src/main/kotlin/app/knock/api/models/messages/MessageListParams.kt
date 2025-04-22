@@ -21,6 +21,7 @@ private constructor(
     private val before: String?,
     private val channelId: String?,
     private val engagementStatus: List<EngagementStatus>?,
+    private val insertedAt: InsertedAt?,
     private val messageIds: List<String>?,
     private val pageSize: Long?,
     private val source: String?,
@@ -46,8 +47,10 @@ private constructor(
     /** Limits the results to messages with the given engagement status. */
     fun engagementStatus(): Optional<List<EngagementStatus>> = Optional.ofNullable(engagementStatus)
 
+    fun insertedAt(): Optional<InsertedAt> = Optional.ofNullable(insertedAt)
+
     /**
-     * Limits the results to only the message ids given (max 50). Note: when using this option, the
+     * Limits the results to only the message IDs given (max 50). Note: when using this option, the
      * results will be subject to any other filters applied to the query.
      */
     fun messageIds(): Optional<List<String>> = Optional.ofNullable(messageIds)
@@ -104,6 +107,7 @@ private constructor(
         private var before: String? = null
         private var channelId: String? = null
         private var engagementStatus: MutableList<EngagementStatus>? = null
+        private var insertedAt: InsertedAt? = null
         private var messageIds: MutableList<String>? = null
         private var pageSize: Long? = null
         private var source: String? = null
@@ -122,6 +126,7 @@ private constructor(
             before = messageListParams.before
             channelId = messageListParams.channelId
             engagementStatus = messageListParams.engagementStatus?.toMutableList()
+            insertedAt = messageListParams.insertedAt
             messageIds = messageListParams.messageIds?.toMutableList()
             pageSize = messageListParams.pageSize
             source = messageListParams.source
@@ -172,8 +177,13 @@ private constructor(
                 (this.engagementStatus ?: mutableListOf()).apply { add(engagementStatus) }
         }
 
+        fun insertedAt(insertedAt: InsertedAt?) = apply { this.insertedAt = insertedAt }
+
+        /** Alias for calling [Builder.insertedAt] with `insertedAt.orElse(null)`. */
+        fun insertedAt(insertedAt: Optional<InsertedAt>) = insertedAt(insertedAt.getOrNull())
+
         /**
-         * Limits the results to only the message ids given (max 50). Note: when using this option,
+         * Limits the results to only the message IDs given (max 50). Note: when using this option,
          * the results will be subject to any other filters applied to the query.
          */
         fun messageIds(messageIds: List<String>?) = apply {
@@ -394,6 +404,7 @@ private constructor(
                 before,
                 channelId,
                 engagementStatus?.toImmutable(),
+                insertedAt,
                 messageIds?.toImmutable(),
                 pageSize,
                 source,
@@ -417,6 +428,17 @@ private constructor(
                 before?.let { put("before", it) }
                 channelId?.let { put("channel_id", it) }
                 engagementStatus?.forEach { put("engagement_status[]", it.toString()) }
+                insertedAt?.let {
+                    it.gt().ifPresent { put("inserted_at[gt]", it) }
+                    it.gte().ifPresent { put("inserted_at[gte]", it) }
+                    it.lt().ifPresent { put("inserted_at[lt]", it) }
+                    it.lte().ifPresent { put("inserted_at[lte]", it) }
+                    it._additionalProperties().keys().forEach { key ->
+                        it._additionalProperties().values(key).forEach { value ->
+                            put("inserted_at[$key]", value)
+                        }
+                    }
+                }
                 messageIds?.forEach { put("message_ids[]", it) }
                 pageSize?.let { put("page_size", it.toString()) }
                 source?.let { put("source", it) }
@@ -574,6 +596,154 @@ private constructor(
         override fun hashCode() = value.hashCode()
 
         override fun toString() = value.toString()
+    }
+
+    class InsertedAt
+    private constructor(
+        private val gt: String?,
+        private val gte: String?,
+        private val lt: String?,
+        private val lte: String?,
+        private val additionalProperties: QueryParams,
+    ) {
+
+        /** Limits the results to messages inserted after the given date. */
+        fun gt(): Optional<String> = Optional.ofNullable(gt)
+
+        /** Limits the results to messages inserted after or on the given date. */
+        fun gte(): Optional<String> = Optional.ofNullable(gte)
+
+        /** Limits the results to messages inserted before the given date. */
+        fun lt(): Optional<String> = Optional.ofNullable(lt)
+
+        /** Limits the results to messages inserted before or on the given date. */
+        fun lte(): Optional<String> = Optional.ofNullable(lte)
+
+        fun _additionalProperties(): QueryParams = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [InsertedAt]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [InsertedAt]. */
+        class Builder internal constructor() {
+
+            private var gt: String? = null
+            private var gte: String? = null
+            private var lt: String? = null
+            private var lte: String? = null
+            private var additionalProperties: QueryParams.Builder = QueryParams.builder()
+
+            @JvmSynthetic
+            internal fun from(insertedAt: InsertedAt) = apply {
+                gt = insertedAt.gt
+                gte = insertedAt.gte
+                lt = insertedAt.lt
+                lte = insertedAt.lte
+                additionalProperties = insertedAt.additionalProperties.toBuilder()
+            }
+
+            /** Limits the results to messages inserted after the given date. */
+            fun gt(gt: String?) = apply { this.gt = gt }
+
+            /** Alias for calling [Builder.gt] with `gt.orElse(null)`. */
+            fun gt(gt: Optional<String>) = gt(gt.getOrNull())
+
+            /** Limits the results to messages inserted after or on the given date. */
+            fun gte(gte: String?) = apply { this.gte = gte }
+
+            /** Alias for calling [Builder.gte] with `gte.orElse(null)`. */
+            fun gte(gte: Optional<String>) = gte(gte.getOrNull())
+
+            /** Limits the results to messages inserted before the given date. */
+            fun lt(lt: String?) = apply { this.lt = lt }
+
+            /** Alias for calling [Builder.lt] with `lt.orElse(null)`. */
+            fun lt(lt: Optional<String>) = lt(lt.getOrNull())
+
+            /** Limits the results to messages inserted before or on the given date. */
+            fun lte(lte: String?) = apply { this.lte = lte }
+
+            /** Alias for calling [Builder.lte] with `lte.orElse(null)`. */
+            fun lte(lte: Optional<String>) = lte(lte.getOrNull())
+
+            fun additionalProperties(additionalProperties: QueryParams) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, Iterable<String>>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: String) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAdditionalProperties(key: String, values: Iterable<String>) = apply {
+                additionalProperties.put(key, values)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: QueryParams) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, Iterable<String>>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+            fun replaceAdditionalProperties(key: String, value: String) = apply {
+                additionalProperties.replace(key, value)
+            }
+
+            fun replaceAdditionalProperties(key: String, values: Iterable<String>) = apply {
+                additionalProperties.replace(key, values)
+            }
+
+            fun replaceAllAdditionalProperties(additionalProperties: QueryParams) = apply {
+                this.additionalProperties.replaceAll(additionalProperties)
+            }
+
+            fun replaceAllAdditionalProperties(
+                additionalProperties: Map<String, Iterable<String>>
+            ) = apply { this.additionalProperties.replaceAll(additionalProperties) }
+
+            fun removeAdditionalProperties(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                additionalProperties.removeAll(keys)
+            }
+
+            /**
+             * Returns an immutable instance of [InsertedAt].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): InsertedAt = InsertedAt(gt, gte, lt, lte, additionalProperties.build())
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is InsertedAt && gt == other.gt && gte == other.gte && lt == other.lt && lte == other.lte && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(gt, gte, lt, lte, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "InsertedAt{gt=$gt, gte=$gte, lt=$lt, lte=$lte, additionalProperties=$additionalProperties}"
     }
 
     class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
@@ -735,11 +905,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is MessageListParams && after == other.after && before == other.before && channelId == other.channelId && engagementStatus == other.engagementStatus && messageIds == other.messageIds && pageSize == other.pageSize && source == other.source && status == other.status && tenant == other.tenant && triggerData == other.triggerData && workflowCategories == other.workflowCategories && workflowRecipientRunId == other.workflowRecipientRunId && workflowRunId == other.workflowRunId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is MessageListParams && after == other.after && before == other.before && channelId == other.channelId && engagementStatus == other.engagementStatus && insertedAt == other.insertedAt && messageIds == other.messageIds && pageSize == other.pageSize && source == other.source && status == other.status && tenant == other.tenant && triggerData == other.triggerData && workflowCategories == other.workflowCategories && workflowRecipientRunId == other.workflowRecipientRunId && workflowRunId == other.workflowRunId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(after, before, channelId, engagementStatus, messageIds, pageSize, source, status, tenant, triggerData, workflowCategories, workflowRecipientRunId, workflowRunId, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(after, before, channelId, engagementStatus, insertedAt, messageIds, pageSize, source, status, tenant, triggerData, workflowCategories, workflowRecipientRunId, workflowRunId, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "MessageListParams{after=$after, before=$before, channelId=$channelId, engagementStatus=$engagementStatus, messageIds=$messageIds, pageSize=$pageSize, source=$source, status=$status, tenant=$tenant, triggerData=$triggerData, workflowCategories=$workflowCategories, workflowRecipientRunId=$workflowRecipientRunId, workflowRunId=$workflowRunId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "MessageListParams{after=$after, before=$before, channelId=$channelId, engagementStatus=$engagementStatus, insertedAt=$insertedAt, messageIds=$messageIds, pageSize=$pageSize, source=$source, status=$status, tenant=$tenant, triggerData=$triggerData, workflowCategories=$workflowCategories, workflowRecipientRunId=$workflowRecipientRunId, workflowRunId=$workflowRunId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

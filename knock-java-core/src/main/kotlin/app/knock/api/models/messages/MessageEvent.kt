@@ -21,7 +21,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A message event. */
+/**
+ * A message event. Occurs when a message
+ * [delivery or engagement status](/send-notifications/message-statuses) changes.
+ */
 class MessageEvent
 private constructor(
     private val id: JsonField<String>,

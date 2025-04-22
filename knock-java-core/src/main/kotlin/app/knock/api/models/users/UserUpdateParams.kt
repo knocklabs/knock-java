@@ -9,7 +9,11 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
 
-/** Create or update a user with the provided identification data. */
+/**
+ * Create or update a user with the provided identification data. When you identify an existing
+ * user, the system merges the properties you specific with what is currently set on the user,
+ * updating only the fields included in your requests.
+ */
 class UserUpdateParams
 private constructor(
     private val userId: String,

@@ -10,10 +10,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * Returns a paginated list of schedules for a specific user. Can be filtered by workflow and
- * tenant.
- */
+/** Returns a paginated list of schedules for a specific user, in descending order. */
 class UserListSchedulesParams
 private constructor(
     private val userId: String,
@@ -37,10 +34,10 @@ private constructor(
     /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
-    /** The ID of the tenant to list schedules for. */
+    /** The tenant ID to filter schedules for. */
     fun tenant(): Optional<String> = Optional.ofNullable(tenant)
 
-    /** The ID of the workflow to list schedules for. */
+    /** The workflow key to filter schedules for. */
     fun workflow(): Optional<String> = Optional.ofNullable(workflow)
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -113,13 +110,13 @@ private constructor(
         /** Alias for calling [Builder.pageSize] with `pageSize.orElse(null)`. */
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
-        /** The ID of the tenant to list schedules for. */
+        /** The tenant ID to filter schedules for. */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
 
         /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
         fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
-        /** The ID of the workflow to list schedules for. */
+        /** The workflow key to filter schedules for. */
         fun workflow(workflow: String?) = apply { this.workflow = workflow }
 
         /** Alias for calling [Builder.workflow] with `workflow.orElse(null)`. */

@@ -21,7 +21,11 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** An activity associated with a workflow run. */
+/**
+ * An activity associated with a workflow trigger request. Messages produced after a
+ * [batch step](/designing-workflows/batch-function) can be associated with one or more activities.
+ * Non-batched messages will always be associated with a single activity.
+ */
 class Activity
 private constructor(
     private val id: JsonField<String>,
@@ -76,7 +80,7 @@ private constructor(
     fun actor(): Optional<Recipient> = actor.getOptional("actor")
 
     /**
-     * The data associated with the activity.
+     * The workflow trigger `data` payload associated with the activity.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -84,7 +88,7 @@ private constructor(
     fun data(): Optional<Data> = data.getOptional("data")
 
     /**
-     * Timestamp when the resource was created.
+     * Timestamp when the activity was created.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -100,7 +104,7 @@ private constructor(
     fun recipient(): Optional<Recipient> = recipient.getOptional("recipient")
 
     /**
-     * The timestamp when the resource was last updated.
+     * Timestamp when the activity was last updated.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -245,7 +249,7 @@ private constructor(
         /** Alias for calling [actor] with `Recipient.ofObject(object_)`. */
         fun actor(object_: Object) = actor(Recipient.ofObject(object_))
 
-        /** The data associated with the activity. */
+        /** The workflow trigger `data` payload associated with the activity. */
         fun data(data: Data?) = data(JsonField.ofNullable(data))
 
         /** Alias for calling [Builder.data] with `data.orElse(null)`. */
@@ -259,7 +263,7 @@ private constructor(
          */
         fun data(data: JsonField<Data>) = apply { this.data = data }
 
-        /** Timestamp when the resource was created. */
+        /** Timestamp when the activity was created. */
         fun insertedAt(insertedAt: OffsetDateTime) = insertedAt(JsonField.of(insertedAt))
 
         /**
@@ -291,7 +295,7 @@ private constructor(
         /** Alias for calling [recipient] with `Recipient.ofObject(object_)`. */
         fun recipient(object_: Object) = recipient(Recipient.ofObject(object_))
 
-        /** The timestamp when the resource was last updated. */
+        /** Timestamp when the activity was last updated. */
         fun updatedAt(updatedAt: OffsetDateTime) = updatedAt(JsonField.of(updatedAt))
 
         /**
@@ -380,7 +384,7 @@ private constructor(
             (recipient.asKnown().getOrNull()?.validity() ?: 0) +
             (if (updatedAt.asKnown().isPresent) 1 else 0)
 
-    /** The data associated with the activity. */
+    /** The workflow trigger `data` payload associated with the activity. */
     class Data
     @JsonCreator
     private constructor(

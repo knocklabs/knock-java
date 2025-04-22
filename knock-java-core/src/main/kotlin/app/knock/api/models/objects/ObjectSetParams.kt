@@ -42,7 +42,7 @@ import kotlin.jvm.optionals.getOrNull
 
 /**
  * Creates a new object or updates an existing one in the specified collection. This operation is
- * used to identify objects with their properties and channel data.
+ * used to identify objects with their properties, as well as optional preferences and channel data.
  */
 class ObjectSetParams
 private constructor(

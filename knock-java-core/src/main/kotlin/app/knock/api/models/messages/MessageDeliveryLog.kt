@@ -30,7 +30,10 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A message delivery log. */
+/**
+ * A message delivery log contains a `request` from Knock to a downstream provider and the
+ * `response` that was returned.
+ */
 class MessageDeliveryLog
 private constructor(
     private val id: JsonField<String>,

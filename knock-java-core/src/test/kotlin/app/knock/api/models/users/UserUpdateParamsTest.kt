@@ -18,6 +18,7 @@ internal class UserUpdateParamsTest {
             .userId("user_id")
             .identifyUserRequest(
                 IdentifyUserRequest.builder()
+                    .avatar("avatar")
                     .addChannelData(
                         UnnamedSchemaWithArrayParent0.builder()
                             .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
@@ -25,6 +26,10 @@ internal class UserUpdateParamsTest {
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .email("jane@ingen.net")
+                    .locale("locale")
+                    .name("Jane Doe")
+                    .phoneNumber("phone_number")
                     .addPreference(
                         UnnamedSchemaWithArrayParent1.builder()
                             .id("default")
@@ -97,6 +102,7 @@ internal class UserUpdateParamsTest {
                             )
                             .build()
                     )
+                    .timezone("America/New_York")
                     .build()
             )
             .build()
@@ -122,6 +128,7 @@ internal class UserUpdateParamsTest {
                 .userId("user_id")
                 .identifyUserRequest(
                     IdentifyUserRequest.builder()
+                        .avatar("avatar")
                         .addChannelData(
                             UnnamedSchemaWithArrayParent0.builder()
                                 .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
@@ -129,6 +136,10 @@ internal class UserUpdateParamsTest {
                                 .build()
                         )
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .email("jane@ingen.net")
+                        .locale("locale")
+                        .name("Jane Doe")
+                        .phoneNumber("phone_number")
                         .addPreference(
                             UnnamedSchemaWithArrayParent1.builder()
                                 .id("default")
@@ -204,6 +215,7 @@ internal class UserUpdateParamsTest {
                                 )
                                 .build()
                         )
+                        .timezone("America/New_York")
                         .build()
                 )
                 .build()
@@ -213,6 +225,7 @@ internal class UserUpdateParamsTest {
         assertThat(body)
             .isEqualTo(
                 IdentifyUserRequest.builder()
+                    .avatar("avatar")
                     .addChannelData(
                         UnnamedSchemaWithArrayParent0.builder()
                             .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
@@ -220,6 +233,10 @@ internal class UserUpdateParamsTest {
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .email("jane@ingen.net")
+                    .locale("locale")
+                    .name("Jane Doe")
+                    .phoneNumber("phone_number")
                     .addPreference(
                         UnnamedSchemaWithArrayParent1.builder()
                             .id("default")
@@ -292,6 +309,7 @@ internal class UserUpdateParamsTest {
                             )
                             .build()
                     )
+                    .timezone("America/New_York")
                     .build()
             )
     }

@@ -58,8 +58,9 @@ private constructor(
     fun addedAt(): OffsetDateTime = addedAt.getRequired("added_at")
 
     /**
-     * A user who can receive notifications in Knock. They are always referenced by your internal
-     * identifier.
+     * A [User](/concepts/users) represents an individual in your system who can receive
+     * notifications through Knock. Users are the most common recipients of notifications and are
+     * always referenced by your internal identifier.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -190,8 +191,9 @@ private constructor(
         fun addedAt(addedAt: JsonField<OffsetDateTime>) = apply { this.addedAt = addedAt }
 
         /**
-         * A user who can receive notifications in Knock. They are always referenced by your
-         * internal identifier.
+         * A [User](/concepts/users) represents an individual in your system who can receive
+         * notifications through Knock. Users are the most common recipients of notifications and
+         * are always referenced by your internal identifier.
          */
         fun user(user: User) = user(JsonField.of(user))
 

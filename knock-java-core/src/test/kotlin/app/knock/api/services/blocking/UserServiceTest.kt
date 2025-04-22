@@ -50,6 +50,7 @@ internal class UserServiceTest {
                     .userId("user_id")
                     .identifyUserRequest(
                         IdentifyUserRequest.builder()
+                            .avatar("avatar")
                             .addChannelData(
                                 UnnamedSchemaWithArrayParent0.builder()
                                     .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
@@ -57,6 +58,10 @@ internal class UserServiceTest {
                                     .build()
                             )
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .email("jane@ingen.net")
+                            .locale("locale")
+                            .name("Jane Doe")
+                            .phoneNumber("phone_number")
                             .addPreference(
                                 UnnamedSchemaWithArrayParent1.builder()
                                     .id("default")
@@ -134,6 +139,7 @@ internal class UserServiceTest {
                                     )
                                     .build()
                             )
+                            .timezone("America/New_York")
                             .build()
                     )
                     .build()

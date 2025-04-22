@@ -31,8 +31,9 @@ private constructor(
 ) {
 
     /**
-     * A user who can receive notifications in Knock. They are always referenced by your internal
-     * identifier.
+     * A [User](/concepts/users) represents an individual in your system who can receive
+     * notifications through Knock. Users are the most common recipients of notifications and are
+     * always referenced by your internal identifier.
      */
     fun user(): Optional<User> = Optional.ofNullable(user)
 
@@ -44,8 +45,9 @@ private constructor(
     fun isObject(): Boolean = object_ != null
 
     /**
-     * A user who can receive notifications in Knock. They are always referenced by your internal
-     * identifier.
+     * A [User](/concepts/users) represents an individual in your system who can receive
+     * notifications through Knock. Users are the most common recipients of notifications and are
+     * always referenced by your internal identifier.
      */
     fun asUser(): User = user.getOrThrow("user")
 
@@ -128,8 +130,9 @@ private constructor(
     companion object {
 
         /**
-         * A user who can receive notifications in Knock. They are always referenced by your
-         * internal identifier.
+         * A [User](/concepts/users) represents an individual in your system who can receive
+         * notifications through Knock. Users are the most common recipients of notifications and
+         * are always referenced by your internal identifier.
          */
         @JvmStatic fun ofUser(user: User) = Recipient(user = user)
 
@@ -141,8 +144,9 @@ private constructor(
     interface Visitor<out T> {
 
         /**
-         * A user who can receive notifications in Knock. They are always referenced by your
-         * internal identifier.
+         * A [User](/concepts/users) represents an individual in your system who can receive
+         * notifications through Knock. Users are the most common recipients of notifications and
+         * are always referenced by your internal identifier.
          */
         fun visitUser(user: User): T
 
