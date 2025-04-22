@@ -10,6 +10,7 @@ import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
+import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -80,8 +81,13 @@ private constructor(
      */
     fun isFinal(): Optional<Boolean> = body.isFinal()
 
-    /** The metadata of the guide. */
-    fun _metadata(): JsonValue = body._metadata()
+    /**
+     * The metadata of the guide.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun metadata(): Optional<Metadata> = body.metadata()
 
     /**
      * The tenant ID of the guide.
@@ -125,6 +131,13 @@ private constructor(
      * Unlike [isFinal], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _isFinal(): JsonField<Boolean> = body._isFinal()
+
+    /**
+     * Returns the raw JSON value of [metadata].
+     *
+     * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _metadata(): JsonField<Metadata> = body._metadata()
 
     /**
      * Returns the raw JSON value of [tenant].
@@ -261,7 +274,16 @@ private constructor(
         fun isFinal(isFinal: JsonField<Boolean>) = apply { body.isFinal(isFinal) }
 
         /** The metadata of the guide. */
-        fun metadata(metadata: JsonValue) = apply { body.metadata(metadata) }
+        fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
+
+        /**
+         * Sets [Builder.metadata] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.metadata] with a well-typed [Metadata] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
 
         /** The tenant ID of the guide. */
         fun tenant(tenant: String?) = apply { body.tenant(tenant) }
@@ -444,7 +466,7 @@ private constructor(
         private val content: JsonValue,
         private val data: JsonValue,
         private val isFinal: JsonField<Boolean>,
-        private val metadata: JsonValue,
+        private val metadata: JsonField<Metadata>,
         private val tenant: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -466,7 +488,9 @@ private constructor(
             @JsonProperty("is_final")
             @ExcludeMissing
             isFinal: JsonField<Boolean> = JsonMissing.of(),
-            @JsonProperty("metadata") @ExcludeMissing metadata: JsonValue = JsonMissing.of(),
+            @JsonProperty("metadata")
+            @ExcludeMissing
+            metadata: JsonField<Metadata> = JsonMissing.of(),
             @JsonProperty("tenant") @ExcludeMissing tenant: JsonField<String> = JsonMissing.of(),
         ) : this(
             channelId,
@@ -527,8 +551,13 @@ private constructor(
          */
         fun isFinal(): Optional<Boolean> = isFinal.getOptional("is_final")
 
-        /** The metadata of the guide. */
-        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonValue = metadata
+        /**
+         * The metadata of the guide.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun metadata(): Optional<Metadata> = metadata.getOptional("metadata")
 
         /**
          * The tenant ID of the guide.
@@ -577,6 +606,13 @@ private constructor(
         @JsonProperty("is_final") @ExcludeMissing fun _isFinal(): JsonField<Boolean> = isFinal
 
         /**
+         * Returns the raw JSON value of [metadata].
+         *
+         * Unlike [metadata], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("metadata") @ExcludeMissing fun _metadata(): JsonField<Metadata> = metadata
+
+        /**
          * Returns the raw JSON value of [tenant].
          *
          * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
@@ -621,7 +657,7 @@ private constructor(
             private var content: JsonValue = JsonMissing.of()
             private var data: JsonValue = JsonMissing.of()
             private var isFinal: JsonField<Boolean> = JsonMissing.of()
-            private var metadata: JsonValue = JsonMissing.of()
+            private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var tenant: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -708,7 +744,16 @@ private constructor(
             fun isFinal(isFinal: JsonField<Boolean>) = apply { this.isFinal = isFinal }
 
             /** The metadata of the guide. */
-            fun metadata(metadata: JsonValue) = apply { this.metadata = metadata }
+            fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
+
+            /**
+             * Sets [Builder.metadata] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.metadata] with a well-typed [Metadata] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
             /** The tenant ID of the guide. */
             fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
@@ -786,6 +831,7 @@ private constructor(
             guideKey()
             guideStepRef()
             isFinal()
+            metadata().ifPresent { it.validate() }
             tenant()
             validated = true
         }
@@ -811,6 +857,7 @@ private constructor(
                 (if (guideKey.asKnown().isPresent) 1 else 0) +
                 (if (guideStepRef.asKnown().isPresent) 1 else 0) +
                 (if (isFinal.asKnown().isPresent) 1 else 0) +
+                (metadata.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (tenant.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
@@ -829,6 +876,108 @@ private constructor(
 
         override fun toString() =
             "Body{channelId=$channelId, guideId=$guideId, guideKey=$guideKey, guideStepRef=$guideStepRef, content=$content, data=$data, isFinal=$isFinal, metadata=$metadata, tenant=$tenant, additionalProperties=$additionalProperties}"
+    }
+
+    /** The metadata of the guide. */
+    class Metadata
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Metadata]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Metadata]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(metadata: Metadata) = apply {
+                additionalProperties = metadata.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Metadata].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Metadata = Metadata(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Metadata = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Metadata && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Metadata{additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

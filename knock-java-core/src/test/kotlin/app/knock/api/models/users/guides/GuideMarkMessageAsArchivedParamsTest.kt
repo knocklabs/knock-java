@@ -22,7 +22,11 @@ internal class GuideMarkMessageAsArchivedParamsTest {
             )
             .data(JsonValue.from(mapOf("product_id" to "product_123")))
             .isFinal(true)
-            .metadata(JsonValue.from(mapOf("source" to "onboarding")))
+            .metadata(
+                GuideMarkMessageAsArchivedParams.Metadata.builder()
+                    .putAdditionalProperty("source", JsonValue.from("bar"))
+                    .build()
+            )
             .tenant("tenant_12345")
             .build()
     }
@@ -60,7 +64,11 @@ internal class GuideMarkMessageAsArchivedParamsTest {
                 )
                 .data(JsonValue.from(mapOf("product_id" to "product_123")))
                 .isFinal(true)
-                .metadata(JsonValue.from(mapOf("source" to "onboarding")))
+                .metadata(
+                    GuideMarkMessageAsArchivedParams.Metadata.builder()
+                        .putAdditionalProperty("source", JsonValue.from("bar"))
+                        .build()
+                )
                 .tenant("tenant_12345")
                 .build()
 
@@ -76,7 +84,12 @@ internal class GuideMarkMessageAsArchivedParamsTest {
             )
         assertThat(body._data()).isEqualTo(JsonValue.from(mapOf("product_id" to "product_123")))
         assertThat(body.isFinal()).contains(true)
-        assertThat(body._metadata()).isEqualTo(JsonValue.from(mapOf("source" to "onboarding")))
+        assertThat(body.metadata())
+            .contains(
+                GuideMarkMessageAsArchivedParams.Metadata.builder()
+                    .putAdditionalProperty("source", JsonValue.from("bar"))
+                    .build()
+            )
         assertThat(body.tenant()).contains("tenant_12345")
     }
 
