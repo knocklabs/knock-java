@@ -21,15 +21,14 @@ import app.knock.api.models.objects.ObjectListSchedulesParams
 import app.knock.api.models.objects.ObjectListSubscriptionsPage
 import app.knock.api.models.objects.ObjectListSubscriptionsParams
 import app.knock.api.models.objects.ObjectSetChannelDataParams
-import app.knock.api.models.objects.ObjectSetChannelDataResponse
 import app.knock.api.models.objects.ObjectSetParams
 import app.knock.api.models.objects.ObjectSetPreferencesParams
 import app.knock.api.models.objects.ObjectUnsetChannelDataParams
+import app.knock.api.models.recipients.channeldata.ChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSet
 import app.knock.api.models.recipients.subscriptions.Subscription
 import app.knock.api.services.blocking.objects.BulkService
 import com.google.errorprone.annotations.MustBeClosed
-import java.util.Optional
 
 interface ObjectService {
 
@@ -101,15 +100,14 @@ interface ObjectService {
     fun get(params: ObjectGetParams, requestOptions: RequestOptions = RequestOptions.none()): Object
 
     /** Returns the channel data for the specified object and channel. */
-    fun getChannelData(
-        params: ObjectGetChannelDataParams
-    ): Optional<List<ObjectSetChannelDataResponse>> = getChannelData(params, RequestOptions.none())
+    fun getChannelData(params: ObjectGetChannelDataParams): ChannelData =
+        getChannelData(params, RequestOptions.none())
 
     /** @see [getChannelData] */
     fun getChannelData(
         params: ObjectGetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Optional<List<ObjectSetChannelDataResponse>>
+    ): ChannelData
 
     /** Returns the preference set for the specified object. */
     fun getPreferences(params: ObjectGetPreferencesParams): PreferenceSet =
@@ -179,15 +177,14 @@ interface ObjectService {
     fun set(params: ObjectSetParams, requestOptions: RequestOptions = RequestOptions.none()): Object
 
     /** Sets the channel data for the specified object and channel. */
-    fun setChannelData(
-        params: ObjectSetChannelDataParams
-    ): Optional<List<ObjectSetChannelDataResponse>> = setChannelData(params, RequestOptions.none())
+    fun setChannelData(params: ObjectSetChannelDataParams): ChannelData =
+        setChannelData(params, RequestOptions.none())
 
     /** @see [setChannelData] */
     fun setChannelData(
         params: ObjectSetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Optional<List<ObjectSetChannelDataResponse>>
+    ): ChannelData
 
     /** Updates the preference set for the specified object. */
     fun setPreferences(params: ObjectSetPreferencesParams): PreferenceSet =
@@ -299,9 +296,7 @@ interface ObjectService {
          * same as [ObjectService.getChannelData].
          */
         @MustBeClosed
-        fun getChannelData(
-            params: ObjectGetChannelDataParams
-        ): HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>> =
+        fun getChannelData(params: ObjectGetChannelDataParams): HttpResponseFor<ChannelData> =
             getChannelData(params, RequestOptions.none())
 
         /** @see [getChannelData] */
@@ -309,7 +304,7 @@ interface ObjectService {
         fun getChannelData(
             params: ObjectGetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>>
+        ): HttpResponseFor<ChannelData>
 
         /**
          * Returns a raw HTTP response for `get
@@ -413,9 +408,7 @@ interface ObjectService {
          * same as [ObjectService.setChannelData].
          */
         @MustBeClosed
-        fun setChannelData(
-            params: ObjectSetChannelDataParams
-        ): HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>> =
+        fun setChannelData(params: ObjectSetChannelDataParams): HttpResponseFor<ChannelData> =
             setChannelData(params, RequestOptions.none())
 
         /** @see [setChannelData] */
@@ -423,7 +416,7 @@ interface ObjectService {
         fun setChannelData(
             params: ObjectSetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>>
+        ): HttpResponseFor<ChannelData>
 
         /**
          * Returns a raw HTTP response for `put

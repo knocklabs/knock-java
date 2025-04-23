@@ -26,7 +26,6 @@ import app.knock.api.models.recipients.channeldata.ChannelDataRequest
 import app.knock.api.models.recipients.channeldata.PushChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
-import kotlin.jvm.optionals.getOrNull
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -172,8 +171,7 @@ internal class ObjectServiceAsyncTest {
             )
 
         val channelData = channelDataFuture.get()
-        val unwrappedChannelData = channelData.getOrNull()
-        unwrappedChannelData?.forEach { it.validate() }
+        channelData.validate()
     }
 
     @Disabled(
@@ -315,16 +313,18 @@ internal class ObjectServiceAsyncTest {
                     .collection("collection")
                     .objectId("object_id")
                     .addChannelData(
-                        UnnamedSchemaWithArrayParent0.builder()
-                            .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                            .data(
-                                PushChannelData.builder()
-                                    ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                                    .addToken("push_token_123")
-                                    .build()
-                            )
-                            .provider("push_fcm")
-                            .build()
+                        listOf(
+                            UnnamedSchemaWithArrayParent0.builder()
+                                .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                                .data(
+                                    PushChannelData.builder()
+                                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                        .addToken("push_token_1")
+                                        .build()
+                                )
+                                .provider("push_fcm")
+                                .build()
+                        )
                     )
                     .locale("en-US")
                     .addPreference(
@@ -439,8 +439,7 @@ internal class ObjectServiceAsyncTest {
             )
 
         val channelData = channelDataFuture.get()
-        val unwrappedChannelData = channelData.getOrNull()
-        unwrappedChannelData?.forEach { it.validate() }
+        channelData.validate()
     }
 
     @Disabled(

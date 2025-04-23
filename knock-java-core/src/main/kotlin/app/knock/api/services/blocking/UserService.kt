@@ -4,7 +4,7 @@ package app.knock.api.services.blocking
 
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
-import app.knock.api.models.objects.ObjectSetChannelDataResponse
+import app.knock.api.models.recipients.channeldata.ChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSet
 import app.knock.api.models.users.User
 import app.knock.api.models.users.UserDeleteParams
@@ -29,7 +29,6 @@ import app.knock.api.services.blocking.users.BulkService
 import app.knock.api.services.blocking.users.FeedService
 import app.knock.api.services.blocking.users.GuideService
 import com.google.errorprone.annotations.MustBeClosed
-import java.util.Optional
 
 interface UserService {
 
@@ -90,15 +89,14 @@ interface UserService {
     fun get(params: UserGetParams, requestOptions: RequestOptions = RequestOptions.none()): User
 
     /** Retrieves the channel data for a specific user and channel ID. */
-    fun getChannelData(
-        params: UserGetChannelDataParams
-    ): Optional<List<ObjectSetChannelDataResponse>> = getChannelData(params, RequestOptions.none())
+    fun getChannelData(params: UserGetChannelDataParams): ChannelData =
+        getChannelData(params, RequestOptions.none())
 
     /** @see [getChannelData] */
     fun getChannelData(
         params: UserGetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Optional<List<ObjectSetChannelDataResponse>>
+    ): ChannelData
 
     /** Retrieves a specific preference set for a user identified by the preference set ID. */
     fun getPreferences(params: UserGetPreferencesParams): PreferenceSet =
@@ -164,15 +162,14 @@ interface UserService {
     fun merge(params: UserMergeParams, requestOptions: RequestOptions = RequestOptions.none()): User
 
     /** Updates or creates channel data for a specific user and channel ID. */
-    fun setChannelData(
-        params: UserSetChannelDataParams
-    ): Optional<List<ObjectSetChannelDataResponse>> = setChannelData(params, RequestOptions.none())
+    fun setChannelData(params: UserSetChannelDataParams): ChannelData =
+        setChannelData(params, RequestOptions.none())
 
     /** @see [setChannelData] */
     fun setChannelData(
         params: UserSetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Optional<List<ObjectSetChannelDataResponse>>
+    ): ChannelData
 
     /**
      * Updates a complete preference set for a user. This is a destructive operation that will
@@ -278,9 +275,7 @@ interface UserService {
          * is otherwise the same as [UserService.getChannelData].
          */
         @MustBeClosed
-        fun getChannelData(
-            params: UserGetChannelDataParams
-        ): HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>> =
+        fun getChannelData(params: UserGetChannelDataParams): HttpResponseFor<ChannelData> =
             getChannelData(params, RequestOptions.none())
 
         /** @see [getChannelData] */
@@ -288,7 +283,7 @@ interface UserService {
         fun getChannelData(
             params: UserGetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>>
+        ): HttpResponseFor<ChannelData>
 
         /**
          * Returns a raw HTTP response for `get
@@ -389,9 +384,7 @@ interface UserService {
          * is otherwise the same as [UserService.setChannelData].
          */
         @MustBeClosed
-        fun setChannelData(
-            params: UserSetChannelDataParams
-        ): HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>> =
+        fun setChannelData(params: UserSetChannelDataParams): HttpResponseFor<ChannelData> =
             setChannelData(params, RequestOptions.none())
 
         /** @see [setChannelData] */
@@ -399,7 +392,7 @@ interface UserService {
         fun setChannelData(
             params: UserSetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>>
+        ): HttpResponseFor<ChannelData>
 
         /**
          * Returns a raw HTTP response for `put

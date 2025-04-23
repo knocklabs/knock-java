@@ -16,7 +16,7 @@ import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
 import app.knock.api.core.http.parseable
 import app.knock.api.core.prepare
-import app.knock.api.models.objects.ObjectSetChannelDataResponse
+import app.knock.api.models.recipients.channeldata.ChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSet
 import app.knock.api.models.users.User
 import app.knock.api.models.users.UserDeleteParams
@@ -47,7 +47,6 @@ import app.knock.api.services.blocking.users.FeedService
 import app.knock.api.services.blocking.users.FeedServiceImpl
 import app.knock.api.services.blocking.users.GuideService
 import app.knock.api.services.blocking.users.GuideServiceImpl
-import java.util.Optional
 
 class UserServiceImpl internal constructor(private val clientOptions: ClientOptions) : UserService {
 
@@ -88,7 +87,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun getChannelData(
         params: UserGetChannelDataParams,
         requestOptions: RequestOptions,
-    ): Optional<List<ObjectSetChannelDataResponse>> =
+    ): ChannelData =
         // get /v1/users/{user_id}/channel_data/{channel_id}
         withRawResponse().getChannelData(params, requestOptions).parse()
 
@@ -134,7 +133,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun setChannelData(
         params: UserSetChannelDataParams,
         requestOptions: RequestOptions,
-    ): Optional<List<ObjectSetChannelDataResponse>> =
+    ): ChannelData =
         // put /v1/users/{user_id}/channel_data/{channel_id}
         withRawResponse().setChannelData(params, requestOptions).parse()
 
@@ -280,14 +279,13 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val getChannelDataHandler: Handler<Optional<List<ObjectSetChannelDataResponse>>> =
-            jsonHandler<Optional<List<ObjectSetChannelDataResponse>>>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val getChannelDataHandler: Handler<ChannelData> =
+            jsonHandler<ChannelData>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun getChannelData(
             params: UserGetChannelDataParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>> {
+        ): HttpResponseFor<ChannelData> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -307,7 +305,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .use { getChannelDataHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
-                            it.ifPresent { it.forEach { it.validate() } }
+                            it.validate()
                         }
                     }
             }
@@ -501,14 +499,13 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val setChannelDataHandler: Handler<Optional<List<ObjectSetChannelDataResponse>>> =
-            jsonHandler<Optional<List<ObjectSetChannelDataResponse>>>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val setChannelDataHandler: Handler<ChannelData> =
+            jsonHandler<ChannelData>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun setChannelData(
             params: UserSetChannelDataParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>> {
+        ): HttpResponseFor<ChannelData> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -529,7 +526,7 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .use { setChannelDataHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
-                            it.ifPresent { it.forEach { it.validate() } }
+                            it.validate()
                         }
                     }
             }

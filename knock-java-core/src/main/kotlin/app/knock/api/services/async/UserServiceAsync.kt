@@ -4,7 +4,7 @@ package app.knock.api.services.async
 
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
-import app.knock.api.models.objects.ObjectSetChannelDataResponse
+import app.knock.api.models.recipients.channeldata.ChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSet
 import app.knock.api.models.users.User
 import app.knock.api.models.users.UserDeleteParams
@@ -29,7 +29,6 @@ import app.knock.api.services.async.users.BulkServiceAsync
 import app.knock.api.services.async.users.FeedServiceAsync
 import app.knock.api.services.async.users.GuideServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
-import java.util.Optional
 import java.util.concurrent.CompletableFuture
 
 interface UserServiceAsync {
@@ -96,16 +95,14 @@ interface UserServiceAsync {
     ): CompletableFuture<User>
 
     /** Retrieves the channel data for a specific user and channel ID. */
-    fun getChannelData(
-        params: UserGetChannelDataParams
-    ): CompletableFuture<Optional<List<ObjectSetChannelDataResponse>>> =
+    fun getChannelData(params: UserGetChannelDataParams): CompletableFuture<ChannelData> =
         getChannelData(params, RequestOptions.none())
 
     /** @see [getChannelData] */
     fun getChannelData(
         params: UserGetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Optional<List<ObjectSetChannelDataResponse>>>
+    ): CompletableFuture<ChannelData>
 
     /** Retrieves a specific preference set for a user identified by the preference set ID. */
     fun getPreferences(params: UserGetPreferencesParams): CompletableFuture<PreferenceSet> =
@@ -178,16 +175,14 @@ interface UserServiceAsync {
     ): CompletableFuture<User>
 
     /** Updates or creates channel data for a specific user and channel ID. */
-    fun setChannelData(
-        params: UserSetChannelDataParams
-    ): CompletableFuture<Optional<List<ObjectSetChannelDataResponse>>> =
+    fun setChannelData(params: UserSetChannelDataParams): CompletableFuture<ChannelData> =
         setChannelData(params, RequestOptions.none())
 
     /** @see [setChannelData] */
     fun setChannelData(
         params: UserSetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Optional<List<ObjectSetChannelDataResponse>>>
+    ): CompletableFuture<ChannelData>
 
     /**
      * Updates a complete preference set for a user. This is a destructive operation that will
@@ -302,7 +297,7 @@ interface UserServiceAsync {
         @MustBeClosed
         fun getChannelData(
             params: UserGetChannelDataParams
-        ): CompletableFuture<HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>>> =
+        ): CompletableFuture<HttpResponseFor<ChannelData>> =
             getChannelData(params, RequestOptions.none())
 
         /** @see [getChannelData] */
@@ -310,7 +305,7 @@ interface UserServiceAsync {
         fun getChannelData(
             params: UserGetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>>>
+        ): CompletableFuture<HttpResponseFor<ChannelData>>
 
         /**
          * Returns a raw HTTP response for `get
@@ -420,7 +415,7 @@ interface UserServiceAsync {
         @MustBeClosed
         fun setChannelData(
             params: UserSetChannelDataParams
-        ): CompletableFuture<HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>>> =
+        ): CompletableFuture<HttpResponseFor<ChannelData>> =
             setChannelData(params, RequestOptions.none())
 
         /** @see [setChannelData] */
@@ -428,7 +423,7 @@ interface UserServiceAsync {
         fun setChannelData(
             params: UserSetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>>>
+        ): CompletableFuture<HttpResponseFor<ChannelData>>
 
         /**
          * Returns a raw HTTP response for `put

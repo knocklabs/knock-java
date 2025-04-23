@@ -37,15 +37,14 @@ import app.knock.api.models.objects.ObjectListSubscriptionsPage
 import app.knock.api.models.objects.ObjectListSubscriptionsPageResponse
 import app.knock.api.models.objects.ObjectListSubscriptionsParams
 import app.knock.api.models.objects.ObjectSetChannelDataParams
-import app.knock.api.models.objects.ObjectSetChannelDataResponse
 import app.knock.api.models.objects.ObjectSetParams
 import app.knock.api.models.objects.ObjectSetPreferencesParams
 import app.knock.api.models.objects.ObjectUnsetChannelDataParams
+import app.knock.api.models.recipients.channeldata.ChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSet
 import app.knock.api.models.recipients.subscriptions.Subscription
 import app.knock.api.services.blocking.objects.BulkService
 import app.knock.api.services.blocking.objects.BulkServiceImpl
-import java.util.Optional
 
 class ObjectServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ObjectService {
@@ -89,7 +88,7 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
     override fun getChannelData(
         params: ObjectGetChannelDataParams,
         requestOptions: RequestOptions,
-    ): Optional<List<ObjectSetChannelDataResponse>> =
+    ): ChannelData =
         // get /v1/objects/{collection}/{object_id}/channel_data/{channel_id}
         withRawResponse().getChannelData(params, requestOptions).parse()
 
@@ -135,7 +134,7 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
     override fun setChannelData(
         params: ObjectSetChannelDataParams,
         requestOptions: RequestOptions,
-    ): Optional<List<ObjectSetChannelDataResponse>> =
+    ): ChannelData =
         // put /v1/objects/{collection}/{object_id}/channel_data/{channel_id}
         withRawResponse().setChannelData(params, requestOptions).parse()
 
@@ -308,14 +307,13 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             }
         }
 
-        private val getChannelDataHandler: Handler<Optional<List<ObjectSetChannelDataResponse>>> =
-            jsonHandler<Optional<List<ObjectSetChannelDataResponse>>>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val getChannelDataHandler: Handler<ChannelData> =
+            jsonHandler<ChannelData>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun getChannelData(
             params: ObjectGetChannelDataParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>> {
+        ): HttpResponseFor<ChannelData> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -336,7 +334,7 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                     .use { getChannelDataHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
-                            it.ifPresent { it.forEach { it.validate() } }
+                            it.validate()
                         }
                     }
             }
@@ -555,14 +553,13 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             }
         }
 
-        private val setChannelDataHandler: Handler<Optional<List<ObjectSetChannelDataResponse>>> =
-            jsonHandler<Optional<List<ObjectSetChannelDataResponse>>>(clientOptions.jsonMapper)
-                .withErrorHandler(errorHandler)
+        private val setChannelDataHandler: Handler<ChannelData> =
+            jsonHandler<ChannelData>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
         override fun setChannelData(
             params: ObjectSetChannelDataParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>> {
+        ): HttpResponseFor<ChannelData> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -584,7 +581,7 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
                     .use { setChannelDataHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
-                            it.ifPresent { it.forEach { it.validate() } }
+                            it.validate()
                         }
                     }
             }

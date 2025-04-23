@@ -26,7 +26,6 @@ import app.knock.api.models.users.UserSetPreferencesParams
 import app.knock.api.models.users.UserUnsetChannelDataParams
 import app.knock.api.models.users.UserUpdateParams
 import java.time.OffsetDateTime
-import kotlin.jvm.optionals.getOrNull
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -225,8 +224,7 @@ internal class UserServiceTest {
                     .build()
             )
 
-        val unwrappedChannelData = channelData.getOrNull()
-        unwrappedChannelData?.forEach { it.validate() }
+        channelData.validate()
     }
 
     @Disabled(
@@ -379,8 +377,7 @@ internal class UserServiceTest {
                     .build()
             )
 
-        val unwrappedChannelData = channelData.getOrNull()
-        unwrappedChannelData?.forEach { it.validate() }
+        channelData.validate()
     }
 
     @Disabled(

@@ -21,15 +21,14 @@ import app.knock.api.models.objects.ObjectListSchedulesParams
 import app.knock.api.models.objects.ObjectListSubscriptionsPageAsync
 import app.knock.api.models.objects.ObjectListSubscriptionsParams
 import app.knock.api.models.objects.ObjectSetChannelDataParams
-import app.knock.api.models.objects.ObjectSetChannelDataResponse
 import app.knock.api.models.objects.ObjectSetParams
 import app.knock.api.models.objects.ObjectSetPreferencesParams
 import app.knock.api.models.objects.ObjectUnsetChannelDataParams
+import app.knock.api.models.recipients.channeldata.ChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSet
 import app.knock.api.models.recipients.subscriptions.Subscription
 import app.knock.api.services.async.objects.BulkServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
-import java.util.Optional
 import java.util.concurrent.CompletableFuture
 
 interface ObjectServiceAsync {
@@ -109,16 +108,14 @@ interface ObjectServiceAsync {
     ): CompletableFuture<Object>
 
     /** Returns the channel data for the specified object and channel. */
-    fun getChannelData(
-        params: ObjectGetChannelDataParams
-    ): CompletableFuture<Optional<List<ObjectSetChannelDataResponse>>> =
+    fun getChannelData(params: ObjectGetChannelDataParams): CompletableFuture<ChannelData> =
         getChannelData(params, RequestOptions.none())
 
     /** @see [getChannelData] */
     fun getChannelData(
         params: ObjectGetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Optional<List<ObjectSetChannelDataResponse>>>
+    ): CompletableFuture<ChannelData>
 
     /** Returns the preference set for the specified object. */
     fun getPreferences(params: ObjectGetPreferencesParams): CompletableFuture<PreferenceSet> =
@@ -197,16 +194,14 @@ interface ObjectServiceAsync {
     ): CompletableFuture<Object>
 
     /** Sets the channel data for the specified object and channel. */
-    fun setChannelData(
-        params: ObjectSetChannelDataParams
-    ): CompletableFuture<Optional<List<ObjectSetChannelDataResponse>>> =
+    fun setChannelData(params: ObjectSetChannelDataParams): CompletableFuture<ChannelData> =
         setChannelData(params, RequestOptions.none())
 
     /** @see [setChannelData] */
     fun setChannelData(
         params: ObjectSetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Optional<List<ObjectSetChannelDataResponse>>>
+    ): CompletableFuture<ChannelData>
 
     /** Updates the preference set for the specified object. */
     fun setPreferences(params: ObjectSetPreferencesParams): CompletableFuture<PreferenceSet> =
@@ -326,7 +321,7 @@ interface ObjectServiceAsync {
         @MustBeClosed
         fun getChannelData(
             params: ObjectGetChannelDataParams
-        ): CompletableFuture<HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>>> =
+        ): CompletableFuture<HttpResponseFor<ChannelData>> =
             getChannelData(params, RequestOptions.none())
 
         /** @see [getChannelData] */
@@ -334,7 +329,7 @@ interface ObjectServiceAsync {
         fun getChannelData(
             params: ObjectGetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>>>
+        ): CompletableFuture<HttpResponseFor<ChannelData>>
 
         /**
          * Returns a raw HTTP response for `get
@@ -445,7 +440,7 @@ interface ObjectServiceAsync {
         @MustBeClosed
         fun setChannelData(
             params: ObjectSetChannelDataParams
-        ): CompletableFuture<HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>>> =
+        ): CompletableFuture<HttpResponseFor<ChannelData>> =
             setChannelData(params, RequestOptions.none())
 
         /** @see [setChannelData] */
@@ -453,7 +448,7 @@ interface ObjectServiceAsync {
         fun setChannelData(
             params: ObjectSetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>>>
+        ): CompletableFuture<HttpResponseFor<ChannelData>>
 
         /**
          * Returns a raw HTTP response for `put
