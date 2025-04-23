@@ -1,37 +1,37 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package app.knock.api.models.objects
+package app.knock.api.models.users
 
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
-import app.knock.api.models.recipients.channeldata.ChannelDataRequest
+import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import java.util.Objects
 
-/** Sets the channel data for the specified object and channel. */
-class ObjectSetChannelDataParams
+/**
+ * Updates a complete preference set for a user. This is a destructive operation that will replace
+ * the existing preference set for the user.
+ */
+class UserSetPreferencesParams
 private constructor(
-    private val collection: String,
-    private val objectId: String,
-    private val channelId: String,
-    private val channelDataRequest: ChannelDataRequest,
+    private val userId: String,
+    private val id: String,
+    private val preferenceSetRequest: PreferenceSetRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun userId(): String = userId
 
-    fun objectId(): String = objectId
+    fun id(): String = id
 
-    fun channelId(): String = channelId
-
-    /** A request to set channel data for a type of channel. */
-    fun channelDataRequest(): ChannelDataRequest = channelDataRequest
+    /** A request to set a preference set for a recipient. */
+    fun preferenceSetRequest(): PreferenceSetRequest = preferenceSetRequest
 
     fun _additionalBodyProperties(): Map<String, JsonValue> =
-        channelDataRequest._additionalProperties()
+        preferenceSetRequest._additionalProperties()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -42,48 +42,43 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ObjectSetChannelDataParams].
+         * Returns a mutable builder for constructing an instance of [UserSetPreferencesParams].
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
-         * .channelId()
-         * .channelDataRequest()
+         * .userId()
+         * .id()
+         * .preferenceSetRequest()
          * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ObjectSetChannelDataParams]. */
+    /** A builder for [UserSetPreferencesParams]. */
     class Builder internal constructor() {
 
-        private var collection: String? = null
-        private var objectId: String? = null
-        private var channelId: String? = null
-        private var channelDataRequest: ChannelDataRequest? = null
+        private var userId: String? = null
+        private var id: String? = null
+        private var preferenceSetRequest: PreferenceSetRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(objectSetChannelDataParams: ObjectSetChannelDataParams) = apply {
-            collection = objectSetChannelDataParams.collection
-            objectId = objectSetChannelDataParams.objectId
-            channelId = objectSetChannelDataParams.channelId
-            channelDataRequest = objectSetChannelDataParams.channelDataRequest
-            additionalHeaders = objectSetChannelDataParams.additionalHeaders.toBuilder()
-            additionalQueryParams = objectSetChannelDataParams.additionalQueryParams.toBuilder()
+        internal fun from(userSetPreferencesParams: UserSetPreferencesParams) = apply {
+            userId = userSetPreferencesParams.userId
+            id = userSetPreferencesParams.id
+            preferenceSetRequest = userSetPreferencesParams.preferenceSetRequest
+            additionalHeaders = userSetPreferencesParams.additionalHeaders.toBuilder()
+            additionalQueryParams = userSetPreferencesParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun userId(userId: String) = apply { this.userId = userId }
 
-        fun objectId(objectId: String) = apply { this.objectId = objectId }
+        fun id(id: String) = apply { this.id = id }
 
-        fun channelId(channelId: String) = apply { this.channelId = channelId }
-
-        /** A request to set channel data for a type of channel. */
-        fun channelDataRequest(channelDataRequest: ChannelDataRequest) = apply {
-            this.channelDataRequest = channelDataRequest
+        /** A request to set a preference set for a recipient. */
+        fun preferenceSetRequest(preferenceSetRequest: PreferenceSetRequest) = apply {
+            this.preferenceSetRequest = preferenceSetRequest
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -185,38 +180,35 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ObjectSetChannelDataParams].
+         * Returns an immutable instance of [UserSetPreferencesParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
-         * .channelId()
-         * .channelDataRequest()
+         * .userId()
+         * .id()
+         * .preferenceSetRequest()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ObjectSetChannelDataParams =
-            ObjectSetChannelDataParams(
-                checkRequired("collection", collection),
-                checkRequired("objectId", objectId),
-                checkRequired("channelId", channelId),
-                checkRequired("channelDataRequest", channelDataRequest),
+        fun build(): UserSetPreferencesParams =
+            UserSetPreferencesParams(
+                checkRequired("userId", userId),
+                checkRequired("id", id),
+                checkRequired("preferenceSetRequest", preferenceSetRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
     }
 
-    fun _body(): ChannelDataRequest = channelDataRequest
+    fun _body(): PreferenceSetRequest = preferenceSetRequest
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
-            1 -> objectId
-            2 -> channelId
+            0 -> userId
+            1 -> id
             else -> ""
         }
 
@@ -229,11 +221,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectSetChannelDataParams && collection == other.collection && objectId == other.objectId && channelId == other.channelId && channelDataRequest == other.channelDataRequest && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is UserSetPreferencesParams && userId == other.userId && id == other.id && preferenceSetRequest == other.preferenceSetRequest && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, channelId, channelDataRequest, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, id, preferenceSetRequest, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ObjectSetChannelDataParams{collection=$collection, objectId=$objectId, channelId=$channelId, channelDataRequest=$channelDataRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserSetPreferencesParams{userId=$userId, id=$id, preferenceSetRequest=$preferenceSetRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

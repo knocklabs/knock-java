@@ -1,28 +1,31 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package app.knock.api.models.objects
+package app.knock.api.models.users
 
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
-/** Returns the channel data for the specified object and channel. */
-class ObjectGetChannelDataParams
+/** Retrieves a specific preference set for a user identified by the preference set ID. */
+class UserGetPreferencesParams
 private constructor(
-    private val collection: String,
-    private val objectId: String,
-    private val channelId: String,
+    private val userId: String,
+    private val id: String,
+    private val tenant: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun userId(): String = userId
 
-    fun objectId(): String = objectId
+    fun id(): String = id
 
-    fun channelId(): String = channelId
+    /** The unique identifier for the tenant. */
+    fun tenant(): Optional<String> = Optional.ofNullable(tenant)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -33,41 +36,44 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ObjectGetChannelDataParams].
+         * Returns a mutable builder for constructing an instance of [UserGetPreferencesParams].
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
-         * .channelId()
+         * .userId()
+         * .id()
          * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ObjectGetChannelDataParams]. */
+    /** A builder for [UserGetPreferencesParams]. */
     class Builder internal constructor() {
 
-        private var collection: String? = null
-        private var objectId: String? = null
-        private var channelId: String? = null
+        private var userId: String? = null
+        private var id: String? = null
+        private var tenant: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(objectGetChannelDataParams: ObjectGetChannelDataParams) = apply {
-            collection = objectGetChannelDataParams.collection
-            objectId = objectGetChannelDataParams.objectId
-            channelId = objectGetChannelDataParams.channelId
-            additionalHeaders = objectGetChannelDataParams.additionalHeaders.toBuilder()
-            additionalQueryParams = objectGetChannelDataParams.additionalQueryParams.toBuilder()
+        internal fun from(userGetPreferencesParams: UserGetPreferencesParams) = apply {
+            userId = userGetPreferencesParams.userId
+            id = userGetPreferencesParams.id
+            tenant = userGetPreferencesParams.tenant
+            additionalHeaders = userGetPreferencesParams.additionalHeaders.toBuilder()
+            additionalQueryParams = userGetPreferencesParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun userId(userId: String) = apply { this.userId = userId }
 
-        fun objectId(objectId: String) = apply { this.objectId = objectId }
+        fun id(id: String) = apply { this.id = id }
 
-        fun channelId(channelId: String) = apply { this.channelId = channelId }
+        /** The unique identifier for the tenant. */
+        fun tenant(tenant: String?) = apply { this.tenant = tenant }
+
+        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
+        fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -168,24 +174,23 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ObjectGetChannelDataParams].
+         * Returns an immutable instance of [UserGetPreferencesParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
-         * .channelId()
+         * .userId()
+         * .id()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ObjectGetChannelDataParams =
-            ObjectGetChannelDataParams(
-                checkRequired("collection", collection),
-                checkRequired("objectId", objectId),
-                checkRequired("channelId", channelId),
+        fun build(): UserGetPreferencesParams =
+            UserGetPreferencesParams(
+                checkRequired("userId", userId),
+                checkRequired("id", id),
+                tenant,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -193,26 +198,31 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
-            1 -> objectId
-            2 -> channelId
+            0 -> userId
+            1 -> id
             else -> ""
         }
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                tenant?.let { put("tenant", it) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is ObjectGetChannelDataParams && collection == other.collection && objectId == other.objectId && channelId == other.channelId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is UserGetPreferencesParams && userId == other.userId && id == other.id && tenant == other.tenant && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, channelId, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, id, tenant, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ObjectGetChannelDataParams{collection=$collection, objectId=$objectId, channelId=$channelId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "UserGetPreferencesParams{userId=$userId, id=$id, tenant=$tenant, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

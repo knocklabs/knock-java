@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package app.knock.api.models.objects
+package app.knock.api.models.tenants
 
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
@@ -11,22 +11,16 @@ import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
 
-/** Unsets the channel data for the specified object and channel. */
-class ObjectUnsetChannelDataParams
+/** Delete a tenant and all associated data. This operation cannot be undone. */
+class TenantDeleteParams
 private constructor(
-    private val collection: String,
-    private val objectId: String,
-    private val channelId: String,
+    private val id: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun collection(): String = collection
-
-    fun objectId(): String = objectId
-
-    fun channelId(): String = channelId
+    fun id(): String = id
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -39,44 +33,33 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ObjectUnsetChannelDataParams].
+         * Returns a mutable builder for constructing an instance of [TenantDeleteParams].
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
-         * .channelId()
+         * .id()
          * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ObjectUnsetChannelDataParams]. */
+    /** A builder for [TenantDeleteParams]. */
     class Builder internal constructor() {
 
-        private var collection: String? = null
-        private var objectId: String? = null
-        private var channelId: String? = null
+        private var id: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
         private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(objectUnsetChannelDataParams: ObjectUnsetChannelDataParams) = apply {
-            collection = objectUnsetChannelDataParams.collection
-            objectId = objectUnsetChannelDataParams.objectId
-            channelId = objectUnsetChannelDataParams.channelId
-            additionalHeaders = objectUnsetChannelDataParams.additionalHeaders.toBuilder()
-            additionalQueryParams = objectUnsetChannelDataParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties =
-                objectUnsetChannelDataParams.additionalBodyProperties.toMutableMap()
+        internal fun from(tenantDeleteParams: TenantDeleteParams) = apply {
+            id = tenantDeleteParams.id
+            additionalHeaders = tenantDeleteParams.additionalHeaders.toBuilder()
+            additionalQueryParams = tenantDeleteParams.additionalQueryParams.toBuilder()
+            additionalBodyProperties = tenantDeleteParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
-
-        fun objectId(objectId: String) = apply { this.objectId = objectId }
-
-        fun channelId(channelId: String) = apply { this.channelId = channelId }
+        fun id(id: String) = apply { this.id = id }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -199,24 +182,20 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ObjectUnsetChannelDataParams].
+         * Returns an immutable instance of [TenantDeleteParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
-         * .channelId()
+         * .id()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ObjectUnsetChannelDataParams =
-            ObjectUnsetChannelDataParams(
-                checkRequired("collection", collection),
-                checkRequired("objectId", objectId),
-                checkRequired("channelId", channelId),
+        fun build(): TenantDeleteParams =
+            TenantDeleteParams(
+                checkRequired("id", id),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -228,9 +207,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
-            1 -> objectId
-            2 -> channelId
+            0 -> id
             else -> ""
         }
 
@@ -243,11 +220,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectUnsetChannelDataParams && collection == other.collection && objectId == other.objectId && channelId == other.channelId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is TenantDeleteParams && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, channelId, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
 
     override fun toString() =
-        "ObjectUnsetChannelDataParams{collection=$collection, objectId=$objectId, channelId=$channelId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "TenantDeleteParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
 }

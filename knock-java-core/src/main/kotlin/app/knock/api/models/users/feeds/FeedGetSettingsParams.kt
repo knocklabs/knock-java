@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package app.knock.api.models.objects
+package app.knock.api.models.users.feeds
 
 import app.knock.api.core.Params
 import app.knock.api.core.checkRequired
@@ -8,18 +8,18 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
 
-/** Returns a paginated list of preference sets for the specified object. */
-class ObjectListPreferencesParams
+/** Returns the feed settings for a user. */
+class FeedGetSettingsParams
 private constructor(
-    private val collection: String,
-    private val objectId: String,
+    private val userId: String,
+    private val id: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun userId(): String = userId
 
-    fun objectId(): String = objectId
+    fun id(): String = id
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -30,36 +30,36 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [ObjectListPreferencesParams].
+         * Returns a mutable builder for constructing an instance of [FeedGetSettingsParams].
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
+         * .userId()
+         * .id()
          * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ObjectListPreferencesParams]. */
+    /** A builder for [FeedGetSettingsParams]. */
     class Builder internal constructor() {
 
-        private var collection: String? = null
-        private var objectId: String? = null
+        private var userId: String? = null
+        private var id: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(objectListPreferencesParams: ObjectListPreferencesParams) = apply {
-            collection = objectListPreferencesParams.collection
-            objectId = objectListPreferencesParams.objectId
-            additionalHeaders = objectListPreferencesParams.additionalHeaders.toBuilder()
-            additionalQueryParams = objectListPreferencesParams.additionalQueryParams.toBuilder()
+        internal fun from(feedGetSettingsParams: FeedGetSettingsParams) = apply {
+            userId = feedGetSettingsParams.userId
+            id = feedGetSettingsParams.id
+            additionalHeaders = feedGetSettingsParams.additionalHeaders.toBuilder()
+            additionalQueryParams = feedGetSettingsParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun userId(userId: String) = apply { this.userId = userId }
 
-        fun objectId(objectId: String) = apply { this.objectId = objectId }
+        fun id(id: String) = apply { this.id = id }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -160,22 +160,22 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ObjectListPreferencesParams].
+         * Returns an immutable instance of [FeedGetSettingsParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
+         * .userId()
+         * .id()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ObjectListPreferencesParams =
-            ObjectListPreferencesParams(
-                checkRequired("collection", collection),
-                checkRequired("objectId", objectId),
+        fun build(): FeedGetSettingsParams =
+            FeedGetSettingsParams(
+                checkRequired("userId", userId),
+                checkRequired("id", id),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -183,8 +183,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
-            1 -> objectId
+            0 -> userId
+            1 -> id
             else -> ""
         }
 
@@ -197,11 +197,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectListPreferencesParams && collection == other.collection && objectId == other.objectId && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is FeedGetSettingsParams && userId == other.userId && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, id, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ObjectListPreferencesParams{collection=$collection, objectId=$objectId, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "FeedGetSettingsParams{userId=$userId, id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

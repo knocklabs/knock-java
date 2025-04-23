@@ -1,6 +1,6 @@
 // File generated from our OpenAPI spec by Stainless.
 
-package app.knock.api.models.objects
+package app.knock.api.models.users.feeds
 
 import app.knock.api.core.Enum
 import app.knock.api.core.JsonField
@@ -10,56 +10,63 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
-import app.knock.api.models.recipients.RecipientReference
 import com.fasterxml.jackson.annotation.JsonCreator
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * List subscriptions for an object. Either list the recipients that subscribe to the provided
- * object, or list the objects that the provided object is subscribed to. Determined by the `mode`
- * query parameter.
- */
-class ObjectListSubscriptionsParams
+/** Returns a paginated list of feed items for a user, including metadata about the feed. */
+class FeedListItemsParams
 private constructor(
-    private val collection: String,
-    private val objectId: String,
+    private val userId: String,
+    private val id: String,
     private val after: String?,
+    private val archived: Archived?,
     private val before: String?,
-    private val include: List<Include>?,
-    private val mode: Mode?,
-    private val objects: List<RecipientReference>?,
+    private val hasTenant: Boolean?,
     private val pageSize: Long?,
-    private val recipients: List<RecipientReference>?,
+    private val source: String?,
+    private val status: Status?,
+    private val tenant: String?,
+    private val triggerData: String?,
+    private val workflowCategories: List<String>?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun userId(): String = userId
 
-    fun objectId(): String = objectId
+    fun id(): String = id
 
     /** The cursor to fetch entries after. */
     fun after(): Optional<String> = Optional.ofNullable(after)
 
+    /** The archived status of the feed items. */
+    fun archived(): Optional<Archived> = Optional.ofNullable(archived)
+
     /** The cursor to fetch entries before. */
     fun before(): Optional<String> = Optional.ofNullable(before)
 
-    /** Additional fields to include in the response. */
-    fun include(): Optional<List<Include>> = Optional.ofNullable(include)
-
-    /** Mode of the request. */
-    fun mode(): Optional<Mode> = Optional.ofNullable(mode)
-
-    /** Objects to filter by (only used if mode is `recipient`). */
-    fun objects(): Optional<List<RecipientReference>> = Optional.ofNullable(objects)
+    /** Whether the feed items have a tenant. */
+    fun hasTenant(): Optional<Boolean> = Optional.ofNullable(hasTenant)
 
     /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
-    /** Recipients to filter by (only used if mode is `object`). */
-    fun recipients(): Optional<List<RecipientReference>> = Optional.ofNullable(recipients)
+    /** The source of the feed items. */
+    fun source(): Optional<String> = Optional.ofNullable(source)
+
+    /** The status of the feed items. */
+    fun status(): Optional<Status> = Optional.ofNullable(status)
+
+    /** The tenant associated with the feed items. */
+    fun tenant(): Optional<String> = Optional.ofNullable(tenant)
+
+    /** The trigger data of the feed items (as a JSON string). */
+    fun triggerData(): Optional<String> = Optional.ofNullable(triggerData)
+
+    /** The workflow categories of the feed items. */
+    fun workflowCategories(): Optional<List<String>> = Optional.ofNullable(workflowCategories)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -70,51 +77,56 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [ObjectListSubscriptionsParams].
+         * Returns a mutable builder for constructing an instance of [FeedListItemsParams].
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
+         * .userId()
+         * .id()
          * ```
          */
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ObjectListSubscriptionsParams]. */
+    /** A builder for [FeedListItemsParams]. */
     class Builder internal constructor() {
 
-        private var collection: String? = null
-        private var objectId: String? = null
+        private var userId: String? = null
+        private var id: String? = null
         private var after: String? = null
+        private var archived: Archived? = null
         private var before: String? = null
-        private var include: MutableList<Include>? = null
-        private var mode: Mode? = null
-        private var objects: MutableList<RecipientReference>? = null
+        private var hasTenant: Boolean? = null
         private var pageSize: Long? = null
-        private var recipients: MutableList<RecipientReference>? = null
+        private var source: String? = null
+        private var status: Status? = null
+        private var tenant: String? = null
+        private var triggerData: String? = null
+        private var workflowCategories: MutableList<String>? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
-        internal fun from(objectListSubscriptionsParams: ObjectListSubscriptionsParams) = apply {
-            collection = objectListSubscriptionsParams.collection
-            objectId = objectListSubscriptionsParams.objectId
-            after = objectListSubscriptionsParams.after
-            before = objectListSubscriptionsParams.before
-            include = objectListSubscriptionsParams.include?.toMutableList()
-            mode = objectListSubscriptionsParams.mode
-            objects = objectListSubscriptionsParams.objects?.toMutableList()
-            pageSize = objectListSubscriptionsParams.pageSize
-            recipients = objectListSubscriptionsParams.recipients?.toMutableList()
-            additionalHeaders = objectListSubscriptionsParams.additionalHeaders.toBuilder()
-            additionalQueryParams = objectListSubscriptionsParams.additionalQueryParams.toBuilder()
+        internal fun from(feedListItemsParams: FeedListItemsParams) = apply {
+            userId = feedListItemsParams.userId
+            id = feedListItemsParams.id
+            after = feedListItemsParams.after
+            archived = feedListItemsParams.archived
+            before = feedListItemsParams.before
+            hasTenant = feedListItemsParams.hasTenant
+            pageSize = feedListItemsParams.pageSize
+            source = feedListItemsParams.source
+            status = feedListItemsParams.status
+            tenant = feedListItemsParams.tenant
+            triggerData = feedListItemsParams.triggerData
+            workflowCategories = feedListItemsParams.workflowCategories?.toMutableList()
+            additionalHeaders = feedListItemsParams.additionalHeaders.toBuilder()
+            additionalQueryParams = feedListItemsParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun userId(userId: String) = apply { this.userId = userId }
 
-        fun objectId(objectId: String) = apply { this.objectId = objectId }
+        fun id(id: String) = apply { this.id = id }
 
         /** The cursor to fetch entries after. */
         fun after(after: String?) = apply { this.after = after }
@@ -122,59 +134,30 @@ private constructor(
         /** Alias for calling [Builder.after] with `after.orElse(null)`. */
         fun after(after: Optional<String>) = after(after.getOrNull())
 
+        /** The archived status of the feed items. */
+        fun archived(archived: Archived?) = apply { this.archived = archived }
+
+        /** Alias for calling [Builder.archived] with `archived.orElse(null)`. */
+        fun archived(archived: Optional<Archived>) = archived(archived.getOrNull())
+
         /** The cursor to fetch entries before. */
         fun before(before: String?) = apply { this.before = before }
 
         /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
-        /** Additional fields to include in the response. */
-        fun include(include: List<Include>?) = apply { this.include = include?.toMutableList() }
-
-        /** Alias for calling [Builder.include] with `include.orElse(null)`. */
-        fun include(include: Optional<List<Include>>) = include(include.getOrNull())
+        /** Whether the feed items have a tenant. */
+        fun hasTenant(hasTenant: Boolean?) = apply { this.hasTenant = hasTenant }
 
         /**
-         * Adds a single [Include] to [Builder.include].
+         * Alias for [Builder.hasTenant].
          *
-         * @throws IllegalStateException if the field was previously set to a non-list.
+         * This unboxed primitive overload exists for backwards compatibility.
          */
-        fun addInclude(include: Include) = apply {
-            this.include = (this.include ?: mutableListOf()).apply { add(include) }
-        }
+        fun hasTenant(hasTenant: Boolean) = hasTenant(hasTenant as Boolean?)
 
-        /** Mode of the request. */
-        fun mode(mode: Mode?) = apply { this.mode = mode }
-
-        /** Alias for calling [Builder.mode] with `mode.orElse(null)`. */
-        fun mode(mode: Optional<Mode>) = mode(mode.getOrNull())
-
-        /** Objects to filter by (only used if mode is `recipient`). */
-        fun objects(objects: List<RecipientReference>?) = apply {
-            this.objects = objects?.toMutableList()
-        }
-
-        /** Alias for calling [Builder.objects] with `objects.orElse(null)`. */
-        fun objects(objects: Optional<List<RecipientReference>>) = objects(objects.getOrNull())
-
-        /**
-         * Adds a single [RecipientReference] to [objects].
-         *
-         * @throws IllegalStateException if the field was previously set to a non-list.
-         */
-        fun addObject(object_: RecipientReference) = apply {
-            objects = (objects ?: mutableListOf()).apply { add(object_) }
-        }
-
-        /** Alias for calling [addObject] with `RecipientReference.ofUser(user)`. */
-        fun addObject(user: String) = addObject(RecipientReference.ofUser(user))
-
-        /**
-         * Alias for calling [addObject] with
-         * `RecipientReference.ofObjectReference(objectReference)`.
-         */
-        fun addObject(objectReference: RecipientReference.ObjectReference) =
-            addObject(RecipientReference.ofObjectReference(objectReference))
+        /** Alias for calling [Builder.hasTenant] with `hasTenant.orElse(null)`. */
+        fun hasTenant(hasTenant: Optional<Boolean>) = hasTenant(hasTenant.getOrNull())
 
         /** The number of items per page. */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
@@ -189,33 +172,50 @@ private constructor(
         /** Alias for calling [Builder.pageSize] with `pageSize.orElse(null)`. */
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
-        /** Recipients to filter by (only used if mode is `object`). */
-        fun recipients(recipients: List<RecipientReference>?) = apply {
-            this.recipients = recipients?.toMutableList()
+        /** The source of the feed items. */
+        fun source(source: String?) = apply { this.source = source }
+
+        /** Alias for calling [Builder.source] with `source.orElse(null)`. */
+        fun source(source: Optional<String>) = source(source.getOrNull())
+
+        /** The status of the feed items. */
+        fun status(status: Status?) = apply { this.status = status }
+
+        /** Alias for calling [Builder.status] with `status.orElse(null)`. */
+        fun status(status: Optional<Status>) = status(status.getOrNull())
+
+        /** The tenant associated with the feed items. */
+        fun tenant(tenant: String?) = apply { this.tenant = tenant }
+
+        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
+        fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
+
+        /** The trigger data of the feed items (as a JSON string). */
+        fun triggerData(triggerData: String?) = apply { this.triggerData = triggerData }
+
+        /** Alias for calling [Builder.triggerData] with `triggerData.orElse(null)`. */
+        fun triggerData(triggerData: Optional<String>) = triggerData(triggerData.getOrNull())
+
+        /** The workflow categories of the feed items. */
+        fun workflowCategories(workflowCategories: List<String>?) = apply {
+            this.workflowCategories = workflowCategories?.toMutableList()
         }
 
-        /** Alias for calling [Builder.recipients] with `recipients.orElse(null)`. */
-        fun recipients(recipients: Optional<List<RecipientReference>>) =
-            recipients(recipients.getOrNull())
+        /**
+         * Alias for calling [Builder.workflowCategories] with `workflowCategories.orElse(null)`.
+         */
+        fun workflowCategories(workflowCategories: Optional<List<String>>) =
+            workflowCategories(workflowCategories.getOrNull())
 
         /**
-         * Adds a single [RecipientReference] to [recipients].
+         * Adds a single [String] to [workflowCategories].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addRecipient(recipient: RecipientReference) = apply {
-            recipients = (recipients ?: mutableListOf()).apply { add(recipient) }
+        fun addWorkflowCategory(workflowCategory: String) = apply {
+            workflowCategories =
+                (workflowCategories ?: mutableListOf()).apply { add(workflowCategory) }
         }
-
-        /** Alias for calling [addRecipient] with `RecipientReference.ofUser(user)`. */
-        fun addRecipient(user: String) = addRecipient(RecipientReference.ofUser(user))
-
-        /**
-         * Alias for calling [addRecipient] with
-         * `RecipientReference.ofObjectReference(objectReference)`.
-         */
-        fun addRecipient(objectReference: RecipientReference.ObjectReference) =
-            addRecipient(RecipientReference.ofObjectReference(objectReference))
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -316,29 +316,32 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ObjectListSubscriptionsParams].
+         * Returns an immutable instance of [FeedListItemsParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
+         * .userId()
+         * .id()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ObjectListSubscriptionsParams =
-            ObjectListSubscriptionsParams(
-                checkRequired("collection", collection),
-                checkRequired("objectId", objectId),
+        fun build(): FeedListItemsParams =
+            FeedListItemsParams(
+                checkRequired("userId", userId),
+                checkRequired("id", id),
                 after,
+                archived,
                 before,
-                include?.toImmutable(),
-                mode,
-                objects?.toImmutable(),
+                hasTenant,
                 pageSize,
-                recipients?.toImmutable(),
+                source,
+                status,
+                tenant,
+                triggerData,
+                workflowCategories?.toImmutable(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -346,8 +349,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
-            1 -> objectId
+            0 -> userId
+            1 -> id
             else -> ""
         }
 
@@ -357,63 +360,21 @@ private constructor(
         QueryParams.builder()
             .apply {
                 after?.let { put("after", it) }
+                archived?.let { put("archived", it.toString()) }
                 before?.let { put("before", it) }
-                include?.forEach { put("include[]", it.toString()) }
-                mode?.let { put("mode", it.toString()) }
-                objects?.forEach {
-                    it.accept(
-                        object : RecipientReference.Visitor<Unit> {
-                            override fun visitUser(user: String) {
-                                put("objects[]", user)
-                            }
-
-                            override fun visitObjectReference(
-                                objectReference: RecipientReference.ObjectReference
-                            ) {
-                                objectReference.id().ifPresent { put("objects[][id]", it) }
-                                objectReference.collection().ifPresent {
-                                    put("objects[][collection]", it)
-                                }
-                                objectReference._additionalProperties().keys().forEach { key ->
-                                    objectReference._additionalProperties().values(key).forEach {
-                                        value ->
-                                        put("objects[][$key]", value)
-                                    }
-                                }
-                            }
-                        }
-                    )
-                }
+                hasTenant?.let { put("has_tenant", it.toString()) }
                 pageSize?.let { put("page_size", it.toString()) }
-                recipients?.forEach {
-                    it.accept(
-                        object : RecipientReference.Visitor<Unit> {
-                            override fun visitUser(user: String) {
-                                put("recipients[]", user)
-                            }
-
-                            override fun visitObjectReference(
-                                objectReference: RecipientReference.ObjectReference
-                            ) {
-                                objectReference.id().ifPresent { put("recipients[][id]", it) }
-                                objectReference.collection().ifPresent {
-                                    put("recipients[][collection]", it)
-                                }
-                                objectReference._additionalProperties().keys().forEach { key ->
-                                    objectReference._additionalProperties().values(key).forEach {
-                                        value ->
-                                        put("recipients[][$key]", value)
-                                    }
-                                }
-                            }
-                        }
-                    )
-                }
+                source?.let { put("source", it) }
+                status?.let { put("status", it.toString()) }
+                tenant?.let { put("tenant", it) }
+                triggerData?.let { put("trigger_data", it) }
+                workflowCategories?.forEach { put("workflow_categories[]", it) }
                 putAll(additionalQueryParams)
             }
             .build()
 
-    class Include @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+    /** The archived status of the feed items. */
+    class Archived @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -427,28 +388,36 @@ private constructor(
 
         companion object {
 
-            @JvmField val PREFERENCES = of("preferences")
+            @JvmField val EXCLUDE = of("exclude")
 
-            @JvmStatic fun of(value: String) = Include(JsonField.of(value))
+            @JvmField val INCLUDE = of("include")
+
+            @JvmField val ONLY = of("only")
+
+            @JvmStatic fun of(value: String) = Archived(JsonField.of(value))
         }
 
-        /** An enum containing [Include]'s known values. */
+        /** An enum containing [Archived]'s known values. */
         enum class Known {
-            PREFERENCES
+            EXCLUDE,
+            INCLUDE,
+            ONLY,
         }
 
         /**
-         * An enum containing [Include]'s known values, as well as an [_UNKNOWN] member.
+         * An enum containing [Archived]'s known values, as well as an [_UNKNOWN] member.
          *
-         * An instance of [Include] can contain an unknown value in a couple of cases:
+         * An instance of [Archived] can contain an unknown value in a couple of cases:
          * - It was deserialized from data that doesn't match any known member. For example, if the
          *   SDK is on an older version than the API, then the API may respond with new members that
          *   the SDK is unaware of.
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
-            PREFERENCES,
-            /** An enum member indicating that [Include] was instantiated with an unknown value. */
+            EXCLUDE,
+            INCLUDE,
+            ONLY,
+            /** An enum member indicating that [Archived] was instantiated with an unknown value. */
             _UNKNOWN,
         }
 
@@ -461,7 +430,9 @@ private constructor(
          */
         fun value(): Value =
             when (this) {
-                PREFERENCES -> Value.PREFERENCES
+                EXCLUDE -> Value.EXCLUDE
+                INCLUDE -> Value.INCLUDE
+                ONLY -> Value.ONLY
                 else -> Value._UNKNOWN
             }
 
@@ -475,8 +446,10 @@ private constructor(
          */
         fun known(): Known =
             when (this) {
-                PREFERENCES -> Known.PREFERENCES
-                else -> throw KnockInvalidDataException("Unknown Include: $value")
+                EXCLUDE -> Known.EXCLUDE
+                INCLUDE -> Known.INCLUDE
+                ONLY -> Known.ONLY
+                else -> throw KnockInvalidDataException("Unknown Archived: $value")
             }
 
         /**
@@ -493,7 +466,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Include = apply {
+        fun validate(): Archived = apply {
             if (validated) {
                 return@apply
             }
@@ -523,7 +496,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Include && value == other.value /* spotless:on */
+            return /* spotless:off */ other is Archived && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -531,8 +504,8 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    /** Mode of the request. */
-    class Mode @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+    /** The status of the feed items. */
+    class Status @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
          * Returns this class instance's raw value.
@@ -546,32 +519,44 @@ private constructor(
 
         companion object {
 
-            @JvmField val RECIPIENT = of("recipient")
+            @JvmField val UNREAD = of("unread")
 
-            @JvmField val OBJECT = of("object")
+            @JvmField val READ = of("read")
 
-            @JvmStatic fun of(value: String) = Mode(JsonField.of(value))
+            @JvmField val UNSEEN = of("unseen")
+
+            @JvmField val SEEN = of("seen")
+
+            @JvmField val ALL = of("all")
+
+            @JvmStatic fun of(value: String) = Status(JsonField.of(value))
         }
 
-        /** An enum containing [Mode]'s known values. */
+        /** An enum containing [Status]'s known values. */
         enum class Known {
-            RECIPIENT,
-            OBJECT,
+            UNREAD,
+            READ,
+            UNSEEN,
+            SEEN,
+            ALL,
         }
 
         /**
-         * An enum containing [Mode]'s known values, as well as an [_UNKNOWN] member.
+         * An enum containing [Status]'s known values, as well as an [_UNKNOWN] member.
          *
-         * An instance of [Mode] can contain an unknown value in a couple of cases:
+         * An instance of [Status] can contain an unknown value in a couple of cases:
          * - It was deserialized from data that doesn't match any known member. For example, if the
          *   SDK is on an older version than the API, then the API may respond with new members that
          *   the SDK is unaware of.
          * - It was constructed with an arbitrary value using the [of] method.
          */
         enum class Value {
-            RECIPIENT,
-            OBJECT,
-            /** An enum member indicating that [Mode] was instantiated with an unknown value. */
+            UNREAD,
+            READ,
+            UNSEEN,
+            SEEN,
+            ALL,
+            /** An enum member indicating that [Status] was instantiated with an unknown value. */
             _UNKNOWN,
         }
 
@@ -584,8 +569,11 @@ private constructor(
          */
         fun value(): Value =
             when (this) {
-                RECIPIENT -> Value.RECIPIENT
-                OBJECT -> Value.OBJECT
+                UNREAD -> Value.UNREAD
+                READ -> Value.READ
+                UNSEEN -> Value.UNSEEN
+                SEEN -> Value.SEEN
+                ALL -> Value.ALL
                 else -> Value._UNKNOWN
             }
 
@@ -599,9 +587,12 @@ private constructor(
          */
         fun known(): Known =
             when (this) {
-                RECIPIENT -> Known.RECIPIENT
-                OBJECT -> Known.OBJECT
-                else -> throw KnockInvalidDataException("Unknown Mode: $value")
+                UNREAD -> Known.UNREAD
+                READ -> Known.READ
+                UNSEEN -> Known.UNSEEN
+                SEEN -> Known.SEEN
+                ALL -> Known.ALL
+                else -> throw KnockInvalidDataException("Unknown Status: $value")
             }
 
         /**
@@ -618,7 +609,7 @@ private constructor(
 
         private var validated: Boolean = false
 
-        fun validate(): Mode = apply {
+        fun validate(): Status = apply {
             if (validated) {
                 return@apply
             }
@@ -648,7 +639,7 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Mode && value == other.value /* spotless:on */
+            return /* spotless:off */ other is Status && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -661,11 +652,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectListSubscriptionsParams && collection == other.collection && objectId == other.objectId && after == other.after && before == other.before && include == other.include && mode == other.mode && objects == other.objects && pageSize == other.pageSize && recipients == other.recipients && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is FeedListItemsParams && userId == other.userId && id == other.id && after == other.after && archived == other.archived && before == other.before && hasTenant == other.hasTenant && pageSize == other.pageSize && source == other.source && status == other.status && tenant == other.tenant && triggerData == other.triggerData && workflowCategories == other.workflowCategories && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, after, before, include, mode, objects, pageSize, recipients, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, id, after, archived, before, hasTenant, pageSize, source, status, tenant, triggerData, workflowCategories, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ObjectListSubscriptionsParams{collection=$collection, objectId=$objectId, after=$after, before=$before, include=$include, mode=$mode, objects=$objects, pageSize=$pageSize, recipients=$recipients, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "FeedListItemsParams{userId=$userId, id=$id, after=$after, archived=$archived, before=$before, hasTenant=$hasTenant, pageSize=$pageSize, source=$source, status=$status, tenant=$tenant, triggerData=$triggerData, workflowCategories=$workflowCategories, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

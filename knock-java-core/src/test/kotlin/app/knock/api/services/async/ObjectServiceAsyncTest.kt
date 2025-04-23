@@ -5,16 +5,16 @@ package app.knock.api.services.async
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClientAsync
 import app.knock.api.core.JsonValue
-import app.knock.api.models.objects.ObjectAddSubscriptionsParams
-import app.knock.api.models.objects.ObjectDeleteSubscriptionsParams
-import app.knock.api.models.objects.ObjectGetChannelDataParams
+import app.knock.api.models.UnnamedSchemaWithArrayParent0
+import app.knock.api.models.UnnamedSchemaWithArrayParent1
+import app.knock.api.models.objects.ObjectDeleteParams
+import app.knock.api.models.objects.ObjectGetParams
+import app.knock.api.models.objects.ObjectListMessagesParams
 import app.knock.api.models.objects.ObjectListParams
-import app.knock.api.models.objects.ObjectListPreferencesParams
-import app.knock.api.models.objects.ObjectListSubscriptionsParams
-import app.knock.api.models.objects.ObjectSetChannelDataParams
-import app.knock.api.models.objects.ObjectUnsetChannelDataParams
-import app.knock.api.models.recipients.channeldata.ChannelDataRequest
+import app.knock.api.models.objects.ObjectListSchedulesParams
+import app.knock.api.models.objects.ObjectSetParams
 import app.knock.api.models.recipients.channeldata.PushChannelData
+import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -45,7 +45,7 @@ internal class ObjectServiceAsyncTest {
         "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
     )
     @Test
-    fun addSubscriptions() {
+    fun delete() {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
@@ -53,30 +53,19 @@ internal class ObjectServiceAsyncTest {
                 .build()
         val objectServiceAsync = client.objects()
 
-        val subscriptionsFuture =
-            objectServiceAsync.addSubscriptions(
-                ObjectAddSubscriptionsParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .addRecipient("user_1")
-                    .addRecipient("user_2")
-                    .properties(
-                        ObjectAddSubscriptionsParams.Properties.builder()
-                            .putAdditionalProperty("key", JsonValue.from("bar"))
-                            .build()
-                    )
-                    .build()
+        val objectFuture =
+            objectServiceAsync.delete(
+                ObjectDeleteParams.builder().collection("collection").id("id").build()
             )
 
-        val subscriptions = subscriptionsFuture.get()
-        subscriptions.forEach { it.validate() }
+        val object_ = objectFuture.get()
     }
 
     @Disabled(
         "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
     )
     @Test
-    fun deleteSubscriptions() {
+    fun get() {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
@@ -84,73 +73,20 @@ internal class ObjectServiceAsyncTest {
                 .build()
         val objectServiceAsync = client.objects()
 
-        val subscriptionsFuture =
-            objectServiceAsync.deleteSubscriptions(
-                ObjectDeleteSubscriptionsParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .addRecipient("user_123")
-                    .build()
+        val objectFuture =
+            objectServiceAsync.get(
+                ObjectGetParams.builder().collection("collection").id("id").build()
             )
 
-        val subscriptions = subscriptionsFuture.get()
-        subscriptions.forEach { it.validate() }
+        val object_ = objectFuture.get()
+        object_.validate()
     }
 
     @Disabled(
         "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
     )
     @Test
-    fun getChannelData() {
-        val client =
-            KnockOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val objectServiceAsync = client.objects()
-
-        val channelDataFuture =
-            objectServiceAsync.getChannelData(
-                ObjectGetChannelDataParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .build()
-            )
-
-        val channelData = channelDataFuture.get()
-        channelData.validate()
-    }
-
-    @Disabled(
-        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
-    )
-    @Test
-    fun listPreferences() {
-        val client =
-            KnockOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val objectServiceAsync = client.objects()
-
-        val preferenceSetsFuture =
-            objectServiceAsync.listPreferences(
-                ObjectListPreferencesParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .build()
-            )
-
-        val preferenceSets = preferenceSetsFuture.get()
-        preferenceSets.forEach { it.validate() }
-    }
-
-    @Disabled(
-        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
-    )
-    @Test
-    fun listSubscriptions() {
+    fun listMessages() {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
@@ -159,11 +95,8 @@ internal class ObjectServiceAsyncTest {
         val objectServiceAsync = client.objects()
 
         val pageFuture =
-            objectServiceAsync.listSubscriptions(
-                ObjectListSubscriptionsParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .build()
+            objectServiceAsync.listMessages(
+                ObjectListMessagesParams.builder().collection("projects").id("project-123").build()
             )
 
         val page = pageFuture.get()
@@ -174,7 +107,7 @@ internal class ObjectServiceAsyncTest {
         "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
     )
     @Test
-    fun setChannelData() {
+    fun listSchedules() {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
@@ -182,34 +115,20 @@ internal class ObjectServiceAsyncTest {
                 .build()
         val objectServiceAsync = client.objects()
 
-        val channelDataFuture =
-            objectServiceAsync.setChannelData(
-                ObjectSetChannelDataParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .channelDataRequest(
-                        ChannelDataRequest.builder()
-                            .data(
-                                PushChannelData.builder()
-                                    ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                                    .addToken("push_token_1")
-                                    .build()
-                            )
-                            .build()
-                    )
-                    .build()
+        val pageFuture =
+            objectServiceAsync.listSchedules(
+                ObjectListSchedulesParams.builder().collection("collection").id("id").build()
             )
 
-        val channelData = channelDataFuture.get()
-        channelData.validate()
+        val page = pageFuture.get()
+        page.response().validate()
     }
 
     @Disabled(
         "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
     )
     @Test
-    fun unsetChannelData() {
+    fun set() {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
@@ -217,15 +136,101 @@ internal class ObjectServiceAsyncTest {
                 .build()
         val objectServiceAsync = client.objects()
 
-        val responseFuture =
-            objectServiceAsync.unsetChannelData(
-                ObjectUnsetChannelDataParams.builder()
+        val objectFuture =
+            objectServiceAsync.set(
+                ObjectSetParams.builder()
                     .collection("collection")
-                    .objectId("object_id")
-                    .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .id("id")
+                    .addChannelData(
+                        UnnamedSchemaWithArrayParent0.builder()
+                            .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
+                            .data(
+                                PushChannelData.builder()
+                                    ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                    .addToken("push_token_123")
+                                    .build()
+                            )
+                            .provider("push_fcm")
+                            .build()
+                    )
+                    .locale("en-US")
+                    .addPreference(
+                        UnnamedSchemaWithArrayParent1.builder()
+                            .id("default")
+                            .categories(
+                                UnnamedSchemaWithArrayParent1.Categories.builder()
+                                    .putAdditionalProperty(
+                                        "marketing",
+                                        JsonValue.from(
+                                            mapOf(
+                                                "channel_types" to
+                                                    mapOf(
+                                                        "chat" to true,
+                                                        "email" to false,
+                                                        "http" to true,
+                                                        "in_app_feed" to true,
+                                                        "push" to true,
+                                                        "sms" to true,
+                                                    ),
+                                                "conditions" to
+                                                    listOf(
+                                                        mapOf(
+                                                            "argument" to "some_property",
+                                                            "operator" to "equal_to",
+                                                            "variable" to "recipient.property",
+                                                        )
+                                                    ),
+                                            )
+                                        ),
+                                    )
+                                    .putAdditionalProperty("transactional", JsonValue.from(true))
+                                    .build()
+                            )
+                            .channelTypes(
+                                PreferenceSetChannelTypes.builder()
+                                    .chat(true)
+                                    .email(true)
+                                    .http(true)
+                                    .inAppFeed(true)
+                                    .push(true)
+                                    .sms(true)
+                                    .build()
+                            )
+                            .workflows(
+                                UnnamedSchemaWithArrayParent1.Workflows.builder()
+                                    .putAdditionalProperty(
+                                        "dinosaurs-loose",
+                                        JsonValue.from(
+                                            mapOf(
+                                                "channel_types" to
+                                                    mapOf(
+                                                        "chat" to true,
+                                                        "email" to true,
+                                                        "http" to true,
+                                                        "in_app_feed" to true,
+                                                        "push" to true,
+                                                        "sms" to true,
+                                                    ),
+                                                "conditions" to
+                                                    listOf(
+                                                        mapOf(
+                                                            "argument" to "some_property",
+                                                            "operator" to "equal_to",
+                                                            "variable" to "recipient.property",
+                                                        )
+                                                    ),
+                                            )
+                                        ),
+                                    )
+                                    .build()
+                            )
+                            .build()
+                    )
+                    .timezone("America/New_York")
                     .build()
             )
 
-        val response = responseFuture.get()
+        val object_ = objectFuture.get()
+        object_.validate()
     }
 }

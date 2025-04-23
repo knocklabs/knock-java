@@ -22,6 +22,7 @@ import app.knock.api.models.users.User
 import app.knock.api.models.users.UserDeleteParams
 import app.knock.api.models.users.UserGetChannelDataParams
 import app.knock.api.models.users.UserGetParams
+import app.knock.api.models.users.UserGetPreferencesParams
 import app.knock.api.models.users.UserListMessagesPageAsync
 import app.knock.api.models.users.UserListMessagesPageResponse
 import app.knock.api.models.users.UserListMessagesParams
@@ -37,6 +38,7 @@ import app.knock.api.models.users.UserListSubscriptionsPageResponse
 import app.knock.api.models.users.UserListSubscriptionsParams
 import app.knock.api.models.users.UserMergeParams
 import app.knock.api.models.users.UserSetChannelDataParams
+import app.knock.api.models.users.UserSetPreferencesParams
 import app.knock.api.models.users.UserUnsetChannelDataParams
 import app.knock.api.models.users.UserUpdateParams
 import app.knock.api.services.async.users.BulkServiceAsync
@@ -103,6 +105,13 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
         // get /v1/users/{user_id}/channel_data/{channel_id}
         withRawResponse().getChannelData(params, requestOptions).thenApply { it.parse() }
 
+    override fun getPreferences(
+        params: UserGetPreferencesParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<PreferenceSet> =
+        // get /v1/users/{user_id}/preferences/{id}
+        withRawResponse().getPreferences(params, requestOptions).thenApply { it.parse() }
+
     override fun listMessages(
         params: UserListMessagesParams,
         requestOptions: RequestOptions,
@@ -144,6 +153,13 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
     ): CompletableFuture<ChannelData> =
         // put /v1/users/{user_id}/channel_data/{channel_id}
         withRawResponse().setChannelData(params, requestOptions).thenApply { it.parse() }
+
+    override fun setPreferences(
+        params: UserSetPreferencesParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<PreferenceSet> =
+        // put /v1/users/{user_id}/preferences/{id}
+        withRawResponse().setPreferences(params, requestOptions).thenApply { it.parse() }
 
     override fun unsetChannelData(
         params: UserUnsetChannelDataParams,
@@ -318,6 +334,41 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                     response.parseable {
                         response
                             .use { getChannelDataHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val getPreferencesHandler: Handler<PreferenceSet> =
+            jsonHandler<PreferenceSet>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun getPreferences(
+            params: UserGetPreferencesParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PreferenceSet>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .addPathSegments(
+                        "v1",
+                        "users",
+                        params._pathParam(0),
+                        "preferences",
+                        params._pathParam(1),
+                    )
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { getPreferencesHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()
@@ -525,6 +576,42 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                     response.parseable {
                         response
                             .use { setChannelDataHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val setPreferencesHandler: Handler<PreferenceSet> =
+            jsonHandler<PreferenceSet>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
+        override fun setPreferences(
+            params: UserSetPreferencesParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<PreferenceSet>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments(
+                        "v1",
+                        "users",
+                        params._pathParam(0),
+                        "preferences",
+                        params._pathParam(1),
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { setPreferencesHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()

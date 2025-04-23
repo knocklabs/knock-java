@@ -10,7 +10,7 @@ import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
-import app.knock.api.models.recipients.subscriptions.Subscription
+import app.knock.api.models.schedules.Schedule
 import app.knock.api.models.shared.PageInfo
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -20,10 +20,10 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/** A response containing a list of subscriptions. */
-class ObjectListSubscriptionsPageResponse
+/** A response containing a list of schedules. */
+class ObjectListSchedulesPageResponse
 private constructor(
-    private val entries: JsonField<List<Subscription>>,
+    private val entries: JsonField<List<Schedule>>,
     private val pageInfo: JsonField<PageInfo>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
@@ -32,17 +32,17 @@ private constructor(
     private constructor(
         @JsonProperty("entries")
         @ExcludeMissing
-        entries: JsonField<List<Subscription>> = JsonMissing.of(),
+        entries: JsonField<List<Schedule>> = JsonMissing.of(),
         @JsonProperty("page_info") @ExcludeMissing pageInfo: JsonField<PageInfo> = JsonMissing.of(),
     ) : this(entries, pageInfo, mutableMapOf())
 
     /**
-     * A list of subscriptions.
+     * A list of schedules.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun entries(): List<Subscription> = entries.getRequired("entries")
+    fun entries(): List<Schedule> = entries.getRequired("entries")
 
     /**
      * Pagination information for a list of resources.
@@ -57,7 +57,7 @@ private constructor(
      *
      * Unlike [entries], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("entries") @ExcludeMissing fun _entries(): JsonField<List<Subscription>> = entries
+    @JsonProperty("entries") @ExcludeMissing fun _entries(): JsonField<List<Schedule>> = entries
 
     /**
      * Returns the raw JSON value of [pageInfo].
@@ -82,7 +82,7 @@ private constructor(
 
         /**
          * Returns a mutable builder for constructing an instance of
-         * [ObjectListSubscriptionsPageResponse].
+         * [ObjectListSchedulesPageResponse].
          *
          * The following fields are required:
          * ```java
@@ -93,43 +93,42 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [ObjectListSubscriptionsPageResponse]. */
+    /** A builder for [ObjectListSchedulesPageResponse]. */
     class Builder internal constructor() {
 
-        private var entries: JsonField<MutableList<Subscription>>? = null
+        private var entries: JsonField<MutableList<Schedule>>? = null
         private var pageInfo: JsonField<PageInfo>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(
-            objectListSubscriptionsPageResponse: ObjectListSubscriptionsPageResponse
-        ) = apply {
-            entries = objectListSubscriptionsPageResponse.entries.map { it.toMutableList() }
-            pageInfo = objectListSubscriptionsPageResponse.pageInfo
-            additionalProperties =
-                objectListSubscriptionsPageResponse.additionalProperties.toMutableMap()
-        }
+        internal fun from(objectListSchedulesPageResponse: ObjectListSchedulesPageResponse) =
+            apply {
+                entries = objectListSchedulesPageResponse.entries.map { it.toMutableList() }
+                pageInfo = objectListSchedulesPageResponse.pageInfo
+                additionalProperties =
+                    objectListSchedulesPageResponse.additionalProperties.toMutableMap()
+            }
 
-        /** A list of subscriptions. */
-        fun entries(entries: List<Subscription>) = entries(JsonField.of(entries))
+        /** A list of schedules. */
+        fun entries(entries: List<Schedule>) = entries(JsonField.of(entries))
 
         /**
          * Sets [Builder.entries] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.entries] with a well-typed `List<Subscription>` value
+         * You should usually call [Builder.entries] with a well-typed `List<Schedule>` value
          * instead. This method is primarily for setting the field to an undocumented or not yet
          * supported value.
          */
-        fun entries(entries: JsonField<List<Subscription>>) = apply {
+        fun entries(entries: JsonField<List<Schedule>>) = apply {
             this.entries = entries.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [Subscription] to [entries].
+         * Adds a single [Schedule] to [entries].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addEntry(entry: Subscription) = apply {
+        fun addEntry(entry: Schedule) = apply {
             entries =
                 (entries ?: JsonField.of(mutableListOf())).also {
                     checkKnown("entries", it).add(entry)
@@ -168,7 +167,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [ObjectListSubscriptionsPageResponse].
+         * Returns an immutable instance of [ObjectListSchedulesPageResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -180,8 +179,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): ObjectListSubscriptionsPageResponse =
-            ObjectListSubscriptionsPageResponse(
+        fun build(): ObjectListSchedulesPageResponse =
+            ObjectListSchedulesPageResponse(
                 checkRequired("entries", entries).map { it.toImmutable() },
                 checkRequired("pageInfo", pageInfo),
                 additionalProperties.toMutableMap(),
@@ -190,7 +189,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): ObjectListSubscriptionsPageResponse = apply {
+    fun validate(): ObjectListSchedulesPageResponse = apply {
         if (validated) {
             return@apply
         }
@@ -223,7 +222,7 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectListSubscriptionsPageResponse && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ObjectListSchedulesPageResponse && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -233,5 +232,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ObjectListSubscriptionsPageResponse{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
+        "ObjectListSchedulesPageResponse{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
 }
