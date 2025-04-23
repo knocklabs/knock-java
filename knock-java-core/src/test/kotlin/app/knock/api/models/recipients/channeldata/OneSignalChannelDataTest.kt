@@ -15,12 +15,14 @@ internal class OneSignalChannelDataTest {
             OneSignalChannelData.builder()
                 ._typename(OneSignalChannelData._Typename.ONE_SIGNAL_CHANNEL_DATA)
                 .addPlayerId("123e4567-e89b-12d3-a456-426614174000")
+                .type(OneSignalChannelData.Type.PUSH_ONE_SIGNAL)
                 .build()
 
         assertThat(oneSignalChannelData._typename())
             .isEqualTo(OneSignalChannelData._Typename.ONE_SIGNAL_CHANNEL_DATA)
         assertThat(oneSignalChannelData.playerIds())
             .containsExactly("123e4567-e89b-12d3-a456-426614174000")
+        assertThat(oneSignalChannelData.type()).isEqualTo(OneSignalChannelData.Type.PUSH_ONE_SIGNAL)
     }
 
     @Test
@@ -30,6 +32,7 @@ internal class OneSignalChannelDataTest {
             OneSignalChannelData.builder()
                 ._typename(OneSignalChannelData._Typename.ONE_SIGNAL_CHANNEL_DATA)
                 .addPlayerId("123e4567-e89b-12d3-a456-426614174000")
+                .type(OneSignalChannelData.Type.PUSH_ONE_SIGNAL)
                 .build()
 
         val roundtrippedOneSignalChannelData =

@@ -8,7 +8,6 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
-import app.knock.api.core.allMaxBy
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.getOrThrow
@@ -794,38 +793,34 @@ private constructor(
 
                 override fun ObjectCodec.deserialize(node: JsonNode): Data {
                     val json = JsonValue.fromJsonNode(node)
+                    val type = json.asObject().getOrNull()?.get("type")?.asString()?.getOrNull()
 
-                    val bestMatches =
-                        sequenceOf(
-                                tryDeserialize(node, jacksonTypeRef<PushChannelData>())?.let {
-                                    Data(pushChannel = it, _json = json)
-                                },
-                                tryDeserialize(node, jacksonTypeRef<OneSignalChannelData>())?.let {
-                                    Data(oneSignalChannel = it, _json = json)
-                                },
-                                tryDeserialize(node, jacksonTypeRef<SlackChannelData>())?.let {
-                                    Data(slackChannel = it, _json = json)
-                                },
-                                tryDeserialize(node, jacksonTypeRef<MsTeamsChannelData>())?.let {
-                                    Data(msTeamsChannel = it, _json = json)
-                                },
-                                tryDeserialize(node, jacksonTypeRef<DiscordChannelData>())?.let {
-                                    Data(discordChannel = it, _json = json)
-                                },
-                            )
-                            .filterNotNull()
-                            .allMaxBy { it.validity() }
-                            .toList()
-                    return when (bestMatches.size) {
-                        // This can happen if what we're deserializing is completely incompatible
-                        // with all the possible variants (e.g. deserializing from boolean).
-                        0 -> Data(_json = json)
-                        1 -> bestMatches.single()
-                        // If there's more than one match with the highest validity, then use the
-                        // first completely valid match, or simply the first match if none are
-                        // completely valid.
-                        else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
+                    when (type) {
+                        "push_one_signal" -> {
+                            return tryDeserialize(node, jacksonTypeRef<OneSignalChannelData>())
+                                ?.let { Data(oneSignalChannel = it, _json = json) }
+                                ?: Data(_json = json)
+                        }
+                        "chat_slack" -> {
+                            return tryDeserialize(node, jacksonTypeRef<SlackChannelData>())?.let {
+                                Data(slackChannel = it, _json = json)
+                            } ?: Data(_json = json)
+                        }
+                        "chat_ms_teams" -> {
+                            return tryDeserialize(node, jacksonTypeRef<MsTeamsChannelData>())?.let {
+                                Data(msTeamsChannel = it, _json = json)
+                            } ?: Data(_json = json)
+                        }
+                        "chat_discord" -> {
+                            return tryDeserialize(node, jacksonTypeRef<DiscordChannelData>())?.let {
+                                Data(discordChannel = it, _json = json)
+                            } ?: Data(_json = json)
+                        }
                     }
+
+                    return tryDeserialize(node, jacksonTypeRef<PushChannelData>())?.let {
+                        Data(pushChannel = it, _json = json)
+                    } ?: Data(_json = json)
                 }
             }
 

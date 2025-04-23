@@ -169,103 +169,18 @@ private constructor(
         /** Alias for calling [data] with `Data.ofPushChannel(pushChannel)`. */
         fun data(pushChannel: PushChannelData) = data(Data.ofPushChannel(pushChannel))
 
-        /**
-         * Alias for calling [data] with the following:
-         * ```java
-         * PushChannelData.builder()
-         *     ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-         *     .tokens(tokens)
-         *     .build()
-         * ```
-         */
-        fun pushChannelData(tokens: List<String>) =
-            data(
-                PushChannelData.builder()
-                    ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                    .tokens(tokens)
-                    .build()
-            )
-
         /** Alias for calling [data] with `Data.ofSlackChannel(slackChannel)`. */
         fun data(slackChannel: SlackChannelData) = data(Data.ofSlackChannel(slackChannel))
-
-        /**
-         * Alias for calling [data] with the following:
-         * ```java
-         * SlackChannelData.builder()
-         *     ._typename(SlackChannelData._Typename.SLACK_CHANNEL_DATA)
-         *     .connections(connections)
-         *     .build()
-         * ```
-         */
-        fun slackChannelData(connections: List<SlackChannelData.Connection>) =
-            data(
-                SlackChannelData.builder()
-                    ._typename(SlackChannelData._Typename.SLACK_CHANNEL_DATA)
-                    .connections(connections)
-                    .build()
-            )
 
         /** Alias for calling [data] with `Data.ofMsTeamsChannel(msTeamsChannel)`. */
         fun data(msTeamsChannel: MsTeamsChannelData) = data(Data.ofMsTeamsChannel(msTeamsChannel))
 
-        /**
-         * Alias for calling [data] with the following:
-         * ```java
-         * MsTeamsChannelData.builder()
-         *     ._typename(MsTeamsChannelData._Typename.MS_TEAMS_CHANNEL_DATA)
-         *     .connections(connections)
-         *     .build()
-         * ```
-         */
-        fun msTeamsChannelData(connections: List<MsTeamsChannelData.Connection>) =
-            data(
-                MsTeamsChannelData.builder()
-                    ._typename(MsTeamsChannelData._Typename.MS_TEAMS_CHANNEL_DATA)
-                    .connections(connections)
-                    .build()
-            )
-
         /** Alias for calling [data] with `Data.ofDiscordChannel(discordChannel)`. */
         fun data(discordChannel: DiscordChannelData) = data(Data.ofDiscordChannel(discordChannel))
-
-        /**
-         * Alias for calling [data] with the following:
-         * ```java
-         * DiscordChannelData.builder()
-         *     ._typename(DiscordChannelData._Typename.DISCORD_CHANNEL_DATA)
-         *     .connections(connections)
-         *     .build()
-         * ```
-         */
-        fun discordChannelData(connections: List<DiscordChannelData.Connection>) =
-            data(
-                DiscordChannelData.builder()
-                    ._typename(DiscordChannelData._Typename.DISCORD_CHANNEL_DATA)
-                    .connections(connections)
-                    .build()
-            )
 
         /** Alias for calling [data] with `Data.ofOneSignalChannel(oneSignalChannel)`. */
         fun data(oneSignalChannel: OneSignalChannelData) =
             data(Data.ofOneSignalChannel(oneSignalChannel))
-
-        /**
-         * Alias for calling [data] with the following:
-         * ```java
-         * OneSignalChannelData.builder()
-         *     ._typename(OneSignalChannelData._Typename.ONE_SIGNAL_CHANNEL_DATA)
-         *     .playerIds(playerIds)
-         *     .build()
-         * ```
-         */
-        fun oneSignalChannelData(playerIds: List<String>) =
-            data(
-                OneSignalChannelData.builder()
-                    ._typename(OneSignalChannelData._Typename.ONE_SIGNAL_CHANNEL_DATA)
-                    .playerIds(playerIds)
-                    .build()
-            )
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()

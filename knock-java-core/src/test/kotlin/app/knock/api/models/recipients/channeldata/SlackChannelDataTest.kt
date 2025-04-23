@@ -21,6 +21,7 @@ internal class SlackChannelDataTest {
                         .userId("U01234567890")
                         .build()
                 )
+                .type(SlackChannelData.Type.CHAT_SLACK)
                 .token(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
                 .build()
 
@@ -36,6 +37,7 @@ internal class SlackChannelDataTest {
                         .build()
                 )
             )
+        assertThat(slackChannelData.type()).isEqualTo(SlackChannelData.Type.CHAT_SLACK)
         assertThat(slackChannelData.token())
             .contains(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
     }
@@ -53,6 +55,7 @@ internal class SlackChannelDataTest {
                         .userId("U01234567890")
                         .build()
                 )
+                .type(SlackChannelData.Type.CHAT_SLACK)
                 .token(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
                 .build()
 

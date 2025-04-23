@@ -67,6 +67,7 @@ internal class BulkServiceTest {
                                         PushChannelData.builder()
                                             ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                                             .addToken("push_token_xxx")
+                                            .type(PushChannelData.Type.PUSH_FCM)
                                             .build()
                                     )
                                     .provider("push_fcm")

@@ -15,11 +15,13 @@ internal class PushChannelDataTest {
             PushChannelData.builder()
                 ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                 .addToken("push_token_1")
+                .type(PushChannelData.Type.PUSH_FCM)
                 .build()
 
         assertThat(pushChannelData._typename())
             .isEqualTo(PushChannelData._Typename.PUSH_CHANNEL_DATA)
         assertThat(pushChannelData.tokens()).containsExactly("push_token_1")
+        assertThat(pushChannelData.type()).isEqualTo(PushChannelData.Type.PUSH_FCM)
     }
 
     @Test
@@ -29,6 +31,7 @@ internal class PushChannelDataTest {
             PushChannelData.builder()
                 ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                 .addToken("push_token_1")
+                .type(PushChannelData.Type.PUSH_FCM)
                 .build()
 
         val roundtrippedPushChannelData =
