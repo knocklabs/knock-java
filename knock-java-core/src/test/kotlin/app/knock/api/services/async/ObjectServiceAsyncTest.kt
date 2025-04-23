@@ -414,8 +414,8 @@ internal class ObjectServiceAsyncTest {
         val channelDataFuture =
             objectServiceAsync.setChannelData(
                 ObjectSetChannelDataParams.builder()
-                    .objectId("object_id")
                     .collection("collection")
+                    .objectId("object_id")
                     .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .channelDataRequest(
                         ChannelDataRequest.builder()

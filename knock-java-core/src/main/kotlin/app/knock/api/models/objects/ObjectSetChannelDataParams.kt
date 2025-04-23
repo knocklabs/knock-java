@@ -13,17 +13,17 @@ import java.util.Objects
 /** Sets the channel data for the specified object and channel. */
 class ObjectSetChannelDataParams
 private constructor(
-    private val objectId: String,
     private val collection: String,
+    private val objectId: String,
     private val channelId: String,
     private val channelDataRequest: ChannelDataRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun objectId(): String = objectId
-
     fun collection(): String = collection
+
+    fun objectId(): String = objectId
 
     fun channelId(): String = channelId
 
@@ -46,8 +46,8 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .objectId()
          * .collection()
+         * .objectId()
          * .channelId()
          * .channelDataRequest()
          * ```
@@ -58,8 +58,8 @@ private constructor(
     /** A builder for [ObjectSetChannelDataParams]. */
     class Builder internal constructor() {
 
-        private var objectId: String? = null
         private var collection: String? = null
+        private var objectId: String? = null
         private var channelId: String? = null
         private var channelDataRequest: ChannelDataRequest? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -67,17 +67,17 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(objectSetChannelDataParams: ObjectSetChannelDataParams) = apply {
-            objectId = objectSetChannelDataParams.objectId
             collection = objectSetChannelDataParams.collection
+            objectId = objectSetChannelDataParams.objectId
             channelId = objectSetChannelDataParams.channelId
             channelDataRequest = objectSetChannelDataParams.channelDataRequest
             additionalHeaders = objectSetChannelDataParams.additionalHeaders.toBuilder()
             additionalQueryParams = objectSetChannelDataParams.additionalQueryParams.toBuilder()
         }
 
-        fun objectId(objectId: String) = apply { this.objectId = objectId }
-
         fun collection(collection: String) = apply { this.collection = collection }
+
+        fun objectId(objectId: String) = apply { this.objectId = objectId }
 
         fun channelId(channelId: String) = apply { this.channelId = channelId }
 
@@ -191,8 +191,8 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .objectId()
          * .collection()
+         * .objectId()
          * .channelId()
          * .channelDataRequest()
          * ```
@@ -201,8 +201,8 @@ private constructor(
          */
         fun build(): ObjectSetChannelDataParams =
             ObjectSetChannelDataParams(
-                checkRequired("objectId", objectId),
                 checkRequired("collection", collection),
+                checkRequired("objectId", objectId),
                 checkRequired("channelId", channelId),
                 checkRequired("channelDataRequest", channelDataRequest),
                 additionalHeaders.build(),
@@ -214,8 +214,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> objectId
-            1 -> collection
+            0 -> collection
+            1 -> objectId
             2 -> channelId
             else -> ""
         }
@@ -229,11 +229,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ObjectSetChannelDataParams && objectId == other.objectId && collection == other.collection && channelId == other.channelId && channelDataRequest == other.channelDataRequest && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is ObjectSetChannelDataParams && collection == other.collection && objectId == other.objectId && channelId == other.channelId && channelDataRequest == other.channelDataRequest && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(objectId, collection, channelId, channelDataRequest, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectId, channelId, channelDataRequest, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "ObjectSetChannelDataParams{objectId=$objectId, collection=$collection, channelId=$channelId, channelDataRequest=$channelDataRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "ObjectSetChannelDataParams{collection=$collection, objectId=$objectId, channelId=$channelId, channelDataRequest=$channelDataRequest, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

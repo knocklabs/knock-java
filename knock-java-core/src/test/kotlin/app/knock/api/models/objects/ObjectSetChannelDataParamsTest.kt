@@ -12,8 +12,8 @@ internal class ObjectSetChannelDataParamsTest {
     @Test
     fun create() {
         ObjectSetChannelDataParams.builder()
-            .objectId("object_id")
             .collection("collection")
+            .objectId("object_id")
             .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .channelDataRequest(
                 ChannelDataRequest.builder()
@@ -32,8 +32,8 @@ internal class ObjectSetChannelDataParamsTest {
     fun pathParams() {
         val params =
             ObjectSetChannelDataParams.builder()
-                .objectId("object_id")
                 .collection("collection")
+                .objectId("object_id")
                 .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .channelDataRequest(
                     ChannelDataRequest.builder()
@@ -47,8 +47,8 @@ internal class ObjectSetChannelDataParamsTest {
                 )
                 .build()
 
-        assertThat(params._pathParam(0)).isEqualTo("object_id")
-        assertThat(params._pathParam(1)).isEqualTo("collection")
+        assertThat(params._pathParam(0)).isEqualTo("collection")
+        assertThat(params._pathParam(1)).isEqualTo("object_id")
         assertThat(params._pathParam(2)).isEqualTo("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
         // out-of-bound path param
         assertThat(params._pathParam(3)).isEqualTo("")
@@ -58,8 +58,8 @@ internal class ObjectSetChannelDataParamsTest {
     fun body() {
         val params =
             ObjectSetChannelDataParams.builder()
-                .objectId("object_id")
                 .collection("collection")
+                .objectId("object_id")
                 .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .channelDataRequest(
                     ChannelDataRequest.builder()
