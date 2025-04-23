@@ -7,6 +7,7 @@ import app.knock.api.core.jsonMapper
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
 import app.knock.api.models.UnnamedSchemaWithArrayParent1
+import app.knock.api.models.recipients.channeldata.PushChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -48,7 +49,12 @@ internal class InlineTenantRequestTest {
                 .addChannelData(
                     UnnamedSchemaWithArrayParent0.builder()
                         .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                        .pushChannelData(listOf("push_token_xxx"))
+                        .data(
+                            PushChannelData.builder()
+                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                .addToken("push_token_xxx")
+                                .build()
+                        )
                         .build()
                 )
                 .addPreference(
@@ -223,7 +229,12 @@ internal class InlineTenantRequestTest {
                     .addChannelData(
                         UnnamedSchemaWithArrayParent0.builder()
                             .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                            .pushChannelData(listOf("push_token_xxx"))
+                            .data(
+                                PushChannelData.builder()
+                                    ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                    .addToken("push_token_xxx")
+                                    .build()
+                            )
                             .build()
                     )
                     .addPreference(

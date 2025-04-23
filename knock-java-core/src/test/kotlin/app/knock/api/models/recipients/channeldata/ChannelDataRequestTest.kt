@@ -12,7 +12,14 @@ internal class ChannelDataRequestTest {
     @Test
     fun create() {
         val channelDataRequest =
-            ChannelDataRequest.builder().pushChannelData(listOf("push_token_1")).build()
+            ChannelDataRequest.builder()
+                .data(
+                    PushChannelData.builder()
+                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                        .addToken("push_token_1")
+                        .build()
+                )
+                .build()
 
         assertThat(channelDataRequest.data())
             .isEqualTo(
@@ -29,7 +36,14 @@ internal class ChannelDataRequestTest {
     fun roundtrip() {
         val jsonMapper = jsonMapper()
         val channelDataRequest =
-            ChannelDataRequest.builder().pushChannelData(listOf("push_token_1")).build()
+            ChannelDataRequest.builder()
+                .data(
+                    PushChannelData.builder()
+                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                        .addToken("push_token_1")
+                        .build()
+                )
+                .build()
 
         val roundtrippedChannelDataRequest =
             jsonMapper.readValue(

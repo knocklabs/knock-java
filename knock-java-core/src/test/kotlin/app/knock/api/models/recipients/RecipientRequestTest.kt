@@ -8,6 +8,7 @@ import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
 import app.knock.api.models.UnnamedSchemaWithArrayParent1
 import app.knock.api.models.objects.InlineObjectRequest
+import app.knock.api.models.recipients.channeldata.PushChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.users.InlineIdentifyUserRequest
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -51,7 +52,12 @@ internal class RecipientRequestTest {
                 .addChannelData(
                     UnnamedSchemaWithArrayParent0.builder()
                         .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                        .pushChannelData(listOf("push_token_123"))
+                        .data(
+                            PushChannelData.builder()
+                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                .addToken("push_token_123")
+                                .build()
+                        )
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -146,7 +152,12 @@ internal class RecipientRequestTest {
                     .addChannelData(
                         UnnamedSchemaWithArrayParent0.builder()
                             .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                            .pushChannelData(listOf("push_token_123"))
+                            .data(
+                                PushChannelData.builder()
+                                    ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                    .addToken("push_token_123")
+                                    .build()
+                            )
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -243,7 +254,12 @@ internal class RecipientRequestTest {
                 .addChannelData(
                     UnnamedSchemaWithArrayParent0.builder()
                         .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                        .pushChannelData(listOf("push_token_xxx"))
+                        .data(
+                            PushChannelData.builder()
+                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                .addToken("push_token_xxx")
+                                .build()
+                        )
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -338,7 +354,12 @@ internal class RecipientRequestTest {
                     .addChannelData(
                         UnnamedSchemaWithArrayParent0.builder()
                             .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                            .pushChannelData(listOf("push_token_xxx"))
+                            .data(
+                                PushChannelData.builder()
+                                    ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                    .addToken("push_token_xxx")
+                                    .build()
+                            )
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

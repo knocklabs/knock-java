@@ -5,6 +5,7 @@ package app.knock.api.models.tenants
 import app.knock.api.core.JsonValue
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
 import app.knock.api.models.UnnamedSchemaWithArrayParent1
+import app.knock.api.models.recipients.channeldata.PushChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import kotlin.jvm.optionals.getOrNull
@@ -20,7 +21,12 @@ internal class TenantSetParamsTest {
             .addChannelData(
                 UnnamedSchemaWithArrayParent0.builder()
                     .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                    .pushChannelData(listOf("push_token_xxx"))
+                    .data(
+                        PushChannelData.builder()
+                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                            .addToken("push_token_xxx")
+                            .build()
+                    )
                     .build()
             )
             .addPreference(
@@ -197,7 +203,12 @@ internal class TenantSetParamsTest {
                 .addChannelData(
                     UnnamedSchemaWithArrayParent0.builder()
                         .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                        .pushChannelData(listOf("push_token_xxx"))
+                        .data(
+                            PushChannelData.builder()
+                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                .addToken("push_token_xxx")
+                                .build()
+                        )
                         .build()
                 )
                 .addPreference(
@@ -362,7 +373,12 @@ internal class TenantSetParamsTest {
             .containsExactly(
                 UnnamedSchemaWithArrayParent0.builder()
                     .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                    .pushChannelData(listOf("push_token_xxx"))
+                    .data(
+                        PushChannelData.builder()
+                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                            .addToken("push_token_xxx")
+                            .build()
+                    )
                     .build()
             )
         assertThat(body.preferences().getOrNull())

@@ -5,6 +5,7 @@ package app.knock.api.models.schedules.bulk
 import app.knock.api.core.JsonValue
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
 import app.knock.api.models.UnnamedSchemaWithArrayParent1
+import app.knock.api.models.recipients.channeldata.PushChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.schedules.ScheduleRepeatRule
 import app.knock.api.models.users.InlineIdentifyUserRequest
@@ -26,7 +27,12 @@ internal class BulkCreateParamsTest {
                             .addChannelData(
                                 UnnamedSchemaWithArrayParent0.builder()
                                     .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                                    .pushChannelData(listOf("push_token_xxx"))
+                                    .data(
+                                        PushChannelData.builder()
+                                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                            .addToken("push_token_xxx")
+                                            .build()
+                                    )
                                     .build()
                             )
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -146,7 +152,12 @@ internal class BulkCreateParamsTest {
                             .addChannelData(
                                 UnnamedSchemaWithArrayParent0.builder()
                                     .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                                    .pushChannelData(listOf("push_token_xxx"))
+                                    .data(
+                                        PushChannelData.builder()
+                                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                            .addToken("push_token_xxx")
+                                            .build()
+                                    )
                                     .build()
                             )
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -273,7 +284,14 @@ internal class BulkCreateParamsTest {
                                 .addChannelData(
                                     UnnamedSchemaWithArrayParent0.builder()
                                         .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                                        .pushChannelData(listOf("push_token_xxx"))
+                                        .data(
+                                            PushChannelData.builder()
+                                                ._typename(
+                                                    PushChannelData._Typename.PUSH_CHANNEL_DATA
+                                                )
+                                                .addToken("push_token_xxx")
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -395,7 +413,14 @@ internal class BulkCreateParamsTest {
                                 .addChannelData(
                                     UnnamedSchemaWithArrayParent0.builder()
                                         .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                                        .pushChannelData(listOf("push_token_xxx"))
+                                        .data(
+                                            PushChannelData.builder()
+                                                ._typename(
+                                                    PushChannelData._Typename.PUSH_CHANNEL_DATA
+                                                )
+                                                .addToken("push_token_xxx")
+                                                .build()
+                                        )
                                         .build()
                                 )
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -522,7 +547,12 @@ internal class BulkCreateParamsTest {
                             .addChannelData(
                                 UnnamedSchemaWithArrayParent0.builder()
                                     .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                                    .pushChannelData(listOf("push_token_xxx"))
+                                    .data(
+                                        PushChannelData.builder()
+                                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                            .addToken("push_token_xxx")
+                                            .build()
+                                    )
                                     .build()
                             )
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
@@ -640,7 +670,12 @@ internal class BulkCreateParamsTest {
                             .addChannelData(
                                 UnnamedSchemaWithArrayParent0.builder()
                                     .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                                    .pushChannelData(listOf("push_token_xxx"))
+                                    .data(
+                                        PushChannelData.builder()
+                                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                            .addToken("push_token_xxx")
+                                            .build()
+                                    )
                                     .build()
                             )
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

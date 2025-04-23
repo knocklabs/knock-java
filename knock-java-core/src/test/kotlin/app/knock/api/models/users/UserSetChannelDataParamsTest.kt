@@ -3,6 +3,7 @@
 package app.knock.api.models.users
 
 import app.knock.api.models.recipients.channeldata.ChannelDataRequest
+import app.knock.api.models.recipients.channeldata.PushChannelData
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -14,7 +15,14 @@ internal class UserSetChannelDataParamsTest {
             .userId("user_id")
             .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .channelDataRequest(
-                ChannelDataRequest.builder().pushChannelData(listOf("push_token_1")).build()
+                ChannelDataRequest.builder()
+                    .data(
+                        PushChannelData.builder()
+                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                            .addToken("push_token_1")
+                            .build()
+                    )
+                    .build()
             )
             .build()
     }
@@ -26,7 +34,14 @@ internal class UserSetChannelDataParamsTest {
                 .userId("user_id")
                 .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .channelDataRequest(
-                    ChannelDataRequest.builder().pushChannelData(listOf("push_token_1")).build()
+                    ChannelDataRequest.builder()
+                        .data(
+                            PushChannelData.builder()
+                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                .addToken("push_token_1")
+                                .build()
+                        )
+                        .build()
                 )
                 .build()
 
@@ -43,13 +58,29 @@ internal class UserSetChannelDataParamsTest {
                 .userId("user_id")
                 .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .channelDataRequest(
-                    ChannelDataRequest.builder().pushChannelData(listOf("push_token_1")).build()
+                    ChannelDataRequest.builder()
+                        .data(
+                            PushChannelData.builder()
+                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                .addToken("push_token_1")
+                                .build()
+                        )
+                        .build()
                 )
                 .build()
 
         val body = params._body()
 
         assertThat(body)
-            .isEqualTo(ChannelDataRequest.builder().pushChannelData(listOf("push_token_1")).build())
+            .isEqualTo(
+                ChannelDataRequest.builder()
+                    .data(
+                        PushChannelData.builder()
+                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                            .addToken("push_token_1")
+                            .build()
+                    )
+                    .build()
+            )
     }
 }

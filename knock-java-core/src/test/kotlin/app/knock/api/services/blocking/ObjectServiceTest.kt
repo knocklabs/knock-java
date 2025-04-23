@@ -23,6 +23,7 @@ import app.knock.api.models.objects.ObjectSetParams
 import app.knock.api.models.objects.ObjectSetPreferencesParams
 import app.knock.api.models.objects.ObjectUnsetChannelDataParams
 import app.knock.api.models.recipients.channeldata.ChannelDataRequest
+import app.knock.api.models.recipients.channeldata.PushChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import org.junit.jupiter.api.Disabled
@@ -300,7 +301,12 @@ internal class ObjectServiceTest {
                     .addChannelData(
                         UnnamedSchemaWithArrayParent0.builder()
                             .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                            .pushChannelData(listOf("push_token_xxx"))
+                            .data(
+                                PushChannelData.builder()
+                                    ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                    .addToken("push_token_xxx")
+                                    .build()
+                            )
                             .build()
                     )
                     .addPreference(
@@ -399,7 +405,14 @@ internal class ObjectServiceTest {
                     .objectId("object_id")
                     .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .channelDataRequest(
-                        ChannelDataRequest.builder().pushChannelData(listOf("push_token_1")).build()
+                        ChannelDataRequest.builder()
+                            .data(
+                                PushChannelData.builder()
+                                    ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                    .addToken("push_token_1")
+                                    .build()
+                            )
+                            .build()
                     )
                     .build()
             )
