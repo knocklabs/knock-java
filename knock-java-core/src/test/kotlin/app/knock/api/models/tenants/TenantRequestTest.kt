@@ -30,6 +30,7 @@ internal class TenantRequestTest {
                                 .addToken("push_token_xxx")
                                 .build()
                         )
+                        .provider("push_fcm")
                         .build()
                 )
                 .addPreference(
@@ -199,6 +200,7 @@ internal class TenantRequestTest {
                             .addToken("push_token_xxx")
                             .build()
                     )
+                    .provider("push_fcm")
                     .build()
             )
         assertThat(tenantRequest.preferences().getOrNull())
@@ -374,6 +376,7 @@ internal class TenantRequestTest {
                                 .addToken("push_token_xxx")
                                 .build()
                         )
+                        .provider("push_fcm")
                         .build()
                 )
                 .addPreference(

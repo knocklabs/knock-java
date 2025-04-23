@@ -27,6 +27,7 @@ internal class ObjectSetParamsTest {
                             .addToken("push_token_xxx")
                             .build()
                     )
+                    .provider("push_fcm")
                     .build()
             )
             .addPreference(
@@ -129,6 +130,7 @@ internal class ObjectSetParamsTest {
                                 .addToken("push_token_xxx")
                                 .build()
                         )
+                        .provider("push_fcm")
                         .build()
                 )
                 .addPreference(
@@ -216,6 +218,7 @@ internal class ObjectSetParamsTest {
                             .addToken("push_token_xxx")
                             .build()
                     )
+                    .provider("push_fcm")
                     .build()
             )
         assertThat(body.preferences().getOrNull())

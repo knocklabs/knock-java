@@ -27,6 +27,7 @@ internal class TenantSetParamsTest {
                             .addToken("push_token_xxx")
                             .build()
                     )
+                    .provider("push_fcm")
                     .build()
             )
             .addPreference(
@@ -209,6 +210,7 @@ internal class TenantSetParamsTest {
                                 .addToken("push_token_xxx")
                                 .build()
                         )
+                        .provider("push_fcm")
                         .build()
                 )
                 .addPreference(
@@ -379,6 +381,7 @@ internal class TenantSetParamsTest {
                             .addToken("push_token_xxx")
                             .build()
                     )
+                    .provider("push_fcm")
                     .build()
             )
         assertThat(body.preferences().getOrNull())

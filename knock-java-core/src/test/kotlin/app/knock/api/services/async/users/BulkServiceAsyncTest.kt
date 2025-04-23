@@ -70,6 +70,7 @@ internal class BulkServiceAsyncTest {
                                             .addToken("push_token_xxx")
                                             .build()
                                     )
+                                    .provider("push_fcm")
                                     .build()
                             )
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))

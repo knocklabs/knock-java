@@ -346,6 +346,7 @@ private constructor(
     private constructor(
         private val channelId: JsonField<String>,
         private val data: JsonField<Data>,
+        private val provider: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -355,10 +356,11 @@ private constructor(
             @ExcludeMissing
             channelId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
-        ) : this(channelId, data, mutableMapOf())
+            @JsonProperty("provider") @ExcludeMissing provider: JsonField<String> = JsonMissing.of(),
+        ) : this(channelId, data, provider, mutableMapOf())
 
         /**
-         * The ID of the channel to associate data with
+         * The ID of the channel to associate data with.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -374,6 +376,14 @@ private constructor(
         fun data(): Data = data.getRequired("data")
 
         /**
+         * The provider identifier (must match the data.type value)
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun provider(): String = provider.getRequired("provider")
+
+        /**
          * Returns the raw JSON value of [channelId].
          *
          * Unlike [channelId], this method doesn't throw if the JSON field has an unexpected type.
@@ -386,6 +396,13 @@ private constructor(
          * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
+
+        /**
+         * Returns the raw JSON value of [provider].
+         *
+         * Unlike [provider], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("provider") @ExcludeMissing fun _provider(): JsonField<String> = provider
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -409,6 +426,7 @@ private constructor(
              * ```java
              * .channelId()
              * .data()
+             * .provider()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -419,6 +437,7 @@ private constructor(
 
             private var channelId: JsonField<String>? = null
             private var data: JsonField<Data>? = null
+            private var provider: JsonField<String>? = null
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -426,11 +445,12 @@ private constructor(
                 apply {
                     channelId = unnamedSchemaWithArrayParent0.channelId
                     data = unnamedSchemaWithArrayParent0.data
+                    provider = unnamedSchemaWithArrayParent0.provider
                     additionalProperties =
                         unnamedSchemaWithArrayParent0.additionalProperties.toMutableMap()
                 }
 
-            /** The ID of the channel to associate data with */
+            /** The ID of the channel to associate data with. */
             fun channelId(channelId: String) = channelId(JsonField.of(channelId))
 
             /**
@@ -472,6 +492,18 @@ private constructor(
             fun data(discordChannel: DiscordChannelData) =
                 data(Data.ofDiscordChannel(discordChannel))
 
+            /** The provider identifier (must match the data.type value) */
+            fun provider(provider: String) = provider(JsonField.of(provider))
+
+            /**
+             * Sets [Builder.provider] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.provider] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun provider(provider: JsonField<String>) = apply { this.provider = provider }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -500,6 +532,7 @@ private constructor(
              * ```java
              * .channelId()
              * .data()
+             * .provider()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -508,6 +541,7 @@ private constructor(
                 UnnamedSchemaWithArrayParent0(
                     checkRequired("channelId", channelId),
                     checkRequired("data", data),
+                    checkRequired("provider", provider),
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -521,6 +555,7 @@ private constructor(
 
             channelId()
             data().validate()
+            provider()
             validated = true
         }
 
@@ -541,7 +576,8 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (if (channelId.asKnown().isPresent) 1 else 0) +
-                (data.asKnown().getOrNull()?.validity() ?: 0)
+                (data.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (provider.asKnown().isPresent) 1 else 0)
 
         /** Channel data for a given channel type. */
         @JsonDeserialize(using = Data.Deserializer::class)
@@ -828,17 +864,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is UnnamedSchemaWithArrayParent0 && channelId == other.channelId && data == other.data && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is UnnamedSchemaWithArrayParent0 && channelId == other.channelId && data == other.data && provider == other.provider && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(channelId, data, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(channelId, data, provider, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "UnnamedSchemaWithArrayParent0{channelId=$channelId, data=$data, additionalProperties=$additionalProperties}"
+            "UnnamedSchemaWithArrayParent0{channelId=$channelId, data=$data, provider=$provider, additionalProperties=$additionalProperties}"
     }
 
     /** Inline set preferences for a recipient, where the key is the preference set name */

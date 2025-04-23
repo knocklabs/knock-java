@@ -94,6 +94,7 @@ internal class TenantServiceTest {
                                     .addToken("push_token_xxx")
                                     .build()
                             )
+                            .provider("push_fcm")
                             .build()
                     )
                     .addPreference(

@@ -61,6 +61,7 @@ internal class UserServiceAsyncTest {
                                             .addToken("push_token_123")
                                             .build()
                                     )
+                                    .provider("push_fcm")
                                     .build()
                             )
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
