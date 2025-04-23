@@ -67,12 +67,31 @@ private constructor(
     fun channelData(): Optional<List<UnnamedSchemaWithArrayParent0>> = body.channelData()
 
     /**
+     * The locale of the object. Used for [message localization](/concepts/translations).
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun locale(): Optional<String> = body.locale()
+
+    /**
      * Inline set preferences for a recipient, where the key is the preference set name
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun preferences(): Optional<List<UnnamedSchemaWithArrayParent1>> = body.preferences()
+
+    /**
+     * The timezone of the object. Must be a valid
+     * [tz database time zone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+     * Used for
+     * [recurring schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun timezone(): Optional<String> = body.timezone()
 
     /**
      * Returns the raw JSON value of [channelData].
@@ -82,11 +101,25 @@ private constructor(
     fun _channelData(): JsonField<List<UnnamedSchemaWithArrayParent0>> = body._channelData()
 
     /**
+     * Returns the raw JSON value of [locale].
+     *
+     * Unlike [locale], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _locale(): JsonField<String> = body._locale()
+
+    /**
      * Returns the raw JSON value of [preferences].
      *
      * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _preferences(): JsonField<List<UnnamedSchemaWithArrayParent1>> = body._preferences()
+
+    /**
+     * Returns the raw JSON value of [timezone].
+     *
+     * Unlike [timezone], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _timezone(): JsonField<String> = body._timezone()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -138,7 +171,9 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [channelData]
+         * - [locale]
          * - [preferences]
+         * - [timezone]
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
@@ -171,6 +206,20 @@ private constructor(
             body.addChannelData(channelData)
         }
 
+        /** The locale of the object. Used for [message localization](/concepts/translations). */
+        fun locale(locale: String?) = apply { body.locale(locale) }
+
+        /** Alias for calling [Builder.locale] with `locale.orElse(null)`. */
+        fun locale(locale: Optional<String>) = locale(locale.getOrNull())
+
+        /**
+         * Sets [Builder.locale] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.locale] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun locale(locale: JsonField<String>) = apply { body.locale(locale) }
+
         /** Inline set preferences for a recipient, where the key is the preference set name */
         fun preferences(preferences: List<UnnamedSchemaWithArrayParent1>?) = apply {
             body.preferences(preferences)
@@ -199,6 +248,25 @@ private constructor(
         fun addPreference(preference: UnnamedSchemaWithArrayParent1) = apply {
             body.addPreference(preference)
         }
+
+        /**
+         * The timezone of the object. Must be a valid
+         * [tz database time zone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+         * Used for
+         * [recurring schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
+         */
+        fun timezone(timezone: String?) = apply { body.timezone(timezone) }
+
+        /** Alias for calling [Builder.timezone] with `timezone.orElse(null)`. */
+        fun timezone(timezone: Optional<String>) = timezone(timezone.getOrNull())
+
+        /**
+         * Sets [Builder.timezone] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.timezone] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun timezone(timezone: JsonField<String>) = apply { body.timezone(timezone) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -357,7 +425,9 @@ private constructor(
     class Body
     private constructor(
         private val channelData: JsonField<List<UnnamedSchemaWithArrayParent0>>,
+        private val locale: JsonField<String>,
         private val preferences: JsonField<List<UnnamedSchemaWithArrayParent1>>,
+        private val timezone: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -366,10 +436,12 @@ private constructor(
             @JsonProperty("channel_data")
             @ExcludeMissing
             channelData: JsonField<List<UnnamedSchemaWithArrayParent0>> = JsonMissing.of(),
+            @JsonProperty("locale") @ExcludeMissing locale: JsonField<String> = JsonMissing.of(),
             @JsonProperty("preferences")
             @ExcludeMissing
             preferences: JsonField<List<UnnamedSchemaWithArrayParent1>> = JsonMissing.of(),
-        ) : this(channelData, preferences, mutableMapOf())
+            @JsonProperty("timezone") @ExcludeMissing timezone: JsonField<String> = JsonMissing.of(),
+        ) : this(channelData, locale, preferences, timezone, mutableMapOf())
 
         /**
          * A request to set channel data for a type of channel inline.
@@ -381,6 +453,14 @@ private constructor(
             channelData.getOptional("channel_data")
 
         /**
+         * The locale of the object. Used for [message localization](/concepts/translations).
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun locale(): Optional<String> = locale.getOptional("locale")
+
+        /**
          * Inline set preferences for a recipient, where the key is the preference set name
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -388,6 +468,17 @@ private constructor(
          */
         fun preferences(): Optional<List<UnnamedSchemaWithArrayParent1>> =
             preferences.getOptional("preferences")
+
+        /**
+         * The timezone of the object. Must be a valid
+         * [tz database time zone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+         * Used for
+         * [recurring schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun timezone(): Optional<String> = timezone.getOptional("timezone")
 
         /**
          * Returns the raw JSON value of [channelData].
@@ -399,6 +490,13 @@ private constructor(
         fun _channelData(): JsonField<List<UnnamedSchemaWithArrayParent0>> = channelData
 
         /**
+         * Returns the raw JSON value of [locale].
+         *
+         * Unlike [locale], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("locale") @ExcludeMissing fun _locale(): JsonField<String> = locale
+
+        /**
          * Returns the raw JSON value of [preferences].
          *
          * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
@@ -406,6 +504,13 @@ private constructor(
         @JsonProperty("preferences")
         @ExcludeMissing
         fun _preferences(): JsonField<List<UnnamedSchemaWithArrayParent1>> = preferences
+
+        /**
+         * Returns the raw JSON value of [timezone].
+         *
+         * Unlike [timezone], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("timezone") @ExcludeMissing fun _timezone(): JsonField<String> = timezone
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -429,13 +534,17 @@ private constructor(
         class Builder internal constructor() {
 
             private var channelData: JsonField<MutableList<UnnamedSchemaWithArrayParent0>>? = null
+            private var locale: JsonField<String> = JsonMissing.of()
             private var preferences: JsonField<MutableList<UnnamedSchemaWithArrayParent1>>? = null
+            private var timezone: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(body: Body) = apply {
                 channelData = body.channelData.map { it.toMutableList() }
+                locale = body.locale
                 preferences = body.preferences.map { it.toMutableList() }
+                timezone = body.timezone
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -470,6 +579,23 @@ private constructor(
                     }
             }
 
+            /**
+             * The locale of the object. Used for [message localization](/concepts/translations).
+             */
+            fun locale(locale: String?) = locale(JsonField.ofNullable(locale))
+
+            /** Alias for calling [Builder.locale] with `locale.orElse(null)`. */
+            fun locale(locale: Optional<String>) = locale(locale.getOrNull())
+
+            /**
+             * Sets [Builder.locale] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.locale] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun locale(locale: JsonField<String>) = apply { this.locale = locale }
+
             /** Inline set preferences for a recipient, where the key is the preference set name */
             fun preferences(preferences: List<UnnamedSchemaWithArrayParent1>?) =
                 preferences(JsonField.ofNullable(preferences))
@@ -501,6 +627,26 @@ private constructor(
                     }
             }
 
+            /**
+             * The timezone of the object. Must be a valid
+             * [tz database time zone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
+             * Used for
+             * [recurring schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
+             */
+            fun timezone(timezone: String?) = timezone(JsonField.ofNullable(timezone))
+
+            /** Alias for calling [Builder.timezone] with `timezone.orElse(null)`. */
+            fun timezone(timezone: Optional<String>) = timezone(timezone.getOrNull())
+
+            /**
+             * Sets [Builder.timezone] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.timezone] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun timezone(timezone: JsonField<String>) = apply { this.timezone = timezone }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -528,7 +674,9 @@ private constructor(
             fun build(): Body =
                 Body(
                     (channelData ?: JsonMissing.of()).map { it.toImmutable() },
+                    locale,
                     (preferences ?: JsonMissing.of()).map { it.toImmutable() },
+                    timezone,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -541,7 +689,9 @@ private constructor(
             }
 
             channelData().ifPresent { it.forEach { it.validate() } }
+            locale()
             preferences().ifPresent { it.forEach { it.validate() } }
+            timezone()
             validated = true
         }
 
@@ -562,24 +712,26 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (channelData.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-                (preferences.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
+                (if (locale.asKnown().isPresent) 1 else 0) +
+                (preferences.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+                (if (timezone.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Body && channelData == other.channelData && preferences == other.preferences && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && channelData == other.channelData && locale == other.locale && preferences == other.preferences && timezone == other.timezone && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(channelData, preferences, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(channelData, locale, preferences, timezone, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{channelData=$channelData, preferences=$preferences, additionalProperties=$additionalProperties}"
+            "Body{channelData=$channelData, locale=$locale, preferences=$preferences, timezone=$timezone, additionalProperties=$additionalProperties}"
     }
 
     /** A request to set channel data for a type of channel inline. */

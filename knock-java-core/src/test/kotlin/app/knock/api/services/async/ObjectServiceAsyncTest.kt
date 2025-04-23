@@ -324,6 +324,7 @@ internal class ObjectServiceAsyncTest {
                             .provider("push_fcm")
                             .build()
                     )
+                    .locale("en-US")
                     .addPreference(
                         UnnamedSchemaWithArrayParent1.builder()
                             .id("default")
@@ -395,6 +396,7 @@ internal class ObjectServiceAsyncTest {
                             )
                             .build()
                     )
+                    .timezone("America/New_York")
                     .build()
             )
 

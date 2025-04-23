@@ -30,6 +30,7 @@ internal class ObjectSetParamsTest {
                     .provider("push_fcm")
                     .build()
             )
+            .locale("en-US")
             .addPreference(
                 UnnamedSchemaWithArrayParent1.builder()
                     .id("default")
@@ -101,6 +102,7 @@ internal class ObjectSetParamsTest {
                     )
                     .build()
             )
+            .timezone("America/New_York")
             .build()
     }
 
@@ -133,6 +135,7 @@ internal class ObjectSetParamsTest {
                         .provider("push_fcm")
                         .build()
                 )
+                .locale("en-US")
                 .addPreference(
                     UnnamedSchemaWithArrayParent1.builder()
                         .id("default")
@@ -204,6 +207,7 @@ internal class ObjectSetParamsTest {
                         )
                         .build()
                 )
+                .timezone("America/New_York")
                 .build()
 
         val body = params._body()
@@ -221,6 +225,7 @@ internal class ObjectSetParamsTest {
                     .provider("push_fcm")
                     .build()
             )
+        assertThat(body.locale()).contains("en-US")
         assertThat(body.preferences().getOrNull())
             .containsExactly(
                 UnnamedSchemaWithArrayParent1.builder()
@@ -293,6 +298,7 @@ internal class ObjectSetParamsTest {
                     )
                     .build()
             )
+        assertThat(body.timezone()).contains("America/New_York")
     }
 
     @Test
