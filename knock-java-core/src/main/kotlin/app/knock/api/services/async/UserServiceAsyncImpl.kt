@@ -16,7 +16,7 @@ import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
 import app.knock.api.core.http.parseable
 import app.knock.api.core.prepareAsync
-import app.knock.api.models.recipients.channeldata.ChannelData
+import app.knock.api.models.objects.ObjectSetChannelDataResponse
 import app.knock.api.models.recipients.preferences.PreferenceSet
 import app.knock.api.models.users.User
 import app.knock.api.models.users.UserDeleteParams
@@ -47,6 +47,7 @@ import app.knock.api.services.async.users.FeedServiceAsync
 import app.knock.api.services.async.users.FeedServiceAsyncImpl
 import app.knock.api.services.async.users.GuideServiceAsync
 import app.knock.api.services.async.users.GuideServiceAsyncImpl
+import java.util.Optional
 import java.util.concurrent.CompletableFuture
 
 class UserServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -101,7 +102,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun getChannelData(
         params: UserGetChannelDataParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<ChannelData> =
+    ): CompletableFuture<Optional<List<ObjectSetChannelDataResponse>>> =
         // get /v1/users/{user_id}/channel_data/{channel_id}
         withRawResponse().getChannelData(params, requestOptions).thenApply { it.parse() }
 
@@ -150,7 +151,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun setChannelData(
         params: UserSetChannelDataParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<ChannelData> =
+    ): CompletableFuture<Optional<List<ObjectSetChannelDataResponse>>> =
         // put /v1/users/{user_id}/channel_data/{channel_id}
         withRawResponse().setChannelData(params, requestOptions).thenApply { it.parse() }
 
@@ -308,13 +309,14 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 }
         }
 
-        private val getChannelDataHandler: Handler<ChannelData> =
-            jsonHandler<ChannelData>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val getChannelDataHandler: Handler<Optional<List<ObjectSetChannelDataResponse>>> =
+            jsonHandler<Optional<List<ObjectSetChannelDataResponse>>>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
         override fun getChannelData(
             params: UserGetChannelDataParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<ChannelData>> {
+        ): CompletableFuture<HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -336,7 +338,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                             .use { getChannelDataHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
-                                    it.validate()
+                                    it.ifPresent { it.forEach { it.validate() } }
                                 }
                             }
                     }
@@ -549,13 +551,14 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 }
         }
 
-        private val setChannelDataHandler: Handler<ChannelData> =
-            jsonHandler<ChannelData>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+        private val setChannelDataHandler: Handler<Optional<List<ObjectSetChannelDataResponse>>> =
+            jsonHandler<Optional<List<ObjectSetChannelDataResponse>>>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
 
         override fun setChannelData(
             params: UserSetChannelDataParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<ChannelData>> {
+        ): CompletableFuture<HttpResponseFor<Optional<List<ObjectSetChannelDataResponse>>>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -578,7 +581,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                             .use { setChannelDataHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
-                                    it.validate()
+                                    it.ifPresent { it.forEach { it.validate() } }
                                 }
                             }
                     }

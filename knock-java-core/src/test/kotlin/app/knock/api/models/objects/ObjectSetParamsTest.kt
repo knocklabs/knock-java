@@ -24,7 +24,7 @@ internal class ObjectSetParamsTest {
                     .data(
                         PushChannelData.builder()
                             ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                            .addToken("push_token_xxx")
+                            .addToken("push_token_123")
                             .build()
                     )
                     .provider("push_fcm")
@@ -37,7 +37,7 @@ internal class ObjectSetParamsTest {
                     .categories(
                         UnnamedSchemaWithArrayParent1.Categories.builder()
                             .putAdditionalProperty(
-                                "transactional",
+                                "marketing",
                                 JsonValue.from(
                                     mapOf(
                                         "channel_types" to
@@ -60,6 +60,7 @@ internal class ObjectSetParamsTest {
                                     )
                                 ),
                             )
+                            .putAdditionalProperty("transactional", JsonValue.from(true))
                             .build()
                     )
                     .channelTypes(
@@ -129,7 +130,7 @@ internal class ObjectSetParamsTest {
                         .data(
                             PushChannelData.builder()
                                 ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                                .addToken("push_token_xxx")
+                                .addToken("push_token_123")
                                 .build()
                         )
                         .provider("push_fcm")
@@ -142,7 +143,7 @@ internal class ObjectSetParamsTest {
                         .categories(
                             UnnamedSchemaWithArrayParent1.Categories.builder()
                                 .putAdditionalProperty(
-                                    "transactional",
+                                    "marketing",
                                     JsonValue.from(
                                         mapOf(
                                             "channel_types" to
@@ -165,6 +166,7 @@ internal class ObjectSetParamsTest {
                                         )
                                     ),
                                 )
+                                .putAdditionalProperty("transactional", JsonValue.from(true))
                                 .build()
                         )
                         .channelTypes(
@@ -219,7 +221,7 @@ internal class ObjectSetParamsTest {
                     .data(
                         PushChannelData.builder()
                             ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                            .addToken("push_token_xxx")
+                            .addToken("push_token_123")
                             .build()
                     )
                     .provider("push_fcm")
@@ -233,7 +235,7 @@ internal class ObjectSetParamsTest {
                     .categories(
                         UnnamedSchemaWithArrayParent1.Categories.builder()
                             .putAdditionalProperty(
-                                "transactional",
+                                "marketing",
                                 JsonValue.from(
                                     mapOf(
                                         "channel_types" to
@@ -256,6 +258,7 @@ internal class ObjectSetParamsTest {
                                     )
                                 ),
                             )
+                            .putAdditionalProperty("transactional", JsonValue.from(true))
                             .build()
                     )
                     .channelTypes(

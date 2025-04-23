@@ -26,6 +26,7 @@ import app.knock.api.models.recipients.channeldata.ChannelDataRequest
 import app.knock.api.models.recipients.channeldata.PushChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
+import kotlin.jvm.optionals.getOrNull
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -171,7 +172,8 @@ internal class ObjectServiceAsyncTest {
             )
 
         val channelData = channelDataFuture.get()
-        channelData.validate()
+        val unwrappedChannelData = channelData.getOrNull()
+        unwrappedChannelData?.forEach { it.validate() }
     }
 
     @Disabled(
@@ -318,7 +320,7 @@ internal class ObjectServiceAsyncTest {
                             .data(
                                 PushChannelData.builder()
                                     ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                                    .addToken("push_token_xxx")
+                                    .addToken("push_token_123")
                                     .build()
                             )
                             .provider("push_fcm")
@@ -331,7 +333,7 @@ internal class ObjectServiceAsyncTest {
                             .categories(
                                 UnnamedSchemaWithArrayParent1.Categories.builder()
                                     .putAdditionalProperty(
-                                        "transactional",
+                                        "marketing",
                                         JsonValue.from(
                                             mapOf(
                                                 "channel_types" to
@@ -354,6 +356,7 @@ internal class ObjectServiceAsyncTest {
                                             )
                                         ),
                                     )
+                                    .putAdditionalProperty("transactional", JsonValue.from(true))
                                     .build()
                             )
                             .channelTypes(
@@ -436,7 +439,8 @@ internal class ObjectServiceAsyncTest {
             )
 
         val channelData = channelDataFuture.get()
-        channelData.validate()
+        val unwrappedChannelData = channelData.getOrNull()
+        unwrappedChannelData?.forEach { it.validate() }
     }
 
     @Disabled(
