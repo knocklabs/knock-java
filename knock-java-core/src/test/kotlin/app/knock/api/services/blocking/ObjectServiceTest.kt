@@ -299,18 +299,16 @@ internal class ObjectServiceTest {
                     .collection("collection")
                     .objectId("object_id")
                     .addChannelData(
-                        listOf(
-                            UnnamedSchemaWithArrayParent0.builder()
-                                .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                                .data(
-                                    PushChannelData.builder()
-                                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                                        .addToken("push_token_1")
-                                        .build()
-                                )
-                                .provider("push_fcm")
-                                .build()
-                        )
+                        UnnamedSchemaWithArrayParent0.builder()
+                            .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
+                            .data(
+                                PushChannelData.builder()
+                                    ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                    .addToken("push_token_123")
+                                    .build()
+                            )
+                            .provider("push_fcm")
+                            .build()
                     )
                     .locale("en-US")
                     .addPreference(

@@ -59,13 +59,12 @@ private constructor(
     fun objectId(): String = objectId
 
     /**
-     * An optional set of [channel data](/managing-recipients/setting-channel-data) for the object.
-     * This is a list of `ChannelData` objects.
+     * A request to set channel data for a type of channel inline.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun channelData(): Optional<List<List<UnnamedSchemaWithArrayParent0>>> = body.channelData()
+    fun channelData(): Optional<List<UnnamedSchemaWithArrayParent0>> = body.channelData()
 
     /**
      * The locale of the object. Used for [message localization](/concepts/translations).
@@ -99,7 +98,7 @@ private constructor(
      *
      * Unlike [channelData], this method doesn't throw if the JSON field has an unexpected type.
      */
-    fun _channelData(): JsonField<List<List<UnnamedSchemaWithArrayParent0>>> = body._channelData()
+    fun _channelData(): JsonField<List<UnnamedSchemaWithArrayParent0>> = body._channelData()
 
     /**
      * Returns the raw JSON value of [locale].
@@ -178,35 +177,28 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /**
-         * An optional set of [channel data](/managing-recipients/setting-channel-data) for the
-         * object. This is a list of `ChannelData` objects.
-         */
-        fun channelData(channelData: List<List<UnnamedSchemaWithArrayParent0>>?) = apply {
+        /** A request to set channel data for a type of channel inline. */
+        fun channelData(channelData: List<UnnamedSchemaWithArrayParent0>) = apply {
             body.channelData(channelData)
         }
-
-        /** Alias for calling [Builder.channelData] with `channelData.orElse(null)`. */
-        fun channelData(channelData: Optional<List<List<UnnamedSchemaWithArrayParent0>>>) =
-            channelData(channelData.getOrNull())
 
         /**
          * Sets [Builder.channelData] to an arbitrary JSON value.
          *
          * You should usually call [Builder.channelData] with a well-typed
-         * `List<List<UnnamedSchemaWithArrayParent0>>` value instead. This method is primarily for
-         * setting the field to an undocumented or not yet supported value.
+         * `List<UnnamedSchemaWithArrayParent0>` value instead. This method is primarily for setting
+         * the field to an undocumented or not yet supported value.
          */
-        fun channelData(channelData: JsonField<List<List<UnnamedSchemaWithArrayParent0>>>) = apply {
+        fun channelData(channelData: JsonField<List<UnnamedSchemaWithArrayParent0>>) = apply {
             body.channelData(channelData)
         }
 
         /**
-         * Adds a single [List<UnnamedSchemaWithArrayParent0>] to [Builder.channelData].
+         * Adds a single [UnnamedSchemaWithArrayParent0] to [Builder.channelData].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addChannelData(channelData: List<UnnamedSchemaWithArrayParent0>) = apply {
+        fun addChannelData(channelData: UnnamedSchemaWithArrayParent0) = apply {
             body.addChannelData(channelData)
         }
 
@@ -428,7 +420,7 @@ private constructor(
     /** A set of parameters to set an object with. Does not include the object id or collection. */
     class Body
     private constructor(
-        private val channelData: JsonField<List<List<UnnamedSchemaWithArrayParent0>>>,
+        private val channelData: JsonField<List<UnnamedSchemaWithArrayParent0>>,
         private val locale: JsonField<String>,
         private val preferences: JsonField<List<UnnamedSchemaWithArrayParent1>>,
         private val timezone: JsonField<String>,
@@ -439,7 +431,7 @@ private constructor(
         private constructor(
             @JsonProperty("channel_data")
             @ExcludeMissing
-            channelData: JsonField<List<List<UnnamedSchemaWithArrayParent0>>> = JsonMissing.of(),
+            channelData: JsonField<List<UnnamedSchemaWithArrayParent0>> = JsonMissing.of(),
             @JsonProperty("locale") @ExcludeMissing locale: JsonField<String> = JsonMissing.of(),
             @JsonProperty("preferences")
             @ExcludeMissing
@@ -448,13 +440,12 @@ private constructor(
         ) : this(channelData, locale, preferences, timezone, mutableMapOf())
 
         /**
-         * An optional set of [channel data](/managing-recipients/setting-channel-data) for the
-         * object. This is a list of `ChannelData` objects.
+         * A request to set channel data for a type of channel inline.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun channelData(): Optional<List<List<UnnamedSchemaWithArrayParent0>>> =
+        fun channelData(): Optional<List<UnnamedSchemaWithArrayParent0>> =
             channelData.getOptional("channel_data")
 
         /**
@@ -492,7 +483,7 @@ private constructor(
          */
         @JsonProperty("channel_data")
         @ExcludeMissing
-        fun _channelData(): JsonField<List<List<UnnamedSchemaWithArrayParent0>>> = channelData
+        fun _channelData(): JsonField<List<UnnamedSchemaWithArrayParent0>> = channelData
 
         /**
          * Returns the raw JSON value of [locale].
@@ -538,8 +529,7 @@ private constructor(
         /** A builder for [Body]. */
         class Builder internal constructor() {
 
-            private var channelData: JsonField<MutableList<List<UnnamedSchemaWithArrayParent0>>>? =
-                null
+            private var channelData: JsonField<MutableList<UnnamedSchemaWithArrayParent0>>? = null
             private var locale: JsonField<String> = JsonMissing.of()
             private var preferences: JsonField<MutableList<UnnamedSchemaWithArrayParent1>>? = null
             private var timezone: JsonField<String> = JsonMissing.of()
@@ -554,35 +544,27 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /**
-             * An optional set of [channel data](/managing-recipients/setting-channel-data) for the
-             * object. This is a list of `ChannelData` objects.
-             */
-            fun channelData(channelData: List<List<UnnamedSchemaWithArrayParent0>>?) =
-                channelData(JsonField.ofNullable(channelData))
-
-            /** Alias for calling [Builder.channelData] with `channelData.orElse(null)`. */
-            fun channelData(channelData: Optional<List<List<UnnamedSchemaWithArrayParent0>>>) =
-                channelData(channelData.getOrNull())
+            /** A request to set channel data for a type of channel inline. */
+            fun channelData(channelData: List<UnnamedSchemaWithArrayParent0>) =
+                channelData(JsonField.of(channelData))
 
             /**
              * Sets [Builder.channelData] to an arbitrary JSON value.
              *
              * You should usually call [Builder.channelData] with a well-typed
-             * `List<List<UnnamedSchemaWithArrayParent0>>` value instead. This method is primarily
-             * for setting the field to an undocumented or not yet supported value.
+             * `List<UnnamedSchemaWithArrayParent0>` value instead. This method is primarily for
+             * setting the field to an undocumented or not yet supported value.
              */
-            fun channelData(channelData: JsonField<List<List<UnnamedSchemaWithArrayParent0>>>) =
-                apply {
-                    this.channelData = channelData.map { it.toMutableList() }
-                }
+            fun channelData(channelData: JsonField<List<UnnamedSchemaWithArrayParent0>>) = apply {
+                this.channelData = channelData.map { it.toMutableList() }
+            }
 
             /**
-             * Adds a single [List<UnnamedSchemaWithArrayParent0>] to [Builder.channelData].
+             * Adds a single [UnnamedSchemaWithArrayParent0] to [Builder.channelData].
              *
              * @throws IllegalStateException if the field was previously set to a non-list.
              */
-            fun addChannelData(channelData: List<UnnamedSchemaWithArrayParent0>) = apply {
+            fun addChannelData(channelData: UnnamedSchemaWithArrayParent0) = apply {
                 this.channelData =
                     (this.channelData ?: JsonField.of(mutableListOf())).also {
                         checkKnown("channelData", it).add(channelData)
@@ -698,7 +680,7 @@ private constructor(
                 return@apply
             }
 
-            channelData().ifPresent { it.forEach { it.forEach { it.validate() } } }
+            channelData().ifPresent { it.forEach { it.validate() } }
             locale()
             preferences().ifPresent { it.forEach { it.validate() } }
             timezone()
@@ -721,8 +703,7 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (channelData.asKnown().getOrNull()?.sumOf { it.sumOf { it.validity().toInt() }.toInt() }
-                ?: 0) +
+            (channelData.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (locale.asKnown().isPresent) 1 else 0) +
                 (preferences.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (timezone.asKnown().isPresent) 1 else 0)
