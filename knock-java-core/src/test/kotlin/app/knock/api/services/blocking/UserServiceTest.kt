@@ -10,19 +10,16 @@ import app.knock.api.models.UnnamedSchemaWithArrayParent1
 import app.knock.api.models.recipients.channeldata.ChannelDataRequest
 import app.knock.api.models.recipients.channeldata.PushChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
-import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import app.knock.api.models.users.IdentifyUserRequest
 import app.knock.api.models.users.UserDeleteParams
 import app.knock.api.models.users.UserGetChannelDataParams
 import app.knock.api.models.users.UserGetParams
-import app.knock.api.models.users.UserGetPreferencesParams
 import app.knock.api.models.users.UserListMessagesParams
 import app.knock.api.models.users.UserListPreferencesParams
 import app.knock.api.models.users.UserListSchedulesParams
 import app.knock.api.models.users.UserListSubscriptionsParams
 import app.knock.api.models.users.UserMergeParams
 import app.knock.api.models.users.UserSetChannelDataParams
-import app.knock.api.models.users.UserSetPreferencesParams
 import app.knock.api.models.users.UserUnsetChannelDataParams
 import app.knock.api.models.users.UserUpdateParams
 import java.time.OffsetDateTime
@@ -231,30 +228,6 @@ internal class UserServiceTest {
         "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
     )
     @Test
-    fun getPreferences() {
-        val client =
-            KnockOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val userService = client.users()
-
-        val preferenceSet =
-            userService.getPreferences(
-                UserGetPreferencesParams.builder()
-                    .userId("user_id")
-                    .preferenceSetId("default")
-                    .tenant("tenant")
-                    .build()
-            )
-
-        preferenceSet.validate()
-    }
-
-    @Disabled(
-        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
-    )
-    @Test
     fun listMessages() {
         val client =
             KnockOkHttpClient.builder()
@@ -378,100 +351,6 @@ internal class UserServiceTest {
             )
 
         channelData.validate()
-    }
-
-    @Disabled(
-        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
-    )
-    @Test
-    fun setPreferences() {
-        val client =
-            KnockOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
-                .build()
-        val userService = client.users()
-
-        val preferenceSet =
-            userService.setPreferences(
-                UserSetPreferencesParams.builder()
-                    .userId("user_id")
-                    .preferenceSetId("default")
-                    .preferenceSetRequest(
-                        PreferenceSetRequest.builder()
-                            .categories(
-                                PreferenceSetRequest.Categories.builder()
-                                    .putAdditionalProperty("marketing", JsonValue.from(false))
-                                    .putAdditionalProperty(
-                                        "transactional",
-                                        JsonValue.from(
-                                            mapOf(
-                                                "channel_types" to
-                                                    mapOf(
-                                                        "chat" to true,
-                                                        "email" to false,
-                                                        "http" to true,
-                                                        "in_app_feed" to true,
-                                                        "push" to true,
-                                                        "sms" to true,
-                                                    ),
-                                                "conditions" to
-                                                    listOf(
-                                                        mapOf(
-                                                            "argument" to "some_property",
-                                                            "operator" to "equal_to",
-                                                            "variable" to "recipient.property",
-                                                        )
-                                                    ),
-                                            )
-                                        ),
-                                    )
-                                    .build()
-                            )
-                            .channelTypes(
-                                PreferenceSetChannelTypes.builder()
-                                    .chat(true)
-                                    .email(true)
-                                    .http(true)
-                                    .inAppFeed(true)
-                                    .push(true)
-                                    .sms(true)
-                                    .build()
-                            )
-                            .workflows(
-                                PreferenceSetRequest.Workflows.builder()
-                                    .putAdditionalProperty(
-                                        "dinosaurs-loose",
-                                        JsonValue.from(
-                                            mapOf(
-                                                "channel_types" to
-                                                    mapOf(
-                                                        "chat" to true,
-                                                        "email" to false,
-                                                        "http" to true,
-                                                        "in_app_feed" to true,
-                                                        "push" to true,
-                                                        "sms" to true,
-                                                    ),
-                                                "conditions" to
-                                                    listOf(
-                                                        mapOf(
-                                                            "argument" to "some_property",
-                                                            "operator" to "equal_to",
-                                                            "variable" to "recipient.property",
-                                                        )
-                                                    ),
-                                            )
-                                        ),
-                                    )
-                                    .build()
-                            )
-                            .build()
-                    )
-                    .build()
-            )
-
-        preferenceSet.validate()
     }
 
     @Disabled(
