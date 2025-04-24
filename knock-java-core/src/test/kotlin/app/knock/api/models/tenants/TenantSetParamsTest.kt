@@ -4,8 +4,8 @@ package app.knock.api.models.tenants
 
 import app.knock.api.core.JsonValue
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
-import app.knock.api.models.UnnamedSchemaWithArrayParent1
 import app.knock.api.models.recipients.channeldata.PushChannelData
+import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import kotlin.jvm.optionals.getOrNull
@@ -31,77 +31,7 @@ internal class TenantSetParamsTest {
                     .provider("push_fcm")
                     .build()
             )
-            .addPreference(
-                UnnamedSchemaWithArrayParent1.builder()
-                    .id("default")
-                    .categories(
-                        UnnamedSchemaWithArrayParent1.Categories.builder()
-                            .putAdditionalProperty(
-                                "transactional",
-                                JsonValue.from(
-                                    mapOf(
-                                        "channel_types" to
-                                            mapOf(
-                                                "chat" to true,
-                                                "email" to false,
-                                                "http" to true,
-                                                "in_app_feed" to true,
-                                                "push" to true,
-                                                "sms" to true,
-                                            ),
-                                        "conditions" to
-                                            listOf(
-                                                mapOf(
-                                                    "argument" to "frog_genome",
-                                                    "operator" to "contains",
-                                                    "variable" to "specimen.dna_sequence",
-                                                )
-                                            ),
-                                    )
-                                ),
-                            )
-                            .build()
-                    )
-                    .channelTypes(
-                        PreferenceSetChannelTypes.builder()
-                            .chat(true)
-                            .email(true)
-                            .http(true)
-                            .inAppFeed(true)
-                            .push(true)
-                            .sms(true)
-                            .build()
-                    )
-                    .workflows(
-                        UnnamedSchemaWithArrayParent1.Workflows.builder()
-                            .putAdditionalProperty(
-                                "dinosaurs-loose",
-                                JsonValue.from(
-                                    mapOf(
-                                        "channel_types" to
-                                            mapOf(
-                                                "chat" to true,
-                                                "email" to true,
-                                                "http" to true,
-                                                "in_app_feed" to true,
-                                                "push" to true,
-                                                "sms" to true,
-                                            ),
-                                        "conditions" to
-                                            listOf(
-                                                mapOf(
-                                                    "argument" to "frog_genome",
-                                                    "operator" to "contains",
-                                                    "variable" to "specimen.dna_sequence",
-                                                )
-                                            ),
-                                    )
-                                ),
-                            )
-                            .build()
-                    )
-                    .build()
-            )
+            .preferences(InlinePreferenceSetRequest.builder().build())
             .settings(
                 TenantSetParams.Settings.builder()
                     .branding(
@@ -215,77 +145,7 @@ internal class TenantSetParamsTest {
                         .provider("push_fcm")
                         .build()
                 )
-                .addPreference(
-                    UnnamedSchemaWithArrayParent1.builder()
-                        .id("default")
-                        .categories(
-                            UnnamedSchemaWithArrayParent1.Categories.builder()
-                                .putAdditionalProperty(
-                                    "transactional",
-                                    JsonValue.from(
-                                        mapOf(
-                                            "channel_types" to
-                                                mapOf(
-                                                    "chat" to true,
-                                                    "email" to false,
-                                                    "http" to true,
-                                                    "in_app_feed" to true,
-                                                    "push" to true,
-                                                    "sms" to true,
-                                                ),
-                                            "conditions" to
-                                                listOf(
-                                                    mapOf(
-                                                        "argument" to "frog_genome",
-                                                        "operator" to "contains",
-                                                        "variable" to "specimen.dna_sequence",
-                                                    )
-                                                ),
-                                        )
-                                    ),
-                                )
-                                .build()
-                        )
-                        .channelTypes(
-                            PreferenceSetChannelTypes.builder()
-                                .chat(true)
-                                .email(true)
-                                .http(true)
-                                .inAppFeed(true)
-                                .push(true)
-                                .sms(true)
-                                .build()
-                        )
-                        .workflows(
-                            UnnamedSchemaWithArrayParent1.Workflows.builder()
-                                .putAdditionalProperty(
-                                    "dinosaurs-loose",
-                                    JsonValue.from(
-                                        mapOf(
-                                            "channel_types" to
-                                                mapOf(
-                                                    "chat" to true,
-                                                    "email" to true,
-                                                    "http" to true,
-                                                    "in_app_feed" to true,
-                                                    "push" to true,
-                                                    "sms" to true,
-                                                ),
-                                            "conditions" to
-                                                listOf(
-                                                    mapOf(
-                                                        "argument" to "frog_genome",
-                                                        "operator" to "contains",
-                                                        "variable" to "specimen.dna_sequence",
-                                                    )
-                                                ),
-                                        )
-                                    ),
-                                )
-                                .build()
-                        )
-                        .build()
-                )
+                .preferences(InlinePreferenceSetRequest.builder().build())
                 .settings(
                     TenantSetParams.Settings.builder()
                         .branding(
@@ -389,78 +249,7 @@ internal class TenantSetParamsTest {
                     .provider("push_fcm")
                     .build()
             )
-        assertThat(body.preferences().getOrNull())
-            .containsExactly(
-                UnnamedSchemaWithArrayParent1.builder()
-                    .id("default")
-                    .categories(
-                        UnnamedSchemaWithArrayParent1.Categories.builder()
-                            .putAdditionalProperty(
-                                "transactional",
-                                JsonValue.from(
-                                    mapOf(
-                                        "channel_types" to
-                                            mapOf(
-                                                "chat" to true,
-                                                "email" to false,
-                                                "http" to true,
-                                                "in_app_feed" to true,
-                                                "push" to true,
-                                                "sms" to true,
-                                            ),
-                                        "conditions" to
-                                            listOf(
-                                                mapOf(
-                                                    "argument" to "frog_genome",
-                                                    "operator" to "contains",
-                                                    "variable" to "specimen.dna_sequence",
-                                                )
-                                            ),
-                                    )
-                                ),
-                            )
-                            .build()
-                    )
-                    .channelTypes(
-                        PreferenceSetChannelTypes.builder()
-                            .chat(true)
-                            .email(true)
-                            .http(true)
-                            .inAppFeed(true)
-                            .push(true)
-                            .sms(true)
-                            .build()
-                    )
-                    .workflows(
-                        UnnamedSchemaWithArrayParent1.Workflows.builder()
-                            .putAdditionalProperty(
-                                "dinosaurs-loose",
-                                JsonValue.from(
-                                    mapOf(
-                                        "channel_types" to
-                                            mapOf(
-                                                "chat" to true,
-                                                "email" to true,
-                                                "http" to true,
-                                                "in_app_feed" to true,
-                                                "push" to true,
-                                                "sms" to true,
-                                            ),
-                                        "conditions" to
-                                            listOf(
-                                                mapOf(
-                                                    "argument" to "frog_genome",
-                                                    "operator" to "contains",
-                                                    "variable" to "specimen.dna_sequence",
-                                                )
-                                            ),
-                                    )
-                                ),
-                            )
-                            .build()
-                    )
-                    .build()
-            )
+        assertThat(body.preferences()).isEqualTo(InlinePreferenceSetRequest.builder().build())
         assertThat(body.settings())
             .contains(
                 TenantSetParams.Settings.builder()

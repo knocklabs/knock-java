@@ -5,9 +5,7 @@ package app.knock.api.models.users
 import app.knock.api.core.JsonValue
 import app.knock.api.core.jsonMapper
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
-import app.knock.api.models.UnnamedSchemaWithArrayParent1
 import app.knock.api.models.recipients.channeldata.PushChannelData
-import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import kotlin.jvm.optionals.getOrNull
@@ -39,77 +37,20 @@ internal class IdentifyUserRequestTest {
                 .locale("locale")
                 .name("Dr. Ian Malcolm")
                 .phoneNumber("phone_number")
-                .addPreference(
-                    UnnamedSchemaWithArrayParent1.builder()
-                        .id("default")
-                        .categories(
-                            UnnamedSchemaWithArrayParent1.Categories.builder()
-                                .putAdditionalProperty(
-                                    "marketing",
-                                    JsonValue.from(
-                                        mapOf(
-                                            "channel_types" to
-                                                mapOf(
-                                                    "chat" to true,
-                                                    "email" to false,
-                                                    "http" to true,
-                                                    "in_app_feed" to true,
-                                                    "push" to true,
-                                                    "sms" to true,
-                                                ),
-                                            "conditions" to
-                                                listOf(
-                                                    mapOf(
-                                                        "argument" to "frog_genome",
-                                                        "operator" to "contains",
-                                                        "variable" to "specimen.dna_sequence",
-                                                    )
-                                                ),
-                                        )
+                .preferences(
+                    JsonValue.from(
+                        listOf(
+                            mapOf(
+                                "channel_types" to mapOf("email" to true),
+                                "id" to "default",
+                                "workflows" to
+                                    mapOf(
+                                        "dinosaurs-loose" to
+                                            mapOf("channel_types" to mapOf("email" to true))
                                     ),
-                                )
-                                .putAdditionalProperty("transactional", JsonValue.from(true))
-                                .build()
+                            )
                         )
-                        .channelTypes(
-                            PreferenceSetChannelTypes.builder()
-                                .chat(true)
-                                .email(true)
-                                .http(true)
-                                .inAppFeed(true)
-                                .push(true)
-                                .sms(true)
-                                .build()
-                        )
-                        .workflows(
-                            UnnamedSchemaWithArrayParent1.Workflows.builder()
-                                .putAdditionalProperty(
-                                    "dinosaurs-loose",
-                                    JsonValue.from(
-                                        mapOf(
-                                            "channel_types" to
-                                                mapOf(
-                                                    "chat" to true,
-                                                    "email" to true,
-                                                    "http" to true,
-                                                    "in_app_feed" to true,
-                                                    "push" to true,
-                                                    "sms" to true,
-                                                ),
-                                            "conditions" to
-                                                listOf(
-                                                    mapOf(
-                                                        "argument" to "frog_genome",
-                                                        "operator" to "contains",
-                                                        "variable" to "specimen.dna_sequence",
-                                                    )
-                                                ),
-                                        )
-                                    ),
-                                )
-                                .build()
-                        )
-                        .build()
+                    )
                 )
                 .timezone("America/New_York")
                 .build()
@@ -135,78 +76,21 @@ internal class IdentifyUserRequestTest {
         assertThat(identifyUserRequest.locale()).contains("locale")
         assertThat(identifyUserRequest.name()).contains("Dr. Ian Malcolm")
         assertThat(identifyUserRequest.phoneNumber()).contains("phone_number")
-        assertThat(identifyUserRequest.preferences().getOrNull())
-            .containsExactly(
-                UnnamedSchemaWithArrayParent1.builder()
-                    .id("default")
-                    .categories(
-                        UnnamedSchemaWithArrayParent1.Categories.builder()
-                            .putAdditionalProperty(
-                                "marketing",
-                                JsonValue.from(
-                                    mapOf(
-                                        "channel_types" to
-                                            mapOf(
-                                                "chat" to true,
-                                                "email" to false,
-                                                "http" to true,
-                                                "in_app_feed" to true,
-                                                "push" to true,
-                                                "sms" to true,
-                                            ),
-                                        "conditions" to
-                                            listOf(
-                                                mapOf(
-                                                    "argument" to "frog_genome",
-                                                    "operator" to "contains",
-                                                    "variable" to "specimen.dna_sequence",
-                                                )
-                                            ),
-                                    )
+        assertThat(identifyUserRequest.preferences())
+            .isEqualTo(
+                JsonValue.from(
+                    listOf(
+                        mapOf(
+                            "channel_types" to mapOf("email" to true),
+                            "id" to "default",
+                            "workflows" to
+                                mapOf(
+                                    "dinosaurs-loose" to
+                                        mapOf("channel_types" to mapOf("email" to true))
                                 ),
-                            )
-                            .putAdditionalProperty("transactional", JsonValue.from(true))
-                            .build()
+                        )
                     )
-                    .channelTypes(
-                        PreferenceSetChannelTypes.builder()
-                            .chat(true)
-                            .email(true)
-                            .http(true)
-                            .inAppFeed(true)
-                            .push(true)
-                            .sms(true)
-                            .build()
-                    )
-                    .workflows(
-                        UnnamedSchemaWithArrayParent1.Workflows.builder()
-                            .putAdditionalProperty(
-                                "dinosaurs-loose",
-                                JsonValue.from(
-                                    mapOf(
-                                        "channel_types" to
-                                            mapOf(
-                                                "chat" to true,
-                                                "email" to true,
-                                                "http" to true,
-                                                "in_app_feed" to true,
-                                                "push" to true,
-                                                "sms" to true,
-                                            ),
-                                        "conditions" to
-                                            listOf(
-                                                mapOf(
-                                                    "argument" to "frog_genome",
-                                                    "operator" to "contains",
-                                                    "variable" to "specimen.dna_sequence",
-                                                )
-                                            ),
-                                    )
-                                ),
-                            )
-                            .build()
-                    )
-                    .build()
+                )
             )
         assertThat(identifyUserRequest.timezone()).contains("America/New_York")
     }
@@ -235,77 +119,20 @@ internal class IdentifyUserRequestTest {
                 .locale("locale")
                 .name("Dr. Ian Malcolm")
                 .phoneNumber("phone_number")
-                .addPreference(
-                    UnnamedSchemaWithArrayParent1.builder()
-                        .id("default")
-                        .categories(
-                            UnnamedSchemaWithArrayParent1.Categories.builder()
-                                .putAdditionalProperty(
-                                    "marketing",
-                                    JsonValue.from(
-                                        mapOf(
-                                            "channel_types" to
-                                                mapOf(
-                                                    "chat" to true,
-                                                    "email" to false,
-                                                    "http" to true,
-                                                    "in_app_feed" to true,
-                                                    "push" to true,
-                                                    "sms" to true,
-                                                ),
-                                            "conditions" to
-                                                listOf(
-                                                    mapOf(
-                                                        "argument" to "frog_genome",
-                                                        "operator" to "contains",
-                                                        "variable" to "specimen.dna_sequence",
-                                                    )
-                                                ),
-                                        )
+                .preferences(
+                    JsonValue.from(
+                        listOf(
+                            mapOf(
+                                "channel_types" to mapOf("email" to true),
+                                "id" to "default",
+                                "workflows" to
+                                    mapOf(
+                                        "dinosaurs-loose" to
+                                            mapOf("channel_types" to mapOf("email" to true))
                                     ),
-                                )
-                                .putAdditionalProperty("transactional", JsonValue.from(true))
-                                .build()
+                            )
                         )
-                        .channelTypes(
-                            PreferenceSetChannelTypes.builder()
-                                .chat(true)
-                                .email(true)
-                                .http(true)
-                                .inAppFeed(true)
-                                .push(true)
-                                .sms(true)
-                                .build()
-                        )
-                        .workflows(
-                            UnnamedSchemaWithArrayParent1.Workflows.builder()
-                                .putAdditionalProperty(
-                                    "dinosaurs-loose",
-                                    JsonValue.from(
-                                        mapOf(
-                                            "channel_types" to
-                                                mapOf(
-                                                    "chat" to true,
-                                                    "email" to true,
-                                                    "http" to true,
-                                                    "in_app_feed" to true,
-                                                    "push" to true,
-                                                    "sms" to true,
-                                                ),
-                                            "conditions" to
-                                                listOf(
-                                                    mapOf(
-                                                        "argument" to "frog_genome",
-                                                        "operator" to "contains",
-                                                        "variable" to "specimen.dna_sequence",
-                                                    )
-                                                ),
-                                        )
-                                    ),
-                                )
-                                .build()
-                        )
-                        .build()
+                    )
                 )
                 .timezone("America/New_York")
                 .build()
