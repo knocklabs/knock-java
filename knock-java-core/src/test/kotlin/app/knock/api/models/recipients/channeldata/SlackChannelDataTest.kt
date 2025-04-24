@@ -20,9 +20,7 @@ internal class SlackChannelDataTest {
                         .userId("U01234567890")
                         .build()
                 )
-                .type(SlackChannelData.Type.CHAT_SLACK)
                 .token(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
-                ._typename(SlackChannelData._Typename.SLACK_CHANNEL_DATA)
                 .build()
 
         assertThat(slackChannelData.connections())
@@ -35,11 +33,8 @@ internal class SlackChannelDataTest {
                         .build()
                 )
             )
-        assertThat(slackChannelData.type()).isEqualTo(SlackChannelData.Type.CHAT_SLACK)
         assertThat(slackChannelData.token())
             .contains(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
-        assertThat(slackChannelData._typename())
-            .contains(SlackChannelData._Typename.SLACK_CHANNEL_DATA)
     }
 
     @Test
@@ -54,9 +49,7 @@ internal class SlackChannelDataTest {
                         .userId("U01234567890")
                         .build()
                 )
-                .type(SlackChannelData.Type.CHAT_SLACK)
                 .token(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
-                ._typename(SlackChannelData._Typename.SLACK_CHANNEL_DATA)
                 .build()
 
         val roundtrippedSlackChannelData =

@@ -16,7 +16,6 @@ internal class PreferenceSetTest {
         val preferenceSet =
             PreferenceSet.builder()
                 .id("default")
-                ._typename("PreferenceSet")
                 .categories(
                     PreferenceSet.Categories.builder()
                         .putAdditionalProperty("marketing", JsonValue.from(false))
@@ -97,7 +96,6 @@ internal class PreferenceSetTest {
                 .build()
 
         assertThat(preferenceSet.id()).isEqualTo("default")
-        assertThat(preferenceSet._typename()).isEqualTo("PreferenceSet")
         assertThat(preferenceSet.categories())
             .contains(
                 PreferenceSet.Categories.builder()
@@ -186,7 +184,6 @@ internal class PreferenceSetTest {
         val preferenceSet =
             PreferenceSet.builder()
                 .id("default")
-                ._typename("PreferenceSet")
                 .categories(
                     PreferenceSet.Categories.builder()
                         .putAdditionalProperty("marketing", JsonValue.from(false))

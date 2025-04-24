@@ -16,13 +16,7 @@ internal class UserSetChannelDataParamsTest {
             .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .channelDataRequest(
                 ChannelDataRequest.builder()
-                    .data(
-                        PushChannelData.builder()
-                            .addToken("push_token_1")
-                            .type(PushChannelData.Type.PUSH_FCM)
-                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                            .build()
-                    )
+                    .data(PushChannelData.builder().addToken("push_token_1").build())
                     .build()
             )
             .build()
@@ -36,12 +30,7 @@ internal class UserSetChannelDataParamsTest {
                 .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .channelDataRequest(
                     ChannelDataRequest.builder()
-                        .data(
-                            PushChannelData.builder()
-                                .addToken("push_token_1")
-                                .type(PushChannelData.Type.PUSH_FCM)
-                                .build()
-                        )
+                        .data(PushChannelData.builder().addToken("push_token_1").build())
                         .build()
                 )
                 .build()
@@ -60,13 +49,7 @@ internal class UserSetChannelDataParamsTest {
                 .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .channelDataRequest(
                     ChannelDataRequest.builder()
-                        .data(
-                            PushChannelData.builder()
-                                .addToken("push_token_1")
-                                .type(PushChannelData.Type.PUSH_FCM)
-                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                                .build()
-                        )
+                        .data(PushChannelData.builder().addToken("push_token_1").build())
                         .build()
                 )
                 .build()
@@ -76,46 +59,7 @@ internal class UserSetChannelDataParamsTest {
         assertThat(body)
             .isEqualTo(
                 ChannelDataRequest.builder()
-                    .data(
-                        PushChannelData.builder()
-                            .addToken("push_token_1")
-                            .type(PushChannelData.Type.PUSH_FCM)
-                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                            .build()
-                    )
-                    .build()
-            )
-    }
-
-    @Test
-    fun bodyWithoutOptionalFields() {
-        val params =
-            UserSetChannelDataParams.builder()
-                .userId("user_id")
-                .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .channelDataRequest(
-                    ChannelDataRequest.builder()
-                        .data(
-                            PushChannelData.builder()
-                                .addToken("push_token_1")
-                                .type(PushChannelData.Type.PUSH_FCM)
-                                .build()
-                        )
-                        .build()
-                )
-                .build()
-
-        val body = params._body()
-
-        assertThat(body)
-            .isEqualTo(
-                ChannelDataRequest.builder()
-                    .data(
-                        PushChannelData.builder()
-                            .addToken("push_token_1")
-                            .type(PushChannelData.Type.PUSH_FCM)
-                            .build()
-                    )
+                    .data(PushChannelData.builder().addToken("push_token_1").build())
                     .build()
             )
     }

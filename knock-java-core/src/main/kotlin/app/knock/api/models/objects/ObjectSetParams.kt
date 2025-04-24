@@ -56,7 +56,7 @@ private constructor(
     fun locale(): Optional<String> = body.locale()
 
     /**
-     * Inline set preferences for a recipient.
+     * Inline set preferences for a recipient, where the key is the preference set id.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -188,7 +188,7 @@ private constructor(
          */
         fun locale(locale: JsonField<String>) = apply { body.locale(locale) }
 
-        /** Inline set preferences for a recipient. */
+        /** Inline set preferences for a recipient, where the key is the preference set id. */
         fun preferences(preferences: InlinePreferenceSetRequest) = apply {
             body.preferences(preferences)
         }
@@ -416,7 +416,7 @@ private constructor(
         fun locale(): Optional<String> = locale.getOptional("locale")
 
         /**
-         * Inline set preferences for a recipient.
+         * Inline set preferences for a recipient, where the key is the preference set id.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -535,7 +535,7 @@ private constructor(
              */
             fun locale(locale: JsonField<String>) = apply { this.locale = locale }
 
-            /** Inline set preferences for a recipient. */
+            /** Inline set preferences for a recipient, where the key is the preference set id. */
             fun preferences(preferences: InlinePreferenceSetRequest) =
                 preferences(JsonField.of(preferences))
 

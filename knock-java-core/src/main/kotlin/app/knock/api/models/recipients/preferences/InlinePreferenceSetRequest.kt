@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import java.util.Objects
 
-/** Inline set preferences for a recipient. */
+/** Inline set preferences for a recipient, where the key is the preference set id. */
 class InlinePreferenceSetRequest
 @JsonCreator
 private constructor(

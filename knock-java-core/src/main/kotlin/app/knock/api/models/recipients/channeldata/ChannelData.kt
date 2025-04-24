@@ -9,6 +9,7 @@ import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
+import app.knock.api.core.allMaxBy
 import app.knock.api.core.checkRequired
 import app.knock.api.core.getOrThrow
 import app.knock.api.errors.KnockInvalidDataException
@@ -34,7 +35,6 @@ private constructor(
     private val channelId: JsonField<String>,
     private val data: JsonField<Data>,
     private val provider: JsonField<Provider>,
-    private val _typename: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -43,8 +43,7 @@ private constructor(
         @JsonProperty("channel_id") @ExcludeMissing channelId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
         @JsonProperty("provider") @ExcludeMissing provider: JsonField<Provider> = JsonMissing.of(),
-        @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
-    ) : this(channelId, data, provider, _typename, mutableMapOf())
+    ) : this(channelId, data, provider, mutableMapOf())
 
     /**
      * The unique identifier for the channel.
@@ -65,18 +64,10 @@ private constructor(
     /**
      * The type of provider.
      *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
-     *   missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun provider(): Provider = provider.getRequired("provider")
-
-    /**
-     * The typename of the schema.
-     *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
-    fun _typename(): Optional<String> = _typename.getOptional("__typename")
+    fun provider(): Optional<Provider> = provider.getOptional("provider")
 
     /**
      * Returns the raw JSON value of [channelId].
@@ -99,13 +90,6 @@ private constructor(
      */
     @JsonProperty("provider") @ExcludeMissing fun _provider(): JsonField<Provider> = provider
 
-    /**
-     * Returns the raw JSON value of [_typename].
-     *
-     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
-
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -127,7 +111,6 @@ private constructor(
          * ```java
          * .channelId()
          * .data()
-         * .provider()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -138,8 +121,7 @@ private constructor(
 
         private var channelId: JsonField<String>? = null
         private var data: JsonField<Data>? = null
-        private var provider: JsonField<Provider>? = null
-        private var _typename: JsonField<String> = JsonMissing.of()
+        private var provider: JsonField<Provider> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -147,7 +129,6 @@ private constructor(
             channelId = channelData.channelId
             data = channelData.data
             provider = channelData.provider
-            _typename = channelData._typename
             additionalProperties = channelData.additionalProperties.toMutableMap()
         }
 
@@ -180,83 +161,15 @@ private constructor(
         /** Alias for calling [data] with `Data.ofSlackChannel(slackChannel)`. */
         fun data(slackChannel: SlackChannelData) = data(Data.ofSlackChannel(slackChannel))
 
-        /**
-         * Alias for calling [data] with the following:
-         * ```java
-         * SlackChannelData.builder()
-         *     .type(SlackChannelData.Type.CHAT_SLACK)
-         *     .connections(connections)
-         *     .build()
-         * ```
-         */
-        fun slackChannelData(connections: List<SlackChannelData.Connection>) =
-            data(
-                SlackChannelData.builder()
-                    .type(SlackChannelData.Type.CHAT_SLACK)
-                    .connections(connections)
-                    .build()
-            )
-
         /** Alias for calling [data] with `Data.ofMsTeamsChannel(msTeamsChannel)`. */
         fun data(msTeamsChannel: MsTeamsChannelData) = data(Data.ofMsTeamsChannel(msTeamsChannel))
-
-        /**
-         * Alias for calling [data] with the following:
-         * ```java
-         * MsTeamsChannelData.builder()
-         *     .type(MsTeamsChannelData.Type.CHAT_MS_TEAMS)
-         *     .connections(connections)
-         *     .build()
-         * ```
-         */
-        fun msTeamsChannelData(connections: List<MsTeamsChannelData.Connection>) =
-            data(
-                MsTeamsChannelData.builder()
-                    .type(MsTeamsChannelData.Type.CHAT_MS_TEAMS)
-                    .connections(connections)
-                    .build()
-            )
 
         /** Alias for calling [data] with `Data.ofDiscordChannel(discordChannel)`. */
         fun data(discordChannel: DiscordChannelData) = data(Data.ofDiscordChannel(discordChannel))
 
-        /**
-         * Alias for calling [data] with the following:
-         * ```java
-         * DiscordChannelData.builder()
-         *     .type(DiscordChannelData.Type.CHAT_DISCORD)
-         *     .connections(connections)
-         *     .build()
-         * ```
-         */
-        fun discordChannelData(connections: List<DiscordChannelData.Connection>) =
-            data(
-                DiscordChannelData.builder()
-                    .type(DiscordChannelData.Type.CHAT_DISCORD)
-                    .connections(connections)
-                    .build()
-            )
-
         /** Alias for calling [data] with `Data.ofOneSignalChannel(oneSignalChannel)`. */
         fun data(oneSignalChannel: OneSignalChannelData) =
             data(Data.ofOneSignalChannel(oneSignalChannel))
-
-        /**
-         * Alias for calling [data] with the following:
-         * ```java
-         * OneSignalChannelData.builder()
-         *     .type(OneSignalChannelData.Type.PUSH_ONE_SIGNAL)
-         *     .playerIds(playerIds)
-         *     .build()
-         * ```
-         */
-        fun oneSignalChannelData(playerIds: List<String>) =
-            data(
-                OneSignalChannelData.builder()
-                    .type(OneSignalChannelData.Type.PUSH_ONE_SIGNAL)
-                    .playerIds(playerIds)
-                    .build()
-            )
 
         /** The type of provider. */
         fun provider(provider: Provider) = provider(JsonField.of(provider))
@@ -269,18 +182,6 @@ private constructor(
          * value.
          */
         fun provider(provider: JsonField<Provider>) = apply { this.provider = provider }
-
-        /** The typename of the schema. */
-        fun _typename(_typename: String) = _typename(JsonField.of(_typename))
-
-        /**
-         * Sets [Builder._typename] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder._typename] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -310,7 +211,6 @@ private constructor(
          * ```java
          * .channelId()
          * .data()
-         * .provider()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -319,8 +219,7 @@ private constructor(
             ChannelData(
                 checkRequired("channelId", channelId),
                 checkRequired("data", data),
-                checkRequired("provider", provider),
-                _typename,
+                provider,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -334,8 +233,7 @@ private constructor(
 
         channelId()
         data().validate()
-        provider().validate()
-        _typename()
+        provider().ifPresent { it.validate() }
         validated = true
     }
 
@@ -356,8 +254,7 @@ private constructor(
     internal fun validity(): Int =
         (if (channelId.asKnown().isPresent) 1 else 0) +
             (data.asKnown().getOrNull()?.validity() ?: 0) +
-            (provider.asKnown().getOrNull()?.validity() ?: 0) +
-            (if (_typename.asKnown().isPresent) 1 else 0)
+            (provider.asKnown().getOrNull()?.validity() ?: 0)
 
     /** Channel data for a given channel type. */
     @JsonDeserialize(using = Data.Deserializer::class)
@@ -579,34 +476,38 @@ private constructor(
 
             override fun ObjectCodec.deserialize(node: JsonNode): Data {
                 val json = JsonValue.fromJsonNode(node)
-                val type = json.asObject().getOrNull()?.get("type")?.asString()?.getOrNull()
 
-                when (type) {
-                    "chat_slack" -> {
-                        return tryDeserialize(node, jacksonTypeRef<SlackChannelData>())?.let {
-                            Data(slackChannel = it, _json = json)
-                        } ?: Data(_json = json)
-                    }
-                    "chat_ms_teams" -> {
-                        return tryDeserialize(node, jacksonTypeRef<MsTeamsChannelData>())?.let {
-                            Data(msTeamsChannel = it, _json = json)
-                        } ?: Data(_json = json)
-                    }
-                    "chat_discord" -> {
-                        return tryDeserialize(node, jacksonTypeRef<DiscordChannelData>())?.let {
-                            Data(discordChannel = it, _json = json)
-                        } ?: Data(_json = json)
-                    }
-                    "push_one_signal" -> {
-                        return tryDeserialize(node, jacksonTypeRef<OneSignalChannelData>())?.let {
-                            Data(oneSignalChannel = it, _json = json)
-                        } ?: Data(_json = json)
-                    }
+                val bestMatches =
+                    sequenceOf(
+                            tryDeserialize(node, jacksonTypeRef<PushChannelData>())?.let {
+                                Data(pushChannel = it, _json = json)
+                            },
+                            tryDeserialize(node, jacksonTypeRef<SlackChannelData>())?.let {
+                                Data(slackChannel = it, _json = json)
+                            },
+                            tryDeserialize(node, jacksonTypeRef<MsTeamsChannelData>())?.let {
+                                Data(msTeamsChannel = it, _json = json)
+                            },
+                            tryDeserialize(node, jacksonTypeRef<DiscordChannelData>())?.let {
+                                Data(discordChannel = it, _json = json)
+                            },
+                            tryDeserialize(node, jacksonTypeRef<OneSignalChannelData>())?.let {
+                                Data(oneSignalChannel = it, _json = json)
+                            },
+                        )
+                        .filterNotNull()
+                        .allMaxBy { it.validity() }
+                        .toList()
+                return when (bestMatches.size) {
+                    // This can happen if what we're deserializing is completely incompatible with
+                    // all the possible variants (e.g. deserializing from boolean).
+                    0 -> Data(_json = json)
+                    1 -> bestMatches.single()
+                    // If there's more than one match with the highest validity, then use the first
+                    // completely valid match, or simply the first match if none are completely
+                    // valid.
+                    else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
                 }
-
-                return tryDeserialize(node, jacksonTypeRef<PushChannelData>())?.let {
-                    Data(pushChannel = it, _json = json)
-                } ?: Data(_json = json)
             }
         }
 
@@ -796,15 +697,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ChannelData && channelId == other.channelId && data == other.data && provider == other.provider && _typename == other._typename && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ChannelData && channelId == other.channelId && data == other.data && provider == other.provider && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(channelId, data, provider, _typename, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(channelId, data, provider, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ChannelData{channelId=$channelId, data=$data, provider=$provider, _typename=$_typename, additionalProperties=$additionalProperties}"
+        "ChannelData{channelId=$channelId, data=$data, provider=$provider, additionalProperties=$additionalProperties}"
 }

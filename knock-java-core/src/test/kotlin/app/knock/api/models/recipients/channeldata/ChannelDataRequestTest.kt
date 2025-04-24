@@ -13,23 +13,13 @@ internal class ChannelDataRequestTest {
     fun create() {
         val channelDataRequest =
             ChannelDataRequest.builder()
-                .data(
-                    PushChannelData.builder()
-                        .addToken("push_token_1")
-                        .type(PushChannelData.Type.PUSH_FCM)
-                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                        .build()
-                )
+                .data(PushChannelData.builder().addToken("push_token_1").build())
                 .build()
 
         assertThat(channelDataRequest.data())
             .isEqualTo(
                 ChannelDataRequest.Data.ofPushChannel(
-                    PushChannelData.builder()
-                        .addToken("push_token_1")
-                        .type(PushChannelData.Type.PUSH_FCM)
-                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                        .build()
+                    PushChannelData.builder().addToken("push_token_1").build()
                 )
             )
     }
@@ -39,13 +29,7 @@ internal class ChannelDataRequestTest {
         val jsonMapper = jsonMapper()
         val channelDataRequest =
             ChannelDataRequest.builder()
-                .data(
-                    PushChannelData.builder()
-                        .addToken("push_token_1")
-                        .type(PushChannelData.Type.PUSH_FCM)
-                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                        .build()
-                )
+                .data(PushChannelData.builder().addToken("push_token_1").build())
                 .build()
 
         val roundtrippedChannelDataRequest =

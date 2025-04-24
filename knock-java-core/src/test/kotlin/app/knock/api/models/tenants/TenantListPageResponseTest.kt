@@ -35,7 +35,6 @@ internal class TenantListPageResponseTest {
                                 .preferenceSet(
                                     PreferenceSet.builder()
                                         .id("default")
-                                        ._typename("PreferenceSet")
                                         .categories(
                                             PreferenceSet.Categories.builder()
                                                 .putAdditionalProperty(
@@ -139,7 +138,6 @@ internal class TenantListPageResponseTest {
                             .preferenceSet(
                                 PreferenceSet.builder()
                                     .id("default")
-                                    ._typename("PreferenceSet")
                                     .categories(
                                         PreferenceSet.Categories.builder()
                                             .putAdditionalProperty(
@@ -248,7 +246,6 @@ internal class TenantListPageResponseTest {
                                 .preferenceSet(
                                     PreferenceSet.builder()
                                         .id("default")
-                                        ._typename("PreferenceSet")
                                         .categories(
                                             PreferenceSet.Categories.builder()
                                                 .putAdditionalProperty(

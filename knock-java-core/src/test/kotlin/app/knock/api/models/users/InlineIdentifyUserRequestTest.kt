@@ -21,16 +21,9 @@ internal class InlineIdentifyUserRequestTest {
                 .channelData(
                     InlineChannelDataRequest.builder()
                         .putAdditionalProperty(
-                            "0",
+                            "97c5837d-c65c-4d54-aa39-080eeb81c69d",
                             JsonValue.from(
-                                mapOf(
-                                    "data" to
-                                        mapOf(
-                                            "tokens" to listOf("push_token_123"),
-                                            "type" to "push_fcm",
-                                            "__typename" to "PushChannelData",
-                                        )
-                                )
+                                mapOf("data" to mapOf("tokens" to listOf("push_token_123")))
                             ),
                         )
                         .build()
@@ -39,7 +32,7 @@ internal class InlineIdentifyUserRequestTest {
                 .preferences(
                     InlinePreferenceSetRequest.builder()
                         .putAdditionalProperty(
-                            "0",
+                            "default",
                             JsonValue.from(
                                 mapOf(
                                     "categories" to
@@ -112,17 +105,8 @@ internal class InlineIdentifyUserRequestTest {
             .contains(
                 InlineChannelDataRequest.builder()
                     .putAdditionalProperty(
-                        "0",
-                        JsonValue.from(
-                            mapOf(
-                                "data" to
-                                    mapOf(
-                                        "tokens" to listOf("push_token_123"),
-                                        "type" to "push_fcm",
-                                        "__typename" to "PushChannelData",
-                                    )
-                            )
-                        ),
+                        "97c5837d-c65c-4d54-aa39-080eeb81c69d",
+                        JsonValue.from(mapOf("data" to mapOf("tokens" to listOf("push_token_123")))),
                     )
                     .build()
             )
@@ -132,7 +116,7 @@ internal class InlineIdentifyUserRequestTest {
             .contains(
                 InlinePreferenceSetRequest.builder()
                     .putAdditionalProperty(
-                        "0",
+                        "default",
                         JsonValue.from(
                             mapOf(
                                 "categories" to
@@ -207,16 +191,9 @@ internal class InlineIdentifyUserRequestTest {
                 .channelData(
                     InlineChannelDataRequest.builder()
                         .putAdditionalProperty(
-                            "0",
+                            "97c5837d-c65c-4d54-aa39-080eeb81c69d",
                             JsonValue.from(
-                                mapOf(
-                                    "data" to
-                                        mapOf(
-                                            "tokens" to listOf("push_token_123"),
-                                            "type" to "push_fcm",
-                                            "__typename" to "PushChannelData",
-                                        )
-                                )
+                                mapOf("data" to mapOf("tokens" to listOf("push_token_123")))
                             ),
                         )
                         .build()
@@ -225,7 +202,7 @@ internal class InlineIdentifyUserRequestTest {
                 .preferences(
                     InlinePreferenceSetRequest.builder()
                         .putAdditionalProperty(
-                            "0",
+                            "default",
                             JsonValue.from(
                                 mapOf(
                                     "categories" to

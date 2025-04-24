@@ -18,8 +18,6 @@ internal class DiscordChannelDataTest {
                         .channelId("123456789012345678")
                         .build()
                 )
-                .type(DiscordChannelData.Type.CHAT_DISCORD)
-                ._typename(DiscordChannelData._Typename.DISCORD_CHANNEL_DATA)
                 .build()
 
         assertThat(discordChannelData.connections())
@@ -30,9 +28,6 @@ internal class DiscordChannelDataTest {
                         .build()
                 )
             )
-        assertThat(discordChannelData.type()).isEqualTo(DiscordChannelData.Type.CHAT_DISCORD)
-        assertThat(discordChannelData._typename())
-            .contains(DiscordChannelData._Typename.DISCORD_CHANNEL_DATA)
     }
 
     @Test
@@ -45,8 +40,6 @@ internal class DiscordChannelDataTest {
                         .channelId("123456789012345678")
                         .build()
                 )
-                .type(DiscordChannelData.Type.CHAT_DISCORD)
-                ._typename(DiscordChannelData._Typename.DISCORD_CHANNEL_DATA)
                 .build()
 
         val roundtrippedDiscordChannelData =

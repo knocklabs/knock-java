@@ -61,7 +61,7 @@ private constructor(
     fun channelData(): Optional<InlineChannelDataRequest> = channelData.getOptional("channel_data")
 
     /**
-     * Inline set preferences for a recipient.
+     * Inline set preferences for a recipient, where the key is the preference set id.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -181,7 +181,7 @@ private constructor(
             this.channelData = channelData
         }
 
-        /** Inline set preferences for a recipient. */
+        /** Inline set preferences for a recipient, where the key is the preference set id. */
         fun preferences(preferences: InlinePreferenceSetRequest?) =
             preferences(JsonField.ofNullable(preferences))
 

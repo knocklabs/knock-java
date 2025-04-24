@@ -25,7 +25,6 @@ import kotlin.jvm.optionals.getOrNull
 class PreferenceSet
 private constructor(
     private val id: JsonField<String>,
-    private val _typename: JsonField<String>,
     private val categories: JsonField<Categories>,
     private val channelTypes: JsonField<PreferenceSetChannelTypes>,
     private val workflows: JsonField<Workflows>,
@@ -35,7 +34,6 @@ private constructor(
     @JsonCreator
     private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
-        @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
         @JsonProperty("categories")
         @ExcludeMissing
         categories: JsonField<Categories> = JsonMissing.of(),
@@ -45,7 +43,7 @@ private constructor(
         @JsonProperty("workflows")
         @ExcludeMissing
         workflows: JsonField<Workflows> = JsonMissing.of(),
-    ) : this(id, _typename, categories, channelTypes, workflows, mutableMapOf())
+    ) : this(id, categories, channelTypes, workflows, mutableMapOf())
 
     /**
      * Unique identifier for the preference set.
@@ -54,14 +52,6 @@ private constructor(
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun id(): String = id.getRequired("id")
-
-    /**
-     * The typename of the schema.
-     *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
-     *   missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun _typename(): String = _typename.getRequired("__typename")
 
     /**
      * An object where the key is the category and the values are the preference settings for that
@@ -96,13 +86,6 @@ private constructor(
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
-
-    /**
-     * Returns the raw JSON value of [_typename].
-     *
-     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
     /**
      * Returns the raw JSON value of [categories].
@@ -149,7 +132,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .id()
-         * ._typename()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -159,7 +141,6 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
-        private var _typename: JsonField<String>? = null
         private var categories: JsonField<Categories> = JsonMissing.of()
         private var channelTypes: JsonField<PreferenceSetChannelTypes> = JsonMissing.of()
         private var workflows: JsonField<Workflows> = JsonMissing.of()
@@ -168,7 +149,6 @@ private constructor(
         @JvmSynthetic
         internal fun from(preferenceSet: PreferenceSet) = apply {
             id = preferenceSet.id
-            _typename = preferenceSet._typename
             categories = preferenceSet.categories
             channelTypes = preferenceSet.channelTypes
             workflows = preferenceSet.workflows
@@ -185,18 +165,6 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun id(id: JsonField<String>) = apply { this.id = id }
-
-        /** The typename of the schema. */
-        fun _typename(_typename: String) = _typename(JsonField.of(_typename))
-
-        /**
-         * Sets [Builder._typename] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder._typename] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         /**
          * An object where the key is the category and the values are the preference settings for
@@ -280,7 +248,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .id()
-         * ._typename()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -288,7 +255,6 @@ private constructor(
         fun build(): PreferenceSet =
             PreferenceSet(
                 checkRequired("id", id),
-                checkRequired("_typename", _typename),
                 categories,
                 channelTypes,
                 workflows,
@@ -304,7 +270,6 @@ private constructor(
         }
 
         id()
-        _typename()
         categories().ifPresent { it.validate() }
         channelTypes().ifPresent { it.validate() }
         workflows().ifPresent { it.validate() }
@@ -327,7 +292,6 @@ private constructor(
     @JvmSynthetic
     internal fun validity(): Int =
         (if (id.asKnown().isPresent) 1 else 0) +
-            (if (_typename.asKnown().isPresent) 1 else 0) +
             (categories.asKnown().getOrNull()?.validity() ?: 0) +
             (channelTypes.asKnown().getOrNull()?.validity() ?: 0) +
             (workflows.asKnown().getOrNull()?.validity() ?: 0)
@@ -547,15 +511,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is PreferenceSet && id == other.id && _typename == other._typename && categories == other.categories && channelTypes == other.channelTypes && workflows == other.workflows && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is PreferenceSet && id == other.id && categories == other.categories && channelTypes == other.channelTypes && workflows == other.workflows && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, _typename, categories, channelTypes, workflows, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, categories, channelTypes, workflows, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "PreferenceSet{id=$id, _typename=$_typename, categories=$categories, channelTypes=$channelTypes, workflows=$workflows, additionalProperties=$additionalProperties}"
+        "PreferenceSet{id=$id, categories=$categories, channelTypes=$channelTypes, workflows=$workflows, additionalProperties=$additionalProperties}"
 }

@@ -21,8 +21,6 @@ internal class MsTeamsChannelDataTest {
                         .msTeamsUserId(null)
                         .build()
                 )
-                .type(MsTeamsChannelData.Type.CHAT_MS_TEAMS)
-                ._typename(MsTeamsChannelData._Typename.MS_TEAMS_CHANNEL_DATA)
                 .msTeamsTenantId(null)
                 .build()
 
@@ -37,9 +35,6 @@ internal class MsTeamsChannelDataTest {
                         .build()
                 )
             )
-        assertThat(msTeamsChannelData.type()).isEqualTo(MsTeamsChannelData.Type.CHAT_MS_TEAMS)
-        assertThat(msTeamsChannelData._typename())
-            .contains(MsTeamsChannelData._Typename.MS_TEAMS_CHANNEL_DATA)
         assertThat(msTeamsChannelData.msTeamsTenantId()).isEmpty
     }
 
@@ -56,8 +51,6 @@ internal class MsTeamsChannelDataTest {
                         .msTeamsUserId(null)
                         .build()
                 )
-                .type(MsTeamsChannelData.Type.CHAT_MS_TEAMS)
-                ._typename(MsTeamsChannelData._Typename.MS_TEAMS_CHANNEL_DATA)
                 .msTeamsTenantId(null)
                 .build()
 

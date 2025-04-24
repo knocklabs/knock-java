@@ -20,16 +20,7 @@ internal class TenantSetParamsTest {
                 InlineChannelDataRequest.builder()
                     .putAdditionalProperty(
                         "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                        JsonValue.from(
-                            mapOf(
-                                "data" to
-                                    mapOf(
-                                        "tokens" to listOf("push_token_xxx"),
-                                        "type" to "push_fcm",
-                                        "__typename" to "PushChannelData",
-                                    )
-                            )
-                        ),
+                        JsonValue.from(mapOf("data" to mapOf("tokens" to listOf("push_token_xxx")))),
                     )
                     .build()
             )
@@ -205,14 +196,7 @@ internal class TenantSetParamsTest {
                         .putAdditionalProperty(
                             "97c5837d-c65c-4d54-aa39-080eeb81c69d",
                             JsonValue.from(
-                                mapOf(
-                                    "data" to
-                                        mapOf(
-                                            "tokens" to listOf("push_token_xxx"),
-                                            "type" to "push_fcm",
-                                            "__typename" to "PushChannelData",
-                                        )
-                                )
+                                mapOf("data" to mapOf("tokens" to listOf("push_token_xxx")))
                             ),
                         )
                         .build()
@@ -380,16 +364,7 @@ internal class TenantSetParamsTest {
                 InlineChannelDataRequest.builder()
                     .putAdditionalProperty(
                         "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                        JsonValue.from(
-                            mapOf(
-                                "data" to
-                                    mapOf(
-                                        "tokens" to listOf("push_token_xxx"),
-                                        "type" to "push_fcm",
-                                        "__typename" to "PushChannelData",
-                                    )
-                            )
-                        ),
+                        JsonValue.from(mapOf("data" to mapOf("tokens" to listOf("push_token_xxx")))),
                     )
                     .build()
             )

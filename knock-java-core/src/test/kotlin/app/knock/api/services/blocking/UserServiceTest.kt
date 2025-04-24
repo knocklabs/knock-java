@@ -55,15 +55,11 @@ internal class UserServiceTest {
                             .channelData(
                                 InlineChannelDataRequest.builder()
                                     .putAdditionalProperty(
-                                        "0",
+                                        "97c5837d-c65c-4d54-aa39-080eeb81c69d",
                                         JsonValue.from(
                                             mapOf(
                                                 "data" to
-                                                    mapOf(
-                                                        "tokens" to listOf("push_token_123"),
-                                                        "type" to "push_fcm",
-                                                        "__typename" to "PushChannelData",
-                                                    )
+                                                    mapOf("tokens" to listOf("push_token_123"))
                                             )
                                         ),
                                     )
@@ -77,7 +73,7 @@ internal class UserServiceTest {
                             .preferences(
                                 InlinePreferenceSetRequest.builder()
                                     .putAdditionalProperty(
-                                        "0",
+                                        "default",
                                         JsonValue.from(
                                             mapOf(
                                                 "categories" to
@@ -367,13 +363,7 @@ internal class UserServiceTest {
                     .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .channelDataRequest(
                         ChannelDataRequest.builder()
-                            .data(
-                                PushChannelData.builder()
-                                    .addToken("push_token_1")
-                                    .type(PushChannelData.Type.PUSH_FCM)
-                                    ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                                    .build()
-                            )
+                            .data(PushChannelData.builder().addToken("push_token_1").build())
                             .build()
                     )
                     .build()

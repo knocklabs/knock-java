@@ -28,11 +28,7 @@ internal class AudienceAddMembersParamsTest {
                                         JsonValue.from(
                                             mapOf(
                                                 "data" to
-                                                    mapOf(
-                                                        "tokens" to listOf("push_token_xxx"),
-                                                        "type" to "push_fcm",
-                                                        "__typename" to "PushChannelData",
-                                                    )
+                                                    mapOf("tokens" to listOf("push_token_xxx"))
                                             )
                                         ),
                                     )
@@ -154,11 +150,7 @@ internal class AudienceAddMembersParamsTest {
                                             JsonValue.from(
                                                 mapOf(
                                                     "data" to
-                                                        mapOf(
-                                                            "tokens" to listOf("push_token_xxx"),
-                                                            "type" to "push_fcm",
-                                                            "__typename" to "PushChannelData",
-                                                        )
+                                                        mapOf("tokens" to listOf("push_token_xxx"))
                                                 )
                                             ),
                                         )
@@ -260,11 +252,7 @@ internal class AudienceAddMembersParamsTest {
                                         JsonValue.from(
                                             mapOf(
                                                 "data" to
-                                                    mapOf(
-                                                        "tokens" to listOf("push_token_xxx"),
-                                                        "type" to "push_fcm",
-                                                        "__typename" to "PushChannelData",
-                                                    )
+                                                    mapOf("tokens" to listOf("push_token_xxx"))
                                             )
                                         ),
                                     )

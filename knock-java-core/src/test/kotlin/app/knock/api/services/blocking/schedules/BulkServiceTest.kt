@@ -47,10 +47,7 @@ internal class BulkServiceTest {
                                                     mapOf(
                                                         "data" to
                                                             mapOf(
-                                                                "tokens" to
-                                                                    listOf("push_token_xxx"),
-                                                                "type" to "push_fcm",
-                                                                "__typename" to "PushChannelData",
+                                                                "tokens" to listOf("push_token_xxx")
                                                             )
                                                     )
                                                 ),
@@ -181,10 +178,7 @@ internal class BulkServiceTest {
                                                     mapOf(
                                                         "data" to
                                                             mapOf(
-                                                                "tokens" to
-                                                                    listOf("push_token_xxx"),
-                                                                "type" to "push_fcm",
-                                                                "__typename" to "PushChannelData",
+                                                                "tokens" to listOf("push_token_xxx")
                                                             )
                                                     )
                                                 ),
