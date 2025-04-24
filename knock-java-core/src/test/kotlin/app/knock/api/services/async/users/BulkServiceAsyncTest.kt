@@ -6,12 +6,10 @@ import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClientAsync
 import app.knock.api.core.JsonValue
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
+import app.knock.api.models.UnnamedSchemaWithArrayParent1
 import app.knock.api.models.recipients.channeldata.PushChannelData
-import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
-import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypeSetting
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
-import app.knock.api.models.shared.Condition
 import app.knock.api.models.users.InlineIdentifyUserRequest
 import app.knock.api.models.users.bulk.BulkDeleteParams
 import app.knock.api.models.users.bulk.BulkIdentifyParams
@@ -77,13 +75,13 @@ internal class BulkServiceAsyncTest {
                                     .build()
                             )
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                            .preferences(
-                                InlinePreferenceSetRequest.builder()
-                                    .id("id")
+                            .addPreference(
+                                UnnamedSchemaWithArrayParent1.builder()
+                                    .id("default")
                                     .categories(
-                                        InlinePreferenceSetRequest.Categories.builder()
+                                        UnnamedSchemaWithArrayParent1.Categories.builder()
                                             .putAdditionalProperty(
-                                                "marketing",
+                                                "transactional",
                                                 JsonValue.from(
                                                     mapOf(
                                                         "channel_types" to
@@ -106,10 +104,6 @@ internal class BulkServiceAsyncTest {
                                                             ),
                                                     )
                                                 ),
-                                            )
-                                            .putAdditionalProperty(
-                                                "transactional",
-                                                JsonValue.from(true),
                                             )
                                             .build()
                                     )
@@ -120,21 +114,11 @@ internal class BulkServiceAsyncTest {
                                             .http(true)
                                             .inAppFeed(true)
                                             .push(true)
-                                            .sms(
-                                                PreferenceSetChannelTypeSetting.builder()
-                                                    .addCondition(
-                                                        Condition.builder()
-                                                            .argument("US")
-                                                            .operator(Condition.Operator.EQUAL_TO)
-                                                            .variable("recipient.country_code")
-                                                            .build()
-                                                    )
-                                                    .build()
-                                            )
+                                            .sms(true)
                                             .build()
                                     )
                                     .workflows(
-                                        InlinePreferenceSetRequest.Workflows.builder()
+                                        UnnamedSchemaWithArrayParent1.Workflows.builder()
                                             .putAdditionalProperty(
                                                 "dinosaurs-loose",
                                                 JsonValue.from(
@@ -142,7 +126,7 @@ internal class BulkServiceAsyncTest {
                                                         "channel_types" to
                                                             mapOf(
                                                                 "chat" to true,
-                                                                "email" to false,
+                                                                "email" to true,
                                                                 "http" to true,
                                                                 "in_app_feed" to true,
                                                                 "push" to true,
@@ -159,10 +143,6 @@ internal class BulkServiceAsyncTest {
                                                             ),
                                                     )
                                                 ),
-                                            )
-                                            .putAdditionalProperty(
-                                                "welcome-sequence",
-                                                JsonValue.from(true),
                                             )
                                             .build()
                                     )

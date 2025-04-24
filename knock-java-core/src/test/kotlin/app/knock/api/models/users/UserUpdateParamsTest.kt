@@ -4,11 +4,9 @@ package app.knock.api.models.users
 
 import app.knock.api.core.JsonValue
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
+import app.knock.api.models.UnnamedSchemaWithArrayParent1
 import app.knock.api.models.recipients.channeldata.PushChannelData
-import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
-import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypeSetting
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
-import app.knock.api.models.shared.Condition
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -40,11 +38,11 @@ internal class UserUpdateParamsTest {
                     .locale("locale")
                     .name("Dr. Ian Malcolm")
                     .phoneNumber("phone_number")
-                    .preferences(
-                        InlinePreferenceSetRequest.builder()
-                            .id("id")
+                    .addPreference(
+                        UnnamedSchemaWithArrayParent1.builder()
+                            .id("default")
                             .categories(
-                                InlinePreferenceSetRequest.Categories.builder()
+                                UnnamedSchemaWithArrayParent1.Categories.builder()
                                     .putAdditionalProperty(
                                         "marketing",
                                         JsonValue.from(
@@ -79,21 +77,11 @@ internal class UserUpdateParamsTest {
                                     .http(true)
                                     .inAppFeed(true)
                                     .push(true)
-                                    .sms(
-                                        PreferenceSetChannelTypeSetting.builder()
-                                            .addCondition(
-                                                Condition.builder()
-                                                    .argument("US")
-                                                    .operator(Condition.Operator.EQUAL_TO)
-                                                    .variable("recipient.country_code")
-                                                    .build()
-                                            )
-                                            .build()
-                                    )
+                                    .sms(true)
                                     .build()
                             )
                             .workflows(
-                                InlinePreferenceSetRequest.Workflows.builder()
+                                UnnamedSchemaWithArrayParent1.Workflows.builder()
                                     .putAdditionalProperty(
                                         "dinosaurs-loose",
                                         JsonValue.from(
@@ -101,7 +89,7 @@ internal class UserUpdateParamsTest {
                                                 "channel_types" to
                                                     mapOf(
                                                         "chat" to true,
-                                                        "email" to false,
+                                                        "email" to true,
                                                         "http" to true,
                                                         "in_app_feed" to true,
                                                         "push" to true,
@@ -118,7 +106,6 @@ internal class UserUpdateParamsTest {
                                             )
                                         ),
                                     )
-                                    .putAdditionalProperty("welcome-sequence", JsonValue.from(true))
                                     .build()
                             )
                             .build()
@@ -168,11 +155,11 @@ internal class UserUpdateParamsTest {
                         .locale("locale")
                         .name("Dr. Ian Malcolm")
                         .phoneNumber("phone_number")
-                        .preferences(
-                            InlinePreferenceSetRequest.builder()
-                                .id("id")
+                        .addPreference(
+                            UnnamedSchemaWithArrayParent1.builder()
+                                .id("default")
                                 .categories(
-                                    InlinePreferenceSetRequest.Categories.builder()
+                                    UnnamedSchemaWithArrayParent1.Categories.builder()
                                         .putAdditionalProperty(
                                             "marketing",
                                             JsonValue.from(
@@ -211,21 +198,11 @@ internal class UserUpdateParamsTest {
                                         .http(true)
                                         .inAppFeed(true)
                                         .push(true)
-                                        .sms(
-                                            PreferenceSetChannelTypeSetting.builder()
-                                                .addCondition(
-                                                    Condition.builder()
-                                                        .argument("US")
-                                                        .operator(Condition.Operator.EQUAL_TO)
-                                                        .variable("recipient.country_code")
-                                                        .build()
-                                                )
-                                                .build()
-                                        )
+                                        .sms(true)
                                         .build()
                                 )
                                 .workflows(
-                                    InlinePreferenceSetRequest.Workflows.builder()
+                                    UnnamedSchemaWithArrayParent1.Workflows.builder()
                                         .putAdditionalProperty(
                                             "dinosaurs-loose",
                                             JsonValue.from(
@@ -233,7 +210,7 @@ internal class UserUpdateParamsTest {
                                                     "channel_types" to
                                                         mapOf(
                                                             "chat" to true,
-                                                            "email" to false,
+                                                            "email" to true,
                                                             "http" to true,
                                                             "in_app_feed" to true,
                                                             "push" to true,
@@ -250,10 +227,6 @@ internal class UserUpdateParamsTest {
                                                         ),
                                                 )
                                             ),
-                                        )
-                                        .putAdditionalProperty(
-                                            "welcome-sequence",
-                                            JsonValue.from(true),
                                         )
                                         .build()
                                 )
@@ -288,11 +261,11 @@ internal class UserUpdateParamsTest {
                     .locale("locale")
                     .name("Dr. Ian Malcolm")
                     .phoneNumber("phone_number")
-                    .preferences(
-                        InlinePreferenceSetRequest.builder()
-                            .id("id")
+                    .addPreference(
+                        UnnamedSchemaWithArrayParent1.builder()
+                            .id("default")
                             .categories(
-                                InlinePreferenceSetRequest.Categories.builder()
+                                UnnamedSchemaWithArrayParent1.Categories.builder()
                                     .putAdditionalProperty(
                                         "marketing",
                                         JsonValue.from(
@@ -327,21 +300,11 @@ internal class UserUpdateParamsTest {
                                     .http(true)
                                     .inAppFeed(true)
                                     .push(true)
-                                    .sms(
-                                        PreferenceSetChannelTypeSetting.builder()
-                                            .addCondition(
-                                                Condition.builder()
-                                                    .argument("US")
-                                                    .operator(Condition.Operator.EQUAL_TO)
-                                                    .variable("recipient.country_code")
-                                                    .build()
-                                            )
-                                            .build()
-                                    )
+                                    .sms(true)
                                     .build()
                             )
                             .workflows(
-                                InlinePreferenceSetRequest.Workflows.builder()
+                                UnnamedSchemaWithArrayParent1.Workflows.builder()
                                     .putAdditionalProperty(
                                         "dinosaurs-loose",
                                         JsonValue.from(
@@ -349,7 +312,7 @@ internal class UserUpdateParamsTest {
                                                 "channel_types" to
                                                     mapOf(
                                                         "chat" to true,
-                                                        "email" to false,
+                                                        "email" to true,
                                                         "http" to true,
                                                         "in_app_feed" to true,
                                                         "push" to true,
@@ -366,7 +329,6 @@ internal class UserUpdateParamsTest {
                                             )
                                         ),
                                     )
-                                    .putAdditionalProperty("welcome-sequence", JsonValue.from(true))
                                     .build()
                             )
                             .build()
