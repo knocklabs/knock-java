@@ -36,7 +36,10 @@ internal class BulkServiceAsyncTest {
 
         val bulkOperationFuture =
             bulkServiceAsync.delete(
-                BulkDeleteParams.builder().collection("collection").addObjectId("string").build()
+                BulkDeleteParams.builder()
+                    .collection("collection")
+                    .objectIds(listOf("obj_123", "obj_456", "obj_789"))
+                    .build()
             )
 
         val bulkOperation = bulkOperationFuture.get()
@@ -61,7 +64,6 @@ internal class BulkServiceAsyncTest {
                     .collection("projects")
                     .addSubscription(
                         BulkAddSubscriptionsParams.Subscription.builder()
-                            .id("project-1")
                             .addRecipient(
                                 InlineIdentifyUserRequest.builder()
                                     .id("user_1")
@@ -70,11 +72,11 @@ internal class BulkServiceAsyncTest {
                                             .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
                                             .data(
                                                 PushChannelData.builder()
+                                                    .addToken("push_token_xxx")
+                                                    .type(PushChannelData.Type.PUSH_FCM)
                                                     ._typename(
                                                         PushChannelData._Typename.PUSH_CHANNEL_DATA
                                                     )
-                                                    .addToken("push_token_xxx")
-                                                    .type(PushChannelData.Type.PUSH_FCM)
                                                     .build()
                                             )
                                             .provider("push_fcm")
@@ -199,9 +201,9 @@ internal class BulkServiceAsyncTest {
                                     .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
                                     .data(
                                         PushChannelData.builder()
-                                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                                             .addToken("push_token_xxx")
                                             .type(PushChannelData.Type.PUSH_FCM)
+                                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                                             .build()
                                     )
                                     .provider("push_fcm")

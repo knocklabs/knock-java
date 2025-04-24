@@ -2,31 +2,52 @@
 
 package app.knock.api.models.objects.bulk
 
+import app.knock.api.core.ExcludeMissing
+import app.knock.api.core.JsonField
+import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
+import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
+import app.knock.api.errors.KnockInvalidDataException
+import com.fasterxml.jackson.annotation.JsonAnyGetter
+import com.fasterxml.jackson.annotation.JsonAnySetter
+import com.fasterxml.jackson.annotation.JsonCreator
+import com.fasterxml.jackson.annotation.JsonProperty
+import java.util.Collections
 import java.util.Objects
-import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Bulk deletes objects from the specified collection. */
 class BulkDeleteParams
 private constructor(
     private val collection: String,
-    private val objectIds: List<String>,
+    private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
-    private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
     fun collection(): String = collection
 
-    /** A list of object IDs. */
-    fun objectIds(): List<String> = objectIds
+    /**
+     * List of object IDs to delete.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun objectIds(): List<String> = body.objectIds()
 
-    fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
+    /**
+     * Returns the raw JSON value of [objectIds].
+     *
+     * Unlike [objectIds], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _objectIds(): JsonField<List<String>> = body._objectIds()
+
+    fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -52,34 +73,65 @@ private constructor(
     class Builder internal constructor() {
 
         private var collection: String? = null
-        private var objectIds: MutableList<String>? = null
+        private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
-        private var additionalBodyProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(bulkDeleteParams: BulkDeleteParams) = apply {
             collection = bulkDeleteParams.collection
-            objectIds = bulkDeleteParams.objectIds.toMutableList()
+            body = bulkDeleteParams.body.toBuilder()
             additionalHeaders = bulkDeleteParams.additionalHeaders.toBuilder()
             additionalQueryParams = bulkDeleteParams.additionalQueryParams.toBuilder()
-            additionalBodyProperties = bulkDeleteParams.additionalBodyProperties.toMutableMap()
         }
 
         fun collection(collection: String) = apply { this.collection = collection }
 
-        /** A list of object IDs. */
-        fun objectIds(objectIds: List<String>) = apply {
-            this.objectIds = objectIds.toMutableList()
-        }
+        /**
+         * Sets the entire request body.
+         *
+         * This is generally only useful if you are already constructing the body separately.
+         * Otherwise, it's more convenient to use the top-level setters instead:
+         * - [objectIds]
+         */
+        fun body(body: Body) = apply { this.body = body.toBuilder() }
+
+        /** List of object IDs to delete. */
+        fun objectIds(objectIds: List<String>) = apply { body.objectIds(objectIds) }
+
+        /**
+         * Sets [Builder.objectIds] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.objectIds] with a well-typed `List<String>` value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun objectIds(objectIds: JsonField<List<String>>) = apply { body.objectIds(objectIds) }
 
         /**
          * Adds a single [String] to [objectIds].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addObjectId(objectId: String) = apply {
-            objectIds = (objectIds ?: mutableListOf()).apply { add(objectId) }
+        fun addObjectId(objectId: String) = apply { body.addObjectId(objectId) }
+
+        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
+            body.additionalProperties(additionalBodyProperties)
+        }
+
+        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
+            body.putAdditionalProperty(key, value)
+        }
+
+        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
+            apply {
+                body.putAllAdditionalProperties(additionalBodyProperties)
+            }
+
+        fun removeAdditionalBodyProperty(key: String) = apply { body.removeAdditionalProperty(key) }
+
+        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
+            body.removeAllAdditionalProperties(keys)
         }
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
@@ -180,28 +232,6 @@ private constructor(
             additionalQueryParams.removeAll(keys)
         }
 
-        fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
-            this.additionalBodyProperties.clear()
-            putAllAdditionalBodyProperties(additionalBodyProperties)
-        }
-
-        fun putAdditionalBodyProperty(key: String, value: JsonValue) = apply {
-            additionalBodyProperties.put(key, value)
-        }
-
-        fun putAllAdditionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) =
-            apply {
-                this.additionalBodyProperties.putAll(additionalBodyProperties)
-            }
-
-        fun removeAdditionalBodyProperty(key: String) = apply {
-            additionalBodyProperties.remove(key)
-        }
-
-        fun removeAllAdditionalBodyProperties(keys: Set<String>) = apply {
-            keys.forEach(::removeAdditionalBodyProperty)
-        }
-
         /**
          * Returns an immutable instance of [BulkDeleteParams].
          *
@@ -218,15 +248,13 @@ private constructor(
         fun build(): BulkDeleteParams =
             BulkDeleteParams(
                 checkRequired("collection", collection),
-                checkRequired("objectIds", objectIds).toImmutable(),
+                body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
-                additionalBodyProperties.toImmutable(),
             )
     }
 
-    fun _body(): Optional<Map<String, JsonValue>> =
-        Optional.ofNullable(additionalBodyProperties.ifEmpty { null })
+    fun _body(): Body = body
 
     fun _pathParam(index: Int): String =
         when (index) {
@@ -236,24 +264,195 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams =
-        QueryParams.builder()
-            .apply {
-                objectIds.forEach { put("object_ids[]", it) }
-                putAll(additionalQueryParams)
+    override fun _queryParams(): QueryParams = additionalQueryParams
+
+    /** Request body for bulk deleting objects. */
+    class Body
+    private constructor(
+        private val objectIds: JsonField<List<String>>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("object_ids")
+            @ExcludeMissing
+            objectIds: JsonField<List<String>> = JsonMissing.of()
+        ) : this(objectIds, mutableMapOf())
+
+        /**
+         * List of object IDs to delete.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun objectIds(): List<String> = objectIds.getRequired("object_ids")
+
+        /**
+         * Returns the raw JSON value of [objectIds].
+         *
+         * Unlike [objectIds], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("object_ids")
+        @ExcludeMissing
+        fun _objectIds(): JsonField<List<String>> = objectIds
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of [Body].
+             *
+             * The following fields are required:
+             * ```java
+             * .objectIds()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Body]. */
+        class Builder internal constructor() {
+
+            private var objectIds: JsonField<MutableList<String>>? = null
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(body: Body) = apply {
+                objectIds = body.objectIds.map { it.toMutableList() }
+                additionalProperties = body.additionalProperties.toMutableMap()
             }
-            .build()
+
+            /** List of object IDs to delete. */
+            fun objectIds(objectIds: List<String>) = objectIds(JsonField.of(objectIds))
+
+            /**
+             * Sets [Builder.objectIds] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.objectIds] with a well-typed `List<String>` value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun objectIds(objectIds: JsonField<List<String>>) = apply {
+                this.objectIds = objectIds.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [String] to [objectIds].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addObjectId(objectId: String) = apply {
+                objectIds =
+                    (objectIds ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("objectIds", it).add(objectId)
+                    }
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Body].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .objectIds()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): Body =
+                Body(
+                    checkRequired("objectIds", objectIds).map { it.toImmutable() },
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Body = apply {
+            if (validated) {
+                return@apply
+            }
+
+            objectIds()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = (objectIds.asKnown().getOrNull()?.size ?: 0)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Body && objectIds == other.objectIds && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(objectIds, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Body{objectIds=$objectIds, additionalProperties=$additionalProperties}"
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is BulkDeleteParams && collection == other.collection && objectIds == other.objectIds && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams && additionalBodyProperties == other.additionalBodyProperties /* spotless:on */
+        return /* spotless:off */ other is BulkDeleteParams && collection == other.collection && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, objectIds, additionalHeaders, additionalQueryParams, additionalBodyProperties) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(collection, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "BulkDeleteParams{collection=$collection, objectIds=$objectIds, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams, additionalBodyProperties=$additionalBodyProperties}"
+        "BulkDeleteParams{collection=$collection, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

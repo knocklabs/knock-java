@@ -14,12 +14,16 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** A tenant entity. */
 class Tenant
 private constructor(
     private val id: JsonField<String>,
     private val _typename: JsonField<String>,
+    private val name: JsonField<String>,
+    private val settings: JsonValue,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -27,7 +31,9 @@ private constructor(
     private constructor(
         @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
         @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
-    ) : this(id, _typename, mutableMapOf())
+        @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("settings") @ExcludeMissing settings: JsonValue = JsonMissing.of(),
+    ) : this(id, _typename, name, settings, mutableMapOf())
 
     /**
      * The unique identifier for the tenant.
@@ -46,6 +52,17 @@ private constructor(
     fun _typename(): String = _typename.getRequired("__typename")
 
     /**
+     * An optional name for the tenant.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun name(): Optional<String> = name.getOptional("name")
+
+    /** The settings for the tenant. Includes branding and preference set. */
+    @JsonProperty("settings") @ExcludeMissing fun _settings(): JsonValue = settings
+
+    /**
      * Returns the raw JSON value of [id].
      *
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
@@ -58,6 +75,13 @@ private constructor(
      * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
+
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -90,12 +114,16 @@ private constructor(
 
         private var id: JsonField<String>? = null
         private var _typename: JsonField<String>? = null
+        private var name: JsonField<String> = JsonMissing.of()
+        private var settings: JsonValue = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(tenant: Tenant) = apply {
             id = tenant.id
             _typename = tenant._typename
+            name = tenant.name
+            settings = tenant.settings
             additionalProperties = tenant.additionalProperties.toMutableMap()
         }
 
@@ -121,6 +149,23 @@ private constructor(
          * value.
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
+
+        /** An optional name for the tenant. */
+        fun name(name: String?) = name(JsonField.ofNullable(name))
+
+        /** Alias for calling [Builder.name] with `name.orElse(null)`. */
+        fun name(name: Optional<String>) = name(name.getOrNull())
+
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun name(name: JsonField<String>) = apply { this.name = name }
+
+        /** The settings for the tenant. Includes branding and preference set. */
+        fun settings(settings: JsonValue) = apply { this.settings = settings }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -158,6 +203,8 @@ private constructor(
             Tenant(
                 checkRequired("id", id),
                 checkRequired("_typename", _typename),
+                name,
+                settings,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -171,6 +218,7 @@ private constructor(
 
         id()
         _typename()
+        name()
         validated = true
     }
 
@@ -189,22 +237,24 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (if (id.asKnown().isPresent) 1 else 0) + (if (_typename.asKnown().isPresent) 1 else 0)
+        (if (id.asKnown().isPresent) 1 else 0) +
+            (if (_typename.asKnown().isPresent) 1 else 0) +
+            (if (name.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is Tenant && id == other.id && _typename == other._typename && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Tenant && id == other.id && _typename == other._typename && name == other.name && settings == other.settings && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, _typename, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, _typename, name, settings, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Tenant{id=$id, _typename=$_typename, additionalProperties=$additionalProperties}"
+        "Tenant{id=$id, _typename=$_typename, name=$name, settings=$settings, additionalProperties=$additionalProperties}"
 }

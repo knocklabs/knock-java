@@ -13,7 +13,6 @@ internal class SlackChannelDataTest {
     fun create() {
         val slackChannelData =
             SlackChannelData.builder()
-                ._typename(SlackChannelData._Typename.SLACK_CHANNEL_DATA)
                 .addConnection(
                     SlackChannelData.Connection.SlackTokenConnection.builder()
                         .accessToken("xoxb-1234567890")
@@ -23,10 +22,9 @@ internal class SlackChannelDataTest {
                 )
                 .type(SlackChannelData.Type.CHAT_SLACK)
                 .token(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
+                ._typename(SlackChannelData._Typename.SLACK_CHANNEL_DATA)
                 .build()
 
-        assertThat(slackChannelData._typename())
-            .isEqualTo(SlackChannelData._Typename.SLACK_CHANNEL_DATA)
         assertThat(slackChannelData.connections())
             .containsExactly(
                 SlackChannelData.Connection.ofSlackToken(
@@ -40,6 +38,8 @@ internal class SlackChannelDataTest {
         assertThat(slackChannelData.type()).isEqualTo(SlackChannelData.Type.CHAT_SLACK)
         assertThat(slackChannelData.token())
             .contains(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
+        assertThat(slackChannelData._typename())
+            .contains(SlackChannelData._Typename.SLACK_CHANNEL_DATA)
     }
 
     @Test
@@ -47,7 +47,6 @@ internal class SlackChannelDataTest {
         val jsonMapper = jsonMapper()
         val slackChannelData =
             SlackChannelData.builder()
-                ._typename(SlackChannelData._Typename.SLACK_CHANNEL_DATA)
                 .addConnection(
                     SlackChannelData.Connection.SlackTokenConnection.builder()
                         .accessToken("xoxb-1234567890")
@@ -57,6 +56,7 @@ internal class SlackChannelDataTest {
                 )
                 .type(SlackChannelData.Type.CHAT_SLACK)
                 .token(SlackChannelData.Token.builder().accessToken("xoxb-1234567890").build())
+                ._typename(SlackChannelData._Typename.SLACK_CHANNEL_DATA)
                 .build()
 
         val roundtrippedSlackChannelData =

@@ -20,7 +20,6 @@ internal class BulkAddSubscriptionsParamsTest {
             .collection("projects")
             .addSubscription(
                 BulkAddSubscriptionsParams.Subscription.builder()
-                    .id("project-1")
                     .addRecipient(
                         InlineIdentifyUserRequest.builder()
                             .id("user_1")
@@ -29,9 +28,9 @@ internal class BulkAddSubscriptionsParamsTest {
                                     .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
                                     .data(
                                         PushChannelData.builder()
-                                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                                             .addToken("push_token_xxx")
                                             .type(PushChannelData.Type.PUSH_FCM)
+                                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                                             .build()
                                     )
                                     .provider("push_fcm")
@@ -130,7 +129,6 @@ internal class BulkAddSubscriptionsParamsTest {
                 .collection("projects")
                 .addSubscription(
                     BulkAddSubscriptionsParams.Subscription.builder()
-                        .id("project-1")
                         .addRecipient(InlineIdentifyUserRequest.builder().id("user_1").build())
                         .build()
                 )
@@ -148,7 +146,6 @@ internal class BulkAddSubscriptionsParamsTest {
                 .collection("projects")
                 .addSubscription(
                     BulkAddSubscriptionsParams.Subscription.builder()
-                        .id("project-1")
                         .addRecipient(
                             InlineIdentifyUserRequest.builder()
                                 .id("user_1")
@@ -157,11 +154,11 @@ internal class BulkAddSubscriptionsParamsTest {
                                         .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
                                         .data(
                                             PushChannelData.builder()
+                                                .addToken("push_token_xxx")
+                                                .type(PushChannelData.Type.PUSH_FCM)
                                                 ._typename(
                                                     PushChannelData._Typename.PUSH_CHANNEL_DATA
                                                 )
-                                                .addToken("push_token_xxx")
-                                                .type(PushChannelData.Type.PUSH_FCM)
                                                 .build()
                                         )
                                         .provider("push_fcm")
@@ -259,7 +256,6 @@ internal class BulkAddSubscriptionsParamsTest {
         assertThat(body.subscriptions())
             .containsExactly(
                 BulkAddSubscriptionsParams.Subscription.builder()
-                    .id("project-1")
                     .addRecipient(
                         InlineIdentifyUserRequest.builder()
                             .id("user_1")
@@ -268,9 +264,9 @@ internal class BulkAddSubscriptionsParamsTest {
                                     .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
                                     .data(
                                         PushChannelData.builder()
-                                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                                             .addToken("push_token_xxx")
                                             .type(PushChannelData.Type.PUSH_FCM)
+                                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                                             .build()
                                     )
                                     .provider("push_fcm")
@@ -368,7 +364,6 @@ internal class BulkAddSubscriptionsParamsTest {
                 .collection("projects")
                 .addSubscription(
                     BulkAddSubscriptionsParams.Subscription.builder()
-                        .id("project-1")
                         .addRecipient(InlineIdentifyUserRequest.builder().id("user_1").build())
                         .build()
                 )
@@ -379,7 +374,6 @@ internal class BulkAddSubscriptionsParamsTest {
         assertThat(body.subscriptions())
             .containsExactly(
                 BulkAddSubscriptionsParams.Subscription.builder()
-                    .id("project-1")
                     .addRecipient(InlineIdentifyUserRequest.builder().id("user_1").build())
                     .build()
             )

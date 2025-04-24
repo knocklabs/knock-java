@@ -471,16 +471,84 @@ private constructor(
             fun data(oneSignalChannel: OneSignalChannelData) =
                 data(Data.ofOneSignalChannel(oneSignalChannel))
 
+            /**
+             * Alias for calling [data] with the following:
+             * ```java
+             * OneSignalChannelData.builder()
+             *     .type(OneSignalChannelData.Type.PUSH_ONE_SIGNAL)
+             *     .playerIds(playerIds)
+             *     .build()
+             * ```
+             */
+            fun oneSignalChannelData(playerIds: List<String>) =
+                data(
+                    OneSignalChannelData.builder()
+                        .type(OneSignalChannelData.Type.PUSH_ONE_SIGNAL)
+                        .playerIds(playerIds)
+                        .build()
+                )
+
             /** Alias for calling [data] with `Data.ofSlackChannel(slackChannel)`. */
             fun data(slackChannel: SlackChannelData) = data(Data.ofSlackChannel(slackChannel))
+
+            /**
+             * Alias for calling [data] with the following:
+             * ```java
+             * SlackChannelData.builder()
+             *     .type(SlackChannelData.Type.CHAT_SLACK)
+             *     .connections(connections)
+             *     .build()
+             * ```
+             */
+            fun slackChannelData(connections: List<SlackChannelData.Connection>) =
+                data(
+                    SlackChannelData.builder()
+                        .type(SlackChannelData.Type.CHAT_SLACK)
+                        .connections(connections)
+                        .build()
+                )
 
             /** Alias for calling [data] with `Data.ofMsTeamsChannel(msTeamsChannel)`. */
             fun data(msTeamsChannel: MsTeamsChannelData) =
                 data(Data.ofMsTeamsChannel(msTeamsChannel))
 
+            /**
+             * Alias for calling [data] with the following:
+             * ```java
+             * MsTeamsChannelData.builder()
+             *     .type(MsTeamsChannelData.Type.CHAT_MS_TEAMS)
+             *     .connections(connections)
+             *     .build()
+             * ```
+             */
+            fun msTeamsChannelData(connections: List<MsTeamsChannelData.Connection>) =
+                data(
+                    MsTeamsChannelData.builder()
+                        .type(MsTeamsChannelData.Type.CHAT_MS_TEAMS)
+                        .connections(connections)
+                        .build()
+                )
+
             /** Alias for calling [data] with `Data.ofDiscordChannel(discordChannel)`. */
             fun data(discordChannel: DiscordChannelData) =
                 data(Data.ofDiscordChannel(discordChannel))
+
+            /**
+             * Alias for calling [data] with the following:
+             * ```java
+             * DiscordChannelData.builder()
+             *     .type(DiscordChannelData.Type.CHAT_DISCORD)
+             *     .connections(connections)
+             *     .build()
+             * ```
+             */
+            fun discordChannelData(connections: List<DiscordChannelData.Connection>) =
+                data(
+                    DiscordChannelData.builder()
+                        .type(DiscordChannelData.Type.CHAT_DISCORD)
+                        .connections(connections)
+                        .build()
+                )
 
             /** The provider identifier (must match the data.type value) */
             fun provider(provider: String) = provider(JsonField.of(provider))
@@ -1583,7 +1651,7 @@ private constructor(
             ) : this(iconUrl, logoUrl, primaryColor, primaryColorContrast, mutableMapOf())
 
             /**
-             * The icon URL for the tenant.
+             * The icon URL for the tenant. Must point to a valid image with an image MIME type.
              *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
@@ -1591,7 +1659,7 @@ private constructor(
             fun iconUrl(): Optional<String> = iconUrl.getOptional("icon_url")
 
             /**
-             * The logo URL for the tenant.
+             * The logo URL for the tenant. Must point to a valid image with an image MIME type.
              *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
@@ -1599,7 +1667,7 @@ private constructor(
             fun logoUrl(): Optional<String> = logoUrl.getOptional("logo_url")
 
             /**
-             * The primary color for the tenant.
+             * The primary color for the tenant, provided as a hex value.
              *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
@@ -1607,7 +1675,7 @@ private constructor(
             fun primaryColor(): Optional<String> = primaryColor.getOptional("primary_color")
 
             /**
-             * The primary color contrast for the tenant.
+             * The primary color contrast for the tenant, provided as a hex value.
              *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
@@ -1685,7 +1753,9 @@ private constructor(
                     additionalProperties = branding.additionalProperties.toMutableMap()
                 }
 
-                /** The icon URL for the tenant. */
+                /**
+                 * The icon URL for the tenant. Must point to a valid image with an image MIME type.
+                 */
                 fun iconUrl(iconUrl: String?) = iconUrl(JsonField.ofNullable(iconUrl))
 
                 /** Alias for calling [Builder.iconUrl] with `iconUrl.orElse(null)`. */
@@ -1700,7 +1770,9 @@ private constructor(
                  */
                 fun iconUrl(iconUrl: JsonField<String>) = apply { this.iconUrl = iconUrl }
 
-                /** The logo URL for the tenant. */
+                /**
+                 * The logo URL for the tenant. Must point to a valid image with an image MIME type.
+                 */
                 fun logoUrl(logoUrl: String?) = logoUrl(JsonField.ofNullable(logoUrl))
 
                 /** Alias for calling [Builder.logoUrl] with `logoUrl.orElse(null)`. */
@@ -1715,7 +1787,7 @@ private constructor(
                  */
                 fun logoUrl(logoUrl: JsonField<String>) = apply { this.logoUrl = logoUrl }
 
-                /** The primary color for the tenant. */
+                /** The primary color for the tenant, provided as a hex value. */
                 fun primaryColor(primaryColor: String?) =
                     primaryColor(JsonField.ofNullable(primaryColor))
 
@@ -1734,7 +1806,7 @@ private constructor(
                     this.primaryColor = primaryColor
                 }
 
-                /** The primary color contrast for the tenant. */
+                /** The primary color contrast for the tenant, provided as a hex value. */
                 fun primaryColorContrast(primaryColorContrast: String?) =
                     primaryColorContrast(JsonField.ofNullable(primaryColorContrast))
 

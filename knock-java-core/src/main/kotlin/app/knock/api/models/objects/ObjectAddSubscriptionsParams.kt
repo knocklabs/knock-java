@@ -44,7 +44,8 @@ private constructor(
     fun objectId(): String = objectId
 
     /**
-     * The recipients of the subscription.
+     * The recipients of the subscription. You can subscribe up to 100 recipients to an object at a
+     * time.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -52,7 +53,7 @@ private constructor(
     fun recipients(): List<RecipientRequest> = body.recipients()
 
     /**
-     * The custom properties associated with the recipients of the subscription.
+     * The custom properties associated with the subscription relationship.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -128,7 +129,10 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /** The recipients of the subscription. */
+        /**
+         * The recipients of the subscription. You can subscribe up to 100 recipients to an object
+         * at a time.
+         */
         fun recipients(recipients: List<RecipientRequest>) = apply { body.recipients(recipients) }
 
         /**
@@ -169,7 +173,7 @@ private constructor(
             body.addRecipient(inlineObject)
         }
 
-        /** The custom properties associated with the recipients of the subscription. */
+        /** The custom properties associated with the subscription relationship. */
         fun properties(properties: Properties?) = apply { body.properties(properties) }
 
         /** Alias for calling [Builder.properties] with `properties.orElse(null)`. */
@@ -357,7 +361,8 @@ private constructor(
         ) : this(recipients, properties, mutableMapOf())
 
         /**
-         * The recipients of the subscription.
+         * The recipients of the subscription. You can subscribe up to 100 recipients to an object
+         * at a time.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -365,7 +370,7 @@ private constructor(
         fun recipients(): List<RecipientRequest> = recipients.getRequired("recipients")
 
         /**
-         * The custom properties associated with the recipients of the subscription.
+         * The custom properties associated with the subscription relationship.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -429,7 +434,10 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /** The recipients of the subscription. */
+            /**
+             * The recipients of the subscription. You can subscribe up to 100 recipients to an
+             * object at a time.
+             */
             fun recipients(recipients: List<RecipientRequest>) =
                 recipients(JsonField.of(recipients))
 
@@ -477,7 +485,7 @@ private constructor(
             fun addRecipient(inlineObject: InlineObjectRequest) =
                 addRecipient(RecipientRequest.ofInlineObject(inlineObject))
 
-            /** The custom properties associated with the recipients of the subscription. */
+            /** The custom properties associated with the subscription relationship. */
             fun properties(properties: Properties?) = properties(JsonField.ofNullable(properties))
 
             /** Alias for calling [Builder.properties] with `properties.orElse(null)`. */
@@ -582,7 +590,7 @@ private constructor(
             "Body{recipients=$recipients, properties=$properties, additionalProperties=$additionalProperties}"
     }
 
-    /** The custom properties associated with the recipients of the subscription. */
+    /** The custom properties associated with the subscription relationship. */
     class Properties
     @JsonCreator
     private constructor(

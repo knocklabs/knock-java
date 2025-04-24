@@ -35,7 +35,7 @@ private constructor(
     private val _json: JsonValue? = null,
 ) {
 
-    /** The ID of the user. */
+    /** The ID of the user which is used as the reference for the recipient. */
     fun userRecipient(): Optional<String> = Optional.ofNullable(userRecipient)
 
     /**
@@ -46,7 +46,7 @@ private constructor(
     fun inlineIdentifyUser(): Optional<InlineIdentifyUserRequest> =
         Optional.ofNullable(inlineIdentifyUser)
 
-    /** A custom object entity which belongs to a collection. */
+    /** A custom [Object](/concepts/objects) entity which belongs to a collection. */
     fun inlineObject(): Optional<InlineObjectRequest> = Optional.ofNullable(inlineObject)
 
     fun isUserRecipient(): Boolean = userRecipient != null
@@ -55,7 +55,7 @@ private constructor(
 
     fun isInlineObject(): Boolean = inlineObject != null
 
-    /** The ID of the user. */
+    /** The ID of the user which is used as the reference for the recipient. */
     fun asUserRecipient(): String = userRecipient.getOrThrow("userRecipient")
 
     /**
@@ -66,7 +66,7 @@ private constructor(
     fun asInlineIdentifyUser(): InlineIdentifyUserRequest =
         inlineIdentifyUser.getOrThrow("inlineIdentifyUser")
 
-    /** A custom object entity which belongs to a collection. */
+    /** A custom [Object](/concepts/objects) entity which belongs to a collection. */
     fun asInlineObject(): InlineObjectRequest = inlineObject.getOrThrow("inlineObject")
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
@@ -155,7 +155,7 @@ private constructor(
 
     companion object {
 
-        /** The ID of the user. */
+        /** The ID of the user which is used as the reference for the recipient. */
         @JvmStatic
         fun ofUserRecipient(userRecipient: String) = RecipientRequest(userRecipient = userRecipient)
 
@@ -168,7 +168,7 @@ private constructor(
         fun ofInlineIdentifyUser(inlineIdentifyUser: InlineIdentifyUserRequest) =
             RecipientRequest(inlineIdentifyUser = inlineIdentifyUser)
 
-        /** A custom object entity which belongs to a collection. */
+        /** A custom [Object](/concepts/objects) entity which belongs to a collection. */
         @JvmStatic
         fun ofInlineObject(inlineObject: InlineObjectRequest) =
             RecipientRequest(inlineObject = inlineObject)
@@ -180,7 +180,7 @@ private constructor(
      */
     interface Visitor<out T> {
 
-        /** The ID of the user. */
+        /** The ID of the user which is used as the reference for the recipient. */
         fun visitUserRecipient(userRecipient: String): T
 
         /**
@@ -190,7 +190,7 @@ private constructor(
          */
         fun visitInlineIdentifyUser(inlineIdentifyUser: InlineIdentifyUserRequest): T
 
-        /** A custom object entity which belongs to a collection. */
+        /** A custom [Object](/concepts/objects) entity which belongs to a collection. */
         fun visitInlineObject(inlineObject: InlineObjectRequest): T
 
         /**

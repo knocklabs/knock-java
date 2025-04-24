@@ -41,7 +41,7 @@ interface BulkService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
-    /** Bulk sets objects in the specified collection. */
+    /** Bulk sets up to 1,000 objects at a time in the specified collection. */
     fun set(params: BulkSetParams): BulkOperation = set(params, RequestOptions.none())
 
     /** @see [set] */

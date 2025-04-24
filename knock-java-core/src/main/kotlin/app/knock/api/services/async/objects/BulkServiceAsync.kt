@@ -43,7 +43,7 @@ interface BulkServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
-    /** Bulk sets objects in the specified collection. */
+    /** Bulk sets up to 1,000 objects at a time in the specified collection. */
     fun set(params: BulkSetParams): CompletableFuture<BulkOperation> =
         set(params, RequestOptions.none())
 

@@ -26,9 +26,9 @@ internal class InlineIdentifyUserRequestTest {
                         .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
                         .data(
                             PushChannelData.builder()
-                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                                 .addToken("push_token_123")
                                 .type(PushChannelData.Type.PUSH_FCM)
+                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                                 .build()
                         )
                         .provider("push_fcm")
@@ -116,9 +116,9 @@ internal class InlineIdentifyUserRequestTest {
                     .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
                     .data(
                         PushChannelData.builder()
-                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                             .addToken("push_token_123")
                             .type(PushChannelData.Type.PUSH_FCM)
+                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                             .build()
                     )
                     .provider("push_fcm")
@@ -212,9 +212,9 @@ internal class InlineIdentifyUserRequestTest {
                         .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
                         .data(
                             PushChannelData.builder()
-                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                                 .addToken("push_token_123")
                                 .type(PushChannelData.Type.PUSH_FCM)
+                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                                 .build()
                         )
                         .provider("push_fcm")

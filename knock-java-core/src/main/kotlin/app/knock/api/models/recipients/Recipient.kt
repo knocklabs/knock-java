@@ -37,7 +37,7 @@ private constructor(
      */
     fun user(): Optional<User> = Optional.ofNullable(user)
 
-    /** A custom object entity which belongs to a collection. */
+    /** A custom [Object](/concepts/objects) entity which belongs to a collection. */
     fun object_(): Optional<Object> = Optional.ofNullable(object_)
 
     fun isUser(): Boolean = user != null
@@ -51,7 +51,7 @@ private constructor(
      */
     fun asUser(): User = user.getOrThrow("user")
 
-    /** A custom object entity which belongs to a collection. */
+    /** A custom [Object](/concepts/objects) entity which belongs to a collection. */
     fun asObject(): Object = object_.getOrThrow("object_")
 
     fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
@@ -136,7 +136,7 @@ private constructor(
          */
         @JvmStatic fun ofUser(user: User) = Recipient(user = user)
 
-        /** A custom object entity which belongs to a collection. */
+        /** A custom [Object](/concepts/objects) entity which belongs to a collection. */
         @JvmStatic fun ofObject(object_: Object) = Recipient(object_ = object_)
     }
 
@@ -150,7 +150,7 @@ private constructor(
          */
         fun visitUser(user: User): T
 
-        /** A custom object entity which belongs to a collection. */
+        /** A custom [Object](/concepts/objects) entity which belongs to a collection. */
         fun visitObject(object_: Object): T
 
         /**

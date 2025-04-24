@@ -10,7 +10,11 @@ import app.knock.api.core.http.QueryParams
 import app.knock.api.models.recipients.channeldata.ChannelDataRequest
 import java.util.Objects
 
-/** Sets the channel data for the specified object and channel. */
+/**
+ * Sets the channel data for the specified object and channel. If no object exists in the current
+ * environment for the given `collection` and `object_id`, Knock will create the object as part of
+ * this request.
+ */
 class ObjectSetChannelDataParams
 private constructor(
     private val collection: String,

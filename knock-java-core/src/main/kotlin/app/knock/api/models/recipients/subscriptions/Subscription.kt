@@ -69,7 +69,7 @@ private constructor(
     fun insertedAt(): OffsetDateTime = insertedAt.getRequired("inserted_at")
 
     /**
-     * A custom object entity which belongs to a collection.
+     * A custom [Object](/concepts/objects) entity which belongs to a collection.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -93,7 +93,7 @@ private constructor(
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
     /**
-     * The custom properties associated with the recipients of the subscription.
+     * The custom properties associated with the subscription relationship.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -225,7 +225,7 @@ private constructor(
             this.insertedAt = insertedAt
         }
 
-        /** A custom object entity which belongs to a collection. */
+        /** A custom [Object](/concepts/objects) entity which belongs to a collection. */
         fun object_(object_: Object) = object_(JsonField.of(object_))
 
         /**
@@ -266,7 +266,7 @@ private constructor(
          */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
-        /** The custom properties associated with the recipients of the subscription. */
+        /** The custom properties associated with the subscription relationship. */
         fun properties(properties: Properties?) = properties(JsonField.ofNullable(properties))
 
         /** Alias for calling [Builder.properties] with `properties.orElse(null)`. */
@@ -366,7 +366,7 @@ private constructor(
             (if (updatedAt.asKnown().isPresent) 1 else 0) +
             (properties.asKnown().getOrNull()?.validity() ?: 0)
 
-    /** The custom properties associated with the recipients of the subscription. */
+    /** The custom properties associated with the subscription relationship. */
     class Properties
     @JsonCreator
     private constructor(

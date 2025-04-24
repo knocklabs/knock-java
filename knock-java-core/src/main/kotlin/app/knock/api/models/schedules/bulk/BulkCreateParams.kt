@@ -2,17 +2,13 @@
 
 package app.knock.api.models.schedules.bulk
 
-import app.knock.api.core.BaseDeserializer
-import app.knock.api.core.BaseSerializer
 import app.knock.api.core.ExcludeMissing
 import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
-import app.knock.api.core.allMaxBy
 import app.knock.api.core.checkKnown
 import app.knock.api.core.checkRequired
-import app.knock.api.core.getOrThrow
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
@@ -20,19 +16,13 @@ import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.objects.InlineObjectRequest
 import app.knock.api.models.recipients.RecipientRequest
 import app.knock.api.models.schedules.ScheduleRepeatRule
+import app.knock.api.models.tenants.InlineTenantRequest
 import app.knock.api.models.tenants.TenantRequest
 import app.knock.api.models.users.InlineIdentifyUserRequest
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.core.JsonGenerator
-import com.fasterxml.jackson.core.ObjectCodec
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.databind.SerializerProvider
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize
-import com.fasterxml.jackson.databind.annotation.JsonSerialize
-import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import java.util.Collections
 import java.util.Objects
@@ -460,7 +450,7 @@ private constructor(
         private val recipient: JsonField<RecipientRequest>,
         private val repeats: JsonField<List<ScheduleRepeatRule>>,
         private val scheduledAt: JsonField<OffsetDateTime>,
-        private val tenant: JsonField<Tenant>,
+        private val tenant: JsonField<InlineTenantRequest>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -485,7 +475,9 @@ private constructor(
             @JsonProperty("scheduled_at")
             @ExcludeMissing
             scheduledAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-            @JsonProperty("tenant") @ExcludeMissing tenant: JsonField<Tenant> = JsonMissing.of(),
+            @JsonProperty("tenant")
+            @ExcludeMissing
+            tenant: JsonField<InlineTenantRequest> = JsonMissing.of(),
         ) : this(
             workflow,
             actor,
@@ -559,14 +551,12 @@ private constructor(
         fun scheduledAt(): Optional<OffsetDateTime> = scheduledAt.getOptional("scheduled_at")
 
         /**
-         * The tenant to trigger the workflow for. Triggering with a tenant will use any
-         * tenant-level overrides associated with the tenant object, and all messages produced from
-         * workflow runs will be tagged with the tenant.
+         * An request to set a tenant inline.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
-        fun tenant(): Optional<Tenant> = tenant.getOptional("tenant")
+        fun tenant(): Optional<InlineTenantRequest> = tenant.getOptional("tenant")
 
         /**
          * Returns the raw JSON value of [workflow].
@@ -630,7 +620,9 @@ private constructor(
          *
          * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("tenant") @ExcludeMissing fun _tenant(): JsonField<Tenant> = tenant
+        @JsonProperty("tenant")
+        @ExcludeMissing
+        fun _tenant(): JsonField<InlineTenantRequest> = tenant
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -667,7 +659,7 @@ private constructor(
             private var recipient: JsonField<RecipientRequest> = JsonMissing.of()
             private var repeats: JsonField<MutableList<ScheduleRepeatRule>>? = null
             private var scheduledAt: JsonField<OffsetDateTime> = JsonMissing.of()
-            private var tenant: JsonField<Tenant> = JsonMissing.of()
+            private var tenant: JsonField<InlineTenantRequest> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -841,30 +833,29 @@ private constructor(
                 this.scheduledAt = scheduledAt
             }
 
-            /**
-             * The tenant to trigger the workflow for. Triggering with a tenant will use any
-             * tenant-level overrides associated with the tenant object, and all messages produced
-             * from workflow runs will be tagged with the tenant.
-             */
-            fun tenant(tenant: Tenant?) = tenant(JsonField.ofNullable(tenant))
+            /** An request to set a tenant inline. */
+            fun tenant(tenant: InlineTenantRequest?) = tenant(JsonField.ofNullable(tenant))
 
             /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
-            fun tenant(tenant: Optional<Tenant>) = tenant(tenant.getOrNull())
+            fun tenant(tenant: Optional<InlineTenantRequest>) = tenant(tenant.getOrNull())
 
             /**
              * Sets [Builder.tenant] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.tenant] with a well-typed [Tenant] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
+             * You should usually call [Builder.tenant] with a well-typed [InlineTenantRequest]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
              */
-            fun tenant(tenant: JsonField<Tenant>) = apply { this.tenant = tenant }
+            fun tenant(tenant: JsonField<InlineTenantRequest>) = apply { this.tenant = tenant }
 
-            /** Alias for calling [tenant] with `Tenant.ofString(string)`. */
-            fun tenant(string: String) = tenant(Tenant.ofString(string))
+            /** Alias for calling [tenant] with `InlineTenantRequest.ofString(string)`. */
+            fun tenant(string: String) = tenant(InlineTenantRequest.ofString(string))
 
-            /** Alias for calling [tenant] with `Tenant.ofRequest(request)`. */
-            fun tenant(request: TenantRequest) = tenant(Tenant.ofRequest(request))
+            /**
+             * Alias for calling [tenant] with `InlineTenantRequest.ofTenantRequest(tenantRequest)`.
+             */
+            fun tenant(tenantRequest: TenantRequest) =
+                tenant(InlineTenantRequest.ofTenantRequest(tenantRequest))
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -1057,202 +1048,6 @@ private constructor(
             override fun hashCode(): Int = hashCode
 
             override fun toString() = "Data{additionalProperties=$additionalProperties}"
-        }
-
-        /**
-         * The tenant to trigger the workflow for. Triggering with a tenant will use any
-         * tenant-level overrides associated with the tenant object, and all messages produced from
-         * workflow runs will be tagged with the tenant.
-         */
-        @JsonDeserialize(using = Tenant.Deserializer::class)
-        @JsonSerialize(using = Tenant.Serializer::class)
-        class Tenant
-        private constructor(
-            private val string: String? = null,
-            private val request: TenantRequest? = null,
-            private val _json: JsonValue? = null,
-        ) {
-
-            /** The unique identifier for the tenant. */
-            fun string(): Optional<String> = Optional.ofNullable(string)
-
-            /**
-             * A tenant to be set in the system. You can supply any additional properties on the
-             * tenant object.
-             */
-            fun request(): Optional<TenantRequest> = Optional.ofNullable(request)
-
-            fun isString(): Boolean = string != null
-
-            fun isRequest(): Boolean = request != null
-
-            /** The unique identifier for the tenant. */
-            fun asString(): String = string.getOrThrow("string")
-
-            /**
-             * A tenant to be set in the system. You can supply any additional properties on the
-             * tenant object.
-             */
-            fun asRequest(): TenantRequest = request.getOrThrow("request")
-
-            fun _json(): Optional<JsonValue> = Optional.ofNullable(_json)
-
-            fun <T> accept(visitor: Visitor<T>): T =
-                when {
-                    string != null -> visitor.visitString(string)
-                    request != null -> visitor.visitRequest(request)
-                    else -> visitor.unknown(_json)
-                }
-
-            private var validated: Boolean = false
-
-            fun validate(): Tenant = apply {
-                if (validated) {
-                    return@apply
-                }
-
-                accept(
-                    object : Visitor<Unit> {
-                        override fun visitString(string: String) {}
-
-                        override fun visitRequest(request: TenantRequest) {
-                            request.validate()
-                        }
-                    }
-                )
-                validated = true
-            }
-
-            fun isValid(): Boolean =
-                try {
-                    validate()
-                    true
-                } catch (e: KnockInvalidDataException) {
-                    false
-                }
-
-            /**
-             * Returns a score indicating how many valid values are contained in this object
-             * recursively.
-             *
-             * Used for best match union deserialization.
-             */
-            @JvmSynthetic
-            internal fun validity(): Int =
-                accept(
-                    object : Visitor<Int> {
-                        override fun visitString(string: String) = 1
-
-                        override fun visitRequest(request: TenantRequest) = request.validity()
-
-                        override fun unknown(json: JsonValue?) = 0
-                    }
-                )
-
-            override fun equals(other: Any?): Boolean {
-                if (this === other) {
-                    return true
-                }
-
-                return /* spotless:off */ other is Tenant && string == other.string && request == other.request /* spotless:on */
-            }
-
-            override fun hashCode(): Int = /* spotless:off */ Objects.hash(string, request) /* spotless:on */
-
-            override fun toString(): String =
-                when {
-                    string != null -> "Tenant{string=$string}"
-                    request != null -> "Tenant{request=$request}"
-                    _json != null -> "Tenant{_unknown=$_json}"
-                    else -> throw IllegalStateException("Invalid Tenant")
-                }
-
-            companion object {
-
-                /** The unique identifier for the tenant. */
-                @JvmStatic fun ofString(string: String) = Tenant(string = string)
-
-                /**
-                 * A tenant to be set in the system. You can supply any additional properties on the
-                 * tenant object.
-                 */
-                @JvmStatic fun ofRequest(request: TenantRequest) = Tenant(request = request)
-            }
-
-            /**
-             * An interface that defines how to map each variant of [Tenant] to a value of type [T].
-             */
-            interface Visitor<out T> {
-
-                /** The unique identifier for the tenant. */
-                fun visitString(string: String): T
-
-                /**
-                 * A tenant to be set in the system. You can supply any additional properties on the
-                 * tenant object.
-                 */
-                fun visitRequest(request: TenantRequest): T
-
-                /**
-                 * Maps an unknown variant of [Tenant] to a value of type [T].
-                 *
-                 * An instance of [Tenant] can contain an unknown variant if it was deserialized
-                 * from data that doesn't match any known variant. For example, if the SDK is on an
-                 * older version than the API, then the API may respond with new variants that the
-                 * SDK is unaware of.
-                 *
-                 * @throws KnockInvalidDataException in the default implementation.
-                 */
-                fun unknown(json: JsonValue?): T {
-                    throw KnockInvalidDataException("Unknown Tenant: $json")
-                }
-            }
-
-            internal class Deserializer : BaseDeserializer<Tenant>(Tenant::class) {
-
-                override fun ObjectCodec.deserialize(node: JsonNode): Tenant {
-                    val json = JsonValue.fromJsonNode(node)
-
-                    val bestMatches =
-                        sequenceOf(
-                                tryDeserialize(node, jacksonTypeRef<TenantRequest>())?.let {
-                                    Tenant(request = it, _json = json)
-                                },
-                                tryDeserialize(node, jacksonTypeRef<String>())?.let {
-                                    Tenant(string = it, _json = json)
-                                },
-                            )
-                            .filterNotNull()
-                            .allMaxBy { it.validity() }
-                            .toList()
-                    return when (bestMatches.size) {
-                        // This can happen if what we're deserializing is completely incompatible
-                        // with all the possible variants (e.g. deserializing from array).
-                        0 -> Tenant(_json = json)
-                        1 -> bestMatches.single()
-                        // If there's more than one match with the highest validity, then use the
-                        // first completely valid match, or simply the first match if none are
-                        // completely valid.
-                        else -> bestMatches.firstOrNull { it.isValid() } ?: bestMatches.first()
-                    }
-                }
-            }
-
-            internal class Serializer : BaseSerializer<Tenant>(Tenant::class) {
-
-                override fun serialize(
-                    value: Tenant,
-                    generator: JsonGenerator,
-                    provider: SerializerProvider,
-                ) {
-                    when {
-                        value.string != null -> generator.writeObject(value.string)
-                        value.request != null -> generator.writeObject(value.request)
-                        value._json != null -> generator.writeObject(value._json)
-                        else -> throw IllegalStateException("Invalid Tenant")
-                    }
-                }
-            }
         }
 
         override fun equals(other: Any?): Boolean {

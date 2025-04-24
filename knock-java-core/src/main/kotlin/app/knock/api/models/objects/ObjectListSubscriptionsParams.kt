@@ -29,7 +29,7 @@ private constructor(
     private val before: String?,
     private val include: List<Include>?,
     private val mode: Mode?,
-    private val objects: List<RecipientReference>?,
+    private val objects: List<Object>?,
     private val pageSize: Long?,
     private val recipients: List<RecipientReference>?,
     private val additionalHeaders: Headers,
@@ -49,11 +49,14 @@ private constructor(
     /** Additional fields to include in the response. */
     fun include(): Optional<List<Include>> = Optional.ofNullable(include)
 
-    /** Mode of the request. */
+    /**
+     * Mode of the request. `recipient` to list the objects that the provided object is subscribed
+     * to, `object` to list the recipients that subscribe to the provided object.
+     */
     fun mode(): Optional<Mode> = Optional.ofNullable(mode)
 
     /** Objects to filter by (only used if mode is `recipient`). */
-    fun objects(): Optional<List<RecipientReference>> = Optional.ofNullable(objects)
+    fun objects(): Optional<List<Object>> = Optional.ofNullable(objects)
 
     /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
@@ -91,7 +94,7 @@ private constructor(
         private var before: String? = null
         private var include: MutableList<Include>? = null
         private var mode: Mode? = null
-        private var objects: MutableList<RecipientReference>? = null
+        private var objects: MutableList<Object>? = null
         private var pageSize: Long? = null
         private var recipients: MutableList<RecipientReference>? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
@@ -143,38 +146,29 @@ private constructor(
             this.include = (this.include ?: mutableListOf()).apply { add(include) }
         }
 
-        /** Mode of the request. */
+        /**
+         * Mode of the request. `recipient` to list the objects that the provided object is
+         * subscribed to, `object` to list the recipients that subscribe to the provided object.
+         */
         fun mode(mode: Mode?) = apply { this.mode = mode }
 
         /** Alias for calling [Builder.mode] with `mode.orElse(null)`. */
         fun mode(mode: Optional<Mode>) = mode(mode.getOrNull())
 
         /** Objects to filter by (only used if mode is `recipient`). */
-        fun objects(objects: List<RecipientReference>?) = apply {
-            this.objects = objects?.toMutableList()
-        }
+        fun objects(objects: List<Object>?) = apply { this.objects = objects?.toMutableList() }
 
         /** Alias for calling [Builder.objects] with `objects.orElse(null)`. */
-        fun objects(objects: Optional<List<RecipientReference>>) = objects(objects.getOrNull())
+        fun objects(objects: Optional<List<Object>>) = objects(objects.getOrNull())
 
         /**
-         * Adds a single [RecipientReference] to [objects].
+         * Adds a single [Object] to [objects].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addObject(object_: RecipientReference) = apply {
+        fun addObject(object_: Object) = apply {
             objects = (objects ?: mutableListOf()).apply { add(object_) }
         }
-
-        /** Alias for calling [addObject] with `RecipientReference.ofUser(user)`. */
-        fun addObject(user: String) = addObject(RecipientReference.ofUser(user))
-
-        /**
-         * Alias for calling [addObject] with
-         * `RecipientReference.ofObjectReference(objectReference)`.
-         */
-        fun addObject(objectReference: RecipientReference.ObjectReference) =
-            addObject(RecipientReference.ofObjectReference(objectReference))
 
         /** The number of items per page. */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
@@ -361,28 +355,13 @@ private constructor(
                 include?.forEach { put("include[]", it.toString()) }
                 mode?.let { put("mode", it.toString()) }
                 objects?.forEach {
-                    it.accept(
-                        object : RecipientReference.Visitor<Unit> {
-                            override fun visitUser(user: String) {
-                                put("objects[]", user)
-                            }
-
-                            override fun visitObjectReference(
-                                objectReference: RecipientReference.ObjectReference
-                            ) {
-                                objectReference.id().ifPresent { put("objects[][id]", it) }
-                                objectReference.collection().ifPresent {
-                                    put("objects[][collection]", it)
-                                }
-                                objectReference._additionalProperties().keys().forEach { key ->
-                                    objectReference._additionalProperties().values(key).forEach {
-                                        value ->
-                                        put("objects[][$key]", value)
-                                    }
-                                }
-                            }
+                    it.id().ifPresent { put("objects[][id]", it) }
+                    it.collection().ifPresent { put("objects[][collection]", it) }
+                    it._additionalProperties().keys().forEach { key ->
+                        it._additionalProperties().values(key).forEach { value ->
+                            put("objects[][$key]", value)
                         }
-                    )
+                    }
                 }
                 pageSize?.let { put("page_size", it.toString()) }
                 recipients?.forEach {
@@ -531,7 +510,10 @@ private constructor(
         override fun toString() = value.toString()
     }
 
-    /** Mode of the request. */
+    /**
+     * Mode of the request. `recipient` to list the objects that the provided object is subscribed
+     * to, `object` to list the recipients that subscribe to the provided object.
+     */
     class Mode @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
@@ -654,6 +636,131 @@ private constructor(
         override fun hashCode() = value.hashCode()
 
         override fun toString() = value.toString()
+    }
+
+    /** A reference to a recipient object. */
+    class Object
+    private constructor(
+        private val id: String?,
+        private val collection: String?,
+        private val additionalProperties: QueryParams,
+    ) {
+
+        /** An identifier for the recipient object. */
+        fun id(): Optional<String> = Optional.ofNullable(id)
+
+        /** The collection the recipient object belongs to. */
+        fun collection(): Optional<String> = Optional.ofNullable(collection)
+
+        fun _additionalProperties(): QueryParams = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Object]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Object]. */
+        class Builder internal constructor() {
+
+            private var id: String? = null
+            private var collection: String? = null
+            private var additionalProperties: QueryParams.Builder = QueryParams.builder()
+
+            @JvmSynthetic
+            internal fun from(object_: Object) = apply {
+                id = object_.id
+                collection = object_.collection
+                additionalProperties = object_.additionalProperties.toBuilder()
+            }
+
+            /** An identifier for the recipient object. */
+            fun id(id: String?) = apply { this.id = id }
+
+            /** Alias for calling [Builder.id] with `id.orElse(null)`. */
+            fun id(id: Optional<String>) = id(id.getOrNull())
+
+            /** The collection the recipient object belongs to. */
+            fun collection(collection: String?) = apply { this.collection = collection }
+
+            /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+            fun collection(collection: Optional<String>) = collection(collection.getOrNull())
+
+            fun additionalProperties(additionalProperties: QueryParams) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, Iterable<String>>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: String) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAdditionalProperties(key: String, values: Iterable<String>) = apply {
+                additionalProperties.put(key, values)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: QueryParams) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, Iterable<String>>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+            fun replaceAdditionalProperties(key: String, value: String) = apply {
+                additionalProperties.replace(key, value)
+            }
+
+            fun replaceAdditionalProperties(key: String, values: Iterable<String>) = apply {
+                additionalProperties.replace(key, values)
+            }
+
+            fun replaceAllAdditionalProperties(additionalProperties: QueryParams) = apply {
+                this.additionalProperties.replaceAll(additionalProperties)
+            }
+
+            fun replaceAllAdditionalProperties(
+                additionalProperties: Map<String, Iterable<String>>
+            ) = apply { this.additionalProperties.replaceAll(additionalProperties) }
+
+            fun removeAdditionalProperties(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                additionalProperties.removeAll(keys)
+            }
+
+            /**
+             * Returns an immutable instance of [Object].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Object = Object(id, collection, additionalProperties.build())
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Object && id == other.id && collection == other.collection && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, collection, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Object{id=$id, collection=$collection, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

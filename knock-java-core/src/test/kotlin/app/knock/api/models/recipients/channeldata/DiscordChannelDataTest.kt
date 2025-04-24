@@ -13,17 +13,15 @@ internal class DiscordChannelDataTest {
     fun create() {
         val discordChannelData =
             DiscordChannelData.builder()
-                ._typename(DiscordChannelData._Typename.DISCORD_CHANNEL_DATA)
                 .addConnection(
                     DiscordChannelData.Connection.DiscordChannelConnection.builder()
                         .channelId("123456789012345678")
                         .build()
                 )
                 .type(DiscordChannelData.Type.CHAT_DISCORD)
+                ._typename(DiscordChannelData._Typename.DISCORD_CHANNEL_DATA)
                 .build()
 
-        assertThat(discordChannelData._typename())
-            .isEqualTo(DiscordChannelData._Typename.DISCORD_CHANNEL_DATA)
         assertThat(discordChannelData.connections())
             .containsExactly(
                 DiscordChannelData.Connection.ofDiscordChannel(
@@ -33,6 +31,8 @@ internal class DiscordChannelDataTest {
                 )
             )
         assertThat(discordChannelData.type()).isEqualTo(DiscordChannelData.Type.CHAT_DISCORD)
+        assertThat(discordChannelData._typename())
+            .contains(DiscordChannelData._Typename.DISCORD_CHANNEL_DATA)
     }
 
     @Test
@@ -40,13 +40,13 @@ internal class DiscordChannelDataTest {
         val jsonMapper = jsonMapper()
         val discordChannelData =
             DiscordChannelData.builder()
-                ._typename(DiscordChannelData._Typename.DISCORD_CHANNEL_DATA)
                 .addConnection(
                     DiscordChannelData.Connection.DiscordChannelConnection.builder()
                         .channelId("123456789012345678")
                         .build()
                 )
                 .type(DiscordChannelData.Type.CHAT_DISCORD)
+                ._typename(DiscordChannelData._Typename.DISCORD_CHANNEL_DATA)
                 .build()
 
         val roundtrippedDiscordChannelData =

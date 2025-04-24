@@ -13,29 +13,31 @@ internal class ChannelDataTest {
     fun create() {
         val channelData =
             ChannelData.builder()
-                ._typename("ChannelData")
                 .channelId("123e4567-e89b-12d3-a456-426614174000")
                 .data(
                     PushChannelData.builder()
-                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                         .addToken("push_token_1")
                         .type(PushChannelData.Type.PUSH_FCM)
+                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                         .build()
                 )
+                .provider(ChannelData.Provider.PUSH_FCM)
+                ._typename("ChannelData")
                 .build()
 
-        assertThat(channelData._typename()).isEqualTo("ChannelData")
         assertThat(channelData.channelId()).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
         assertThat(channelData.data())
             .isEqualTo(
                 ChannelData.Data.ofPushChannel(
                     PushChannelData.builder()
-                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                         .addToken("push_token_1")
                         .type(PushChannelData.Type.PUSH_FCM)
+                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                         .build()
                 )
             )
+        assertThat(channelData.provider()).isEqualTo(ChannelData.Provider.PUSH_FCM)
+        assertThat(channelData._typename()).contains("ChannelData")
     }
 
     @Test
@@ -43,15 +45,16 @@ internal class ChannelDataTest {
         val jsonMapper = jsonMapper()
         val channelData =
             ChannelData.builder()
-                ._typename("ChannelData")
                 .channelId("123e4567-e89b-12d3-a456-426614174000")
                 .data(
                     PushChannelData.builder()
-                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                         .addToken("push_token_1")
                         .type(PushChannelData.Type.PUSH_FCM)
+                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                         .build()
                 )
+                .provider(ChannelData.Provider.PUSH_FCM)
+                ._typename("ChannelData")
                 .build()
 
         val roundtrippedChannelData =

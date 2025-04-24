@@ -8,7 +8,7 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
 
-/** Returns the preference set for the specified object. */
+/** Returns the preference set for the specified object and preference set `id`. */
 class ObjectGetPreferencesParams
 private constructor(
     private val collection: String,

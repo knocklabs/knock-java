@@ -2,7 +2,6 @@
 
 package app.knock.api.models.objects.bulk
 
-import app.knock.api.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -10,13 +9,19 @@ internal class BulkDeleteParamsTest {
 
     @Test
     fun create() {
-        BulkDeleteParams.builder().collection("collection").addObjectId("string").build()
+        BulkDeleteParams.builder()
+            .collection("collection")
+            .objectIds(listOf("obj_123", "obj_456", "obj_789"))
+            .build()
     }
 
     @Test
     fun pathParams() {
         val params =
-            BulkDeleteParams.builder().collection("collection").addObjectId("string").build()
+            BulkDeleteParams.builder()
+                .collection("collection")
+                .objectIds(listOf("obj_123", "obj_456", "obj_789"))
+                .build()
 
         assertThat(params._pathParam(0)).isEqualTo("collection")
         // out-of-bound path param
@@ -24,13 +29,15 @@ internal class BulkDeleteParamsTest {
     }
 
     @Test
-    fun queryParams() {
+    fun body() {
         val params =
-            BulkDeleteParams.builder().collection("collection").addObjectId("string").build()
+            BulkDeleteParams.builder()
+                .collection("collection")
+                .objectIds(listOf("obj_123", "obj_456", "obj_789"))
+                .build()
 
-        val queryParams = params._queryParams()
+        val body = params._body()
 
-        assertThat(queryParams)
-            .isEqualTo(QueryParams.builder().put("object_ids[]", "string").build())
+        assertThat(body.objectIds()).containsExactly("obj_123", "obj_456", "obj_789")
     }
 }

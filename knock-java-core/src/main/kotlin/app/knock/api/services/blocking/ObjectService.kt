@@ -109,7 +109,7 @@ interface ObjectService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ChannelData
 
-    /** Returns the preference set for the specified object. */
+    /** Returns the preference set for the specified object and preference set `id`. */
     fun getPreferences(params: ObjectGetPreferencesParams): PreferenceSet =
         getPreferences(params, RequestOptions.none())
 
@@ -176,7 +176,11 @@ interface ObjectService {
     /** @see [set] */
     fun set(params: ObjectSetParams, requestOptions: RequestOptions = RequestOptions.none()): Object
 
-    /** Sets the channel data for the specified object and channel. */
+    /**
+     * Sets the channel data for the specified object and channel. If no object exists in the
+     * current environment for the given `collection` and `object_id`, Knock will create the object
+     * as part of this request.
+     */
     fun setChannelData(params: ObjectSetChannelDataParams): ChannelData =
         setChannelData(params, RequestOptions.none())
 
@@ -186,7 +190,13 @@ interface ObjectService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ChannelData
 
-    /** Updates the preference set for the specified object. */
+    /**
+     * Sets preferences within the given preference set. This is a destructive operation and will
+     * replace any existing preferences with the preferences given. If no object exists in the
+     * current environment for the given `:collection` and `:object_id`, Knock will create the
+     * object as part of this request. The preference set `:id` can be either `default` or a
+     * `tenant.id`. Learn more about [per-tenant preferences](/preferences/tenant-preferences).
+     */
     fun setPreferences(params: ObjectSetPreferencesParams): PreferenceSet =
         setPreferences(params, RequestOptions.none())
 

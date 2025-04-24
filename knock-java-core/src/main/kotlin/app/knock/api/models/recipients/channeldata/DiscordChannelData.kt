@@ -34,30 +34,22 @@ import kotlin.jvm.optionals.getOrNull
 /** Discord channel data. */
 class DiscordChannelData
 private constructor(
-    private val _typename: JsonField<_Typename>,
     private val connections: JsonField<List<Connection>>,
     private val type: JsonField<Type>,
+    private val _typename: JsonField<_Typename>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("__typename")
-        @ExcludeMissing
-        _typename: JsonField<_Typename> = JsonMissing.of(),
         @JsonProperty("connections")
         @ExcludeMissing
         connections: JsonField<List<Connection>> = JsonMissing.of(),
         @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
-    ) : this(_typename, connections, type, mutableMapOf())
-
-    /**
-     * The typename of the schema.
-     *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
-     *   missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun _typename(): _Typename = _typename.getRequired("__typename")
+        @JsonProperty("__typename")
+        @ExcludeMissing
+        _typename: JsonField<_Typename> = JsonMissing.of(),
+    ) : this(connections, type, _typename, mutableMapOf())
 
     /**
      * List of Discord channel connections.
@@ -68,7 +60,7 @@ private constructor(
     fun connections(): List<Connection> = connections.getRequired("connections")
 
     /**
-     * The channel type identifier
+     * The type of provider.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -76,11 +68,12 @@ private constructor(
     fun type(): Type = type.getRequired("type")
 
     /**
-     * Returns the raw JSON value of [_typename].
+     * The typename of the schema.
      *
-     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<_Typename> = _typename
+    fun _typename(): Optional<_Typename> = _typename.getOptional("__typename")
 
     /**
      * Returns the raw JSON value of [connections].
@@ -97,6 +90,13 @@ private constructor(
      * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+
+    /**
+     * Returns the raw JSON value of [_typename].
+     *
+     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<_Typename> = _typename
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -117,7 +117,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * ._typename()
          * .connections()
          * .type()
          * ```
@@ -128,30 +127,18 @@ private constructor(
     /** A builder for [DiscordChannelData]. */
     class Builder internal constructor() {
 
-        private var _typename: JsonField<_Typename>? = null
         private var connections: JsonField<MutableList<Connection>>? = null
         private var type: JsonField<Type>? = null
+        private var _typename: JsonField<_Typename> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(discordChannelData: DiscordChannelData) = apply {
-            _typename = discordChannelData._typename
             connections = discordChannelData.connections.map { it.toMutableList() }
             type = discordChannelData.type
+            _typename = discordChannelData._typename
             additionalProperties = discordChannelData.additionalProperties.toMutableMap()
         }
-
-        /** The typename of the schema. */
-        fun _typename(_typename: _Typename) = _typename(JsonField.of(_typename))
-
-        /**
-         * Sets [Builder._typename] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder._typename] with a well-typed [_Typename] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun _typename(_typename: JsonField<_Typename>) = apply { this._typename = _typename }
 
         /** List of Discord channel connections. */
         fun connections(connections: List<Connection>) = connections(JsonField.of(connections))
@@ -190,7 +177,7 @@ private constructor(
         fun addConnection(discordIncomingWebhook: Connection.DiscordIncomingWebhookConnection) =
             addConnection(Connection.ofDiscordIncomingWebhook(discordIncomingWebhook))
 
-        /** The channel type identifier */
+        /** The type of provider. */
         fun type(type: Type) = type(JsonField.of(type))
 
         /**
@@ -200,6 +187,18 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun type(type: JsonField<Type>) = apply { this.type = type }
+
+        /** The typename of the schema. */
+        fun _typename(_typename: _Typename) = _typename(JsonField.of(_typename))
+
+        /**
+         * Sets [Builder._typename] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder._typename] with a well-typed [_Typename] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun _typename(_typename: JsonField<_Typename>) = apply { this._typename = _typename }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -227,7 +226,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * ._typename()
          * .connections()
          * .type()
          * ```
@@ -236,9 +234,9 @@ private constructor(
          */
         fun build(): DiscordChannelData =
             DiscordChannelData(
-                checkRequired("_typename", _typename),
                 checkRequired("connections", connections).map { it.toImmutable() },
                 checkRequired("type", type),
+                _typename,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -250,9 +248,9 @@ private constructor(
             return@apply
         }
 
-        _typename().validate()
         connections().forEach { it.validate() }
         type().validate()
+        _typename().ifPresent { it.validate() }
         validated = true
     }
 
@@ -271,130 +269,9 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (_typename.asKnown().getOrNull()?.validity() ?: 0) +
-            (connections.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-            (type.asKnown().getOrNull()?.validity() ?: 0)
-
-    /** The typename of the schema. */
-    class _Typename @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
-
-        /**
-         * Returns this class instance's raw value.
-         *
-         * This is usually only useful if this instance was deserialized from data that doesn't
-         * match any known member, and you want to know that value. For example, if the SDK is on an
-         * older version than the API, then the API may respond with new members that the SDK is
-         * unaware of.
-         */
-        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
-
-        companion object {
-
-            @JvmField val DISCORD_CHANNEL_DATA = of("DiscordChannelData")
-
-            @JvmStatic fun of(value: String) = _Typename(JsonField.of(value))
-        }
-
-        /** An enum containing [_Typename]'s known values. */
-        enum class Known {
-            DISCORD_CHANNEL_DATA
-        }
-
-        /**
-         * An enum containing [_Typename]'s known values, as well as an [_UNKNOWN] member.
-         *
-         * An instance of [_Typename] can contain an unknown value in a couple of cases:
-         * - It was deserialized from data that doesn't match any known member. For example, if the
-         *   SDK is on an older version than the API, then the API may respond with new members that
-         *   the SDK is unaware of.
-         * - It was constructed with an arbitrary value using the [of] method.
-         */
-        enum class Value {
-            DISCORD_CHANNEL_DATA,
-            /**
-             * An enum member indicating that [_Typename] was instantiated with an unknown value.
-             */
-            _UNKNOWN,
-        }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
-         * if the class was instantiated with an unknown value.
-         *
-         * Use the [known] method instead if you're certain the value is always known or if you want
-         * to throw for the unknown case.
-         */
-        fun value(): Value =
-            when (this) {
-                DISCORD_CHANNEL_DATA -> Value.DISCORD_CHANNEL_DATA
-                else -> Value._UNKNOWN
-            }
-
-        /**
-         * Returns an enum member corresponding to this class instance's value.
-         *
-         * Use the [value] method instead if you're uncertain the value is always known and don't
-         * want to throw for the unknown case.
-         *
-         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
-         */
-        fun known(): Known =
-            when (this) {
-                DISCORD_CHANNEL_DATA -> Known.DISCORD_CHANNEL_DATA
-                else -> throw KnockInvalidDataException("Unknown _Typename: $value")
-            }
-
-        /**
-         * Returns this class instance's primitive wire representation.
-         *
-         * This differs from the [toString] method because that method is primarily for debugging
-         * and generally doesn't throw.
-         *
-         * @throws KnockInvalidDataException if this class instance's value does not have the
-         *   expected primitive type.
-         */
-        fun asString(): String =
-            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
-
-        private var validated: Boolean = false
-
-        fun validate(): _Typename = apply {
-            if (validated) {
-                return@apply
-            }
-
-            known()
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: KnockInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is _Typename && value == other.value /* spotless:on */
-        }
-
-        override fun hashCode() = value.hashCode()
-
-        override fun toString() = value.toString()
-    }
+        (connections.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (type.asKnown().getOrNull()?.validity() ?: 0) +
+            (_typename.asKnown().getOrNull()?.validity() ?: 0)
 
     /**
      * Discord channel connection, either a channel connection or an incoming webhook connection.
@@ -1107,7 +984,7 @@ private constructor(
         }
     }
 
-    /** The channel type identifier */
+    /** The type of provider. */
     class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
 
         /**
@@ -1226,20 +1103,141 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /** The typename of the schema. */
+    class _Typename @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val DISCORD_CHANNEL_DATA = of("DiscordChannelData")
+
+            @JvmStatic fun of(value: String) = _Typename(JsonField.of(value))
+        }
+
+        /** An enum containing [_Typename]'s known values. */
+        enum class Known {
+            DISCORD_CHANNEL_DATA
+        }
+
+        /**
+         * An enum containing [_Typename]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [_Typename] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            DISCORD_CHANNEL_DATA,
+            /**
+             * An enum member indicating that [_Typename] was instantiated with an unknown value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                DISCORD_CHANNEL_DATA -> Value.DISCORD_CHANNEL_DATA
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
+         */
+        fun known(): Known =
+            when (this) {
+                DISCORD_CHANNEL_DATA -> Known.DISCORD_CHANNEL_DATA
+                else -> throw KnockInvalidDataException("Unknown _Typename: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws KnockInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): _Typename = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is _Typename && value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is DiscordChannelData && _typename == other._typename && connections == other.connections && type == other.type && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is DiscordChannelData && connections == other.connections && type == other.type && _typename == other._typename && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(_typename, connections, type, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(connections, type, _typename, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "DiscordChannelData{_typename=$_typename, connections=$connections, type=$type, additionalProperties=$additionalProperties}"
+        "DiscordChannelData{connections=$connections, type=$type, _typename=$_typename, additionalProperties=$additionalProperties}"
 }

@@ -18,7 +18,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A custom object entity which belongs to a collection. */
+/** A custom [Object](/concepts/objects) entity which belongs to a collection. */
 class Object
 private constructor(
     private val id: JsonField<String>,

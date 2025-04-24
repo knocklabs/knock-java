@@ -10,7 +10,13 @@ import app.knock.api.core.http.QueryParams
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import java.util.Objects
 
-/** Updates the preference set for the specified object. */
+/**
+ * Sets preferences within the given preference set. This is a destructive operation and will
+ * replace any existing preferences with the preferences given. If no object exists in the current
+ * environment for the given `:collection` and `:object_id`, Knock will create the object as part of
+ * this request. The preference set `:id` can be either `default` or a `tenant.id`. Learn more about
+ * [per-tenant preferences](/preferences/tenant-preferences).
+ */
 class ObjectSetPreferencesParams
 private constructor(
     private val collection: String,

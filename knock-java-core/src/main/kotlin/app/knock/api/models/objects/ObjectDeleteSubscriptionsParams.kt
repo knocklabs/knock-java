@@ -40,7 +40,8 @@ private constructor(
     fun objectId(): String = objectId
 
     /**
-     * The recipients of the subscription.
+     * The recipients of the subscription. You can subscribe up to 100 recipients to an object at a
+     * time.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -111,7 +112,10 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /** The recipients of the subscription. */
+        /**
+         * The recipients of the subscription. You can subscribe up to 100 recipients to an object
+         * at a time.
+         */
         fun recipients(recipients: List<RecipientReference>) = apply { body.recipients(recipients) }
 
         /**
@@ -312,7 +316,8 @@ private constructor(
         ) : this(recipients, mutableMapOf())
 
         /**
-         * The recipients of the subscription.
+         * The recipients of the subscription. You can subscribe up to 100 recipients to an object
+         * at a time.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -365,7 +370,10 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /** The recipients of the subscription. */
+            /**
+             * The recipients of the subscription. You can subscribe up to 100 recipients to an
+             * object at a time.
+             */
             fun recipients(recipients: List<RecipientReference>) =
                 recipients(JsonField.of(recipients))
 

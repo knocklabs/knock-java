@@ -38,7 +38,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** A custom object entity which belongs to a collection. */
+/** A custom [Object](/concepts/objects) entity which belongs to a collection. */
 class InlineObjectRequest
 private constructor(
     private val id: JsonField<String>,
@@ -514,16 +514,84 @@ private constructor(
             fun data(oneSignalChannel: OneSignalChannelData) =
                 data(Data.ofOneSignalChannel(oneSignalChannel))
 
+            /**
+             * Alias for calling [data] with the following:
+             * ```java
+             * OneSignalChannelData.builder()
+             *     .type(OneSignalChannelData.Type.PUSH_ONE_SIGNAL)
+             *     .playerIds(playerIds)
+             *     .build()
+             * ```
+             */
+            fun oneSignalChannelData(playerIds: List<String>) =
+                data(
+                    OneSignalChannelData.builder()
+                        .type(OneSignalChannelData.Type.PUSH_ONE_SIGNAL)
+                        .playerIds(playerIds)
+                        .build()
+                )
+
             /** Alias for calling [data] with `Data.ofSlackChannel(slackChannel)`. */
             fun data(slackChannel: SlackChannelData) = data(Data.ofSlackChannel(slackChannel))
+
+            /**
+             * Alias for calling [data] with the following:
+             * ```java
+             * SlackChannelData.builder()
+             *     .type(SlackChannelData.Type.CHAT_SLACK)
+             *     .connections(connections)
+             *     .build()
+             * ```
+             */
+            fun slackChannelData(connections: List<SlackChannelData.Connection>) =
+                data(
+                    SlackChannelData.builder()
+                        .type(SlackChannelData.Type.CHAT_SLACK)
+                        .connections(connections)
+                        .build()
+                )
 
             /** Alias for calling [data] with `Data.ofMsTeamsChannel(msTeamsChannel)`. */
             fun data(msTeamsChannel: MsTeamsChannelData) =
                 data(Data.ofMsTeamsChannel(msTeamsChannel))
 
+            /**
+             * Alias for calling [data] with the following:
+             * ```java
+             * MsTeamsChannelData.builder()
+             *     .type(MsTeamsChannelData.Type.CHAT_MS_TEAMS)
+             *     .connections(connections)
+             *     .build()
+             * ```
+             */
+            fun msTeamsChannelData(connections: List<MsTeamsChannelData.Connection>) =
+                data(
+                    MsTeamsChannelData.builder()
+                        .type(MsTeamsChannelData.Type.CHAT_MS_TEAMS)
+                        .connections(connections)
+                        .build()
+                )
+
             /** Alias for calling [data] with `Data.ofDiscordChannel(discordChannel)`. */
             fun data(discordChannel: DiscordChannelData) =
                 data(Data.ofDiscordChannel(discordChannel))
+
+            /**
+             * Alias for calling [data] with the following:
+             * ```java
+             * DiscordChannelData.builder()
+             *     .type(DiscordChannelData.Type.CHAT_DISCORD)
+             *     .connections(connections)
+             *     .build()
+             * ```
+             */
+            fun discordChannelData(connections: List<DiscordChannelData.Connection>) =
+                data(
+                    DiscordChannelData.builder()
+                        .type(DiscordChannelData.Type.CHAT_DISCORD)
+                        .connections(connections)
+                        .build()
+                )
 
             /** The provider identifier (must match the data.type value) */
             fun provider(provider: String) = provider(JsonField.of(provider))

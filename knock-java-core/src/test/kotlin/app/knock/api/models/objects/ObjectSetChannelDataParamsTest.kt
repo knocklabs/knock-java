@@ -19,9 +19,9 @@ internal class ObjectSetChannelDataParamsTest {
                 ChannelDataRequest.builder()
                     .data(
                         PushChannelData.builder()
-                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                             .addToken("push_token_1")
                             .type(PushChannelData.Type.PUSH_FCM)
+                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                             .build()
                     )
                     .build()
@@ -40,7 +40,6 @@ internal class ObjectSetChannelDataParamsTest {
                     ChannelDataRequest.builder()
                         .data(
                             PushChannelData.builder()
-                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                                 .addToken("push_token_1")
                                 .type(PushChannelData.Type.PUSH_FCM)
                                 .build()
@@ -67,7 +66,42 @@ internal class ObjectSetChannelDataParamsTest {
                     ChannelDataRequest.builder()
                         .data(
                             PushChannelData.builder()
+                                .addToken("push_token_1")
+                                .type(PushChannelData.Type.PUSH_FCM)
                                 ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                                .build()
+                        )
+                        .build()
+                )
+                .build()
+
+        val body = params._body()
+
+        assertThat(body)
+            .isEqualTo(
+                ChannelDataRequest.builder()
+                    .data(
+                        PushChannelData.builder()
+                            .addToken("push_token_1")
+                            .type(PushChannelData.Type.PUSH_FCM)
+                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
+                            .build()
+                    )
+                    .build()
+            )
+    }
+
+    @Test
+    fun bodyWithoutOptionalFields() {
+        val params =
+            ObjectSetChannelDataParams.builder()
+                .collection("collection")
+                .objectId("object_id")
+                .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .channelDataRequest(
+                    ChannelDataRequest.builder()
+                        .data(
+                            PushChannelData.builder()
                                 .addToken("push_token_1")
                                 .type(PushChannelData.Type.PUSH_FCM)
                                 .build()
@@ -83,7 +117,6 @@ internal class ObjectSetChannelDataParamsTest {
                 ChannelDataRequest.builder()
                     .data(
                         PushChannelData.builder()
-                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                             .addToken("push_token_1")
                             .type(PushChannelData.Type.PUSH_FCM)
                             .build()

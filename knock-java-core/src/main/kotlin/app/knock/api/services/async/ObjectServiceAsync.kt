@@ -117,7 +117,7 @@ interface ObjectServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ChannelData>
 
-    /** Returns the preference set for the specified object. */
+    /** Returns the preference set for the specified object and preference set `id`. */
     fun getPreferences(params: ObjectGetPreferencesParams): CompletableFuture<PreferenceSet> =
         getPreferences(params, RequestOptions.none())
 
@@ -193,7 +193,11 @@ interface ObjectServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<Object>
 
-    /** Sets the channel data for the specified object and channel. */
+    /**
+     * Sets the channel data for the specified object and channel. If no object exists in the
+     * current environment for the given `collection` and `object_id`, Knock will create the object
+     * as part of this request.
+     */
     fun setChannelData(params: ObjectSetChannelDataParams): CompletableFuture<ChannelData> =
         setChannelData(params, RequestOptions.none())
 
@@ -203,7 +207,13 @@ interface ObjectServiceAsync {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<ChannelData>
 
-    /** Updates the preference set for the specified object. */
+    /**
+     * Sets preferences within the given preference set. This is a destructive operation and will
+     * replace any existing preferences with the preferences given. If no object exists in the
+     * current environment for the given `:collection` and `:object_id`, Knock will create the
+     * object as part of this request. The preference set `:id` can be either `default` or a
+     * `tenant.id`. Learn more about [per-tenant preferences](/preferences/tenant-preferences).
+     */
     fun setPreferences(params: ObjectSetPreferencesParams): CompletableFuture<PreferenceSet> =
         setPreferences(params, RequestOptions.none())
 

@@ -2,6 +2,7 @@
 
 package app.knock.api.models.tenants
 
+import app.knock.api.core.JsonValue
 import app.knock.api.core.jsonMapper
 import app.knock.api.models.shared.PageInfo
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -14,7 +15,14 @@ internal class TenantListPageResponseTest {
     fun create() {
         val tenantListPageResponse =
             TenantListPageResponse.builder()
-                .addEntry(Tenant.builder().id("tenant_123")._typename("Tenant").build())
+                .addEntry(
+                    Tenant.builder()
+                        .id("tenant_123")
+                        ._typename("Tenant")
+                        .name("ACME Corp, Inc.")
+                        .settings(JsonValue.from(mapOf<String, Any>()))
+                        .build()
+                )
                 .pageInfo(
                     PageInfo.builder()
                         ._typename("PageInfo")
@@ -26,7 +34,14 @@ internal class TenantListPageResponseTest {
                 .build()
 
         assertThat(tenantListPageResponse.entries())
-            .containsExactly(Tenant.builder().id("tenant_123")._typename("Tenant").build())
+            .containsExactly(
+                Tenant.builder()
+                    .id("tenant_123")
+                    ._typename("Tenant")
+                    .name("ACME Corp, Inc.")
+                    .settings(JsonValue.from(mapOf<String, Any>()))
+                    .build()
+            )
         assertThat(tenantListPageResponse.pageInfo())
             .isEqualTo(
                 PageInfo.builder()
@@ -43,7 +58,14 @@ internal class TenantListPageResponseTest {
         val jsonMapper = jsonMapper()
         val tenantListPageResponse =
             TenantListPageResponse.builder()
-                .addEntry(Tenant.builder().id("tenant_123")._typename("Tenant").build())
+                .addEntry(
+                    Tenant.builder()
+                        .id("tenant_123")
+                        ._typename("Tenant")
+                        .name("ACME Corp, Inc.")
+                        .settings(JsonValue.from(mapOf<String, Any>()))
+                        .build()
+                )
                 .pageInfo(
                     PageInfo.builder()
                         ._typename("PageInfo")

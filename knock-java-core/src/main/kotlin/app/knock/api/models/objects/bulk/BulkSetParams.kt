@@ -22,7 +22,7 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/** Bulk sets objects in the specified collection. */
+/** Bulk sets up to 1,000 objects at a time in the specified collection. */
 class BulkSetParams
 private constructor(
     private val collection: String,

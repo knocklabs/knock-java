@@ -464,7 +464,6 @@ private constructor(
 
     class Subscription
     private constructor(
-        private val id: JsonField<String>,
         private val recipients: JsonField<List<RecipientRequest>>,
         private val properties: JsonField<Properties>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -472,25 +471,17 @@ private constructor(
 
         @JsonCreator
         private constructor(
-            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
             @JsonProperty("recipients")
             @ExcludeMissing
             recipients: JsonField<List<RecipientRequest>> = JsonMissing.of(),
             @JsonProperty("properties")
             @ExcludeMissing
             properties: JsonField<Properties> = JsonMissing.of(),
-        ) : this(id, recipients, properties, mutableMapOf())
+        ) : this(recipients, properties, mutableMapOf())
 
         /**
-         * Unique identifier for the subscription.
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun id(): String = id.getRequired("id")
-
-        /**
-         * The recipients of the subscription.
+         * The recipients of the subscription. You can subscribe up to 100 recipients to an object
+         * at a time.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -498,19 +489,12 @@ private constructor(
         fun recipients(): List<RecipientRequest> = recipients.getRequired("recipients")
 
         /**
-         * The custom properties associated with the recipients of the subscription.
+         * The custom properties associated with the subscription relationship.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun properties(): Optional<Properties> = properties.getOptional("properties")
-
-        /**
-         * Returns the raw JSON value of [id].
-         *
-         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
 
         /**
          * Returns the raw JSON value of [recipients].
@@ -549,7 +533,6 @@ private constructor(
              *
              * The following fields are required:
              * ```java
-             * .id()
              * .recipients()
              * ```
              */
@@ -559,32 +542,21 @@ private constructor(
         /** A builder for [Subscription]. */
         class Builder internal constructor() {
 
-            private var id: JsonField<String>? = null
             private var recipients: JsonField<MutableList<RecipientRequest>>? = null
             private var properties: JsonField<Properties> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(subscription: Subscription) = apply {
-                id = subscription.id
                 recipients = subscription.recipients.map { it.toMutableList() }
                 properties = subscription.properties
                 additionalProperties = subscription.additionalProperties.toMutableMap()
             }
 
-            /** Unique identifier for the subscription. */
-            fun id(id: String) = id(JsonField.of(id))
-
             /**
-             * Sets [Builder.id] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.id] with a well-typed [String] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
+             * The recipients of the subscription. You can subscribe up to 100 recipients to an
+             * object at a time.
              */
-            fun id(id: JsonField<String>) = apply { this.id = id }
-
-            /** The recipients of the subscription. */
             fun recipients(recipients: List<RecipientRequest>) =
                 recipients(JsonField.of(recipients))
 
@@ -632,7 +604,7 @@ private constructor(
             fun addRecipient(inlineObject: InlineObjectRequest) =
                 addRecipient(RecipientRequest.ofInlineObject(inlineObject))
 
-            /** The custom properties associated with the recipients of the subscription. */
+            /** The custom properties associated with the subscription relationship. */
             fun properties(properties: Properties?) = properties(JsonField.ofNullable(properties))
 
             /** Alias for calling [Builder.properties] with `properties.orElse(null)`. */
@@ -675,7 +647,6 @@ private constructor(
              *
              * The following fields are required:
              * ```java
-             * .id()
              * .recipients()
              * ```
              *
@@ -683,7 +654,6 @@ private constructor(
              */
             fun build(): Subscription =
                 Subscription(
-                    checkRequired("id", id),
                     checkRequired("recipients", recipients).map { it.toImmutable() },
                     properties,
                     additionalProperties.toMutableMap(),
@@ -697,7 +667,6 @@ private constructor(
                 return@apply
             }
 
-            id()
             recipients().forEach { it.validate() }
             properties().ifPresent { it.validate() }
             validated = true
@@ -719,11 +688,10 @@ private constructor(
          */
         @JvmSynthetic
         internal fun validity(): Int =
-            (if (id.asKnown().isPresent) 1 else 0) +
-                (recipients.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+            (recipients.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (properties.asKnown().getOrNull()?.validity() ?: 0)
 
-        /** The custom properties associated with the recipients of the subscription. */
+        /** The custom properties associated with the subscription relationship. */
         class Properties
         @JsonCreator
         private constructor(
@@ -833,17 +801,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Subscription && id == other.id && recipients == other.recipients && properties == other.properties && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Subscription && recipients == other.recipients && properties == other.properties && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(id, recipients, properties, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(recipients, properties, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Subscription{id=$id, recipients=$recipients, properties=$properties, additionalProperties=$additionalProperties}"
+            "Subscription{recipients=$recipients, properties=$properties, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

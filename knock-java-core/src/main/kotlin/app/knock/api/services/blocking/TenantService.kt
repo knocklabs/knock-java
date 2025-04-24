@@ -55,8 +55,8 @@ interface TenantService {
     fun get(params: TenantGetParams, requestOptions: RequestOptions = RequestOptions.none()): Tenant
 
     /**
-     * Set or update a tenant's properties and settings. This operation allows you to update tenant
-     * preferences, channel data, and branding settings.
+     * Sets a tenant within an environment, performing an upsert operation. Any existing properties
+     * will be merged with the incoming properties.
      */
     fun set(params: TenantSetParams): Tenant = set(params, RequestOptions.none())
 

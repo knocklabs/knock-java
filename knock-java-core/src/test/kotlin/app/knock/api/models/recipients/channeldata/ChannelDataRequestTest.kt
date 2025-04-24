@@ -15,9 +15,9 @@ internal class ChannelDataRequestTest {
             ChannelDataRequest.builder()
                 .data(
                     PushChannelData.builder()
-                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                         .addToken("push_token_1")
                         .type(PushChannelData.Type.PUSH_FCM)
+                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                         .build()
                 )
                 .build()
@@ -26,9 +26,9 @@ internal class ChannelDataRequestTest {
             .isEqualTo(
                 ChannelDataRequest.Data.ofPushChannel(
                     PushChannelData.builder()
-                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                         .addToken("push_token_1")
                         .type(PushChannelData.Type.PUSH_FCM)
+                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                         .build()
                 )
             )
@@ -41,9 +41,9 @@ internal class ChannelDataRequestTest {
             ChannelDataRequest.builder()
                 .data(
                     PushChannelData.builder()
-                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                         .addToken("push_token_1")
                         .type(PushChannelData.Type.PUSH_FCM)
+                        ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
                         .build()
                 )
                 .build()
