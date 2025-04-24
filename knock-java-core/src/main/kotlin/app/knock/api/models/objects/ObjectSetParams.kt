@@ -216,13 +216,9 @@ private constructor(
         fun locale(locale: JsonField<String>) = apply { body.locale(locale) }
 
         /** Inline set preferences for a recipient, where the key is the preference set name */
-        fun preferences(preferences: List<UnnamedSchemaWithArrayParent1>?) = apply {
+        fun preferences(preferences: List<UnnamedSchemaWithArrayParent1>) = apply {
             body.preferences(preferences)
         }
-
-        /** Alias for calling [Builder.preferences] with `preferences.orElse(null)`. */
-        fun preferences(preferences: Optional<List<UnnamedSchemaWithArrayParent1>>) =
-            preferences(preferences.getOrNull())
 
         /**
          * Sets [Builder.preferences] to an arbitrary JSON value.
@@ -588,12 +584,8 @@ private constructor(
             fun locale(locale: JsonField<String>) = apply { this.locale = locale }
 
             /** Inline set preferences for a recipient, where the key is the preference set name */
-            fun preferences(preferences: List<UnnamedSchemaWithArrayParent1>?) =
-                preferences(JsonField.ofNullable(preferences))
-
-            /** Alias for calling [Builder.preferences] with `preferences.orElse(null)`. */
-            fun preferences(preferences: Optional<List<UnnamedSchemaWithArrayParent1>>) =
-                preferences(preferences.getOrNull())
+            fun preferences(preferences: List<UnnamedSchemaWithArrayParent1>) =
+                preferences(JsonField.of(preferences))
 
             /**
              * Sets [Builder.preferences] to an arbitrary JSON value.
