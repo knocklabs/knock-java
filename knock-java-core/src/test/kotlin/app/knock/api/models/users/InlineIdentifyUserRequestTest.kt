@@ -5,9 +5,11 @@ package app.knock.api.models.users
 import app.knock.api.core.JsonValue
 import app.knock.api.core.jsonMapper
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
-import app.knock.api.models.UnnamedSchemaWithArrayParent1
 import app.knock.api.models.recipients.channeldata.PushChannelData
+import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
+import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypeSetting
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
+import app.knock.api.models.shared.Condition
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import java.time.OffsetDateTime
 import kotlin.jvm.optionals.getOrNull
@@ -35,11 +37,11 @@ internal class InlineIdentifyUserRequestTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .addPreference(
-                    UnnamedSchemaWithArrayParent1.builder()
-                        .id("default")
+                .preferences(
+                    InlinePreferenceSetRequest.builder()
+                        .id("id")
                         .categories(
-                            UnnamedSchemaWithArrayParent1.Categories.builder()
+                            InlinePreferenceSetRequest.Categories.builder()
                                 .putAdditionalProperty(
                                     "marketing",
                                     JsonValue.from(
@@ -74,11 +76,21 @@ internal class InlineIdentifyUserRequestTest {
                                 .http(true)
                                 .inAppFeed(true)
                                 .push(true)
-                                .sms(true)
+                                .sms(
+                                    PreferenceSetChannelTypeSetting.builder()
+                                        .addCondition(
+                                            Condition.builder()
+                                                .argument("US")
+                                                .operator(Condition.Operator.EQUAL_TO)
+                                                .variable("recipient.country_code")
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .workflows(
-                            UnnamedSchemaWithArrayParent1.Workflows.builder()
+                            InlinePreferenceSetRequest.Workflows.builder()
                                 .putAdditionalProperty(
                                     "dinosaurs-loose",
                                     JsonValue.from(
@@ -86,7 +98,7 @@ internal class InlineIdentifyUserRequestTest {
                                             "channel_types" to
                                                 mapOf(
                                                     "chat" to true,
-                                                    "email" to true,
+                                                    "email" to false,
                                                     "http" to true,
                                                     "in_app_feed" to true,
                                                     "push" to true,
@@ -103,6 +115,7 @@ internal class InlineIdentifyUserRequestTest {
                                         )
                                     ),
                                 )
+                                .putAdditionalProperty("welcome-sequence", JsonValue.from(true))
                                 .build()
                         )
                         .build()
@@ -126,12 +139,12 @@ internal class InlineIdentifyUserRequestTest {
             )
         assertThat(inlineIdentifyUserRequest.createdAt())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-        assertThat(inlineIdentifyUserRequest.preferences().getOrNull())
-            .containsExactly(
-                UnnamedSchemaWithArrayParent1.builder()
-                    .id("default")
+        assertThat(inlineIdentifyUserRequest.preferences())
+            .contains(
+                InlinePreferenceSetRequest.builder()
+                    .id("id")
                     .categories(
-                        UnnamedSchemaWithArrayParent1.Categories.builder()
+                        InlinePreferenceSetRequest.Categories.builder()
                             .putAdditionalProperty(
                                 "marketing",
                                 JsonValue.from(
@@ -166,11 +179,21 @@ internal class InlineIdentifyUserRequestTest {
                             .http(true)
                             .inAppFeed(true)
                             .push(true)
-                            .sms(true)
+                            .sms(
+                                PreferenceSetChannelTypeSetting.builder()
+                                    .addCondition(
+                                        Condition.builder()
+                                            .argument("US")
+                                            .operator(Condition.Operator.EQUAL_TO)
+                                            .variable("recipient.country_code")
+                                            .build()
+                                    )
+                                    .build()
+                            )
                             .build()
                     )
                     .workflows(
-                        UnnamedSchemaWithArrayParent1.Workflows.builder()
+                        InlinePreferenceSetRequest.Workflows.builder()
                             .putAdditionalProperty(
                                 "dinosaurs-loose",
                                 JsonValue.from(
@@ -178,7 +201,7 @@ internal class InlineIdentifyUserRequestTest {
                                         "channel_types" to
                                             mapOf(
                                                 "chat" to true,
-                                                "email" to true,
+                                                "email" to false,
                                                 "http" to true,
                                                 "in_app_feed" to true,
                                                 "push" to true,
@@ -195,6 +218,7 @@ internal class InlineIdentifyUserRequestTest {
                                     )
                                 ),
                             )
+                            .putAdditionalProperty("welcome-sequence", JsonValue.from(true))
                             .build()
                     )
                     .build()
@@ -221,11 +245,11 @@ internal class InlineIdentifyUserRequestTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
-                .addPreference(
-                    UnnamedSchemaWithArrayParent1.builder()
-                        .id("default")
+                .preferences(
+                    InlinePreferenceSetRequest.builder()
+                        .id("id")
                         .categories(
-                            UnnamedSchemaWithArrayParent1.Categories.builder()
+                            InlinePreferenceSetRequest.Categories.builder()
                                 .putAdditionalProperty(
                                     "marketing",
                                     JsonValue.from(
@@ -260,11 +284,21 @@ internal class InlineIdentifyUserRequestTest {
                                 .http(true)
                                 .inAppFeed(true)
                                 .push(true)
-                                .sms(true)
+                                .sms(
+                                    PreferenceSetChannelTypeSetting.builder()
+                                        .addCondition(
+                                            Condition.builder()
+                                                .argument("US")
+                                                .operator(Condition.Operator.EQUAL_TO)
+                                                .variable("recipient.country_code")
+                                                .build()
+                                        )
+                                        .build()
+                                )
                                 .build()
                         )
                         .workflows(
-                            UnnamedSchemaWithArrayParent1.Workflows.builder()
+                            InlinePreferenceSetRequest.Workflows.builder()
                                 .putAdditionalProperty(
                                     "dinosaurs-loose",
                                     JsonValue.from(
@@ -272,7 +306,7 @@ internal class InlineIdentifyUserRequestTest {
                                             "channel_types" to
                                                 mapOf(
                                                     "chat" to true,
-                                                    "email" to true,
+                                                    "email" to false,
                                                     "http" to true,
                                                     "in_app_feed" to true,
                                                     "push" to true,
@@ -289,6 +323,7 @@ internal class InlineIdentifyUserRequestTest {
                                         )
                                     ),
                                 )
+                                .putAdditionalProperty("welcome-sequence", JsonValue.from(true))
                                 .build()
                         )
                         .build()
