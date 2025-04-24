@@ -106,10 +106,10 @@ internal class TenantSetParamsTest {
                 TenantSetParams.Settings.builder()
                     .branding(
                         TenantSetParams.Settings.Branding.builder()
-                            .iconUrl("https://example.com/icon.png")
-                            .logoUrl("https://example.com/logo.png")
-                            .primaryColor("#000000")
-                            .primaryColorContrast("#FFFFFF")
+                            .iconUrl("https://example.com/trex_silhouette_icon.png")
+                            .logoUrl("https://example.com/amber_fossil_logo.png")
+                            .primaryColor("#DF1A22")
+                            .primaryColorContrast("#FFDE00")
                             .build()
                     )
                     .preferenceSet(
@@ -290,10 +290,10 @@ internal class TenantSetParamsTest {
                     TenantSetParams.Settings.builder()
                         .branding(
                             TenantSetParams.Settings.Branding.builder()
-                                .iconUrl("https://example.com/icon.png")
-                                .logoUrl("https://example.com/logo.png")
-                                .primaryColor("#000000")
-                                .primaryColorContrast("#FFFFFF")
+                                .iconUrl("https://example.com/trex_silhouette_icon.png")
+                                .logoUrl("https://example.com/amber_fossil_logo.png")
+                                .primaryColor("#DF1A22")
+                                .primaryColorContrast("#FFDE00")
                                 .build()
                         )
                         .preferenceSet(
@@ -466,10 +466,10 @@ internal class TenantSetParamsTest {
                 TenantSetParams.Settings.builder()
                     .branding(
                         TenantSetParams.Settings.Branding.builder()
-                            .iconUrl("https://example.com/icon.png")
-                            .logoUrl("https://example.com/logo.png")
-                            .primaryColor("#000000")
-                            .primaryColorContrast("#FFFFFF")
+                            .iconUrl("https://example.com/trex_silhouette_icon.png")
+                            .logoUrl("https://example.com/amber_fossil_logo.png")
+                            .primaryColor("#DF1A22")
+                            .primaryColorContrast("#FFDE00")
                             .build()
                     )
                     .preferenceSet(

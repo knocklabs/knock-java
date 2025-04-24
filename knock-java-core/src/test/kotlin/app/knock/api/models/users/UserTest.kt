@@ -14,7 +14,7 @@ internal class UserTest {
     fun create() {
         val user =
             User.builder()
-                .id("dr_malcolm")
+                .id("user_id")
                 ._typename("User")
                 .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                 .avatar("avatar")
@@ -25,7 +25,7 @@ internal class UserTest {
                 .timezone("timezone")
                 .build()
 
-        assertThat(user.id()).isEqualTo("dr_malcolm")
+        assertThat(user.id()).isEqualTo("user_id")
         assertThat(user._typename()).isEqualTo("User")
         assertThat(user.updatedAt()).isEqualTo(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
         assertThat(user.avatar()).contains("avatar")
@@ -41,7 +41,7 @@ internal class UserTest {
         val jsonMapper = jsonMapper()
         val user =
             User.builder()
-                .id("dr_malcolm")
+                .id("user_id")
                 ._typename("User")
                 .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                 .avatar("avatar")

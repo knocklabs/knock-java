@@ -974,7 +974,6 @@ private constructor(
             "UnnamedSchemaWithArrayParent0{channelId=$channelId, data=$data, provider=$provider, additionalProperties=$additionalProperties}"
     }
 
-    /** Inline set preferences for a recipient, where the key is the preference set name */
     class UnnamedSchemaWithArrayParent1
     private constructor(
         private val id: JsonField<String>,
@@ -999,7 +998,7 @@ private constructor(
         ) : this(id, categories, channelTypes, workflows, mutableMapOf())
 
         /**
-         * The ID of the preference set
+         * Unique identifier for the preference set.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -1114,7 +1113,7 @@ private constructor(
                         unnamedSchemaWithArrayParent1.additionalProperties.toMutableMap()
                 }
 
-            /** The ID of the preference set */
+            /** Unique identifier for the preference set. */
             fun id(id: String) = id(JsonField.of(id))
 
             /**

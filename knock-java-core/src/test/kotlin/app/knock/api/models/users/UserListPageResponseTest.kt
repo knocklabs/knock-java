@@ -18,7 +18,7 @@ internal class UserListPageResponseTest {
             UserListPageResponse.builder()
                 .addEntry(
                     User.builder()
-                        .id("dr_malcolm")
+                        .id("user_id")
                         ._typename("User")
                         .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                         .avatar("avatar")
@@ -42,7 +42,7 @@ internal class UserListPageResponseTest {
         assertThat(userListPageResponse.entries().getOrNull())
             .containsExactly(
                 User.builder()
-                    .id("dr_malcolm")
+                    .id("user_id")
                     ._typename("User")
                     .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                     .avatar("avatar")
@@ -71,7 +71,7 @@ internal class UserListPageResponseTest {
             UserListPageResponse.builder()
                 .addEntry(
                     User.builder()
-                        .id("dr_malcolm")
+                        .id("user_id")
                         ._typename("User")
                         .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                         .avatar("avatar")
