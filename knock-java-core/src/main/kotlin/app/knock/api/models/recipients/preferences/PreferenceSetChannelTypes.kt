@@ -52,7 +52,7 @@ private constructor(
     ) : this(chat, email, http, inAppFeed, push, sms, mutableMapOf())
 
     /**
-     * Either a boolean or a setting for the given channel type.
+     * Whether the channel type is enabled for the preference set.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -60,7 +60,7 @@ private constructor(
     fun chat(): Optional<Chat> = chat.getOptional("chat")
 
     /**
-     * Either a boolean or a setting for the given channel type.
+     * Whether the channel type is enabled for the preference set.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -68,7 +68,7 @@ private constructor(
     fun email(): Optional<Email> = email.getOptional("email")
 
     /**
-     * Either a boolean or a setting for the given channel type.
+     * Whether the channel type is enabled for the preference set.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -76,7 +76,7 @@ private constructor(
     fun http(): Optional<Http> = http.getOptional("http")
 
     /**
-     * Either a boolean or a setting for the given channel type.
+     * Whether the channel type is enabled for the preference set.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -84,7 +84,7 @@ private constructor(
     fun inAppFeed(): Optional<InAppFeed> = inAppFeed.getOptional("in_app_feed")
 
     /**
-     * Either a boolean or a setting for the given channel type.
+     * Whether the channel type is enabled for the preference set.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -92,7 +92,7 @@ private constructor(
     fun push(): Optional<Push> = push.getOptional("push")
 
     /**
-     * Either a boolean or a setting for the given channel type.
+     * Whether the channel type is enabled for the preference set.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -183,7 +183,7 @@ private constructor(
             additionalProperties = preferenceSetChannelTypes.additionalProperties.toMutableMap()
         }
 
-        /** Either a boolean or a setting for the given channel type. */
+        /** Whether the channel type is enabled for the preference set. */
         fun chat(chat: Chat) = chat(JsonField.of(chat))
 
         /**
@@ -204,7 +204,7 @@ private constructor(
         fun chat(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
             chat(Chat.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
 
-        /** Either a boolean or a setting for the given channel type. */
+        /** Whether the channel type is enabled for the preference set. */
         fun email(email: Email) = email(JsonField.of(email))
 
         /**
@@ -225,7 +225,7 @@ private constructor(
         fun email(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
             email(Email.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
 
-        /** Either a boolean or a setting for the given channel type. */
+        /** Whether the channel type is enabled for the preference set. */
         fun http(http: Http) = http(JsonField.of(http))
 
         /**
@@ -246,7 +246,7 @@ private constructor(
         fun http(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
             http(Http.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
 
-        /** Either a boolean or a setting for the given channel type. */
+        /** Whether the channel type is enabled for the preference set. */
         fun inAppFeed(inAppFeed: InAppFeed) = inAppFeed(JsonField.of(inAppFeed))
 
         /**
@@ -268,7 +268,7 @@ private constructor(
         fun inAppFeed(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
             inAppFeed(InAppFeed.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
 
-        /** Either a boolean or a setting for the given channel type. */
+        /** Whether the channel type is enabled for the preference set. */
         fun push(push: Push) = push(JsonField.of(push))
 
         /**
@@ -289,7 +289,7 @@ private constructor(
         fun push(preferenceSetChannelTypeSetting: PreferenceSetChannelTypeSetting) =
             push(Push.ofPreferenceSetChannelTypeSetting(preferenceSetChannelTypeSetting))
 
-        /** Either a boolean or a setting for the given channel type. */
+        /** Whether the channel type is enabled for the preference set. */
         fun sms(sms: Sms) = sms(JsonField.of(sms))
 
         /**
@@ -384,7 +384,7 @@ private constructor(
             (push.asKnown().getOrNull()?.validity() ?: 0) +
             (sms.asKnown().getOrNull()?.validity() ?: 0)
 
-    /** Either a boolean or a setting for the given channel type. */
+    /** Whether the channel type is enabled for the preference set. */
     @JsonDeserialize(using = Chat.Deserializer::class)
     @JsonSerialize(using = Chat.Serializer::class)
     class Chat
@@ -394,7 +394,6 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** Whether the channel type is enabled for the preference set. */
         fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
 
         /**
@@ -408,7 +407,6 @@ private constructor(
 
         fun isPreferenceSetChannelTypeSetting(): Boolean = preferenceSetChannelTypeSetting != null
 
-        /** Whether the channel type is enabled for the preference set. */
         fun asBool(): Boolean = bool.getOrThrow("bool")
 
         /**
@@ -498,7 +496,6 @@ private constructor(
 
         companion object {
 
-            /** Whether the channel type is enabled for the preference set. */
             @JvmStatic fun ofBool(bool: Boolean) = Chat(bool = bool)
 
             /**
@@ -514,7 +511,6 @@ private constructor(
         /** An interface that defines how to map each variant of [Chat] to a value of type [T]. */
         interface Visitor<out T> {
 
-            /** Whether the channel type is enabled for the preference set. */
             fun visitBool(bool: Boolean): T
 
             /**
@@ -586,7 +582,7 @@ private constructor(
         }
     }
 
-    /** Either a boolean or a setting for the given channel type. */
+    /** Whether the channel type is enabled for the preference set. */
     @JsonDeserialize(using = Email.Deserializer::class)
     @JsonSerialize(using = Email.Serializer::class)
     class Email
@@ -596,7 +592,6 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** Whether the channel type is enabled for the preference set. */
         fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
 
         /**
@@ -610,7 +605,6 @@ private constructor(
 
         fun isPreferenceSetChannelTypeSetting(): Boolean = preferenceSetChannelTypeSetting != null
 
-        /** Whether the channel type is enabled for the preference set. */
         fun asBool(): Boolean = bool.getOrThrow("bool")
 
         /**
@@ -700,7 +694,6 @@ private constructor(
 
         companion object {
 
-            /** Whether the channel type is enabled for the preference set. */
             @JvmStatic fun ofBool(bool: Boolean) = Email(bool = bool)
 
             /**
@@ -716,7 +709,6 @@ private constructor(
         /** An interface that defines how to map each variant of [Email] to a value of type [T]. */
         interface Visitor<out T> {
 
-            /** Whether the channel type is enabled for the preference set. */
             fun visitBool(bool: Boolean): T
 
             /**
@@ -789,7 +781,7 @@ private constructor(
         }
     }
 
-    /** Either a boolean or a setting for the given channel type. */
+    /** Whether the channel type is enabled for the preference set. */
     @JsonDeserialize(using = Http.Deserializer::class)
     @JsonSerialize(using = Http.Serializer::class)
     class Http
@@ -799,7 +791,6 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** Whether the channel type is enabled for the preference set. */
         fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
 
         /**
@@ -813,7 +804,6 @@ private constructor(
 
         fun isPreferenceSetChannelTypeSetting(): Boolean = preferenceSetChannelTypeSetting != null
 
-        /** Whether the channel type is enabled for the preference set. */
         fun asBool(): Boolean = bool.getOrThrow("bool")
 
         /**
@@ -903,7 +893,6 @@ private constructor(
 
         companion object {
 
-            /** Whether the channel type is enabled for the preference set. */
             @JvmStatic fun ofBool(bool: Boolean) = Http(bool = bool)
 
             /**
@@ -919,7 +908,6 @@ private constructor(
         /** An interface that defines how to map each variant of [Http] to a value of type [T]. */
         interface Visitor<out T> {
 
-            /** Whether the channel type is enabled for the preference set. */
             fun visitBool(bool: Boolean): T
 
             /**
@@ -991,7 +979,7 @@ private constructor(
         }
     }
 
-    /** Either a boolean or a setting for the given channel type. */
+    /** Whether the channel type is enabled for the preference set. */
     @JsonDeserialize(using = InAppFeed.Deserializer::class)
     @JsonSerialize(using = InAppFeed.Serializer::class)
     class InAppFeed
@@ -1001,7 +989,6 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** Whether the channel type is enabled for the preference set. */
         fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
 
         /**
@@ -1015,7 +1002,6 @@ private constructor(
 
         fun isPreferenceSetChannelTypeSetting(): Boolean = preferenceSetChannelTypeSetting != null
 
-        /** Whether the channel type is enabled for the preference set. */
         fun asBool(): Boolean = bool.getOrThrow("bool")
 
         /**
@@ -1105,7 +1091,6 @@ private constructor(
 
         companion object {
 
-            /** Whether the channel type is enabled for the preference set. */
             @JvmStatic fun ofBool(bool: Boolean) = InAppFeed(bool = bool)
 
             /**
@@ -1123,7 +1108,6 @@ private constructor(
          */
         interface Visitor<out T> {
 
-            /** Whether the channel type is enabled for the preference set. */
             fun visitBool(bool: Boolean): T
 
             /**
@@ -1198,7 +1182,7 @@ private constructor(
         }
     }
 
-    /** Either a boolean or a setting for the given channel type. */
+    /** Whether the channel type is enabled for the preference set. */
     @JsonDeserialize(using = Push.Deserializer::class)
     @JsonSerialize(using = Push.Serializer::class)
     class Push
@@ -1208,7 +1192,6 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** Whether the channel type is enabled for the preference set. */
         fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
 
         /**
@@ -1222,7 +1205,6 @@ private constructor(
 
         fun isPreferenceSetChannelTypeSetting(): Boolean = preferenceSetChannelTypeSetting != null
 
-        /** Whether the channel type is enabled for the preference set. */
         fun asBool(): Boolean = bool.getOrThrow("bool")
 
         /**
@@ -1312,7 +1294,6 @@ private constructor(
 
         companion object {
 
-            /** Whether the channel type is enabled for the preference set. */
             @JvmStatic fun ofBool(bool: Boolean) = Push(bool = bool)
 
             /**
@@ -1328,7 +1309,6 @@ private constructor(
         /** An interface that defines how to map each variant of [Push] to a value of type [T]. */
         interface Visitor<out T> {
 
-            /** Whether the channel type is enabled for the preference set. */
             fun visitBool(bool: Boolean): T
 
             /**
@@ -1400,7 +1380,7 @@ private constructor(
         }
     }
 
-    /** Either a boolean or a setting for the given channel type. */
+    /** Whether the channel type is enabled for the preference set. */
     @JsonDeserialize(using = Sms.Deserializer::class)
     @JsonSerialize(using = Sms.Serializer::class)
     class Sms
@@ -1410,7 +1390,6 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** Whether the channel type is enabled for the preference set. */
         fun bool(): Optional<Boolean> = Optional.ofNullable(bool)
 
         /**
@@ -1424,7 +1403,6 @@ private constructor(
 
         fun isPreferenceSetChannelTypeSetting(): Boolean = preferenceSetChannelTypeSetting != null
 
-        /** Whether the channel type is enabled for the preference set. */
         fun asBool(): Boolean = bool.getOrThrow("bool")
 
         /**
@@ -1514,7 +1492,6 @@ private constructor(
 
         companion object {
 
-            /** Whether the channel type is enabled for the preference set. */
             @JvmStatic fun ofBool(bool: Boolean) = Sms(bool = bool)
 
             /**
@@ -1530,7 +1507,6 @@ private constructor(
         /** An interface that defines how to map each variant of [Sms] to a value of type [T]. */
         interface Visitor<out T> {
 
-            /** Whether the channel type is enabled for the preference set. */
             fun visitBool(bool: Boolean): T
 
             /**

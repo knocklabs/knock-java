@@ -3,11 +3,8 @@
 package app.knock.api.models.objects
 
 import app.knock.api.core.JsonValue
-import app.knock.api.models.UnnamedSchemaWithArrayParent0
-import app.knock.api.models.UnnamedSchemaWithArrayParent1
-import app.knock.api.models.recipients.channeldata.PushChannelData
-import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
-import kotlin.jvm.optionals.getOrNull
+import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
+import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -18,89 +15,88 @@ internal class ObjectSetParamsTest {
         ObjectSetParams.builder()
             .collection("collection")
             .id("id")
-            .addChannelData(
-                UnnamedSchemaWithArrayParent0.builder()
-                    .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                    .data(
-                        PushChannelData.builder()
-                            .addToken("push_token_123")
-                            .type(PushChannelData.Type.PUSH_FCM)
-                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                            .build()
+            .channelData(
+                InlineChannelDataRequest.builder()
+                    .putAdditionalProperty(
+                        "0",
+                        JsonValue.from(
+                            mapOf(
+                                "data" to
+                                    mapOf(
+                                        "tokens" to listOf("push_token_123"),
+                                        "type" to "push_fcm",
+                                        "__typename" to "PushChannelData",
+                                    )
+                            )
+                        ),
                     )
-                    .provider("push_fcm")
                     .build()
             )
             .locale("en-US")
-            .addPreference(
-                UnnamedSchemaWithArrayParent1.builder()
-                    .id("default")
-                    .categories(
-                        UnnamedSchemaWithArrayParent1.Categories.builder()
-                            .putAdditionalProperty(
-                                "marketing",
-                                JsonValue.from(
+            .preferences(
+                InlinePreferenceSetRequest.builder()
+                    .putAdditionalProperty(
+                        "0",
+                        JsonValue.from(
+                            mapOf(
+                                "categories" to
                                     mapOf(
-                                        "channel_types" to
+                                        "marketing" to
                                             mapOf(
-                                                "chat" to true,
-                                                "email" to false,
-                                                "http" to true,
-                                                "in_app_feed" to true,
-                                                "push" to true,
-                                                "sms" to true,
+                                                "channel_types" to
+                                                    mapOf(
+                                                        "chat" to true,
+                                                        "email" to false,
+                                                        "http" to true,
+                                                        "in_app_feed" to true,
+                                                        "push" to true,
+                                                        "sms" to true,
+                                                    ),
+                                                "conditions" to
+                                                    listOf(
+                                                        mapOf(
+                                                            "argument" to "frog_genome",
+                                                            "operator" to "contains",
+                                                            "variable" to "specimen.dna_sequence",
+                                                        )
+                                                    ),
                                             ),
-                                        "conditions" to
-                                            listOf(
-                                                mapOf(
-                                                    "argument" to "frog_genome",
-                                                    "operator" to "contains",
-                                                    "variable" to "specimen.dna_sequence",
-                                                )
-                                            ),
-                                    )
-                                ),
-                            )
-                            .putAdditionalProperty("transactional", JsonValue.from(true))
-                            .build()
-                    )
-                    .channelTypes(
-                        PreferenceSetChannelTypes.builder()
-                            .chat(true)
-                            .email(true)
-                            .http(true)
-                            .inAppFeed(true)
-                            .push(true)
-                            .sms(true)
-                            .build()
-                    )
-                    .workflows(
-                        UnnamedSchemaWithArrayParent1.Workflows.builder()
-                            .putAdditionalProperty(
-                                "dinosaurs-loose",
-                                JsonValue.from(
+                                        "transactional" to true,
+                                    ),
+                                "channel_types" to
                                     mapOf(
-                                        "channel_types" to
+                                        "chat" to true,
+                                        "email" to true,
+                                        "http" to true,
+                                        "in_app_feed" to true,
+                                        "push" to true,
+                                        "sms" to true,
+                                    ),
+                                "workflows" to
+                                    mapOf(
+                                        "dinosaurs-loose" to
                                             mapOf(
-                                                "chat" to true,
-                                                "email" to true,
-                                                "http" to true,
-                                                "in_app_feed" to true,
-                                                "push" to true,
-                                                "sms" to true,
-                                            ),
-                                        "conditions" to
-                                            listOf(
-                                                mapOf(
-                                                    "argument" to "frog_genome",
-                                                    "operator" to "contains",
-                                                    "variable" to "specimen.dna_sequence",
-                                                )
-                                            ),
-                                    )
-                                ),
+                                                "channel_types" to
+                                                    mapOf(
+                                                        "chat" to true,
+                                                        "email" to true,
+                                                        "http" to true,
+                                                        "in_app_feed" to true,
+                                                        "push" to true,
+                                                        "sms" to true,
+                                                    ),
+                                                "conditions" to
+                                                    listOf(
+                                                        mapOf(
+                                                            "argument" to "frog_genome",
+                                                            "operator" to "contains",
+                                                            "variable" to "specimen.dna_sequence",
+                                                        )
+                                                    ),
+                                            )
+                                    ),
                             )
-                            .build()
+                        ),
                     )
                     .build()
             )
@@ -124,89 +120,90 @@ internal class ObjectSetParamsTest {
             ObjectSetParams.builder()
                 .collection("collection")
                 .id("id")
-                .addChannelData(
-                    UnnamedSchemaWithArrayParent0.builder()
-                        .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                        .data(
-                            PushChannelData.builder()
-                                .addToken("push_token_123")
-                                .type(PushChannelData.Type.PUSH_FCM)
-                                ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                                .build()
+                .channelData(
+                    InlineChannelDataRequest.builder()
+                        .putAdditionalProperty(
+                            "0",
+                            JsonValue.from(
+                                mapOf(
+                                    "data" to
+                                        mapOf(
+                                            "tokens" to listOf("push_token_123"),
+                                            "type" to "push_fcm",
+                                            "__typename" to "PushChannelData",
+                                        )
+                                )
+                            ),
                         )
-                        .provider("push_fcm")
                         .build()
                 )
                 .locale("en-US")
-                .addPreference(
-                    UnnamedSchemaWithArrayParent1.builder()
-                        .id("default")
-                        .categories(
-                            UnnamedSchemaWithArrayParent1.Categories.builder()
-                                .putAdditionalProperty(
-                                    "marketing",
-                                    JsonValue.from(
+                .preferences(
+                    InlinePreferenceSetRequest.builder()
+                        .putAdditionalProperty(
+                            "0",
+                            JsonValue.from(
+                                mapOf(
+                                    "categories" to
                                         mapOf(
-                                            "channel_types" to
+                                            "marketing" to
                                                 mapOf(
-                                                    "chat" to true,
-                                                    "email" to false,
-                                                    "http" to true,
-                                                    "in_app_feed" to true,
-                                                    "push" to true,
-                                                    "sms" to true,
+                                                    "channel_types" to
+                                                        mapOf(
+                                                            "chat" to true,
+                                                            "email" to false,
+                                                            "http" to true,
+                                                            "in_app_feed" to true,
+                                                            "push" to true,
+                                                            "sms" to true,
+                                                        ),
+                                                    "conditions" to
+                                                        listOf(
+                                                            mapOf(
+                                                                "argument" to "frog_genome",
+                                                                "operator" to "contains",
+                                                                "variable" to
+                                                                    "specimen.dna_sequence",
+                                                            )
+                                                        ),
                                                 ),
-                                            "conditions" to
-                                                listOf(
-                                                    mapOf(
-                                                        "argument" to "frog_genome",
-                                                        "operator" to "contains",
-                                                        "variable" to "specimen.dna_sequence",
-                                                    )
-                                                ),
-                                        )
-                                    ),
-                                )
-                                .putAdditionalProperty("transactional", JsonValue.from(true))
-                                .build()
-                        )
-                        .channelTypes(
-                            PreferenceSetChannelTypes.builder()
-                                .chat(true)
-                                .email(true)
-                                .http(true)
-                                .inAppFeed(true)
-                                .push(true)
-                                .sms(true)
-                                .build()
-                        )
-                        .workflows(
-                            UnnamedSchemaWithArrayParent1.Workflows.builder()
-                                .putAdditionalProperty(
-                                    "dinosaurs-loose",
-                                    JsonValue.from(
+                                            "transactional" to true,
+                                        ),
+                                    "channel_types" to
                                         mapOf(
-                                            "channel_types" to
+                                            "chat" to true,
+                                            "email" to true,
+                                            "http" to true,
+                                            "in_app_feed" to true,
+                                            "push" to true,
+                                            "sms" to true,
+                                        ),
+                                    "workflows" to
+                                        mapOf(
+                                            "dinosaurs-loose" to
                                                 mapOf(
-                                                    "chat" to true,
-                                                    "email" to true,
-                                                    "http" to true,
-                                                    "in_app_feed" to true,
-                                                    "push" to true,
-                                                    "sms" to true,
-                                                ),
-                                            "conditions" to
-                                                listOf(
-                                                    mapOf(
-                                                        "argument" to "frog_genome",
-                                                        "operator" to "contains",
-                                                        "variable" to "specimen.dna_sequence",
-                                                    )
-                                                ),
-                                        )
-                                    ),
+                                                    "channel_types" to
+                                                        mapOf(
+                                                            "chat" to true,
+                                                            "email" to true,
+                                                            "http" to true,
+                                                            "in_app_feed" to true,
+                                                            "push" to true,
+                                                            "sms" to true,
+                                                        ),
+                                                    "conditions" to
+                                                        listOf(
+                                                            mapOf(
+                                                                "argument" to "frog_genome",
+                                                                "operator" to "contains",
+                                                                "variable" to
+                                                                    "specimen.dna_sequence",
+                                                            )
+                                                        ),
+                                                )
+                                        ),
                                 )
-                                .build()
+                            ),
                         )
                         .build()
                 )
@@ -215,91 +212,90 @@ internal class ObjectSetParamsTest {
 
         val body = params._body()
 
-        assertThat(body.channelData().getOrNull())
-            .containsExactly(
-                UnnamedSchemaWithArrayParent0.builder()
-                    .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
-                    .data(
-                        PushChannelData.builder()
-                            .addToken("push_token_123")
-                            .type(PushChannelData.Type.PUSH_FCM)
-                            ._typename(PushChannelData._Typename.PUSH_CHANNEL_DATA)
-                            .build()
+        assertThat(body.channelData())
+            .contains(
+                InlineChannelDataRequest.builder()
+                    .putAdditionalProperty(
+                        "0",
+                        JsonValue.from(
+                            mapOf(
+                                "data" to
+                                    mapOf(
+                                        "tokens" to listOf("push_token_123"),
+                                        "type" to "push_fcm",
+                                        "__typename" to "PushChannelData",
+                                    )
+                            )
+                        ),
                     )
-                    .provider("push_fcm")
                     .build()
             )
         assertThat(body.locale()).contains("en-US")
-        assertThat(body.preferences().getOrNull())
-            .containsExactly(
-                UnnamedSchemaWithArrayParent1.builder()
-                    .id("default")
-                    .categories(
-                        UnnamedSchemaWithArrayParent1.Categories.builder()
-                            .putAdditionalProperty(
-                                "marketing",
-                                JsonValue.from(
+        assertThat(body.preferences())
+            .contains(
+                InlinePreferenceSetRequest.builder()
+                    .putAdditionalProperty(
+                        "0",
+                        JsonValue.from(
+                            mapOf(
+                                "categories" to
                                     mapOf(
-                                        "channel_types" to
+                                        "marketing" to
                                             mapOf(
-                                                "chat" to true,
-                                                "email" to false,
-                                                "http" to true,
-                                                "in_app_feed" to true,
-                                                "push" to true,
-                                                "sms" to true,
+                                                "channel_types" to
+                                                    mapOf(
+                                                        "chat" to true,
+                                                        "email" to false,
+                                                        "http" to true,
+                                                        "in_app_feed" to true,
+                                                        "push" to true,
+                                                        "sms" to true,
+                                                    ),
+                                                "conditions" to
+                                                    listOf(
+                                                        mapOf(
+                                                            "argument" to "frog_genome",
+                                                            "operator" to "contains",
+                                                            "variable" to "specimen.dna_sequence",
+                                                        )
+                                                    ),
                                             ),
-                                        "conditions" to
-                                            listOf(
-                                                mapOf(
-                                                    "argument" to "frog_genome",
-                                                    "operator" to "contains",
-                                                    "variable" to "specimen.dna_sequence",
-                                                )
-                                            ),
-                                    )
-                                ),
-                            )
-                            .putAdditionalProperty("transactional", JsonValue.from(true))
-                            .build()
-                    )
-                    .channelTypes(
-                        PreferenceSetChannelTypes.builder()
-                            .chat(true)
-                            .email(true)
-                            .http(true)
-                            .inAppFeed(true)
-                            .push(true)
-                            .sms(true)
-                            .build()
-                    )
-                    .workflows(
-                        UnnamedSchemaWithArrayParent1.Workflows.builder()
-                            .putAdditionalProperty(
-                                "dinosaurs-loose",
-                                JsonValue.from(
+                                        "transactional" to true,
+                                    ),
+                                "channel_types" to
                                     mapOf(
-                                        "channel_types" to
+                                        "chat" to true,
+                                        "email" to true,
+                                        "http" to true,
+                                        "in_app_feed" to true,
+                                        "push" to true,
+                                        "sms" to true,
+                                    ),
+                                "workflows" to
+                                    mapOf(
+                                        "dinosaurs-loose" to
                                             mapOf(
-                                                "chat" to true,
-                                                "email" to true,
-                                                "http" to true,
-                                                "in_app_feed" to true,
-                                                "push" to true,
-                                                "sms" to true,
-                                            ),
-                                        "conditions" to
-                                            listOf(
-                                                mapOf(
-                                                    "argument" to "frog_genome",
-                                                    "operator" to "contains",
-                                                    "variable" to "specimen.dna_sequence",
-                                                )
-                                            ),
-                                    )
-                                ),
+                                                "channel_types" to
+                                                    mapOf(
+                                                        "chat" to true,
+                                                        "email" to true,
+                                                        "http" to true,
+                                                        "in_app_feed" to true,
+                                                        "push" to true,
+                                                        "sms" to true,
+                                                    ),
+                                                "conditions" to
+                                                    listOf(
+                                                        mapOf(
+                                                            "argument" to "frog_genome",
+                                                            "operator" to "contains",
+                                                            "variable" to "specimen.dna_sequence",
+                                                        )
+                                                    ),
+                                            )
+                                    ),
                             )
-                            .build()
+                        ),
                     )
                     .build()
             )
