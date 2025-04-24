@@ -16,36 +16,56 @@ internal class GuideGetChannelResponseTest {
             GuideGetChannelResponse.builder()
                 .addGuide(
                     GuideGetChannelResponse.Guide.builder()
-                        .id("323e4567-e89b-12d3-a456-426614174000")
-                        .content("Welcome to our application!")
+                        .id("f47ac10b-58cc-4372-a567-0e02b2c3d479")
+                        .content("New prehistoric specimens added to the visitor center display.")
                         .metadata(
                             GuideGetChannelResponse.Guide.Metadata.builder()
-                                .putAdditionalProperty("dismissable", JsonValue.from("bar"))
-                                .putAdditionalProperty("position", JsonValue.from("bar"))
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .title("Welcome Guide")
+                        .title("Amber Collection Updated")
                         .build()
                 )
-                .recipient(GuideGetChannelResponse.Recipient.builder().id("user_12345").build())
+                .addGuide(
+                    GuideGetChannelResponse.Guide.builder()
+                        .id("fe6c2c9c-849e-48d2-a5e5-9dc1f6b0f806")
+                        .content("Version 2.1 - Enhanced paddock monitoring now available.")
+                        .metadata(
+                            GuideGetChannelResponse.Guide.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .title("Security Systems Upgraded")
+                        .build()
+                )
+                .recipient(GuideGetChannelResponse.Recipient.builder().id("dr_malcolm").build())
                 .build()
 
         assertThat(guideGetChannelResponse.guides())
             .containsExactly(
                 GuideGetChannelResponse.Guide.builder()
-                    .id("323e4567-e89b-12d3-a456-426614174000")
-                    .content("Welcome to our application!")
+                    .id("f47ac10b-58cc-4372-a567-0e02b2c3d479")
+                    .content("New prehistoric specimens added to the visitor center display.")
                     .metadata(
                         GuideGetChannelResponse.Guide.Metadata.builder()
-                            .putAdditionalProperty("dismissable", JsonValue.from("bar"))
-                            .putAdditionalProperty("position", JsonValue.from("bar"))
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
                             .build()
                     )
-                    .title("Welcome Guide")
-                    .build()
+                    .title("Amber Collection Updated")
+                    .build(),
+                GuideGetChannelResponse.Guide.builder()
+                    .id("fe6c2c9c-849e-48d2-a5e5-9dc1f6b0f806")
+                    .content("Version 2.1 - Enhanced paddock monitoring now available.")
+                    .metadata(
+                        GuideGetChannelResponse.Guide.Metadata.builder()
+                            .putAdditionalProperty("foo", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .title("Security Systems Upgraded")
+                    .build(),
             )
         assertThat(guideGetChannelResponse.recipient())
-            .contains(GuideGetChannelResponse.Recipient.builder().id("user_12345").build())
+            .contains(GuideGetChannelResponse.Recipient.builder().id("dr_malcolm").build())
     }
 
     @Test
@@ -55,18 +75,29 @@ internal class GuideGetChannelResponseTest {
             GuideGetChannelResponse.builder()
                 .addGuide(
                     GuideGetChannelResponse.Guide.builder()
-                        .id("323e4567-e89b-12d3-a456-426614174000")
-                        .content("Welcome to our application!")
+                        .id("f47ac10b-58cc-4372-a567-0e02b2c3d479")
+                        .content("New prehistoric specimens added to the visitor center display.")
                         .metadata(
                             GuideGetChannelResponse.Guide.Metadata.builder()
-                                .putAdditionalProperty("dismissable", JsonValue.from("bar"))
-                                .putAdditionalProperty("position", JsonValue.from("bar"))
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
                                 .build()
                         )
-                        .title("Welcome Guide")
+                        .title("Amber Collection Updated")
                         .build()
                 )
-                .recipient(GuideGetChannelResponse.Recipient.builder().id("user_12345").build())
+                .addGuide(
+                    GuideGetChannelResponse.Guide.builder()
+                        .id("fe6c2c9c-849e-48d2-a5e5-9dc1f6b0f806")
+                        .content("Version 2.1 - Enhanced paddock monitoring now available.")
+                        .metadata(
+                            GuideGetChannelResponse.Guide.Metadata.builder()
+                                .putAdditionalProperty("foo", JsonValue.from("bar"))
+                                .build()
+                        )
+                        .title("Security Systems Upgraded")
+                        .build()
+                )
+                .recipient(GuideGetChannelResponse.Recipient.builder().id("dr_malcolm").build())
                 .build()
 
         val roundtrippedGuideGetChannelResponse =

@@ -40,7 +40,7 @@ internal class AudienceServiceTest {
                     AudienceAddMembersParams.Member.builder()
                         .user(
                             InlineIdentifyUserRequest.builder()
-                                .id("user_1")
+                                .id("dr_sattler")
                                 .addChannelData(
                                     UnnamedSchemaWithArrayParent0.builder()
                                         .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
@@ -78,11 +78,10 @@ internal class AudienceServiceTest {
                                                             "conditions" to
                                                                 listOf(
                                                                     mapOf(
-                                                                        "argument" to
-                                                                            "some_property",
-                                                                        "operator" to "equal_to",
+                                                                        "argument" to "frog_genome",
+                                                                        "operator" to "contains",
                                                                         "variable" to
-                                                                            "recipient.property",
+                                                                            "specimen.dna_sequence",
                                                                     )
                                                                 ),
                                                         )
@@ -118,11 +117,10 @@ internal class AudienceServiceTest {
                                                             "conditions" to
                                                                 listOf(
                                                                     mapOf(
-                                                                        "argument" to
-                                                                            "some_property",
-                                                                        "operator" to "equal_to",
+                                                                        "argument" to "frog_genome",
+                                                                        "operator" to "contains",
                                                                         "variable" to
-                                                                            "recipient.property",
+                                                                            "specimen.dna_sequence",
                                                                     )
                                                                 ),
                                                         )
@@ -134,7 +132,7 @@ internal class AudienceServiceTest {
                                 )
                                 .build()
                         )
-                        .tenant(null)
+                        .tenant("ingen_isla_nublar")
                         .build()
                 )
                 .build()
@@ -178,7 +176,7 @@ internal class AudienceServiceTest {
                     AudienceRemoveMembersParams.Member.builder()
                         .user(
                             InlineIdentifyUserRequest.builder()
-                                .id("user_1")
+                                .id("dr_sattler")
                                 .addChannelData(
                                     UnnamedSchemaWithArrayParent0.builder()
                                         .channelId("97c5837d-c65c-4d54-aa39-080eeb81c69d")
@@ -216,11 +214,10 @@ internal class AudienceServiceTest {
                                                             "conditions" to
                                                                 listOf(
                                                                     mapOf(
-                                                                        "argument" to
-                                                                            "some_property",
-                                                                        "operator" to "equal_to",
+                                                                        "argument" to "frog_genome",
+                                                                        "operator" to "contains",
                                                                         "variable" to
-                                                                            "recipient.property",
+                                                                            "specimen.dna_sequence",
                                                                     )
                                                                 ),
                                                         )
@@ -256,11 +253,10 @@ internal class AudienceServiceTest {
                                                             "conditions" to
                                                                 listOf(
                                                                     mapOf(
-                                                                        "argument" to
-                                                                            "some_property",
-                                                                        "operator" to "equal_to",
+                                                                        "argument" to "frog_genome",
+                                                                        "operator" to "contains",
                                                                         "variable" to
-                                                                            "recipient.property",
+                                                                            "specimen.dna_sequence",
                                                                     )
                                                                 ),
                                                         )
@@ -272,7 +268,7 @@ internal class AudienceServiceTest {
                                 )
                                 .build()
                         )
-                        .tenant(null)
+                        .tenant("ingen_isla_nublar")
                         .build()
                 )
                 .build()

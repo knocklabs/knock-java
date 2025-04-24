@@ -60,9 +60,9 @@ internal class IdentifyUserRequestTest {
                                             "conditions" to
                                                 listOf(
                                                     mapOf(
-                                                        "argument" to "some_property",
-                                                        "operator" to "equal_to",
-                                                        "variable" to "recipient.property",
+                                                        "argument" to "frog_genome",
+                                                        "operator" to "contains",
+                                                        "variable" to "specimen.dna_sequence",
                                                     )
                                                 ),
                                         )
@@ -99,9 +99,9 @@ internal class IdentifyUserRequestTest {
                                             "conditions" to
                                                 listOf(
                                                     mapOf(
-                                                        "argument" to "some_property",
-                                                        "operator" to "equal_to",
-                                                        "variable" to "recipient.property",
+                                                        "argument" to "frog_genome",
+                                                        "operator" to "contains",
+                                                        "variable" to "specimen.dna_sequence",
                                                     )
                                                 ),
                                         )
@@ -157,9 +157,9 @@ internal class IdentifyUserRequestTest {
                                         "conditions" to
                                             listOf(
                                                 mapOf(
-                                                    "argument" to "some_property",
-                                                    "operator" to "equal_to",
-                                                    "variable" to "recipient.property",
+                                                    "argument" to "frog_genome",
+                                                    "operator" to "contains",
+                                                    "variable" to "specimen.dna_sequence",
                                                 )
                                             ),
                                     )
@@ -196,9 +196,9 @@ internal class IdentifyUserRequestTest {
                                         "conditions" to
                                             listOf(
                                                 mapOf(
-                                                    "argument" to "some_property",
-                                                    "operator" to "equal_to",
-                                                    "variable" to "recipient.property",
+                                                    "argument" to "frog_genome",
+                                                    "operator" to "contains",
+                                                    "variable" to "specimen.dna_sequence",
                                                 )
                                             ),
                                     )
@@ -256,9 +256,9 @@ internal class IdentifyUserRequestTest {
                                             "conditions" to
                                                 listOf(
                                                     mapOf(
-                                                        "argument" to "some_property",
-                                                        "operator" to "equal_to",
-                                                        "variable" to "recipient.property",
+                                                        "argument" to "frog_genome",
+                                                        "operator" to "contains",
+                                                        "variable" to "specimen.dna_sequence",
                                                     )
                                                 ),
                                         )
@@ -295,9 +295,9 @@ internal class IdentifyUserRequestTest {
                                             "conditions" to
                                                 listOf(
                                                     mapOf(
-                                                        "argument" to "some_property",
-                                                        "operator" to "equal_to",
-                                                        "variable" to "recipient.property",
+                                                        "argument" to "frog_genome",
+                                                        "operator" to "contains",
+                                                        "variable" to "specimen.dna_sequence",
                                                     )
                                                 ),
                                         )

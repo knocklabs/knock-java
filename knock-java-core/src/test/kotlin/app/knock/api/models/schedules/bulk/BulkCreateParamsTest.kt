@@ -59,10 +59,10 @@ internal class BulkCreateParamsTest {
                                                         "conditions" to
                                                             listOf(
                                                                 mapOf(
-                                                                    "argument" to "some_property",
-                                                                    "operator" to "equal_to",
+                                                                    "argument" to "frog_genome",
+                                                                    "operator" to "contains",
                                                                     "variable" to
-                                                                        "recipient.property",
+                                                                        "specimen.dna_sequence",
                                                                 )
                                                             ),
                                                     )
@@ -98,10 +98,10 @@ internal class BulkCreateParamsTest {
                                                         "conditions" to
                                                             listOf(
                                                                 mapOf(
-                                                                    "argument" to "some_property",
-                                                                    "operator" to "equal_to",
+                                                                    "argument" to "frog_genome",
+                                                                    "operator" to "contains",
                                                                     "variable" to
-                                                                        "recipient.property",
+                                                                        "specimen.dna_sequence",
                                                                 )
                                                             ),
                                                     )
@@ -186,10 +186,10 @@ internal class BulkCreateParamsTest {
                                                         "conditions" to
                                                             listOf(
                                                                 mapOf(
-                                                                    "argument" to "some_property",
-                                                                    "operator" to "equal_to",
+                                                                    "argument" to "frog_genome",
+                                                                    "operator" to "contains",
                                                                     "variable" to
-                                                                        "recipient.property",
+                                                                        "specimen.dna_sequence",
                                                                 )
                                                             ),
                                                     )
@@ -225,10 +225,10 @@ internal class BulkCreateParamsTest {
                                                         "conditions" to
                                                             listOf(
                                                                 mapOf(
-                                                                    "argument" to "some_property",
-                                                                    "operator" to "equal_to",
+                                                                    "argument" to "frog_genome",
+                                                                    "operator" to "contains",
                                                                     "variable" to
-                                                                        "recipient.property",
+                                                                        "specimen.dna_sequence",
                                                                 )
                                                             ),
                                                     )
@@ -322,11 +322,10 @@ internal class BulkCreateParamsTest {
                                                             "conditions" to
                                                                 listOf(
                                                                     mapOf(
-                                                                        "argument" to
-                                                                            "some_property",
-                                                                        "operator" to "equal_to",
+                                                                        "argument" to "frog_genome",
+                                                                        "operator" to "contains",
                                                                         "variable" to
-                                                                            "recipient.property",
+                                                                            "specimen.dna_sequence",
                                                                     )
                                                                 ),
                                                         )
@@ -362,11 +361,10 @@ internal class BulkCreateParamsTest {
                                                             "conditions" to
                                                                 listOf(
                                                                     mapOf(
-                                                                        "argument" to
-                                                                            "some_property",
-                                                                        "operator" to "equal_to",
+                                                                        "argument" to "frog_genome",
+                                                                        "operator" to "contains",
                                                                         "variable" to
-                                                                            "recipient.property",
+                                                                            "specimen.dna_sequence",
                                                                     )
                                                                 ),
                                                         )
@@ -453,11 +451,10 @@ internal class BulkCreateParamsTest {
                                                             "conditions" to
                                                                 listOf(
                                                                     mapOf(
-                                                                        "argument" to
-                                                                            "some_property",
-                                                                        "operator" to "equal_to",
+                                                                        "argument" to "frog_genome",
+                                                                        "operator" to "contains",
                                                                         "variable" to
-                                                                            "recipient.property",
+                                                                            "specimen.dna_sequence",
                                                                     )
                                                                 ),
                                                         )
@@ -493,11 +490,10 @@ internal class BulkCreateParamsTest {
                                                             "conditions" to
                                                                 listOf(
                                                                     mapOf(
-                                                                        "argument" to
-                                                                            "some_property",
-                                                                        "operator" to "equal_to",
+                                                                        "argument" to "frog_genome",
+                                                                        "operator" to "contains",
                                                                         "variable" to
-                                                                            "recipient.property",
+                                                                            "specimen.dna_sequence",
                                                                     )
                                                                 ),
                                                         )
@@ -587,10 +583,10 @@ internal class BulkCreateParamsTest {
                                                         "conditions" to
                                                             listOf(
                                                                 mapOf(
-                                                                    "argument" to "some_property",
-                                                                    "operator" to "equal_to",
+                                                                    "argument" to "frog_genome",
+                                                                    "operator" to "contains",
                                                                     "variable" to
-                                                                        "recipient.property",
+                                                                        "specimen.dna_sequence",
                                                                 )
                                                             ),
                                                     )
@@ -626,10 +622,10 @@ internal class BulkCreateParamsTest {
                                                         "conditions" to
                                                             listOf(
                                                                 mapOf(
-                                                                    "argument" to "some_property",
-                                                                    "operator" to "equal_to",
+                                                                    "argument" to "frog_genome",
+                                                                    "operator" to "contains",
                                                                     "variable" to
-                                                                        "recipient.property",
+                                                                        "specimen.dna_sequence",
                                                                 )
                                                             ),
                                                     )
@@ -712,10 +708,10 @@ internal class BulkCreateParamsTest {
                                                         "conditions" to
                                                             listOf(
                                                                 mapOf(
-                                                                    "argument" to "some_property",
-                                                                    "operator" to "equal_to",
+                                                                    "argument" to "frog_genome",
+                                                                    "operator" to "contains",
                                                                     "variable" to
-                                                                        "recipient.property",
+                                                                        "specimen.dna_sequence",
                                                                 )
                                                             ),
                                                     )
@@ -751,10 +747,10 @@ internal class BulkCreateParamsTest {
                                                         "conditions" to
                                                             listOf(
                                                                 mapOf(
-                                                                    "argument" to "some_property",
-                                                                    "operator" to "equal_to",
+                                                                    "argument" to "frog_genome",
+                                                                    "operator" to "contains",
                                                                     "variable" to
-                                                                        "recipient.property",
+                                                                        "specimen.dna_sequence",
                                                                 )
                                                             ),
                                                     )

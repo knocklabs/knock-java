@@ -79,11 +79,11 @@ internal class BulkServiceAsyncTest {
                                                                     listOf(
                                                                         mapOf(
                                                                             "argument" to
-                                                                                "some_property",
+                                                                                "frog_genome",
                                                                             "operator" to
-                                                                                "equal_to",
+                                                                                "contains",
                                                                             "variable" to
-                                                                                "recipient.property",
+                                                                                "specimen.dna_sequence",
                                                                         )
                                                                     ),
                                                             )
@@ -120,11 +120,11 @@ internal class BulkServiceAsyncTest {
                                                                     listOf(
                                                                         mapOf(
                                                                             "argument" to
-                                                                                "some_property",
+                                                                                "frog_genome",
                                                                             "operator" to
-                                                                                "equal_to",
+                                                                                "contains",
                                                                             "variable" to
-                                                                                "recipient.property",
+                                                                                "specimen.dna_sequence",
                                                                         )
                                                                     ),
                                                             )
@@ -212,11 +212,11 @@ internal class BulkServiceAsyncTest {
                                                                     listOf(
                                                                         mapOf(
                                                                             "argument" to
-                                                                                "some_property",
+                                                                                "frog_genome",
                                                                             "operator" to
-                                                                                "equal_to",
+                                                                                "contains",
                                                                             "variable" to
-                                                                                "recipient.property",
+                                                                                "specimen.dna_sequence",
                                                                         )
                                                                     ),
                                                             )
@@ -253,11 +253,11 @@ internal class BulkServiceAsyncTest {
                                                                     listOf(
                                                                         mapOf(
                                                                             "argument" to
-                                                                                "some_property",
+                                                                                "frog_genome",
                                                                             "operator" to
-                                                                                "equal_to",
+                                                                                "contains",
                                                                             "variable" to
-                                                                                "recipient.property",
+                                                                                "specimen.dna_sequence",
                                                                         )
                                                                     ),
                                                             )

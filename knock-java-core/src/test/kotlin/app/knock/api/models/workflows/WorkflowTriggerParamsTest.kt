@@ -14,25 +14,42 @@ internal class WorkflowTriggerParamsTest {
     fun create() {
         WorkflowTriggerParams.builder()
             .key("key")
-            .addRecipient("jhammond")
-            .actor("string")
-            .cancellationKey(null)
+            .recipients(
+                listOf(
+                    RecipientRequest.ofUserRecipient("dr_grant"),
+                    RecipientRequest.ofUserRecipient("dr_sattler"),
+                    RecipientRequest.ofUserRecipient("dr_malcolm"),
+                )
+            )
+            .actor("mr_dna")
+            .cancellationKey("isla_nublar_incident_1993")
             .data(
                 WorkflowTriggerParams.Data.builder()
-                    .putAdditionalProperty("dinosaur_names", JsonValue.from("bar"))
-                    .putAdditionalProperty("is_alert", JsonValue.from("bar"))
-                    .putAdditionalProperty("park_id", JsonValue.from("bar"))
+                    .putAdditionalProperty("affected_areas", JsonValue.from("bar"))
+                    .putAdditionalProperty("attraction_id", JsonValue.from("bar"))
+                    .putAdditionalProperty("evacuation_protocol", JsonValue.from("bar"))
+                    .putAdditionalProperty("message", JsonValue.from("bar"))
                     .putAdditionalProperty("severity", JsonValue.from("bar"))
-                    .putAdditionalProperty("welcome_message", JsonValue.from("bar"))
+                    .putAdditionalProperty("system_status", JsonValue.from("bar"))
                     .build()
             )
-            .tenant("acme_corp")
+            .tenant("ingen_isla_nublar")
             .build()
     }
 
     @Test
     fun pathParams() {
-        val params = WorkflowTriggerParams.builder().key("key").addRecipient("jhammond").build()
+        val params =
+            WorkflowTriggerParams.builder()
+                .key("key")
+                .recipients(
+                    listOf(
+                        RecipientRequest.ofUserRecipient("dr_grant"),
+                        RecipientRequest.ofUserRecipient("dr_sattler"),
+                        RecipientRequest.ofUserRecipient("dr_malcolm"),
+                    )
+                )
+                .build()
 
         assertThat(params._pathParam(0)).isEqualTo("key")
         // out-of-bound path param
@@ -44,45 +61,73 @@ internal class WorkflowTriggerParamsTest {
         val params =
             WorkflowTriggerParams.builder()
                 .key("key")
-                .addRecipient("jhammond")
-                .actor("string")
-                .cancellationKey(null)
+                .recipients(
+                    listOf(
+                        RecipientRequest.ofUserRecipient("dr_grant"),
+                        RecipientRequest.ofUserRecipient("dr_sattler"),
+                        RecipientRequest.ofUserRecipient("dr_malcolm"),
+                    )
+                )
+                .actor("mr_dna")
+                .cancellationKey("isla_nublar_incident_1993")
                 .data(
                     WorkflowTriggerParams.Data.builder()
-                        .putAdditionalProperty("dinosaur_names", JsonValue.from("bar"))
-                        .putAdditionalProperty("is_alert", JsonValue.from("bar"))
-                        .putAdditionalProperty("park_id", JsonValue.from("bar"))
+                        .putAdditionalProperty("affected_areas", JsonValue.from("bar"))
+                        .putAdditionalProperty("attraction_id", JsonValue.from("bar"))
+                        .putAdditionalProperty("evacuation_protocol", JsonValue.from("bar"))
+                        .putAdditionalProperty("message", JsonValue.from("bar"))
                         .putAdditionalProperty("severity", JsonValue.from("bar"))
-                        .putAdditionalProperty("welcome_message", JsonValue.from("bar"))
+                        .putAdditionalProperty("system_status", JsonValue.from("bar"))
                         .build()
                 )
-                .tenant("acme_corp")
+                .tenant("ingen_isla_nublar")
                 .build()
 
         val body = params._body()
 
-        assertThat(body.recipients()).containsExactly(RecipientRequest.ofUserRecipient("jhammond"))
-        assertThat(body.actor()).contains(RecipientRequest.ofUserRecipient("string"))
-        assertThat(body.cancellationKey()).isEmpty
+        assertThat(body.recipients())
+            .containsExactly(
+                RecipientRequest.ofUserRecipient("dr_grant"),
+                RecipientRequest.ofUserRecipient("dr_sattler"),
+                RecipientRequest.ofUserRecipient("dr_malcolm"),
+            )
+        assertThat(body.actor()).contains(RecipientRequest.ofUserRecipient("mr_dna"))
+        assertThat(body.cancellationKey()).contains("isla_nublar_incident_1993")
         assertThat(body.data())
             .contains(
                 WorkflowTriggerParams.Data.builder()
-                    .putAdditionalProperty("dinosaur_names", JsonValue.from("bar"))
-                    .putAdditionalProperty("is_alert", JsonValue.from("bar"))
-                    .putAdditionalProperty("park_id", JsonValue.from("bar"))
+                    .putAdditionalProperty("affected_areas", JsonValue.from("bar"))
+                    .putAdditionalProperty("attraction_id", JsonValue.from("bar"))
+                    .putAdditionalProperty("evacuation_protocol", JsonValue.from("bar"))
+                    .putAdditionalProperty("message", JsonValue.from("bar"))
                     .putAdditionalProperty("severity", JsonValue.from("bar"))
-                    .putAdditionalProperty("welcome_message", JsonValue.from("bar"))
+                    .putAdditionalProperty("system_status", JsonValue.from("bar"))
                     .build()
             )
-        assertThat(body.tenant()).contains(InlineTenantRequest.ofString("acme_corp"))
+        assertThat(body.tenant()).contains(InlineTenantRequest.ofString("ingen_isla_nublar"))
     }
 
     @Test
     fun bodyWithoutOptionalFields() {
-        val params = WorkflowTriggerParams.builder().key("key").addRecipient("jhammond").build()
+        val params =
+            WorkflowTriggerParams.builder()
+                .key("key")
+                .recipients(
+                    listOf(
+                        RecipientRequest.ofUserRecipient("dr_grant"),
+                        RecipientRequest.ofUserRecipient("dr_sattler"),
+                        RecipientRequest.ofUserRecipient("dr_malcolm"),
+                    )
+                )
+                .build()
 
         val body = params._body()
 
-        assertThat(body.recipients()).containsExactly(RecipientRequest.ofUserRecipient("jhammond"))
+        assertThat(body.recipients())
+            .containsExactly(
+                RecipientRequest.ofUserRecipient("dr_grant"),
+                RecipientRequest.ofUserRecipient("dr_sattler"),
+                RecipientRequest.ofUserRecipient("dr_malcolm"),
+            )
     }
 }

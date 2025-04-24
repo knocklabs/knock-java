@@ -14,16 +14,16 @@ internal class ObjectTest {
     fun create() {
         val object_ =
             Object.builder()
-                .id("project_1")
+                .id("specimen_25")
                 ._typename("Object")
-                .collection("projects")
+                .collection("assets")
                 .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                 .createdAt(null)
                 .build()
 
-        assertThat(object_.id()).isEqualTo("project_1")
+        assertThat(object_.id()).isEqualTo("specimen_25")
         assertThat(object_._typename()).isEqualTo("Object")
-        assertThat(object_.collection()).isEqualTo("projects")
+        assertThat(object_.collection()).isEqualTo("assets")
         assertThat(object_.updatedAt()).isEqualTo(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
         assertThat(object_.createdAt()).isEmpty
     }
@@ -33,9 +33,9 @@ internal class ObjectTest {
         val jsonMapper = jsonMapper()
         val object_ =
             Object.builder()
-                .id("project_1")
+                .id("specimen_25")
                 ._typename("Object")
-                .collection("projects")
+                .collection("assets")
                 .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                 .createdAt(null)
                 .build()

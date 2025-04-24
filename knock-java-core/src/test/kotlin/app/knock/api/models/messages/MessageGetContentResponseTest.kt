@@ -18,12 +18,14 @@ internal class MessageGetContentResponseTest {
                 .data(
                     MessageGetContentResponse.Data.MessageSmsContent.builder()
                         ._typename("MessageSmsContent")
-                        .body("Hello, world!")
-                        .to("user_123")
+                        .body(
+                            "URGENT: Power failure detected in perimeter fencing. Backup generators failed to engage. Technical team dispatched. Maintain lockdown protocols."
+                        )
+                        .to("+15553982647")
                         .build()
                 )
-                .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
-                .messageId("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
+                .insertedAt(OffsetDateTime.parse("1993-06-11T20:30:00Z"))
+                .messageId("2w3YUpTTOxuDvZFji8OMsKrG176")
                 .build()
 
         assertThat(messageGetContentResponse._typename()).isEqualTo("MessageContent")
@@ -32,14 +34,16 @@ internal class MessageGetContentResponseTest {
                 MessageGetContentResponse.Data.ofMessageSmsContent(
                     MessageGetContentResponse.Data.MessageSmsContent.builder()
                         ._typename("MessageSmsContent")
-                        .body("Hello, world!")
-                        .to("user_123")
+                        .body(
+                            "URGENT: Power failure detected in perimeter fencing. Backup generators failed to engage. Technical team dispatched. Maintain lockdown protocols."
+                        )
+                        .to("+15553982647")
                         .build()
                 )
             )
         assertThat(messageGetContentResponse.insertedAt())
-            .isEqualTo(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
-        assertThat(messageGetContentResponse.messageId()).isEqualTo("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
+            .isEqualTo(OffsetDateTime.parse("1993-06-11T20:30:00Z"))
+        assertThat(messageGetContentResponse.messageId()).isEqualTo("2w3YUpTTOxuDvZFji8OMsKrG176")
     }
 
     @Test
@@ -51,12 +55,14 @@ internal class MessageGetContentResponseTest {
                 .data(
                     MessageGetContentResponse.Data.MessageSmsContent.builder()
                         ._typename("MessageSmsContent")
-                        .body("Hello, world!")
-                        .to("user_123")
+                        .body(
+                            "URGENT: Power failure detected in perimeter fencing. Backup generators failed to engage. Technical team dispatched. Maintain lockdown protocols."
+                        )
+                        .to("+15553982647")
                         .build()
                 )
-                .insertedAt(OffsetDateTime.parse("2021-01-01T00:00:00Z"))
-                .messageId("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
+                .insertedAt(OffsetDateTime.parse("1993-06-11T20:30:00Z"))
+                .messageId("2w3YUpTTOxuDvZFji8OMsKrG176")
                 .build()
 
         val roundtrippedMessageGetContentResponse =

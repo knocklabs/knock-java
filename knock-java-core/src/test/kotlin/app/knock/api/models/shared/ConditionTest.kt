@@ -13,14 +13,14 @@ internal class ConditionTest {
     fun create() {
         val condition =
             Condition.builder()
-                .argument("some_property")
-                .operator(Condition.Operator.EQUAL_TO)
-                .variable("recipient.property")
+                .argument("frog_genome")
+                .operator(Condition.Operator.CONTAINS)
+                .variable("specimen.dna_sequence")
                 .build()
 
-        assertThat(condition.argument()).contains("some_property")
-        assertThat(condition.operator()).isEqualTo(Condition.Operator.EQUAL_TO)
-        assertThat(condition.variable()).isEqualTo("recipient.property")
+        assertThat(condition.argument()).contains("frog_genome")
+        assertThat(condition.operator()).isEqualTo(Condition.Operator.CONTAINS)
+        assertThat(condition.variable()).isEqualTo("specimen.dna_sequence")
     }
 
     @Test
@@ -28,9 +28,9 @@ internal class ConditionTest {
         val jsonMapper = jsonMapper()
         val condition =
             Condition.builder()
-                .argument("some_property")
-                .operator(Condition.Operator.EQUAL_TO)
-                .variable("recipient.property")
+                .argument("frog_genome")
+                .operator(Condition.Operator.CONTAINS)
+                .variable("specimen.dna_sequence")
                 .build()
 
         val roundtrippedCondition =

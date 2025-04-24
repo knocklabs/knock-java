@@ -504,10 +504,16 @@ To forcibly omit a required parameter or property, pass [`JsonMissing`](knock-ja
 
 ```java
 import app.knock.api.core.JsonMissing;
+import app.knock.api.models.recipients.RecipientRequest;
 import app.knock.api.models.workflows.WorkflowTriggerParams;
+import java.util.List;
 
 WorkflowTriggerParams params = WorkflowTriggerParams.builder()
-    .addRecipient("jhammond")
+    .recipients(List.of(
+      RecipientRequest.ofUserRecipient("dr_grant"),
+      RecipientRequest.ofUserRecipient("dr_sattler"),
+      RecipientRequest.ofUserRecipient("dr_malcolm")
+    ))
     .key(JsonMissing.of())
     .build();
 ```

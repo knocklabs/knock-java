@@ -21,13 +21,13 @@ internal class RecipientTest {
     fun ofUser() {
         val user =
             User.builder()
-                .id("jane")
+                .id("dr_malcolm")
                 ._typename("User")
                 .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                 .avatar("avatar")
                 .createdAt(null)
-                .email("jane@ingen.net")
-                .name("Jane Doe")
+                .email("ian.malcolm@chaos.theory")
+                .name("Dr. Ian Malcolm")
                 .phoneNumber("phone_number")
                 .timezone("timezone")
                 .build()
@@ -44,13 +44,13 @@ internal class RecipientTest {
         val recipient =
             Recipient.ofUser(
                 User.builder()
-                    .id("jane")
+                    .id("dr_malcolm")
                     ._typename("User")
                     .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                     .avatar("avatar")
                     .createdAt(null)
-                    .email("jane@ingen.net")
-                    .name("Jane Doe")
+                    .email("ian.malcolm@chaos.theory")
+                    .name("Dr. Ian Malcolm")
                     .phoneNumber("phone_number")
                     .timezone("timezone")
                     .build()
@@ -69,9 +69,9 @@ internal class RecipientTest {
     fun ofObject() {
         val object_ =
             Object.builder()
-                .id("project_1")
+                .id("specimen_25")
                 ._typename("Object")
-                .collection("projects")
+                .collection("assets")
                 .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                 .createdAt(null)
                 .build()
@@ -88,9 +88,9 @@ internal class RecipientTest {
         val recipient =
             Recipient.ofObject(
                 Object.builder()
-                    .id("project_1")
+                    .id("specimen_25")
                     ._typename("Object")
-                    .collection("projects")
+                    .collection("assets")
                     .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                     .createdAt(null)
                     .build()
