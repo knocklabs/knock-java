@@ -14,11 +14,13 @@ import app.knock.api.core.getOrThrow
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.UnnamedSchemaWithArrayParent0
+import app.knock.api.models.UnnamedSchemaWithArrayParent1
 import app.knock.api.models.recipients.channeldata.DiscordChannelData
 import app.knock.api.models.recipients.channeldata.MsTeamsChannelData
 import app.knock.api.models.recipients.channeldata.OneSignalChannelData
 import app.knock.api.models.recipients.channeldata.PushChannelData
 import app.knock.api.models.recipients.channeldata.SlackChannelData
+import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -43,7 +45,7 @@ private constructor(
     private val collection: JsonField<String>,
     private val channelData: JsonField<List<UnnamedSchemaWithArrayParent0>>,
     private val createdAt: JsonField<OffsetDateTime>,
-    private val preferences: JsonValue,
+    private val preferences: JsonField<List<UnnamedSchemaWithArrayParent1>>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -59,7 +61,9 @@ private constructor(
         @JsonProperty("created_at")
         @ExcludeMissing
         createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-        @JsonProperty("preferences") @ExcludeMissing preferences: JsonValue = JsonMissing.of(),
+        @JsonProperty("preferences")
+        @ExcludeMissing
+        preferences: JsonField<List<UnnamedSchemaWithArrayParent1>> = JsonMissing.of(),
     ) : this(id, collection, channelData, createdAt, preferences, mutableMapOf())
 
     /**
@@ -95,8 +99,14 @@ private constructor(
      */
     fun createdAt(): Optional<OffsetDateTime> = createdAt.getOptional("created_at")
 
-    /** A list of objects that specify the preferences for the user. */
-    @JsonProperty("preferences") @ExcludeMissing fun _preferences(): JsonValue = preferences
+    /**
+     * Inline set preferences for a recipient, where the key is the preference set name
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun preferences(): Optional<List<UnnamedSchemaWithArrayParent1>> =
+        preferences.getOptional("preferences")
 
     /**
      * Returns the raw JSON value of [id].
@@ -129,6 +139,15 @@ private constructor(
     @JsonProperty("created_at")
     @ExcludeMissing
     fun _createdAt(): JsonField<OffsetDateTime> = createdAt
+
+    /**
+     * Returns the raw JSON value of [preferences].
+     *
+     * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("preferences")
+    @ExcludeMissing
+    fun _preferences(): JsonField<List<UnnamedSchemaWithArrayParent1>> = preferences
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -163,7 +182,7 @@ private constructor(
         private var collection: JsonField<String>? = null
         private var channelData: JsonField<MutableList<UnnamedSchemaWithArrayParent0>>? = null
         private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
-        private var preferences: JsonValue = JsonMissing.of()
+        private var preferences: JsonField<MutableList<UnnamedSchemaWithArrayParent1>>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -172,7 +191,7 @@ private constructor(
             collection = inlineObjectRequest.collection
             channelData = inlineObjectRequest.channelData.map { it.toMutableList() }
             createdAt = inlineObjectRequest.createdAt
-            preferences = inlineObjectRequest.preferences
+            preferences = inlineObjectRequest.preferences.map { it.toMutableList() }
             additionalProperties = inlineObjectRequest.additionalProperties.toMutableMap()
         }
 
@@ -245,8 +264,36 @@ private constructor(
          */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
-        /** A list of objects that specify the preferences for the user. */
-        fun preferences(preferences: JsonValue) = apply { this.preferences = preferences }
+        /** Inline set preferences for a recipient, where the key is the preference set name */
+        fun preferences(preferences: List<UnnamedSchemaWithArrayParent1>?) =
+            preferences(JsonField.ofNullable(preferences))
+
+        /** Alias for calling [Builder.preferences] with `preferences.orElse(null)`. */
+        fun preferences(preferences: Optional<List<UnnamedSchemaWithArrayParent1>>) =
+            preferences(preferences.getOrNull())
+
+        /**
+         * Sets [Builder.preferences] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.preferences] with a well-typed
+         * `List<UnnamedSchemaWithArrayParent1>` value instead. This method is primarily for setting
+         * the field to an undocumented or not yet supported value.
+         */
+        fun preferences(preferences: JsonField<List<UnnamedSchemaWithArrayParent1>>) = apply {
+            this.preferences = preferences.map { it.toMutableList() }
+        }
+
+        /**
+         * Adds a single [UnnamedSchemaWithArrayParent1] to [preferences].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addPreference(preference: UnnamedSchemaWithArrayParent1) = apply {
+            preferences =
+                (preferences ?: JsonField.of(mutableListOf())).also {
+                    checkKnown("preferences", it).add(preference)
+                }
+        }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -286,7 +333,7 @@ private constructor(
                 checkRequired("collection", collection),
                 (channelData ?: JsonMissing.of()).map { it.toImmutable() },
                 createdAt,
-                preferences,
+                (preferences ?: JsonMissing.of()).map { it.toImmutable() },
                 additionalProperties.toMutableMap(),
             )
     }
@@ -302,6 +349,7 @@ private constructor(
         collection()
         channelData().ifPresent { it.forEach { it.validate() } }
         createdAt()
+        preferences().ifPresent { it.forEach { it.validate() } }
         validated = true
     }
 
@@ -323,7 +371,8 @@ private constructor(
         (if (id.asKnown().isPresent) 1 else 0) +
             (if (collection.asKnown().isPresent) 1 else 0) +
             (channelData.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-            (if (createdAt.asKnown().isPresent) 1 else 0)
+            (if (createdAt.asKnown().isPresent) 1 else 0) +
+            (preferences.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0)
 
     /** A request to set channel data for a type of channel inline. */
     class UnnamedSchemaWithArrayParent0
@@ -923,6 +972,524 @@ private constructor(
 
         override fun toString() =
             "UnnamedSchemaWithArrayParent0{channelId=$channelId, data=$data, provider=$provider, additionalProperties=$additionalProperties}"
+    }
+
+    class UnnamedSchemaWithArrayParent1
+    private constructor(
+        private val id: JsonField<String>,
+        private val categories: JsonField<Categories>,
+        private val channelTypes: JsonField<PreferenceSetChannelTypes>,
+        private val workflows: JsonField<Workflows>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("categories")
+            @ExcludeMissing
+            categories: JsonField<Categories> = JsonMissing.of(),
+            @JsonProperty("channel_types")
+            @ExcludeMissing
+            channelTypes: JsonField<PreferenceSetChannelTypes> = JsonMissing.of(),
+            @JsonProperty("workflows")
+            @ExcludeMissing
+            workflows: JsonField<Workflows> = JsonMissing.of(),
+        ) : this(id, categories, channelTypes, workflows, mutableMapOf())
+
+        /**
+         * Unique identifier for the preference set.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
+         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         */
+        fun id(): String = id.getRequired("id")
+
+        /**
+         * An object where the key is the category and the values are the preference settings for
+         * that category.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun categories(): Optional<Categories> = categories.getOptional("categories")
+
+        /**
+         * Channel type preferences.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun channelTypes(): Optional<PreferenceSetChannelTypes> =
+            channelTypes.getOptional("channel_types")
+
+        /**
+         * An object where the key is the workflow key and the values are the preference settings
+         * for that workflow.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun workflows(): Optional<Workflows> = workflows.getOptional("workflows")
+
+        /**
+         * Returns the raw JSON value of [id].
+         *
+         * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+        /**
+         * Returns the raw JSON value of [categories].
+         *
+         * Unlike [categories], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("categories")
+        @ExcludeMissing
+        fun _categories(): JsonField<Categories> = categories
+
+        /**
+         * Returns the raw JSON value of [channelTypes].
+         *
+         * Unlike [channelTypes], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("channel_types")
+        @ExcludeMissing
+        fun _channelTypes(): JsonField<PreferenceSetChannelTypes> = channelTypes
+
+        /**
+         * Returns the raw JSON value of [workflows].
+         *
+         * Unlike [workflows], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("workflows")
+        @ExcludeMissing
+        fun _workflows(): JsonField<Workflows> = workflows
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /**
+             * Returns a mutable builder for constructing an instance of
+             * [UnnamedSchemaWithArrayParent1].
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * ```
+             */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [UnnamedSchemaWithArrayParent1]. */
+        class Builder internal constructor() {
+
+            private var id: JsonField<String>? = null
+            private var categories: JsonField<Categories> = JsonMissing.of()
+            private var channelTypes: JsonField<PreferenceSetChannelTypes> = JsonMissing.of()
+            private var workflows: JsonField<Workflows> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(unnamedSchemaWithArrayParent1: UnnamedSchemaWithArrayParent1) =
+                apply {
+                    id = unnamedSchemaWithArrayParent1.id
+                    categories = unnamedSchemaWithArrayParent1.categories
+                    channelTypes = unnamedSchemaWithArrayParent1.channelTypes
+                    workflows = unnamedSchemaWithArrayParent1.workflows
+                    additionalProperties =
+                        unnamedSchemaWithArrayParent1.additionalProperties.toMutableMap()
+                }
+
+            /** Unique identifier for the preference set. */
+            fun id(id: String) = id(JsonField.of(id))
+
+            /**
+             * Sets [Builder.id] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.id] with a well-typed [String] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun id(id: JsonField<String>) = apply { this.id = id }
+
+            /**
+             * An object where the key is the category and the values are the preference settings
+             * for that category.
+             */
+            fun categories(categories: Categories?) = categories(JsonField.ofNullable(categories))
+
+            /** Alias for calling [Builder.categories] with `categories.orElse(null)`. */
+            fun categories(categories: Optional<Categories>) = categories(categories.getOrNull())
+
+            /**
+             * Sets [Builder.categories] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.categories] with a well-typed [Categories] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun categories(categories: JsonField<Categories>) = apply {
+                this.categories = categories
+            }
+
+            /** Channel type preferences. */
+            fun channelTypes(channelTypes: PreferenceSetChannelTypes?) =
+                channelTypes(JsonField.ofNullable(channelTypes))
+
+            /** Alias for calling [Builder.channelTypes] with `channelTypes.orElse(null)`. */
+            fun channelTypes(channelTypes: Optional<PreferenceSetChannelTypes>) =
+                channelTypes(channelTypes.getOrNull())
+
+            /**
+             * Sets [Builder.channelTypes] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.channelTypes] with a well-typed
+             * [PreferenceSetChannelTypes] value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun channelTypes(channelTypes: JsonField<PreferenceSetChannelTypes>) = apply {
+                this.channelTypes = channelTypes
+            }
+
+            /**
+             * An object where the key is the workflow key and the values are the preference
+             * settings for that workflow.
+             */
+            fun workflows(workflows: Workflows?) = workflows(JsonField.ofNullable(workflows))
+
+            /** Alias for calling [Builder.workflows] with `workflows.orElse(null)`. */
+            fun workflows(workflows: Optional<Workflows>) = workflows(workflows.getOrNull())
+
+            /**
+             * Sets [Builder.workflows] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.workflows] with a well-typed [Workflows] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun workflows(workflows: JsonField<Workflows>) = apply { this.workflows = workflows }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [UnnamedSchemaWithArrayParent1].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             *
+             * The following fields are required:
+             * ```java
+             * .id()
+             * ```
+             *
+             * @throws IllegalStateException if any required field is unset.
+             */
+            fun build(): UnnamedSchemaWithArrayParent1 =
+                UnnamedSchemaWithArrayParent1(
+                    checkRequired("id", id),
+                    categories,
+                    channelTypes,
+                    workflows,
+                    additionalProperties.toMutableMap(),
+                )
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): UnnamedSchemaWithArrayParent1 = apply {
+            if (validated) {
+                return@apply
+            }
+
+            id()
+            categories().ifPresent { it.validate() }
+            channelTypes().ifPresent { it.validate() }
+            workflows().ifPresent { it.validate() }
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (id.asKnown().isPresent) 1 else 0) +
+                (categories.asKnown().getOrNull()?.validity() ?: 0) +
+                (channelTypes.asKnown().getOrNull()?.validity() ?: 0) +
+                (workflows.asKnown().getOrNull()?.validity() ?: 0)
+
+        /**
+         * An object where the key is the category and the values are the preference settings for
+         * that category.
+         */
+        class Categories
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
+        ) {
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [Categories]. */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Categories]. */
+            class Builder internal constructor() {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(categories: Categories) = apply {
+                    additionalProperties = categories.additionalProperties.toMutableMap()
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Categories].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): Categories = Categories(additionalProperties.toImmutable())
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): Categories = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: KnockInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Categories && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() = "Categories{additionalProperties=$additionalProperties}"
+        }
+
+        /**
+         * An object where the key is the workflow key and the values are the preference settings
+         * for that workflow.
+         */
+        class Workflows
+        @JsonCreator
+        private constructor(
+            @com.fasterxml.jackson.annotation.JsonValue
+            private val additionalProperties: Map<String, JsonValue>
+        ) {
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [Workflows]. */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [Workflows]. */
+            class Builder internal constructor() {
+
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(workflows: Workflows) = apply {
+                    additionalProperties = workflows.additionalProperties.toMutableMap()
+                }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [Workflows].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): Workflows = Workflows(additionalProperties.toImmutable())
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): Workflows = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: KnockInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic
+            internal fun validity(): Int =
+                additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Workflows && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() = "Workflows{additionalProperties=$additionalProperties}"
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is UnnamedSchemaWithArrayParent1 && id == other.id && categories == other.categories && channelTypes == other.channelTypes && workflows == other.workflows && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(id, categories, channelTypes, workflows, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "UnnamedSchemaWithArrayParent1{id=$id, categories=$categories, channelTypes=$channelTypes, workflows=$workflows, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {
