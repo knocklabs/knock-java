@@ -13,11 +13,13 @@ internal class ChannelDataTest {
     fun create() {
         val channelData =
             ChannelData.builder()
+                ._typename("ChannelData")
                 .channelId("123e4567-e89b-12d3-a456-426614174000")
                 .data(PushChannelData.builder().addToken("push_token_1").build())
                 .provider(ChannelData.Provider.PUSH_FCM)
                 .build()
 
+        assertThat(channelData._typename()).isEqualTo("ChannelData")
         assertThat(channelData.channelId()).isEqualTo("123e4567-e89b-12d3-a456-426614174000")
         assertThat(channelData.data())
             .isEqualTo(
@@ -33,6 +35,7 @@ internal class ChannelDataTest {
         val jsonMapper = jsonMapper()
         val channelData =
             ChannelData.builder()
+                ._typename("ChannelData")
                 .channelId("123e4567-e89b-12d3-a456-426614174000")
                 .data(PushChannelData.builder().addToken("push_token_1").build())
                 .provider(ChannelData.Provider.PUSH_FCM)

@@ -2,6 +2,7 @@
 
 package app.knock.api.models.objects.bulk
 
+import app.knock.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,7 +12,7 @@ internal class BulkDeleteParamsTest {
     fun create() {
         BulkDeleteParams.builder()
             .collection("collection")
-            .objectIds(listOf("obj_123", "obj_456", "obj_789"))
+            .body(JsonValue.from(mapOf("object_ids" to listOf("obj_123", "obj_456", "obj_789"))))
             .build()
     }
 
@@ -20,7 +21,9 @@ internal class BulkDeleteParamsTest {
         val params =
             BulkDeleteParams.builder()
                 .collection("collection")
-                .objectIds(listOf("obj_123", "obj_456", "obj_789"))
+                .body(
+                    JsonValue.from(mapOf("object_ids" to listOf("obj_123", "obj_456", "obj_789")))
+                )
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("collection")
@@ -33,11 +36,16 @@ internal class BulkDeleteParamsTest {
         val params =
             BulkDeleteParams.builder()
                 .collection("collection")
-                .objectIds(listOf("obj_123", "obj_456", "obj_789"))
+                .body(
+                    JsonValue.from(mapOf("object_ids" to listOf("obj_123", "obj_456", "obj_789")))
+                )
                 .build()
 
         val body = params._body()
 
-        assertThat(body.objectIds()).containsExactly("obj_123", "obj_456", "obj_789")
+        assertThat(body)
+            .isEqualTo(
+                JsonValue.from(mapOf("object_ids" to listOf("obj_123", "obj_456", "obj_789")))
+            )
     }
 }

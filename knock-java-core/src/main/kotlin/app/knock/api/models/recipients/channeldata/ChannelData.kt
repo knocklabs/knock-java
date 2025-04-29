@@ -32,6 +32,7 @@ import kotlin.jvm.optionals.getOrNull
 /** Channel data for a given channel type. */
 class ChannelData
 private constructor(
+    private val _typename: JsonField<String>,
     private val channelId: JsonField<String>,
     private val data: JsonField<Data>,
     private val provider: JsonField<Provider>,
@@ -40,10 +41,19 @@ private constructor(
 
     @JsonCreator
     private constructor(
+        @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
         @JsonProperty("channel_id") @ExcludeMissing channelId: JsonField<String> = JsonMissing.of(),
         @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
         @JsonProperty("provider") @ExcludeMissing provider: JsonField<Provider> = JsonMissing.of(),
-    ) : this(channelId, data, provider, mutableMapOf())
+    ) : this(_typename, channelId, data, provider, mutableMapOf())
+
+    /**
+     * The typename of the schema.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
+     *   missing or null (e.g. if the server responded with an unexpected value).
+     */
+    fun _typename(): String = _typename.getRequired("__typename")
 
     /**
      * The unique identifier for the channel.
@@ -68,6 +78,13 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun provider(): Optional<Provider> = provider.getOptional("provider")
+
+    /**
+     * Returns the raw JSON value of [_typename].
+     *
+     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
     /**
      * Returns the raw JSON value of [channelId].
@@ -109,6 +126,7 @@ private constructor(
          *
          * The following fields are required:
          * ```java
+         * ._typename()
          * .channelId()
          * .data()
          * ```
@@ -119,6 +137,7 @@ private constructor(
     /** A builder for [ChannelData]. */
     class Builder internal constructor() {
 
+        private var _typename: JsonField<String>? = null
         private var channelId: JsonField<String>? = null
         private var data: JsonField<Data>? = null
         private var provider: JsonField<Provider> = JsonMissing.of()
@@ -126,11 +145,24 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(channelData: ChannelData) = apply {
+            _typename = channelData._typename
             channelId = channelData.channelId
             data = channelData.data
             provider = channelData.provider
             additionalProperties = channelData.additionalProperties.toMutableMap()
         }
+
+        /** The typename of the schema. */
+        fun _typename(_typename: String) = _typename(JsonField.of(_typename))
+
+        /**
+         * Sets [Builder._typename] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder._typename] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         /** The unique identifier for the channel. */
         fun channelId(channelId: String) = channelId(JsonField.of(channelId))
@@ -209,6 +241,7 @@ private constructor(
          *
          * The following fields are required:
          * ```java
+         * ._typename()
          * .channelId()
          * .data()
          * ```
@@ -217,6 +250,7 @@ private constructor(
          */
         fun build(): ChannelData =
             ChannelData(
+                checkRequired("_typename", _typename),
                 checkRequired("channelId", channelId),
                 checkRequired("data", data),
                 provider,
@@ -231,6 +265,7 @@ private constructor(
             return@apply
         }
 
+        _typename()
         channelId()
         data().validate()
         provider().ifPresent { it.validate() }
@@ -252,7 +287,8 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (if (channelId.asKnown().isPresent) 1 else 0) +
+        (if (_typename.asKnown().isPresent) 1 else 0) +
+            (if (channelId.asKnown().isPresent) 1 else 0) +
             (data.asKnown().getOrNull()?.validity() ?: 0) +
             (provider.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -697,15 +733,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ChannelData && channelId == other.channelId && data == other.data && provider == other.provider && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ChannelData && _typename == other._typename && channelId == other.channelId && data == other.data && provider == other.provider && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(channelId, data, provider, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(_typename, channelId, data, provider, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ChannelData{channelId=$channelId, data=$data, provider=$provider, additionalProperties=$additionalProperties}"
+        "ChannelData{_typename=$_typename, channelId=$channelId, data=$data, provider=$provider, additionalProperties=$additionalProperties}"
 }
