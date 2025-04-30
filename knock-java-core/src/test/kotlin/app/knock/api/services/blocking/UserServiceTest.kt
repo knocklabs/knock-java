@@ -41,7 +41,7 @@ internal class UserServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val userService = client.users()
 
@@ -160,7 +160,7 @@ internal class UserServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val userService = client.users()
 
@@ -177,7 +177,7 @@ internal class UserServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val userService = client.users()
 
@@ -192,7 +192,7 @@ internal class UserServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val userService = client.users()
 
@@ -209,7 +209,7 @@ internal class UserServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val userService = client.users()
 
@@ -232,7 +232,7 @@ internal class UserServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val userService = client.users()
 
@@ -256,7 +256,7 @@ internal class UserServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val userService = client.users()
 
@@ -274,7 +274,7 @@ internal class UserServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val userService = client.users()
 
@@ -294,7 +294,7 @@ internal class UserServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val userService = client.users()
 
@@ -312,7 +312,7 @@ internal class UserServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val userService = client.users()
 
@@ -332,7 +332,7 @@ internal class UserServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val userService = client.users()
 
@@ -352,7 +352,7 @@ internal class UserServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val userService = client.users()
 
@@ -380,7 +380,7 @@ internal class UserServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val userService = client.users()
 
@@ -474,7 +474,7 @@ internal class UserServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val userService = client.users()
 

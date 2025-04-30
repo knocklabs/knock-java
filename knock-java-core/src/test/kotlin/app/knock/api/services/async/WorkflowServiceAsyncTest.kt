@@ -23,7 +23,7 @@ internal class WorkflowServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val workflowServiceAsync = client.workflows()
 
@@ -47,7 +47,7 @@ internal class WorkflowServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val workflowServiceAsync = client.workflows()
 

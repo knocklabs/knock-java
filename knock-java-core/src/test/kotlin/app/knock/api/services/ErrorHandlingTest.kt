@@ -54,7 +54,7 @@ internal class ErrorHandlingTest {
         client =
             KnockOkHttpClient.builder()
                 .baseUrl(wmRuntimeInfo.httpBaseUrl)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
     }
 

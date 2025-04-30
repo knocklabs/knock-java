@@ -20,7 +20,7 @@ internal class ActivityServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val activityServiceAsync = client.messages().activities()
 

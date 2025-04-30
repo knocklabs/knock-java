@@ -25,7 +25,7 @@ internal class ScheduleServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val scheduleService = client.schedules()
 
@@ -77,7 +77,7 @@ internal class ScheduleServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val scheduleService = client.schedules()
 
@@ -129,7 +129,7 @@ internal class ScheduleServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val scheduleService = client.schedules()
 
@@ -146,7 +146,7 @@ internal class ScheduleServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val scheduleService = client.schedules()
 

@@ -23,7 +23,7 @@ private constructor(
     @get:JvmName("responseValidation") val responseValidation: Boolean,
     @get:JvmName("timeout") val timeout: Timeout,
     @get:JvmName("maxRetries") val maxRetries: Int,
-    @get:JvmName("bearerToken") val bearerToken: String,
+    @get:JvmName("apiKey") val apiKey: String,
 ) {
 
     init {
@@ -44,7 +44,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .httpClient()
-         * .bearerToken()
+         * .apiKey()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -65,7 +65,7 @@ private constructor(
         private var responseValidation: Boolean = false
         private var timeout: Timeout = Timeout.default()
         private var maxRetries: Int = 2
-        private var bearerToken: String? = null
+        private var apiKey: String? = null
 
         @JvmSynthetic
         internal fun from(clientOptions: ClientOptions) = apply {
@@ -79,7 +79,7 @@ private constructor(
             responseValidation = clientOptions.responseValidation
             timeout = clientOptions.timeout
             maxRetries = clientOptions.maxRetries
-            bearerToken = clientOptions.bearerToken
+            apiKey = clientOptions.apiKey
         }
 
         fun httpClient(httpClient: HttpClient) = apply { this.httpClient = httpClient }
@@ -102,7 +102,7 @@ private constructor(
 
         fun maxRetries(maxRetries: Int) = apply { this.maxRetries = maxRetries }
 
-        fun bearerToken(bearerToken: String) = apply { this.bearerToken = bearerToken }
+        fun apiKey(apiKey: String) = apply { this.apiKey = apiKey }
 
         fun headers(headers: Headers) = apply {
             this.headers.clear()
@@ -188,7 +188,7 @@ private constructor(
 
         fun fromEnv() = apply {
             System.getenv("KNOCK_BASE_URL")?.let { baseUrl(it) }
-            System.getenv("KNOCK_API_KEY")?.let { bearerToken(it) }
+            System.getenv("KNOCK_API_KEY")?.let { apiKey(it) }
         }
 
         /**
@@ -199,14 +199,14 @@ private constructor(
          * The following fields are required:
          * ```java
          * .httpClient()
-         * .bearerToken()
+         * .apiKey()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ClientOptions {
             val httpClient = checkRequired("httpClient", httpClient)
-            val bearerToken = checkRequired("bearerToken", bearerToken)
+            val apiKey = checkRequired("apiKey", apiKey)
 
             val headers = Headers.builder()
             val queryParams = QueryParams.builder()
@@ -217,7 +217,7 @@ private constructor(
             headers.put("X-Stainless-Package-Version", getPackageVersion())
             headers.put("X-Stainless-Runtime", "JRE")
             headers.put("X-Stainless-Runtime-Version", getJavaVersion())
-            bearerToken.let {
+            apiKey.let {
                 if (!it.isEmpty()) {
                     headers.put("Authorization", "Bearer $it")
                 }
@@ -243,7 +243,7 @@ private constructor(
                 responseValidation,
                 timeout,
                 maxRetries,
-                bearerToken,
+                apiKey,
             )
         }
     }

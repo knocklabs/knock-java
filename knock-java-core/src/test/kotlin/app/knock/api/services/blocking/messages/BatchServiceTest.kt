@@ -28,7 +28,7 @@ internal class BatchServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val batchService = client.messages().batch()
 
@@ -51,7 +51,7 @@ internal class BatchServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val batchService = client.messages().batch()
 
@@ -69,7 +69,7 @@ internal class BatchServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val batchService = client.messages().batch()
 
@@ -96,7 +96,7 @@ internal class BatchServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val batchService = client.messages().batch()
 
@@ -119,7 +119,7 @@ internal class BatchServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val batchService = client.messages().batch()
 
@@ -142,7 +142,7 @@ internal class BatchServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val batchService = client.messages().batch()
 
@@ -165,7 +165,7 @@ internal class BatchServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val batchService = client.messages().batch()
 
@@ -188,7 +188,7 @@ internal class BatchServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val batchService = client.messages().batch()
 

@@ -21,7 +21,7 @@ internal class HightouchServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val hightouchService = client.integrations().hightouch()
 

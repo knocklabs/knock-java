@@ -21,7 +21,7 @@ internal class BulkServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val bulkServiceAsync = client.channels().bulk()
 
