@@ -1,15 +1,25 @@
 # Knock Java API Library
 
+<!-- x-release-please-start-version -->
+
 [![Maven Central](https://img.shields.io/maven-central/v/app.knock.api/knock-java)](https://central.sonatype.com/artifact/app.knock.api/knock-java/0.0.1-alpha.0)
 [![javadoc](https://javadoc.io/badge2/app.knock.api/knock-java/0.0.1-alpha.0/javadoc.svg)](https://javadoc.io/doc/app.knock.api/knock-java/0.0.1-alpha.0)
+
+<!-- x-release-please-end -->
 
 The Knock Java SDK provides convenient access to the [Knock REST API](https://docs.knock.app) from applications written in Java.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
+<!-- x-release-please-start-version -->
+
 The REST API documentation can be found on [docs.knock.app](https://docs.knock.app). Javadocs are available on [javadoc.io](https://javadoc.io/doc/app.knock.api/knock-java/0.0.1-alpha.0).
 
+<!-- x-release-please-end -->
+
 ## Installation
+
+<!-- x-release-please-start-version -->
 
 ### Gradle
 
@@ -26,6 +36,8 @@ implementation("app.knock.api:knock-java:0.0.1-alpha.0")
   <version>0.0.1-alpha.0</version>
 </dependency>
 ```
+
+<!-- x-release-please-end -->
 
 ## Requirements
 
@@ -649,4 +661,4 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/knock-java/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/knocklabs/knock-java/issues) with questions, bugs, or suggestions.

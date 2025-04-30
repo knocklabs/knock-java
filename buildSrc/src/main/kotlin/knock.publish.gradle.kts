@@ -27,9 +27,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/stainless-sdks/knock-java.git")
-                    developerConnection.set("scm:git:git://github.com/stainless-sdks/knock-java.git")
-                    url.set("https://github.com/stainless-sdks/knock-java")
+                    connection.set("scm:git:git://github.com/knocklabs/knock-java.git")
+                    developerConnection.set("scm:git:git://github.com/knocklabs/knock-java.git")
+                    url.set("https://github.com/knocklabs/knock-java")
                 }
 
                 versionMapping {

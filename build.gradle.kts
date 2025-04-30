@@ -9,7 +9,7 @@ repositories {
 
 allprojects {
     group = "app.knock.api"
-    version = "0.0.1-alpha.0"
+    version = "0.0.1-alpha.0" // x-release-please-version
 }
 
 subprojects {
