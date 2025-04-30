@@ -21,7 +21,7 @@ internal class FeedServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val feedServiceAsync = client.users().feeds()
 
@@ -45,7 +45,7 @@ internal class FeedServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val feedServiceAsync = client.users().feeds()
 

@@ -21,7 +21,7 @@ internal class CensusServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val censusServiceAsync = client.integrations().census()
 

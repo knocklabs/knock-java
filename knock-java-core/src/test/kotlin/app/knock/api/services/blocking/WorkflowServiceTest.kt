@@ -23,7 +23,7 @@ internal class WorkflowServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val workflowService = client.workflows()
 
@@ -44,7 +44,7 @@ internal class WorkflowServiceTest {
         val client =
             KnockOkHttpClient.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val workflowService = client.workflows()
 

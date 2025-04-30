@@ -27,7 +27,7 @@ internal class TenantServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val tenantServiceAsync = client.tenants()
 
@@ -45,7 +45,7 @@ internal class TenantServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val tenantServiceAsync = client.tenants()
 
@@ -62,7 +62,7 @@ internal class TenantServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val tenantServiceAsync = client.tenants()
 
@@ -80,7 +80,7 @@ internal class TenantServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val tenantServiceAsync = client.tenants()
 

@@ -27,7 +27,7 @@ internal class AudienceServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val audienceServiceAsync = client.audiences()
 
@@ -150,7 +150,7 @@ internal class AudienceServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val audienceServiceAsync = client.audiences()
 
@@ -169,7 +169,7 @@ internal class AudienceServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val audienceServiceAsync = client.audiences()
 

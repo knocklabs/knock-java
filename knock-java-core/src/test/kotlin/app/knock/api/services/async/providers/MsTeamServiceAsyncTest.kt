@@ -23,7 +23,7 @@ internal class MsTeamServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val msTeamServiceAsync = client.providers().msTeams()
 
@@ -47,7 +47,7 @@ internal class MsTeamServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val msTeamServiceAsync = client.providers().msTeams()
 
@@ -78,7 +78,7 @@ internal class MsTeamServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val msTeamServiceAsync = client.providers().msTeams()
 
@@ -102,7 +102,7 @@ internal class MsTeamServiceAsyncTest {
         val client =
             KnockOkHttpClientAsync.builder()
                 .baseUrl(TestServerExtension.BASE_URL)
-                .bearerToken("My Bearer Token")
+                .apiKey("My API Key")
                 .build()
         val msTeamServiceAsync = client.providers().msTeams()
 
