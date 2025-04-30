@@ -36,11 +36,7 @@ internal class BulkServiceAsyncTest {
             bulkServiceAsync.delete(
                 BulkDeleteParams.builder()
                     .collection("collection")
-                    .body(
-                        JsonValue.from(
-                            mapOf("object_ids" to listOf("obj_123", "obj_456", "obj_789"))
-                        )
-                    )
+                    .objectIds(listOf("obj_123", "obj_456", "obj_789"))
                     .build()
             )
 
