@@ -13,7 +13,6 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
-import app.knock.api.models.users.InlineIdentifyUserRequest
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
 import com.fasterxml.jackson.annotation.JsonCreator
@@ -448,28 +447,22 @@ private constructor(
     /** An audience member. */
     class Member
     private constructor(
-        private val user: JsonField<InlineIdentifyUserRequest>,
+        private val user: JsonField<User>,
         private val tenant: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
         @JsonCreator
         private constructor(
-            @JsonProperty("user")
-            @ExcludeMissing
-            user: JsonField<InlineIdentifyUserRequest> = JsonMissing.of(),
+            @JsonProperty("user") @ExcludeMissing user: JsonField<User> = JsonMissing.of(),
             @JsonProperty("tenant") @ExcludeMissing tenant: JsonField<String> = JsonMissing.of(),
         ) : this(user, tenant, mutableMapOf())
 
         /**
-         * A set of parameters to inline-identify a user with. Inline identifying the user will
-         * ensure that the user is available before the request is executed in Knock. It will
-         * perform an upsert for the user you're supplying, replacing any properties specified.
-         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
-        fun user(): InlineIdentifyUserRequest = user.getRequired("user")
+        fun user(): User = user.getRequired("user")
 
         /**
          * The unique identifier for the tenant.
@@ -484,9 +477,7 @@ private constructor(
          *
          * Unlike [user], this method doesn't throw if the JSON field has an unexpected type.
          */
-        @JsonProperty("user")
-        @ExcludeMissing
-        fun _user(): JsonField<InlineIdentifyUserRequest> = user
+        @JsonProperty("user") @ExcludeMissing fun _user(): JsonField<User> = user
 
         /**
          * Returns the raw JSON value of [tenant].
@@ -523,7 +514,7 @@ private constructor(
         /** A builder for [Member]. */
         class Builder internal constructor() {
 
-            private var user: JsonField<InlineIdentifyUserRequest>? = null
+            private var user: JsonField<User>? = null
             private var tenant: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
@@ -534,21 +525,16 @@ private constructor(
                 additionalProperties = member.additionalProperties.toMutableMap()
             }
 
-            /**
-             * A set of parameters to inline-identify a user with. Inline identifying the user will
-             * ensure that the user is available before the request is executed in Knock. It will
-             * perform an upsert for the user you're supplying, replacing any properties specified.
-             */
-            fun user(user: InlineIdentifyUserRequest) = user(JsonField.of(user))
+            fun user(user: User) = user(JsonField.of(user))
 
             /**
              * Sets [Builder.user] to an arbitrary JSON value.
              *
-             * You should usually call [Builder.user] with a well-typed [InlineIdentifyUserRequest]
-             * value instead. This method is primarily for setting the field to an undocumented or
-             * not yet supported value.
+             * You should usually call [Builder.user] with a well-typed [User] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
              */
-            fun user(user: JsonField<InlineIdentifyUserRequest>) = apply { this.user = user }
+            fun user(user: JsonField<User>) = apply { this.user = user }
 
             /** The unique identifier for the tenant. */
             fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
@@ -630,6 +616,148 @@ private constructor(
         internal fun validity(): Int =
             (user.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (tenant.asKnown().isPresent) 1 else 0)
+
+        class User
+        private constructor(
+            private val id: JsonField<String>,
+            private val additionalProperties: MutableMap<String, JsonValue>,
+        ) {
+
+            @JsonCreator
+            private constructor(
+                @JsonProperty("id") @ExcludeMissing id: JsonField<String> = JsonMissing.of()
+            ) : this(id, mutableMapOf())
+
+            /**
+             * The ID for the user that you set when identifying them in Knock.
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun id(): Optional<String> = id.getOptional("id")
+
+            /**
+             * Returns the raw JSON value of [id].
+             *
+             * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
+             */
+            @JsonProperty("id") @ExcludeMissing fun _id(): JsonField<String> = id
+
+            @JsonAnySetter
+            private fun putAdditionalProperty(key: String, value: JsonValue) {
+                additionalProperties.put(key, value)
+            }
+
+            @JsonAnyGetter
+            @ExcludeMissing
+            fun _additionalProperties(): Map<String, JsonValue> =
+                Collections.unmodifiableMap(additionalProperties)
+
+            fun toBuilder() = Builder().from(this)
+
+            companion object {
+
+                /** Returns a mutable builder for constructing an instance of [User]. */
+                @JvmStatic fun builder() = Builder()
+            }
+
+            /** A builder for [User]. */
+            class Builder internal constructor() {
+
+                private var id: JsonField<String> = JsonMissing.of()
+                private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+                @JvmSynthetic
+                internal fun from(user: User) = apply {
+                    id = user.id
+                    additionalProperties = user.additionalProperties.toMutableMap()
+                }
+
+                /** The ID for the user that you set when identifying them in Knock. */
+                fun id(id: String) = id(JsonField.of(id))
+
+                /**
+                 * Sets [Builder.id] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.id] with a well-typed [String] value instead.
+                 * This method is primarily for setting the field to an undocumented or not yet
+                 * supported value.
+                 */
+                fun id(id: JsonField<String>) = apply { this.id = id }
+
+                fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                    this.additionalProperties.clear()
+                    putAllAdditionalProperties(additionalProperties)
+                }
+
+                fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                    additionalProperties.put(key, value)
+                }
+
+                fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) =
+                    apply {
+                        this.additionalProperties.putAll(additionalProperties)
+                    }
+
+                fun removeAdditionalProperty(key: String) = apply {
+                    additionalProperties.remove(key)
+                }
+
+                fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                    keys.forEach(::removeAdditionalProperty)
+                }
+
+                /**
+                 * Returns an immutable instance of [User].
+                 *
+                 * Further updates to this [Builder] will not mutate the returned instance.
+                 */
+                fun build(): User = User(id, additionalProperties.toMutableMap())
+            }
+
+            private var validated: Boolean = false
+
+            fun validate(): User = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                id()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: KnockInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = (if (id.asKnown().isPresent) 1 else 0)
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is User && id == other.id && additionalProperties == other.additionalProperties /* spotless:on */
+            }
+
+            /* spotless:off */
+            private val hashCode: Int by lazy { Objects.hash(id, additionalProperties) }
+            /* spotless:on */
+
+            override fun hashCode(): Int = hashCode
+
+            override fun toString() = "User{id=$id, additionalProperties=$additionalProperties}"
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
