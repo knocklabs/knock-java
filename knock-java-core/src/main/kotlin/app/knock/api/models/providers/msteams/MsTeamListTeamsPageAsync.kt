@@ -41,9 +41,14 @@ private constructor(
             return Optional.empty()
         }
 
-        return Optional.of(
-            params.toBuilder().apply { skipToken().ifPresent { queryOptionsSkiptoken(it) } }.build()
-        )
+        return skipToken().map { skipToken ->
+            params
+                .toBuilder()
+                .queryOptions(
+                    params.queryOptions().map { it.toBuilder().skiptoken(skipToken).build() }
+                )
+                .build()
+        }
     }
 
     fun getNextPage(): CompletableFuture<Optional<MsTeamListTeamsPageAsync>> =

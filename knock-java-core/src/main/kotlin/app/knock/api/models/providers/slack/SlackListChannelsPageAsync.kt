@@ -41,9 +41,14 @@ private constructor(
             return Optional.empty()
         }
 
-        return Optional.of(
-            params.toBuilder().apply { nextCursor().ifPresent { queryOptionsCursor(it) } }.build()
-        )
+        return nextCursor().map { nextCursor ->
+            params
+                .toBuilder()
+                .queryOptions(
+                    params.queryOptions().map { it.toBuilder().cursor(nextCursor).build() }
+                )
+                .build()
+        }
     }
 
     fun getNextPage(): CompletableFuture<Optional<SlackListChannelsPageAsync>> =

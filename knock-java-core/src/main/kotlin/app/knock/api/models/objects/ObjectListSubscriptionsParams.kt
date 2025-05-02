@@ -378,11 +378,8 @@ private constructor(
                                 objectReference.collection().ifPresent {
                                     put("recipients[][collection]", it)
                                 }
-                                objectReference._additionalProperties().keys().forEach { key ->
-                                    objectReference._additionalProperties().values(key).forEach {
-                                        value ->
-                                        put("recipients[][$key]", value)
-                                    }
+                                objectReference._additionalProperties().forEach { (key, value) ->
+                                    put("recipients[][$key]", value.toString())
                                 }
                             }
                         }
