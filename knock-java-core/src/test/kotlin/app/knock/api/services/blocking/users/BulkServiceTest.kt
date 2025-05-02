@@ -73,6 +73,8 @@ internal class BulkServiceTest {
                                     .build()
                             )
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .email("jane@ingen.net")
+                            .name("Jane Doe")
                             .preferences(
                                 InlinePreferenceSetRequest.builder()
                                     .putAdditionalProperty(
@@ -146,6 +148,7 @@ internal class BulkServiceTest {
                                     )
                                     .build()
                             )
+                            .timezone("America/New_York")
                             .build()
                     )
                     .build()
