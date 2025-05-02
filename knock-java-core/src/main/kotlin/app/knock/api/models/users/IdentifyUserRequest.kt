@@ -119,7 +119,7 @@ private constructor(
     fun name(): Optional<String> = name.getOptional("name")
 
     /**
-     * The [E.164](https://www.twilio.com/docs/glossary/what-e164) phone number of the user
+     * The [E.164](https://www.twilio.com/docs/glossary/what-e164) phone number of the user
      * (required for SMS channels).
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -136,10 +136,9 @@ private constructor(
     fun preferences(): Optional<InlinePreferenceSetRequest> = preferences.getOptional("preferences")
 
     /**
-     * The timezone of the user. Must be a valid
-     * [tz database time zone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
-     * Used for
-     * [recurring schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
+     * The timezone of the user. Must be a valid [tz database time zone
+     * string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). Used for [recurring
+     * schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -354,7 +353,7 @@ private constructor(
         fun name(name: JsonField<String>) = apply { this.name = name }
 
         /**
-         * The [E.164](https://www.twilio.com/docs/glossary/what-e164) phone number of the user
+         * The [E.164](https://www.twilio.com/docs/glossary/what-e164) phone number of the user
          * (required for SMS channels).
          */
         fun phoneNumber(phoneNumber: String?) = phoneNumber(JsonField.ofNullable(phoneNumber))
@@ -391,10 +390,10 @@ private constructor(
         }
 
         /**
-         * The timezone of the user. Must be a valid
-         * [tz database time zone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
-         * Used for
-         * [recurring schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
+         * The timezone of the user. Must be a valid [tz database time zone
+         * string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). Used
+         * for [recurring
+         * schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
          */
         fun timezone(timezone: String?) = timezone(JsonField.ofNullable(timezone))
 

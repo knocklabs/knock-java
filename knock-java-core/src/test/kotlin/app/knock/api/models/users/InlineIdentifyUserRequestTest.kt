@@ -29,6 +29,8 @@ internal class InlineIdentifyUserRequestTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .email("jane@ingen.net")
+                .name("Jane Doe")
                 .preferences(
                     InlinePreferenceSetRequest.builder()
                         .putAdditionalProperty(
@@ -98,6 +100,7 @@ internal class InlineIdentifyUserRequestTest {
                         )
                         .build()
                 )
+                .timezone("America/New_York")
                 .build()
 
         assertThat(inlineIdentifyUserRequest.id()).isEqualTo("user_1")
@@ -112,6 +115,8 @@ internal class InlineIdentifyUserRequestTest {
             )
         assertThat(inlineIdentifyUserRequest.createdAt())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+        assertThat(inlineIdentifyUserRequest.email()).contains("jane@ingen.net")
+        assertThat(inlineIdentifyUserRequest.name()).contains("Jane Doe")
         assertThat(inlineIdentifyUserRequest.preferences())
             .contains(
                 InlinePreferenceSetRequest.builder()
@@ -180,6 +185,7 @@ internal class InlineIdentifyUserRequestTest {
                     )
                     .build()
             )
+        assertThat(inlineIdentifyUserRequest.timezone()).contains("America/New_York")
     }
 
     @Test
@@ -199,6 +205,8 @@ internal class InlineIdentifyUserRequestTest {
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .email("jane@ingen.net")
+                .name("Jane Doe")
                 .preferences(
                     InlinePreferenceSetRequest.builder()
                         .putAdditionalProperty(
@@ -268,6 +276,7 @@ internal class InlineIdentifyUserRequestTest {
                         )
                         .build()
                 )
+                .timezone("America/New_York")
                 .build()
 
         val roundtrippedInlineIdentifyUserRequest =

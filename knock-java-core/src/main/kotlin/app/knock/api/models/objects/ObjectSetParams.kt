@@ -64,10 +64,9 @@ private constructor(
     fun preferences(): Optional<InlinePreferenceSetRequest> = body.preferences()
 
     /**
-     * The timezone of the object. Must be a valid
-     * [tz database time zone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
-     * Used for
-     * [recurring schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
+     * The timezone of the object. Must be a valid [tz database time zone
+     * string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). Used for [recurring
+     * schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -205,10 +204,10 @@ private constructor(
         }
 
         /**
-         * The timezone of the object. Must be a valid
-         * [tz database time zone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
-         * Used for
-         * [recurring schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
+         * The timezone of the object. Must be a valid [tz database time zone
+         * string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). Used
+         * for [recurring
+         * schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
          */
         fun timezone(timezone: String?) = apply { body.timezone(timezone) }
 
@@ -425,10 +424,10 @@ private constructor(
             preferences.getOptional("preferences")
 
         /**
-         * The timezone of the object. Must be a valid
-         * [tz database time zone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
-         * Used for
-         * [recurring schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
+         * The timezone of the object. Must be a valid [tz database time zone
+         * string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). Used
+         * for [recurring
+         * schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -551,10 +550,10 @@ private constructor(
             }
 
             /**
-             * The timezone of the object. Must be a valid
-             * [tz database time zone string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones).
-             * Used for
-             * [recurring schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
+             * The timezone of the object. Must be a valid [tz database time zone
+             * string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). Used
+             * for [recurring
+             * schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
              */
             fun timezone(timezone: String?) = timezone(JsonField.ofNullable(timezone))
 

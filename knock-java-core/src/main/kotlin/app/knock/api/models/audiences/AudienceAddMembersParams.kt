@@ -459,6 +459,8 @@ private constructor(
         ) : this(user, tenant, mutableMapOf())
 
         /**
+         * An object containing the user's ID.
+         *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
@@ -525,6 +527,7 @@ private constructor(
                 additionalProperties = member.additionalProperties.toMutableMap()
             }
 
+            /** An object containing the user's ID. */
             fun user(user: User) = user(JsonField.of(user))
 
             /**
@@ -617,6 +620,7 @@ private constructor(
             (user.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (tenant.asKnown().isPresent) 1 else 0)
 
+        /** An object containing the user's ID. */
         class User
         private constructor(
             private val id: JsonField<String>,

@@ -55,6 +55,8 @@ internal class BulkServiceAsyncTest {
                                             .build()
                                     )
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .email("email")
+                                    .name("name")
                                     .preferences(
                                         InlinePreferenceSetRequest.builder()
                                             .putAdditionalProperty(
@@ -130,6 +132,7 @@ internal class BulkServiceAsyncTest {
                                             )
                                             .build()
                                     )
+                                    .timezone("timezone")
                                     .build()
                             )
                             .data(
@@ -186,6 +189,8 @@ internal class BulkServiceAsyncTest {
                                             .build()
                                     )
                                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                                    .email("email")
+                                    .name("name")
                                     .preferences(
                                         InlinePreferenceSetRequest.builder()
                                             .putAdditionalProperty(
@@ -261,6 +266,7 @@ internal class BulkServiceAsyncTest {
                                             )
                                             .build()
                                     )
+                                    .timezone("timezone")
                                     .build()
                             )
                             .data(

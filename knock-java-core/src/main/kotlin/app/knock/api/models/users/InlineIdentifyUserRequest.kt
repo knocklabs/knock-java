@@ -30,7 +30,10 @@ private constructor(
     private val id: JsonField<String>,
     private val channelData: JsonField<InlineChannelDataRequest>,
     private val createdAt: JsonField<OffsetDateTime>,
+    private val email: JsonField<String>,
+    private val name: JsonField<String>,
     private val preferences: JsonField<InlinePreferenceSetRequest>,
+    private val timezone: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -43,10 +46,13 @@ private constructor(
         @JsonProperty("created_at")
         @ExcludeMissing
         createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+        @JsonProperty("email") @ExcludeMissing email: JsonField<String> = JsonMissing.of(),
+        @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
         @JsonProperty("preferences")
         @ExcludeMissing
         preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of(),
-    ) : this(id, channelData, createdAt, preferences, mutableMapOf())
+        @JsonProperty("timezone") @ExcludeMissing timezone: JsonField<String> = JsonMissing.of(),
+    ) : this(id, channelData, createdAt, email, name, preferences, timezone, mutableMapOf())
 
     /**
      * The ID for the user that you set when identifying them in Knock.
@@ -73,12 +79,38 @@ private constructor(
     fun createdAt(): Optional<OffsetDateTime> = createdAt.getOptional("created_at")
 
     /**
+     * The primary email address for the user.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun email(): Optional<String> = email.getOptional("email")
+
+    /**
+     * Display name of the user.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun name(): Optional<String> = name.getOptional("name")
+
+    /**
      * Inline set preferences for a recipient, where the key is the preference set id.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun preferences(): Optional<InlinePreferenceSetRequest> = preferences.getOptional("preferences")
+
+    /**
+     * The timezone of the user. Must be a valid [tz database time zone
+     * string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). Used for [recurring
+     * schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun timezone(): Optional<String> = timezone.getOptional("timezone")
 
     /**
      * Returns the raw JSON value of [id].
@@ -106,6 +138,20 @@ private constructor(
     fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
     /**
+     * Returns the raw JSON value of [email].
+     *
+     * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
+
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
+
+    /**
      * Returns the raw JSON value of [preferences].
      *
      * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
@@ -113,6 +159,13 @@ private constructor(
     @JsonProperty("preferences")
     @ExcludeMissing
     fun _preferences(): JsonField<InlinePreferenceSetRequest> = preferences
+
+    /**
+     * Returns the raw JSON value of [timezone].
+     *
+     * Unlike [timezone], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("timezone") @ExcludeMissing fun _timezone(): JsonField<String> = timezone
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -145,7 +198,10 @@ private constructor(
         private var id: JsonField<String>? = null
         private var channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of()
         private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var email: JsonField<String> = JsonMissing.of()
+        private var name: JsonField<String> = JsonMissing.of()
         private var preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of()
+        private var timezone: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -153,7 +209,10 @@ private constructor(
             id = inlineIdentifyUserRequest.id
             channelData = inlineIdentifyUserRequest.channelData
             createdAt = inlineIdentifyUserRequest.createdAt
+            email = inlineIdentifyUserRequest.email
+            name = inlineIdentifyUserRequest.name
             preferences = inlineIdentifyUserRequest.preferences
+            timezone = inlineIdentifyUserRequest.timezone
             additionalProperties = inlineIdentifyUserRequest.additionalProperties.toMutableMap()
         }
 
@@ -202,6 +261,34 @@ private constructor(
          */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
+        /** The primary email address for the user. */
+        fun email(email: String?) = email(JsonField.ofNullable(email))
+
+        /** Alias for calling [Builder.email] with `email.orElse(null)`. */
+        fun email(email: Optional<String>) = email(email.getOrNull())
+
+        /**
+         * Sets [Builder.email] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.email] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun email(email: JsonField<String>) = apply { this.email = email }
+
+        /** Display name of the user. */
+        fun name(name: String?) = name(JsonField.ofNullable(name))
+
+        /** Alias for calling [Builder.name] with `name.orElse(null)`. */
+        fun name(name: Optional<String>) = name(name.getOrNull())
+
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun name(name: JsonField<String>) = apply { this.name = name }
+
         /** Inline set preferences for a recipient, where the key is the preference set id. */
         fun preferences(preferences: InlinePreferenceSetRequest?) =
             preferences(JsonField.ofNullable(preferences))
@@ -220,6 +307,25 @@ private constructor(
         fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {
             this.preferences = preferences
         }
+
+        /**
+         * The timezone of the user. Must be a valid [tz database time zone
+         * string](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones). Used
+         * for [recurring
+         * schedules](/concepts/schedules#scheduling-workflows-with-recurring-schedules-for-recipients).
+         */
+        fun timezone(timezone: String?) = timezone(JsonField.ofNullable(timezone))
+
+        /** Alias for calling [Builder.timezone] with `timezone.orElse(null)`. */
+        fun timezone(timezone: Optional<String>) = timezone(timezone.getOrNull())
+
+        /**
+         * Sets [Builder.timezone] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.timezone] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun timezone(timezone: JsonField<String>) = apply { this.timezone = timezone }
 
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
@@ -257,7 +363,10 @@ private constructor(
                 checkRequired("id", id),
                 channelData,
                 createdAt,
+                email,
+                name,
                 preferences,
+                timezone,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -272,7 +381,10 @@ private constructor(
         id()
         channelData().ifPresent { it.validate() }
         createdAt()
+        email()
+        name()
         preferences().ifPresent { it.validate() }
+        timezone()
         validated = true
     }
 
@@ -294,22 +406,25 @@ private constructor(
         (if (id.asKnown().isPresent) 1 else 0) +
             (channelData.asKnown().getOrNull()?.validity() ?: 0) +
             (if (createdAt.asKnown().isPresent) 1 else 0) +
-            (preferences.asKnown().getOrNull()?.validity() ?: 0)
+            (if (email.asKnown().isPresent) 1 else 0) +
+            (if (name.asKnown().isPresent) 1 else 0) +
+            (preferences.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (timezone.asKnown().isPresent) 1 else 0)
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is InlineIdentifyUserRequest && id == other.id && channelData == other.channelData && createdAt == other.createdAt && preferences == other.preferences && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is InlineIdentifyUserRequest && id == other.id && channelData == other.channelData && createdAt == other.createdAt && email == other.email && name == other.name && preferences == other.preferences && timezone == other.timezone && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, channelData, createdAt, preferences, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, channelData, createdAt, email, name, preferences, timezone, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "InlineIdentifyUserRequest{id=$id, channelData=$channelData, createdAt=$createdAt, preferences=$preferences, additionalProperties=$additionalProperties}"
+        "InlineIdentifyUserRequest{id=$id, channelData=$channelData, createdAt=$createdAt, email=$email, name=$name, preferences=$preferences, timezone=$timezone, additionalProperties=$additionalProperties}"
 }
