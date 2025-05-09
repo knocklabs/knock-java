@@ -4,7 +4,6 @@ package app.knock.api.services.blocking
 
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClient
-import app.knock.api.models.bulkoperations.BulkOperationGetParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -24,10 +23,7 @@ internal class BulkOperationServiceTest {
                 .build()
         val bulkOperationService = client.bulkOperations()
 
-        val bulkOperation =
-            bulkOperationService.get(
-                BulkOperationGetParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
-            )
+        val bulkOperation = bulkOperationService.get("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 
         bulkOperation.validate()
     }

@@ -4,7 +4,6 @@ package app.knock.api.services.async
 
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClientAsync
-import app.knock.api.models.bulkoperations.BulkOperationGetParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -25,9 +24,7 @@ internal class BulkOperationServiceAsyncTest {
         val bulkOperationServiceAsync = client.bulkOperations()
 
         val bulkOperationFuture =
-            bulkOperationServiceAsync.get(
-                BulkOperationGetParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
-            )
+            bulkOperationServiceAsync.get("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 
         val bulkOperation = bulkOperationFuture.get()
         bulkOperation.validate()

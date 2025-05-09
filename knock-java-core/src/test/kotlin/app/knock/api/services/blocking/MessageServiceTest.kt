@@ -5,18 +5,7 @@ package app.knock.api.services.blocking
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClient
 import app.knock.api.core.JsonValue
-import app.knock.api.models.messages.MessageArchiveParams
-import app.knock.api.models.messages.MessageGetContentParams
-import app.knock.api.models.messages.MessageGetParams
-import app.knock.api.models.messages.MessageListActivitiesParams
-import app.knock.api.models.messages.MessageListDeliveryLogsParams
-import app.knock.api.models.messages.MessageListEventsParams
 import app.knock.api.models.messages.MessageMarkAsInteractedParams
-import app.knock.api.models.messages.MessageMarkAsReadParams
-import app.knock.api.models.messages.MessageMarkAsSeenParams
-import app.knock.api.models.messages.MessageMarkAsUnreadParams
-import app.knock.api.models.messages.MessageMarkAsUnseenParams
-import app.knock.api.models.messages.MessageUnarchiveParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -53,10 +42,7 @@ internal class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val message =
-            messageService.archive(
-                MessageArchiveParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-            )
+        val message = messageService.archive("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
 
         message.validate()
     }
@@ -73,10 +59,7 @@ internal class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val message =
-            messageService.get(
-                MessageGetParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-            )
+        val message = messageService.get("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
 
         message.validate()
     }
@@ -93,10 +76,7 @@ internal class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val response =
-            messageService.getContent(
-                MessageGetContentParams.builder().messageId("message_id").build()
-            )
+        val response = messageService.getContent("message_id")
 
         response.validate()
     }
@@ -113,10 +93,7 @@ internal class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val page =
-            messageService.listActivities(
-                MessageListActivitiesParams.builder().messageId("message_id").build()
-            )
+        val page = messageService.listActivities("message_id")
 
         page.response().validate()
     }
@@ -133,10 +110,7 @@ internal class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val page =
-            messageService.listDeliveryLogs(
-                MessageListDeliveryLogsParams.builder().messageId("message_id").build()
-            )
+        val page = messageService.listDeliveryLogs("message_id")
 
         page.response().validate()
     }
@@ -153,10 +127,7 @@ internal class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val page =
-            messageService.listEvents(
-                MessageListEventsParams.builder().messageId("message_id").build()
-            )
+        val page = messageService.listEvents("message_id")
 
         page.response().validate()
     }
@@ -200,10 +171,7 @@ internal class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val message =
-            messageService.markAsRead(
-                MessageMarkAsReadParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-            )
+        val message = messageService.markAsRead("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
 
         message.validate()
     }
@@ -220,10 +188,7 @@ internal class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val message =
-            messageService.markAsSeen(
-                MessageMarkAsSeenParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-            )
+        val message = messageService.markAsSeen("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
 
         message.validate()
     }
@@ -240,10 +205,7 @@ internal class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val message =
-            messageService.markAsUnread(
-                MessageMarkAsUnreadParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-            )
+        val message = messageService.markAsUnread("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
 
         message.validate()
     }
@@ -260,10 +222,7 @@ internal class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val message =
-            messageService.markAsUnseen(
-                MessageMarkAsUnseenParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-            )
+        val message = messageService.markAsUnseen("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
 
         message.validate()
     }
@@ -280,10 +239,7 @@ internal class MessageServiceTest {
                 .build()
         val messageService = client.messages()
 
-        val message =
-            messageService.unarchive(
-                MessageUnarchiveParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-            )
+        val message = messageService.unarchive("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
 
         message.validate()
     }

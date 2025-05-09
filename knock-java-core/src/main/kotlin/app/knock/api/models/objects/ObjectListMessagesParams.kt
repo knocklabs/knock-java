@@ -5,7 +5,6 @@ package app.knock.api.models.objects
 import app.knock.api.core.Enum
 import app.knock.api.core.JsonField
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
@@ -21,8 +20,8 @@ import kotlin.jvm.optionals.getOrNull
  */
 class ObjectListMessagesParams
 private constructor(
-    private val collection: String,
-    private val id: String,
+    private val collection: String?,
+    private val id: String?,
     private val after: String?,
     private val before: String?,
     private val channelId: String?,
@@ -41,9 +40,9 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun collection(): Optional<String> = Optional.ofNullable(collection)
 
-    fun id(): String = id
+    fun id(): Optional<String> = Optional.ofNullable(id)
 
     /** The cursor to fetch entries after. */
     fun after(): Optional<String> = Optional.ofNullable(after)
@@ -104,15 +103,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [ObjectListMessagesParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .collection()
-         * .id()
-         * ```
-         */
+        @JvmStatic fun none(): ObjectListMessagesParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [ObjectListMessagesParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -160,9 +153,15 @@ private constructor(
             additionalQueryParams = objectListMessagesParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun collection(collection: String?) = apply { this.collection = collection }
 
-        fun id(id: String) = apply { this.id = id }
+        /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+        fun collection(collection: Optional<String>) = collection(collection.getOrNull())
+
+        fun id(id: String?) = apply { this.id = id }
+
+        /** Alias for calling [Builder.id] with `id.orElse(null)`. */
+        fun id(id: Optional<String>) = id(id.getOrNull())
 
         /** The cursor to fetch entries after. */
         fun after(after: String?) = apply { this.after = after }
@@ -421,19 +420,11 @@ private constructor(
          * Returns an immutable instance of [ObjectListMessagesParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .collection()
-         * .id()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ObjectListMessagesParams =
             ObjectListMessagesParams(
-                checkRequired("collection", collection),
-                checkRequired("id", id),
+                collection,
+                id,
                 after,
                 before,
                 channelId,
@@ -455,8 +446,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
-            1 -> id
+            0 -> collection ?: ""
+            1 -> id ?: ""
             else -> ""
         }
 

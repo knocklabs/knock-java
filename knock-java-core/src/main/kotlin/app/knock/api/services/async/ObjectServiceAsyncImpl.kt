@@ -5,6 +5,7 @@ package app.knock.api.services.async
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.stringHandler
@@ -46,6 +47,7 @@ import app.knock.api.models.recipients.subscriptions.Subscription
 import app.knock.api.services.async.objects.BulkServiceAsync
 import app.knock.api.services.async.objects.BulkServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class ObjectServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ObjectServiceAsync {
@@ -184,6 +186,9 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectListParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<ObjectListPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -219,6 +224,10 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectDeleteParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<String>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -241,6 +250,10 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectAddSubscriptionsParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<List<Subscription>>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -277,6 +290,10 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectDeleteSubscriptionsParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<List<Subscription>>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -313,6 +330,10 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectGetParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Object>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -342,6 +363,11 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectGetChannelDataParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<ChannelData>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -378,6 +404,11 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectGetPreferencesParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<PreferenceSet>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -415,6 +446,10 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectListMessagesParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<ObjectListMessagesPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -458,6 +493,10 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectListPreferencesParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<List<PreferenceSet>>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -494,6 +533,10 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectListSchedulesParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<ObjectListSchedulesPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -537,6 +580,10 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectListSubscriptionsParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<ObjectListSubscriptionsPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -579,6 +626,10 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectSetParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Object>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -609,6 +660,11 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectSetChannelDataParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<ChannelData>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -646,6 +702,11 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectSetPreferencesParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<PreferenceSet>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -683,6 +744,11 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: ObjectUnsetChannelDataParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<String>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)

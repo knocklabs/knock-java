@@ -30,13 +30,13 @@ import kotlin.jvm.optionals.getOrNull
  */
 class WorkflowCancelParams
 private constructor(
-    private val key: String,
+    private val key: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun key(): String = key
+    fun key(): Optional<String> = Optional.ofNullable(key)
 
     /**
      * An optional key that is used to reference a specific workflow trigger request when issuing a
@@ -87,7 +87,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .key()
          * .cancellationKey()
          * ```
          */
@@ -110,7 +109,10 @@ private constructor(
             additionalQueryParams = workflowCancelParams.additionalQueryParams.toBuilder()
         }
 
-        fun key(key: String) = apply { this.key = key }
+        fun key(key: String?) = apply { this.key = key }
+
+        /** Alias for calling [Builder.key] with `key.orElse(null)`. */
+        fun key(key: Optional<String>) = key(key.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -308,7 +310,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .key()
          * .cancellationKey()
          * ```
          *
@@ -316,7 +317,7 @@ private constructor(
          */
         fun build(): WorkflowCancelParams =
             WorkflowCancelParams(
-                checkRequired("key", key),
+                key,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -327,7 +328,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> key
+            0 -> key ?: ""
             else -> ""
         }
 

@@ -16,13 +16,33 @@ interface ActivityService {
     fun withRawResponse(): WithRawResponse
 
     /** Returns a paginated list of activities for the specified message. */
-    fun list(params: ActivityListParams): ActivityListPage = list(params, RequestOptions.none())
+    fun list(messageId: String): ActivityListPage = list(messageId, ActivityListParams.none())
+
+    /** @see [list] */
+    fun list(
+        messageId: String,
+        params: ActivityListParams = ActivityListParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ActivityListPage = list(params.toBuilder().messageId(messageId).build(), requestOptions)
+
+    /** @see [list] */
+    fun list(
+        messageId: String,
+        params: ActivityListParams = ActivityListParams.none(),
+    ): ActivityListPage = list(messageId, params, RequestOptions.none())
 
     /** @see [list] */
     fun list(
         params: ActivityListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ActivityListPage
+
+    /** @see [list] */
+    fun list(params: ActivityListParams): ActivityListPage = list(params, RequestOptions.none())
+
+    /** @see [list] */
+    fun list(messageId: String, requestOptions: RequestOptions): ActivityListPage =
+        list(messageId, ActivityListParams.none(), requestOptions)
 
     /** A view of [ActivityService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -32,8 +52,24 @@ interface ActivityService {
          * otherwise the same as [ActivityService.list].
          */
         @MustBeClosed
-        fun list(params: ActivityListParams): HttpResponseFor<ActivityListPage> =
-            list(params, RequestOptions.none())
+        fun list(messageId: String): HttpResponseFor<ActivityListPage> =
+            list(messageId, ActivityListParams.none())
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            messageId: String,
+            params: ActivityListParams = ActivityListParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ActivityListPage> =
+            list(params.toBuilder().messageId(messageId).build(), requestOptions)
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            messageId: String,
+            params: ActivityListParams = ActivityListParams.none(),
+        ): HttpResponseFor<ActivityListPage> = list(messageId, params, RequestOptions.none())
 
         /** @see [list] */
         @MustBeClosed
@@ -41,5 +77,18 @@ interface ActivityService {
             params: ActivityListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ActivityListPage>
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(params: ActivityListParams): HttpResponseFor<ActivityListPage> =
+            list(params, RequestOptions.none())
+
+        /** @see [list] */
+        @MustBeClosed
+        fun list(
+            messageId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ActivityListPage> =
+            list(messageId, ActivityListParams.none(), requestOptions)
     }
 }

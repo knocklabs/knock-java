@@ -4,12 +4,12 @@ package app.knock.api.models.messages
 
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Archives a message for the user. Archived messages are hidden from the default message list in
@@ -17,13 +17,13 @@ import java.util.Optional
  */
 class MessageArchiveParams
 private constructor(
-    private val messageId: String,
+    private val messageId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun messageId(): String = messageId
+    fun messageId(): Optional<String> = Optional.ofNullable(messageId)
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -35,14 +35,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [MessageArchiveParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .messageId()
-         * ```
-         */
+        @JvmStatic fun none(): MessageArchiveParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [MessageArchiveParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -62,7 +57,10 @@ private constructor(
             additionalBodyProperties = messageArchiveParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun messageId(messageId: String) = apply { this.messageId = messageId }
+        fun messageId(messageId: String?) = apply { this.messageId = messageId }
+
+        /** Alias for calling [Builder.messageId] with `messageId.orElse(null)`. */
+        fun messageId(messageId: Optional<String>) = messageId(messageId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -188,17 +186,10 @@ private constructor(
          * Returns an immutable instance of [MessageArchiveParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .messageId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): MessageArchiveParams =
             MessageArchiveParams(
-                checkRequired("messageId", messageId),
+                messageId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -210,7 +201,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> messageId
+            0 -> messageId ?: ""
             else -> ""
         }
 

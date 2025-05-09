@@ -19,18 +19,19 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** Bulk deletes objects from the specified collection. */
 class BulkDeleteParams
 private constructor(
-    private val collection: String,
+    private val collection: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun collection(): Optional<String> = Optional.ofNullable(collection)
 
     /**
      * List of object IDs to delete.
@@ -62,7 +63,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .collection()
          * .objectIds()
          * ```
          */
@@ -85,7 +85,10 @@ private constructor(
             additionalQueryParams = bulkDeleteParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun collection(collection: String?) = apply { this.collection = collection }
+
+        /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+        fun collection(collection: Optional<String>) = collection(collection.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -239,7 +242,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .collection()
          * .objectIds()
          * ```
          *
@@ -247,7 +249,7 @@ private constructor(
          */
         fun build(): BulkDeleteParams =
             BulkDeleteParams(
-                checkRequired("collection", collection),
+                collection,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -258,7 +260,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
+            0 -> collection ?: ""
             else -> ""
         }
 

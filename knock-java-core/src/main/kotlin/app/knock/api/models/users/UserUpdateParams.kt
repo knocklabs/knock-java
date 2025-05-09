@@ -8,6 +8,8 @@ import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Create or update a user with the provided identification data. When you identify an existing
@@ -16,13 +18,13 @@ import java.util.Objects
  */
 class UserUpdateParams
 private constructor(
-    private val userId: String,
+    private val userId: String?,
     private val identifyUserRequest: IdentifyUserRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun userId(): String = userId
+    fun userId(): Optional<String> = Optional.ofNullable(userId)
 
     /**
      * A set of parameters to identify a user with. Does not include the user ID, as that's
@@ -47,7 +49,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .userId()
          * .identifyUserRequest()
          * ```
          */
@@ -70,7 +71,10 @@ private constructor(
             additionalQueryParams = userUpdateParams.additionalQueryParams.toBuilder()
         }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun userId(userId: String?) = apply { this.userId = userId }
+
+        /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
 
         /**
          * A set of parameters to identify a user with. Does not include the user ID, as that's
@@ -186,7 +190,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .userId()
          * .identifyUserRequest()
          * ```
          *
@@ -194,7 +197,7 @@ private constructor(
          */
         fun build(): UserUpdateParams =
             UserUpdateParams(
-                checkRequired("userId", userId),
+                userId,
                 checkRequired("identifyUserRequest", identifyUserRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -205,7 +208,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> userId
+            0 -> userId ?: ""
             else -> ""
         }
 

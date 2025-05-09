@@ -5,6 +5,7 @@ package app.knock.api.services.blocking
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.stringHandler
@@ -47,6 +48,7 @@ import app.knock.api.services.blocking.users.FeedService
 import app.knock.api.services.blocking.users.FeedServiceImpl
 import app.knock.api.services.blocking.users.GuideService
 import app.knock.api.services.blocking.users.GuideServiceImpl
+import kotlin.jvm.optionals.getOrNull
 
 class UserServiceImpl internal constructor(private val clientOptions: ClientOptions) : UserService {
 
@@ -181,6 +183,9 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: UserUpdateParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<User> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -241,6 +246,9 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: UserDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<String> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -260,6 +268,9 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: UserGetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<User> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -286,6 +297,10 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: UserGetChannelDataParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<ChannelData> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -318,6 +333,10 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: UserGetPreferencesParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<PreferenceSet> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -351,6 +370,9 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: UserListMessagesParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<UserListMessagesPage> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -385,6 +407,9 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: UserListPreferencesParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<List<PreferenceSet>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -412,6 +437,9 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: UserListSchedulesParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<UserListSchedulesPage> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -446,6 +474,9 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: UserListSubscriptionsParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<UserListSubscriptionsPage> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -479,6 +510,9 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: UserMergeParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<User> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -506,6 +540,10 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: UserSetChannelDataParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<ChannelData> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -539,6 +577,10 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: UserSetPreferencesParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<PreferenceSet> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -572,6 +614,10 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             params: UserUnsetChannelDataParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<String> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)

@@ -22,14 +22,49 @@ interface BulkServiceAsync {
      * the action is a status change action (e.g. `archive`, `unarchive`).
      */
     fun updateMessageStatus(
-        params: BulkUpdateMessageStatusParams
-    ): CompletableFuture<BulkOperation> = updateMessageStatus(params, RequestOptions.none())
+        channelId: String,
+        action: BulkUpdateMessageStatusParams.Action,
+    ): CompletableFuture<BulkOperation> =
+        updateMessageStatus(channelId, action, BulkUpdateMessageStatusParams.none())
+
+    /** @see [updateMessageStatus] */
+    fun updateMessageStatus(
+        channelId: String,
+        action: BulkUpdateMessageStatusParams.Action,
+        params: BulkUpdateMessageStatusParams = BulkUpdateMessageStatusParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<BulkOperation> =
+        updateMessageStatus(
+            params.toBuilder().channelId(channelId).action(action).build(),
+            requestOptions,
+        )
+
+    /** @see [updateMessageStatus] */
+    fun updateMessageStatus(
+        channelId: String,
+        action: BulkUpdateMessageStatusParams.Action,
+        params: BulkUpdateMessageStatusParams = BulkUpdateMessageStatusParams.none(),
+    ): CompletableFuture<BulkOperation> =
+        updateMessageStatus(channelId, action, params, RequestOptions.none())
 
     /** @see [updateMessageStatus] */
     fun updateMessageStatus(
         params: BulkUpdateMessageStatusParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
+
+    /** @see [updateMessageStatus] */
+    fun updateMessageStatus(
+        params: BulkUpdateMessageStatusParams
+    ): CompletableFuture<BulkOperation> = updateMessageStatus(params, RequestOptions.none())
+
+    /** @see [updateMessageStatus] */
+    fun updateMessageStatus(
+        channelId: String,
+        action: BulkUpdateMessageStatusParams.Action,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<BulkOperation> =
+        updateMessageStatus(channelId, action, BulkUpdateMessageStatusParams.none(), requestOptions)
 
     /** A view of [BulkServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -40,9 +75,32 @@ interface BulkServiceAsync {
          */
         @MustBeClosed
         fun updateMessageStatus(
-            params: BulkUpdateMessageStatusParams
+            channelId: String,
+            action: BulkUpdateMessageStatusParams.Action,
         ): CompletableFuture<HttpResponseFor<BulkOperation>> =
-            updateMessageStatus(params, RequestOptions.none())
+            updateMessageStatus(channelId, action, BulkUpdateMessageStatusParams.none())
+
+        /** @see [updateMessageStatus] */
+        @MustBeClosed
+        fun updateMessageStatus(
+            channelId: String,
+            action: BulkUpdateMessageStatusParams.Action,
+            params: BulkUpdateMessageStatusParams = BulkUpdateMessageStatusParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            updateMessageStatus(
+                params.toBuilder().channelId(channelId).action(action).build(),
+                requestOptions,
+            )
+
+        /** @see [updateMessageStatus] */
+        @MustBeClosed
+        fun updateMessageStatus(
+            channelId: String,
+            action: BulkUpdateMessageStatusParams.Action,
+            params: BulkUpdateMessageStatusParams = BulkUpdateMessageStatusParams.none(),
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            updateMessageStatus(channelId, action, params, RequestOptions.none())
 
         /** @see [updateMessageStatus] */
         @MustBeClosed
@@ -50,5 +108,26 @@ interface BulkServiceAsync {
             params: BulkUpdateMessageStatusParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
+
+        /** @see [updateMessageStatus] */
+        @MustBeClosed
+        fun updateMessageStatus(
+            params: BulkUpdateMessageStatusParams
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            updateMessageStatus(params, RequestOptions.none())
+
+        /** @see [updateMessageStatus] */
+        @MustBeClosed
+        fun updateMessageStatus(
+            channelId: String,
+            action: BulkUpdateMessageStatusParams.Action,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            updateMessageStatus(
+                channelId,
+                action,
+                BulkUpdateMessageStatusParams.none(),
+                requestOptions,
+            )
     }
 }

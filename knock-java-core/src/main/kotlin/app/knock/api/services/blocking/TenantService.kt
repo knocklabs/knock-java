@@ -40,7 +40,18 @@ interface TenantService {
         list(TenantListParams.none(), requestOptions)
 
     /** Delete a tenant and all associated data. This operation cannot be undone. */
-    fun delete(params: TenantDeleteParams): String = delete(params, RequestOptions.none())
+    fun delete(id: String): String = delete(id, TenantDeleteParams.none())
+
+    /** @see [delete] */
+    fun delete(
+        id: String,
+        params: TenantDeleteParams = TenantDeleteParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): String = delete(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [delete] */
+    fun delete(id: String, params: TenantDeleteParams = TenantDeleteParams.none()): String =
+        delete(id, params, RequestOptions.none())
 
     /** @see [delete] */
     fun delete(
@@ -48,20 +59,63 @@ interface TenantService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): String
 
+    /** @see [delete] */
+    fun delete(params: TenantDeleteParams): String = delete(params, RequestOptions.none())
+
+    /** @see [delete] */
+    fun delete(id: String, requestOptions: RequestOptions): String =
+        delete(id, TenantDeleteParams.none(), requestOptions)
+
     /** Get a tenant by ID. */
-    fun get(params: TenantGetParams): Tenant = get(params, RequestOptions.none())
+    fun get(id: String): Tenant = get(id, TenantGetParams.none())
+
+    /** @see [get] */
+    fun get(
+        id: String,
+        params: TenantGetParams = TenantGetParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Tenant = get(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [get] */
+    fun get(id: String, params: TenantGetParams = TenantGetParams.none()): Tenant =
+        get(id, params, RequestOptions.none())
 
     /** @see [get] */
     fun get(params: TenantGetParams, requestOptions: RequestOptions = RequestOptions.none()): Tenant
+
+    /** @see [get] */
+    fun get(params: TenantGetParams): Tenant = get(params, RequestOptions.none())
+
+    /** @see [get] */
+    fun get(id: String, requestOptions: RequestOptions): Tenant =
+        get(id, TenantGetParams.none(), requestOptions)
 
     /**
      * Sets a tenant within an environment, performing an upsert operation. Any existing properties
      * will be merged with the incoming properties.
      */
-    fun set(params: TenantSetParams): Tenant = set(params, RequestOptions.none())
+    fun set(id: String): Tenant = set(id, TenantSetParams.none())
+
+    /** @see [set] */
+    fun set(
+        id: String,
+        params: TenantSetParams = TenantSetParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): Tenant = set(params.toBuilder().id(id).build(), requestOptions)
+
+    /** @see [set] */
+    fun set(id: String, params: TenantSetParams = TenantSetParams.none()): Tenant =
+        set(id, params, RequestOptions.none())
 
     /** @see [set] */
     fun set(params: TenantSetParams, requestOptions: RequestOptions = RequestOptions.none()): Tenant
+
+    /** @see [set] */
+    fun set(params: TenantSetParams): Tenant = set(params, RequestOptions.none())
+
+    /** @see [set] */
+    fun set(id: String, requestOptions: RequestOptions): Tenant =
+        set(id, TenantSetParams.none(), requestOptions)
 
     /** A view of [TenantService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -97,8 +151,22 @@ interface TenantService {
          * [TenantService.delete].
          */
         @MustBeClosed
-        fun delete(params: TenantDeleteParams): HttpResponseFor<String> =
-            delete(params, RequestOptions.none())
+        fun delete(id: String): HttpResponseFor<String> = delete(id, TenantDeleteParams.none())
+
+        /** @see [delete] */
+        @MustBeClosed
+        fun delete(
+            id: String,
+            params: TenantDeleteParams = TenantDeleteParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<String> = delete(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [delete] */
+        @MustBeClosed
+        fun delete(
+            id: String,
+            params: TenantDeleteParams = TenantDeleteParams.none(),
+        ): HttpResponseFor<String> = delete(id, params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
@@ -107,13 +175,36 @@ interface TenantService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<String>
 
+        /** @see [delete] */
+        @MustBeClosed
+        fun delete(params: TenantDeleteParams): HttpResponseFor<String> =
+            delete(params, RequestOptions.none())
+
+        /** @see [delete] */
+        @MustBeClosed
+        fun delete(id: String, requestOptions: RequestOptions): HttpResponseFor<String> =
+            delete(id, TenantDeleteParams.none(), requestOptions)
+
         /**
          * Returns a raw HTTP response for `get /v1/tenants/{id}`, but is otherwise the same as
          * [TenantService.get].
          */
+        @MustBeClosed fun get(id: String): HttpResponseFor<Tenant> = get(id, TenantGetParams.none())
+
+        /** @see [get] */
         @MustBeClosed
-        fun get(params: TenantGetParams): HttpResponseFor<Tenant> =
-            get(params, RequestOptions.none())
+        fun get(
+            id: String,
+            params: TenantGetParams = TenantGetParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Tenant> = get(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [get] */
+        @MustBeClosed
+        fun get(
+            id: String,
+            params: TenantGetParams = TenantGetParams.none(),
+        ): HttpResponseFor<Tenant> = get(id, params, RequestOptions.none())
 
         /** @see [get] */
         @MustBeClosed
@@ -122,13 +213,36 @@ interface TenantService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Tenant>
 
+        /** @see [get] */
+        @MustBeClosed
+        fun get(params: TenantGetParams): HttpResponseFor<Tenant> =
+            get(params, RequestOptions.none())
+
+        /** @see [get] */
+        @MustBeClosed
+        fun get(id: String, requestOptions: RequestOptions): HttpResponseFor<Tenant> =
+            get(id, TenantGetParams.none(), requestOptions)
+
         /**
          * Returns a raw HTTP response for `put /v1/tenants/{id}`, but is otherwise the same as
          * [TenantService.set].
          */
+        @MustBeClosed fun set(id: String): HttpResponseFor<Tenant> = set(id, TenantSetParams.none())
+
+        /** @see [set] */
         @MustBeClosed
-        fun set(params: TenantSetParams): HttpResponseFor<Tenant> =
-            set(params, RequestOptions.none())
+        fun set(
+            id: String,
+            params: TenantSetParams = TenantSetParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<Tenant> = set(params.toBuilder().id(id).build(), requestOptions)
+
+        /** @see [set] */
+        @MustBeClosed
+        fun set(
+            id: String,
+            params: TenantSetParams = TenantSetParams.none(),
+        ): HttpResponseFor<Tenant> = set(id, params, RequestOptions.none())
 
         /** @see [set] */
         @MustBeClosed
@@ -136,5 +250,15 @@ interface TenantService {
             params: TenantSetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<Tenant>
+
+        /** @see [set] */
+        @MustBeClosed
+        fun set(params: TenantSetParams): HttpResponseFor<Tenant> =
+            set(params, RequestOptions.none())
+
+        /** @see [set] */
+        @MustBeClosed
+        fun set(id: String, requestOptions: RequestOptions): HttpResponseFor<Tenant> =
+            set(id, TenantSetParams.none(), requestOptions)
     }
 }

@@ -5,6 +5,7 @@ package app.knock.api.services.blocking.users
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.withErrorHandler
@@ -23,6 +24,7 @@ import app.knock.api.models.users.guides.GuideMarkMessageAsInteractedParams
 import app.knock.api.models.users.guides.GuideMarkMessageAsInteractedResponse
 import app.knock.api.models.users.guides.GuideMarkMessageAsSeenParams
 import app.knock.api.models.users.guides.GuideMarkMessageAsSeenResponse
+import kotlin.jvm.optionals.getOrNull
 
 class GuideServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     GuideService {
@@ -74,6 +76,10 @@ class GuideServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: GuideGetChannelParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<GuideGetChannelResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -107,6 +113,10 @@ class GuideServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: GuideMarkMessageAsArchivedParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<GuideMarkMessageAsArchivedResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -143,6 +153,10 @@ class GuideServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: GuideMarkMessageAsInteractedParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<GuideMarkMessageAsInteractedResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -179,6 +193,10 @@ class GuideServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: GuideMarkMessageAsSeenParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<GuideMarkMessageAsSeenResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)

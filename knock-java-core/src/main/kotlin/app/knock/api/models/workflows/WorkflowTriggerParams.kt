@@ -36,13 +36,13 @@ import kotlin.jvm.optionals.getOrNull
  */
 class WorkflowTriggerParams
 private constructor(
-    private val key: String,
+    private val key: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun key(): String = key
+    fun key(): Optional<String> = Optional.ofNullable(key)
 
     /**
      * The recipients to trigger the workflow for. Can inline identify users, objects, or use a list
@@ -140,7 +140,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .key()
          * .recipients()
          * ```
          */
@@ -163,7 +162,10 @@ private constructor(
             additionalQueryParams = workflowTriggerParams.additionalQueryParams.toBuilder()
         }
 
-        fun key(key: String) = apply { this.key = key }
+        fun key(key: String?) = apply { this.key = key }
+
+        /** Alias for calling [Builder.key] with `key.orElse(null)`. */
+        fun key(key: Optional<String>) = key(key.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -440,7 +442,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .key()
          * .recipients()
          * ```
          *
@@ -448,7 +449,7 @@ private constructor(
          */
         fun build(): WorkflowTriggerParams =
             WorkflowTriggerParams(
-                checkRequired("key", key),
+                key,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -459,7 +460,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> key
+            0 -> key ?: ""
             else -> ""
         }
 

@@ -3,10 +3,11 @@
 package app.knock.api.models.messages
 
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Returns the fully rendered contents of a message, where the response depends on which channel the
@@ -14,12 +15,12 @@ import java.util.Objects
  */
 class MessageGetContentParams
 private constructor(
-    private val messageId: String,
+    private val messageId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun messageId(): String = messageId
+    fun messageId(): Optional<String> = Optional.ofNullable(messageId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -29,14 +30,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [MessageGetContentParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .messageId()
-         * ```
-         */
+        @JvmStatic fun none(): MessageGetContentParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [MessageGetContentParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -54,7 +50,10 @@ private constructor(
             additionalQueryParams = messageGetContentParams.additionalQueryParams.toBuilder()
         }
 
-        fun messageId(messageId: String) = apply { this.messageId = messageId }
+        fun messageId(messageId: String?) = apply { this.messageId = messageId }
+
+        /** Alias for calling [Builder.messageId] with `messageId.orElse(null)`. */
+        fun messageId(messageId: Optional<String>) = messageId(messageId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -158,17 +157,10 @@ private constructor(
          * Returns an immutable instance of [MessageGetContentParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .messageId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): MessageGetContentParams =
             MessageGetContentParams(
-                checkRequired("messageId", messageId),
+                messageId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -176,7 +168,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> messageId
+            0 -> messageId ?: ""
             else -> ""
         }
 

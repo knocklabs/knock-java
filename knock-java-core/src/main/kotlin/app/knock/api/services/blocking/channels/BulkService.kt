@@ -20,14 +20,47 @@ interface BulkService {
      * `channel_id` parameter. The action to perform is specified by the `action` parameter, where
      * the action is a status change action (e.g. `archive`, `unarchive`).
      */
-    fun updateMessageStatus(params: BulkUpdateMessageStatusParams): BulkOperation =
-        updateMessageStatus(params, RequestOptions.none())
+    fun updateMessageStatus(
+        channelId: String,
+        action: BulkUpdateMessageStatusParams.Action,
+    ): BulkOperation = updateMessageStatus(channelId, action, BulkUpdateMessageStatusParams.none())
+
+    /** @see [updateMessageStatus] */
+    fun updateMessageStatus(
+        channelId: String,
+        action: BulkUpdateMessageStatusParams.Action,
+        params: BulkUpdateMessageStatusParams = BulkUpdateMessageStatusParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BulkOperation =
+        updateMessageStatus(
+            params.toBuilder().channelId(channelId).action(action).build(),
+            requestOptions,
+        )
+
+    /** @see [updateMessageStatus] */
+    fun updateMessageStatus(
+        channelId: String,
+        action: BulkUpdateMessageStatusParams.Action,
+        params: BulkUpdateMessageStatusParams = BulkUpdateMessageStatusParams.none(),
+    ): BulkOperation = updateMessageStatus(channelId, action, params, RequestOptions.none())
 
     /** @see [updateMessageStatus] */
     fun updateMessageStatus(
         params: BulkUpdateMessageStatusParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
+
+    /** @see [updateMessageStatus] */
+    fun updateMessageStatus(params: BulkUpdateMessageStatusParams): BulkOperation =
+        updateMessageStatus(params, RequestOptions.none())
+
+    /** @see [updateMessageStatus] */
+    fun updateMessageStatus(
+        channelId: String,
+        action: BulkUpdateMessageStatusParams.Action,
+        requestOptions: RequestOptions,
+    ): BulkOperation =
+        updateMessageStatus(channelId, action, BulkUpdateMessageStatusParams.none(), requestOptions)
 
     /** A view of [BulkService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -38,8 +71,32 @@ interface BulkService {
          */
         @MustBeClosed
         fun updateMessageStatus(
-            params: BulkUpdateMessageStatusParams
-        ): HttpResponseFor<BulkOperation> = updateMessageStatus(params, RequestOptions.none())
+            channelId: String,
+            action: BulkUpdateMessageStatusParams.Action,
+        ): HttpResponseFor<BulkOperation> =
+            updateMessageStatus(channelId, action, BulkUpdateMessageStatusParams.none())
+
+        /** @see [updateMessageStatus] */
+        @MustBeClosed
+        fun updateMessageStatus(
+            channelId: String,
+            action: BulkUpdateMessageStatusParams.Action,
+            params: BulkUpdateMessageStatusParams = BulkUpdateMessageStatusParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BulkOperation> =
+            updateMessageStatus(
+                params.toBuilder().channelId(channelId).action(action).build(),
+                requestOptions,
+            )
+
+        /** @see [updateMessageStatus] */
+        @MustBeClosed
+        fun updateMessageStatus(
+            channelId: String,
+            action: BulkUpdateMessageStatusParams.Action,
+            params: BulkUpdateMessageStatusParams = BulkUpdateMessageStatusParams.none(),
+        ): HttpResponseFor<BulkOperation> =
+            updateMessageStatus(channelId, action, params, RequestOptions.none())
 
         /** @see [updateMessageStatus] */
         @MustBeClosed
@@ -47,5 +104,25 @@ interface BulkService {
             params: BulkUpdateMessageStatusParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BulkOperation>
+
+        /** @see [updateMessageStatus] */
+        @MustBeClosed
+        fun updateMessageStatus(
+            params: BulkUpdateMessageStatusParams
+        ): HttpResponseFor<BulkOperation> = updateMessageStatus(params, RequestOptions.none())
+
+        /** @see [updateMessageStatus] */
+        @MustBeClosed
+        fun updateMessageStatus(
+            channelId: String,
+            action: BulkUpdateMessageStatusParams.Action,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BulkOperation> =
+            updateMessageStatus(
+                channelId,
+                action,
+                BulkUpdateMessageStatusParams.none(),
+                requestOptions,
+            )
     }
 }

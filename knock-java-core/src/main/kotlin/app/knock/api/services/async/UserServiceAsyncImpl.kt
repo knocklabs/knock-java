@@ -5,6 +5,7 @@ package app.knock.api.services.async
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.stringHandler
@@ -48,6 +49,7 @@ import app.knock.api.services.async.users.FeedServiceAsyncImpl
 import app.knock.api.services.async.users.GuideServiceAsync
 import app.knock.api.services.async.users.GuideServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class UserServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     UserServiceAsync {
@@ -198,6 +200,9 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: UserUpdateParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<User>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -264,6 +269,9 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: UserDeleteParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<String>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -286,6 +294,9 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: UserGetParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<User>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -315,6 +326,10 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: UserGetChannelDataParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<ChannelData>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -350,6 +365,10 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: UserGetPreferencesParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<PreferenceSet>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -386,6 +405,9 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: UserListMessagesParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<UserListMessagesPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -423,6 +445,9 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: UserListPreferencesParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<List<PreferenceSet>>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -453,6 +478,9 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: UserListSchedulesParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<UserListSchedulesPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -490,6 +518,9 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: UserListSubscriptionsParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<UserListSubscriptionsPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -526,6 +557,9 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: UserMergeParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<User>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -556,6 +590,10 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: UserSetChannelDataParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<ChannelData>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -592,6 +630,10 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: UserSetPreferencesParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<PreferenceSet>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -628,6 +670,10 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: UserUnsetChannelDataParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<String>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)

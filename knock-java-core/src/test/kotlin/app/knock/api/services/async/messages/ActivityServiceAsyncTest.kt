@@ -4,7 +4,6 @@ package app.knock.api.services.async.messages
 
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClientAsync
-import app.knock.api.models.messages.activities.ActivityListParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -24,8 +23,7 @@ internal class ActivityServiceAsyncTest {
                 .build()
         val activityServiceAsync = client.messages().activities()
 
-        val pageFuture =
-            activityServiceAsync.list(ActivityListParams.builder().messageId("message_id").build())
+        val pageFuture = activityServiceAsync.list("message_id")
 
         val page = pageFuture.get()
         page.response().validate()

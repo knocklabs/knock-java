@@ -12,18 +12,10 @@ import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import app.knock.api.models.users.IdentifyUserRequest
-import app.knock.api.models.users.UserDeleteParams
-import app.knock.api.models.users.UserGetChannelDataParams
-import app.knock.api.models.users.UserGetParams
 import app.knock.api.models.users.UserGetPreferencesParams
-import app.knock.api.models.users.UserListMessagesParams
-import app.knock.api.models.users.UserListPreferencesParams
-import app.knock.api.models.users.UserListSchedulesParams
-import app.knock.api.models.users.UserListSubscriptionsParams
 import app.knock.api.models.users.UserMergeParams
 import app.knock.api.models.users.UserSetChannelDataParams
 import app.knock.api.models.users.UserSetPreferencesParams
-import app.knock.api.models.users.UserUnsetChannelDataParams
 import app.knock.api.models.users.UserUpdateParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Disabled
@@ -181,7 +173,7 @@ internal class UserServiceTest {
                 .build()
         val userService = client.users()
 
-        userService.delete(UserDeleteParams.builder().userId("user_id").build())
+        userService.delete("user_id")
     }
 
     @Disabled(
@@ -196,7 +188,7 @@ internal class UserServiceTest {
                 .build()
         val userService = client.users()
 
-        val user = userService.get(UserGetParams.builder().userId("user_id").build())
+        val user = userService.get("user_id")
 
         user.validate()
     }
@@ -214,12 +206,7 @@ internal class UserServiceTest {
         val userService = client.users()
 
         val channelData =
-            userService.getChannelData(
-                UserGetChannelDataParams.builder()
-                    .userId("user_id")
-                    .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .build()
-            )
+            userService.getChannelData("user_id", "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 
         channelData.validate()
     }
@@ -260,8 +247,7 @@ internal class UserServiceTest {
                 .build()
         val userService = client.users()
 
-        val page =
-            userService.listMessages(UserListMessagesParams.builder().userId("user-123").build())
+        val page = userService.listMessages("user-123")
 
         page.response().validate()
     }
@@ -278,10 +264,7 @@ internal class UserServiceTest {
                 .build()
         val userService = client.users()
 
-        val preferenceSets =
-            userService.listPreferences(
-                UserListPreferencesParams.builder().userId("user_id").build()
-            )
+        val preferenceSets = userService.listPreferences("user_id")
 
         preferenceSets.forEach { it.validate() }
     }
@@ -298,8 +281,7 @@ internal class UserServiceTest {
                 .build()
         val userService = client.users()
 
-        val page =
-            userService.listSchedules(UserListSchedulesParams.builder().userId("user_id").build())
+        val page = userService.listSchedules("user_id")
 
         page.response().validate()
     }
@@ -316,10 +298,7 @@ internal class UserServiceTest {
                 .build()
         val userService = client.users()
 
-        val page =
-            userService.listSubscriptions(
-                UserListSubscriptionsParams.builder().userId("user_id").build()
-            )
+        val page = userService.listSubscriptions("user_id")
 
         page.response().validate()
     }
@@ -478,11 +457,6 @@ internal class UserServiceTest {
                 .build()
         val userService = client.users()
 
-        userService.unsetChannelData(
-            UserUnsetChannelDataParams.builder()
-                .userId("user_id")
-                .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .build()
-        )
+        userService.unsetChannelData("user_id", "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
     }
 }

@@ -12,18 +12,10 @@ import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import app.knock.api.models.users.IdentifyUserRequest
-import app.knock.api.models.users.UserDeleteParams
-import app.knock.api.models.users.UserGetChannelDataParams
-import app.knock.api.models.users.UserGetParams
 import app.knock.api.models.users.UserGetPreferencesParams
-import app.knock.api.models.users.UserListMessagesParams
-import app.knock.api.models.users.UserListPreferencesParams
-import app.knock.api.models.users.UserListSchedulesParams
-import app.knock.api.models.users.UserListSubscriptionsParams
 import app.knock.api.models.users.UserMergeParams
 import app.knock.api.models.users.UserSetChannelDataParams
 import app.knock.api.models.users.UserSetPreferencesParams
-import app.knock.api.models.users.UserUnsetChannelDataParams
 import app.knock.api.models.users.UserUpdateParams
 import java.time.OffsetDateTime
 import org.junit.jupiter.api.Disabled
@@ -183,8 +175,7 @@ internal class UserServiceAsyncTest {
                 .build()
         val userServiceAsync = client.users()
 
-        val userFuture =
-            userServiceAsync.delete(UserDeleteParams.builder().userId("user_id").build())
+        val userFuture = userServiceAsync.delete("user_id")
 
         val user = userFuture.get()
     }
@@ -201,7 +192,7 @@ internal class UserServiceAsyncTest {
                 .build()
         val userServiceAsync = client.users()
 
-        val userFuture = userServiceAsync.get(UserGetParams.builder().userId("user_id").build())
+        val userFuture = userServiceAsync.get("user_id")
 
         val user = userFuture.get()
         user.validate()
@@ -220,12 +211,7 @@ internal class UserServiceAsyncTest {
         val userServiceAsync = client.users()
 
         val channelDataFuture =
-            userServiceAsync.getChannelData(
-                UserGetChannelDataParams.builder()
-                    .userId("user_id")
-                    .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .build()
-            )
+            userServiceAsync.getChannelData("user_id", "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 
         val channelData = channelDataFuture.get()
         channelData.validate()
@@ -268,10 +254,7 @@ internal class UserServiceAsyncTest {
                 .build()
         val userServiceAsync = client.users()
 
-        val pageFuture =
-            userServiceAsync.listMessages(
-                UserListMessagesParams.builder().userId("user-123").build()
-            )
+        val pageFuture = userServiceAsync.listMessages("user-123")
 
         val page = pageFuture.get()
         page.response().validate()
@@ -289,10 +272,7 @@ internal class UserServiceAsyncTest {
                 .build()
         val userServiceAsync = client.users()
 
-        val preferenceSetsFuture =
-            userServiceAsync.listPreferences(
-                UserListPreferencesParams.builder().userId("user_id").build()
-            )
+        val preferenceSetsFuture = userServiceAsync.listPreferences("user_id")
 
         val preferenceSets = preferenceSetsFuture.get()
         preferenceSets.forEach { it.validate() }
@@ -310,10 +290,7 @@ internal class UserServiceAsyncTest {
                 .build()
         val userServiceAsync = client.users()
 
-        val pageFuture =
-            userServiceAsync.listSchedules(
-                UserListSchedulesParams.builder().userId("user_id").build()
-            )
+        val pageFuture = userServiceAsync.listSchedules("user_id")
 
         val page = pageFuture.get()
         page.response().validate()
@@ -331,10 +308,7 @@ internal class UserServiceAsyncTest {
                 .build()
         val userServiceAsync = client.users()
 
-        val pageFuture =
-            userServiceAsync.listSubscriptions(
-                UserListSubscriptionsParams.builder().userId("user_id").build()
-            )
+        val pageFuture = userServiceAsync.listSubscriptions("user_id")
 
         val page = pageFuture.get()
         page.response().validate()
@@ -498,12 +472,7 @@ internal class UserServiceAsyncTest {
         val userServiceAsync = client.users()
 
         val responseFuture =
-            userServiceAsync.unsetChannelData(
-                UserUnsetChannelDataParams.builder()
-                    .userId("user_id")
-                    .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .build()
-            )
+            userServiceAsync.unsetChannelData("user_id", "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 
         val response = responseFuture.get()
     }

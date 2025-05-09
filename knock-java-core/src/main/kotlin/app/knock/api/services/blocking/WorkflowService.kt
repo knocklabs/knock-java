@@ -21,6 +21,17 @@ interface WorkflowService {
      * any queued workflow runs associated with that key/cancellation key pair. Can optionally be
      * provided one or more recipients to scope the request to.
      */
+    fun cancel(key: String, params: WorkflowCancelParams): String =
+        cancel(key, params, RequestOptions.none())
+
+    /** @see [cancel] */
+    fun cancel(
+        key: String,
+        params: WorkflowCancelParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): String = cancel(params.toBuilder().key(key).build(), requestOptions)
+
+    /** @see [cancel] */
     fun cancel(params: WorkflowCancelParams): String = cancel(params, RequestOptions.none())
 
     /** @see [cancel] */
@@ -36,6 +47,17 @@ interface WorkflowService {
      * [inline identifications](/managing-recipients/identifying-recipients#inline-identifying-recipients)
      * for the `actor`, `recipient`, and `tenant` fields.
      */
+    fun trigger(key: String, params: WorkflowTriggerParams): WorkflowTriggerResponse =
+        trigger(key, params, RequestOptions.none())
+
+    /** @see [trigger] */
+    fun trigger(
+        key: String,
+        params: WorkflowTriggerParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): WorkflowTriggerResponse = trigger(params.toBuilder().key(key).build(), requestOptions)
+
+    /** @see [trigger] */
     fun trigger(params: WorkflowTriggerParams): WorkflowTriggerResponse =
         trigger(params, RequestOptions.none())
 
@@ -53,6 +75,19 @@ interface WorkflowService {
          * same as [WorkflowService.cancel].
          */
         @MustBeClosed
+        fun cancel(key: String, params: WorkflowCancelParams): HttpResponseFor<String> =
+            cancel(key, params, RequestOptions.none())
+
+        /** @see [cancel] */
+        @MustBeClosed
+        fun cancel(
+            key: String,
+            params: WorkflowCancelParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<String> = cancel(params.toBuilder().key(key).build(), requestOptions)
+
+        /** @see [cancel] */
+        @MustBeClosed
         fun cancel(params: WorkflowCancelParams): HttpResponseFor<String> =
             cancel(params, RequestOptions.none())
 
@@ -67,6 +102,22 @@ interface WorkflowService {
          * Returns a raw HTTP response for `post /v1/workflows/{key}/trigger`, but is otherwise the
          * same as [WorkflowService.trigger].
          */
+        @MustBeClosed
+        fun trigger(
+            key: String,
+            params: WorkflowTriggerParams,
+        ): HttpResponseFor<WorkflowTriggerResponse> = trigger(key, params, RequestOptions.none())
+
+        /** @see [trigger] */
+        @MustBeClosed
+        fun trigger(
+            key: String,
+            params: WorkflowTriggerParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<WorkflowTriggerResponse> =
+            trigger(params.toBuilder().key(key).build(), requestOptions)
+
+        /** @see [trigger] */
         @MustBeClosed
         fun trigger(params: WorkflowTriggerParams): HttpResponseFor<WorkflowTriggerResponse> =
             trigger(params, RequestOptions.none())

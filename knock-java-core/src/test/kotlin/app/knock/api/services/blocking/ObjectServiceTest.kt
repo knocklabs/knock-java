@@ -6,20 +6,10 @@ import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClient
 import app.knock.api.core.JsonValue
 import app.knock.api.models.objects.ObjectAddSubscriptionsParams
-import app.knock.api.models.objects.ObjectDeleteParams
 import app.knock.api.models.objects.ObjectDeleteSubscriptionsParams
-import app.knock.api.models.objects.ObjectGetChannelDataParams
-import app.knock.api.models.objects.ObjectGetParams
-import app.knock.api.models.objects.ObjectGetPreferencesParams
-import app.knock.api.models.objects.ObjectListMessagesParams
-import app.knock.api.models.objects.ObjectListParams
-import app.knock.api.models.objects.ObjectListPreferencesParams
-import app.knock.api.models.objects.ObjectListSchedulesParams
-import app.knock.api.models.objects.ObjectListSubscriptionsParams
 import app.knock.api.models.objects.ObjectSetChannelDataParams
 import app.knock.api.models.objects.ObjectSetParams
 import app.knock.api.models.objects.ObjectSetPreferencesParams
-import app.knock.api.models.objects.ObjectUnsetChannelDataParams
 import app.knock.api.models.recipients.channeldata.ChannelDataRequest
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.channeldata.PushChannelData
@@ -45,7 +35,7 @@ internal class ObjectServiceTest {
                 .build()
         val objectService = client.objects()
 
-        val page = objectService.list(ObjectListParams.builder().collection("collection").build())
+        val page = objectService.list("collection")
 
         page.response().validate()
     }
@@ -62,7 +52,7 @@ internal class ObjectServiceTest {
                 .build()
         val objectService = client.objects()
 
-        objectService.delete(ObjectDeleteParams.builder().collection("collection").id("id").build())
+        objectService.delete("collection", "id")
     }
 
     @Disabled(
@@ -131,8 +121,7 @@ internal class ObjectServiceTest {
                 .build()
         val objectService = client.objects()
 
-        val object_ =
-            objectService.get(ObjectGetParams.builder().collection("collection").id("id").build())
+        val object_ = objectService.get("collection", "id")
 
         object_.validate()
     }
@@ -151,11 +140,9 @@ internal class ObjectServiceTest {
 
         val channelData =
             objectService.getChannelData(
-                ObjectGetChannelDataParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .build()
+                "collection",
+                "object_id",
+                "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             )
 
         channelData.validate()
@@ -173,14 +160,7 @@ internal class ObjectServiceTest {
                 .build()
         val objectService = client.objects()
 
-        val preferenceSet =
-            objectService.getPreferences(
-                ObjectGetPreferencesParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .id("default")
-                    .build()
-            )
+        val preferenceSet = objectService.getPreferences("collection", "object_id", "default")
 
         preferenceSet.validate()
     }
@@ -197,10 +177,7 @@ internal class ObjectServiceTest {
                 .build()
         val objectService = client.objects()
 
-        val page =
-            objectService.listMessages(
-                ObjectListMessagesParams.builder().collection("projects").id("project-123").build()
-            )
+        val page = objectService.listMessages("projects", "project-123")
 
         page.response().validate()
     }
@@ -217,13 +194,7 @@ internal class ObjectServiceTest {
                 .build()
         val objectService = client.objects()
 
-        val preferenceSets =
-            objectService.listPreferences(
-                ObjectListPreferencesParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .build()
-            )
+        val preferenceSets = objectService.listPreferences("collection", "object_id")
 
         preferenceSets.forEach { it.validate() }
     }
@@ -240,10 +211,7 @@ internal class ObjectServiceTest {
                 .build()
         val objectService = client.objects()
 
-        val page =
-            objectService.listSchedules(
-                ObjectListSchedulesParams.builder().collection("collection").id("id").build()
-            )
+        val page = objectService.listSchedules("collection", "id")
 
         page.response().validate()
     }
@@ -260,13 +228,7 @@ internal class ObjectServiceTest {
                 .build()
         val objectService = client.objects()
 
-        val page =
-            objectService.listSubscriptions(
-                ObjectListSubscriptionsParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .build()
-            )
+        val page = objectService.listSubscriptions("collection", "object_id")
 
         page.response().validate()
     }
@@ -512,11 +474,9 @@ internal class ObjectServiceTest {
         val objectService = client.objects()
 
         objectService.unsetChannelData(
-            ObjectUnsetChannelDataParams.builder()
-                .collection("collection")
-                .objectId("object_id")
-                .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                .build()
+            "collection",
+            "object_id",
+            "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
         )
     }
 }

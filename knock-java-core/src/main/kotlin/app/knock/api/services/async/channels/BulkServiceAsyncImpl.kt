@@ -5,6 +5,7 @@ package app.knock.api.services.async.channels
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.withErrorHandler
@@ -18,6 +19,7 @@ import app.knock.api.core.prepareAsync
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.channels.bulk.BulkUpdateMessageStatusParams
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class BulkServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     BulkServiceAsync {
@@ -47,6 +49,10 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
             params: BulkUpdateMessageStatusParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<BulkOperation>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("channelId", params.channelId().getOrNull())
+            checkRequired("action", params.action().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)

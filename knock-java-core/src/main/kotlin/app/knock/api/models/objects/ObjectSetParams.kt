@@ -7,7 +7,6 @@ import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.errors.KnockInvalidDataException
@@ -28,16 +27,16 @@ import kotlin.jvm.optionals.getOrNull
  */
 class ObjectSetParams
 private constructor(
-    private val collection: String,
-    private val id: String,
+    private val collection: String?,
+    private val id: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun collection(): Optional<String> = Optional.ofNullable(collection)
 
-    fun id(): String = id
+    fun id(): Optional<String> = Optional.ofNullable(id)
 
     /**
      * A request to set channel data for a type of channel inline.
@@ -111,15 +110,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [ObjectSetParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .collection()
-         * .id()
-         * ```
-         */
+        @JvmStatic fun none(): ObjectSetParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [ObjectSetParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -141,9 +134,15 @@ private constructor(
             additionalQueryParams = objectSetParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun collection(collection: String?) = apply { this.collection = collection }
 
-        fun id(id: String) = apply { this.id = id }
+        /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+        fun collection(collection: Optional<String>) = collection(collection.getOrNull())
+
+        fun id(id: String?) = apply { this.id = id }
+
+        /** Alias for calling [Builder.id] with `id.orElse(null)`. */
+        fun id(id: Optional<String>) = id(id.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -343,19 +342,11 @@ private constructor(
          * Returns an immutable instance of [ObjectSetParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .collection()
-         * .id()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ObjectSetParams =
             ObjectSetParams(
-                checkRequired("collection", collection),
-                checkRequired("id", id),
+                collection,
+                id,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -366,8 +357,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
-            1 -> id
+            0 -> collection ?: ""
+            1 -> id ?: ""
             else -> ""
         }
 

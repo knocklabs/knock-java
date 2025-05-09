@@ -4,12 +4,12 @@ package app.knock.api.models.messages
 
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Marks a message as `unseen`. This reverses the `seen` state. Read more about message engagement
@@ -17,13 +17,13 @@ import java.util.Optional
  */
 class MessageMarkAsUnseenParams
 private constructor(
-    private val messageId: String,
+    private val messageId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun messageId(): String = messageId
+    fun messageId(): Optional<String> = Optional.ofNullable(messageId)
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -35,13 +35,10 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): MessageMarkAsUnseenParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of [MessageMarkAsUnseenParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .messageId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -63,7 +60,10 @@ private constructor(
                 messageMarkAsUnseenParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun messageId(messageId: String) = apply { this.messageId = messageId }
+        fun messageId(messageId: String?) = apply { this.messageId = messageId }
+
+        /** Alias for calling [Builder.messageId] with `messageId.orElse(null)`. */
+        fun messageId(messageId: Optional<String>) = messageId(messageId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -189,17 +189,10 @@ private constructor(
          * Returns an immutable instance of [MessageMarkAsUnseenParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .messageId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): MessageMarkAsUnseenParams =
             MessageMarkAsUnseenParams(
-                checkRequired("messageId", messageId),
+                messageId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -211,7 +204,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> messageId
+            0 -> messageId ?: ""
             else -> ""
         }
 

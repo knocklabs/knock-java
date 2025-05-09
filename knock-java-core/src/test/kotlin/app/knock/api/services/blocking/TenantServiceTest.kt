@@ -9,8 +9,6 @@ import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
-import app.knock.api.models.tenants.TenantDeleteParams
-import app.knock.api.models.tenants.TenantGetParams
 import app.knock.api.models.tenants.TenantSetParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -48,7 +46,7 @@ internal class TenantServiceTest {
                 .build()
         val tenantService = client.tenants()
 
-        tenantService.delete(TenantDeleteParams.builder().id("id").build())
+        tenantService.delete("id")
     }
 
     @Disabled(
@@ -63,7 +61,7 @@ internal class TenantServiceTest {
                 .build()
         val tenantService = client.tenants()
 
-        val tenant = tenantService.get(TenantGetParams.builder().id("id").build())
+        val tenant = tenantService.get("id")
 
         tenant.validate()
     }

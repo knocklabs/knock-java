@@ -5,7 +5,6 @@ package app.knock.api.models.users.feeds
 import app.knock.api.core.Enum
 import app.knock.api.core.JsonField
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
@@ -18,8 +17,8 @@ import kotlin.jvm.optionals.getOrNull
 /** Returns a paginated list of feed items for a user, including metadata about the feed. */
 class FeedListItemsParams
 private constructor(
-    private val userId: String,
-    private val id: String,
+    private val userId: String?,
+    private val id: String?,
     private val after: String?,
     private val archived: Archived?,
     private val before: String?,
@@ -34,9 +33,9 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun userId(): String = userId
+    fun userId(): Optional<String> = Optional.ofNullable(userId)
 
-    fun id(): String = id
+    fun id(): Optional<String> = Optional.ofNullable(id)
 
     /** The cursor to fetch entries after. */
     fun after(): Optional<String> = Optional.ofNullable(after)
@@ -76,15 +75,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [FeedListItemsParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * .id()
-         * ```
-         */
+        @JvmStatic fun none(): FeedListItemsParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [FeedListItemsParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -124,9 +117,15 @@ private constructor(
             additionalQueryParams = feedListItemsParams.additionalQueryParams.toBuilder()
         }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun userId(userId: String?) = apply { this.userId = userId }
 
-        fun id(id: String) = apply { this.id = id }
+        /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
+
+        fun id(id: String?) = apply { this.id = id }
+
+        /** Alias for calling [Builder.id] with `id.orElse(null)`. */
+        fun id(id: Optional<String>) = id(id.getOrNull())
 
         /** The cursor to fetch entries after. */
         fun after(after: String?) = apply { this.after = after }
@@ -319,19 +318,11 @@ private constructor(
          * Returns an immutable instance of [FeedListItemsParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * .id()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): FeedListItemsParams =
             FeedListItemsParams(
-                checkRequired("userId", userId),
-                checkRequired("id", id),
+                userId,
+                id,
                 after,
                 archived,
                 before,
@@ -349,8 +340,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> userId
-            1 -> id
+            0 -> userId ?: ""
+            1 -> id ?: ""
             else -> ""
         }
 

@@ -9,7 +9,6 @@ import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
 import app.knock.api.core.checkKnown
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
@@ -31,16 +30,16 @@ import kotlin.jvm.optionals.getOrNull
  */
 class BulkUpdateMessageStatusParams
 private constructor(
-    private val channelId: String,
-    private val action: Action,
+    private val channelId: String?,
+    private val action: Action?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun channelId(): String = channelId
+    fun channelId(): Optional<String> = Optional.ofNullable(channelId)
 
-    fun action(): Action = action
+    fun action(): Optional<Action> = Optional.ofNullable(action)
 
     /**
      * Limits the results to messages with the given archived status.
@@ -205,15 +204,11 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): BulkUpdateMessageStatusParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [BulkUpdateMessageStatusParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .channelId()
-         * .action()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -236,9 +231,15 @@ private constructor(
             additionalQueryParams = bulkUpdateMessageStatusParams.additionalQueryParams.toBuilder()
         }
 
-        fun channelId(channelId: String) = apply { this.channelId = channelId }
+        fun channelId(channelId: String?) = apply { this.channelId = channelId }
 
-        fun action(action: Action) = apply { this.action = action }
+        /** Alias for calling [Builder.channelId] with `channelId.orElse(null)`. */
+        fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
+
+        fun action(action: Action?) = apply { this.action = action }
+
+        /** Alias for calling [Builder.action] with `action.orElse(null)`. */
+        fun action(action: Optional<Action>) = action(action.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -530,19 +531,11 @@ private constructor(
          * Returns an immutable instance of [BulkUpdateMessageStatusParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .channelId()
-         * .action()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): BulkUpdateMessageStatusParams =
             BulkUpdateMessageStatusParams(
-                checkRequired("channelId", channelId),
-                checkRequired("action", action),
+                channelId,
+                action,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -553,8 +546,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> channelId
-            1 -> action.toString()
+            0 -> channelId ?: ""
+            1 -> action?.toString() ?: ""
             else -> ""
         }
 

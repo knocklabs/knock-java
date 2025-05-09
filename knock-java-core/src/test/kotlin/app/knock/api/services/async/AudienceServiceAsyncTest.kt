@@ -5,7 +5,6 @@ package app.knock.api.services.async
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClientAsync
 import app.knock.api.models.audiences.AudienceAddMembersParams
-import app.knock.api.models.audiences.AudienceListMembersParams
 import app.knock.api.models.audiences.AudienceRemoveMembersParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -58,8 +57,7 @@ internal class AudienceServiceAsyncTest {
                 .build()
         val audienceServiceAsync = client.audiences()
 
-        val responseFuture =
-            audienceServiceAsync.listMembers(AudienceListMembersParams.builder().key("key").build())
+        val responseFuture = audienceServiceAsync.listMembers("key")
 
         val response = responseFuture.get()
         response.validate()

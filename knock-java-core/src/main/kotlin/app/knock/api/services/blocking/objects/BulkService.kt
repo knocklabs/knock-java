@@ -18,6 +18,17 @@ interface BulkService {
     fun withRawResponse(): WithRawResponse
 
     /** Bulk deletes objects from the specified collection. */
+    fun delete(collection: String, params: BulkDeleteParams): BulkOperation =
+        delete(collection, params, RequestOptions.none())
+
+    /** @see [delete] */
+    fun delete(
+        collection: String,
+        params: BulkDeleteParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BulkOperation = delete(params.toBuilder().collection(collection).build(), requestOptions)
+
+    /** @see [delete] */
     fun delete(params: BulkDeleteParams): BulkOperation = delete(params, RequestOptions.none())
 
     /** @see [delete] */
@@ -32,6 +43,18 @@ interface BulkService {
      * [inline identifications](/managing-recipients/identifying-recipients#inline-identifying-recipients)
      * for the `recipient` field.
      */
+    fun addSubscriptions(collection: String, params: BulkAddSubscriptionsParams): BulkOperation =
+        addSubscriptions(collection, params, RequestOptions.none())
+
+    /** @see [addSubscriptions] */
+    fun addSubscriptions(
+        collection: String,
+        params: BulkAddSubscriptionsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BulkOperation =
+        addSubscriptions(params.toBuilder().collection(collection).build(), requestOptions)
+
+    /** @see [addSubscriptions] */
     fun addSubscriptions(params: BulkAddSubscriptionsParams): BulkOperation =
         addSubscriptions(params, RequestOptions.none())
 
@@ -42,6 +65,17 @@ interface BulkService {
     ): BulkOperation
 
     /** Bulk sets up to 1,000 objects at a time in the specified collection. */
+    fun set(collection: String, params: BulkSetParams): BulkOperation =
+        set(collection, params, RequestOptions.none())
+
+    /** @see [set] */
+    fun set(
+        collection: String,
+        params: BulkSetParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BulkOperation = set(params.toBuilder().collection(collection).build(), requestOptions)
+
+    /** @see [set] */
     fun set(params: BulkSetParams): BulkOperation = set(params, RequestOptions.none())
 
     /** @see [set] */
@@ -58,6 +92,20 @@ interface BulkService {
          * otherwise the same as [BulkService.delete].
          */
         @MustBeClosed
+        fun delete(collection: String, params: BulkDeleteParams): HttpResponseFor<BulkOperation> =
+            delete(collection, params, RequestOptions.none())
+
+        /** @see [delete] */
+        @MustBeClosed
+        fun delete(
+            collection: String,
+            params: BulkDeleteParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BulkOperation> =
+            delete(params.toBuilder().collection(collection).build(), requestOptions)
+
+        /** @see [delete] */
+        @MustBeClosed
         fun delete(params: BulkDeleteParams): HttpResponseFor<BulkOperation> =
             delete(params, RequestOptions.none())
 
@@ -73,6 +121,23 @@ interface BulkService {
          * but is otherwise the same as [BulkService.addSubscriptions].
          */
         @MustBeClosed
+        fun addSubscriptions(
+            collection: String,
+            params: BulkAddSubscriptionsParams,
+        ): HttpResponseFor<BulkOperation> =
+            addSubscriptions(collection, params, RequestOptions.none())
+
+        /** @see [addSubscriptions] */
+        @MustBeClosed
+        fun addSubscriptions(
+            collection: String,
+            params: BulkAddSubscriptionsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BulkOperation> =
+            addSubscriptions(params.toBuilder().collection(collection).build(), requestOptions)
+
+        /** @see [addSubscriptions] */
+        @MustBeClosed
         fun addSubscriptions(params: BulkAddSubscriptionsParams): HttpResponseFor<BulkOperation> =
             addSubscriptions(params, RequestOptions.none())
 
@@ -87,6 +152,20 @@ interface BulkService {
          * Returns a raw HTTP response for `post /v1/objects/{collection}/bulk/set`, but is
          * otherwise the same as [BulkService.set].
          */
+        @MustBeClosed
+        fun set(collection: String, params: BulkSetParams): HttpResponseFor<BulkOperation> =
+            set(collection, params, RequestOptions.none())
+
+        /** @see [set] */
+        @MustBeClosed
+        fun set(
+            collection: String,
+            params: BulkSetParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BulkOperation> =
+            set(params.toBuilder().collection(collection).build(), requestOptions)
+
+        /** @see [set] */
         @MustBeClosed
         fun set(params: BulkSetParams): HttpResponseFor<BulkOperation> =
             set(params, RequestOptions.none())

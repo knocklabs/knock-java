@@ -5,7 +5,6 @@ package app.knock.api.models.objects
 import app.knock.api.core.Enum
 import app.knock.api.core.JsonField
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
@@ -23,8 +22,8 @@ import kotlin.jvm.optionals.getOrNull
  */
 class ObjectListSubscriptionsParams
 private constructor(
-    private val collection: String,
-    private val objectId: String,
+    private val collection: String?,
+    private val objectId: String?,
     private val after: String?,
     private val before: String?,
     private val include: List<Include>?,
@@ -36,9 +35,9 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun collection(): Optional<String> = Optional.ofNullable(collection)
 
-    fun objectId(): String = objectId
+    fun objectId(): Optional<String> = Optional.ofNullable(objectId)
 
     /** The cursor to fetch entries after. */
     fun after(): Optional<String> = Optional.ofNullable(after)
@@ -72,15 +71,11 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): ObjectListSubscriptionsParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [ObjectListSubscriptionsParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .collection()
-         * .objectId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -115,9 +110,15 @@ private constructor(
             additionalQueryParams = objectListSubscriptionsParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun collection(collection: String?) = apply { this.collection = collection }
 
-        fun objectId(objectId: String) = apply { this.objectId = objectId }
+        /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+        fun collection(collection: Optional<String>) = collection(collection.getOrNull())
+
+        fun objectId(objectId: String?) = apply { this.objectId = objectId }
+
+        /** Alias for calling [Builder.objectId] with `objectId.orElse(null)`. */
+        fun objectId(objectId: Optional<String>) = objectId(objectId.getOrNull())
 
         /** The cursor to fetch entries after. */
         fun after(after: String?) = apply { this.after = after }
@@ -313,19 +314,11 @@ private constructor(
          * Returns an immutable instance of [ObjectListSubscriptionsParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .collection()
-         * .objectId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ObjectListSubscriptionsParams =
             ObjectListSubscriptionsParams(
-                checkRequired("collection", collection),
-                checkRequired("objectId", objectId),
+                collection,
+                objectId,
                 after,
                 before,
                 include?.toImmutable(),
@@ -340,8 +333,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
-            1 -> objectId
+            0 -> collection ?: ""
+            1 -> objectId ?: ""
             else -> ""
         }
 

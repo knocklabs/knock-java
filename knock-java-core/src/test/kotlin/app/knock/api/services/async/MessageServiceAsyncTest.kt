@@ -5,18 +5,7 @@ package app.knock.api.services.async
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClientAsync
 import app.knock.api.core.JsonValue
-import app.knock.api.models.messages.MessageArchiveParams
-import app.knock.api.models.messages.MessageGetContentParams
-import app.knock.api.models.messages.MessageGetParams
-import app.knock.api.models.messages.MessageListActivitiesParams
-import app.knock.api.models.messages.MessageListDeliveryLogsParams
-import app.knock.api.models.messages.MessageListEventsParams
 import app.knock.api.models.messages.MessageMarkAsInteractedParams
-import app.knock.api.models.messages.MessageMarkAsReadParams
-import app.knock.api.models.messages.MessageMarkAsSeenParams
-import app.knock.api.models.messages.MessageMarkAsUnreadParams
-import app.knock.api.models.messages.MessageMarkAsUnseenParams
-import app.knock.api.models.messages.MessageUnarchiveParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -54,10 +43,7 @@ internal class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val messageFuture =
-            messageServiceAsync.archive(
-                MessageArchiveParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-            )
+        val messageFuture = messageServiceAsync.archive("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
 
         val message = messageFuture.get()
         message.validate()
@@ -75,10 +61,7 @@ internal class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val messageFuture =
-            messageServiceAsync.get(
-                MessageGetParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-            )
+        val messageFuture = messageServiceAsync.get("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
 
         val message = messageFuture.get()
         message.validate()
@@ -96,10 +79,7 @@ internal class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val responseFuture =
-            messageServiceAsync.getContent(
-                MessageGetContentParams.builder().messageId("message_id").build()
-            )
+        val responseFuture = messageServiceAsync.getContent("message_id")
 
         val response = responseFuture.get()
         response.validate()
@@ -117,10 +97,7 @@ internal class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val pageFuture =
-            messageServiceAsync.listActivities(
-                MessageListActivitiesParams.builder().messageId("message_id").build()
-            )
+        val pageFuture = messageServiceAsync.listActivities("message_id")
 
         val page = pageFuture.get()
         page.response().validate()
@@ -138,10 +115,7 @@ internal class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val pageFuture =
-            messageServiceAsync.listDeliveryLogs(
-                MessageListDeliveryLogsParams.builder().messageId("message_id").build()
-            )
+        val pageFuture = messageServiceAsync.listDeliveryLogs("message_id")
 
         val page = pageFuture.get()
         page.response().validate()
@@ -159,10 +133,7 @@ internal class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val pageFuture =
-            messageServiceAsync.listEvents(
-                MessageListEventsParams.builder().messageId("message_id").build()
-            )
+        val pageFuture = messageServiceAsync.listEvents("message_id")
 
         val page = pageFuture.get()
         page.response().validate()
@@ -208,10 +179,7 @@ internal class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val messageFuture =
-            messageServiceAsync.markAsRead(
-                MessageMarkAsReadParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-            )
+        val messageFuture = messageServiceAsync.markAsRead("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
 
         val message = messageFuture.get()
         message.validate()
@@ -229,10 +197,7 @@ internal class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val messageFuture =
-            messageServiceAsync.markAsSeen(
-                MessageMarkAsSeenParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-            )
+        val messageFuture = messageServiceAsync.markAsSeen("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
 
         val message = messageFuture.get()
         message.validate()
@@ -250,10 +215,7 @@ internal class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val messageFuture =
-            messageServiceAsync.markAsUnread(
-                MessageMarkAsUnreadParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-            )
+        val messageFuture = messageServiceAsync.markAsUnread("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
 
         val message = messageFuture.get()
         message.validate()
@@ -271,10 +233,7 @@ internal class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val messageFuture =
-            messageServiceAsync.markAsUnseen(
-                MessageMarkAsUnseenParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-            )
+        val messageFuture = messageServiceAsync.markAsUnseen("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
 
         val message = messageFuture.get()
         message.validate()
@@ -292,10 +251,7 @@ internal class MessageServiceAsyncTest {
                 .build()
         val messageServiceAsync = client.messages()
 
-        val messageFuture =
-            messageServiceAsync.unarchive(
-                MessageUnarchiveParams.builder().messageId("1jNaXzB2RZX3LY8wVQnfCKyPnv7").build()
-            )
+        val messageFuture = messageServiceAsync.unarchive("1jNaXzB2RZX3LY8wVQnfCKyPnv7")
 
         val message = messageFuture.get()
         message.validate()

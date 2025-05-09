@@ -4,23 +4,23 @@ package app.knock.api.models.users
 
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Permanently delete a user and all associated data. */
 class UserDeleteParams
 private constructor(
-    private val userId: String,
+    private val userId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun userId(): String = userId
+    fun userId(): Optional<String> = Optional.ofNullable(userId)
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -32,14 +32,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [UserDeleteParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * ```
-         */
+        @JvmStatic fun none(): UserDeleteParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [UserDeleteParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -59,7 +54,10 @@ private constructor(
             additionalBodyProperties = userDeleteParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun userId(userId: String?) = apply { this.userId = userId }
+
+        /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -185,17 +183,10 @@ private constructor(
          * Returns an immutable instance of [UserDeleteParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): UserDeleteParams =
             UserDeleteParams(
-                checkRequired("userId", userId),
+                userId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -207,7 +198,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> userId
+            0 -> userId ?: ""
             else -> ""
         }
 

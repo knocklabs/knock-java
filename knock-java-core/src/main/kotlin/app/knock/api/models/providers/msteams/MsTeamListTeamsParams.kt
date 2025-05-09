@@ -16,14 +16,14 @@ import kotlin.jvm.optionals.getOrNull
  */
 class MsTeamListTeamsParams
 private constructor(
-    private val channelId: String,
+    private val channelId: String?,
     private val msTeamsTenantObject: String,
     private val queryOptions: QueryOptions?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun channelId(): String = channelId
+    fun channelId(): Optional<String> = Optional.ofNullable(channelId)
 
     /** A JSON encoded string containing the Microsoft Teams tenant object reference. */
     fun msTeamsTenantObject(): String = msTeamsTenantObject
@@ -43,7 +43,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .channelId()
          * .msTeamsTenantObject()
          * ```
          */
@@ -68,7 +67,10 @@ private constructor(
             additionalQueryParams = msTeamListTeamsParams.additionalQueryParams.toBuilder()
         }
 
-        fun channelId(channelId: String) = apply { this.channelId = channelId }
+        fun channelId(channelId: String?) = apply { this.channelId = channelId }
+
+        /** Alias for calling [Builder.channelId] with `channelId.orElse(null)`. */
+        fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
         /** A JSON encoded string containing the Microsoft Teams tenant object reference. */
         fun msTeamsTenantObject(msTeamsTenantObject: String) = apply {
@@ -186,7 +188,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .channelId()
          * .msTeamsTenantObject()
          * ```
          *
@@ -194,7 +195,7 @@ private constructor(
          */
         fun build(): MsTeamListTeamsParams =
             MsTeamListTeamsParams(
-                checkRequired("channelId", channelId),
+                channelId,
                 checkRequired("msTeamsTenantObject", msTeamsTenantObject),
                 queryOptions,
                 additionalHeaders.build(),
@@ -204,7 +205,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> channelId
+            0 -> channelId ?: ""
             else -> ""
         }
 

@@ -5,6 +5,7 @@ package app.knock.api.services.async
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.stringHandler
@@ -21,6 +22,7 @@ import app.knock.api.models.audiences.AudienceListMembersParams
 import app.knock.api.models.audiences.AudienceListMembersResponse
 import app.knock.api.models.audiences.AudienceRemoveMembersParams
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class AudienceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     AudienceServiceAsync {
@@ -64,6 +66,9 @@ class AudienceServiceAsyncImpl internal constructor(private val clientOptions: C
             params: AudienceAddMembersParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<String>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("key", params.key().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -87,6 +92,9 @@ class AudienceServiceAsyncImpl internal constructor(private val clientOptions: C
             params: AudienceListMembersParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<AudienceListMembersResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("key", params.key().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -116,6 +124,9 @@ class AudienceServiceAsyncImpl internal constructor(private val clientOptions: C
             params: AudienceRemoveMembersParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<String>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("key", params.key().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)

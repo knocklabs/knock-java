@@ -6,20 +6,10 @@ import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClientAsync
 import app.knock.api.core.JsonValue
 import app.knock.api.models.objects.ObjectAddSubscriptionsParams
-import app.knock.api.models.objects.ObjectDeleteParams
 import app.knock.api.models.objects.ObjectDeleteSubscriptionsParams
-import app.knock.api.models.objects.ObjectGetChannelDataParams
-import app.knock.api.models.objects.ObjectGetParams
-import app.knock.api.models.objects.ObjectGetPreferencesParams
-import app.knock.api.models.objects.ObjectListMessagesParams
-import app.knock.api.models.objects.ObjectListParams
-import app.knock.api.models.objects.ObjectListPreferencesParams
-import app.knock.api.models.objects.ObjectListSchedulesParams
-import app.knock.api.models.objects.ObjectListSubscriptionsParams
 import app.knock.api.models.objects.ObjectSetChannelDataParams
 import app.knock.api.models.objects.ObjectSetParams
 import app.knock.api.models.objects.ObjectSetPreferencesParams
-import app.knock.api.models.objects.ObjectUnsetChannelDataParams
 import app.knock.api.models.recipients.channeldata.ChannelDataRequest
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.channeldata.PushChannelData
@@ -45,8 +35,7 @@ internal class ObjectServiceAsyncTest {
                 .build()
         val objectServiceAsync = client.objects()
 
-        val pageFuture =
-            objectServiceAsync.list(ObjectListParams.builder().collection("collection").build())
+        val pageFuture = objectServiceAsync.list("collection")
 
         val page = pageFuture.get()
         page.response().validate()
@@ -64,10 +53,7 @@ internal class ObjectServiceAsyncTest {
                 .build()
         val objectServiceAsync = client.objects()
 
-        val objectFuture =
-            objectServiceAsync.delete(
-                ObjectDeleteParams.builder().collection("collection").id("id").build()
-            )
+        val objectFuture = objectServiceAsync.delete("collection", "id")
 
         val object_ = objectFuture.get()
     }
@@ -140,10 +126,7 @@ internal class ObjectServiceAsyncTest {
                 .build()
         val objectServiceAsync = client.objects()
 
-        val objectFuture =
-            objectServiceAsync.get(
-                ObjectGetParams.builder().collection("collection").id("id").build()
-            )
+        val objectFuture = objectServiceAsync.get("collection", "id")
 
         val object_ = objectFuture.get()
         object_.validate()
@@ -163,11 +146,9 @@ internal class ObjectServiceAsyncTest {
 
         val channelDataFuture =
             objectServiceAsync.getChannelData(
-                ObjectGetChannelDataParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .build()
+                "collection",
+                "object_id",
+                "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             )
 
         val channelData = channelDataFuture.get()
@@ -187,13 +168,7 @@ internal class ObjectServiceAsyncTest {
         val objectServiceAsync = client.objects()
 
         val preferenceSetFuture =
-            objectServiceAsync.getPreferences(
-                ObjectGetPreferencesParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .id("default")
-                    .build()
-            )
+            objectServiceAsync.getPreferences("collection", "object_id", "default")
 
         val preferenceSet = preferenceSetFuture.get()
         preferenceSet.validate()
@@ -211,10 +186,7 @@ internal class ObjectServiceAsyncTest {
                 .build()
         val objectServiceAsync = client.objects()
 
-        val pageFuture =
-            objectServiceAsync.listMessages(
-                ObjectListMessagesParams.builder().collection("projects").id("project-123").build()
-            )
+        val pageFuture = objectServiceAsync.listMessages("projects", "project-123")
 
         val page = pageFuture.get()
         page.response().validate()
@@ -232,13 +204,7 @@ internal class ObjectServiceAsyncTest {
                 .build()
         val objectServiceAsync = client.objects()
 
-        val preferenceSetsFuture =
-            objectServiceAsync.listPreferences(
-                ObjectListPreferencesParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .build()
-            )
+        val preferenceSetsFuture = objectServiceAsync.listPreferences("collection", "object_id")
 
         val preferenceSets = preferenceSetsFuture.get()
         preferenceSets.forEach { it.validate() }
@@ -256,10 +222,7 @@ internal class ObjectServiceAsyncTest {
                 .build()
         val objectServiceAsync = client.objects()
 
-        val pageFuture =
-            objectServiceAsync.listSchedules(
-                ObjectListSchedulesParams.builder().collection("collection").id("id").build()
-            )
+        val pageFuture = objectServiceAsync.listSchedules("collection", "id")
 
         val page = pageFuture.get()
         page.response().validate()
@@ -277,13 +240,7 @@ internal class ObjectServiceAsyncTest {
                 .build()
         val objectServiceAsync = client.objects()
 
-        val pageFuture =
-            objectServiceAsync.listSubscriptions(
-                ObjectListSubscriptionsParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .build()
-            )
+        val pageFuture = objectServiceAsync.listSubscriptions("collection", "object_id")
 
         val page = pageFuture.get()
         page.response().validate()
@@ -534,11 +491,9 @@ internal class ObjectServiceAsyncTest {
 
         val responseFuture =
             objectServiceAsync.unsetChannelData(
-                ObjectUnsetChannelDataParams.builder()
-                    .collection("collection")
-                    .objectId("object_id")
-                    .channelId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .build()
+                "collection",
+                "object_id",
+                "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             )
 
         val response = responseFuture.get()

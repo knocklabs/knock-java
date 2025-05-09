@@ -3,7 +3,6 @@
 package app.knock.api.models.users
 
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
@@ -13,16 +12,16 @@ import kotlin.jvm.optionals.getOrNull
 /** Retrieves a specific preference set for a user identified by the preference set ID. */
 class UserGetPreferencesParams
 private constructor(
-    private val userId: String,
-    private val id: String,
+    private val userId: String?,
+    private val id: String?,
     private val tenant: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun userId(): String = userId
+    fun userId(): Optional<String> = Optional.ofNullable(userId)
 
-    fun id(): String = id
+    fun id(): Optional<String> = Optional.ofNullable(id)
 
     /** The unique identifier for the tenant. */
     fun tenant(): Optional<String> = Optional.ofNullable(tenant)
@@ -35,15 +34,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [UserGetPreferencesParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * .id()
-         * ```
-         */
+        @JvmStatic fun none(): UserGetPreferencesParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [UserGetPreferencesParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -65,9 +58,15 @@ private constructor(
             additionalQueryParams = userGetPreferencesParams.additionalQueryParams.toBuilder()
         }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun userId(userId: String?) = apply { this.userId = userId }
 
-        fun id(id: String) = apply { this.id = id }
+        /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
+
+        fun id(id: String?) = apply { this.id = id }
+
+        /** Alias for calling [Builder.id] with `id.orElse(null)`. */
+        fun id(id: Optional<String>) = id(id.getOrNull())
 
         /** The unique identifier for the tenant. */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
@@ -177,19 +176,11 @@ private constructor(
          * Returns an immutable instance of [UserGetPreferencesParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * .id()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): UserGetPreferencesParams =
             UserGetPreferencesParams(
-                checkRequired("userId", userId),
-                checkRequired("id", id),
+                userId,
+                id,
                 tenant,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -198,8 +189,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> userId
-            1 -> id
+            0 -> userId ?: ""
+            1 -> id ?: ""
             else -> ""
         }
 

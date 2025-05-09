@@ -5,7 +5,6 @@ package app.knock.api.models.users
 import app.knock.api.core.Enum
 import app.knock.api.core.JsonField
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
@@ -22,7 +21,7 @@ import kotlin.jvm.optionals.getOrNull
  */
 class UserListMessagesParams
 private constructor(
-    private val userId: String,
+    private val userId: String?,
     private val after: String?,
     private val before: String?,
     private val channelId: String?,
@@ -41,7 +40,7 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun userId(): String = userId
+    fun userId(): Optional<String> = Optional.ofNullable(userId)
 
     /** The cursor to fetch entries after. */
     fun after(): Optional<String> = Optional.ofNullable(after)
@@ -102,14 +101,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [UserListMessagesParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * ```
-         */
+        @JvmStatic fun none(): UserListMessagesParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [UserListMessagesParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -155,7 +149,10 @@ private constructor(
             additionalQueryParams = userListMessagesParams.additionalQueryParams.toBuilder()
         }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun userId(userId: String?) = apply { this.userId = userId }
+
+        /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
 
         /** The cursor to fetch entries after. */
         fun after(after: String?) = apply { this.after = after }
@@ -414,17 +411,10 @@ private constructor(
          * Returns an immutable instance of [UserListMessagesParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): UserListMessagesParams =
             UserListMessagesParams(
-                checkRequired("userId", userId),
+                userId,
                 after,
                 before,
                 channelId,
@@ -446,7 +436,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> userId
+            0 -> userId ?: ""
             else -> ""
         }
 

@@ -5,6 +5,7 @@ package app.knock.api.services.blocking
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.stringHandler
@@ -25,6 +26,7 @@ import app.knock.api.models.tenants.TenantListParams
 import app.knock.api.models.tenants.TenantSetParams
 import app.knock.api.services.blocking.tenants.BulkService
 import app.knock.api.services.blocking.tenants.BulkServiceImpl
+import kotlin.jvm.optionals.getOrNull
 
 class TenantServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     TenantService {
@@ -106,6 +108,9 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
             params: TenantDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<String> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -125,6 +130,9 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
             params: TenantGetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Tenant> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -151,6 +159,9 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
             params: TenantSetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Tenant> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)

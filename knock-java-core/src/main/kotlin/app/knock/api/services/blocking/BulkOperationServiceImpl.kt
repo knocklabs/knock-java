@@ -5,6 +5,7 @@ package app.knock.api.services.blocking
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.withErrorHandler
@@ -16,6 +17,7 @@ import app.knock.api.core.http.parseable
 import app.knock.api.core.prepare
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.bulkoperations.BulkOperationGetParams
+import kotlin.jvm.optionals.getOrNull
 
 class BulkOperationServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     BulkOperationService {
@@ -45,6 +47,9 @@ class BulkOperationServiceImpl internal constructor(private val clientOptions: C
             params: BulkOperationGetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<BulkOperation> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

@@ -48,6 +48,17 @@ interface UserService {
      * user, the system merges the properties you specific with what is currently set on the user,
      * updating only the fields included in your requests.
      */
+    fun update(userId: String, params: UserUpdateParams): User =
+        update(userId, params, RequestOptions.none())
+
+    /** @see [update] */
+    fun update(
+        userId: String,
+        params: UserUpdateParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): User = update(params.toBuilder().userId(userId).build(), requestOptions)
+
+    /** @see [update] */
     fun update(params: UserUpdateParams): User = update(params, RequestOptions.none())
 
     /** @see [update] */
@@ -74,7 +85,18 @@ interface UserService {
         list(UserListParams.none(), requestOptions)
 
     /** Permanently delete a user and all associated data. */
-    fun delete(params: UserDeleteParams): String = delete(params, RequestOptions.none())
+    fun delete(userId: String): String = delete(userId, UserDeleteParams.none())
+
+    /** @see [delete] */
+    fun delete(
+        userId: String,
+        params: UserDeleteParams = UserDeleteParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): String = delete(params.toBuilder().userId(userId).build(), requestOptions)
+
+    /** @see [delete] */
+    fun delete(userId: String, params: UserDeleteParams = UserDeleteParams.none()): String =
+        delete(userId, params, RequestOptions.none())
 
     /** @see [delete] */
     fun delete(
@@ -82,15 +104,59 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): String
 
+    /** @see [delete] */
+    fun delete(params: UserDeleteParams): String = delete(params, RequestOptions.none())
+
+    /** @see [delete] */
+    fun delete(userId: String, requestOptions: RequestOptions): String =
+        delete(userId, UserDeleteParams.none(), requestOptions)
+
     /** Retrieve a specific user by their ID. */
-    fun get(params: UserGetParams): User = get(params, RequestOptions.none())
+    fun get(userId: String): User = get(userId, UserGetParams.none())
+
+    /** @see [get] */
+    fun get(
+        userId: String,
+        params: UserGetParams = UserGetParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): User = get(params.toBuilder().userId(userId).build(), requestOptions)
+
+    /** @see [get] */
+    fun get(userId: String, params: UserGetParams = UserGetParams.none()): User =
+        get(userId, params, RequestOptions.none())
 
     /** @see [get] */
     fun get(params: UserGetParams, requestOptions: RequestOptions = RequestOptions.none()): User
 
+    /** @see [get] */
+    fun get(params: UserGetParams): User = get(params, RequestOptions.none())
+
+    /** @see [get] */
+    fun get(userId: String, requestOptions: RequestOptions): User =
+        get(userId, UserGetParams.none(), requestOptions)
+
     /** Retrieves the channel data for a specific user and channel ID. */
-    fun getChannelData(params: UserGetChannelDataParams): ChannelData =
-        getChannelData(params, RequestOptions.none())
+    fun getChannelData(userId: String, channelId: String): ChannelData =
+        getChannelData(userId, channelId, UserGetChannelDataParams.none())
+
+    /** @see [getChannelData] */
+    fun getChannelData(
+        userId: String,
+        channelId: String,
+        params: UserGetChannelDataParams = UserGetChannelDataParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ChannelData =
+        getChannelData(
+            params.toBuilder().userId(userId).channelId(channelId).build(),
+            requestOptions,
+        )
+
+    /** @see [getChannelData] */
+    fun getChannelData(
+        userId: String,
+        channelId: String,
+        params: UserGetChannelDataParams = UserGetChannelDataParams.none(),
+    ): ChannelData = getChannelData(userId, channelId, params, RequestOptions.none())
 
     /** @see [getChannelData] */
     fun getChannelData(
@@ -98,9 +164,37 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): ChannelData
 
+    /** @see [getChannelData] */
+    fun getChannelData(params: UserGetChannelDataParams): ChannelData =
+        getChannelData(params, RequestOptions.none())
+
+    /** @see [getChannelData] */
+    fun getChannelData(
+        userId: String,
+        channelId: String,
+        requestOptions: RequestOptions,
+    ): ChannelData =
+        getChannelData(userId, channelId, UserGetChannelDataParams.none(), requestOptions)
+
     /** Retrieves a specific preference set for a user identified by the preference set ID. */
-    fun getPreferences(params: UserGetPreferencesParams): PreferenceSet =
-        getPreferences(params, RequestOptions.none())
+    fun getPreferences(userId: String, id: String): PreferenceSet =
+        getPreferences(userId, id, UserGetPreferencesParams.none())
+
+    /** @see [getPreferences] */
+    fun getPreferences(
+        userId: String,
+        id: String,
+        params: UserGetPreferencesParams = UserGetPreferencesParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PreferenceSet =
+        getPreferences(params.toBuilder().userId(userId).id(id).build(), requestOptions)
+
+    /** @see [getPreferences] */
+    fun getPreferences(
+        userId: String,
+        id: String,
+        params: UserGetPreferencesParams = UserGetPreferencesParams.none(),
+    ): PreferenceSet = getPreferences(userId, id, params, RequestOptions.none())
 
     /** @see [getPreferences] */
     fun getPreferences(
@@ -108,13 +202,35 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): PreferenceSet
 
+    /** @see [getPreferences] */
+    fun getPreferences(params: UserGetPreferencesParams): PreferenceSet =
+        getPreferences(params, RequestOptions.none())
+
+    /** @see [getPreferences] */
+    fun getPreferences(userId: String, id: String, requestOptions: RequestOptions): PreferenceSet =
+        getPreferences(userId, id, UserGetPreferencesParams.none(), requestOptions)
+
     /**
      * Returns a paginated list of messages for a specific user. Allows filtering by message status
      * and provides various sorting options. Messages outside the account's retention window will
      * not be included in the results.
      */
-    fun listMessages(params: UserListMessagesParams): UserListMessagesPage =
-        listMessages(params, RequestOptions.none())
+    fun listMessages(userId: String): UserListMessagesPage =
+        listMessages(userId, UserListMessagesParams.none())
+
+    /** @see [listMessages] */
+    fun listMessages(
+        userId: String,
+        params: UserListMessagesParams = UserListMessagesParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): UserListMessagesPage =
+        listMessages(params.toBuilder().userId(userId).build(), requestOptions)
+
+    /** @see [listMessages] */
+    fun listMessages(
+        userId: String,
+        params: UserListMessagesParams = UserListMessagesParams.none(),
+    ): UserListMessagesPage = listMessages(userId, params, RequestOptions.none())
 
     /** @see [listMessages] */
     fun listMessages(
@@ -122,9 +238,31 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): UserListMessagesPage
 
+    /** @see [listMessages] */
+    fun listMessages(params: UserListMessagesParams): UserListMessagesPage =
+        listMessages(params, RequestOptions.none())
+
+    /** @see [listMessages] */
+    fun listMessages(userId: String, requestOptions: RequestOptions): UserListMessagesPage =
+        listMessages(userId, UserListMessagesParams.none(), requestOptions)
+
     /** Retrieves a list of all preference sets for a specific user. */
-    fun listPreferences(params: UserListPreferencesParams): List<PreferenceSet> =
-        listPreferences(params, RequestOptions.none())
+    fun listPreferences(userId: String): List<PreferenceSet> =
+        listPreferences(userId, UserListPreferencesParams.none())
+
+    /** @see [listPreferences] */
+    fun listPreferences(
+        userId: String,
+        params: UserListPreferencesParams = UserListPreferencesParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): List<PreferenceSet> =
+        listPreferences(params.toBuilder().userId(userId).build(), requestOptions)
+
+    /** @see [listPreferences] */
+    fun listPreferences(
+        userId: String,
+        params: UserListPreferencesParams = UserListPreferencesParams.none(),
+    ): List<PreferenceSet> = listPreferences(userId, params, RequestOptions.none())
 
     /** @see [listPreferences] */
     fun listPreferences(
@@ -132,9 +270,31 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): List<PreferenceSet>
 
+    /** @see [listPreferences] */
+    fun listPreferences(params: UserListPreferencesParams): List<PreferenceSet> =
+        listPreferences(params, RequestOptions.none())
+
+    /** @see [listPreferences] */
+    fun listPreferences(userId: String, requestOptions: RequestOptions): List<PreferenceSet> =
+        listPreferences(userId, UserListPreferencesParams.none(), requestOptions)
+
     /** Returns a paginated list of schedules for a specific user, in descending order. */
-    fun listSchedules(params: UserListSchedulesParams): UserListSchedulesPage =
-        listSchedules(params, RequestOptions.none())
+    fun listSchedules(userId: String): UserListSchedulesPage =
+        listSchedules(userId, UserListSchedulesParams.none())
+
+    /** @see [listSchedules] */
+    fun listSchedules(
+        userId: String,
+        params: UserListSchedulesParams = UserListSchedulesParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): UserListSchedulesPage =
+        listSchedules(params.toBuilder().userId(userId).build(), requestOptions)
+
+    /** @see [listSchedules] */
+    fun listSchedules(
+        userId: String,
+        params: UserListSchedulesParams = UserListSchedulesParams.none(),
+    ): UserListSchedulesPage = listSchedules(userId, params, RequestOptions.none())
 
     /** @see [listSchedules] */
     fun listSchedules(
@@ -142,9 +302,31 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): UserListSchedulesPage
 
+    /** @see [listSchedules] */
+    fun listSchedules(params: UserListSchedulesParams): UserListSchedulesPage =
+        listSchedules(params, RequestOptions.none())
+
+    /** @see [listSchedules] */
+    fun listSchedules(userId: String, requestOptions: RequestOptions): UserListSchedulesPage =
+        listSchedules(userId, UserListSchedulesParams.none(), requestOptions)
+
     /** Retrieves a paginated list of subscriptions for a specific user, in descending order. */
-    fun listSubscriptions(params: UserListSubscriptionsParams): UserListSubscriptionsPage =
-        listSubscriptions(params, RequestOptions.none())
+    fun listSubscriptions(userId: String): UserListSubscriptionsPage =
+        listSubscriptions(userId, UserListSubscriptionsParams.none())
+
+    /** @see [listSubscriptions] */
+    fun listSubscriptions(
+        userId: String,
+        params: UserListSubscriptionsParams = UserListSubscriptionsParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): UserListSubscriptionsPage =
+        listSubscriptions(params.toBuilder().userId(userId).build(), requestOptions)
+
+    /** @see [listSubscriptions] */
+    fun listSubscriptions(
+        userId: String,
+        params: UserListSubscriptionsParams = UserListSubscriptionsParams.none(),
+    ): UserListSubscriptionsPage = listSubscriptions(userId, params, RequestOptions.none())
 
     /** @see [listSubscriptions] */
     fun listSubscriptions(
@@ -152,16 +334,57 @@ interface UserService {
         requestOptions: RequestOptions = RequestOptions.none(),
     ): UserListSubscriptionsPage
 
+    /** @see [listSubscriptions] */
+    fun listSubscriptions(params: UserListSubscriptionsParams): UserListSubscriptionsPage =
+        listSubscriptions(params, RequestOptions.none())
+
+    /** @see [listSubscriptions] */
+    fun listSubscriptions(
+        userId: String,
+        requestOptions: RequestOptions,
+    ): UserListSubscriptionsPage =
+        listSubscriptions(userId, UserListSubscriptionsParams.none(), requestOptions)
+
     /**
      * Merge two users together, where the user specified with the `from_user_id` param will be
      * merged into the user specified by `user_id`.
      */
+    fun merge(userId: String, params: UserMergeParams): User =
+        merge(userId, params, RequestOptions.none())
+
+    /** @see [merge] */
+    fun merge(
+        userId: String,
+        params: UserMergeParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): User = merge(params.toBuilder().userId(userId).build(), requestOptions)
+
+    /** @see [merge] */
     fun merge(params: UserMergeParams): User = merge(params, RequestOptions.none())
 
     /** @see [merge] */
     fun merge(params: UserMergeParams, requestOptions: RequestOptions = RequestOptions.none()): User
 
     /** Updates or creates channel data for a specific user and channel ID. */
+    fun setChannelData(
+        userId: String,
+        channelId: String,
+        params: UserSetChannelDataParams,
+    ): ChannelData = setChannelData(userId, channelId, params, RequestOptions.none())
+
+    /** @see [setChannelData] */
+    fun setChannelData(
+        userId: String,
+        channelId: String,
+        params: UserSetChannelDataParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): ChannelData =
+        setChannelData(
+            params.toBuilder().userId(userId).channelId(channelId).build(),
+            requestOptions,
+        )
+
+    /** @see [setChannelData] */
     fun setChannelData(params: UserSetChannelDataParams): ChannelData =
         setChannelData(params, RequestOptions.none())
 
@@ -175,6 +398,22 @@ interface UserService {
      * Updates a complete preference set for a user. This is a destructive operation that will
      * replace the existing preference set for the user.
      */
+    fun setPreferences(
+        userId: String,
+        id: String,
+        params: UserSetPreferencesParams,
+    ): PreferenceSet = setPreferences(userId, id, params, RequestOptions.none())
+
+    /** @see [setPreferences] */
+    fun setPreferences(
+        userId: String,
+        id: String,
+        params: UserSetPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): PreferenceSet =
+        setPreferences(params.toBuilder().userId(userId).id(id).build(), requestOptions)
+
+    /** @see [setPreferences] */
     fun setPreferences(params: UserSetPreferencesParams): PreferenceSet =
         setPreferences(params, RequestOptions.none())
 
@@ -185,14 +424,45 @@ interface UserService {
     ): PreferenceSet
 
     /** Deletes channel data for a specific user and channel ID. */
-    fun unsetChannelData(params: UserUnsetChannelDataParams): String =
-        unsetChannelData(params, RequestOptions.none())
+    fun unsetChannelData(userId: String, channelId: String): String =
+        unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none())
+
+    /** @see [unsetChannelData] */
+    fun unsetChannelData(
+        userId: String,
+        channelId: String,
+        params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): String =
+        unsetChannelData(
+            params.toBuilder().userId(userId).channelId(channelId).build(),
+            requestOptions,
+        )
+
+    /** @see [unsetChannelData] */
+    fun unsetChannelData(
+        userId: String,
+        channelId: String,
+        params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
+    ): String = unsetChannelData(userId, channelId, params, RequestOptions.none())
 
     /** @see [unsetChannelData] */
     fun unsetChannelData(
         params: UserUnsetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): String
+
+    /** @see [unsetChannelData] */
+    fun unsetChannelData(params: UserUnsetChannelDataParams): String =
+        unsetChannelData(params, RequestOptions.none())
+
+    /** @see [unsetChannelData] */
+    fun unsetChannelData(
+        userId: String,
+        channelId: String,
+        requestOptions: RequestOptions,
+    ): String =
+        unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none(), requestOptions)
 
     /** A view of [UserService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -207,6 +477,19 @@ interface UserService {
          * Returns a raw HTTP response for `put /v1/users/{user_id}`, but is otherwise the same as
          * [UserService.update].
          */
+        @MustBeClosed
+        fun update(userId: String, params: UserUpdateParams): HttpResponseFor<User> =
+            update(userId, params, RequestOptions.none())
+
+        /** @see [update] */
+        @MustBeClosed
+        fun update(
+            userId: String,
+            params: UserUpdateParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<User> = update(params.toBuilder().userId(userId).build(), requestOptions)
+
+        /** @see [update] */
         @MustBeClosed
         fun update(params: UserUpdateParams): HttpResponseFor<User> =
             update(params, RequestOptions.none())
@@ -246,8 +529,24 @@ interface UserService {
          * as [UserService.delete].
          */
         @MustBeClosed
-        fun delete(params: UserDeleteParams): HttpResponseFor<String> =
-            delete(params, RequestOptions.none())
+        fun delete(userId: String): HttpResponseFor<String> =
+            delete(userId, UserDeleteParams.none())
+
+        /** @see [delete] */
+        @MustBeClosed
+        fun delete(
+            userId: String,
+            params: UserDeleteParams = UserDeleteParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<String> =
+            delete(params.toBuilder().userId(userId).build(), requestOptions)
+
+        /** @see [delete] */
+        @MustBeClosed
+        fun delete(
+            userId: String,
+            params: UserDeleteParams = UserDeleteParams.none(),
+        ): HttpResponseFor<String> = delete(userId, params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
@@ -256,12 +555,37 @@ interface UserService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<String>
 
+        /** @see [delete] */
+        @MustBeClosed
+        fun delete(params: UserDeleteParams): HttpResponseFor<String> =
+            delete(params, RequestOptions.none())
+
+        /** @see [delete] */
+        @MustBeClosed
+        fun delete(userId: String, requestOptions: RequestOptions): HttpResponseFor<String> =
+            delete(userId, UserDeleteParams.none(), requestOptions)
+
         /**
          * Returns a raw HTTP response for `get /v1/users/{user_id}`, but is otherwise the same as
          * [UserService.get].
          */
         @MustBeClosed
-        fun get(params: UserGetParams): HttpResponseFor<User> = get(params, RequestOptions.none())
+        fun get(userId: String): HttpResponseFor<User> = get(userId, UserGetParams.none())
+
+        /** @see [get] */
+        @MustBeClosed
+        fun get(
+            userId: String,
+            params: UserGetParams = UserGetParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<User> = get(params.toBuilder().userId(userId).build(), requestOptions)
+
+        /** @see [get] */
+        @MustBeClosed
+        fun get(
+            userId: String,
+            params: UserGetParams = UserGetParams.none(),
+        ): HttpResponseFor<User> = get(userId, params, RequestOptions.none())
 
         /** @see [get] */
         @MustBeClosed
@@ -270,13 +594,44 @@ interface UserService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<User>
 
+        /** @see [get] */
+        @MustBeClosed
+        fun get(params: UserGetParams): HttpResponseFor<User> = get(params, RequestOptions.none())
+
+        /** @see [get] */
+        @MustBeClosed
+        fun get(userId: String, requestOptions: RequestOptions): HttpResponseFor<User> =
+            get(userId, UserGetParams.none(), requestOptions)
+
         /**
          * Returns a raw HTTP response for `get /v1/users/{user_id}/channel_data/{channel_id}`, but
          * is otherwise the same as [UserService.getChannelData].
          */
         @MustBeClosed
-        fun getChannelData(params: UserGetChannelDataParams): HttpResponseFor<ChannelData> =
-            getChannelData(params, RequestOptions.none())
+        fun getChannelData(userId: String, channelId: String): HttpResponseFor<ChannelData> =
+            getChannelData(userId, channelId, UserGetChannelDataParams.none())
+
+        /** @see [getChannelData] */
+        @MustBeClosed
+        fun getChannelData(
+            userId: String,
+            channelId: String,
+            params: UserGetChannelDataParams = UserGetChannelDataParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ChannelData> =
+            getChannelData(
+                params.toBuilder().userId(userId).channelId(channelId).build(),
+                requestOptions,
+            )
+
+        /** @see [getChannelData] */
+        @MustBeClosed
+        fun getChannelData(
+            userId: String,
+            channelId: String,
+            params: UserGetChannelDataParams = UserGetChannelDataParams.none(),
+        ): HttpResponseFor<ChannelData> =
+            getChannelData(userId, channelId, params, RequestOptions.none())
 
         /** @see [getChannelData] */
         @MustBeClosed
@@ -285,13 +640,46 @@ interface UserService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<ChannelData>
 
+        /** @see [getChannelData] */
+        @MustBeClosed
+        fun getChannelData(params: UserGetChannelDataParams): HttpResponseFor<ChannelData> =
+            getChannelData(params, RequestOptions.none())
+
+        /** @see [getChannelData] */
+        @MustBeClosed
+        fun getChannelData(
+            userId: String,
+            channelId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<ChannelData> =
+            getChannelData(userId, channelId, UserGetChannelDataParams.none(), requestOptions)
+
         /**
          * Returns a raw HTTP response for `get /v1/users/{user_id}/preferences/{id}`, but is
          * otherwise the same as [UserService.getPreferences].
          */
         @MustBeClosed
-        fun getPreferences(params: UserGetPreferencesParams): HttpResponseFor<PreferenceSet> =
-            getPreferences(params, RequestOptions.none())
+        fun getPreferences(userId: String, id: String): HttpResponseFor<PreferenceSet> =
+            getPreferences(userId, id, UserGetPreferencesParams.none())
+
+        /** @see [getPreferences] */
+        @MustBeClosed
+        fun getPreferences(
+            userId: String,
+            id: String,
+            params: UserGetPreferencesParams = UserGetPreferencesParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PreferenceSet> =
+            getPreferences(params.toBuilder().userId(userId).id(id).build(), requestOptions)
+
+        /** @see [getPreferences] */
+        @MustBeClosed
+        fun getPreferences(
+            userId: String,
+            id: String,
+            params: UserGetPreferencesParams = UserGetPreferencesParams.none(),
+        ): HttpResponseFor<PreferenceSet> =
+            getPreferences(userId, id, params, RequestOptions.none())
 
         /** @see [getPreferences] */
         @MustBeClosed
@@ -300,13 +688,44 @@ interface UserService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<PreferenceSet>
 
+        /** @see [getPreferences] */
+        @MustBeClosed
+        fun getPreferences(params: UserGetPreferencesParams): HttpResponseFor<PreferenceSet> =
+            getPreferences(params, RequestOptions.none())
+
+        /** @see [getPreferences] */
+        @MustBeClosed
+        fun getPreferences(
+            userId: String,
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<PreferenceSet> =
+            getPreferences(userId, id, UserGetPreferencesParams.none(), requestOptions)
+
         /**
          * Returns a raw HTTP response for `get /v1/users/{user_id}/messages`, but is otherwise the
          * same as [UserService.listMessages].
          */
         @MustBeClosed
-        fun listMessages(params: UserListMessagesParams): HttpResponseFor<UserListMessagesPage> =
-            listMessages(params, RequestOptions.none())
+        fun listMessages(userId: String): HttpResponseFor<UserListMessagesPage> =
+            listMessages(userId, UserListMessagesParams.none())
+
+        /** @see [listMessages] */
+        @MustBeClosed
+        fun listMessages(
+            userId: String,
+            params: UserListMessagesParams = UserListMessagesParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<UserListMessagesPage> =
+            listMessages(params.toBuilder().userId(userId).build(), requestOptions)
+
+        /** @see [listMessages] */
+        @MustBeClosed
+        fun listMessages(
+            userId: String,
+            params: UserListMessagesParams = UserListMessagesParams.none(),
+        ): HttpResponseFor<UserListMessagesPage> =
+            listMessages(userId, params, RequestOptions.none())
 
         /** @see [listMessages] */
         @MustBeClosed
@@ -315,14 +734,43 @@ interface UserService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<UserListMessagesPage>
 
+        /** @see [listMessages] */
+        @MustBeClosed
+        fun listMessages(params: UserListMessagesParams): HttpResponseFor<UserListMessagesPage> =
+            listMessages(params, RequestOptions.none())
+
+        /** @see [listMessages] */
+        @MustBeClosed
+        fun listMessages(
+            userId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<UserListMessagesPage> =
+            listMessages(userId, UserListMessagesParams.none(), requestOptions)
+
         /**
          * Returns a raw HTTP response for `get /v1/users/{user_id}/preferences`, but is otherwise
          * the same as [UserService.listPreferences].
          */
         @MustBeClosed
+        fun listPreferences(userId: String): HttpResponseFor<List<PreferenceSet>> =
+            listPreferences(userId, UserListPreferencesParams.none())
+
+        /** @see [listPreferences] */
+        @MustBeClosed
         fun listPreferences(
-            params: UserListPreferencesParams
-        ): HttpResponseFor<List<PreferenceSet>> = listPreferences(params, RequestOptions.none())
+            userId: String,
+            params: UserListPreferencesParams = UserListPreferencesParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<List<PreferenceSet>> =
+            listPreferences(params.toBuilder().userId(userId).build(), requestOptions)
+
+        /** @see [listPreferences] */
+        @MustBeClosed
+        fun listPreferences(
+            userId: String,
+            params: UserListPreferencesParams = UserListPreferencesParams.none(),
+        ): HttpResponseFor<List<PreferenceSet>> =
+            listPreferences(userId, params, RequestOptions.none())
 
         /** @see [listPreferences] */
         @MustBeClosed
@@ -331,13 +779,44 @@ interface UserService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<List<PreferenceSet>>
 
+        /** @see [listPreferences] */
+        @MustBeClosed
+        fun listPreferences(
+            params: UserListPreferencesParams
+        ): HttpResponseFor<List<PreferenceSet>> = listPreferences(params, RequestOptions.none())
+
+        /** @see [listPreferences] */
+        @MustBeClosed
+        fun listPreferences(
+            userId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<List<PreferenceSet>> =
+            listPreferences(userId, UserListPreferencesParams.none(), requestOptions)
+
         /**
          * Returns a raw HTTP response for `get /v1/users/{user_id}/schedules`, but is otherwise the
          * same as [UserService.listSchedules].
          */
         @MustBeClosed
-        fun listSchedules(params: UserListSchedulesParams): HttpResponseFor<UserListSchedulesPage> =
-            listSchedules(params, RequestOptions.none())
+        fun listSchedules(userId: String): HttpResponseFor<UserListSchedulesPage> =
+            listSchedules(userId, UserListSchedulesParams.none())
+
+        /** @see [listSchedules] */
+        @MustBeClosed
+        fun listSchedules(
+            userId: String,
+            params: UserListSchedulesParams = UserListSchedulesParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<UserListSchedulesPage> =
+            listSchedules(params.toBuilder().userId(userId).build(), requestOptions)
+
+        /** @see [listSchedules] */
+        @MustBeClosed
+        fun listSchedules(
+            userId: String,
+            params: UserListSchedulesParams = UserListSchedulesParams.none(),
+        ): HttpResponseFor<UserListSchedulesPage> =
+            listSchedules(userId, params, RequestOptions.none())
 
         /** @see [listSchedules] */
         @MustBeClosed
@@ -346,10 +825,52 @@ interface UserService {
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<UserListSchedulesPage>
 
+        /** @see [listSchedules] */
+        @MustBeClosed
+        fun listSchedules(params: UserListSchedulesParams): HttpResponseFor<UserListSchedulesPage> =
+            listSchedules(params, RequestOptions.none())
+
+        /** @see [listSchedules] */
+        @MustBeClosed
+        fun listSchedules(
+            userId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<UserListSchedulesPage> =
+            listSchedules(userId, UserListSchedulesParams.none(), requestOptions)
+
         /**
          * Returns a raw HTTP response for `get /v1/users/{user_id}/subscriptions`, but is otherwise
          * the same as [UserService.listSubscriptions].
          */
+        @MustBeClosed
+        fun listSubscriptions(userId: String): HttpResponseFor<UserListSubscriptionsPage> =
+            listSubscriptions(userId, UserListSubscriptionsParams.none())
+
+        /** @see [listSubscriptions] */
+        @MustBeClosed
+        fun listSubscriptions(
+            userId: String,
+            params: UserListSubscriptionsParams = UserListSubscriptionsParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<UserListSubscriptionsPage> =
+            listSubscriptions(params.toBuilder().userId(userId).build(), requestOptions)
+
+        /** @see [listSubscriptions] */
+        @MustBeClosed
+        fun listSubscriptions(
+            userId: String,
+            params: UserListSubscriptionsParams = UserListSubscriptionsParams.none(),
+        ): HttpResponseFor<UserListSubscriptionsPage> =
+            listSubscriptions(userId, params, RequestOptions.none())
+
+        /** @see [listSubscriptions] */
+        @MustBeClosed
+        fun listSubscriptions(
+            params: UserListSubscriptionsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<UserListSubscriptionsPage>
+
+        /** @see [listSubscriptions] */
         @MustBeClosed
         fun listSubscriptions(
             params: UserListSubscriptionsParams
@@ -359,14 +880,28 @@ interface UserService {
         /** @see [listSubscriptions] */
         @MustBeClosed
         fun listSubscriptions(
-            params: UserListSubscriptionsParams,
-            requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<UserListSubscriptionsPage>
+            userId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<UserListSubscriptionsPage> =
+            listSubscriptions(userId, UserListSubscriptionsParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `post /v1/users/{user_id}/merge`, but is otherwise the
          * same as [UserService.merge].
          */
+        @MustBeClosed
+        fun merge(userId: String, params: UserMergeParams): HttpResponseFor<User> =
+            merge(userId, params, RequestOptions.none())
+
+        /** @see [merge] */
+        @MustBeClosed
+        fun merge(
+            userId: String,
+            params: UserMergeParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<User> = merge(params.toBuilder().userId(userId).build(), requestOptions)
+
+        /** @see [merge] */
         @MustBeClosed
         fun merge(params: UserMergeParams): HttpResponseFor<User> =
             merge(params, RequestOptions.none())
@@ -383,6 +918,28 @@ interface UserService {
          * is otherwise the same as [UserService.setChannelData].
          */
         @MustBeClosed
+        fun setChannelData(
+            userId: String,
+            channelId: String,
+            params: UserSetChannelDataParams,
+        ): HttpResponseFor<ChannelData> =
+            setChannelData(userId, channelId, params, RequestOptions.none())
+
+        /** @see [setChannelData] */
+        @MustBeClosed
+        fun setChannelData(
+            userId: String,
+            channelId: String,
+            params: UserSetChannelDataParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<ChannelData> =
+            setChannelData(
+                params.toBuilder().userId(userId).channelId(channelId).build(),
+                requestOptions,
+            )
+
+        /** @see [setChannelData] */
+        @MustBeClosed
         fun setChannelData(params: UserSetChannelDataParams): HttpResponseFor<ChannelData> =
             setChannelData(params, RequestOptions.none())
 
@@ -397,6 +954,25 @@ interface UserService {
          * Returns a raw HTTP response for `put /v1/users/{user_id}/preferences/{id}`, but is
          * otherwise the same as [UserService.setPreferences].
          */
+        @MustBeClosed
+        fun setPreferences(
+            userId: String,
+            id: String,
+            params: UserSetPreferencesParams,
+        ): HttpResponseFor<PreferenceSet> =
+            setPreferences(userId, id, params, RequestOptions.none())
+
+        /** @see [setPreferences] */
+        @MustBeClosed
+        fun setPreferences(
+            userId: String,
+            id: String,
+            params: UserSetPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<PreferenceSet> =
+            setPreferences(params.toBuilder().userId(userId).id(id).build(), requestOptions)
+
+        /** @see [setPreferences] */
         @MustBeClosed
         fun setPreferences(params: UserSetPreferencesParams): HttpResponseFor<PreferenceSet> =
             setPreferences(params, RequestOptions.none())
@@ -413,8 +989,30 @@ interface UserService {
          * but is otherwise the same as [UserService.unsetChannelData].
          */
         @MustBeClosed
-        fun unsetChannelData(params: UserUnsetChannelDataParams): HttpResponseFor<String> =
-            unsetChannelData(params, RequestOptions.none())
+        fun unsetChannelData(userId: String, channelId: String): HttpResponseFor<String> =
+            unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none())
+
+        /** @see [unsetChannelData] */
+        @MustBeClosed
+        fun unsetChannelData(
+            userId: String,
+            channelId: String,
+            params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<String> =
+            unsetChannelData(
+                params.toBuilder().userId(userId).channelId(channelId).build(),
+                requestOptions,
+            )
+
+        /** @see [unsetChannelData] */
+        @MustBeClosed
+        fun unsetChannelData(
+            userId: String,
+            channelId: String,
+            params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
+        ): HttpResponseFor<String> =
+            unsetChannelData(userId, channelId, params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
         @MustBeClosed
@@ -422,5 +1020,19 @@ interface UserService {
             params: UserUnsetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<String>
+
+        /** @see [unsetChannelData] */
+        @MustBeClosed
+        fun unsetChannelData(params: UserUnsetChannelDataParams): HttpResponseFor<String> =
+            unsetChannelData(params, RequestOptions.none())
+
+        /** @see [unsetChannelData] */
+        @MustBeClosed
+        fun unsetChannelData(
+            userId: String,
+            channelId: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<String> =
+            unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none(), requestOptions)
     }
 }
