@@ -74,6 +74,7 @@ class ActivityServiceAsyncImpl internal constructor(private val clientOptions: C
                             .let {
                                 ActivityListPageAsync.builder()
                                     .service(ActivityServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

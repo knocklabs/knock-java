@@ -2,12 +2,12 @@
 
 package app.knock.api.models.providers.msteams
 
+import app.knock.api.core.AutoPager
+import app.knock.api.core.Page
 import app.knock.api.core.checkRequired
 import app.knock.api.services.blocking.providers.MsTeamService
 import java.util.Objects
 import java.util.Optional
-import java.util.stream.Stream
-import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [MsTeamService.listTeams] */
@@ -16,7 +16,7 @@ private constructor(
     private val service: MsTeamService,
     private val params: MsTeamListTeamsParams,
     private val response: MsTeamListTeamsPageResponse,
-) {
+) : Page<MsTeamListTeamsResponse> {
 
     /**
      * Delegates to [MsTeamListTeamsPageResponse], but gracefully handles missing data.
@@ -33,22 +33,20 @@ private constructor(
     fun msTeamsTeams(): List<MsTeamListTeamsResponse> =
         response._msTeamsTeams().getOptional("ms_teams_teams").getOrNull() ?: emptyList()
 
-    fun hasNextPage(): Boolean = msTeamsTeams().isNotEmpty() && skipToken().isPresent
+    override fun items(): List<MsTeamListTeamsResponse> = msTeamsTeams()
 
-    fun getNextPageParams(): Optional<MsTeamListTeamsParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
+    override fun hasNextPage(): Boolean = items().isNotEmpty() && skipToken().isPresent
 
-        return Optional.of(
-            params.toBuilder().apply { skipToken().ifPresent { queryOptionsSkiptoken(it) } }.build()
-        )
+    fun nextPageParams(): MsTeamListTeamsParams {
+        val nextCursor =
+            skipToken().getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().queryOptionsSkiptoken(nextCursor).build()
     }
 
-    fun getNextPage(): Optional<MsTeamListTeamsPage> =
-        getNextPageParams().map { service.listTeams(it) }
+    override fun nextPage(): MsTeamListTeamsPage = service.listTeams(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPager<MsTeamListTeamsResponse> = AutoPager.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): MsTeamListTeamsParams = params
@@ -115,26 +113,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: MsTeamListTeamsPage) :
-        Iterable<MsTeamListTeamsResponse> {
-
-        override fun iterator(): Iterator<MsTeamListTeamsResponse> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.msTeamsTeams().size) {
-                    yield(page.msTeamsTeams()[index++])
-                }
-                page = page.getNextPage().getOrNull() ?: break
-                index = 0
-            }
-        }
-
-        fun stream(): Stream<MsTeamListTeamsResponse> {
-            return StreamSupport.stream(spliterator(), false)
-        }
     }
 
     override fun equals(other: Any?): Boolean {

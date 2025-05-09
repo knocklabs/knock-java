@@ -2,6 +2,8 @@
 
 package app.knock.api.models.tenants
 
+import app.knock.api.core.AutoPagerAsync
+import app.knock.api.core.PageAsync
 import app.knock.api.core.checkRequired
 import app.knock.api.models.shared.PageInfo
 import app.knock.api.services.async.TenantServiceAsync
@@ -9,16 +11,16 @@ import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [TenantServiceAsync.list] */
 class TenantListPageAsync
 private constructor(
     private val service: TenantServiceAsync,
+    private val streamHandlerExecutor: Executor,
     private val params: TenantListParams,
     private val response: TenantListPageResponse,
-) {
+) : PageAsync<Tenant> {
 
     /**
      * Delegates to [TenantListPageResponse], but gracefully handles missing data.
@@ -35,30 +37,21 @@ private constructor(
      */
     fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
 
-    fun hasNextPage(): Boolean =
-        entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
+    override fun items(): List<Tenant> = entries()
 
-    fun getNextPageParams(): Optional<TenantListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
 
-        return Optional.of(
-            params
-                .toBuilder()
-                .apply {
-                    pageInfo().flatMap { it._after().getOptional("after") }.ifPresent { after(it) }
-                }
-                .build()
-        )
+    fun nextPageParams(): TenantListParams {
+        val nextCursor =
+            pageInfo().flatMap { it._after().getOptional("after") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().after(nextCursor).build()
     }
 
-    fun getNextPage(): CompletableFuture<Optional<TenantListPageAsync>> =
-        getNextPageParams()
-            .map { service.list(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
+    override fun nextPage(): CompletableFuture<TenantListPageAsync> = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<Tenant> = AutoPagerAsync.from(this, streamHandlerExecutor)
 
     /** The parameters that were used to request this page. */
     fun params(): TenantListParams = params
@@ -76,6 +69,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -87,17 +81,23 @@ private constructor(
     class Builder internal constructor() {
 
         private var service: TenantServiceAsync? = null
+        private var streamHandlerExecutor: Executor? = null
         private var params: TenantListParams? = null
         private var response: TenantListPageResponse? = null
 
         @JvmSynthetic
         internal fun from(tenantListPageAsync: TenantListPageAsync) = apply {
             service = tenantListPageAsync.service
+            streamHandlerExecutor = tenantListPageAsync.streamHandlerExecutor
             params = tenantListPageAsync.params
             response = tenantListPageAsync.response
         }
 
         fun service(service: TenantServiceAsync) = apply { this.service = service }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
 
         /** The parameters that were used to request this page. */
         fun params(params: TenantListParams) = apply { this.params = params }
@@ -113,6 +113,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -122,35 +123,10 @@ private constructor(
         fun build(): TenantListPageAsync =
             TenantListPageAsync(
                 checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: TenantListPageAsync) {
-
-        fun forEach(action: Predicate<Tenant>, executor: Executor): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<TenantListPageAsync>>.forEach(
-                action: (Tenant) -> Boolean,
-                executor: Executor,
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.entries().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor,
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
-        }
-
-        fun toList(executor: Executor): CompletableFuture<List<Tenant>> {
-            val values = mutableListOf<Tenant>()
-            return forEach(values::add, executor).thenApply { values }
-        }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -158,11 +134,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is TenantListPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is TenantListPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, streamHandlerExecutor, params, response) /* spotless:on */
 
     override fun toString() =
-        "TenantListPageAsync{service=$service, params=$params, response=$response}"
+        "TenantListPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

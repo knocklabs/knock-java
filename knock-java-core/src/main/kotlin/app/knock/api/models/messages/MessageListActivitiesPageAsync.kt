@@ -2,6 +2,8 @@
 
 package app.knock.api.models.messages
 
+import app.knock.api.core.AutoPagerAsync
+import app.knock.api.core.PageAsync
 import app.knock.api.core.checkRequired
 import app.knock.api.models.shared.PageInfo
 import app.knock.api.services.async.MessageServiceAsync
@@ -9,23 +11,24 @@ import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [MessageServiceAsync.listActivities] */
 class MessageListActivitiesPageAsync
 private constructor(
     private val service: MessageServiceAsync,
+    private val streamHandlerExecutor: Executor,
     private val params: MessageListActivitiesParams,
     private val response: MessageListActivitiesPageResponse,
-) {
+) : PageAsync<Activity> {
 
     /**
      * Delegates to [MessageListActivitiesPageResponse], but gracefully handles missing data.
      *
      * @see [MessageListActivitiesPageResponse.items]
      */
-    fun items(): List<Activity> = response._items().getOptional("items").getOrNull() ?: emptyList()
+    override fun items(): List<Activity> =
+        response._items().getOptional("items").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [MessageListActivitiesPageResponse], but gracefully handles missing data.
@@ -34,30 +37,20 @@ private constructor(
      */
     fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
 
-    fun hasNextPage(): Boolean =
+    override fun hasNextPage(): Boolean =
         items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
 
-    fun getNextPageParams(): Optional<MessageListActivitiesParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            params
-                .toBuilder()
-                .apply {
-                    pageInfo().flatMap { it._after().getOptional("after") }.ifPresent { after(it) }
-                }
-                .build()
-        )
+    fun nextPageParams(): MessageListActivitiesParams {
+        val nextCursor =
+            pageInfo().flatMap { it._after().getOptional("after") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().after(nextCursor).build()
     }
 
-    fun getNextPage(): CompletableFuture<Optional<MessageListActivitiesPageAsync>> =
-        getNextPageParams()
-            .map { service.listActivities(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
+    override fun nextPage(): CompletableFuture<MessageListActivitiesPageAsync> =
+        service.listActivities(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<Activity> = AutoPagerAsync.from(this, streamHandlerExecutor)
 
     /** The parameters that were used to request this page. */
     fun params(): MessageListActivitiesParams = params
@@ -76,6 +69,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -87,17 +81,23 @@ private constructor(
     class Builder internal constructor() {
 
         private var service: MessageServiceAsync? = null
+        private var streamHandlerExecutor: Executor? = null
         private var params: MessageListActivitiesParams? = null
         private var response: MessageListActivitiesPageResponse? = null
 
         @JvmSynthetic
         internal fun from(messageListActivitiesPageAsync: MessageListActivitiesPageAsync) = apply {
             service = messageListActivitiesPageAsync.service
+            streamHandlerExecutor = messageListActivitiesPageAsync.streamHandlerExecutor
             params = messageListActivitiesPageAsync.params
             response = messageListActivitiesPageAsync.response
         }
 
         fun service(service: MessageServiceAsync) = apply { this.service = service }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
 
         /** The parameters that were used to request this page. */
         fun params(params: MessageListActivitiesParams) = apply { this.params = params }
@@ -115,6 +115,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -124,35 +125,10 @@ private constructor(
         fun build(): MessageListActivitiesPageAsync =
             MessageListActivitiesPageAsync(
                 checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: MessageListActivitiesPageAsync) {
-
-        fun forEach(action: Predicate<Activity>, executor: Executor): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<MessageListActivitiesPageAsync>>.forEach(
-                action: (Activity) -> Boolean,
-                executor: Executor,
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.items().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor,
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
-        }
-
-        fun toList(executor: Executor): CompletableFuture<List<Activity>> {
-            val values = mutableListOf<Activity>()
-            return forEach(values::add, executor).thenApply { values }
-        }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -160,11 +136,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is MessageListActivitiesPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is MessageListActivitiesPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, streamHandlerExecutor, params, response) /* spotless:on */
 
     override fun toString() =
-        "MessageListActivitiesPageAsync{service=$service, params=$params, response=$response}"
+        "MessageListActivitiesPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

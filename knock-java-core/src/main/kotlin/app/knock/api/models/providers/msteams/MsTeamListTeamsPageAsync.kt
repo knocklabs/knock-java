@@ -2,22 +2,24 @@
 
 package app.knock.api.models.providers.msteams
 
+import app.knock.api.core.AutoPagerAsync
+import app.knock.api.core.PageAsync
 import app.knock.api.core.checkRequired
 import app.knock.api.services.async.providers.MsTeamServiceAsync
 import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [MsTeamServiceAsync.listTeams] */
 class MsTeamListTeamsPageAsync
 private constructor(
     private val service: MsTeamServiceAsync,
+    private val streamHandlerExecutor: Executor,
     private val params: MsTeamListTeamsParams,
     private val response: MsTeamListTeamsPageResponse,
-) {
+) : PageAsync<MsTeamListTeamsResponse> {
 
     /**
      * Delegates to [MsTeamListTeamsPageResponse], but gracefully handles missing data.
@@ -34,24 +36,22 @@ private constructor(
     fun msTeamsTeams(): List<MsTeamListTeamsResponse> =
         response._msTeamsTeams().getOptional("ms_teams_teams").getOrNull() ?: emptyList()
 
-    fun hasNextPage(): Boolean = msTeamsTeams().isNotEmpty() && skipToken().isPresent
+    override fun items(): List<MsTeamListTeamsResponse> = msTeamsTeams()
 
-    fun getNextPageParams(): Optional<MsTeamListTeamsParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
+    override fun hasNextPage(): Boolean = items().isNotEmpty() && skipToken().isPresent
 
-        return Optional.of(
-            params.toBuilder().apply { skipToken().ifPresent { queryOptionsSkiptoken(it) } }.build()
-        )
+    fun nextPageParams(): MsTeamListTeamsParams {
+        val nextCursor =
+            skipToken().getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().queryOptionsSkiptoken(nextCursor).build()
     }
 
-    fun getNextPage(): CompletableFuture<Optional<MsTeamListTeamsPageAsync>> =
-        getNextPageParams()
-            .map { service.listTeams(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
+    override fun nextPage(): CompletableFuture<MsTeamListTeamsPageAsync> =
+        service.listTeams(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<MsTeamListTeamsResponse> =
+        AutoPagerAsync.from(this, streamHandlerExecutor)
 
     /** The parameters that were used to request this page. */
     fun params(): MsTeamListTeamsParams = params
@@ -69,6 +69,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -80,17 +81,23 @@ private constructor(
     class Builder internal constructor() {
 
         private var service: MsTeamServiceAsync? = null
+        private var streamHandlerExecutor: Executor? = null
         private var params: MsTeamListTeamsParams? = null
         private var response: MsTeamListTeamsPageResponse? = null
 
         @JvmSynthetic
         internal fun from(msTeamListTeamsPageAsync: MsTeamListTeamsPageAsync) = apply {
             service = msTeamListTeamsPageAsync.service
+            streamHandlerExecutor = msTeamListTeamsPageAsync.streamHandlerExecutor
             params = msTeamListTeamsPageAsync.params
             response = msTeamListTeamsPageAsync.response
         }
 
         fun service(service: MsTeamServiceAsync) = apply { this.service = service }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
 
         /** The parameters that were used to request this page. */
         fun params(params: MsTeamListTeamsParams) = apply { this.params = params }
@@ -106,6 +113,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -115,38 +123,10 @@ private constructor(
         fun build(): MsTeamListTeamsPageAsync =
             MsTeamListTeamsPageAsync(
                 checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: MsTeamListTeamsPageAsync) {
-
-        fun forEach(
-            action: Predicate<MsTeamListTeamsResponse>,
-            executor: Executor,
-        ): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<MsTeamListTeamsPageAsync>>.forEach(
-                action: (MsTeamListTeamsResponse) -> Boolean,
-                executor: Executor,
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.msTeamsTeams().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor,
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
-        }
-
-        fun toList(executor: Executor): CompletableFuture<List<MsTeamListTeamsResponse>> {
-            val values = mutableListOf<MsTeamListTeamsResponse>()
-            return forEach(values::add, executor).thenApply { values }
-        }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -154,11 +134,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is MsTeamListTeamsPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is MsTeamListTeamsPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, streamHandlerExecutor, params, response) /* spotless:on */
 
     override fun toString() =
-        "MsTeamListTeamsPageAsync{service=$service, params=$params, response=$response}"
+        "MsTeamListTeamsPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

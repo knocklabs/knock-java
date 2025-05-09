@@ -180,6 +180,7 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
                             .let {
                                 MsTeamListTeamsPageAsync.builder()
                                     .service(MsTeamServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

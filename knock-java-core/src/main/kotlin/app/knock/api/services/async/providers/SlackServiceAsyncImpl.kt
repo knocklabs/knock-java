@@ -126,6 +126,7 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
                             .let {
                                 SlackListChannelsPageAsync.builder()
                                     .service(SlackServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

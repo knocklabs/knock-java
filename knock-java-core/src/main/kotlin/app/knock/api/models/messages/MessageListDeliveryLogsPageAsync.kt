@@ -2,6 +2,8 @@
 
 package app.knock.api.models.messages
 
+import app.knock.api.core.AutoPagerAsync
+import app.knock.api.core.PageAsync
 import app.knock.api.core.checkRequired
 import app.knock.api.models.shared.PageInfo
 import app.knock.api.services.async.MessageServiceAsync
@@ -9,16 +11,16 @@ import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [MessageServiceAsync.listDeliveryLogs] */
 class MessageListDeliveryLogsPageAsync
 private constructor(
     private val service: MessageServiceAsync,
+    private val streamHandlerExecutor: Executor,
     private val params: MessageListDeliveryLogsParams,
     private val response: MessageListDeliveryLogsPageResponse,
-) {
+) : PageAsync<MessageDeliveryLog> {
 
     /**
      * Delegates to [MessageListDeliveryLogsPageResponse], but gracefully handles missing data.
@@ -35,30 +37,23 @@ private constructor(
      */
     fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
 
-    fun hasNextPage(): Boolean =
-        entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
+    override fun items(): List<MessageDeliveryLog> = entries()
 
-    fun getNextPageParams(): Optional<MessageListDeliveryLogsParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
 
-        return Optional.of(
-            params
-                .toBuilder()
-                .apply {
-                    pageInfo().flatMap { it._after().getOptional("after") }.ifPresent { after(it) }
-                }
-                .build()
-        )
+    fun nextPageParams(): MessageListDeliveryLogsParams {
+        val nextCursor =
+            pageInfo().flatMap { it._after().getOptional("after") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().after(nextCursor).build()
     }
 
-    fun getNextPage(): CompletableFuture<Optional<MessageListDeliveryLogsPageAsync>> =
-        getNextPageParams()
-            .map { service.listDeliveryLogs(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
+    override fun nextPage(): CompletableFuture<MessageListDeliveryLogsPageAsync> =
+        service.listDeliveryLogs(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<MessageDeliveryLog> =
+        AutoPagerAsync.from(this, streamHandlerExecutor)
 
     /** The parameters that were used to request this page. */
     fun params(): MessageListDeliveryLogsParams = params
@@ -77,6 +72,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -88,6 +84,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var service: MessageServiceAsync? = null
+        private var streamHandlerExecutor: Executor? = null
         private var params: MessageListDeliveryLogsParams? = null
         private var response: MessageListDeliveryLogsPageResponse? = null
 
@@ -95,11 +92,16 @@ private constructor(
         internal fun from(messageListDeliveryLogsPageAsync: MessageListDeliveryLogsPageAsync) =
             apply {
                 service = messageListDeliveryLogsPageAsync.service
+                streamHandlerExecutor = messageListDeliveryLogsPageAsync.streamHandlerExecutor
                 params = messageListDeliveryLogsPageAsync.params
                 response = messageListDeliveryLogsPageAsync.response
             }
 
         fun service(service: MessageServiceAsync) = apply { this.service = service }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
 
         /** The parameters that were used to request this page. */
         fun params(params: MessageListDeliveryLogsParams) = apply { this.params = params }
@@ -117,6 +119,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -126,38 +129,10 @@ private constructor(
         fun build(): MessageListDeliveryLogsPageAsync =
             MessageListDeliveryLogsPageAsync(
                 checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: MessageListDeliveryLogsPageAsync) {
-
-        fun forEach(
-            action: Predicate<MessageDeliveryLog>,
-            executor: Executor,
-        ): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<MessageListDeliveryLogsPageAsync>>.forEach(
-                action: (MessageDeliveryLog) -> Boolean,
-                executor: Executor,
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.entries().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor,
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
-        }
-
-        fun toList(executor: Executor): CompletableFuture<List<MessageDeliveryLog>> {
-            val values = mutableListOf<MessageDeliveryLog>()
-            return forEach(values::add, executor).thenApply { values }
-        }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -165,11 +140,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is MessageListDeliveryLogsPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is MessageListDeliveryLogsPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, streamHandlerExecutor, params, response) /* spotless:on */
 
     override fun toString() =
-        "MessageListDeliveryLogsPageAsync{service=$service, params=$params, response=$response}"
+        "MessageListDeliveryLogsPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

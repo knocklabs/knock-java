@@ -2,12 +2,12 @@
 
 package app.knock.api.models.providers.slack
 
+import app.knock.api.core.AutoPager
+import app.knock.api.core.Page
 import app.knock.api.core.checkRequired
 import app.knock.api.services.blocking.providers.SlackService
 import java.util.Objects
 import java.util.Optional
-import java.util.stream.Stream
-import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [SlackService.listChannels] */
@@ -16,7 +16,7 @@ private constructor(
     private val service: SlackService,
     private val params: SlackListChannelsParams,
     private val response: SlackListChannelsPageResponse,
-) {
+) : Page<SlackListChannelsResponse> {
 
     /**
      * Delegates to [SlackListChannelsPageResponse], but gracefully handles missing data.
@@ -33,22 +33,20 @@ private constructor(
     fun slackChannels(): List<SlackListChannelsResponse> =
         response._slackChannels().getOptional("slack_channels").getOrNull() ?: emptyList()
 
-    fun hasNextPage(): Boolean = slackChannels().isNotEmpty() && nextCursor().isPresent
+    override fun items(): List<SlackListChannelsResponse> = slackChannels()
 
-    fun getNextPageParams(): Optional<SlackListChannelsParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
+    override fun hasNextPage(): Boolean = items().isNotEmpty() && nextCursor().isPresent
 
-        return Optional.of(
-            params.toBuilder().apply { nextCursor().ifPresent { queryOptionsCursor(it) } }.build()
-        )
+    fun nextPageParams(): SlackListChannelsParams {
+        val nextCursor =
+            nextCursor().getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().queryOptionsCursor(nextCursor).build()
     }
 
-    fun getNextPage(): Optional<SlackListChannelsPage> =
-        getNextPageParams().map { service.listChannels(it) }
+    override fun nextPage(): SlackListChannelsPage = service.listChannels(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPager<SlackListChannelsResponse> = AutoPager.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): SlackListChannelsParams = params
@@ -115,26 +113,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: SlackListChannelsPage) :
-        Iterable<SlackListChannelsResponse> {
-
-        override fun iterator(): Iterator<SlackListChannelsResponse> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.slackChannels().size) {
-                    yield(page.slackChannels()[index++])
-                }
-                page = page.getNextPage().getOrNull() ?: break
-                index = 0
-            }
-        }
-
-        fun stream(): Stream<SlackListChannelsResponse> {
-            return StreamSupport.stream(spliterator(), false)
-        }
     }
 
     override fun equals(other: Any?): Boolean {

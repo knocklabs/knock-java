@@ -210,6 +210,7 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                             .let {
                                 ObjectListPageAsync.builder()
                                     .service(ObjectServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
@@ -477,6 +478,7 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                             .let {
                                 ObjectListMessagesPageAsync.builder()
                                     .service(ObjectServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
@@ -564,6 +566,7 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                             .let {
                                 ObjectListSchedulesPageAsync.builder()
                                     .service(ObjectServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
@@ -611,6 +614,7 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                             .let {
                                 ObjectListSubscriptionsPageAsync.builder()
                                     .service(ObjectServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

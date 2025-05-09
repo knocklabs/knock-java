@@ -2,14 +2,14 @@
 
 package app.knock.api.models.users
 
+import app.knock.api.core.AutoPager
+import app.knock.api.core.Page
 import app.knock.api.core.checkRequired
 import app.knock.api.models.recipients.subscriptions.Subscription
 import app.knock.api.models.shared.PageInfo
 import app.knock.api.services.blocking.UserService
 import java.util.Objects
 import java.util.Optional
-import java.util.stream.Stream
-import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [UserService.listSubscriptions] */
@@ -18,7 +18,7 @@ private constructor(
     private val service: UserService,
     private val params: UserListSubscriptionsParams,
     private val response: UserListSubscriptionsPageResponse,
-) {
+) : Page<Subscription> {
 
     /**
      * Delegates to [UserListSubscriptionsPageResponse], but gracefully handles missing data.
@@ -35,28 +35,21 @@ private constructor(
      */
     fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
 
-    fun hasNextPage(): Boolean =
-        entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
+    override fun items(): List<Subscription> = entries()
 
-    fun getNextPageParams(): Optional<UserListSubscriptionsParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
 
-        return Optional.of(
-            params
-                .toBuilder()
-                .apply {
-                    pageInfo().flatMap { it._after().getOptional("after") }.ifPresent { after(it) }
-                }
-                .build()
-        )
+    fun nextPageParams(): UserListSubscriptionsParams {
+        val nextCursor =
+            pageInfo().flatMap { it._after().getOptional("after") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().after(nextCursor).build()
     }
 
-    fun getNextPage(): Optional<UserListSubscriptionsPage> =
-        getNextPageParams().map { service.listSubscriptions(it) }
+    override fun nextPage(): UserListSubscriptionsPage = service.listSubscriptions(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPager<Subscription> = AutoPager.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): UserListSubscriptionsParams = params
@@ -125,25 +118,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: UserListSubscriptionsPage) : Iterable<Subscription> {
-
-        override fun iterator(): Iterator<Subscription> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.entries().size) {
-                    yield(page.entries()[index++])
-                }
-                page = page.getNextPage().getOrNull() ?: break
-                index = 0
-            }
-        }
-
-        fun stream(): Stream<Subscription> {
-            return StreamSupport.stream(spliterator(), false)
-        }
     }
 
     override fun equals(other: Any?): Boolean {

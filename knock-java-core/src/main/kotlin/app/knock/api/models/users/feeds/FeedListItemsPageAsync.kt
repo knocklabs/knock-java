@@ -2,6 +2,8 @@
 
 package app.knock.api.models.users.feeds
 
+import app.knock.api.core.AutoPagerAsync
+import app.knock.api.core.PageAsync
 import app.knock.api.core.checkRequired
 import app.knock.api.models.shared.PageInfo
 import app.knock.api.services.async.users.FeedServiceAsync
@@ -9,16 +11,16 @@ import java.util.Objects
 import java.util.Optional
 import java.util.concurrent.CompletableFuture
 import java.util.concurrent.Executor
-import java.util.function.Predicate
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [FeedServiceAsync.listItems] */
 class FeedListItemsPageAsync
 private constructor(
     private val service: FeedServiceAsync,
+    private val streamHandlerExecutor: Executor,
     private val params: FeedListItemsParams,
     private val response: FeedListItemsPageResponse,
-) {
+) : PageAsync<FeedListItemsResponse> {
 
     /**
      * Delegates to [FeedListItemsPageResponse], but gracefully handles missing data.
@@ -35,30 +37,23 @@ private constructor(
      */
     fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
 
-    fun hasNextPage(): Boolean =
-        entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
+    override fun items(): List<FeedListItemsResponse> = entries()
 
-    fun getNextPageParams(): Optional<FeedListItemsParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
 
-        return Optional.of(
-            params
-                .toBuilder()
-                .apply {
-                    pageInfo().flatMap { it._after().getOptional("after") }.ifPresent { after(it) }
-                }
-                .build()
-        )
+    fun nextPageParams(): FeedListItemsParams {
+        val nextCursor =
+            pageInfo().flatMap { it._after().getOptional("after") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().after(nextCursor).build()
     }
 
-    fun getNextPage(): CompletableFuture<Optional<FeedListItemsPageAsync>> =
-        getNextPageParams()
-            .map { service.listItems(it).thenApply { Optional.of(it) } }
-            .orElseGet { CompletableFuture.completedFuture(Optional.empty()) }
+    override fun nextPage(): CompletableFuture<FeedListItemsPageAsync> =
+        service.listItems(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPagerAsync<FeedListItemsResponse> =
+        AutoPagerAsync.from(this, streamHandlerExecutor)
 
     /** The parameters that were used to request this page. */
     fun params(): FeedListItemsParams = params
@@ -76,6 +71,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -87,17 +83,23 @@ private constructor(
     class Builder internal constructor() {
 
         private var service: FeedServiceAsync? = null
+        private var streamHandlerExecutor: Executor? = null
         private var params: FeedListItemsParams? = null
         private var response: FeedListItemsPageResponse? = null
 
         @JvmSynthetic
         internal fun from(feedListItemsPageAsync: FeedListItemsPageAsync) = apply {
             service = feedListItemsPageAsync.service
+            streamHandlerExecutor = feedListItemsPageAsync.streamHandlerExecutor
             params = feedListItemsPageAsync.params
             response = feedListItemsPageAsync.response
         }
 
         fun service(service: FeedServiceAsync) = apply { this.service = service }
+
+        fun streamHandlerExecutor(streamHandlerExecutor: Executor) = apply {
+            this.streamHandlerExecutor = streamHandlerExecutor
+        }
 
         /** The parameters that were used to request this page. */
         fun params(params: FeedListItemsParams) = apply { this.params = params }
@@ -113,6 +115,7 @@ private constructor(
          * The following fields are required:
          * ```java
          * .service()
+         * .streamHandlerExecutor()
          * .params()
          * .response()
          * ```
@@ -122,38 +125,10 @@ private constructor(
         fun build(): FeedListItemsPageAsync =
             FeedListItemsPageAsync(
                 checkRequired("service", service),
+                checkRequired("streamHandlerExecutor", streamHandlerExecutor),
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: FeedListItemsPageAsync) {
-
-        fun forEach(
-            action: Predicate<FeedListItemsResponse>,
-            executor: Executor,
-        ): CompletableFuture<Void> {
-            fun CompletableFuture<Optional<FeedListItemsPageAsync>>.forEach(
-                action: (FeedListItemsResponse) -> Boolean,
-                executor: Executor,
-            ): CompletableFuture<Void> =
-                thenComposeAsync(
-                    { page ->
-                        page
-                            .filter { it.entries().all(action) }
-                            .map { it.getNextPage().forEach(action, executor) }
-                            .orElseGet { CompletableFuture.completedFuture(null) }
-                    },
-                    executor,
-                )
-            return CompletableFuture.completedFuture(Optional.of(firstPage))
-                .forEach(action::test, executor)
-        }
-
-        fun toList(executor: Executor): CompletableFuture<List<FeedListItemsResponse>> {
-            val values = mutableListOf<FeedListItemsResponse>()
-            return forEach(values::add, executor).thenApply { values }
-        }
     }
 
     override fun equals(other: Any?): Boolean {
@@ -161,11 +136,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is FeedListItemsPageAsync && service == other.service && params == other.params && response == other.response /* spotless:on */
+        return /* spotless:off */ other is FeedListItemsPageAsync && service == other.service && streamHandlerExecutor == other.streamHandlerExecutor && params == other.params && response == other.response /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, params, response) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(service, streamHandlerExecutor, params, response) /* spotless:on */
 
     override fun toString() =
-        "FeedListItemsPageAsync{service=$service, params=$params, response=$response}"
+        "FeedListItemsPageAsync{service=$service, streamHandlerExecutor=$streamHandlerExecutor, params=$params, response=$response}"
 }

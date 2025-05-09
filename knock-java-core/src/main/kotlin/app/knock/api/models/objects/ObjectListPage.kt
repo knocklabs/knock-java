@@ -2,13 +2,13 @@
 
 package app.knock.api.models.objects
 
+import app.knock.api.core.AutoPager
+import app.knock.api.core.Page
 import app.knock.api.core.checkRequired
 import app.knock.api.models.shared.PageInfo
 import app.knock.api.services.blocking.ObjectService
 import java.util.Objects
 import java.util.Optional
-import java.util.stream.Stream
-import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [ObjectService.list] */
@@ -17,7 +17,7 @@ private constructor(
     private val service: ObjectService,
     private val params: ObjectListParams,
     private val response: ObjectListPageResponse,
-) {
+) : Page<Object> {
 
     /**
      * Delegates to [ObjectListPageResponse], but gracefully handles missing data.
@@ -34,27 +34,21 @@ private constructor(
      */
     fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
 
-    fun hasNextPage(): Boolean =
-        entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
+    override fun items(): List<Object> = entries()
 
-    fun getNextPageParams(): Optional<ObjectListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
 
-        return Optional.of(
-            params
-                .toBuilder()
-                .apply {
-                    pageInfo().flatMap { it._after().getOptional("after") }.ifPresent { after(it) }
-                }
-                .build()
-        )
+    fun nextPageParams(): ObjectListParams {
+        val nextCursor =
+            pageInfo().flatMap { it._after().getOptional("after") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().after(nextCursor).build()
     }
 
-    fun getNextPage(): Optional<ObjectListPage> = getNextPageParams().map { service.list(it) }
+    override fun nextPage(): ObjectListPage = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPager<Object> = AutoPager.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): ObjectListParams = params
@@ -121,25 +115,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: ObjectListPage) : Iterable<Object> {
-
-        override fun iterator(): Iterator<Object> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.entries().size) {
-                    yield(page.entries()[index++])
-                }
-                page = page.getNextPage().getOrNull() ?: break
-                index = 0
-            }
-        }
-
-        fun stream(): Stream<Object> {
-            return StreamSupport.stream(spliterator(), false)
-        }
     }
 
     override fun equals(other: Any?): Boolean {

@@ -2,14 +2,14 @@
 
 package app.knock.api.models.messages.activities
 
+import app.knock.api.core.AutoPager
+import app.knock.api.core.Page
 import app.knock.api.core.checkRequired
 import app.knock.api.models.messages.Activity
 import app.knock.api.models.shared.PageInfo
 import app.knock.api.services.blocking.messages.ActivityService
 import java.util.Objects
 import java.util.Optional
-import java.util.stream.Stream
-import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [ActivityService.list] */
@@ -18,14 +18,15 @@ private constructor(
     private val service: ActivityService,
     private val params: ActivityListParams,
     private val response: ActivityListPageResponse,
-) {
+) : Page<Activity> {
 
     /**
      * Delegates to [ActivityListPageResponse], but gracefully handles missing data.
      *
      * @see [ActivityListPageResponse.items]
      */
-    fun items(): List<Activity> = response._items().getOptional("items").getOrNull() ?: emptyList()
+    override fun items(): List<Activity> =
+        response._items().getOptional("items").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [ActivityListPageResponse], but gracefully handles missing data.
@@ -34,27 +35,19 @@ private constructor(
      */
     fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
 
-    fun hasNextPage(): Boolean =
+    override fun hasNextPage(): Boolean =
         items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
 
-    fun getNextPageParams(): Optional<ActivityListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
-
-        return Optional.of(
-            params
-                .toBuilder()
-                .apply {
-                    pageInfo().flatMap { it._after().getOptional("after") }.ifPresent { after(it) }
-                }
-                .build()
-        )
+    fun nextPageParams(): ActivityListParams {
+        val nextCursor =
+            pageInfo().flatMap { it._after().getOptional("after") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().after(nextCursor).build()
     }
 
-    fun getNextPage(): Optional<ActivityListPage> = getNextPageParams().map { service.list(it) }
+    override fun nextPage(): ActivityListPage = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPager<Activity> = AutoPager.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): ActivityListParams = params
@@ -121,25 +114,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: ActivityListPage) : Iterable<Activity> {
-
-        override fun iterator(): Iterator<Activity> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.items().size) {
-                    yield(page.items()[index++])
-                }
-                page = page.getNextPage().getOrNull() ?: break
-                index = 0
-            }
-        }
-
-        fun stream(): Stream<Activity> {
-            return StreamSupport.stream(spliterator(), false)
-        }
     }
 
     override fun equals(other: Any?): Boolean {

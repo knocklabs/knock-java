@@ -2,13 +2,13 @@
 
 package app.knock.api.models.schedules
 
+import app.knock.api.core.AutoPager
+import app.knock.api.core.Page
 import app.knock.api.core.checkRequired
 import app.knock.api.models.shared.PageInfo
 import app.knock.api.services.blocking.ScheduleService
 import java.util.Objects
 import java.util.Optional
-import java.util.stream.Stream
-import java.util.stream.StreamSupport
 import kotlin.jvm.optionals.getOrNull
 
 /** @see [ScheduleService.list] */
@@ -17,7 +17,7 @@ private constructor(
     private val service: ScheduleService,
     private val params: ScheduleListParams,
     private val response: ScheduleListPageResponse,
-) {
+) : Page<Schedule> {
 
     /**
      * Delegates to [ScheduleListPageResponse], but gracefully handles missing data.
@@ -34,27 +34,21 @@ private constructor(
      */
     fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
 
-    fun hasNextPage(): Boolean =
-        entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
+    override fun items(): List<Schedule> = entries()
 
-    fun getNextPageParams(): Optional<ScheduleListParams> {
-        if (!hasNextPage()) {
-            return Optional.empty()
-        }
+    override fun hasNextPage(): Boolean =
+        items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
 
-        return Optional.of(
-            params
-                .toBuilder()
-                .apply {
-                    pageInfo().flatMap { it._after().getOptional("after") }.ifPresent { after(it) }
-                }
-                .build()
-        )
+    fun nextPageParams(): ScheduleListParams {
+        val nextCursor =
+            pageInfo().flatMap { it._after().getOptional("after") }.getOrNull()
+                ?: throw IllegalStateException("Cannot construct next page params")
+        return params.toBuilder().after(nextCursor).build()
     }
 
-    fun getNextPage(): Optional<ScheduleListPage> = getNextPageParams().map { service.list(it) }
+    override fun nextPage(): ScheduleListPage = service.list(nextPageParams())
 
-    fun autoPager(): AutoPager = AutoPager(this)
+    fun autoPager(): AutoPager<Schedule> = AutoPager.from(this)
 
     /** The parameters that were used to request this page. */
     fun params(): ScheduleListParams = params
@@ -121,25 +115,6 @@ private constructor(
                 checkRequired("params", params),
                 checkRequired("response", response),
             )
-    }
-
-    class AutoPager(private val firstPage: ScheduleListPage) : Iterable<Schedule> {
-
-        override fun iterator(): Iterator<Schedule> = iterator {
-            var page = firstPage
-            var index = 0
-            while (true) {
-                while (index < page.entries().size) {
-                    yield(page.entries()[index++])
-                }
-                page = page.getNextPage().getOrNull() ?: break
-                index = 0
-            }
-        }
-
-        fun stream(): Stream<Schedule> {
-            return StreamSupport.stream(spliterator(), false)
-        }
     }
 
     override fun equals(other: Any?): Boolean {

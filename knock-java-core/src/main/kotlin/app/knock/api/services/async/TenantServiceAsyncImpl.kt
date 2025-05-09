@@ -110,6 +110,7 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
                             .let {
                                 TenantListPageAsync.builder()
                                     .service(TenantServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

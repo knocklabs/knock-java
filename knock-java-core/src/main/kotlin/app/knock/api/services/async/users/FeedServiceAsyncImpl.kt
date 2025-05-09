@@ -131,6 +131,7 @@ class FeedServiceAsyncImpl internal constructor(private val clientOptions: Clien
                             .let {
                                 FeedListItemsPageAsync.builder()
                                     .service(FeedServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

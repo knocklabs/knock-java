@@ -255,6 +255,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                             .let {
                                 UserListPageAsync.builder()
                                     .service(UserServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
@@ -429,6 +430,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                             .let {
                                 UserListMessagesPageAsync.builder()
                                     .service(UserServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
@@ -502,6 +504,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                             .let {
                                 UserListSchedulesPageAsync.builder()
                                     .service(UserServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
@@ -542,6 +545,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                             .let {
                                 UserListSubscriptionsPageAsync.builder()
                                     .service(UserServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()

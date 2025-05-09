@@ -200,6 +200,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                             .let {
                                 MessageListPageAsync.builder()
                                     .service(MessageServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
@@ -338,6 +339,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                             .let {
                                 MessageListActivitiesPageAsync.builder()
                                     .service(MessageServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
@@ -378,6 +380,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                             .let {
                                 MessageListDeliveryLogsPageAsync.builder()
                                     .service(MessageServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
@@ -418,6 +421,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
                             .let {
                                 MessageListEventsPageAsync.builder()
                                     .service(MessageServiceAsyncImpl(clientOptions))
+                                    .streamHandlerExecutor(clientOptions.streamHandlerExecutor)
                                     .params(params)
                                     .response(it)
                                     .build()
