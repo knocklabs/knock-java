@@ -10,18 +10,19 @@ import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Revoke access for a Slack channel. */
 class SlackRevokeAccessParams
 private constructor(
-    private val channelId: String,
+    private val channelId: String?,
     private val accessTokenObject: String,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun channelId(): String = channelId
+    fun channelId(): Optional<String> = Optional.ofNullable(channelId)
 
     /** A JSON encoded string containing the access token object reference. */
     fun accessTokenObject(): String = accessTokenObject
@@ -41,7 +42,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .channelId()
          * .accessTokenObject()
          * ```
          */
@@ -67,7 +67,10 @@ private constructor(
                 slackRevokeAccessParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun channelId(channelId: String) = apply { this.channelId = channelId }
+        fun channelId(channelId: String?) = apply { this.channelId = channelId }
+
+        /** Alias for calling [Builder.channelId] with `channelId.orElse(null)`. */
+        fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
         /** A JSON encoded string containing the access token object reference. */
         fun accessTokenObject(accessTokenObject: String) = apply {
@@ -201,7 +204,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .channelId()
          * .accessTokenObject()
          * ```
          *
@@ -209,7 +211,7 @@ private constructor(
          */
         fun build(): SlackRevokeAccessParams =
             SlackRevokeAccessParams(
-                checkRequired("channelId", channelId),
+                channelId,
                 checkRequired("accessTokenObject", accessTokenObject),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -222,7 +224,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> channelId
+            0 -> channelId ?: ""
             else -> ""
         }
 

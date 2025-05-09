@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
@@ -28,16 +29,16 @@ import kotlin.jvm.optionals.getOrNull
  */
 class ObjectDeleteSubscriptionsParams
 private constructor(
-    private val collection: String,
-    private val objectId: String,
+    private val collection: String?,
+    private val objectId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun collection(): Optional<String> = Optional.ofNullable(collection)
 
-    fun objectId(): String = objectId
+    fun objectId(): Optional<String> = Optional.ofNullable(objectId)
 
     /**
      * The recipients of the subscription. You can subscribe up to 100 recipients to an object at a
@@ -71,8 +72,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
          * .recipients()
          * ```
          */
@@ -99,9 +98,15 @@ private constructor(
                     objectDeleteSubscriptionsParams.additionalQueryParams.toBuilder()
             }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun collection(collection: String?) = apply { this.collection = collection }
 
-        fun objectId(objectId: String) = apply { this.objectId = objectId }
+        /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+        fun collection(collection: Optional<String>) = collection(collection.getOrNull())
+
+        fun objectId(objectId: String?) = apply { this.objectId = objectId }
+
+        /** Alias for calling [Builder.objectId] with `objectId.orElse(null)`. */
+        fun objectId(objectId: Optional<String>) = objectId(objectId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -271,8 +276,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
          * .recipients()
          * ```
          *
@@ -280,8 +283,8 @@ private constructor(
          */
         fun build(): ObjectDeleteSubscriptionsParams =
             ObjectDeleteSubscriptionsParams(
-                checkRequired("collection", collection),
-                checkRequired("objectId", objectId),
+                collection,
+                objectId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -292,8 +295,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
-            1 -> objectId
+            0 -> collection ?: ""
+            1 -> objectId ?: ""
             else -> ""
         }
 

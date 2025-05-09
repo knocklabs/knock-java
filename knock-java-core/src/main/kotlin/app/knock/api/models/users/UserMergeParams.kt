@@ -17,6 +17,8 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Merge two users together, where the user specified with the `from_user_id` param will be merged
@@ -24,13 +26,13 @@ import java.util.Objects
  */
 class UserMergeParams
 private constructor(
-    private val userId: String,
+    private val userId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun userId(): String = userId
+    fun userId(): Optional<String> = Optional.ofNullable(userId)
 
     /**
      * The user ID to merge from.
@@ -62,7 +64,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .userId()
          * .fromUserId()
          * ```
          */
@@ -85,7 +86,10 @@ private constructor(
             additionalQueryParams = userMergeParams.additionalQueryParams.toBuilder()
         }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun userId(userId: String?) = apply { this.userId = userId }
+
+        /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -232,7 +236,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .userId()
          * .fromUserId()
          * ```
          *
@@ -240,7 +243,7 @@ private constructor(
          */
         fun build(): UserMergeParams =
             UserMergeParams(
-                checkRequired("userId", userId),
+                userId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -251,7 +254,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> userId
+            0 -> userId ?: ""
             else -> ""
         }
 

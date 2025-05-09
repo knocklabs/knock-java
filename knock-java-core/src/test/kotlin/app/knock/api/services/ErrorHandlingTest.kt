@@ -16,7 +16,6 @@ import app.knock.api.errors.RateLimitException
 import app.knock.api.errors.UnauthorizedException
 import app.knock.api.errors.UnexpectedStatusCodeException
 import app.knock.api.errors.UnprocessableEntityException
-import app.knock.api.models.users.UserGetParams
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.get
 import com.github.tomakehurst.wiremock.client.WireMock.status
@@ -68,10 +67,7 @@ internal class ErrorHandlingTest {
                 )
         )
 
-        val e =
-            assertThrows<BadRequestException> {
-                userService.get(UserGetParams.builder().userId("user_id").build())
-            }
+        val e = assertThrows<BadRequestException> { userService.get("user_id") }
 
         assertThat(e.statusCode()).isEqualTo(400)
         assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
@@ -88,10 +84,7 @@ internal class ErrorHandlingTest {
                 )
         )
 
-        val e =
-            assertThrows<UnauthorizedException> {
-                userService.get(UserGetParams.builder().userId("user_id").build())
-            }
+        val e = assertThrows<UnauthorizedException> { userService.get("user_id") }
 
         assertThat(e.statusCode()).isEqualTo(401)
         assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
@@ -108,10 +101,7 @@ internal class ErrorHandlingTest {
                 )
         )
 
-        val e =
-            assertThrows<PermissionDeniedException> {
-                userService.get(UserGetParams.builder().userId("user_id").build())
-            }
+        val e = assertThrows<PermissionDeniedException> { userService.get("user_id") }
 
         assertThat(e.statusCode()).isEqualTo(403)
         assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
@@ -128,10 +118,7 @@ internal class ErrorHandlingTest {
                 )
         )
 
-        val e =
-            assertThrows<NotFoundException> {
-                userService.get(UserGetParams.builder().userId("user_id").build())
-            }
+        val e = assertThrows<NotFoundException> { userService.get("user_id") }
 
         assertThat(e.statusCode()).isEqualTo(404)
         assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
@@ -148,10 +135,7 @@ internal class ErrorHandlingTest {
                 )
         )
 
-        val e =
-            assertThrows<UnprocessableEntityException> {
-                userService.get(UserGetParams.builder().userId("user_id").build())
-            }
+        val e = assertThrows<UnprocessableEntityException> { userService.get("user_id") }
 
         assertThat(e.statusCode()).isEqualTo(422)
         assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
@@ -168,10 +152,7 @@ internal class ErrorHandlingTest {
                 )
         )
 
-        val e =
-            assertThrows<RateLimitException> {
-                userService.get(UserGetParams.builder().userId("user_id").build())
-            }
+        val e = assertThrows<RateLimitException> { userService.get("user_id") }
 
         assertThat(e.statusCode()).isEqualTo(429)
         assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
@@ -188,10 +169,7 @@ internal class ErrorHandlingTest {
                 )
         )
 
-        val e =
-            assertThrows<InternalServerException> {
-                userService.get(UserGetParams.builder().userId("user_id").build())
-            }
+        val e = assertThrows<InternalServerException> { userService.get("user_id") }
 
         assertThat(e.statusCode()).isEqualTo(500)
         assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
@@ -208,10 +186,7 @@ internal class ErrorHandlingTest {
                 )
         )
 
-        val e =
-            assertThrows<UnexpectedStatusCodeException> {
-                userService.get(UserGetParams.builder().userId("user_id").build())
-            }
+        val e = assertThrows<UnexpectedStatusCodeException> { userService.get("user_id") }
 
         assertThat(e.statusCode()).isEqualTo(999)
         assertThat(e.headers().toMap()).contains(entry(HEADER_NAME, listOf(HEADER_VALUE)))
@@ -226,10 +201,7 @@ internal class ErrorHandlingTest {
                 .willReturn(status(200).withHeader(HEADER_NAME, HEADER_VALUE).withBody(NOT_JSON))
         )
 
-        val e =
-            assertThrows<KnockException> {
-                userService.get(UserGetParams.builder().userId("user_id").build())
-            }
+        val e = assertThrows<KnockException> { userService.get("user_id") }
 
         assertThat(e).hasMessage("Error reading response")
     }

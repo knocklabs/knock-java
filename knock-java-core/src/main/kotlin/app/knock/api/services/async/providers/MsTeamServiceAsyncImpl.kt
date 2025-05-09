@@ -5,6 +5,7 @@ package app.knock.api.services.async.providers
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.withErrorHandler
@@ -25,6 +26,7 @@ import app.knock.api.models.providers.msteams.MsTeamListTeamsParams
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessParams
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessResponse
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     MsTeamServiceAsync {
@@ -76,6 +78,9 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: MsTeamCheckAuthParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<MsTeamCheckAuthResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -112,6 +117,9 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: MsTeamListChannelsParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<MsTeamListChannelsResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -148,6 +156,9 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: MsTeamListTeamsParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<MsTeamListTeamsPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -185,6 +196,9 @@ class MsTeamServiceAsyncImpl internal constructor(private val clientOptions: Cli
             params: MsTeamRevokeAccessParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<MsTeamRevokeAccessResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)

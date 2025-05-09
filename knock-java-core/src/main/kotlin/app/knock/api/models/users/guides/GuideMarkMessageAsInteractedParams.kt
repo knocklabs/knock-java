@@ -24,16 +24,16 @@ import kotlin.jvm.optionals.getOrNull
 /** Records that a user has interacted with a guide, triggering any associated interacted events. */
 class GuideMarkMessageAsInteractedParams
 private constructor(
-    private val userId: String,
-    private val messageId: String,
+    private val userId: String?,
+    private val messageId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun userId(): String = userId
+    fun userId(): Optional<String> = Optional.ofNullable(userId)
 
-    fun messageId(): String = messageId
+    fun messageId(): Optional<String> = Optional.ofNullable(messageId)
 
     /**
      * The unique identifier for the channel.
@@ -186,8 +186,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .userId()
-         * .messageId()
          * .channelId()
          * .guideId()
          * .guideKey()
@@ -217,9 +215,15 @@ private constructor(
                     guideMarkMessageAsInteractedParams.additionalQueryParams.toBuilder()
             }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun userId(userId: String?) = apply { this.userId = userId }
 
-        fun messageId(messageId: String) = apply { this.messageId = messageId }
+        /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
+
+        fun messageId(messageId: String?) = apply { this.messageId = messageId }
+
+        /** Alias for calling [Builder.messageId] with `messageId.orElse(null)`. */
+        fun messageId(messageId: Optional<String>) = messageId(messageId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -466,8 +470,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .userId()
-         * .messageId()
          * .channelId()
          * .guideId()
          * .guideKey()
@@ -478,8 +480,8 @@ private constructor(
          */
         fun build(): GuideMarkMessageAsInteractedParams =
             GuideMarkMessageAsInteractedParams(
-                checkRequired("userId", userId),
-                checkRequired("messageId", messageId),
+                userId,
+                messageId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -490,8 +492,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> userId
-            1 -> messageId
+            0 -> userId ?: ""
+            1 -> messageId ?: ""
             else -> ""
         }
 

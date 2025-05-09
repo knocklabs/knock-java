@@ -20,18 +20,19 @@ import com.fasterxml.jackson.annotation.JsonCreator
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /** Bulk sets up to 1,000 objects at a time in the specified collection. */
 class BulkSetParams
 private constructor(
-    private val collection: String,
+    private val collection: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun collection(): Optional<String> = Optional.ofNullable(collection)
 
     /**
      * A list of objects.
@@ -63,7 +64,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .collection()
          * .objects()
          * ```
          */
@@ -86,7 +86,10 @@ private constructor(
             additionalQueryParams = bulkSetParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun collection(collection: String?) = apply { this.collection = collection }
+
+        /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+        fun collection(collection: Optional<String>) = collection(collection.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -240,7 +243,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .collection()
          * .objects()
          * ```
          *
@@ -248,7 +250,7 @@ private constructor(
          */
         fun build(): BulkSetParams =
             BulkSetParams(
-                checkRequired("collection", collection),
+                collection,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -259,7 +261,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
+            0 -> collection ?: ""
             else -> ""
         }
 

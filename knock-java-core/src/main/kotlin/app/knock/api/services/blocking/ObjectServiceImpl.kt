@@ -5,6 +5,7 @@ package app.knock.api.services.blocking
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.stringHandler
@@ -45,6 +46,7 @@ import app.knock.api.models.recipients.preferences.PreferenceSet
 import app.knock.api.models.recipients.subscriptions.Subscription
 import app.knock.api.services.blocking.objects.BulkService
 import app.knock.api.services.blocking.objects.BulkServiceImpl
+import kotlin.jvm.optionals.getOrNull
 
 class ObjectServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ObjectService {
@@ -171,6 +173,9 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectListParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<ObjectListPage> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -203,6 +208,10 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectDeleteParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<String> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -222,6 +231,10 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectAddSubscriptionsParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<List<Subscription>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -255,6 +268,10 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectDeleteSubscriptionsParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<List<Subscription>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -288,6 +305,10 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectGetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Object> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -314,6 +335,11 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectGetChannelDataParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<ChannelData> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -347,6 +373,11 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectGetPreferencesParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<PreferenceSet> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -381,6 +412,10 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectListMessagesParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<ObjectListMessagesPage> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -421,6 +456,10 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectListPreferencesParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<List<PreferenceSet>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -454,6 +493,10 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectListSchedulesParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<ObjectListSchedulesPage> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -494,6 +537,10 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectListSubscriptionsParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<ObjectListSubscriptionsPage> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -533,6 +580,10 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectSetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Object> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -560,6 +611,11 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectSetChannelDataParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<ChannelData> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -594,6 +650,11 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectSetPreferencesParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<PreferenceSet> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -628,6 +689,11 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
             params: ObjectUnsetChannelDataParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<String> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)

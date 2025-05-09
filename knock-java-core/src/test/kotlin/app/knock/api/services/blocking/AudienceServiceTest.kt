@@ -5,7 +5,6 @@ package app.knock.api.services.blocking
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClient
 import app.knock.api.models.audiences.AudienceAddMembersParams
-import app.knock.api.models.audiences.AudienceListMembersParams
 import app.knock.api.models.audiences.AudienceRemoveMembersParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -53,8 +52,7 @@ internal class AudienceServiceTest {
                 .build()
         val audienceService = client.audiences()
 
-        val response =
-            audienceService.listMembers(AudienceListMembersParams.builder().key("key").build())
+        val response = audienceService.listMembers("key")
 
         response.validate()
     }

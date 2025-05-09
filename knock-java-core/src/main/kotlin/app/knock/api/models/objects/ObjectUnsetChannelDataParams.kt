@@ -4,29 +4,29 @@ package app.knock.api.models.objects
 
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Unsets the channel data for the specified object and channel. */
 class ObjectUnsetChannelDataParams
 private constructor(
-    private val collection: String,
-    private val objectId: String,
-    private val channelId: String,
+    private val collection: String?,
+    private val objectId: String?,
+    private val channelId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun collection(): String = collection
+    fun collection(): Optional<String> = Optional.ofNullable(collection)
 
-    fun objectId(): String = objectId
+    fun objectId(): Optional<String> = Optional.ofNullable(objectId)
 
-    fun channelId(): String = channelId
+    fun channelId(): Optional<String> = Optional.ofNullable(channelId)
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -38,15 +38,10 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): ObjectUnsetChannelDataParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of [ObjectUnsetChannelDataParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .collection()
-         * .objectId()
-         * .channelId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -72,11 +67,20 @@ private constructor(
                 objectUnsetChannelDataParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun collection(collection: String?) = apply { this.collection = collection }
 
-        fun objectId(objectId: String) = apply { this.objectId = objectId }
+        /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+        fun collection(collection: Optional<String>) = collection(collection.getOrNull())
 
-        fun channelId(channelId: String) = apply { this.channelId = channelId }
+        fun objectId(objectId: String?) = apply { this.objectId = objectId }
+
+        /** Alias for calling [Builder.objectId] with `objectId.orElse(null)`. */
+        fun objectId(objectId: Optional<String>) = objectId(objectId.getOrNull())
+
+        fun channelId(channelId: String?) = apply { this.channelId = channelId }
+
+        /** Alias for calling [Builder.channelId] with `channelId.orElse(null)`. */
+        fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -202,21 +206,12 @@ private constructor(
          * Returns an immutable instance of [ObjectUnsetChannelDataParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .collection()
-         * .objectId()
-         * .channelId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ObjectUnsetChannelDataParams =
             ObjectUnsetChannelDataParams(
-                checkRequired("collection", collection),
-                checkRequired("objectId", objectId),
-                checkRequired("channelId", channelId),
+                collection,
+                objectId,
+                channelId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -228,9 +223,9 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
-            1 -> objectId
-            2 -> channelId
+            0 -> collection ?: ""
+            1 -> objectId ?: ""
+            2 -> channelId ?: ""
             else -> ""
         }
 

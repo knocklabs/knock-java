@@ -5,6 +5,7 @@ package app.knock.api.services.blocking.providers
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.withErrorHandler
@@ -22,6 +23,7 @@ import app.knock.api.models.providers.slack.SlackListChannelsPageResponse
 import app.knock.api.models.providers.slack.SlackListChannelsParams
 import app.knock.api.models.providers.slack.SlackRevokeAccessParams
 import app.knock.api.models.providers.slack.SlackRevokeAccessResponse
+import kotlin.jvm.optionals.getOrNull
 
 class SlackServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     SlackService {
@@ -66,6 +68,9 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: SlackCheckAuthParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<SlackCheckAuthResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -93,6 +98,9 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: SlackListChannelsParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<SlackListChannelsPage> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -127,6 +135,9 @@ class SlackServiceImpl internal constructor(private val clientOptions: ClientOpt
             params: SlackRevokeAccessParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<SlackRevokeAccessResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("channelId", params.channelId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)

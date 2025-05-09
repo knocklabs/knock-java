@@ -3,23 +3,24 @@
 package app.knock.api.models.users
 
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Retrieves the channel data for a specific user and channel ID. */
 class UserGetChannelDataParams
 private constructor(
-    private val userId: String,
-    private val channelId: String,
+    private val userId: String?,
+    private val channelId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun userId(): String = userId
+    fun userId(): Optional<String> = Optional.ofNullable(userId)
 
-    fun channelId(): String = channelId
+    fun channelId(): Optional<String> = Optional.ofNullable(channelId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -29,15 +30,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [UserGetChannelDataParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * .channelId()
-         * ```
-         */
+        @JvmStatic fun none(): UserGetChannelDataParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [UserGetChannelDataParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -57,9 +52,15 @@ private constructor(
             additionalQueryParams = userGetChannelDataParams.additionalQueryParams.toBuilder()
         }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun userId(userId: String?) = apply { this.userId = userId }
 
-        fun channelId(channelId: String) = apply { this.channelId = channelId }
+        /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
+
+        fun channelId(channelId: String?) = apply { this.channelId = channelId }
+
+        /** Alias for calling [Builder.channelId] with `channelId.orElse(null)`. */
+        fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -163,19 +164,11 @@ private constructor(
          * Returns an immutable instance of [UserGetChannelDataParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * .channelId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): UserGetChannelDataParams =
             UserGetChannelDataParams(
-                checkRequired("userId", userId),
-                checkRequired("channelId", channelId),
+                userId,
+                channelId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -183,8 +176,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> userId
-            1 -> channelId
+            0 -> userId ?: ""
+            1 -> channelId ?: ""
             else -> ""
         }
 

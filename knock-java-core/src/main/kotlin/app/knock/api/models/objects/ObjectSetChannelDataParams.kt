@@ -9,6 +9,8 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.models.recipients.channeldata.ChannelDataRequest
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Sets the channel data for the specified object and channel. If no object exists in the current
@@ -17,19 +19,19 @@ import java.util.Objects
  */
 class ObjectSetChannelDataParams
 private constructor(
-    private val collection: String,
-    private val objectId: String,
-    private val channelId: String,
+    private val collection: String?,
+    private val objectId: String?,
+    private val channelId: String?,
     private val channelDataRequest: ChannelDataRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun collection(): Optional<String> = Optional.ofNullable(collection)
 
-    fun objectId(): String = objectId
+    fun objectId(): Optional<String> = Optional.ofNullable(objectId)
 
-    fun channelId(): String = channelId
+    fun channelId(): Optional<String> = Optional.ofNullable(channelId)
 
     /** A request to set channel data for a type of channel. */
     fun channelDataRequest(): ChannelDataRequest = channelDataRequest
@@ -50,9 +52,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
-         * .channelId()
          * .channelDataRequest()
          * ```
          */
@@ -79,11 +78,20 @@ private constructor(
             additionalQueryParams = objectSetChannelDataParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun collection(collection: String?) = apply { this.collection = collection }
 
-        fun objectId(objectId: String) = apply { this.objectId = objectId }
+        /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+        fun collection(collection: Optional<String>) = collection(collection.getOrNull())
 
-        fun channelId(channelId: String) = apply { this.channelId = channelId }
+        fun objectId(objectId: String?) = apply { this.objectId = objectId }
+
+        /** Alias for calling [Builder.objectId] with `objectId.orElse(null)`. */
+        fun objectId(objectId: Optional<String>) = objectId(objectId.getOrNull())
+
+        fun channelId(channelId: String?) = apply { this.channelId = channelId }
+
+        /** Alias for calling [Builder.channelId] with `channelId.orElse(null)`. */
+        fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
         /** A request to set channel data for a type of channel. */
         fun channelDataRequest(channelDataRequest: ChannelDataRequest) = apply {
@@ -195,9 +203,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
-         * .channelId()
          * .channelDataRequest()
          * ```
          *
@@ -205,9 +210,9 @@ private constructor(
          */
         fun build(): ObjectSetChannelDataParams =
             ObjectSetChannelDataParams(
-                checkRequired("collection", collection),
-                checkRequired("objectId", objectId),
-                checkRequired("channelId", channelId),
+                collection,
+                objectId,
+                channelId,
                 checkRequired("channelDataRequest", channelDataRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -218,9 +223,9 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
-            1 -> objectId
-            2 -> channelId
+            0 -> collection ?: ""
+            1 -> objectId ?: ""
+            2 -> channelId ?: ""
             else -> ""
         }
 

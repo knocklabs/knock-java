@@ -3,20 +3,21 @@
 package app.knock.api.models.audiences
 
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Returns a paginated list of members for the specified audience. */
 class AudienceListMembersParams
 private constructor(
-    private val key: String,
+    private val key: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun key(): String = key
+    fun key(): Optional<String> = Optional.ofNullable(key)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -26,13 +27,10 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): AudienceListMembersParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of [AudienceListMembersParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .key()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -51,7 +49,10 @@ private constructor(
             additionalQueryParams = audienceListMembersParams.additionalQueryParams.toBuilder()
         }
 
-        fun key(key: String) = apply { this.key = key }
+        fun key(key: String?) = apply { this.key = key }
+
+        /** Alias for calling [Builder.key] with `key.orElse(null)`. */
+        fun key(key: Optional<String>) = key(key.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -155,25 +156,14 @@ private constructor(
          * Returns an immutable instance of [AudienceListMembersParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .key()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): AudienceListMembersParams =
-            AudienceListMembersParams(
-                checkRequired("key", key),
-                additionalHeaders.build(),
-                additionalQueryParams.build(),
-            )
+            AudienceListMembersParams(key, additionalHeaders.build(), additionalQueryParams.build())
     }
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> key
+            0 -> key ?: ""
             else -> ""
         }
 

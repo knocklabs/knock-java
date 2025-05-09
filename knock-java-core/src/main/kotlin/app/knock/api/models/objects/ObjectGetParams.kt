@@ -3,10 +3,11 @@
 package app.knock.api.models.objects
 
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Retrieves a specific object by its ID from the specified collection. Returns the object with all
@@ -14,15 +15,15 @@ import java.util.Objects
  */
 class ObjectGetParams
 private constructor(
-    private val collection: String,
-    private val id: String,
+    private val collection: String?,
+    private val id: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun collection(): Optional<String> = Optional.ofNullable(collection)
 
-    fun id(): String = id
+    fun id(): Optional<String> = Optional.ofNullable(id)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -32,15 +33,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [ObjectGetParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .collection()
-         * .id()
-         * ```
-         */
+        @JvmStatic fun none(): ObjectGetParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [ObjectGetParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -60,9 +55,15 @@ private constructor(
             additionalQueryParams = objectGetParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun collection(collection: String?) = apply { this.collection = collection }
 
-        fun id(id: String) = apply { this.id = id }
+        /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+        fun collection(collection: Optional<String>) = collection(collection.getOrNull())
+
+        fun id(id: String?) = apply { this.id = id }
+
+        /** Alias for calling [Builder.id] with `id.orElse(null)`. */
+        fun id(id: Optional<String>) = id(id.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -166,19 +167,11 @@ private constructor(
          * Returns an immutable instance of [ObjectGetParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .collection()
-         * .id()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ObjectGetParams =
             ObjectGetParams(
-                checkRequired("collection", collection),
-                checkRequired("id", id),
+                collection,
+                id,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -186,8 +179,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
-            1 -> id
+            0 -> collection ?: ""
+            1 -> id ?: ""
             else -> ""
         }
 

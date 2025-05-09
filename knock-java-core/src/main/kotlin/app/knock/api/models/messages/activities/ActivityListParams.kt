@@ -3,7 +3,6 @@
 package app.knock.api.models.messages.activities
 
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
@@ -13,7 +12,7 @@ import kotlin.jvm.optionals.getOrNull
 /** Returns a paginated list of activities for the specified message. */
 class ActivityListParams
 private constructor(
-    private val messageId: String,
+    private val messageId: String?,
     private val after: String?,
     private val before: String?,
     private val pageSize: Long?,
@@ -22,7 +21,7 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun messageId(): String = messageId
+    fun messageId(): Optional<String> = Optional.ofNullable(messageId)
 
     /** The cursor to fetch entries after. */
     fun after(): Optional<String> = Optional.ofNullable(after)
@@ -44,14 +43,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [ActivityListParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .messageId()
-         * ```
-         */
+        @JvmStatic fun none(): ActivityListParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [ActivityListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -77,7 +71,10 @@ private constructor(
             additionalQueryParams = activityListParams.additionalQueryParams.toBuilder()
         }
 
-        fun messageId(messageId: String) = apply { this.messageId = messageId }
+        fun messageId(messageId: String?) = apply { this.messageId = messageId }
+
+        /** Alias for calling [Builder.messageId] with `messageId.orElse(null)`. */
+        fun messageId(messageId: Optional<String>) = messageId(messageId.getOrNull())
 
         /** The cursor to fetch entries after. */
         fun after(after: String?) = apply { this.after = after }
@@ -212,17 +209,10 @@ private constructor(
          * Returns an immutable instance of [ActivityListParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .messageId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ActivityListParams =
             ActivityListParams(
-                checkRequired("messageId", messageId),
+                messageId,
                 after,
                 before,
                 pageSize,
@@ -234,7 +224,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> messageId
+            0 -> messageId ?: ""
             else -> ""
         }
 

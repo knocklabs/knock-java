@@ -4,7 +4,6 @@ package app.knock.api.services.blocking.messages
 
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClient
-import app.knock.api.models.messages.activities.ActivityListParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -24,8 +23,7 @@ internal class ActivityServiceTest {
                 .build()
         val activityService = client.messages().activities()
 
-        val page =
-            activityService.list(ActivityListParams.builder().messageId("message_id").build())
+        val page = activityService.list("message_id")
 
         page.response().validate()
     }

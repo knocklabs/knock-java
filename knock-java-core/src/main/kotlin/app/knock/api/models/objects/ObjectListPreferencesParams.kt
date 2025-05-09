@@ -3,23 +3,24 @@
 package app.knock.api.models.objects
 
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Returns a paginated list of preference sets for the specified object. */
 class ObjectListPreferencesParams
 private constructor(
-    private val collection: String,
-    private val objectId: String,
+    private val collection: String?,
+    private val objectId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun collection(): Optional<String> = Optional.ofNullable(collection)
 
-    fun objectId(): String = objectId
+    fun objectId(): Optional<String> = Optional.ofNullable(objectId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -29,14 +30,10 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): ObjectListPreferencesParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of [ObjectListPreferencesParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .collection()
-         * .objectId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -57,9 +54,15 @@ private constructor(
             additionalQueryParams = objectListPreferencesParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun collection(collection: String?) = apply { this.collection = collection }
 
-        fun objectId(objectId: String) = apply { this.objectId = objectId }
+        /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+        fun collection(collection: Optional<String>) = collection(collection.getOrNull())
+
+        fun objectId(objectId: String?) = apply { this.objectId = objectId }
+
+        /** Alias for calling [Builder.objectId] with `objectId.orElse(null)`. */
+        fun objectId(objectId: Optional<String>) = objectId(objectId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -163,19 +166,11 @@ private constructor(
          * Returns an immutable instance of [ObjectListPreferencesParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .collection()
-         * .objectId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ObjectListPreferencesParams =
             ObjectListPreferencesParams(
-                checkRequired("collection", collection),
-                checkRequired("objectId", objectId),
+                collection,
+                objectId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -183,8 +178,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
-            1 -> objectId
+            0 -> collection ?: ""
+            1 -> objectId ?: ""
             else -> ""
         }
 

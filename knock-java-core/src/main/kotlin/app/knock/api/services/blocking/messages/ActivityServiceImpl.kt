@@ -5,6 +5,7 @@ package app.knock.api.services.blocking.messages
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.withErrorHandler
@@ -17,6 +18,7 @@ import app.knock.api.core.prepare
 import app.knock.api.models.messages.activities.ActivityListPage
 import app.knock.api.models.messages.activities.ActivityListPageResponse
 import app.knock.api.models.messages.activities.ActivityListParams
+import kotlin.jvm.optionals.getOrNull
 
 class ActivityServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ActivityService {
@@ -47,6 +49,9 @@ class ActivityServiceImpl internal constructor(private val clientOptions: Client
             params: ActivityListParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<ActivityListPage> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

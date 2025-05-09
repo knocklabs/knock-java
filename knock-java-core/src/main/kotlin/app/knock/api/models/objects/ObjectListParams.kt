@@ -5,7 +5,6 @@ package app.knock.api.models.objects
 import app.knock.api.core.Enum
 import app.knock.api.core.JsonField
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
@@ -21,7 +20,7 @@ import kotlin.jvm.optionals.getOrNull
  */
 class ObjectListParams
 private constructor(
-    private val collection: String,
+    private val collection: String?,
     private val after: String?,
     private val before: String?,
     private val include: List<Include>?,
@@ -30,7 +29,7 @@ private constructor(
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun collection(): Optional<String> = Optional.ofNullable(collection)
 
     /** The cursor to fetch entries after. */
     fun after(): Optional<String> = Optional.ofNullable(after)
@@ -52,14 +51,9 @@ private constructor(
 
     companion object {
 
-        /**
-         * Returns a mutable builder for constructing an instance of [ObjectListParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .collection()
-         * ```
-         */
+        @JvmStatic fun none(): ObjectListParams = builder().build()
+
+        /** Returns a mutable builder for constructing an instance of [ObjectListParams]. */
         @JvmStatic fun builder() = Builder()
     }
 
@@ -85,7 +79,10 @@ private constructor(
             additionalQueryParams = objectListParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun collection(collection: String?) = apply { this.collection = collection }
+
+        /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+        fun collection(collection: Optional<String>) = collection(collection.getOrNull())
 
         /** The cursor to fetch entries after. */
         fun after(after: String?) = apply { this.after = after }
@@ -229,17 +226,10 @@ private constructor(
          * Returns an immutable instance of [ObjectListParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .collection()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): ObjectListParams =
             ObjectListParams(
-                checkRequired("collection", collection),
+                collection,
                 after,
                 before,
                 include?.toImmutable(),
@@ -251,7 +241,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
+            0 -> collection ?: ""
             else -> ""
         }
 

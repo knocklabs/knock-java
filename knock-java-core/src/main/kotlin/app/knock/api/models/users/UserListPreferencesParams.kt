@@ -3,20 +3,21 @@
 package app.knock.api.models.users
 
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Retrieves a list of all preference sets for a specific user. */
 class UserListPreferencesParams
 private constructor(
-    private val userId: String,
+    private val userId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun userId(): String = userId
+    fun userId(): Optional<String> = Optional.ofNullable(userId)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -26,13 +27,10 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): UserListPreferencesParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of [UserListPreferencesParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -51,7 +49,10 @@ private constructor(
             additionalQueryParams = userListPreferencesParams.additionalQueryParams.toBuilder()
         }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun userId(userId: String?) = apply { this.userId = userId }
+
+        /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -155,17 +156,10 @@ private constructor(
          * Returns an immutable instance of [UserListPreferencesParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): UserListPreferencesParams =
             UserListPreferencesParams(
-                checkRequired("userId", userId),
+                userId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
             )
@@ -173,7 +167,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> userId
+            0 -> userId ?: ""
             else -> ""
         }
 

@@ -13,14 +13,14 @@ import kotlin.jvm.optionals.getOrNull
 /** List Slack channels for a Slack workspace. */
 class SlackListChannelsParams
 private constructor(
-    private val channelId: String,
+    private val channelId: String?,
     private val accessTokenObject: String,
     private val queryOptions: QueryOptions?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun channelId(): String = channelId
+    fun channelId(): Optional<String> = Optional.ofNullable(channelId)
 
     /** A JSON encoded string containing the access token object reference. */
     fun accessTokenObject(): String = accessTokenObject
@@ -40,7 +40,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .channelId()
          * .accessTokenObject()
          * ```
          */
@@ -65,7 +64,10 @@ private constructor(
             additionalQueryParams = slackListChannelsParams.additionalQueryParams.toBuilder()
         }
 
-        fun channelId(channelId: String) = apply { this.channelId = channelId }
+        fun channelId(channelId: String?) = apply { this.channelId = channelId }
+
+        /** Alias for calling [Builder.channelId] with `channelId.orElse(null)`. */
+        fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
         /** A JSON encoded string containing the access token object reference. */
         fun accessTokenObject(accessTokenObject: String) = apply {
@@ -183,7 +185,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .channelId()
          * .accessTokenObject()
          * ```
          *
@@ -191,7 +192,7 @@ private constructor(
          */
         fun build(): SlackListChannelsParams =
             SlackListChannelsParams(
-                checkRequired("channelId", channelId),
+                channelId,
                 checkRequired("accessTokenObject", accessTokenObject),
                 queryOptions,
                 additionalHeaders.build(),
@@ -201,7 +202,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> channelId
+            0 -> channelId ?: ""
             else -> ""
         }
 

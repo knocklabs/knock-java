@@ -4,26 +4,26 @@ package app.knock.api.models.users
 
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import java.util.Objects
 import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Deletes channel data for a specific user and channel ID. */
 class UserUnsetChannelDataParams
 private constructor(
-    private val userId: String,
-    private val channelId: String,
+    private val userId: String?,
+    private val channelId: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
     private val additionalBodyProperties: Map<String, JsonValue>,
 ) : Params {
 
-    fun userId(): String = userId
+    fun userId(): Optional<String> = Optional.ofNullable(userId)
 
-    fun channelId(): String = channelId
+    fun channelId(): Optional<String> = Optional.ofNullable(channelId)
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = additionalBodyProperties
 
@@ -35,14 +35,10 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): UserUnsetChannelDataParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of [UserUnsetChannelDataParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * .channelId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -66,9 +62,15 @@ private constructor(
                 userUnsetChannelDataParams.additionalBodyProperties.toMutableMap()
         }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun userId(userId: String?) = apply { this.userId = userId }
 
-        fun channelId(channelId: String) = apply { this.channelId = channelId }
+        /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
+
+        fun channelId(channelId: String?) = apply { this.channelId = channelId }
+
+        /** Alias for calling [Builder.channelId] with `channelId.orElse(null)`. */
+        fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -194,19 +196,11 @@ private constructor(
          * Returns an immutable instance of [UserUnsetChannelDataParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .userId()
-         * .channelId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): UserUnsetChannelDataParams =
             UserUnsetChannelDataParams(
-                checkRequired("userId", userId),
-                checkRequired("channelId", channelId),
+                userId,
+                channelId,
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
                 additionalBodyProperties.toImmutable(),
@@ -218,8 +212,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> userId
-            1 -> channelId
+            0 -> userId ?: ""
+            1 -> channelId ?: ""
             else -> ""
         }
 

@@ -33,13 +33,13 @@ import kotlin.jvm.optionals.getOrNull
  */
 class BulkAddSubscriptionsParams
 private constructor(
-    private val collection: String,
+    private val collection: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun collection(): Optional<String> = Optional.ofNullable(collection)
 
     /**
      * A list of subscriptions.
@@ -71,7 +71,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .collection()
          * .subscriptions()
          * ```
          */
@@ -94,7 +93,10 @@ private constructor(
             additionalQueryParams = bulkAddSubscriptionsParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun collection(collection: String?) = apply { this.collection = collection }
+
+        /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+        fun collection(collection: Optional<String>) = collection(collection.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -254,7 +256,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .collection()
          * .subscriptions()
          * ```
          *
@@ -262,7 +263,7 @@ private constructor(
          */
         fun build(): BulkAddSubscriptionsParams =
             BulkAddSubscriptionsParams(
-                checkRequired("collection", collection),
+                collection,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -273,7 +274,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
+            0 -> collection ?: ""
             else -> ""
         }
 

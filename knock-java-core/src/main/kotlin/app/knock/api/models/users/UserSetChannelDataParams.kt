@@ -9,20 +9,22 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.models.recipients.channeldata.ChannelDataRequest
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Updates or creates channel data for a specific user and channel ID. */
 class UserSetChannelDataParams
 private constructor(
-    private val userId: String,
-    private val channelId: String,
+    private val userId: String?,
+    private val channelId: String?,
     private val channelDataRequest: ChannelDataRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun userId(): String = userId
+    fun userId(): Optional<String> = Optional.ofNullable(userId)
 
-    fun channelId(): String = channelId
+    fun channelId(): Optional<String> = Optional.ofNullable(channelId)
 
     /** A request to set channel data for a type of channel. */
     fun channelDataRequest(): ChannelDataRequest = channelDataRequest
@@ -43,8 +45,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .userId()
-         * .channelId()
          * .channelDataRequest()
          * ```
          */
@@ -69,9 +69,15 @@ private constructor(
             additionalQueryParams = userSetChannelDataParams.additionalQueryParams.toBuilder()
         }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun userId(userId: String?) = apply { this.userId = userId }
 
-        fun channelId(channelId: String) = apply { this.channelId = channelId }
+        /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
+
+        fun channelId(channelId: String?) = apply { this.channelId = channelId }
+
+        /** Alias for calling [Builder.channelId] with `channelId.orElse(null)`. */
+        fun channelId(channelId: Optional<String>) = channelId(channelId.getOrNull())
 
         /** A request to set channel data for a type of channel. */
         fun channelDataRequest(channelDataRequest: ChannelDataRequest) = apply {
@@ -183,8 +189,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .userId()
-         * .channelId()
          * .channelDataRequest()
          * ```
          *
@@ -192,8 +196,8 @@ private constructor(
          */
         fun build(): UserSetChannelDataParams =
             UserSetChannelDataParams(
-                checkRequired("userId", userId),
-                checkRequired("channelId", channelId),
+                userId,
+                channelId,
                 checkRequired("channelDataRequest", channelDataRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -204,8 +208,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> userId
-            1 -> channelId
+            0 -> userId ?: ""
+            1 -> channelId ?: ""
             else -> ""
         }
 

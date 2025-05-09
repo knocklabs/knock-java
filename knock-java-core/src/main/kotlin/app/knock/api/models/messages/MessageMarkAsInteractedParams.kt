@@ -7,7 +7,6 @@ import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
 import app.knock.api.core.Params
-import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
@@ -29,13 +28,13 @@ import kotlin.jvm.optionals.getOrNull
  */
 class MessageMarkAsInteractedParams
 private constructor(
-    private val messageId: String,
+    private val messageId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun messageId(): String = messageId
+    fun messageId(): Optional<String> = Optional.ofNullable(messageId)
 
     /**
      * Metadata about the interaction.
@@ -62,14 +61,11 @@ private constructor(
 
     companion object {
 
+        @JvmStatic fun none(): MessageMarkAsInteractedParams = builder().build()
+
         /**
          * Returns a mutable builder for constructing an instance of
          * [MessageMarkAsInteractedParams].
-         *
-         * The following fields are required:
-         * ```java
-         * .messageId()
-         * ```
          */
         @JvmStatic fun builder() = Builder()
     }
@@ -90,7 +86,10 @@ private constructor(
             additionalQueryParams = messageMarkAsInteractedParams.additionalQueryParams.toBuilder()
         }
 
-        fun messageId(messageId: String) = apply { this.messageId = messageId }
+        fun messageId(messageId: String?) = apply { this.messageId = messageId }
+
+        /** Alias for calling [Builder.messageId] with `messageId.orElse(null)`. */
+        fun messageId(messageId: Optional<String>) = messageId(messageId.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -234,17 +233,10 @@ private constructor(
          * Returns an immutable instance of [MessageMarkAsInteractedParams].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
-         *
-         * The following fields are required:
-         * ```java
-         * .messageId()
-         * ```
-         *
-         * @throws IllegalStateException if any required field is unset.
          */
         fun build(): MessageMarkAsInteractedParams =
             MessageMarkAsInteractedParams(
-                checkRequired("messageId", messageId),
+                messageId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -255,7 +247,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> messageId
+            0 -> messageId ?: ""
             else -> ""
         }
 

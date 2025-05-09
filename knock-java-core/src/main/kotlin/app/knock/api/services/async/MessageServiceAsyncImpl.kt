@@ -5,6 +5,7 @@ package app.knock.api.services.async
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.withErrorHandler
@@ -43,6 +44,7 @@ import app.knock.api.services.async.messages.ActivityServiceAsyncImpl
 import app.knock.api.services.async.messages.BatchServiceAsync
 import app.knock.api.services.async.messages.BatchServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class MessageServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     MessageServiceAsync {
@@ -213,6 +215,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MessageArchiveParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Message>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -243,6 +248,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MessageGetParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Message>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -273,6 +281,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MessageGetContentParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<MessageGetContentResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -303,6 +314,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MessageListActivitiesParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<MessageListActivitiesPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -340,6 +354,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MessageListDeliveryLogsParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<MessageListDeliveryLogsPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -377,6 +394,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MessageListEventsParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<MessageListEventsPageAsync>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -413,6 +433,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MessageMarkAsInteractedParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Message>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -443,6 +466,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MessageMarkAsReadParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Message>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -473,6 +499,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MessageMarkAsSeenParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Message>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -503,6 +532,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MessageMarkAsUnreadParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Message>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -533,6 +565,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MessageMarkAsUnseenParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Message>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -563,6 +598,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             params: MessageUnarchiveParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<Message>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)

@@ -4,8 +4,6 @@ package app.knock.api.services.blocking.users
 
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClient
-import app.knock.api.models.users.feeds.FeedGetSettingsParams
-import app.knock.api.models.users.feeds.FeedListItemsParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -25,13 +23,7 @@ internal class FeedServiceTest {
                 .build()
         val feedService = client.users().feeds()
 
-        val response =
-            feedService.getSettings(
-                FeedGetSettingsParams.builder()
-                    .userId("user_id")
-                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .build()
-            )
+        val response = feedService.getSettings("user_id", "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 
         response.validate()
     }
@@ -48,13 +40,7 @@ internal class FeedServiceTest {
                 .build()
         val feedService = client.users().feeds()
 
-        val page =
-            feedService.listItems(
-                FeedListItemsParams.builder()
-                    .userId("user_id")
-                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
-                    .build()
-            )
+        val page = feedService.listItems("user_id", "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 
         page.response().validate()
     }

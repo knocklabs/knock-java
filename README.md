@@ -188,10 +188,7 @@ import app.knock.api.core.http.HttpResponseFor;
 import app.knock.api.models.users.User;
 import app.knock.api.models.users.UserGetParams;
 
-UserGetParams params = UserGetParams.builder()
-    .userId("dnedry")
-    .build();
-HttpResponseFor<User> user = client.users().withRawResponse().get(params);
+HttpResponseFor<User> user = client.users().withRawResponse().get("dnedry");
 
 int statusCode = user.statusCode();
 Headers headers = user.headers();
@@ -463,7 +460,6 @@ import app.knock.api.core.JsonValue;
 import app.knock.api.models.workflows.WorkflowTriggerParams;
 
 WorkflowTriggerParams params = WorkflowTriggerParams.builder()
-    .key("dinosaurs-loose")
     .recipients(JsonValue.from(42))
     .data(WorkflowTriggerParams.Data.builder()
         .putAdditionalProperty("dinosaur", JsonValue.from("triceratops"))

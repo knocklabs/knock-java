@@ -25,13 +25,13 @@ import kotlin.jvm.optionals.getOrNull
 /** Removes one or more members from the specified audience. */
 class AudienceRemoveMembersParams
 private constructor(
-    private val key: String,
+    private val key: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun key(): String = key
+    fun key(): Optional<String> = Optional.ofNullable(key)
 
     /**
      * A list of audience members to remove.
@@ -63,7 +63,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .key()
          * .members()
          * ```
          */
@@ -86,7 +85,10 @@ private constructor(
             additionalQueryParams = audienceRemoveMembersParams.additionalQueryParams.toBuilder()
         }
 
-        fun key(key: String) = apply { this.key = key }
+        fun key(key: String?) = apply { this.key = key }
+
+        /** Alias for calling [Builder.key] with `key.orElse(null)`. */
+        fun key(key: Optional<String>) = key(key.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -240,7 +242,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .key()
          * .members()
          * ```
          *
@@ -248,7 +249,7 @@ private constructor(
          */
         fun build(): AudienceRemoveMembersParams =
             AudienceRemoveMembersParams(
-                checkRequired("key", key),
+                key,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -259,7 +260,7 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> key
+            0 -> key ?: ""
             else -> ""
         }
 

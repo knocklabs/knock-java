@@ -5,6 +5,7 @@ package app.knock.api.services.async
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.withErrorHandler
@@ -17,6 +18,7 @@ import app.knock.api.core.prepareAsync
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.bulkoperations.BulkOperationGetParams
 import java.util.concurrent.CompletableFuture
+import kotlin.jvm.optionals.getOrNull
 
 class BulkOperationServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     BulkOperationServiceAsync {
@@ -46,6 +48,9 @@ class BulkOperationServiceAsyncImpl internal constructor(private val clientOptio
             params: BulkOperationGetParams,
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<BulkOperation>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("id", params.id().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)

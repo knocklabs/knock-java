@@ -5,6 +5,7 @@ package app.knock.api.services.blocking
 import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.withErrorHandler
@@ -42,6 +43,7 @@ import app.knock.api.services.blocking.messages.ActivityService
 import app.knock.api.services.blocking.messages.ActivityServiceImpl
 import app.knock.api.services.blocking.messages.BatchService
 import app.knock.api.services.blocking.messages.BatchServiceImpl
+import kotlin.jvm.optionals.getOrNull
 
 class MessageServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     MessageService {
@@ -200,6 +202,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             params: MessageArchiveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Message> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -227,6 +232,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             params: MessageGetParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Message> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -254,6 +262,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             params: MessageGetContentParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<MessageGetContentResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -281,6 +292,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             params: MessageListActivitiesParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<MessageListActivitiesPage> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -315,6 +329,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             params: MessageListDeliveryLogsParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<MessageListDeliveryLogsPage> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -349,6 +366,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             params: MessageListEventsParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<MessageListEventsPage> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -382,6 +402,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             params: MessageMarkAsInteractedParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Message> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -409,6 +432,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             params: MessageMarkAsReadParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Message> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -436,6 +462,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             params: MessageMarkAsSeenParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Message> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -463,6 +492,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             params: MessageMarkAsUnreadParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Message> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -490,6 +522,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             params: MessageMarkAsUnseenParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Message> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
@@ -517,6 +552,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             params: MessageUnarchiveParams,
             requestOptions: RequestOptions,
         ): HttpResponseFor<Message> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)

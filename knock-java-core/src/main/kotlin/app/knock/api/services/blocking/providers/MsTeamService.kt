@@ -25,6 +25,18 @@ interface MsTeamService {
      * Check if a connection to Microsoft Teams has been authorized for a given Microsoft Teams
      * tenant object.
      */
+    fun checkAuth(channelId: String, params: MsTeamCheckAuthParams): MsTeamCheckAuthResponse =
+        checkAuth(channelId, params, RequestOptions.none())
+
+    /** @see [checkAuth] */
+    fun checkAuth(
+        channelId: String,
+        params: MsTeamCheckAuthParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): MsTeamCheckAuthResponse =
+        checkAuth(params.toBuilder().channelId(channelId).build(), requestOptions)
+
+    /** @see [checkAuth] */
     fun checkAuth(params: MsTeamCheckAuthParams): MsTeamCheckAuthResponse =
         checkAuth(params, RequestOptions.none())
 
@@ -38,6 +50,20 @@ interface MsTeamService {
      * List the Microsoft Teams channels within a team. By default, archived and private channels
      * are excluded from the results.
      */
+    fun listChannels(
+        channelId: String,
+        params: MsTeamListChannelsParams,
+    ): MsTeamListChannelsResponse = listChannels(channelId, params, RequestOptions.none())
+
+    /** @see [listChannels] */
+    fun listChannels(
+        channelId: String,
+        params: MsTeamListChannelsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): MsTeamListChannelsResponse =
+        listChannels(params.toBuilder().channelId(channelId).build(), requestOptions)
+
+    /** @see [listChannels] */
     fun listChannels(params: MsTeamListChannelsParams): MsTeamListChannelsResponse =
         listChannels(params, RequestOptions.none())
 
@@ -51,6 +77,18 @@ interface MsTeamService {
      * Get a list of teams belonging to the Microsoft Entra tenant. By default, archived and private
      * channels are excluded from the results.
      */
+    fun listTeams(channelId: String, params: MsTeamListTeamsParams): MsTeamListTeamsPage =
+        listTeams(channelId, params, RequestOptions.none())
+
+    /** @see [listTeams] */
+    fun listTeams(
+        channelId: String,
+        params: MsTeamListTeamsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): MsTeamListTeamsPage =
+        listTeams(params.toBuilder().channelId(channelId).build(), requestOptions)
+
+    /** @see [listTeams] */
     fun listTeams(params: MsTeamListTeamsParams): MsTeamListTeamsPage =
         listTeams(params, RequestOptions.none())
 
@@ -61,6 +99,20 @@ interface MsTeamService {
     ): MsTeamListTeamsPage
 
     /** Remove a Microsoft Entra tenant ID from a Microsoft Teams tenant object. */
+    fun revokeAccess(
+        channelId: String,
+        params: MsTeamRevokeAccessParams,
+    ): MsTeamRevokeAccessResponse = revokeAccess(channelId, params, RequestOptions.none())
+
+    /** @see [revokeAccess] */
+    fun revokeAccess(
+        channelId: String,
+        params: MsTeamRevokeAccessParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): MsTeamRevokeAccessResponse =
+        revokeAccess(params.toBuilder().channelId(channelId).build(), requestOptions)
+
+    /** @see [revokeAccess] */
     fun revokeAccess(params: MsTeamRevokeAccessParams): MsTeamRevokeAccessResponse =
         revokeAccess(params, RequestOptions.none())
 
@@ -78,6 +130,23 @@ interface MsTeamService {
          * is otherwise the same as [MsTeamService.checkAuth].
          */
         @MustBeClosed
+        fun checkAuth(
+            channelId: String,
+            params: MsTeamCheckAuthParams,
+        ): HttpResponseFor<MsTeamCheckAuthResponse> =
+            checkAuth(channelId, params, RequestOptions.none())
+
+        /** @see [checkAuth] */
+        @MustBeClosed
+        fun checkAuth(
+            channelId: String,
+            params: MsTeamCheckAuthParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<MsTeamCheckAuthResponse> =
+            checkAuth(params.toBuilder().channelId(channelId).build(), requestOptions)
+
+        /** @see [checkAuth] */
+        @MustBeClosed
         fun checkAuth(params: MsTeamCheckAuthParams): HttpResponseFor<MsTeamCheckAuthResponse> =
             checkAuth(params, RequestOptions.none())
 
@@ -92,6 +161,23 @@ interface MsTeamService {
          * Returns a raw HTTP response for `get /v1/providers/ms-teams/{channel_id}/channels`, but
          * is otherwise the same as [MsTeamService.listChannels].
          */
+        @MustBeClosed
+        fun listChannels(
+            channelId: String,
+            params: MsTeamListChannelsParams,
+        ): HttpResponseFor<MsTeamListChannelsResponse> =
+            listChannels(channelId, params, RequestOptions.none())
+
+        /** @see [listChannels] */
+        @MustBeClosed
+        fun listChannels(
+            channelId: String,
+            params: MsTeamListChannelsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<MsTeamListChannelsResponse> =
+            listChannels(params.toBuilder().channelId(channelId).build(), requestOptions)
+
+        /** @see [listChannels] */
         @MustBeClosed
         fun listChannels(
             params: MsTeamListChannelsParams
@@ -109,6 +195,23 @@ interface MsTeamService {
          * otherwise the same as [MsTeamService.listTeams].
          */
         @MustBeClosed
+        fun listTeams(
+            channelId: String,
+            params: MsTeamListTeamsParams,
+        ): HttpResponseFor<MsTeamListTeamsPage> =
+            listTeams(channelId, params, RequestOptions.none())
+
+        /** @see [listTeams] */
+        @MustBeClosed
+        fun listTeams(
+            channelId: String,
+            params: MsTeamListTeamsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<MsTeamListTeamsPage> =
+            listTeams(params.toBuilder().channelId(channelId).build(), requestOptions)
+
+        /** @see [listTeams] */
+        @MustBeClosed
         fun listTeams(params: MsTeamListTeamsParams): HttpResponseFor<MsTeamListTeamsPage> =
             listTeams(params, RequestOptions.none())
 
@@ -123,6 +226,23 @@ interface MsTeamService {
          * Returns a raw HTTP response for `put /v1/providers/ms-teams/{channel_id}/revoke_access`,
          * but is otherwise the same as [MsTeamService.revokeAccess].
          */
+        @MustBeClosed
+        fun revokeAccess(
+            channelId: String,
+            params: MsTeamRevokeAccessParams,
+        ): HttpResponseFor<MsTeamRevokeAccessResponse> =
+            revokeAccess(channelId, params, RequestOptions.none())
+
+        /** @see [revokeAccess] */
+        @MustBeClosed
+        fun revokeAccess(
+            channelId: String,
+            params: MsTeamRevokeAccessParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<MsTeamRevokeAccessResponse> =
+            revokeAccess(params.toBuilder().channelId(channelId).build(), requestOptions)
+
+        /** @see [revokeAccess] */
         @MustBeClosed
         fun revokeAccess(
             params: MsTeamRevokeAccessParams

@@ -9,6 +9,8 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Updates a complete preference set for a user. This is a destructive operation that will replace
@@ -16,16 +18,16 @@ import java.util.Objects
  */
 class UserSetPreferencesParams
 private constructor(
-    private val userId: String,
-    private val id: String,
+    private val userId: String?,
+    private val id: String?,
     private val preferenceSetRequest: PreferenceSetRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun userId(): String = userId
+    fun userId(): Optional<String> = Optional.ofNullable(userId)
 
-    fun id(): String = id
+    fun id(): Optional<String> = Optional.ofNullable(id)
 
     /** A request to set a preference set for a recipient. */
     fun preferenceSetRequest(): PreferenceSetRequest = preferenceSetRequest
@@ -46,8 +48,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .userId()
-         * .id()
          * .preferenceSetRequest()
          * ```
          */
@@ -72,9 +72,15 @@ private constructor(
             additionalQueryParams = userSetPreferencesParams.additionalQueryParams.toBuilder()
         }
 
-        fun userId(userId: String) = apply { this.userId = userId }
+        fun userId(userId: String?) = apply { this.userId = userId }
 
-        fun id(id: String) = apply { this.id = id }
+        /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
+
+        fun id(id: String?) = apply { this.id = id }
+
+        /** Alias for calling [Builder.id] with `id.orElse(null)`. */
+        fun id(id: Optional<String>) = id(id.getOrNull())
 
         /** A request to set a preference set for a recipient. */
         fun preferenceSetRequest(preferenceSetRequest: PreferenceSetRequest) = apply {
@@ -186,8 +192,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .userId()
-         * .id()
          * .preferenceSetRequest()
          * ```
          *
@@ -195,8 +199,8 @@ private constructor(
          */
         fun build(): UserSetPreferencesParams =
             UserSetPreferencesParams(
-                checkRequired("userId", userId),
-                checkRequired("id", id),
+                userId,
+                id,
                 checkRequired("preferenceSetRequest", preferenceSetRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -207,8 +211,8 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> userId
-            1 -> id
+            0 -> userId ?: ""
+            1 -> id ?: ""
             else -> ""
         }
 

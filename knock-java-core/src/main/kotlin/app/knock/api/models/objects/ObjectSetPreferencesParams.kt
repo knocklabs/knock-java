@@ -9,6 +9,8 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /**
  * Sets preferences within the given preference set. This is a destructive operation and will
@@ -19,19 +21,19 @@ import java.util.Objects
  */
 class ObjectSetPreferencesParams
 private constructor(
-    private val collection: String,
-    private val objectId: String,
-    private val id: String,
+    private val collection: String?,
+    private val objectId: String?,
+    private val id: String?,
     private val preferenceSetRequest: PreferenceSetRequest,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun collection(): String = collection
+    fun collection(): Optional<String> = Optional.ofNullable(collection)
 
-    fun objectId(): String = objectId
+    fun objectId(): Optional<String> = Optional.ofNullable(objectId)
 
-    fun id(): String = id
+    fun id(): Optional<String> = Optional.ofNullable(id)
 
     /** A request to set a preference set for a recipient. */
     fun preferenceSetRequest(): PreferenceSetRequest = preferenceSetRequest
@@ -52,9 +54,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
-         * .id()
          * .preferenceSetRequest()
          * ```
          */
@@ -81,11 +80,20 @@ private constructor(
             additionalQueryParams = objectSetPreferencesParams.additionalQueryParams.toBuilder()
         }
 
-        fun collection(collection: String) = apply { this.collection = collection }
+        fun collection(collection: String?) = apply { this.collection = collection }
 
-        fun objectId(objectId: String) = apply { this.objectId = objectId }
+        /** Alias for calling [Builder.collection] with `collection.orElse(null)`. */
+        fun collection(collection: Optional<String>) = collection(collection.getOrNull())
 
-        fun id(id: String) = apply { this.id = id }
+        fun objectId(objectId: String?) = apply { this.objectId = objectId }
+
+        /** Alias for calling [Builder.objectId] with `objectId.orElse(null)`. */
+        fun objectId(objectId: Optional<String>) = objectId(objectId.getOrNull())
+
+        fun id(id: String?) = apply { this.id = id }
+
+        /** Alias for calling [Builder.id] with `id.orElse(null)`. */
+        fun id(id: Optional<String>) = id(id.getOrNull())
 
         /** A request to set a preference set for a recipient. */
         fun preferenceSetRequest(preferenceSetRequest: PreferenceSetRequest) = apply {
@@ -197,9 +205,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .collection()
-         * .objectId()
-         * .id()
          * .preferenceSetRequest()
          * ```
          *
@@ -207,9 +212,9 @@ private constructor(
          */
         fun build(): ObjectSetPreferencesParams =
             ObjectSetPreferencesParams(
-                checkRequired("collection", collection),
-                checkRequired("objectId", objectId),
-                checkRequired("id", id),
+                collection,
+                objectId,
+                id,
                 checkRequired("preferenceSetRequest", preferenceSetRequest),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -220,9 +225,9 @@ private constructor(
 
     fun _pathParam(index: Int): String =
         when (index) {
-            0 -> collection
-            1 -> objectId
-            2 -> id
+            0 -> collection ?: ""
+            1 -> objectId ?: ""
+            2 -> id ?: ""
             else -> ""
         }
 
