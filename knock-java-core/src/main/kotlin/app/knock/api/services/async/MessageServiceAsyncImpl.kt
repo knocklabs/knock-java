@@ -39,8 +39,6 @@ import app.knock.api.models.messages.MessageMarkAsSeenParams
 import app.knock.api.models.messages.MessageMarkAsUnreadParams
 import app.knock.api.models.messages.MessageMarkAsUnseenParams
 import app.knock.api.models.messages.MessageUnarchiveParams
-import app.knock.api.services.async.messages.ActivityServiceAsync
-import app.knock.api.services.async.messages.ActivityServiceAsyncImpl
 import app.knock.api.services.async.messages.BatchServiceAsync
 import app.knock.api.services.async.messages.BatchServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
@@ -55,13 +53,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
 
     private val batch: BatchServiceAsync by lazy { BatchServiceAsyncImpl(clientOptions) }
 
-    private val activities: ActivityServiceAsync by lazy { ActivityServiceAsyncImpl(clientOptions) }
-
     override fun withRawResponse(): MessageServiceAsync.WithRawResponse = withRawResponse
 
     override fun batch(): BatchServiceAsync = batch
-
-    override fun activities(): ActivityServiceAsync = activities
 
     override fun list(
         params: MessageListParams,
@@ -163,13 +157,7 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
             BatchServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
-        private val activities: ActivityServiceAsync.WithRawResponse by lazy {
-            ActivityServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
-
         override fun batch(): BatchServiceAsync.WithRawResponse = batch
-
-        override fun activities(): ActivityServiceAsync.WithRawResponse = activities
 
         private val listHandler: Handler<MessageListPageResponse> =
             jsonHandler<MessageListPageResponse>(clientOptions.jsonMapper)

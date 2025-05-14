@@ -23,7 +23,6 @@ import app.knock.api.models.messages.MessageMarkAsSeenParams
 import app.knock.api.models.messages.MessageMarkAsUnreadParams
 import app.knock.api.models.messages.MessageMarkAsUnseenParams
 import app.knock.api.models.messages.MessageUnarchiveParams
-import app.knock.api.services.async.messages.ActivityServiceAsync
 import app.knock.api.services.async.messages.BatchServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
@@ -36,8 +35,6 @@ interface MessageServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     fun batch(): BatchServiceAsync
-
-    fun activities(): ActivityServiceAsync
 
     /** Returns a paginated list of messages for the current environment. */
     fun list(): CompletableFuture<MessageListPageAsync> = list(MessageListParams.none())
@@ -503,8 +500,6 @@ interface MessageServiceAsync {
     interface WithRawResponse {
 
         fun batch(): BatchServiceAsync.WithRawResponse
-
-        fun activities(): ActivityServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /v1/messages`, but is otherwise the same as

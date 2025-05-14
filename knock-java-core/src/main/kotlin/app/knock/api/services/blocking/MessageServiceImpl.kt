@@ -39,8 +39,6 @@ import app.knock.api.models.messages.MessageMarkAsSeenParams
 import app.knock.api.models.messages.MessageMarkAsUnreadParams
 import app.knock.api.models.messages.MessageMarkAsUnseenParams
 import app.knock.api.models.messages.MessageUnarchiveParams
-import app.knock.api.services.blocking.messages.ActivityService
-import app.knock.api.services.blocking.messages.ActivityServiceImpl
 import app.knock.api.services.blocking.messages.BatchService
 import app.knock.api.services.blocking.messages.BatchServiceImpl
 import kotlin.jvm.optionals.getOrNull
@@ -54,13 +52,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
 
     private val batch: BatchService by lazy { BatchServiceImpl(clientOptions) }
 
-    private val activities: ActivityService by lazy { ActivityServiceImpl(clientOptions) }
-
     override fun withRawResponse(): MessageService.WithRawResponse = withRawResponse
 
     override fun batch(): BatchService = batch
-
-    override fun activities(): ActivityService = activities
 
     override fun list(params: MessageListParams, requestOptions: RequestOptions): MessageListPage =
         // get /v1/messages
@@ -153,13 +147,7 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
             BatchServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
-        private val activities: ActivityService.WithRawResponse by lazy {
-            ActivityServiceImpl.WithRawResponseImpl(clientOptions)
-        }
-
         override fun batch(): BatchService.WithRawResponse = batch
-
-        override fun activities(): ActivityService.WithRawResponse = activities
 
         private val listHandler: Handler<MessageListPageResponse> =
             jsonHandler<MessageListPageResponse>(clientOptions.jsonMapper)
