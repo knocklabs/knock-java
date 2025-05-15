@@ -21,22 +21,20 @@ internal class BulkAddSubscriptionsParamsTest {
                     .addRecipient(
                         InlineIdentifyUserRequest.builder()
                             .id("user_1")
+                            .avatar("avatar")
                             .channelData(
                                 InlineChannelDataRequest.builder()
                                     .putAdditionalProperty(
                                         "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                                        JsonValue.from(
-                                            mapOf(
-                                                "data" to
-                                                    mapOf("tokens" to listOf("push_token_xxx"))
-                                            )
-                                        ),
+                                        JsonValue.from(mapOf("tokens" to listOf("push_token_xxx"))),
                                     )
                                     .build()
                             )
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .email("email")
+                            .locale("locale")
                             .name("name")
+                            .phoneNumber("phone_number")
                             .preferences(
                                 InlinePreferenceSetRequest.builder()
                                     .putAdditionalProperty(
@@ -150,22 +148,22 @@ internal class BulkAddSubscriptionsParamsTest {
                         .addRecipient(
                             InlineIdentifyUserRequest.builder()
                                 .id("user_1")
+                                .avatar("avatar")
                                 .channelData(
                                     InlineChannelDataRequest.builder()
                                         .putAdditionalProperty(
                                             "97c5837d-c65c-4d54-aa39-080eeb81c69d",
                                             JsonValue.from(
-                                                mapOf(
-                                                    "data" to
-                                                        mapOf("tokens" to listOf("push_token_xxx"))
-                                                )
+                                                mapOf("tokens" to listOf("push_token_xxx"))
                                             ),
                                         )
                                         .build()
                                 )
                                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                                 .email("email")
+                                .locale("locale")
                                 .name("name")
+                                .phoneNumber("phone_number")
                                 .preferences(
                                     InlinePreferenceSetRequest.builder()
                                         .putAdditionalProperty(
@@ -259,22 +257,20 @@ internal class BulkAddSubscriptionsParamsTest {
                     .addRecipient(
                         InlineIdentifyUserRequest.builder()
                             .id("user_1")
+                            .avatar("avatar")
                             .channelData(
                                 InlineChannelDataRequest.builder()
                                     .putAdditionalProperty(
                                         "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                                        JsonValue.from(
-                                            mapOf(
-                                                "data" to
-                                                    mapOf("tokens" to listOf("push_token_xxx"))
-                                            )
-                                        ),
+                                        JsonValue.from(mapOf("tokens" to listOf("push_token_xxx"))),
                                     )
                                     .build()
                             )
                             .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                             .email("email")
+                            .locale("locale")
                             .name("name")
+                            .phoneNumber("phone_number")
                             .preferences(
                                 InlinePreferenceSetRequest.builder()
                                     .putAdditionalProperty(

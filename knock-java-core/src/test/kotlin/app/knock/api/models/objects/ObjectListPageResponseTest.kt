@@ -2,6 +2,7 @@
 
 package app.knock.api.models.objects
 
+import app.knock.api.core.JsonValue
 import app.knock.api.core.jsonMapper
 import app.knock.api.models.shared.PageInfo
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
@@ -22,6 +23,14 @@ internal class ObjectListPageResponseTest {
                         .collection("assets")
                         .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                         .createdAt(null)
+                        .properties(
+                            Object.Properties.builder()
+                                .putAdditionalProperty("classification", JsonValue.from("bar"))
+                                .putAdditionalProperty("config", JsonValue.from("bar"))
+                                .putAdditionalProperty("name", JsonValue.from("bar"))
+                                .putAdditionalProperty("status", JsonValue.from("bar"))
+                                .build()
+                        )
                         .build()
                 )
                 .pageInfo(
@@ -42,6 +51,14 @@ internal class ObjectListPageResponseTest {
                     .collection("assets")
                     .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                     .createdAt(null)
+                    .properties(
+                        Object.Properties.builder()
+                            .putAdditionalProperty("classification", JsonValue.from("bar"))
+                            .putAdditionalProperty("config", JsonValue.from("bar"))
+                            .putAdditionalProperty("name", JsonValue.from("bar"))
+                            .putAdditionalProperty("status", JsonValue.from("bar"))
+                            .build()
+                    )
                     .build()
             )
         assertThat(objectListPageResponse.pageInfo())
@@ -67,6 +84,14 @@ internal class ObjectListPageResponseTest {
                         .collection("assets")
                         .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                         .createdAt(null)
+                        .properties(
+                            Object.Properties.builder()
+                                .putAdditionalProperty("classification", JsonValue.from("bar"))
+                                .putAdditionalProperty("config", JsonValue.from("bar"))
+                                .putAdditionalProperty("name", JsonValue.from("bar"))
+                                .putAdditionalProperty("status", JsonValue.from("bar"))
+                                .build()
+                        )
                         .build()
                 )
                 .pageInfo(

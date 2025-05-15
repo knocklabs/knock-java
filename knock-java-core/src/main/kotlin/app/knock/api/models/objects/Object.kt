@@ -7,6 +7,7 @@ import app.knock.api.core.JsonField
 import app.knock.api.core.JsonMissing
 import app.knock.api.core.JsonValue
 import app.knock.api.core.checkRequired
+import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -26,6 +27,7 @@ private constructor(
     private val collection: JsonField<String>,
     private val updatedAt: JsonField<OffsetDateTime>,
     private val createdAt: JsonField<OffsetDateTime>,
+    private val properties: JsonField<Properties>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -42,7 +44,10 @@ private constructor(
         @JsonProperty("created_at")
         @ExcludeMissing
         createdAt: JsonField<OffsetDateTime> = JsonMissing.of(),
-    ) : this(id, _typename, collection, updatedAt, createdAt, mutableMapOf())
+        @JsonProperty("properties")
+        @ExcludeMissing
+        properties: JsonField<Properties> = JsonMissing.of(),
+    ) : this(id, _typename, collection, updatedAt, createdAt, properties, mutableMapOf())
 
     /**
      * Unique identifier for the object.
@@ -85,6 +90,14 @@ private constructor(
     fun createdAt(): Optional<OffsetDateTime> = createdAt.getOptional("created_at")
 
     /**
+     * The custom properties associated with the object.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun properties(): Optional<Properties> = properties.getOptional("properties")
+
+    /**
      * Returns the raw JSON value of [id].
      *
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
@@ -123,6 +136,15 @@ private constructor(
     @ExcludeMissing
     fun _createdAt(): JsonField<OffsetDateTime> = createdAt
 
+    /**
+     * Returns the raw JSON value of [properties].
+     *
+     * Unlike [properties], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("properties")
+    @ExcludeMissing
+    fun _properties(): JsonField<Properties> = properties
+
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
         additionalProperties.put(key, value)
@@ -159,6 +181,7 @@ private constructor(
         private var collection: JsonField<String>? = null
         private var updatedAt: JsonField<OffsetDateTime>? = null
         private var createdAt: JsonField<OffsetDateTime> = JsonMissing.of()
+        private var properties: JsonField<Properties> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -168,6 +191,7 @@ private constructor(
             collection = object_.collection
             updatedAt = object_.updatedAt
             createdAt = object_.createdAt
+            properties = object_.properties
             additionalProperties = object_.additionalProperties.toMutableMap()
         }
 
@@ -233,6 +257,18 @@ private constructor(
          */
         fun createdAt(createdAt: JsonField<OffsetDateTime>) = apply { this.createdAt = createdAt }
 
+        /** The custom properties associated with the object. */
+        fun properties(properties: Properties) = properties(JsonField.of(properties))
+
+        /**
+         * Sets [Builder.properties] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.properties] with a well-typed [Properties] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun properties(properties: JsonField<Properties>) = apply { this.properties = properties }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -274,6 +310,7 @@ private constructor(
                 checkRequired("collection", collection),
                 checkRequired("updatedAt", updatedAt),
                 createdAt,
+                properties,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -290,6 +327,7 @@ private constructor(
         collection()
         updatedAt()
         createdAt()
+        properties().ifPresent { it.validate() }
         validated = true
     }
 
@@ -312,22 +350,125 @@ private constructor(
             (if (_typename.asKnown().isPresent) 1 else 0) +
             (if (collection.asKnown().isPresent) 1 else 0) +
             (if (updatedAt.asKnown().isPresent) 1 else 0) +
-            (if (createdAt.asKnown().isPresent) 1 else 0)
+            (if (createdAt.asKnown().isPresent) 1 else 0) +
+            (properties.asKnown().getOrNull()?.validity() ?: 0)
+
+    /** The custom properties associated with the object. */
+    class Properties
+    @JsonCreator
+    private constructor(
+        @com.fasterxml.jackson.annotation.JsonValue
+        private val additionalProperties: Map<String, JsonValue>
+    ) {
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Properties]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Properties]. */
+        class Builder internal constructor() {
+
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(properties: Properties) = apply {
+                additionalProperties = properties.additionalProperties.toMutableMap()
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Properties].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Properties = Properties(additionalProperties.toImmutable())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Properties = apply {
+            if (validated) {
+                return@apply
+            }
+
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Properties && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() = "Properties{additionalProperties=$additionalProperties}"
+    }
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is Object && id == other.id && _typename == other._typename && collection == other.collection && updatedAt == other.updatedAt && createdAt == other.createdAt && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is Object && id == other.id && _typename == other._typename && collection == other.collection && updatedAt == other.updatedAt && createdAt == other.createdAt && properties == other.properties && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, _typename, collection, updatedAt, createdAt, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, _typename, collection, updatedAt, createdAt, properties, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Object{id=$id, _typename=$_typename, collection=$collection, updatedAt=$updatedAt, createdAt=$createdAt, additionalProperties=$additionalProperties}"
+        "Object{id=$id, _typename=$_typename, collection=$collection, updatedAt=$updatedAt, createdAt=$createdAt, properties=$properties, additionalProperties=$additionalProperties}"
 }

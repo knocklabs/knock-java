@@ -18,19 +18,20 @@ internal class InlineIdentifyUserRequestTest {
         val inlineIdentifyUserRequest =
             InlineIdentifyUserRequest.builder()
                 .id("user_1")
+                .avatar("avatar")
                 .channelData(
                     InlineChannelDataRequest.builder()
                         .putAdditionalProperty(
                             "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                            JsonValue.from(
-                                mapOf("data" to mapOf("tokens" to listOf("push_token_123")))
-                            ),
+                            JsonValue.from(mapOf("tokens" to listOf("push_token_123"))),
                         )
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .email("jane@ingen.net")
+                .locale("locale")
                 .name("Jane Doe")
+                .phoneNumber("phone_number")
                 .preferences(
                     InlinePreferenceSetRequest.builder()
                         .putAdditionalProperty(
@@ -104,19 +105,22 @@ internal class InlineIdentifyUserRequestTest {
                 .build()
 
         assertThat(inlineIdentifyUserRequest.id()).isEqualTo("user_1")
+        assertThat(inlineIdentifyUserRequest.avatar()).contains("avatar")
         assertThat(inlineIdentifyUserRequest.channelData())
             .contains(
                 InlineChannelDataRequest.builder()
                     .putAdditionalProperty(
                         "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                        JsonValue.from(mapOf("data" to mapOf("tokens" to listOf("push_token_123")))),
+                        JsonValue.from(mapOf("tokens" to listOf("push_token_123"))),
                     )
                     .build()
             )
         assertThat(inlineIdentifyUserRequest.createdAt())
             .contains(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
         assertThat(inlineIdentifyUserRequest.email()).contains("jane@ingen.net")
+        assertThat(inlineIdentifyUserRequest.locale()).contains("locale")
         assertThat(inlineIdentifyUserRequest.name()).contains("Jane Doe")
+        assertThat(inlineIdentifyUserRequest.phoneNumber()).contains("phone_number")
         assertThat(inlineIdentifyUserRequest.preferences())
             .contains(
                 InlinePreferenceSetRequest.builder()
@@ -194,19 +198,20 @@ internal class InlineIdentifyUserRequestTest {
         val inlineIdentifyUserRequest =
             InlineIdentifyUserRequest.builder()
                 .id("user_1")
+                .avatar("avatar")
                 .channelData(
                     InlineChannelDataRequest.builder()
                         .putAdditionalProperty(
                             "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                            JsonValue.from(
-                                mapOf("data" to mapOf("tokens" to listOf("push_token_123")))
-                            ),
+                            JsonValue.from(mapOf("tokens" to listOf("push_token_123"))),
                         )
                         .build()
                 )
                 .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                 .email("jane@ingen.net")
+                .locale("locale")
                 .name("Jane Doe")
+                .phoneNumber("phone_number")
                 .preferences(
                     InlinePreferenceSetRequest.builder()
                         .putAdditionalProperty(

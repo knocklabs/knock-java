@@ -22,9 +22,7 @@ internal class IdentifyUserRequestTest {
                     InlineChannelDataRequest.builder()
                         .putAdditionalProperty(
                             "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                            JsonValue.from(
-                                mapOf("data" to mapOf("tokens" to listOf("push_token_123")))
-                            ),
+                            JsonValue.from(mapOf("tokens" to listOf("push_token_123"))),
                         )
                         .build()
                 )
@@ -111,7 +109,7 @@ internal class IdentifyUserRequestTest {
                 InlineChannelDataRequest.builder()
                     .putAdditionalProperty(
                         "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                        JsonValue.from(mapOf("data" to mapOf("tokens" to listOf("push_token_123")))),
+                        JsonValue.from(mapOf("tokens" to listOf("push_token_123"))),
                     )
                     .build()
             )
@@ -202,9 +200,7 @@ internal class IdentifyUserRequestTest {
                     InlineChannelDataRequest.builder()
                         .putAdditionalProperty(
                             "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                            JsonValue.from(
-                                mapOf("data" to mapOf("tokens" to listOf("push_token_123")))
-                            ),
+                            JsonValue.from(mapOf("tokens" to listOf("push_token_123"))),
                         )
                         .build()
                 )

@@ -29,6 +29,17 @@ internal class UserListSubscriptionsPageResponseTest {
                                 .collection("assets")
                                 .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                                 .createdAt(null)
+                                .properties(
+                                    Object.Properties.builder()
+                                        .putAdditionalProperty(
+                                            "classification",
+                                            JsonValue.from("bar"),
+                                        )
+                                        .putAdditionalProperty("config", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
+                                        .putAdditionalProperty("status", JsonValue.from("bar"))
+                                        .build()
+                                )
                                 .build()
                         )
                         .recipient(
@@ -74,6 +85,14 @@ internal class UserListSubscriptionsPageResponseTest {
                             .collection("assets")
                             .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                             .createdAt(null)
+                            .properties(
+                                Object.Properties.builder()
+                                    .putAdditionalProperty("classification", JsonValue.from("bar"))
+                                    .putAdditionalProperty("config", JsonValue.from("bar"))
+                                    .putAdditionalProperty("name", JsonValue.from("bar"))
+                                    .putAdditionalProperty("status", JsonValue.from("bar"))
+                                    .build()
+                            )
                             .build()
                     )
                     .recipient(
@@ -124,6 +143,17 @@ internal class UserListSubscriptionsPageResponseTest {
                                 .collection("assets")
                                 .updatedAt(OffsetDateTime.parse("2024-05-22T12:00:00Z"))
                                 .createdAt(null)
+                                .properties(
+                                    Object.Properties.builder()
+                                        .putAdditionalProperty(
+                                            "classification",
+                                            JsonValue.from("bar"),
+                                        )
+                                        .putAdditionalProperty("config", JsonValue.from("bar"))
+                                        .putAdditionalProperty("name", JsonValue.from("bar"))
+                                        .putAdditionalProperty("status", JsonValue.from("bar"))
+                                        .build()
+                                )
                                 .build()
                         )
                         .recipient(

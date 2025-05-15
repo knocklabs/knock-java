@@ -18,19 +18,20 @@ internal class BulkIdentifyParamsTest {
             .addUser(
                 InlineIdentifyUserRequest.builder()
                     .id("user_1")
+                    .avatar("avatar")
                     .channelData(
                         InlineChannelDataRequest.builder()
                             .putAdditionalProperty(
                                 "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                                JsonValue.from(
-                                    mapOf("data" to mapOf("tokens" to listOf("push_token_xxx")))
-                                ),
+                                JsonValue.from(mapOf("tokens" to listOf("push_token_xxx"))),
                             )
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .email("jane@ingen.net")
+                    .locale("locale")
                     .name("Jane Doe")
+                    .phoneNumber("phone_number")
                     .preferences(
                         InlinePreferenceSetRequest.builder()
                             .putAdditionalProperty(
@@ -113,19 +114,20 @@ internal class BulkIdentifyParamsTest {
                 .addUser(
                     InlineIdentifyUserRequest.builder()
                         .id("user_1")
+                        .avatar("avatar")
                         .channelData(
                             InlineChannelDataRequest.builder()
                                 .putAdditionalProperty(
                                     "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                                    JsonValue.from(
-                                        mapOf("data" to mapOf("tokens" to listOf("push_token_xxx")))
-                                    ),
+                                    JsonValue.from(mapOf("tokens" to listOf("push_token_xxx"))),
                                 )
                                 .build()
                         )
                         .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                         .email("jane@ingen.net")
+                        .locale("locale")
                         .name("Jane Doe")
+                        .phoneNumber("phone_number")
                         .preferences(
                             InlinePreferenceSetRequest.builder()
                                 .putAdditionalProperty(
@@ -206,19 +208,20 @@ internal class BulkIdentifyParamsTest {
             .containsExactly(
                 InlineIdentifyUserRequest.builder()
                     .id("user_1")
+                    .avatar("avatar")
                     .channelData(
                         InlineChannelDataRequest.builder()
                             .putAdditionalProperty(
                                 "97c5837d-c65c-4d54-aa39-080eeb81c69d",
-                                JsonValue.from(
-                                    mapOf("data" to mapOf("tokens" to listOf("push_token_xxx")))
-                                ),
+                                JsonValue.from(mapOf("tokens" to listOf("push_token_xxx"))),
                             )
                             .build()
                     )
                     .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
                     .email("jane@ingen.net")
+                    .locale("locale")
                     .name("Jane Doe")
+                    .phoneNumber("phone_number")
                     .preferences(
                         InlinePreferenceSetRequest.builder()
                             .putAdditionalProperty(

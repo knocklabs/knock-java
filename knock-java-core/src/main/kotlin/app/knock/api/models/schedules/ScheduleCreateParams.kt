@@ -42,8 +42,7 @@ private constructor(
 ) : Params {
 
     /**
-     * The recipients to trigger the workflow for. Can inline identify users, objects, or use a list
-     * of user IDs. Limited to 1,000 recipients.
+     * The recipients to set the schedule for. Limited to 100 recipients per request.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -198,10 +197,7 @@ private constructor(
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
 
-        /**
-         * The recipients to trigger the workflow for. Can inline identify users, objects, or use a
-         * list of user IDs. Limited to 1,000 recipients.
-         */
+        /** The recipients to set the schedule for. Limited to 100 recipients per request. */
         fun recipients(recipients: List<RecipientRequest>) = apply { body.recipients(recipients) }
 
         /**
@@ -522,8 +518,7 @@ private constructor(
         ) : this(recipients, repeats, workflow, data, endingAt, scheduledAt, tenant, mutableMapOf())
 
         /**
-         * The recipients to trigger the workflow for. Can inline identify users, objects, or use a
-         * list of user IDs. Limited to 1,000 recipients.
+         * The recipients to set the schedule for. Limited to 100 recipients per request.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
@@ -688,10 +683,7 @@ private constructor(
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
-            /**
-             * The recipients to trigger the workflow for. Can inline identify users, objects, or
-             * use a list of user IDs. Limited to 1,000 recipients.
-             */
+            /** The recipients to set the schedule for. Limited to 100 recipients per request. */
             fun recipients(recipients: List<RecipientRequest>) =
                 recipients(JsonField.of(recipients))
 
