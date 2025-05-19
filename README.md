@@ -2,8 +2,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/app.knock.api/knock-java)](https://central.sonatype.com/artifact/app.knock.api/knock-java/0.0.1-alpha.0)
-[![javadoc](https://javadoc.io/badge2/app.knock.api/knock-java/0.0.1-alpha.0/javadoc.svg)](https://javadoc.io/doc/app.knock.api/knock-java/0.0.1-alpha.0)
+[![Maven Central](https://img.shields.io/maven-central/v/app.knock.api/knock-java)](https://central.sonatype.com/artifact/app.knock.api/knock-java/1.0.0)
+[![javadoc](https://javadoc.io/badge2/app.knock.api/knock-java/1.0.0/javadoc.svg)](https://javadoc.io/doc/app.knock.api/knock-java/1.0.0)
 
 <!-- x-release-please-end -->
 
@@ -13,7 +13,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 <!-- x-release-please-start-version -->
 
-The REST API documentation can be found on [docs.knock.app](https://docs.knock.app). Javadocs are available on [javadoc.io](https://javadoc.io/doc/app.knock.api/knock-java/0.0.1-alpha.0).
+The REST API documentation can be found on [docs.knock.app](https://docs.knock.app). Javadocs are available on [javadoc.io](https://javadoc.io/doc/app.knock.api/knock-java/1.0.0).
 
 <!-- x-release-please-end -->
 
@@ -24,7 +24,7 @@ The REST API documentation can be found on [docs.knock.app](https://docs.knock.a
 ### Gradle
 
 ```kotlin
-implementation("app.knock.api:knock-java:0.0.1-alpha.0")
+implementation("app.knock.api:knock-java:1.0.0")
 ```
 
 ### Maven
@@ -33,7 +33,7 @@ implementation("app.knock.api:knock-java:0.0.1-alpha.0")
 <dependency>
   <groupId>app.knock.api</groupId>
   <artifactId>knock-java</artifactId>
-  <version>0.0.1-alpha.0</version>
+  <version>1.0.0</version>
 </dependency>
 ```
 
