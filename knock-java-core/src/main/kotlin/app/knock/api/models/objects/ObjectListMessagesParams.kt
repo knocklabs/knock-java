@@ -501,13 +501,19 @@ private constructor(
 
             @JvmField val SEEN = of("seen")
 
+            @JvmField val UNSEEN = of("unseen")
+
             @JvmField val READ = of("read")
 
-            @JvmField val INTERACTED = of("interacted")
+            @JvmField val UNREAD = of("unread")
+
+            @JvmField val ARCHIVED = of("archived")
+
+            @JvmField val UNARCHIVED = of("unarchived")
 
             @JvmField val LINK_CLICKED = of("link_clicked")
 
-            @JvmField val ARCHIVED = of("archived")
+            @JvmField val INTERACTED = of("interacted")
 
             @JvmStatic fun of(value: String) = EngagementStatus(JsonField.of(value))
         }
@@ -515,10 +521,13 @@ private constructor(
         /** An enum containing [EngagementStatus]'s known values. */
         enum class Known {
             SEEN,
+            UNSEEN,
             READ,
-            INTERACTED,
-            LINK_CLICKED,
+            UNREAD,
             ARCHIVED,
+            UNARCHIVED,
+            LINK_CLICKED,
+            INTERACTED,
         }
 
         /**
@@ -532,10 +541,13 @@ private constructor(
          */
         enum class Value {
             SEEN,
+            UNSEEN,
             READ,
-            INTERACTED,
-            LINK_CLICKED,
+            UNREAD,
             ARCHIVED,
+            UNARCHIVED,
+            LINK_CLICKED,
+            INTERACTED,
             /**
              * An enum member indicating that [EngagementStatus] was instantiated with an unknown
              * value.
@@ -553,10 +565,13 @@ private constructor(
         fun value(): Value =
             when (this) {
                 SEEN -> Value.SEEN
+                UNSEEN -> Value.UNSEEN
                 READ -> Value.READ
-                INTERACTED -> Value.INTERACTED
-                LINK_CLICKED -> Value.LINK_CLICKED
+                UNREAD -> Value.UNREAD
                 ARCHIVED -> Value.ARCHIVED
+                UNARCHIVED -> Value.UNARCHIVED
+                LINK_CLICKED -> Value.LINK_CLICKED
+                INTERACTED -> Value.INTERACTED
                 else -> Value._UNKNOWN
             }
 
@@ -571,10 +586,13 @@ private constructor(
         fun known(): Known =
             when (this) {
                 SEEN -> Known.SEEN
+                UNSEEN -> Known.UNSEEN
                 READ -> Known.READ
-                INTERACTED -> Known.INTERACTED
-                LINK_CLICKED -> Known.LINK_CLICKED
+                UNREAD -> Known.UNREAD
                 ARCHIVED -> Known.ARCHIVED
+                UNARCHIVED -> Known.UNARCHIVED
+                LINK_CLICKED -> Known.LINK_CLICKED
+                INTERACTED -> Known.INTERACTED
                 else -> throw KnockInvalidDataException("Unknown EngagementStatus: $value")
             }
 
