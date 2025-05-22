@@ -66,7 +66,10 @@ private constructor(
     fun workflow(): String = body.workflow()
 
     /**
-     * An optional map of data to pass into the workflow execution.
+     * An optional map of data to pass into the workflow execution. There is a 1024 byte limit on
+     * the size of any single string value (with the exception of
+     * [email attachments](/integrations/email/attachments)), and a 10MB limit on the size of the
+     * full `data` payload.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -268,7 +271,12 @@ private constructor(
          */
         fun workflow(workflow: JsonField<String>) = apply { body.workflow(workflow) }
 
-        /** An optional map of data to pass into the workflow execution. */
+        /**
+         * An optional map of data to pass into the workflow execution. There is a 1024 byte limit
+         * on the size of any single string value (with the exception of
+         * [email attachments](/integrations/email/attachments)), and a 10MB limit on the size of
+         * the full `data` payload.
+         */
         fun data(data: Data?) = apply { body.data(data) }
 
         /** Alias for calling [Builder.data] with `data.orElse(null)`. */
@@ -542,7 +550,10 @@ private constructor(
         fun workflow(): String = workflow.getRequired("workflow")
 
         /**
-         * An optional map of data to pass into the workflow execution.
+         * An optional map of data to pass into the workflow execution. There is a 1024 byte limit
+         * on the size of any single string value (with the exception of
+         * [email attachments](/integrations/email/attachments)), and a 10MB limit on the size of
+         * the full `data` payload.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -769,7 +780,12 @@ private constructor(
              */
             fun workflow(workflow: JsonField<String>) = apply { this.workflow = workflow }
 
-            /** An optional map of data to pass into the workflow execution. */
+            /**
+             * An optional map of data to pass into the workflow execution. There is a 1024 byte
+             * limit on the size of any single string value (with the exception of
+             * [email attachments](/integrations/email/attachments)), and a 10MB limit on the size
+             * of the full `data` payload.
+             */
             fun data(data: Data?) = data(JsonField.ofNullable(data))
 
             /** Alias for calling [Builder.data] with `data.orElse(null)`. */
@@ -947,7 +963,12 @@ private constructor(
             "Body{recipients=$recipients, repeats=$repeats, workflow=$workflow, data=$data, endingAt=$endingAt, scheduledAt=$scheduledAt, tenant=$tenant, additionalProperties=$additionalProperties}"
     }
 
-    /** An optional map of data to pass into the workflow execution. */
+    /**
+     * An optional map of data to pass into the workflow execution. There is a 1024 byte limit on
+     * the size of any single string value (with the exception of
+     * [email attachments](/integrations/email/attachments)), and a 10MB limit on the size of the
+     * full `data` payload.
+     */
     class Data
     @JsonCreator
     private constructor(

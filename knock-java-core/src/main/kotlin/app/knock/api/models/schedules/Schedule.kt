@@ -148,7 +148,10 @@ private constructor(
     fun actor(): Optional<Recipient> = actor.getOptional("actor")
 
     /**
-     * An optional map of data to pass into the workflow execution.
+     * An optional map of data to pass into the workflow execution. There is a 1024 byte limit on
+     * the size of any single string value (with the exception of
+     * [email attachments](/integrations/email/attachments)), and a 10MB limit on the size of the
+     * full `data` payload.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -467,7 +470,12 @@ private constructor(
         /** Alias for calling [actor] with `Recipient.ofObject(object_)`. */
         fun actor(object_: Object) = actor(Recipient.ofObject(object_))
 
-        /** An optional map of data to pass into the workflow execution. */
+        /**
+         * An optional map of data to pass into the workflow execution. There is a 1024 byte limit
+         * on the size of any single string value (with the exception of
+         * [email attachments](/integrations/email/attachments)), and a 10MB limit on the size of
+         * the full `data` payload.
+         */
         fun data(data: Data?) = data(JsonField.ofNullable(data))
 
         /** Alias for calling [Builder.data] with `data.orElse(null)`. */
@@ -641,7 +649,12 @@ private constructor(
             (if (nextOccurrenceAt.asKnown().isPresent) 1 else 0) +
             (if (tenant.asKnown().isPresent) 1 else 0)
 
-    /** An optional map of data to pass into the workflow execution. */
+    /**
+     * An optional map of data to pass into the workflow execution. There is a 1024 byte limit on
+     * the size of any single string value (with the exception of
+     * [email attachments](/integrations/email/attachments)), and a 10MB limit on the size of the
+     * full `data` payload.
+     */
     class Data
     @JsonCreator
     private constructor(
