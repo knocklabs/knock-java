@@ -25,10 +25,10 @@ private constructor(
     /**
      * Delegates to [MessageListEventsPageResponse], but gracefully handles missing data.
      *
-     * @see [MessageListEventsPageResponse.entries]
+     * @see [MessageListEventsPageResponse.items]
      */
-    fun entries(): List<MessageEvent> =
-        response._entries().getOptional("entries").getOrNull() ?: emptyList()
+    override fun items(): List<MessageEvent> =
+        response._items().getOptional("items").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [MessageListEventsPageResponse], but gracefully handles missing data.
@@ -36,8 +36,6 @@ private constructor(
      * @see [MessageListEventsPageResponse.pageInfo]
      */
     fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
-
-    override fun items(): List<MessageEvent> = entries()
 
     override fun hasNextPage(): Boolean =
         items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent

@@ -16,7 +16,7 @@ internal class MessageListEventsPageResponseTest {
     fun create() {
         val messageListEventsPageResponse =
             MessageListEventsPageResponse.builder()
-                .addEntry(
+                .addItem(
                     MessageEvent.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                         ._typename("MessageEvent")
@@ -40,7 +40,7 @@ internal class MessageListEventsPageResponseTest {
                 )
                 .build()
 
-        assertThat(messageListEventsPageResponse.entries())
+        assertThat(messageListEventsPageResponse.items())
             .containsExactly(
                 MessageEvent.builder()
                     .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
@@ -71,7 +71,7 @@ internal class MessageListEventsPageResponseTest {
         val jsonMapper = jsonMapper()
         val messageListEventsPageResponse =
             MessageListEventsPageResponse.builder()
-                .addEntry(
+                .addItem(
                     MessageEvent.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                         ._typename("MessageEvent")

@@ -17,7 +17,7 @@ internal class UserListMessagesPageResponseTest {
     fun create() {
         val userListMessagesPageResponse =
             UserListMessagesPageResponse.builder()
-                .addEntry(
+                .addItem(
                     Message.builder()
                         .id("2w3YUpTTOxuDvZFji8OMsKrG176")
                         ._typename("Message")
@@ -77,7 +77,7 @@ internal class UserListMessagesPageResponseTest {
                 )
                 .build()
 
-        assertThat(userListMessagesPageResponse.entries())
+        assertThat(userListMessagesPageResponse.items())
             .containsExactly(
                 Message.builder()
                     .id("2w3YUpTTOxuDvZFji8OMsKrG176")
@@ -144,7 +144,7 @@ internal class UserListMessagesPageResponseTest {
         val jsonMapper = jsonMapper()
         val userListMessagesPageResponse =
             UserListMessagesPageResponse.builder()
-                .addEntry(
+                .addItem(
                     Message.builder()
                         .id("2w3YUpTTOxuDvZFji8OMsKrG176")
                         ._typename("Message")

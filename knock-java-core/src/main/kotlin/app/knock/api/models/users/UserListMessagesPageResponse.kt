@@ -23,18 +23,16 @@ import kotlin.jvm.optionals.getOrNull
 /** A paginated list of messages. */
 class UserListMessagesPageResponse
 private constructor(
-    private val entries: JsonField<List<Message>>,
+    private val items: JsonField<List<Message>>,
     private val pageInfo: JsonField<PageInfo>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
     @JsonCreator
     private constructor(
-        @JsonProperty("entries")
-        @ExcludeMissing
-        entries: JsonField<List<Message>> = JsonMissing.of(),
+        @JsonProperty("items") @ExcludeMissing items: JsonField<List<Message>> = JsonMissing.of(),
         @JsonProperty("page_info") @ExcludeMissing pageInfo: JsonField<PageInfo> = JsonMissing.of(),
-    ) : this(entries, pageInfo, mutableMapOf())
+    ) : this(items, pageInfo, mutableMapOf())
 
     /**
      * A list of messages.
@@ -42,7 +40,7 @@ private constructor(
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
-    fun entries(): List<Message> = entries.getRequired("entries")
+    fun items(): List<Message> = items.getRequired("items")
 
     /**
      * Pagination information for a list of resources.
@@ -53,11 +51,11 @@ private constructor(
     fun pageInfo(): PageInfo = pageInfo.getRequired("page_info")
 
     /**
-     * Returns the raw JSON value of [entries].
+     * Returns the raw JSON value of [items].
      *
-     * Unlike [entries], this method doesn't throw if the JSON field has an unexpected type.
+     * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("entries") @ExcludeMissing fun _entries(): JsonField<List<Message>> = entries
+    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<Message>> = items
 
     /**
      * Returns the raw JSON value of [pageInfo].
@@ -85,7 +83,7 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .entries()
+         * .items()
          * .pageInfo()
          * ```
          */
@@ -95,41 +93,39 @@ private constructor(
     /** A builder for [UserListMessagesPageResponse]. */
     class Builder internal constructor() {
 
-        private var entries: JsonField<MutableList<Message>>? = null
+        private var items: JsonField<MutableList<Message>>? = null
         private var pageInfo: JsonField<PageInfo>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
         internal fun from(userListMessagesPageResponse: UserListMessagesPageResponse) = apply {
-            entries = userListMessagesPageResponse.entries.map { it.toMutableList() }
+            items = userListMessagesPageResponse.items.map { it.toMutableList() }
             pageInfo = userListMessagesPageResponse.pageInfo
             additionalProperties = userListMessagesPageResponse.additionalProperties.toMutableMap()
         }
 
         /** A list of messages. */
-        fun entries(entries: List<Message>) = entries(JsonField.of(entries))
+        fun items(items: List<Message>) = items(JsonField.of(items))
 
         /**
-         * Sets [Builder.entries] to an arbitrary JSON value.
+         * Sets [Builder.items] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.entries] with a well-typed `List<Message>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.items] with a well-typed `List<Message>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
-        fun entries(entries: JsonField<List<Message>>) = apply {
-            this.entries = entries.map { it.toMutableList() }
+        fun items(items: JsonField<List<Message>>) = apply {
+            this.items = items.map { it.toMutableList() }
         }
 
         /**
-         * Adds a single [Message] to [entries].
+         * Adds a single [Message] to [items].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addEntry(entry: Message) = apply {
-            entries =
-                (entries ?: JsonField.of(mutableListOf())).also {
-                    checkKnown("entries", it).add(entry)
-                }
+        fun addItem(item: Message) = apply {
+            items =
+                (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
         }
 
         /** Pagination information for a list of resources. */
@@ -170,7 +166,7 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .entries()
+         * .items()
          * .pageInfo()
          * ```
          *
@@ -178,7 +174,7 @@ private constructor(
          */
         fun build(): UserListMessagesPageResponse =
             UserListMessagesPageResponse(
-                checkRequired("entries", entries).map { it.toImmutable() },
+                checkRequired("items", items).map { it.toImmutable() },
                 checkRequired("pageInfo", pageInfo),
                 additionalProperties.toMutableMap(),
             )
@@ -191,7 +187,7 @@ private constructor(
             return@apply
         }
 
-        entries().forEach { it.validate() }
+        items().forEach { it.validate() }
         pageInfo().validate()
         validated = true
     }
@@ -211,7 +207,7 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (entries.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
+        (items.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (pageInfo.asKnown().getOrNull()?.validity() ?: 0)
 
     override fun equals(other: Any?): Boolean {
@@ -219,15 +215,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is UserListMessagesPageResponse && entries == other.entries && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is UserListMessagesPageResponse && items == other.items && pageInfo == other.pageInfo && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(entries, pageInfo, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(items, pageInfo, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "UserListMessagesPageResponse{entries=$entries, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
+        "UserListMessagesPageResponse{items=$items, pageInfo=$pageInfo, additionalProperties=$additionalProperties}"
 }

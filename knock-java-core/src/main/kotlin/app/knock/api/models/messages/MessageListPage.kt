@@ -22,10 +22,10 @@ private constructor(
     /**
      * Delegates to [MessageListPageResponse], but gracefully handles missing data.
      *
-     * @see [MessageListPageResponse.entries]
+     * @see [MessageListPageResponse.items]
      */
-    fun entries(): List<Message> =
-        response._entries().getOptional("entries").getOrNull() ?: emptyList()
+    override fun items(): List<Message> =
+        response._items().getOptional("items").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [MessageListPageResponse], but gracefully handles missing data.
@@ -33,8 +33,6 @@ private constructor(
      * @see [MessageListPageResponse.pageInfo]
      */
     fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
-
-    override fun items(): List<Message> = entries()
 
     override fun hasNextPage(): Boolean =
         items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent

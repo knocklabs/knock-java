@@ -16,7 +16,7 @@ internal class MessageListPageResponseTest {
     fun create() {
         val messageListPageResponse =
             MessageListPageResponse.builder()
-                .addEntry(
+                .addItem(
                     Message.builder()
                         .id("2w3YUpTTOxuDvZFji8OMsKrG176")
                         ._typename("Message")
@@ -76,7 +76,7 @@ internal class MessageListPageResponseTest {
                 )
                 .build()
 
-        assertThat(messageListPageResponse.entries())
+        assertThat(messageListPageResponse.items())
             .containsExactly(
                 Message.builder()
                     .id("2w3YUpTTOxuDvZFji8OMsKrG176")
@@ -143,7 +143,7 @@ internal class MessageListPageResponseTest {
         val jsonMapper = jsonMapper()
         val messageListPageResponse =
             MessageListPageResponse.builder()
-                .addEntry(
+                .addItem(
                     Message.builder()
                         .id("2w3YUpTTOxuDvZFji8OMsKrG176")
                         ._typename("Message")
