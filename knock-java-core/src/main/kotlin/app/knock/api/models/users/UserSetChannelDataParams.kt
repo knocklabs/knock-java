@@ -12,7 +12,11 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Updates or creates channel data for a specific user and channel ID. */
+/**
+ * Updates or creates channel data for a specific user and channel ID. If no user exists in the
+ * current environment for the given `user_id`, Knock will create the user entry as part of this
+ * request.
+ */
 class UserSetChannelDataParams
 private constructor(
     private val userId: String?,
