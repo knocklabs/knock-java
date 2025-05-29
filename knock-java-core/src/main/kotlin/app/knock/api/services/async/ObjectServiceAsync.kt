@@ -28,7 +28,6 @@ import app.knock.api.models.recipients.channeldata.ChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSet
 import app.knock.api.models.recipients.subscriptions.Subscription
 import app.knock.api.services.async.objects.BulkServiceAsync
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface ObjectServiceAsync {
@@ -717,12 +716,10 @@ interface ObjectServiceAsync {
          * Returns a raw HTTP response for `get /v1/objects/{collection}`, but is otherwise the same
          * as [ObjectServiceAsync.list].
          */
-        @MustBeClosed
         fun list(collection: String): CompletableFuture<HttpResponseFor<ObjectListPageAsync>> =
             list(collection, ObjectListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             collection: String,
             params: ObjectListParams = ObjectListParams.none(),
@@ -731,7 +728,6 @@ interface ObjectServiceAsync {
             list(params.toBuilder().collection(collection).build(), requestOptions)
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             collection: String,
             params: ObjectListParams = ObjectListParams.none(),
@@ -739,21 +735,18 @@ interface ObjectServiceAsync {
             list(collection, params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: ObjectListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<ObjectListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: ObjectListParams
         ): CompletableFuture<HttpResponseFor<ObjectListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             collection: String,
             requestOptions: RequestOptions,
@@ -764,12 +757,10 @@ interface ObjectServiceAsync {
          * Returns a raw HTTP response for `delete /v1/objects/{collection}/{id}`, but is otherwise
          * the same as [ObjectServiceAsync.delete].
          */
-        @MustBeClosed
         fun delete(collection: String, id: String): CompletableFuture<HttpResponseFor<String>> =
             delete(collection, id, ObjectDeleteParams.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             collection: String,
             id: String,
@@ -779,7 +770,6 @@ interface ObjectServiceAsync {
             delete(params.toBuilder().collection(collection).id(id).build(), requestOptions)
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             collection: String,
             id: String,
@@ -788,19 +778,16 @@ interface ObjectServiceAsync {
             delete(collection, id, params, RequestOptions.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             params: ObjectDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<String>>
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(params: ObjectDeleteParams): CompletableFuture<HttpResponseFor<String>> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             collection: String,
             id: String,
@@ -813,7 +800,6 @@ interface ObjectServiceAsync {
          * /v1/objects/{collection}/{object_id}/subscriptions`, but is otherwise the same as
          * [ObjectServiceAsync.addSubscriptions].
          */
-        @MustBeClosed
         fun addSubscriptions(
             collection: String,
             objectId: String,
@@ -822,7 +808,6 @@ interface ObjectServiceAsync {
             addSubscriptions(collection, objectId, params, RequestOptions.none())
 
         /** @see [addSubscriptions] */
-        @MustBeClosed
         fun addSubscriptions(
             collection: String,
             objectId: String,
@@ -835,14 +820,12 @@ interface ObjectServiceAsync {
             )
 
         /** @see [addSubscriptions] */
-        @MustBeClosed
         fun addSubscriptions(
             params: ObjectAddSubscriptionsParams
         ): CompletableFuture<HttpResponseFor<List<Subscription>>> =
             addSubscriptions(params, RequestOptions.none())
 
         /** @see [addSubscriptions] */
-        @MustBeClosed
         fun addSubscriptions(
             params: ObjectAddSubscriptionsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -853,7 +836,6 @@ interface ObjectServiceAsync {
          * /v1/objects/{collection}/{object_id}/subscriptions`, but is otherwise the same as
          * [ObjectServiceAsync.deleteSubscriptions].
          */
-        @MustBeClosed
         fun deleteSubscriptions(
             collection: String,
             objectId: String,
@@ -862,7 +844,6 @@ interface ObjectServiceAsync {
             deleteSubscriptions(collection, objectId, params, RequestOptions.none())
 
         /** @see [deleteSubscriptions] */
-        @MustBeClosed
         fun deleteSubscriptions(
             collection: String,
             objectId: String,
@@ -875,14 +856,12 @@ interface ObjectServiceAsync {
             )
 
         /** @see [deleteSubscriptions] */
-        @MustBeClosed
         fun deleteSubscriptions(
             params: ObjectDeleteSubscriptionsParams
         ): CompletableFuture<HttpResponseFor<List<Subscription>>> =
             deleteSubscriptions(params, RequestOptions.none())
 
         /** @see [deleteSubscriptions] */
-        @MustBeClosed
         fun deleteSubscriptions(
             params: ObjectDeleteSubscriptionsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -892,12 +871,10 @@ interface ObjectServiceAsync {
          * Returns a raw HTTP response for `get /v1/objects/{collection}/{id}`, but is otherwise the
          * same as [ObjectServiceAsync.get].
          */
-        @MustBeClosed
         fun get(collection: String, id: String): CompletableFuture<HttpResponseFor<Object>> =
             get(collection, id, ObjectGetParams.none())
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             collection: String,
             id: String,
@@ -907,7 +884,6 @@ interface ObjectServiceAsync {
             get(params.toBuilder().collection(collection).id(id).build(), requestOptions)
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             collection: String,
             id: String,
@@ -916,19 +892,16 @@ interface ObjectServiceAsync {
             get(collection, id, params, RequestOptions.none())
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             params: ObjectGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Object>>
 
         /** @see [get] */
-        @MustBeClosed
         fun get(params: ObjectGetParams): CompletableFuture<HttpResponseFor<Object>> =
             get(params, RequestOptions.none())
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             collection: String,
             id: String,
@@ -941,7 +914,6 @@ interface ObjectServiceAsync {
          * /v1/objects/{collection}/{object_id}/channel_data/{channel_id}`, but is otherwise the
          * same as [ObjectServiceAsync.getChannelData].
          */
-        @MustBeClosed
         fun getChannelData(
             collection: String,
             objectId: String,
@@ -950,7 +922,6 @@ interface ObjectServiceAsync {
             getChannelData(collection, objectId, channelId, ObjectGetChannelDataParams.none())
 
         /** @see [getChannelData] */
-        @MustBeClosed
         fun getChannelData(
             collection: String,
             objectId: String,
@@ -969,7 +940,6 @@ interface ObjectServiceAsync {
             )
 
         /** @see [getChannelData] */
-        @MustBeClosed
         fun getChannelData(
             collection: String,
             objectId: String,
@@ -979,21 +949,18 @@ interface ObjectServiceAsync {
             getChannelData(collection, objectId, channelId, params, RequestOptions.none())
 
         /** @see [getChannelData] */
-        @MustBeClosed
         fun getChannelData(
             params: ObjectGetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<ChannelData>>
 
         /** @see [getChannelData] */
-        @MustBeClosed
         fun getChannelData(
             params: ObjectGetChannelDataParams
         ): CompletableFuture<HttpResponseFor<ChannelData>> =
             getChannelData(params, RequestOptions.none())
 
         /** @see [getChannelData] */
-        @MustBeClosed
         fun getChannelData(
             collection: String,
             objectId: String,
@@ -1013,7 +980,6 @@ interface ObjectServiceAsync {
          * /v1/objects/{collection}/{object_id}/preferences/{id}`, but is otherwise the same as
          * [ObjectServiceAsync.getPreferences].
          */
-        @MustBeClosed
         fun getPreferences(
             collection: String,
             objectId: String,
@@ -1022,7 +988,6 @@ interface ObjectServiceAsync {
             getPreferences(collection, objectId, id, ObjectGetPreferencesParams.none())
 
         /** @see [getPreferences] */
-        @MustBeClosed
         fun getPreferences(
             collection: String,
             objectId: String,
@@ -1036,7 +1001,6 @@ interface ObjectServiceAsync {
             )
 
         /** @see [getPreferences] */
-        @MustBeClosed
         fun getPreferences(
             collection: String,
             objectId: String,
@@ -1046,21 +1010,18 @@ interface ObjectServiceAsync {
             getPreferences(collection, objectId, id, params, RequestOptions.none())
 
         /** @see [getPreferences] */
-        @MustBeClosed
         fun getPreferences(
             params: ObjectGetPreferencesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<PreferenceSet>>
 
         /** @see [getPreferences] */
-        @MustBeClosed
         fun getPreferences(
             params: ObjectGetPreferencesParams
         ): CompletableFuture<HttpResponseFor<PreferenceSet>> =
             getPreferences(params, RequestOptions.none())
 
         /** @see [getPreferences] */
-        @MustBeClosed
         fun getPreferences(
             collection: String,
             objectId: String,
@@ -1079,7 +1040,6 @@ interface ObjectServiceAsync {
          * Returns a raw HTTP response for `get /v1/objects/{collection}/{id}/messages`, but is
          * otherwise the same as [ObjectServiceAsync.listMessages].
          */
-        @MustBeClosed
         fun listMessages(
             collection: String,
             id: String,
@@ -1087,7 +1047,6 @@ interface ObjectServiceAsync {
             listMessages(collection, id, ObjectListMessagesParams.none())
 
         /** @see [listMessages] */
-        @MustBeClosed
         fun listMessages(
             collection: String,
             id: String,
@@ -1097,7 +1056,6 @@ interface ObjectServiceAsync {
             listMessages(params.toBuilder().collection(collection).id(id).build(), requestOptions)
 
         /** @see [listMessages] */
-        @MustBeClosed
         fun listMessages(
             collection: String,
             id: String,
@@ -1106,21 +1064,18 @@ interface ObjectServiceAsync {
             listMessages(collection, id, params, RequestOptions.none())
 
         /** @see [listMessages] */
-        @MustBeClosed
         fun listMessages(
             params: ObjectListMessagesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<ObjectListMessagesPageAsync>>
 
         /** @see [listMessages] */
-        @MustBeClosed
         fun listMessages(
             params: ObjectListMessagesParams
         ): CompletableFuture<HttpResponseFor<ObjectListMessagesPageAsync>> =
             listMessages(params, RequestOptions.none())
 
         /** @see [listMessages] */
-        @MustBeClosed
         fun listMessages(
             collection: String,
             id: String,
@@ -1132,7 +1087,6 @@ interface ObjectServiceAsync {
          * Returns a raw HTTP response for `get /v1/objects/{collection}/{object_id}/preferences`,
          * but is otherwise the same as [ObjectServiceAsync.listPreferences].
          */
-        @MustBeClosed
         fun listPreferences(
             collection: String,
             objectId: String,
@@ -1140,7 +1094,6 @@ interface ObjectServiceAsync {
             listPreferences(collection, objectId, ObjectListPreferencesParams.none())
 
         /** @see [listPreferences] */
-        @MustBeClosed
         fun listPreferences(
             collection: String,
             objectId: String,
@@ -1153,7 +1106,6 @@ interface ObjectServiceAsync {
             )
 
         /** @see [listPreferences] */
-        @MustBeClosed
         fun listPreferences(
             collection: String,
             objectId: String,
@@ -1162,21 +1114,18 @@ interface ObjectServiceAsync {
             listPreferences(collection, objectId, params, RequestOptions.none())
 
         /** @see [listPreferences] */
-        @MustBeClosed
         fun listPreferences(
             params: ObjectListPreferencesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<List<PreferenceSet>>>
 
         /** @see [listPreferences] */
-        @MustBeClosed
         fun listPreferences(
             params: ObjectListPreferencesParams
         ): CompletableFuture<HttpResponseFor<List<PreferenceSet>>> =
             listPreferences(params, RequestOptions.none())
 
         /** @see [listPreferences] */
-        @MustBeClosed
         fun listPreferences(
             collection: String,
             objectId: String,
@@ -1193,7 +1142,6 @@ interface ObjectServiceAsync {
          * Returns a raw HTTP response for `get /v1/objects/{collection}/{id}/schedules`, but is
          * otherwise the same as [ObjectServiceAsync.listSchedules].
          */
-        @MustBeClosed
         fun listSchedules(
             collection: String,
             id: String,
@@ -1201,7 +1149,6 @@ interface ObjectServiceAsync {
             listSchedules(collection, id, ObjectListSchedulesParams.none())
 
         /** @see [listSchedules] */
-        @MustBeClosed
         fun listSchedules(
             collection: String,
             id: String,
@@ -1211,7 +1158,6 @@ interface ObjectServiceAsync {
             listSchedules(params.toBuilder().collection(collection).id(id).build(), requestOptions)
 
         /** @see [listSchedules] */
-        @MustBeClosed
         fun listSchedules(
             collection: String,
             id: String,
@@ -1220,21 +1166,18 @@ interface ObjectServiceAsync {
             listSchedules(collection, id, params, RequestOptions.none())
 
         /** @see [listSchedules] */
-        @MustBeClosed
         fun listSchedules(
             params: ObjectListSchedulesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<ObjectListSchedulesPageAsync>>
 
         /** @see [listSchedules] */
-        @MustBeClosed
         fun listSchedules(
             params: ObjectListSchedulesParams
         ): CompletableFuture<HttpResponseFor<ObjectListSchedulesPageAsync>> =
             listSchedules(params, RequestOptions.none())
 
         /** @see [listSchedules] */
-        @MustBeClosed
         fun listSchedules(
             collection: String,
             id: String,
@@ -1246,7 +1189,6 @@ interface ObjectServiceAsync {
          * Returns a raw HTTP response for `get /v1/objects/{collection}/{object_id}/subscriptions`,
          * but is otherwise the same as [ObjectServiceAsync.listSubscriptions].
          */
-        @MustBeClosed
         fun listSubscriptions(
             collection: String,
             objectId: String,
@@ -1254,7 +1196,6 @@ interface ObjectServiceAsync {
             listSubscriptions(collection, objectId, ObjectListSubscriptionsParams.none())
 
         /** @see [listSubscriptions] */
-        @MustBeClosed
         fun listSubscriptions(
             collection: String,
             objectId: String,
@@ -1267,7 +1208,6 @@ interface ObjectServiceAsync {
             )
 
         /** @see [listSubscriptions] */
-        @MustBeClosed
         fun listSubscriptions(
             collection: String,
             objectId: String,
@@ -1276,21 +1216,18 @@ interface ObjectServiceAsync {
             listSubscriptions(collection, objectId, params, RequestOptions.none())
 
         /** @see [listSubscriptions] */
-        @MustBeClosed
         fun listSubscriptions(
             params: ObjectListSubscriptionsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<ObjectListSubscriptionsPageAsync>>
 
         /** @see [listSubscriptions] */
-        @MustBeClosed
         fun listSubscriptions(
             params: ObjectListSubscriptionsParams
         ): CompletableFuture<HttpResponseFor<ObjectListSubscriptionsPageAsync>> =
             listSubscriptions(params, RequestOptions.none())
 
         /** @see [listSubscriptions] */
-        @MustBeClosed
         fun listSubscriptions(
             collection: String,
             objectId: String,
@@ -1307,12 +1244,10 @@ interface ObjectServiceAsync {
          * Returns a raw HTTP response for `put /v1/objects/{collection}/{id}`, but is otherwise the
          * same as [ObjectServiceAsync.set].
          */
-        @MustBeClosed
         fun set(collection: String, id: String): CompletableFuture<HttpResponseFor<Object>> =
             set(collection, id, ObjectSetParams.none())
 
         /** @see [set] */
-        @MustBeClosed
         fun set(
             collection: String,
             id: String,
@@ -1322,7 +1257,6 @@ interface ObjectServiceAsync {
             set(params.toBuilder().collection(collection).id(id).build(), requestOptions)
 
         /** @see [set] */
-        @MustBeClosed
         fun set(
             collection: String,
             id: String,
@@ -1331,19 +1265,16 @@ interface ObjectServiceAsync {
             set(collection, id, params, RequestOptions.none())
 
         /** @see [set] */
-        @MustBeClosed
         fun set(
             params: ObjectSetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Object>>
 
         /** @see [set] */
-        @MustBeClosed
         fun set(params: ObjectSetParams): CompletableFuture<HttpResponseFor<Object>> =
             set(params, RequestOptions.none())
 
         /** @see [set] */
-        @MustBeClosed
         fun set(
             collection: String,
             id: String,
@@ -1356,7 +1287,6 @@ interface ObjectServiceAsync {
          * /v1/objects/{collection}/{object_id}/channel_data/{channel_id}`, but is otherwise the
          * same as [ObjectServiceAsync.setChannelData].
          */
-        @MustBeClosed
         fun setChannelData(
             collection: String,
             objectId: String,
@@ -1366,7 +1296,6 @@ interface ObjectServiceAsync {
             setChannelData(collection, objectId, channelId, params, RequestOptions.none())
 
         /** @see [setChannelData] */
-        @MustBeClosed
         fun setChannelData(
             collection: String,
             objectId: String,
@@ -1385,14 +1314,12 @@ interface ObjectServiceAsync {
             )
 
         /** @see [setChannelData] */
-        @MustBeClosed
         fun setChannelData(
             params: ObjectSetChannelDataParams
         ): CompletableFuture<HttpResponseFor<ChannelData>> =
             setChannelData(params, RequestOptions.none())
 
         /** @see [setChannelData] */
-        @MustBeClosed
         fun setChannelData(
             params: ObjectSetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -1403,7 +1330,6 @@ interface ObjectServiceAsync {
          * /v1/objects/{collection}/{object_id}/preferences/{id}`, but is otherwise the same as
          * [ObjectServiceAsync.setPreferences].
          */
-        @MustBeClosed
         fun setPreferences(
             collection: String,
             objectId: String,
@@ -1413,7 +1339,6 @@ interface ObjectServiceAsync {
             setPreferences(collection, objectId, id, params, RequestOptions.none())
 
         /** @see [setPreferences] */
-        @MustBeClosed
         fun setPreferences(
             collection: String,
             objectId: String,
@@ -1427,14 +1352,12 @@ interface ObjectServiceAsync {
             )
 
         /** @see [setPreferences] */
-        @MustBeClosed
         fun setPreferences(
             params: ObjectSetPreferencesParams
         ): CompletableFuture<HttpResponseFor<PreferenceSet>> =
             setPreferences(params, RequestOptions.none())
 
         /** @see [setPreferences] */
-        @MustBeClosed
         fun setPreferences(
             params: ObjectSetPreferencesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -1445,7 +1368,6 @@ interface ObjectServiceAsync {
          * /v1/objects/{collection}/{object_id}/channel_data/{channel_id}`, but is otherwise the
          * same as [ObjectServiceAsync.unsetChannelData].
          */
-        @MustBeClosed
         fun unsetChannelData(
             collection: String,
             objectId: String,
@@ -1454,7 +1376,6 @@ interface ObjectServiceAsync {
             unsetChannelData(collection, objectId, channelId, ObjectUnsetChannelDataParams.none())
 
         /** @see [unsetChannelData] */
-        @MustBeClosed
         fun unsetChannelData(
             collection: String,
             objectId: String,
@@ -1473,7 +1394,6 @@ interface ObjectServiceAsync {
             )
 
         /** @see [unsetChannelData] */
-        @MustBeClosed
         fun unsetChannelData(
             collection: String,
             objectId: String,
@@ -1483,21 +1403,18 @@ interface ObjectServiceAsync {
             unsetChannelData(collection, objectId, channelId, params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
-        @MustBeClosed
         fun unsetChannelData(
             params: ObjectUnsetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<String>>
 
         /** @see [unsetChannelData] */
-        @MustBeClosed
         fun unsetChannelData(
             params: ObjectUnsetChannelDataParams
         ): CompletableFuture<HttpResponseFor<String>> =
             unsetChannelData(params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
-        @MustBeClosed
         fun unsetChannelData(
             collection: String,
             objectId: String,

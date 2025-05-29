@@ -6,7 +6,6 @@ import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.bulkoperations.BulkOperationGetParams
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface BulkOperationServiceAsync {
@@ -56,12 +55,10 @@ interface BulkOperationServiceAsync {
          * Returns a raw HTTP response for `get /v1/bulk_operations/{id}`, but is otherwise the same
          * as [BulkOperationServiceAsync.get].
          */
-        @MustBeClosed
         fun get(id: String): CompletableFuture<HttpResponseFor<BulkOperation>> =
             get(id, BulkOperationGetParams.none())
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             id: String,
             params: BulkOperationGetParams = BulkOperationGetParams.none(),
@@ -70,7 +67,6 @@ interface BulkOperationServiceAsync {
             get(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             id: String,
             params: BulkOperationGetParams = BulkOperationGetParams.none(),
@@ -78,19 +74,16 @@ interface BulkOperationServiceAsync {
             get(id, params, RequestOptions.none())
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             params: BulkOperationGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
 
         /** @see [get] */
-        @MustBeClosed
         fun get(params: BulkOperationGetParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
             get(params, RequestOptions.none())
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             id: String,
             requestOptions: RequestOptions,

@@ -10,7 +10,6 @@ import app.knock.api.models.providers.slack.SlackListChannelsPageAsync
 import app.knock.api.models.providers.slack.SlackListChannelsParams
 import app.knock.api.models.providers.slack.SlackRevokeAccessParams
 import app.knock.api.models.providers.slack.SlackRevokeAccessResponse
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface SlackServiceAsync {
@@ -104,7 +103,6 @@ interface SlackServiceAsync {
          * Returns a raw HTTP response for `get /v1/providers/slack/{channel_id}/auth_check`, but is
          * otherwise the same as [SlackServiceAsync.checkAuth].
          */
-        @MustBeClosed
         fun checkAuth(
             channelId: String,
             params: SlackCheckAuthParams,
@@ -112,7 +110,6 @@ interface SlackServiceAsync {
             checkAuth(channelId, params, RequestOptions.none())
 
         /** @see [checkAuth] */
-        @MustBeClosed
         fun checkAuth(
             channelId: String,
             params: SlackCheckAuthParams,
@@ -121,14 +118,12 @@ interface SlackServiceAsync {
             checkAuth(params.toBuilder().channelId(channelId).build(), requestOptions)
 
         /** @see [checkAuth] */
-        @MustBeClosed
         fun checkAuth(
             params: SlackCheckAuthParams
         ): CompletableFuture<HttpResponseFor<SlackCheckAuthResponse>> =
             checkAuth(params, RequestOptions.none())
 
         /** @see [checkAuth] */
-        @MustBeClosed
         fun checkAuth(
             params: SlackCheckAuthParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -138,7 +133,6 @@ interface SlackServiceAsync {
          * Returns a raw HTTP response for `get /v1/providers/slack/{channel_id}/channels`, but is
          * otherwise the same as [SlackServiceAsync.listChannels].
          */
-        @MustBeClosed
         fun listChannels(
             channelId: String,
             params: SlackListChannelsParams,
@@ -146,7 +140,6 @@ interface SlackServiceAsync {
             listChannels(channelId, params, RequestOptions.none())
 
         /** @see [listChannels] */
-        @MustBeClosed
         fun listChannels(
             channelId: String,
             params: SlackListChannelsParams,
@@ -155,14 +148,12 @@ interface SlackServiceAsync {
             listChannels(params.toBuilder().channelId(channelId).build(), requestOptions)
 
         /** @see [listChannels] */
-        @MustBeClosed
         fun listChannels(
             params: SlackListChannelsParams
         ): CompletableFuture<HttpResponseFor<SlackListChannelsPageAsync>> =
             listChannels(params, RequestOptions.none())
 
         /** @see [listChannels] */
-        @MustBeClosed
         fun listChannels(
             params: SlackListChannelsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -172,7 +163,6 @@ interface SlackServiceAsync {
          * Returns a raw HTTP response for `put /v1/providers/slack/{channel_id}/revoke_access`, but
          * is otherwise the same as [SlackServiceAsync.revokeAccess].
          */
-        @MustBeClosed
         fun revokeAccess(
             channelId: String,
             params: SlackRevokeAccessParams,
@@ -180,7 +170,6 @@ interface SlackServiceAsync {
             revokeAccess(channelId, params, RequestOptions.none())
 
         /** @see [revokeAccess] */
-        @MustBeClosed
         fun revokeAccess(
             channelId: String,
             params: SlackRevokeAccessParams,
@@ -189,14 +178,12 @@ interface SlackServiceAsync {
             revokeAccess(params.toBuilder().channelId(channelId).build(), requestOptions)
 
         /** @see [revokeAccess] */
-        @MustBeClosed
         fun revokeAccess(
             params: SlackRevokeAccessParams
         ): CompletableFuture<HttpResponseFor<SlackRevokeAccessResponse>> =
             revokeAccess(params, RequestOptions.none())
 
         /** @see [revokeAccess] */
-        @MustBeClosed
         fun revokeAccess(
             params: SlackRevokeAccessParams,
             requestOptions: RequestOptions = RequestOptions.none(),

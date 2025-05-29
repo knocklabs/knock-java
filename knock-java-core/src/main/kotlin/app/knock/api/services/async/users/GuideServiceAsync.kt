@@ -12,7 +12,6 @@ import app.knock.api.models.users.guides.GuideMarkMessageAsInteractedParams
 import app.knock.api.models.users.guides.GuideMarkMessageAsInteractedResponse
 import app.knock.api.models.users.guides.GuideMarkMessageAsSeenParams
 import app.knock.api.models.users.guides.GuideMarkMessageAsSeenResponse
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface GuideServiceAsync {
@@ -168,7 +167,6 @@ interface GuideServiceAsync {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/guides/{channel_id}`, but is
          * otherwise the same as [GuideServiceAsync.getChannel].
          */
-        @MustBeClosed
         fun getChannel(
             userId: String,
             channelId: String,
@@ -176,7 +174,6 @@ interface GuideServiceAsync {
             getChannel(userId, channelId, GuideGetChannelParams.none())
 
         /** @see [getChannel] */
-        @MustBeClosed
         fun getChannel(
             userId: String,
             channelId: String,
@@ -189,7 +186,6 @@ interface GuideServiceAsync {
             )
 
         /** @see [getChannel] */
-        @MustBeClosed
         fun getChannel(
             userId: String,
             channelId: String,
@@ -198,21 +194,18 @@ interface GuideServiceAsync {
             getChannel(userId, channelId, params, RequestOptions.none())
 
         /** @see [getChannel] */
-        @MustBeClosed
         fun getChannel(
             params: GuideGetChannelParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<GuideGetChannelResponse>>
 
         /** @see [getChannel] */
-        @MustBeClosed
         fun getChannel(
             params: GuideGetChannelParams
         ): CompletableFuture<HttpResponseFor<GuideGetChannelResponse>> =
             getChannel(params, RequestOptions.none())
 
         /** @see [getChannel] */
-        @MustBeClosed
         fun getChannel(
             userId: String,
             channelId: String,
@@ -225,7 +218,6 @@ interface GuideServiceAsync {
          * /v1/users/{user_id}/guides/messages/{message_id}/archived`, but is otherwise the same as
          * [GuideServiceAsync.markMessageAsArchived].
          */
-        @MustBeClosed
         fun markMessageAsArchived(
             userId: String,
             messageId: String,
@@ -234,7 +226,6 @@ interface GuideServiceAsync {
             markMessageAsArchived(userId, messageId, params, RequestOptions.none())
 
         /** @see [markMessageAsArchived] */
-        @MustBeClosed
         fun markMessageAsArchived(
             userId: String,
             messageId: String,
@@ -247,14 +238,12 @@ interface GuideServiceAsync {
             )
 
         /** @see [markMessageAsArchived] */
-        @MustBeClosed
         fun markMessageAsArchived(
             params: GuideMarkMessageAsArchivedParams
         ): CompletableFuture<HttpResponseFor<GuideMarkMessageAsArchivedResponse>> =
             markMessageAsArchived(params, RequestOptions.none())
 
         /** @see [markMessageAsArchived] */
-        @MustBeClosed
         fun markMessageAsArchived(
             params: GuideMarkMessageAsArchivedParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -265,7 +254,6 @@ interface GuideServiceAsync {
          * /v1/users/{user_id}/guides/messages/{message_id}/interacted`, but is otherwise the same
          * as [GuideServiceAsync.markMessageAsInteracted].
          */
-        @MustBeClosed
         fun markMessageAsInteracted(
             userId: String,
             messageId: String,
@@ -274,7 +262,6 @@ interface GuideServiceAsync {
             markMessageAsInteracted(userId, messageId, params, RequestOptions.none())
 
         /** @see [markMessageAsInteracted] */
-        @MustBeClosed
         fun markMessageAsInteracted(
             userId: String,
             messageId: String,
@@ -287,14 +274,12 @@ interface GuideServiceAsync {
             )
 
         /** @see [markMessageAsInteracted] */
-        @MustBeClosed
         fun markMessageAsInteracted(
             params: GuideMarkMessageAsInteractedParams
         ): CompletableFuture<HttpResponseFor<GuideMarkMessageAsInteractedResponse>> =
             markMessageAsInteracted(params, RequestOptions.none())
 
         /** @see [markMessageAsInteracted] */
-        @MustBeClosed
         fun markMessageAsInteracted(
             params: GuideMarkMessageAsInteractedParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -305,7 +290,6 @@ interface GuideServiceAsync {
          * /v1/users/{user_id}/guides/messages/{message_id}/seen`, but is otherwise the same as
          * [GuideServiceAsync.markMessageAsSeen].
          */
-        @MustBeClosed
         fun markMessageAsSeen(
             userId: String,
             messageId: String,
@@ -314,7 +298,6 @@ interface GuideServiceAsync {
             markMessageAsSeen(userId, messageId, params, RequestOptions.none())
 
         /** @see [markMessageAsSeen] */
-        @MustBeClosed
         fun markMessageAsSeen(
             userId: String,
             messageId: String,
@@ -327,14 +310,12 @@ interface GuideServiceAsync {
             )
 
         /** @see [markMessageAsSeen] */
-        @MustBeClosed
         fun markMessageAsSeen(
             params: GuideMarkMessageAsSeenParams
         ): CompletableFuture<HttpResponseFor<GuideMarkMessageAsSeenResponse>> =
             markMessageAsSeen(params, RequestOptions.none())
 
         /** @see [markMessageAsSeen] */
-        @MustBeClosed
         fun markMessageAsSeen(
             params: GuideMarkMessageAsSeenParams,
             requestOptions: RequestOptions = RequestOptions.none(),

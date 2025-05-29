@@ -28,7 +28,6 @@ import app.knock.api.models.users.UserUpdateParams
 import app.knock.api.services.async.users.BulkServiceAsync
 import app.knock.api.services.async.users.FeedServiceAsync
 import app.knock.api.services.async.users.GuideServiceAsync
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface UserServiceAsync {
@@ -512,14 +511,12 @@ interface UserServiceAsync {
          * Returns a raw HTTP response for `put /v1/users/{user_id}`, but is otherwise the same as
          * [UserServiceAsync.update].
          */
-        @MustBeClosed
         fun update(
             userId: String,
             params: UserUpdateParams,
         ): CompletableFuture<HttpResponseFor<User>> = update(userId, params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             userId: String,
             params: UserUpdateParams,
@@ -528,12 +525,10 @@ interface UserServiceAsync {
             update(params.toBuilder().userId(userId).build(), requestOptions)
 
         /** @see [update] */
-        @MustBeClosed
         fun update(params: UserUpdateParams): CompletableFuture<HttpResponseFor<User>> =
             update(params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             params: UserUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -543,26 +538,22 @@ interface UserServiceAsync {
          * Returns a raw HTTP response for `get /v1/users`, but is otherwise the same as
          * [UserServiceAsync.list].
          */
-        @MustBeClosed
         fun list(): CompletableFuture<HttpResponseFor<UserListPageAsync>> =
             list(UserListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: UserListParams = UserListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<UserListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: UserListParams = UserListParams.none()
         ): CompletableFuture<HttpResponseFor<UserListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<UserListPageAsync>> =
@@ -572,12 +563,10 @@ interface UserServiceAsync {
          * Returns a raw HTTP response for `delete /v1/users/{user_id}`, but is otherwise the same
          * as [UserServiceAsync.delete].
          */
-        @MustBeClosed
         fun delete(userId: String): CompletableFuture<HttpResponseFor<String>> =
             delete(userId, UserDeleteParams.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             userId: String,
             params: UserDeleteParams = UserDeleteParams.none(),
@@ -586,7 +575,6 @@ interface UserServiceAsync {
             delete(params.toBuilder().userId(userId).build(), requestOptions)
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             userId: String,
             params: UserDeleteParams = UserDeleteParams.none(),
@@ -594,19 +582,16 @@ interface UserServiceAsync {
             delete(userId, params, RequestOptions.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             params: UserDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<String>>
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(params: UserDeleteParams): CompletableFuture<HttpResponseFor<String>> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             userId: String,
             requestOptions: RequestOptions,
@@ -617,12 +602,10 @@ interface UserServiceAsync {
          * Returns a raw HTTP response for `get /v1/users/{user_id}`, but is otherwise the same as
          * [UserServiceAsync.get].
          */
-        @MustBeClosed
         fun get(userId: String): CompletableFuture<HttpResponseFor<User>> =
             get(userId, UserGetParams.none())
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             userId: String,
             params: UserGetParams = UserGetParams.none(),
@@ -631,26 +614,22 @@ interface UserServiceAsync {
             get(params.toBuilder().userId(userId).build(), requestOptions)
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             userId: String,
             params: UserGetParams = UserGetParams.none(),
         ): CompletableFuture<HttpResponseFor<User>> = get(userId, params, RequestOptions.none())
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             params: UserGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<User>>
 
         /** @see [get] */
-        @MustBeClosed
         fun get(params: UserGetParams): CompletableFuture<HttpResponseFor<User>> =
             get(params, RequestOptions.none())
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             userId: String,
             requestOptions: RequestOptions,
@@ -661,7 +640,6 @@ interface UserServiceAsync {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/channel_data/{channel_id}`, but
          * is otherwise the same as [UserServiceAsync.getChannelData].
          */
-        @MustBeClosed
         fun getChannelData(
             userId: String,
             channelId: String,
@@ -669,7 +647,6 @@ interface UserServiceAsync {
             getChannelData(userId, channelId, UserGetChannelDataParams.none())
 
         /** @see [getChannelData] */
-        @MustBeClosed
         fun getChannelData(
             userId: String,
             channelId: String,
@@ -682,7 +659,6 @@ interface UserServiceAsync {
             )
 
         /** @see [getChannelData] */
-        @MustBeClosed
         fun getChannelData(
             userId: String,
             channelId: String,
@@ -691,21 +667,18 @@ interface UserServiceAsync {
             getChannelData(userId, channelId, params, RequestOptions.none())
 
         /** @see [getChannelData] */
-        @MustBeClosed
         fun getChannelData(
             params: UserGetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<ChannelData>>
 
         /** @see [getChannelData] */
-        @MustBeClosed
         fun getChannelData(
             params: UserGetChannelDataParams
         ): CompletableFuture<HttpResponseFor<ChannelData>> =
             getChannelData(params, RequestOptions.none())
 
         /** @see [getChannelData] */
-        @MustBeClosed
         fun getChannelData(
             userId: String,
             channelId: String,
@@ -717,7 +690,6 @@ interface UserServiceAsync {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/preferences/{id}`, but is
          * otherwise the same as [UserServiceAsync.getPreferences].
          */
-        @MustBeClosed
         fun getPreferences(
             userId: String,
             id: String,
@@ -725,7 +697,6 @@ interface UserServiceAsync {
             getPreferences(userId, id, UserGetPreferencesParams.none())
 
         /** @see [getPreferences] */
-        @MustBeClosed
         fun getPreferences(
             userId: String,
             id: String,
@@ -735,7 +706,6 @@ interface UserServiceAsync {
             getPreferences(params.toBuilder().userId(userId).id(id).build(), requestOptions)
 
         /** @see [getPreferences] */
-        @MustBeClosed
         fun getPreferences(
             userId: String,
             id: String,
@@ -744,21 +714,18 @@ interface UserServiceAsync {
             getPreferences(userId, id, params, RequestOptions.none())
 
         /** @see [getPreferences] */
-        @MustBeClosed
         fun getPreferences(
             params: UserGetPreferencesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<PreferenceSet>>
 
         /** @see [getPreferences] */
-        @MustBeClosed
         fun getPreferences(
             params: UserGetPreferencesParams
         ): CompletableFuture<HttpResponseFor<PreferenceSet>> =
             getPreferences(params, RequestOptions.none())
 
         /** @see [getPreferences] */
-        @MustBeClosed
         fun getPreferences(
             userId: String,
             id: String,
@@ -770,14 +737,12 @@ interface UserServiceAsync {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/messages`, but is otherwise the
          * same as [UserServiceAsync.listMessages].
          */
-        @MustBeClosed
         fun listMessages(
             userId: String
         ): CompletableFuture<HttpResponseFor<UserListMessagesPageAsync>> =
             listMessages(userId, UserListMessagesParams.none())
 
         /** @see [listMessages] */
-        @MustBeClosed
         fun listMessages(
             userId: String,
             params: UserListMessagesParams = UserListMessagesParams.none(),
@@ -786,7 +751,6 @@ interface UserServiceAsync {
             listMessages(params.toBuilder().userId(userId).build(), requestOptions)
 
         /** @see [listMessages] */
-        @MustBeClosed
         fun listMessages(
             userId: String,
             params: UserListMessagesParams = UserListMessagesParams.none(),
@@ -794,21 +758,18 @@ interface UserServiceAsync {
             listMessages(userId, params, RequestOptions.none())
 
         /** @see [listMessages] */
-        @MustBeClosed
         fun listMessages(
             params: UserListMessagesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<UserListMessagesPageAsync>>
 
         /** @see [listMessages] */
-        @MustBeClosed
         fun listMessages(
             params: UserListMessagesParams
         ): CompletableFuture<HttpResponseFor<UserListMessagesPageAsync>> =
             listMessages(params, RequestOptions.none())
 
         /** @see [listMessages] */
-        @MustBeClosed
         fun listMessages(
             userId: String,
             requestOptions: RequestOptions,
@@ -819,14 +780,12 @@ interface UserServiceAsync {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/preferences`, but is otherwise
          * the same as [UserServiceAsync.listPreferences].
          */
-        @MustBeClosed
         fun listPreferences(
             userId: String
         ): CompletableFuture<HttpResponseFor<List<PreferenceSet>>> =
             listPreferences(userId, UserListPreferencesParams.none())
 
         /** @see [listPreferences] */
-        @MustBeClosed
         fun listPreferences(
             userId: String,
             params: UserListPreferencesParams = UserListPreferencesParams.none(),
@@ -835,7 +794,6 @@ interface UserServiceAsync {
             listPreferences(params.toBuilder().userId(userId).build(), requestOptions)
 
         /** @see [listPreferences] */
-        @MustBeClosed
         fun listPreferences(
             userId: String,
             params: UserListPreferencesParams = UserListPreferencesParams.none(),
@@ -843,21 +801,18 @@ interface UserServiceAsync {
             listPreferences(userId, params, RequestOptions.none())
 
         /** @see [listPreferences] */
-        @MustBeClosed
         fun listPreferences(
             params: UserListPreferencesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<List<PreferenceSet>>>
 
         /** @see [listPreferences] */
-        @MustBeClosed
         fun listPreferences(
             params: UserListPreferencesParams
         ): CompletableFuture<HttpResponseFor<List<PreferenceSet>>> =
             listPreferences(params, RequestOptions.none())
 
         /** @see [listPreferences] */
-        @MustBeClosed
         fun listPreferences(
             userId: String,
             requestOptions: RequestOptions,
@@ -868,14 +823,12 @@ interface UserServiceAsync {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/schedules`, but is otherwise the
          * same as [UserServiceAsync.listSchedules].
          */
-        @MustBeClosed
         fun listSchedules(
             userId: String
         ): CompletableFuture<HttpResponseFor<UserListSchedulesPageAsync>> =
             listSchedules(userId, UserListSchedulesParams.none())
 
         /** @see [listSchedules] */
-        @MustBeClosed
         fun listSchedules(
             userId: String,
             params: UserListSchedulesParams = UserListSchedulesParams.none(),
@@ -884,7 +837,6 @@ interface UserServiceAsync {
             listSchedules(params.toBuilder().userId(userId).build(), requestOptions)
 
         /** @see [listSchedules] */
-        @MustBeClosed
         fun listSchedules(
             userId: String,
             params: UserListSchedulesParams = UserListSchedulesParams.none(),
@@ -892,21 +844,18 @@ interface UserServiceAsync {
             listSchedules(userId, params, RequestOptions.none())
 
         /** @see [listSchedules] */
-        @MustBeClosed
         fun listSchedules(
             params: UserListSchedulesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<UserListSchedulesPageAsync>>
 
         /** @see [listSchedules] */
-        @MustBeClosed
         fun listSchedules(
             params: UserListSchedulesParams
         ): CompletableFuture<HttpResponseFor<UserListSchedulesPageAsync>> =
             listSchedules(params, RequestOptions.none())
 
         /** @see [listSchedules] */
-        @MustBeClosed
         fun listSchedules(
             userId: String,
             requestOptions: RequestOptions,
@@ -917,14 +866,12 @@ interface UserServiceAsync {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/subscriptions`, but is otherwise
          * the same as [UserServiceAsync.listSubscriptions].
          */
-        @MustBeClosed
         fun listSubscriptions(
             userId: String
         ): CompletableFuture<HttpResponseFor<UserListSubscriptionsPageAsync>> =
             listSubscriptions(userId, UserListSubscriptionsParams.none())
 
         /** @see [listSubscriptions] */
-        @MustBeClosed
         fun listSubscriptions(
             userId: String,
             params: UserListSubscriptionsParams = UserListSubscriptionsParams.none(),
@@ -933,7 +880,6 @@ interface UserServiceAsync {
             listSubscriptions(params.toBuilder().userId(userId).build(), requestOptions)
 
         /** @see [listSubscriptions] */
-        @MustBeClosed
         fun listSubscriptions(
             userId: String,
             params: UserListSubscriptionsParams = UserListSubscriptionsParams.none(),
@@ -941,21 +887,18 @@ interface UserServiceAsync {
             listSubscriptions(userId, params, RequestOptions.none())
 
         /** @see [listSubscriptions] */
-        @MustBeClosed
         fun listSubscriptions(
             params: UserListSubscriptionsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<UserListSubscriptionsPageAsync>>
 
         /** @see [listSubscriptions] */
-        @MustBeClosed
         fun listSubscriptions(
             params: UserListSubscriptionsParams
         ): CompletableFuture<HttpResponseFor<UserListSubscriptionsPageAsync>> =
             listSubscriptions(params, RequestOptions.none())
 
         /** @see [listSubscriptions] */
-        @MustBeClosed
         fun listSubscriptions(
             userId: String,
             requestOptions: RequestOptions,
@@ -966,14 +909,12 @@ interface UserServiceAsync {
          * Returns a raw HTTP response for `post /v1/users/{user_id}/merge`, but is otherwise the
          * same as [UserServiceAsync.merge].
          */
-        @MustBeClosed
         fun merge(
             userId: String,
             params: UserMergeParams,
         ): CompletableFuture<HttpResponseFor<User>> = merge(userId, params, RequestOptions.none())
 
         /** @see [merge] */
-        @MustBeClosed
         fun merge(
             userId: String,
             params: UserMergeParams,
@@ -982,12 +923,10 @@ interface UserServiceAsync {
             merge(params.toBuilder().userId(userId).build(), requestOptions)
 
         /** @see [merge] */
-        @MustBeClosed
         fun merge(params: UserMergeParams): CompletableFuture<HttpResponseFor<User>> =
             merge(params, RequestOptions.none())
 
         /** @see [merge] */
-        @MustBeClosed
         fun merge(
             params: UserMergeParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -997,7 +936,6 @@ interface UserServiceAsync {
          * Returns a raw HTTP response for `put /v1/users/{user_id}/channel_data/{channel_id}`, but
          * is otherwise the same as [UserServiceAsync.setChannelData].
          */
-        @MustBeClosed
         fun setChannelData(
             userId: String,
             channelId: String,
@@ -1006,7 +944,6 @@ interface UserServiceAsync {
             setChannelData(userId, channelId, params, RequestOptions.none())
 
         /** @see [setChannelData] */
-        @MustBeClosed
         fun setChannelData(
             userId: String,
             channelId: String,
@@ -1019,14 +956,12 @@ interface UserServiceAsync {
             )
 
         /** @see [setChannelData] */
-        @MustBeClosed
         fun setChannelData(
             params: UserSetChannelDataParams
         ): CompletableFuture<HttpResponseFor<ChannelData>> =
             setChannelData(params, RequestOptions.none())
 
         /** @see [setChannelData] */
-        @MustBeClosed
         fun setChannelData(
             params: UserSetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -1036,7 +971,6 @@ interface UserServiceAsync {
          * Returns a raw HTTP response for `put /v1/users/{user_id}/preferences/{id}`, but is
          * otherwise the same as [UserServiceAsync.setPreferences].
          */
-        @MustBeClosed
         fun setPreferences(
             userId: String,
             id: String,
@@ -1045,7 +979,6 @@ interface UserServiceAsync {
             setPreferences(userId, id, params, RequestOptions.none())
 
         /** @see [setPreferences] */
-        @MustBeClosed
         fun setPreferences(
             userId: String,
             id: String,
@@ -1055,14 +988,12 @@ interface UserServiceAsync {
             setPreferences(params.toBuilder().userId(userId).id(id).build(), requestOptions)
 
         /** @see [setPreferences] */
-        @MustBeClosed
         fun setPreferences(
             params: UserSetPreferencesParams
         ): CompletableFuture<HttpResponseFor<PreferenceSet>> =
             setPreferences(params, RequestOptions.none())
 
         /** @see [setPreferences] */
-        @MustBeClosed
         fun setPreferences(
             params: UserSetPreferencesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -1072,7 +1003,6 @@ interface UserServiceAsync {
          * Returns a raw HTTP response for `delete /v1/users/{user_id}/channel_data/{channel_id}`,
          * but is otherwise the same as [UserServiceAsync.unsetChannelData].
          */
-        @MustBeClosed
         fun unsetChannelData(
             userId: String,
             channelId: String,
@@ -1080,7 +1010,6 @@ interface UserServiceAsync {
             unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none())
 
         /** @see [unsetChannelData] */
-        @MustBeClosed
         fun unsetChannelData(
             userId: String,
             channelId: String,
@@ -1093,7 +1022,6 @@ interface UserServiceAsync {
             )
 
         /** @see [unsetChannelData] */
-        @MustBeClosed
         fun unsetChannelData(
             userId: String,
             channelId: String,
@@ -1102,21 +1030,18 @@ interface UserServiceAsync {
             unsetChannelData(userId, channelId, params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
-        @MustBeClosed
         fun unsetChannelData(
             params: UserUnsetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<String>>
 
         /** @see [unsetChannelData] */
-        @MustBeClosed
         fun unsetChannelData(
             params: UserUnsetChannelDataParams
         ): CompletableFuture<HttpResponseFor<String>> =
             unsetChannelData(params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
-        @MustBeClosed
         fun unsetChannelData(
             userId: String,
             channelId: String,

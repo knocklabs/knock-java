@@ -6,7 +6,6 @@ import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.integrations.census.CensusCustomDestinationParams
 import app.knock.api.models.integrations.census.CensusCustomDestinationResponse
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface CensusServiceAsync {
@@ -37,14 +36,12 @@ interface CensusServiceAsync {
          * Returns a raw HTTP response for `post /v1/integrations/census/custom-destination`, but is
          * otherwise the same as [CensusServiceAsync.customDestination].
          */
-        @MustBeClosed
         fun customDestination(
             params: CensusCustomDestinationParams
         ): CompletableFuture<HttpResponseFor<CensusCustomDestinationResponse>> =
             customDestination(params, RequestOptions.none())
 
         /** @see [customDestination] */
-        @MustBeClosed
         fun customDestination(
             params: CensusCustomDestinationParams,
             requestOptions: RequestOptions = RequestOptions.none(),

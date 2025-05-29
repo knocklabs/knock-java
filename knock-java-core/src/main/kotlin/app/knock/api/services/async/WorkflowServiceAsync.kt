@@ -7,7 +7,6 @@ import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.workflows.WorkflowCancelParams
 import app.knock.api.models.workflows.WorkflowTriggerParams
 import app.knock.api.models.workflows.WorkflowTriggerResponse
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface WorkflowServiceAsync {
@@ -81,14 +80,12 @@ interface WorkflowServiceAsync {
          * Returns a raw HTTP response for `post /v1/workflows/{key}/cancel`, but is otherwise the
          * same as [WorkflowServiceAsync.cancel].
          */
-        @MustBeClosed
         fun cancel(
             key: String,
             params: WorkflowCancelParams,
         ): CompletableFuture<HttpResponseFor<String>> = cancel(key, params, RequestOptions.none())
 
         /** @see [cancel] */
-        @MustBeClosed
         fun cancel(
             key: String,
             params: WorkflowCancelParams,
@@ -97,12 +94,10 @@ interface WorkflowServiceAsync {
             cancel(params.toBuilder().key(key).build(), requestOptions)
 
         /** @see [cancel] */
-        @MustBeClosed
         fun cancel(params: WorkflowCancelParams): CompletableFuture<HttpResponseFor<String>> =
             cancel(params, RequestOptions.none())
 
         /** @see [cancel] */
-        @MustBeClosed
         fun cancel(
             params: WorkflowCancelParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -112,7 +107,6 @@ interface WorkflowServiceAsync {
          * Returns a raw HTTP response for `post /v1/workflows/{key}/trigger`, but is otherwise the
          * same as [WorkflowServiceAsync.trigger].
          */
-        @MustBeClosed
         fun trigger(
             key: String,
             params: WorkflowTriggerParams,
@@ -120,7 +114,6 @@ interface WorkflowServiceAsync {
             trigger(key, params, RequestOptions.none())
 
         /** @see [trigger] */
-        @MustBeClosed
         fun trigger(
             key: String,
             params: WorkflowTriggerParams,
@@ -129,14 +122,12 @@ interface WorkflowServiceAsync {
             trigger(params.toBuilder().key(key).build(), requestOptions)
 
         /** @see [trigger] */
-        @MustBeClosed
         fun trigger(
             params: WorkflowTriggerParams
         ): CompletableFuture<HttpResponseFor<WorkflowTriggerResponse>> =
             trigger(params, RequestOptions.none())
 
         /** @see [trigger] */
-        @MustBeClosed
         fun trigger(
             params: WorkflowTriggerParams,
             requestOptions: RequestOptions = RequestOptions.none(),

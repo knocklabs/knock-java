@@ -8,7 +8,6 @@ import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.objects.bulk.BulkAddSubscriptionsParams
 import app.knock.api.models.objects.bulk.BulkDeleteParams
 import app.knock.api.models.objects.bulk.BulkSetParams
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface BulkServiceAsync {
@@ -99,7 +98,6 @@ interface BulkServiceAsync {
          * Returns a raw HTTP response for `post /v1/objects/{collection}/bulk/delete`, but is
          * otherwise the same as [BulkServiceAsync.delete].
          */
-        @MustBeClosed
         fun delete(
             collection: String,
             params: BulkDeleteParams,
@@ -107,7 +105,6 @@ interface BulkServiceAsync {
             delete(collection, params, RequestOptions.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             collection: String,
             params: BulkDeleteParams,
@@ -116,12 +113,10 @@ interface BulkServiceAsync {
             delete(params.toBuilder().collection(collection).build(), requestOptions)
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(params: BulkDeleteParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             params: BulkDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -131,7 +126,6 @@ interface BulkServiceAsync {
          * Returns a raw HTTP response for `post /v1/objects/{collection}/bulk/subscriptions/add`,
          * but is otherwise the same as [BulkServiceAsync.addSubscriptions].
          */
-        @MustBeClosed
         fun addSubscriptions(
             collection: String,
             params: BulkAddSubscriptionsParams,
@@ -139,7 +133,6 @@ interface BulkServiceAsync {
             addSubscriptions(collection, params, RequestOptions.none())
 
         /** @see [addSubscriptions] */
-        @MustBeClosed
         fun addSubscriptions(
             collection: String,
             params: BulkAddSubscriptionsParams,
@@ -148,14 +141,12 @@ interface BulkServiceAsync {
             addSubscriptions(params.toBuilder().collection(collection).build(), requestOptions)
 
         /** @see [addSubscriptions] */
-        @MustBeClosed
         fun addSubscriptions(
             params: BulkAddSubscriptionsParams
         ): CompletableFuture<HttpResponseFor<BulkOperation>> =
             addSubscriptions(params, RequestOptions.none())
 
         /** @see [addSubscriptions] */
-        @MustBeClosed
         fun addSubscriptions(
             params: BulkAddSubscriptionsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -165,7 +156,6 @@ interface BulkServiceAsync {
          * Returns a raw HTTP response for `post /v1/objects/{collection}/bulk/set`, but is
          * otherwise the same as [BulkServiceAsync.set].
          */
-        @MustBeClosed
         fun set(
             collection: String,
             params: BulkSetParams,
@@ -173,7 +163,6 @@ interface BulkServiceAsync {
             set(collection, params, RequestOptions.none())
 
         /** @see [set] */
-        @MustBeClosed
         fun set(
             collection: String,
             params: BulkSetParams,
@@ -182,12 +171,10 @@ interface BulkServiceAsync {
             set(params.toBuilder().collection(collection).build(), requestOptions)
 
         /** @see [set] */
-        @MustBeClosed
         fun set(params: BulkSetParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
             set(params, RequestOptions.none())
 
         /** @see [set] */
-        @MustBeClosed
         fun set(
             params: BulkSetParams,
             requestOptions: RequestOptions = RequestOptions.none(),

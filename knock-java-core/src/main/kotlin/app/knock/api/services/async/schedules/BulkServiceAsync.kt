@@ -6,7 +6,6 @@ import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.schedules.bulk.BulkCreateParams
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface BulkServiceAsync {
@@ -37,12 +36,10 @@ interface BulkServiceAsync {
          * Returns a raw HTTP response for `post /v1/schedules/bulk/create`, but is otherwise the
          * same as [BulkServiceAsync.create].
          */
-        @MustBeClosed
         fun create(params: BulkCreateParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: BulkCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),

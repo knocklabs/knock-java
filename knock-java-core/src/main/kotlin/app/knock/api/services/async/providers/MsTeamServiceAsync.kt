@@ -12,7 +12,6 @@ import app.knock.api.models.providers.msteams.MsTeamListTeamsPageAsync
 import app.knock.api.models.providers.msteams.MsTeamListTeamsParams
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessParams
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessResponse
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface MsTeamServiceAsync {
@@ -142,7 +141,6 @@ interface MsTeamServiceAsync {
          * Returns a raw HTTP response for `get /v1/providers/ms-teams/{channel_id}/auth_check`, but
          * is otherwise the same as [MsTeamServiceAsync.checkAuth].
          */
-        @MustBeClosed
         fun checkAuth(
             channelId: String,
             params: MsTeamCheckAuthParams,
@@ -150,7 +148,6 @@ interface MsTeamServiceAsync {
             checkAuth(channelId, params, RequestOptions.none())
 
         /** @see [checkAuth] */
-        @MustBeClosed
         fun checkAuth(
             channelId: String,
             params: MsTeamCheckAuthParams,
@@ -159,14 +156,12 @@ interface MsTeamServiceAsync {
             checkAuth(params.toBuilder().channelId(channelId).build(), requestOptions)
 
         /** @see [checkAuth] */
-        @MustBeClosed
         fun checkAuth(
             params: MsTeamCheckAuthParams
         ): CompletableFuture<HttpResponseFor<MsTeamCheckAuthResponse>> =
             checkAuth(params, RequestOptions.none())
 
         /** @see [checkAuth] */
-        @MustBeClosed
         fun checkAuth(
             params: MsTeamCheckAuthParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -176,7 +171,6 @@ interface MsTeamServiceAsync {
          * Returns a raw HTTP response for `get /v1/providers/ms-teams/{channel_id}/channels`, but
          * is otherwise the same as [MsTeamServiceAsync.listChannels].
          */
-        @MustBeClosed
         fun listChannels(
             channelId: String,
             params: MsTeamListChannelsParams,
@@ -184,7 +178,6 @@ interface MsTeamServiceAsync {
             listChannels(channelId, params, RequestOptions.none())
 
         /** @see [listChannels] */
-        @MustBeClosed
         fun listChannels(
             channelId: String,
             params: MsTeamListChannelsParams,
@@ -193,14 +186,12 @@ interface MsTeamServiceAsync {
             listChannels(params.toBuilder().channelId(channelId).build(), requestOptions)
 
         /** @see [listChannels] */
-        @MustBeClosed
         fun listChannels(
             params: MsTeamListChannelsParams
         ): CompletableFuture<HttpResponseFor<MsTeamListChannelsResponse>> =
             listChannels(params, RequestOptions.none())
 
         /** @see [listChannels] */
-        @MustBeClosed
         fun listChannels(
             params: MsTeamListChannelsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -210,7 +201,6 @@ interface MsTeamServiceAsync {
          * Returns a raw HTTP response for `get /v1/providers/ms-teams/{channel_id}/teams`, but is
          * otherwise the same as [MsTeamServiceAsync.listTeams].
          */
-        @MustBeClosed
         fun listTeams(
             channelId: String,
             params: MsTeamListTeamsParams,
@@ -218,7 +208,6 @@ interface MsTeamServiceAsync {
             listTeams(channelId, params, RequestOptions.none())
 
         /** @see [listTeams] */
-        @MustBeClosed
         fun listTeams(
             channelId: String,
             params: MsTeamListTeamsParams,
@@ -227,14 +216,12 @@ interface MsTeamServiceAsync {
             listTeams(params.toBuilder().channelId(channelId).build(), requestOptions)
 
         /** @see [listTeams] */
-        @MustBeClosed
         fun listTeams(
             params: MsTeamListTeamsParams
         ): CompletableFuture<HttpResponseFor<MsTeamListTeamsPageAsync>> =
             listTeams(params, RequestOptions.none())
 
         /** @see [listTeams] */
-        @MustBeClosed
         fun listTeams(
             params: MsTeamListTeamsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -244,7 +231,6 @@ interface MsTeamServiceAsync {
          * Returns a raw HTTP response for `put /v1/providers/ms-teams/{channel_id}/revoke_access`,
          * but is otherwise the same as [MsTeamServiceAsync.revokeAccess].
          */
-        @MustBeClosed
         fun revokeAccess(
             channelId: String,
             params: MsTeamRevokeAccessParams,
@@ -252,7 +238,6 @@ interface MsTeamServiceAsync {
             revokeAccess(channelId, params, RequestOptions.none())
 
         /** @see [revokeAccess] */
-        @MustBeClosed
         fun revokeAccess(
             channelId: String,
             params: MsTeamRevokeAccessParams,
@@ -261,14 +246,12 @@ interface MsTeamServiceAsync {
             revokeAccess(params.toBuilder().channelId(channelId).build(), requestOptions)
 
         /** @see [revokeAccess] */
-        @MustBeClosed
         fun revokeAccess(
             params: MsTeamRevokeAccessParams
         ): CompletableFuture<HttpResponseFor<MsTeamRevokeAccessResponse>> =
             revokeAccess(params, RequestOptions.none())
 
         /** @see [revokeAccess] */
-        @MustBeClosed
         fun revokeAccess(
             params: MsTeamRevokeAccessParams,
             requestOptions: RequestOptions = RequestOptions.none(),

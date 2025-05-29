@@ -11,7 +11,6 @@ import app.knock.api.models.tenants.TenantListPageAsync
 import app.knock.api.models.tenants.TenantListParams
 import app.knock.api.models.tenants.TenantSetParams
 import app.knock.api.services.async.tenants.BulkServiceAsync
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface TenantServiceAsync {
@@ -143,26 +142,22 @@ interface TenantServiceAsync {
          * Returns a raw HTTP response for `get /v1/tenants`, but is otherwise the same as
          * [TenantServiceAsync.list].
          */
-        @MustBeClosed
         fun list(): CompletableFuture<HttpResponseFor<TenantListPageAsync>> =
             list(TenantListParams.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: TenantListParams = TenantListParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<TenantListPageAsync>>
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: TenantListParams = TenantListParams.none()
         ): CompletableFuture<HttpResponseFor<TenantListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             requestOptions: RequestOptions
         ): CompletableFuture<HttpResponseFor<TenantListPageAsync>> =
@@ -172,12 +167,10 @@ interface TenantServiceAsync {
          * Returns a raw HTTP response for `delete /v1/tenants/{id}`, but is otherwise the same as
          * [TenantServiceAsync.delete].
          */
-        @MustBeClosed
         fun delete(id: String): CompletableFuture<HttpResponseFor<String>> =
             delete(id, TenantDeleteParams.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             id: String,
             params: TenantDeleteParams = TenantDeleteParams.none(),
@@ -186,26 +179,22 @@ interface TenantServiceAsync {
             delete(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             id: String,
             params: TenantDeleteParams = TenantDeleteParams.none(),
         ): CompletableFuture<HttpResponseFor<String>> = delete(id, params, RequestOptions.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             params: TenantDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<String>>
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(params: TenantDeleteParams): CompletableFuture<HttpResponseFor<String>> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             id: String,
             requestOptions: RequestOptions,
@@ -216,12 +205,10 @@ interface TenantServiceAsync {
          * Returns a raw HTTP response for `get /v1/tenants/{id}`, but is otherwise the same as
          * [TenantServiceAsync.get].
          */
-        @MustBeClosed
         fun get(id: String): CompletableFuture<HttpResponseFor<Tenant>> =
             get(id, TenantGetParams.none())
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             id: String,
             params: TenantGetParams = TenantGetParams.none(),
@@ -230,26 +217,22 @@ interface TenantServiceAsync {
             get(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             id: String,
             params: TenantGetParams = TenantGetParams.none(),
         ): CompletableFuture<HttpResponseFor<Tenant>> = get(id, params, RequestOptions.none())
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             params: TenantGetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Tenant>>
 
         /** @see [get] */
-        @MustBeClosed
         fun get(params: TenantGetParams): CompletableFuture<HttpResponseFor<Tenant>> =
             get(params, RequestOptions.none())
 
         /** @see [get] */
-        @MustBeClosed
         fun get(
             id: String,
             requestOptions: RequestOptions,
@@ -260,12 +243,10 @@ interface TenantServiceAsync {
          * Returns a raw HTTP response for `put /v1/tenants/{id}`, but is otherwise the same as
          * [TenantServiceAsync.set].
          */
-        @MustBeClosed
         fun set(id: String): CompletableFuture<HttpResponseFor<Tenant>> =
             set(id, TenantSetParams.none())
 
         /** @see [set] */
-        @MustBeClosed
         fun set(
             id: String,
             params: TenantSetParams = TenantSetParams.none(),
@@ -274,26 +255,22 @@ interface TenantServiceAsync {
             set(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see [set] */
-        @MustBeClosed
         fun set(
             id: String,
             params: TenantSetParams = TenantSetParams.none(),
         ): CompletableFuture<HttpResponseFor<Tenant>> = set(id, params, RequestOptions.none())
 
         /** @see [set] */
-        @MustBeClosed
         fun set(
             params: TenantSetParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<Tenant>>
 
         /** @see [set] */
-        @MustBeClosed
         fun set(params: TenantSetParams): CompletableFuture<HttpResponseFor<Tenant>> =
             set(params, RequestOptions.none())
 
         /** @see [set] */
-        @MustBeClosed
         fun set(
             id: String,
             requestOptions: RequestOptions,

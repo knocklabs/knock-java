@@ -8,7 +8,6 @@ import app.knock.api.models.users.feeds.FeedGetSettingsParams
 import app.knock.api.models.users.feeds.FeedGetSettingsResponse
 import app.knock.api.models.users.feeds.FeedListItemsPageAsync
 import app.knock.api.models.users.feeds.FeedListItemsParams
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface FeedServiceAsync {
@@ -103,7 +102,6 @@ interface FeedServiceAsync {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/feeds/{id}/settings`, but is
          * otherwise the same as [FeedServiceAsync.getSettings].
          */
-        @MustBeClosed
         fun getSettings(
             userId: String,
             id: String,
@@ -111,7 +109,6 @@ interface FeedServiceAsync {
             getSettings(userId, id, FeedGetSettingsParams.none())
 
         /** @see [getSettings] */
-        @MustBeClosed
         fun getSettings(
             userId: String,
             id: String,
@@ -121,7 +118,6 @@ interface FeedServiceAsync {
             getSettings(params.toBuilder().userId(userId).id(id).build(), requestOptions)
 
         /** @see [getSettings] */
-        @MustBeClosed
         fun getSettings(
             userId: String,
             id: String,
@@ -130,21 +126,18 @@ interface FeedServiceAsync {
             getSettings(userId, id, params, RequestOptions.none())
 
         /** @see [getSettings] */
-        @MustBeClosed
         fun getSettings(
             params: FeedGetSettingsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<FeedGetSettingsResponse>>
 
         /** @see [getSettings] */
-        @MustBeClosed
         fun getSettings(
             params: FeedGetSettingsParams
         ): CompletableFuture<HttpResponseFor<FeedGetSettingsResponse>> =
             getSettings(params, RequestOptions.none())
 
         /** @see [getSettings] */
-        @MustBeClosed
         fun getSettings(
             userId: String,
             id: String,
@@ -156,7 +149,6 @@ interface FeedServiceAsync {
          * Returns a raw HTTP response for `get /v1/users/{user_id}/feeds/{id}`, but is otherwise
          * the same as [FeedServiceAsync.listItems].
          */
-        @MustBeClosed
         fun listItems(
             userId: String,
             id: String,
@@ -164,7 +156,6 @@ interface FeedServiceAsync {
             listItems(userId, id, FeedListItemsParams.none())
 
         /** @see [listItems] */
-        @MustBeClosed
         fun listItems(
             userId: String,
             id: String,
@@ -174,7 +165,6 @@ interface FeedServiceAsync {
             listItems(params.toBuilder().userId(userId).id(id).build(), requestOptions)
 
         /** @see [listItems] */
-        @MustBeClosed
         fun listItems(
             userId: String,
             id: String,
@@ -183,21 +173,18 @@ interface FeedServiceAsync {
             listItems(userId, id, params, RequestOptions.none())
 
         /** @see [listItems] */
-        @MustBeClosed
         fun listItems(
             params: FeedListItemsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<FeedListItemsPageAsync>>
 
         /** @see [listItems] */
-        @MustBeClosed
         fun listItems(
             params: FeedListItemsParams
         ): CompletableFuture<HttpResponseFor<FeedListItemsPageAsync>> =
             listItems(params, RequestOptions.none())
 
         /** @see [listItems] */
-        @MustBeClosed
         fun listItems(
             userId: String,
             id: String,

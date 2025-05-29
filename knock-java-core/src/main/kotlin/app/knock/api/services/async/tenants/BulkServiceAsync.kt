@@ -7,7 +7,6 @@ import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.tenants.bulk.BulkDeleteParams
 import app.knock.api.models.tenants.bulk.BulkSetParams
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface BulkServiceAsync {
@@ -44,12 +43,10 @@ interface BulkServiceAsync {
          * Returns a raw HTTP response for `post /v1/tenants/bulk/delete`, but is otherwise the same
          * as [BulkServiceAsync.delete].
          */
-        @MustBeClosed
         fun delete(params: BulkDeleteParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             params: BulkDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -59,12 +56,10 @@ interface BulkServiceAsync {
          * Returns a raw HTTP response for `post /v1/tenants/bulk/set`, but is otherwise the same as
          * [BulkServiceAsync.set].
          */
-        @MustBeClosed
         fun set(params: BulkSetParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
             set(params, RequestOptions.none())
 
         /** @see [set] */
-        @MustBeClosed
         fun set(
             params: BulkSetParams,
             requestOptions: RequestOptions = RequestOptions.none(),

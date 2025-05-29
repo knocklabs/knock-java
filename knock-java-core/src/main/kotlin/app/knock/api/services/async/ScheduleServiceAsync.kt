@@ -11,7 +11,6 @@ import app.knock.api.models.schedules.ScheduleListPageAsync
 import app.knock.api.models.schedules.ScheduleListParams
 import app.knock.api.models.schedules.ScheduleUpdateParams
 import app.knock.api.services.async.schedules.BulkServiceAsync
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface ScheduleServiceAsync {
@@ -90,14 +89,12 @@ interface ScheduleServiceAsync {
          * Returns a raw HTTP response for `post /v1/schedules`, but is otherwise the same as
          * [ScheduleServiceAsync.create].
          */
-        @MustBeClosed
         fun create(
             params: ScheduleCreateParams
         ): CompletableFuture<HttpResponseFor<List<Schedule>>> =
             create(params, RequestOptions.none())
 
         /** @see [create] */
-        @MustBeClosed
         fun create(
             params: ScheduleCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -107,14 +104,12 @@ interface ScheduleServiceAsync {
          * Returns a raw HTTP response for `put /v1/schedules`, but is otherwise the same as
          * [ScheduleServiceAsync.update].
          */
-        @MustBeClosed
         fun update(
             params: ScheduleUpdateParams
         ): CompletableFuture<HttpResponseFor<List<Schedule>>> =
             update(params, RequestOptions.none())
 
         /** @see [update] */
-        @MustBeClosed
         fun update(
             params: ScheduleUpdateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -124,14 +119,12 @@ interface ScheduleServiceAsync {
          * Returns a raw HTTP response for `get /v1/schedules`, but is otherwise the same as
          * [ScheduleServiceAsync.list].
          */
-        @MustBeClosed
         fun list(
             params: ScheduleListParams
         ): CompletableFuture<HttpResponseFor<ScheduleListPageAsync>> =
             list(params, RequestOptions.none())
 
         /** @see [list] */
-        @MustBeClosed
         fun list(
             params: ScheduleListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -141,14 +134,12 @@ interface ScheduleServiceAsync {
          * Returns a raw HTTP response for `delete /v1/schedules`, but is otherwise the same as
          * [ScheduleServiceAsync.delete].
          */
-        @MustBeClosed
         fun delete(
             params: ScheduleDeleteParams
         ): CompletableFuture<HttpResponseFor<List<Schedule>>> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             params: ScheduleDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),

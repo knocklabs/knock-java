@@ -6,7 +6,6 @@ import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.channels.bulk.BulkUpdateMessageStatusParams
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface BulkServiceAsync {
@@ -73,7 +72,6 @@ interface BulkServiceAsync {
          * Returns a raw HTTP response for `post /v1/channels/{channel_id}/messages/bulk/{action}`,
          * but is otherwise the same as [BulkServiceAsync.updateMessageStatus].
          */
-        @MustBeClosed
         fun updateMessageStatus(
             channelId: String,
             action: BulkUpdateMessageStatusParams.Action,
@@ -81,7 +79,6 @@ interface BulkServiceAsync {
             updateMessageStatus(channelId, action, BulkUpdateMessageStatusParams.none())
 
         /** @see [updateMessageStatus] */
-        @MustBeClosed
         fun updateMessageStatus(
             channelId: String,
             action: BulkUpdateMessageStatusParams.Action,
@@ -94,7 +91,6 @@ interface BulkServiceAsync {
             )
 
         /** @see [updateMessageStatus] */
-        @MustBeClosed
         fun updateMessageStatus(
             channelId: String,
             action: BulkUpdateMessageStatusParams.Action,
@@ -103,21 +99,18 @@ interface BulkServiceAsync {
             updateMessageStatus(channelId, action, params, RequestOptions.none())
 
         /** @see [updateMessageStatus] */
-        @MustBeClosed
         fun updateMessageStatus(
             params: BulkUpdateMessageStatusParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
 
         /** @see [updateMessageStatus] */
-        @MustBeClosed
         fun updateMessageStatus(
             params: BulkUpdateMessageStatusParams
         ): CompletableFuture<HttpResponseFor<BulkOperation>> =
             updateMessageStatus(params, RequestOptions.none())
 
         /** @see [updateMessageStatus] */
-        @MustBeClosed
         fun updateMessageStatus(
             channelId: String,
             action: BulkUpdateMessageStatusParams.Action,

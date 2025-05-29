@@ -8,7 +8,6 @@ import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.users.bulk.BulkDeleteParams
 import app.knock.api.models.users.bulk.BulkIdentifyParams
 import app.knock.api.models.users.bulk.BulkSetPreferencesParams
-import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
 interface BulkServiceAsync {
@@ -64,12 +63,10 @@ interface BulkServiceAsync {
          * Returns a raw HTTP response for `post /v1/users/bulk/delete`, but is otherwise the same
          * as [BulkServiceAsync.delete].
          */
-        @MustBeClosed
         fun delete(params: BulkDeleteParams): CompletableFuture<HttpResponseFor<BulkOperation>> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
-        @MustBeClosed
         fun delete(
             params: BulkDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -79,14 +76,12 @@ interface BulkServiceAsync {
          * Returns a raw HTTP response for `post /v1/users/bulk/identify`, but is otherwise the same
          * as [BulkServiceAsync.identify].
          */
-        @MustBeClosed
         fun identify(
             params: BulkIdentifyParams
         ): CompletableFuture<HttpResponseFor<BulkOperation>> =
             identify(params, RequestOptions.none())
 
         /** @see [identify] */
-        @MustBeClosed
         fun identify(
             params: BulkIdentifyParams,
             requestOptions: RequestOptions = RequestOptions.none(),
@@ -96,14 +91,12 @@ interface BulkServiceAsync {
          * Returns a raw HTTP response for `post /v1/users/bulk/preferences`, but is otherwise the
          * same as [BulkServiceAsync.setPreferences].
          */
-        @MustBeClosed
         fun setPreferences(
             params: BulkSetPreferencesParams
         ): CompletableFuture<HttpResponseFor<BulkOperation>> =
             setPreferences(params, RequestOptions.none())
 
         /** @see [setPreferences] */
-        @MustBeClosed
         fun setPreferences(
             params: BulkSetPreferencesParams,
             requestOptions: RequestOptions = RequestOptions.none(),
