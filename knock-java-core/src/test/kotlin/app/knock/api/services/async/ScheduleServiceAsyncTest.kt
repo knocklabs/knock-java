@@ -5,11 +5,15 @@ package app.knock.api.services.async
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClientAsync
 import app.knock.api.core.JsonValue
+import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
+import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import app.knock.api.models.schedules.ScheduleCreateParams
 import app.knock.api.models.schedules.ScheduleDeleteParams
 import app.knock.api.models.schedules.ScheduleListParams
 import app.knock.api.models.schedules.ScheduleRepeatRule
 import app.knock.api.models.schedules.ScheduleUpdateParams
+import app.knock.api.models.users.InlineIdentifyUserRequest
+import java.time.OffsetDateTime
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -33,6 +37,106 @@ internal class ScheduleServiceAsyncTest {
             scheduleServiceAsync.create(
                 ScheduleCreateParams.builder()
                     .addRecipient("user_123")
+                    .workflow("comment-created")
+                    .actor(
+                        InlineIdentifyUserRequest.builder()
+                            .id("user_1")
+                            .avatar("avatar")
+                            .channelData(
+                                InlineChannelDataRequest.builder()
+                                    .putAdditionalProperty(
+                                        "97c5837d-c65c-4d54-aa39-080eeb81c69d",
+                                        JsonValue.from(mapOf("tokens" to listOf("push_token_xxx"))),
+                                    )
+                                    .build()
+                            )
+                            .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                            .email("email")
+                            .locale("locale")
+                            .name("name")
+                            .phoneNumber("phone_number")
+                            .preferences(
+                                InlinePreferenceSetRequest.builder()
+                                    .putAdditionalProperty(
+                                        "default",
+                                        JsonValue.from(
+                                            mapOf(
+                                                "categories" to
+                                                    mapOf(
+                                                        "transactional" to
+                                                            mapOf(
+                                                                "channel_types" to
+                                                                    mapOf(
+                                                                        "chat" to true,
+                                                                        "email" to false,
+                                                                        "http" to true,
+                                                                        "in_app_feed" to true,
+                                                                        "push" to true,
+                                                                        "sms" to true,
+                                                                    ),
+                                                                "conditions" to
+                                                                    listOf(
+                                                                        mapOf(
+                                                                            "argument" to
+                                                                                "frog_genome",
+                                                                            "operator" to
+                                                                                "contains",
+                                                                            "variable" to
+                                                                                "specimen.dna_sequence",
+                                                                        )
+                                                                    ),
+                                                            )
+                                                    ),
+                                                "channel_types" to
+                                                    mapOf(
+                                                        "chat" to true,
+                                                        "email" to true,
+                                                        "http" to true,
+                                                        "in_app_feed" to true,
+                                                        "push" to true,
+                                                        "sms" to true,
+                                                    ),
+                                                "workflows" to
+                                                    mapOf(
+                                                        "dinosaurs-loose" to
+                                                            mapOf(
+                                                                "channel_types" to
+                                                                    mapOf(
+                                                                        "chat" to true,
+                                                                        "email" to false,
+                                                                        "http" to true,
+                                                                        "in_app_feed" to true,
+                                                                        "push" to true,
+                                                                        "sms" to true,
+                                                                    ),
+                                                                "conditions" to
+                                                                    listOf(
+                                                                        mapOf(
+                                                                            "argument" to
+                                                                                "frog_genome",
+                                                                            "operator" to
+                                                                                "contains",
+                                                                            "variable" to
+                                                                                "specimen.dna_sequence",
+                                                                        )
+                                                                    ),
+                                                            ),
+                                                        "welcome-sequence" to true,
+                                                    ),
+                                            )
+                                        ),
+                                    )
+                                    .build()
+                            )
+                            .timezone("timezone")
+                            .build()
+                    )
+                    .data(
+                        ScheduleCreateParams.Data.builder()
+                            .putAdditionalProperty("key", JsonValue.from("bar"))
+                            .build()
+                    )
+                    .endingAt(null)
                     .addRepeat(
                         ScheduleRepeatRule.builder()
                             ._typename("ScheduleRepeat")
@@ -54,13 +158,6 @@ internal class ScheduleServiceAsyncTest {
                             .minutes(null)
                             .build()
                     )
-                    .workflow("comment-created")
-                    .data(
-                        ScheduleCreateParams.Data.builder()
-                            .putAdditionalProperty("key", JsonValue.from("bar"))
-                            .build()
-                    )
-                    .endingAt(null)
                     .scheduledAt(null)
                     .tenant("acme_corp")
                     .build()

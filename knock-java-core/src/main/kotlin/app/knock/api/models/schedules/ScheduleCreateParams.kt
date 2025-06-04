@@ -50,20 +50,22 @@ private constructor(
     fun recipients(): List<RecipientRequest> = body.recipients()
 
     /**
-     * The repeat rule for the schedule.
-     *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
-     *   missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun repeats(): List<ScheduleRepeatRule> = body.repeats()
-
-    /**
      * The key of the workflow.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun workflow(): String = body.workflow()
+
+    /**
+     * Specifies a recipient in a request. This can either be a user identifier (string), an inline
+     * user request (object), or an inline object request, which is determined by the presence of a
+     * `collection` property.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun actor(): Optional<RecipientRequest> = body.actor()
 
     /**
      * An optional map of data to pass into the workflow execution. There is a 1024 byte limit on
@@ -83,6 +85,14 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun endingAt(): Optional<OffsetDateTime> = body.endingAt()
+
+    /**
+     * The repeat rule for the schedule.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun repeats(): Optional<List<ScheduleRepeatRule>> = body.repeats()
 
     /**
      * The starting date and time for the schedule.
@@ -108,18 +118,18 @@ private constructor(
     fun _recipients(): JsonField<List<RecipientRequest>> = body._recipients()
 
     /**
-     * Returns the raw JSON value of [repeats].
-     *
-     * Unlike [repeats], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _repeats(): JsonField<List<ScheduleRepeatRule>> = body._repeats()
-
-    /**
      * Returns the raw JSON value of [workflow].
      *
      * Unlike [workflow], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _workflow(): JsonField<String> = body._workflow()
+
+    /**
+     * Returns the raw JSON value of [actor].
+     *
+     * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _actor(): JsonField<RecipientRequest> = body._actor()
 
     /**
      * Returns the raw JSON value of [data].
@@ -134,6 +144,13 @@ private constructor(
      * Unlike [endingAt], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _endingAt(): JsonField<OffsetDateTime> = body._endingAt()
+
+    /**
+     * Returns the raw JSON value of [repeats].
+     *
+     * Unlike [repeats], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _repeats(): JsonField<List<ScheduleRepeatRule>> = body._repeats()
 
     /**
      * Returns the raw JSON value of [scheduledAt].
@@ -165,7 +182,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .recipients()
-         * .repeats()
          * .workflow()
          * ```
          */
@@ -192,8 +208,8 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [recipients]
-         * - [repeats]
          * - [workflow]
+         * - [actor]
          * - [data]
          * - [endingAt]
          * - etc.
@@ -241,25 +257,6 @@ private constructor(
             body.addRecipient(inlineObject)
         }
 
-        /** The repeat rule for the schedule. */
-        fun repeats(repeats: List<ScheduleRepeatRule>) = apply { body.repeats(repeats) }
-
-        /**
-         * Sets [Builder.repeats] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.repeats] with a well-typed `List<ScheduleRepeatRule>`
-         * value instead. This method is primarily for setting the field to an undocumented or not
-         * yet supported value.
-         */
-        fun repeats(repeats: JsonField<List<ScheduleRepeatRule>>) = apply { body.repeats(repeats) }
-
-        /**
-         * Adds a single [ScheduleRepeatRule] to [repeats].
-         *
-         * @throws IllegalStateException if the field was previously set to a non-list.
-         */
-        fun addRepeat(repeat: ScheduleRepeatRule) = apply { body.addRepeat(repeat) }
-
         /** The key of the workflow. */
         fun workflow(workflow: String) = apply { body.workflow(workflow) }
 
@@ -270,6 +267,39 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun workflow(workflow: JsonField<String>) = apply { body.workflow(workflow) }
+
+        /**
+         * Specifies a recipient in a request. This can either be a user identifier (string), an
+         * inline user request (object), or an inline object request, which is determined by the
+         * presence of a `collection` property.
+         */
+        fun actor(actor: RecipientRequest?) = apply { body.actor(actor) }
+
+        /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
+        fun actor(actor: Optional<RecipientRequest>) = actor(actor.getOrNull())
+
+        /**
+         * Sets [Builder.actor] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.actor] with a well-typed [RecipientRequest] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun actor(actor: JsonField<RecipientRequest>) = apply { body.actor(actor) }
+
+        /** Alias for calling [actor] with `RecipientRequest.ofUserRecipient(userRecipient)`. */
+        fun actor(userRecipient: String) = apply { body.actor(userRecipient) }
+
+        /**
+         * Alias for calling [actor] with
+         * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
+         */
+        fun actor(inlineIdentifyUser: InlineIdentifyUserRequest) = apply {
+            body.actor(inlineIdentifyUser)
+        }
+
+        /** Alias for calling [actor] with `RecipientRequest.ofInlineObject(inlineObject)`. */
+        fun actor(inlineObject: InlineObjectRequest) = apply { body.actor(inlineObject) }
 
         /**
          * An optional map of data to pass into the workflow execution. There is a 1024 byte limit
@@ -304,6 +334,25 @@ private constructor(
          * supported value.
          */
         fun endingAt(endingAt: JsonField<OffsetDateTime>) = apply { body.endingAt(endingAt) }
+
+        /** The repeat rule for the schedule. */
+        fun repeats(repeats: List<ScheduleRepeatRule>) = apply { body.repeats(repeats) }
+
+        /**
+         * Sets [Builder.repeats] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.repeats] with a well-typed `List<ScheduleRepeatRule>`
+         * value instead. This method is primarily for setting the field to an undocumented or not
+         * yet supported value.
+         */
+        fun repeats(repeats: JsonField<List<ScheduleRepeatRule>>) = apply { body.repeats(repeats) }
+
+        /**
+         * Adds a single [ScheduleRepeatRule] to [repeats].
+         *
+         * @throws IllegalStateException if the field was previously set to a non-list.
+         */
+        fun addRepeat(repeat: ScheduleRepeatRule) = apply { body.addRepeat(repeat) }
 
         /** The starting date and time for the schedule. */
         fun scheduledAt(scheduledAt: OffsetDateTime?) = apply { body.scheduledAt(scheduledAt) }
@@ -469,7 +518,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .recipients()
-         * .repeats()
          * .workflow()
          * ```
          *
@@ -493,10 +541,11 @@ private constructor(
     class Body
     private constructor(
         private val recipients: JsonField<List<RecipientRequest>>,
-        private val repeats: JsonField<List<ScheduleRepeatRule>>,
         private val workflow: JsonField<String>,
+        private val actor: JsonField<RecipientRequest>,
         private val data: JsonField<Data>,
         private val endingAt: JsonField<OffsetDateTime>,
+        private val repeats: JsonField<List<ScheduleRepeatRule>>,
         private val scheduledAt: JsonField<OffsetDateTime>,
         private val tenant: JsonField<InlineTenantRequest>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -507,23 +556,36 @@ private constructor(
             @JsonProperty("recipients")
             @ExcludeMissing
             recipients: JsonField<List<RecipientRequest>> = JsonMissing.of(),
-            @JsonProperty("repeats")
-            @ExcludeMissing
-            repeats: JsonField<List<ScheduleRepeatRule>> = JsonMissing.of(),
             @JsonProperty("workflow")
             @ExcludeMissing
             workflow: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("actor")
+            @ExcludeMissing
+            actor: JsonField<RecipientRequest> = JsonMissing.of(),
             @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
             @JsonProperty("ending_at")
             @ExcludeMissing
             endingAt: JsonField<OffsetDateTime> = JsonMissing.of(),
+            @JsonProperty("repeats")
+            @ExcludeMissing
+            repeats: JsonField<List<ScheduleRepeatRule>> = JsonMissing.of(),
             @JsonProperty("scheduled_at")
             @ExcludeMissing
             scheduledAt: JsonField<OffsetDateTime> = JsonMissing.of(),
             @JsonProperty("tenant")
             @ExcludeMissing
             tenant: JsonField<InlineTenantRequest> = JsonMissing.of(),
-        ) : this(recipients, repeats, workflow, data, endingAt, scheduledAt, tenant, mutableMapOf())
+        ) : this(
+            recipients,
+            workflow,
+            actor,
+            data,
+            endingAt,
+            repeats,
+            scheduledAt,
+            tenant,
+            mutableMapOf(),
+        )
 
         /**
          * The recipients to set the schedule for. Limited to 100 recipients per request.
@@ -534,20 +596,22 @@ private constructor(
         fun recipients(): List<RecipientRequest> = recipients.getRequired("recipients")
 
         /**
-         * The repeat rule for the schedule.
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun repeats(): List<ScheduleRepeatRule> = repeats.getRequired("repeats")
-
-        /**
          * The key of the workflow.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
          *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
          */
         fun workflow(): String = workflow.getRequired("workflow")
+
+        /**
+         * Specifies a recipient in a request. This can either be a user identifier (string), an
+         * inline user request (object), or an inline object request, which is determined by the
+         * presence of a `collection` property.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun actor(): Optional<RecipientRequest> = actor.getOptional("actor")
 
         /**
          * An optional map of data to pass into the workflow execution. There is a 1024 byte limit
@@ -567,6 +631,14 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun endingAt(): Optional<OffsetDateTime> = endingAt.getOptional("ending_at")
+
+        /**
+         * The repeat rule for the schedule.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun repeats(): Optional<List<ScheduleRepeatRule>> = repeats.getOptional("repeats")
 
         /**
          * The starting date and time for the schedule.
@@ -594,20 +666,18 @@ private constructor(
         fun _recipients(): JsonField<List<RecipientRequest>> = recipients
 
         /**
-         * Returns the raw JSON value of [repeats].
-         *
-         * Unlike [repeats], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("repeats")
-        @ExcludeMissing
-        fun _repeats(): JsonField<List<ScheduleRepeatRule>> = repeats
-
-        /**
          * Returns the raw JSON value of [workflow].
          *
          * Unlike [workflow], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("workflow") @ExcludeMissing fun _workflow(): JsonField<String> = workflow
+
+        /**
+         * Returns the raw JSON value of [actor].
+         *
+         * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("actor") @ExcludeMissing fun _actor(): JsonField<RecipientRequest> = actor
 
         /**
          * Returns the raw JSON value of [data].
@@ -624,6 +694,15 @@ private constructor(
         @JsonProperty("ending_at")
         @ExcludeMissing
         fun _endingAt(): JsonField<OffsetDateTime> = endingAt
+
+        /**
+         * Returns the raw JSON value of [repeats].
+         *
+         * Unlike [repeats], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("repeats")
+        @ExcludeMissing
+        fun _repeats(): JsonField<List<ScheduleRepeatRule>> = repeats
 
         /**
          * Returns the raw JSON value of [scheduledAt].
@@ -663,7 +742,6 @@ private constructor(
              * The following fields are required:
              * ```java
              * .recipients()
-             * .repeats()
              * .workflow()
              * ```
              */
@@ -674,10 +752,11 @@ private constructor(
         class Builder internal constructor() {
 
             private var recipients: JsonField<MutableList<RecipientRequest>>? = null
-            private var repeats: JsonField<MutableList<ScheduleRepeatRule>>? = null
             private var workflow: JsonField<String>? = null
+            private var actor: JsonField<RecipientRequest> = JsonMissing.of()
             private var data: JsonField<Data> = JsonMissing.of()
             private var endingAt: JsonField<OffsetDateTime> = JsonMissing.of()
+            private var repeats: JsonField<MutableList<ScheduleRepeatRule>>? = null
             private var scheduledAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var tenant: JsonField<InlineTenantRequest> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -685,10 +764,11 @@ private constructor(
             @JvmSynthetic
             internal fun from(body: Body) = apply {
                 recipients = body.recipients.map { it.toMutableList() }
-                repeats = body.repeats.map { it.toMutableList() }
                 workflow = body.workflow
+                actor = body.actor
                 data = body.data
                 endingAt = body.endingAt
+                repeats = body.repeats.map { it.toMutableList() }
                 scheduledAt = body.scheduledAt
                 tenant = body.tenant
                 additionalProperties = body.additionalProperties.toMutableMap()
@@ -742,32 +822,6 @@ private constructor(
             fun addRecipient(inlineObject: InlineObjectRequest) =
                 addRecipient(RecipientRequest.ofInlineObject(inlineObject))
 
-            /** The repeat rule for the schedule. */
-            fun repeats(repeats: List<ScheduleRepeatRule>) = repeats(JsonField.of(repeats))
-
-            /**
-             * Sets [Builder.repeats] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.repeats] with a well-typed
-             * `List<ScheduleRepeatRule>` value instead. This method is primarily for setting the
-             * field to an undocumented or not yet supported value.
-             */
-            fun repeats(repeats: JsonField<List<ScheduleRepeatRule>>) = apply {
-                this.repeats = repeats.map { it.toMutableList() }
-            }
-
-            /**
-             * Adds a single [ScheduleRepeatRule] to [repeats].
-             *
-             * @throws IllegalStateException if the field was previously set to a non-list.
-             */
-            fun addRepeat(repeat: ScheduleRepeatRule) = apply {
-                repeats =
-                    (repeats ?: JsonField.of(mutableListOf())).also {
-                        checkKnown("repeats", it).add(repeat)
-                    }
-            }
-
             /** The key of the workflow. */
             fun workflow(workflow: String) = workflow(JsonField.of(workflow))
 
@@ -779,6 +833,40 @@ private constructor(
              * supported value.
              */
             fun workflow(workflow: JsonField<String>) = apply { this.workflow = workflow }
+
+            /**
+             * Specifies a recipient in a request. This can either be a user identifier (string), an
+             * inline user request (object), or an inline object request, which is determined by the
+             * presence of a `collection` property.
+             */
+            fun actor(actor: RecipientRequest?) = actor(JsonField.ofNullable(actor))
+
+            /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
+            fun actor(actor: Optional<RecipientRequest>) = actor(actor.getOrNull())
+
+            /**
+             * Sets [Builder.actor] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.actor] with a well-typed [RecipientRequest] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun actor(actor: JsonField<RecipientRequest>) = apply { this.actor = actor }
+
+            /** Alias for calling [actor] with `RecipientRequest.ofUserRecipient(userRecipient)`. */
+            fun actor(userRecipient: String) =
+                actor(RecipientRequest.ofUserRecipient(userRecipient))
+
+            /**
+             * Alias for calling [actor] with
+             * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
+             */
+            fun actor(inlineIdentifyUser: InlineIdentifyUserRequest) =
+                actor(RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser))
+
+            /** Alias for calling [actor] with `RecipientRequest.ofInlineObject(inlineObject)`. */
+            fun actor(inlineObject: InlineObjectRequest) =
+                actor(RecipientRequest.ofInlineObject(inlineObject))
 
             /**
              * An optional map of data to pass into the workflow execution. There is a 1024 byte
@@ -814,6 +902,32 @@ private constructor(
              * supported value.
              */
             fun endingAt(endingAt: JsonField<OffsetDateTime>) = apply { this.endingAt = endingAt }
+
+            /** The repeat rule for the schedule. */
+            fun repeats(repeats: List<ScheduleRepeatRule>) = repeats(JsonField.of(repeats))
+
+            /**
+             * Sets [Builder.repeats] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.repeats] with a well-typed
+             * `List<ScheduleRepeatRule>` value instead. This method is primarily for setting the
+             * field to an undocumented or not yet supported value.
+             */
+            fun repeats(repeats: JsonField<List<ScheduleRepeatRule>>) = apply {
+                this.repeats = repeats.map { it.toMutableList() }
+            }
+
+            /**
+             * Adds a single [ScheduleRepeatRule] to [repeats].
+             *
+             * @throws IllegalStateException if the field was previously set to a non-list.
+             */
+            fun addRepeat(repeat: ScheduleRepeatRule) = apply {
+                repeats =
+                    (repeats ?: JsonField.of(mutableListOf())).also {
+                        checkKnown("repeats", it).add(repeat)
+                    }
+            }
 
             /** The starting date and time for the schedule. */
             fun scheduledAt(scheduledAt: OffsetDateTime?) =
@@ -885,7 +999,6 @@ private constructor(
              * The following fields are required:
              * ```java
              * .recipients()
-             * .repeats()
              * .workflow()
              * ```
              *
@@ -894,10 +1007,11 @@ private constructor(
             fun build(): Body =
                 Body(
                     checkRequired("recipients", recipients).map { it.toImmutable() },
-                    checkRequired("repeats", repeats).map { it.toImmutable() },
                     checkRequired("workflow", workflow),
+                    actor,
                     data,
                     endingAt,
+                    (repeats ?: JsonMissing.of()).map { it.toImmutable() },
                     scheduledAt,
                     tenant,
                     additionalProperties.toMutableMap(),
@@ -912,10 +1026,11 @@ private constructor(
             }
 
             recipients().forEach { it.validate() }
-            repeats().forEach { it.validate() }
             workflow()
+            actor().ifPresent { it.validate() }
             data().ifPresent { it.validate() }
             endingAt()
+            repeats().ifPresent { it.forEach { it.validate() } }
             scheduledAt()
             tenant().ifPresent { it.validate() }
             validated = true
@@ -938,10 +1053,11 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (recipients.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
-                (repeats.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (workflow.asKnown().isPresent) 1 else 0) +
+                (actor.asKnown().getOrNull()?.validity() ?: 0) +
                 (data.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (endingAt.asKnown().isPresent) 1 else 0) +
+                (repeats.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
                 (if (scheduledAt.asKnown().isPresent) 1 else 0) +
                 (tenant.asKnown().getOrNull()?.validity() ?: 0)
 
@@ -950,17 +1066,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && recipients == other.recipients && repeats == other.repeats && workflow == other.workflow && data == other.data && endingAt == other.endingAt && scheduledAt == other.scheduledAt && tenant == other.tenant && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && recipients == other.recipients && workflow == other.workflow && actor == other.actor && data == other.data && endingAt == other.endingAt && repeats == other.repeats && scheduledAt == other.scheduledAt && tenant == other.tenant && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(recipients, repeats, workflow, data, endingAt, scheduledAt, tenant, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(recipients, workflow, actor, data, endingAt, repeats, scheduledAt, tenant, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{recipients=$recipients, repeats=$repeats, workflow=$workflow, data=$data, endingAt=$endingAt, scheduledAt=$scheduledAt, tenant=$tenant, additionalProperties=$additionalProperties}"
+            "Body{recipients=$recipients, workflow=$workflow, actor=$actor, data=$data, endingAt=$endingAt, repeats=$repeats, scheduledAt=$scheduledAt, tenant=$tenant, additionalProperties=$additionalProperties}"
     }
 
     /**
