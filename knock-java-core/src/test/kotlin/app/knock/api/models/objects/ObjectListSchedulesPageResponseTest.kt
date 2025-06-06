@@ -38,8 +38,8 @@ internal class ObjectListSchedulesPageResponseTest {
                         )
                         .addRepeat(
                             ScheduleRepeatRule.builder()
-                                ._typename("ScheduleRepeat")
                                 .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                                ._typename("ScheduleRepeat")
                                 .dayOfMonth(null)
                                 .days(
                                     listOf(
@@ -113,8 +113,8 @@ internal class ObjectListSchedulesPageResponseTest {
                     )
                     .addRepeat(
                         ScheduleRepeatRule.builder()
-                            ._typename("ScheduleRepeat")
                             .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                            ._typename("ScheduleRepeat")
                             .dayOfMonth(null)
                             .days(
                                 listOf(
@@ -193,8 +193,8 @@ internal class ObjectListSchedulesPageResponseTest {
                         )
                         .addRepeat(
                             ScheduleRepeatRule.builder()
-                                ._typename("ScheduleRepeat")
                                 .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                                ._typename("ScheduleRepeat")
                                 .dayOfMonth(null)
                                 .days(
                                     listOf(

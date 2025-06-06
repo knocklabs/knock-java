@@ -139,8 +139,8 @@ internal class ScheduleServiceAsyncTest {
                     .endingAt(null)
                     .addRepeat(
                         ScheduleRepeatRule.builder()
-                            ._typename("ScheduleRepeat")
                             .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                            ._typename("ScheduleRepeat")
                             .dayOfMonth(null)
                             .days(
                                 listOf(
@@ -192,8 +192,8 @@ internal class ScheduleServiceAsyncTest {
                     .endingAt(null)
                     .addRepeat(
                         ScheduleRepeatRule.builder()
-                            ._typename("ScheduleRepeat")
                             .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                            ._typename("ScheduleRepeat")
                             .dayOfMonth(null)
                             .days(
                                 listOf(

@@ -11,7 +11,6 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.errors.KnockInvalidDataException
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
-import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import com.fasterxml.jackson.annotation.JsonAnyGetter
 import com.fasterxml.jackson.annotation.JsonAnySetter
@@ -45,14 +44,6 @@ private constructor(
     fun channelData(): Optional<InlineChannelDataRequest> = body.channelData()
 
     /**
-     * Inline set preferences for a recipient, where the key is the preference set id.
-     *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun preferences(): Optional<InlinePreferenceSetRequest> = body.preferences()
-
-    /**
      * The settings for the tenant. Includes branding and preference set.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -66,13 +57,6 @@ private constructor(
      * Unlike [channelData], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _channelData(): JsonField<InlineChannelDataRequest> = body._channelData()
-
-    /**
-     * Returns the raw JSON value of [preferences].
-     *
-     * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _preferences(): JsonField<InlinePreferenceSetRequest> = body._preferences()
 
     /**
      * Returns the raw JSON value of [settings].
@@ -124,7 +108,6 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [channelData]
-         * - [preferences]
          * - [settings]
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -147,26 +130,6 @@ private constructor(
          */
         fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
             body.channelData(channelData)
-        }
-
-        /** Inline set preferences for a recipient, where the key is the preference set id. */
-        fun preferences(preferences: InlinePreferenceSetRequest?) = apply {
-            body.preferences(preferences)
-        }
-
-        /** Alias for calling [Builder.preferences] with `preferences.orElse(null)`. */
-        fun preferences(preferences: Optional<InlinePreferenceSetRequest>) =
-            preferences(preferences.getOrNull())
-
-        /**
-         * Sets [Builder.preferences] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.preferences] with a well-typed
-         * [InlinePreferenceSetRequest] value instead. This method is primarily for setting the
-         * field to an undocumented or not yet supported value.
-         */
-        fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {
-            body.preferences(preferences)
         }
 
         /** The settings for the tenant. Includes branding and preference set. */
@@ -331,7 +294,6 @@ private constructor(
     class Body
     private constructor(
         private val channelData: JsonField<InlineChannelDataRequest>,
-        private val preferences: JsonField<InlinePreferenceSetRequest>,
         private val settings: JsonField<Settings>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
@@ -341,13 +303,10 @@ private constructor(
             @JsonProperty("channel_data")
             @ExcludeMissing
             channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of(),
-            @JsonProperty("preferences")
-            @ExcludeMissing
-            preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of(),
             @JsonProperty("settings")
             @ExcludeMissing
             settings: JsonField<Settings> = JsonMissing.of(),
-        ) : this(channelData, preferences, settings, mutableMapOf())
+        ) : this(channelData, settings, mutableMapOf())
 
         /**
          * A request to set channel data for a type of channel inline.
@@ -357,15 +316,6 @@ private constructor(
          */
         fun channelData(): Optional<InlineChannelDataRequest> =
             channelData.getOptional("channel_data")
-
-        /**
-         * Inline set preferences for a recipient, where the key is the preference set id.
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun preferences(): Optional<InlinePreferenceSetRequest> =
-            preferences.getOptional("preferences")
 
         /**
          * The settings for the tenant. Includes branding and preference set.
@@ -383,15 +333,6 @@ private constructor(
         @JsonProperty("channel_data")
         @ExcludeMissing
         fun _channelData(): JsonField<InlineChannelDataRequest> = channelData
-
-        /**
-         * Returns the raw JSON value of [preferences].
-         *
-         * Unlike [preferences], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("preferences")
-        @ExcludeMissing
-        fun _preferences(): JsonField<InlinePreferenceSetRequest> = preferences
 
         /**
          * Returns the raw JSON value of [settings].
@@ -422,14 +363,12 @@ private constructor(
         class Builder internal constructor() {
 
             private var channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of()
-            private var preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of()
             private var settings: JsonField<Settings> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(body: Body) = apply {
                 channelData = body.channelData
-                preferences = body.preferences
                 settings = body.settings
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
@@ -451,25 +390,6 @@ private constructor(
              */
             fun channelData(channelData: JsonField<InlineChannelDataRequest>) = apply {
                 this.channelData = channelData
-            }
-
-            /** Inline set preferences for a recipient, where the key is the preference set id. */
-            fun preferences(preferences: InlinePreferenceSetRequest?) =
-                preferences(JsonField.ofNullable(preferences))
-
-            /** Alias for calling [Builder.preferences] with `preferences.orElse(null)`. */
-            fun preferences(preferences: Optional<InlinePreferenceSetRequest>) =
-                preferences(preferences.getOrNull())
-
-            /**
-             * Sets [Builder.preferences] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.preferences] with a well-typed
-             * [InlinePreferenceSetRequest] value instead. This method is primarily for setting the
-             * field to an undocumented or not yet supported value.
-             */
-            fun preferences(preferences: JsonField<InlinePreferenceSetRequest>) = apply {
-                this.preferences = preferences
             }
 
             /** The settings for the tenant. Includes branding and preference set. */
@@ -508,8 +428,7 @@ private constructor(
              *
              * Further updates to this [Builder] will not mutate the returned instance.
              */
-            fun build(): Body =
-                Body(channelData, preferences, settings, additionalProperties.toMutableMap())
+            fun build(): Body = Body(channelData, settings, additionalProperties.toMutableMap())
         }
 
         private var validated: Boolean = false
@@ -520,7 +439,6 @@ private constructor(
             }
 
             channelData().ifPresent { it.validate() }
-            preferences().ifPresent { it.validate() }
             settings().ifPresent { it.validate() }
             validated = true
         }
@@ -542,7 +460,6 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (channelData.asKnown().getOrNull()?.validity() ?: 0) +
-                (preferences.asKnown().getOrNull()?.validity() ?: 0) +
                 (settings.asKnown().getOrNull()?.validity() ?: 0)
 
         override fun equals(other: Any?): Boolean {
@@ -550,17 +467,17 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && channelData == other.channelData && preferences == other.preferences && settings == other.settings && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && channelData == other.channelData && settings == other.settings && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(channelData, preferences, settings, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(channelData, settings, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{channelData=$channelData, preferences=$preferences, settings=$settings, additionalProperties=$additionalProperties}"
+            "Body{channelData=$channelData, settings=$settings, additionalProperties=$additionalProperties}"
     }
 
     /** The settings for the tenant. Includes branding and preference set. */

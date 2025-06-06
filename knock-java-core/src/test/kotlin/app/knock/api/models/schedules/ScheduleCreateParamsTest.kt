@@ -117,8 +117,8 @@ internal class ScheduleCreateParamsTest {
             .endingAt(null)
             .addRepeat(
                 ScheduleRepeatRule.builder()
-                    ._typename("ScheduleRepeat")
                     .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                    ._typename("ScheduleRepeat")
                     .dayOfMonth(null)
                     .days(
                         listOf(
@@ -244,8 +244,8 @@ internal class ScheduleCreateParamsTest {
                 .endingAt(null)
                 .addRepeat(
                     ScheduleRepeatRule.builder()
-                        ._typename("ScheduleRepeat")
                         .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                        ._typename("ScheduleRepeat")
                         .dayOfMonth(null)
                         .days(
                             listOf(
@@ -373,8 +373,8 @@ internal class ScheduleCreateParamsTest {
         assertThat(body.repeats().getOrNull())
             .containsExactly(
                 ScheduleRepeatRule.builder()
-                    ._typename("ScheduleRepeat")
                     .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                    ._typename("ScheduleRepeat")
                     .dayOfMonth(null)
                     .days(
                         listOf(

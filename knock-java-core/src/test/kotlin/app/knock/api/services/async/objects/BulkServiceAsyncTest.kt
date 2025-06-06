@@ -5,7 +5,6 @@ package app.knock.api.services.async.objects
 import app.knock.api.TestServerExtension
 import app.knock.api.client.okhttp.KnockOkHttpClientAsync
 import app.knock.api.core.JsonValue
-import app.knock.api.models.objects.InlineObjectRequest
 import app.knock.api.models.objects.bulk.BulkAddSubscriptionsParams
 import app.knock.api.models.objects.bulk.BulkDeleteParams
 import app.knock.api.models.objects.bulk.BulkSetParams
@@ -190,9 +189,8 @@ internal class BulkServiceAsyncTest {
                 BulkSetParams.builder()
                     .collection("collection")
                     .addObject(
-                        InlineObjectRequest.builder()
+                        BulkSetParams.Object.builder()
                             .id("project_1")
-                            .collection("projects")
                             .channelData(
                                 InlineChannelDataRequest.builder()
                                     .putAdditionalProperty(

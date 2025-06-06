@@ -15,7 +15,7 @@ internal class ScheduleListParamsTest {
             .after("after")
             .before("before")
             .pageSize(0L)
-            .addRecipient("string")
+            .addRecipient("user_123")
             .tenant("tenant")
             .build()
     }
@@ -28,7 +28,7 @@ internal class ScheduleListParamsTest {
                 .after("after")
                 .before("before")
                 .pageSize(0L)
-                .addRecipient("string")
+                .addRecipient("user_123")
                 .tenant("tenant")
                 .build()
 
@@ -41,7 +41,7 @@ internal class ScheduleListParamsTest {
                     .put("after", "after")
                     .put("before", "before")
                     .put("page_size", "0")
-                    .put("recipients[]", "string")
+                    .put("recipients[]", "user_123")
                     .put("tenant", "tenant")
                     .build()
             )

@@ -142,8 +142,8 @@ internal class BulkServiceTest {
                             .recipient("dnedry")
                             .addRepeat(
                                 ScheduleRepeatRule.builder()
-                                    ._typename("ScheduleRepeat")
                                     .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                                    ._typename("ScheduleRepeat")
                                     .dayOfMonth(null)
                                     .days(
                                         listOf(
@@ -274,8 +274,8 @@ internal class BulkServiceTest {
                             .recipient("esattler")
                             .addRepeat(
                                 ScheduleRepeatRule.builder()
-                                    ._typename("ScheduleRepeat")
                                     .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                                    ._typename("ScheduleRepeat")
                                     .dayOfMonth(null)
                                     .days(
                                         listOf(

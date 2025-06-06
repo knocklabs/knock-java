@@ -121,8 +121,8 @@ internal class BulkCreateParamsTest {
                     .recipient("dnedry")
                     .addRepeat(
                         ScheduleRepeatRule.builder()
-                            ._typename("ScheduleRepeat")
                             .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                            ._typename("ScheduleRepeat")
                             .dayOfMonth(null)
                             .days(
                                 listOf(
@@ -249,8 +249,8 @@ internal class BulkCreateParamsTest {
                     .recipient("esattler")
                     .addRepeat(
                         ScheduleRepeatRule.builder()
-                            ._typename("ScheduleRepeat")
                             .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                            ._typename("ScheduleRepeat")
                             .dayOfMonth(null)
                             .days(
                                 listOf(
@@ -386,8 +386,8 @@ internal class BulkCreateParamsTest {
                         .recipient("dnedry")
                         .addRepeat(
                             ScheduleRepeatRule.builder()
-                                ._typename("ScheduleRepeat")
                                 .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                                ._typename("ScheduleRepeat")
                                 .dayOfMonth(null)
                                 .days(
                                     listOf(
@@ -516,8 +516,8 @@ internal class BulkCreateParamsTest {
                         .recipient("esattler")
                         .addRepeat(
                             ScheduleRepeatRule.builder()
-                                ._typename("ScheduleRepeat")
                                 .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                                ._typename("ScheduleRepeat")
                                 .dayOfMonth(null)
                                 .days(
                                     listOf(
@@ -649,8 +649,8 @@ internal class BulkCreateParamsTest {
                     .recipient("dnedry")
                     .addRepeat(
                         ScheduleRepeatRule.builder()
-                            ._typename("ScheduleRepeat")
                             .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                            ._typename("ScheduleRepeat")
                             .dayOfMonth(null)
                             .days(
                                 listOf(
@@ -775,8 +775,8 @@ internal class BulkCreateParamsTest {
                     .recipient("esattler")
                     .addRepeat(
                         ScheduleRepeatRule.builder()
-                            ._typename("ScheduleRepeat")
                             .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                            ._typename("ScheduleRepeat")
                             .dayOfMonth(null)
                             .days(
                                 listOf(

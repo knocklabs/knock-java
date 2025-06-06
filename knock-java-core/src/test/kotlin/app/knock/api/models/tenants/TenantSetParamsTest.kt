@@ -4,7 +4,6 @@ package app.knock.api.models.tenants
 
 import app.knock.api.core.JsonValue
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
-import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
 import app.knock.api.models.recipients.preferences.PreferenceSetRequest
 import org.assertj.core.api.Assertions.assertThat
@@ -21,73 +20,6 @@ internal class TenantSetParamsTest {
                     .putAdditionalProperty(
                         "97c5837d-c65c-4d54-aa39-080eeb81c69d",
                         JsonValue.from(mapOf("tokens" to listOf("push_token_xxx"))),
-                    )
-                    .build()
-            )
-            .preferences(
-                InlinePreferenceSetRequest.builder()
-                    .putAdditionalProperty(
-                        "default",
-                        JsonValue.from(
-                            mapOf(
-                                "categories" to
-                                    mapOf(
-                                        "transactional" to
-                                            mapOf(
-                                                "channel_types" to
-                                                    mapOf(
-                                                        "chat" to true,
-                                                        "email" to false,
-                                                        "http" to true,
-                                                        "in_app_feed" to true,
-                                                        "push" to true,
-                                                        "sms" to true,
-                                                    ),
-                                                "conditions" to
-                                                    listOf(
-                                                        mapOf(
-                                                            "argument" to "frog_genome",
-                                                            "operator" to "contains",
-                                                            "variable" to "specimen.dna_sequence",
-                                                        )
-                                                    ),
-                                            )
-                                    ),
-                                "channel_types" to
-                                    mapOf(
-                                        "chat" to true,
-                                        "email" to true,
-                                        "http" to true,
-                                        "in_app_feed" to true,
-                                        "push" to true,
-                                        "sms" to true,
-                                    ),
-                                "workflows" to
-                                    mapOf(
-                                        "dinosaurs-loose" to
-                                            mapOf(
-                                                "channel_types" to
-                                                    mapOf(
-                                                        "chat" to true,
-                                                        "email" to false,
-                                                        "http" to true,
-                                                        "in_app_feed" to true,
-                                                        "push" to true,
-                                                        "sms" to true,
-                                                    ),
-                                                "conditions" to
-                                                    listOf(
-                                                        mapOf(
-                                                            "argument" to "frog_genome",
-                                                            "operator" to "contains",
-                                                            "variable" to "specimen.dna_sequence",
-                                                        )
-                                                    ),
-                                            ),
-                                        "welcome-sequence" to true,
-                                    ),
-                            )
-                        ),
                     )
                     .build()
             )
@@ -199,75 +131,6 @@ internal class TenantSetParamsTest {
                         )
                         .build()
                 )
-                .preferences(
-                    InlinePreferenceSetRequest.builder()
-                        .putAdditionalProperty(
-                            "default",
-                            JsonValue.from(
-                                mapOf(
-                                    "categories" to
-                                        mapOf(
-                                            "transactional" to
-                                                mapOf(
-                                                    "channel_types" to
-                                                        mapOf(
-                                                            "chat" to true,
-                                                            "email" to false,
-                                                            "http" to true,
-                                                            "in_app_feed" to true,
-                                                            "push" to true,
-                                                            "sms" to true,
-                                                        ),
-                                                    "conditions" to
-                                                        listOf(
-                                                            mapOf(
-                                                                "argument" to "frog_genome",
-                                                                "operator" to "contains",
-                                                                "variable" to
-                                                                    "specimen.dna_sequence",
-                                                            )
-                                                        ),
-                                                )
-                                        ),
-                                    "channel_types" to
-                                        mapOf(
-                                            "chat" to true,
-                                            "email" to true,
-                                            "http" to true,
-                                            "in_app_feed" to true,
-                                            "push" to true,
-                                            "sms" to true,
-                                        ),
-                                    "workflows" to
-                                        mapOf(
-                                            "dinosaurs-loose" to
-                                                mapOf(
-                                                    "channel_types" to
-                                                        mapOf(
-                                                            "chat" to true,
-                                                            "email" to false,
-                                                            "http" to true,
-                                                            "in_app_feed" to true,
-                                                            "push" to true,
-                                                            "sms" to true,
-                                                        ),
-                                                    "conditions" to
-                                                        listOf(
-                                                            mapOf(
-                                                                "argument" to "frog_genome",
-                                                                "operator" to "contains",
-                                                                "variable" to
-                                                                    "specimen.dna_sequence",
-                                                            )
-                                                        ),
-                                                ),
-                                            "welcome-sequence" to true,
-                                        ),
-                                )
-                            ),
-                        )
-                        .build()
-                )
                 .settings(
                     TenantSetParams.Settings.builder()
                         .branding(
@@ -363,74 +226,6 @@ internal class TenantSetParamsTest {
                     .putAdditionalProperty(
                         "97c5837d-c65c-4d54-aa39-080eeb81c69d",
                         JsonValue.from(mapOf("tokens" to listOf("push_token_xxx"))),
-                    )
-                    .build()
-            )
-        assertThat(body.preferences())
-            .contains(
-                InlinePreferenceSetRequest.builder()
-                    .putAdditionalProperty(
-                        "default",
-                        JsonValue.from(
-                            mapOf(
-                                "categories" to
-                                    mapOf(
-                                        "transactional" to
-                                            mapOf(
-                                                "channel_types" to
-                                                    mapOf(
-                                                        "chat" to true,
-                                                        "email" to false,
-                                                        "http" to true,
-                                                        "in_app_feed" to true,
-                                                        "push" to true,
-                                                        "sms" to true,
-                                                    ),
-                                                "conditions" to
-                                                    listOf(
-                                                        mapOf(
-                                                            "argument" to "frog_genome",
-                                                            "operator" to "contains",
-                                                            "variable" to "specimen.dna_sequence",
-                                                        )
-                                                    ),
-                                            )
-                                    ),
-                                "channel_types" to
-                                    mapOf(
-                                        "chat" to true,
-                                        "email" to true,
-                                        "http" to true,
-                                        "in_app_feed" to true,
-                                        "push" to true,
-                                        "sms" to true,
-                                    ),
-                                "workflows" to
-                                    mapOf(
-                                        "dinosaurs-loose" to
-                                            mapOf(
-                                                "channel_types" to
-                                                    mapOf(
-                                                        "chat" to true,
-                                                        "email" to false,
-                                                        "http" to true,
-                                                        "in_app_feed" to true,
-                                                        "push" to true,
-                                                        "sms" to true,
-                                                    ),
-                                                "conditions" to
-                                                    listOf(
-                                                        mapOf(
-                                                            "argument" to "frog_genome",
-                                                            "operator" to "contains",
-                                                            "variable" to "specimen.dna_sequence",
-                                                        )
-                                                    ),
-                                            ),
-                                        "welcome-sequence" to true,
-                                    ),
-                            )
-                        ),
                     )
                     .build()
             )

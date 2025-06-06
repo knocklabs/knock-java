@@ -3,7 +3,6 @@
 package app.knock.api.models.objects.bulk
 
 import app.knock.api.core.JsonValue
-import app.knock.api.models.objects.InlineObjectRequest
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import java.time.OffsetDateTime
@@ -17,9 +16,8 @@ internal class BulkSetParamsTest {
         BulkSetParams.builder()
             .collection("collection")
             .addObject(
-                InlineObjectRequest.builder()
+                BulkSetParams.Object.builder()
                     .id("project_1")
-                    .collection("projects")
                     .channelData(
                         InlineChannelDataRequest.builder()
                             .putAdditionalProperty(
@@ -108,9 +106,7 @@ internal class BulkSetParamsTest {
         val params =
             BulkSetParams.builder()
                 .collection("collection")
-                .addObject(
-                    InlineObjectRequest.builder().id("project_1").collection("projects").build()
-                )
+                .addObject(BulkSetParams.Object.builder().id("project_1").build())
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("collection")
@@ -124,9 +120,8 @@ internal class BulkSetParamsTest {
             BulkSetParams.builder()
                 .collection("collection")
                 .addObject(
-                    InlineObjectRequest.builder()
+                    BulkSetParams.Object.builder()
                         .id("project_1")
-                        .collection("projects")
                         .channelData(
                             InlineChannelDataRequest.builder()
                                 .putAdditionalProperty(
@@ -213,9 +208,8 @@ internal class BulkSetParamsTest {
 
         assertThat(body.objects())
             .containsExactly(
-                InlineObjectRequest.builder()
+                BulkSetParams.Object.builder()
                     .id("project_1")
-                    .collection("projects")
                     .channelData(
                         InlineChannelDataRequest.builder()
                             .putAdditionalProperty(
@@ -303,16 +297,12 @@ internal class BulkSetParamsTest {
         val params =
             BulkSetParams.builder()
                 .collection("collection")
-                .addObject(
-                    InlineObjectRequest.builder().id("project_1").collection("projects").build()
-                )
+                .addObject(BulkSetParams.Object.builder().id("project_1").build())
                 .build()
 
         val body = params._body()
 
         assertThat(body.objects())
-            .containsExactly(
-                InlineObjectRequest.builder().id("project_1").collection("projects").build()
-            )
+            .containsExactly(BulkSetParams.Object.builder().id("project_1").build())
     }
 }

@@ -23,8 +23,8 @@ import kotlin.jvm.optionals.getOrNull
 /** The repeat rule for the schedule. */
 class ScheduleRepeatRule
 private constructor(
-    private val _typename: JsonField<String>,
     private val frequency: JsonField<Frequency>,
+    private val _typename: JsonField<String>,
     private val dayOfMonth: JsonField<Long>,
     private val days: JsonField<List<Day>>,
     private val hours: JsonField<Long>,
@@ -35,10 +35,10 @@ private constructor(
 
     @JsonCreator
     private constructor(
-        @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
         @JsonProperty("frequency")
         @ExcludeMissing
         frequency: JsonField<Frequency> = JsonMissing.of(),
+        @JsonProperty("__typename") @ExcludeMissing _typename: JsonField<String> = JsonMissing.of(),
         @JsonProperty("day_of_month")
         @ExcludeMissing
         dayOfMonth: JsonField<Long> = JsonMissing.of(),
@@ -46,15 +46,7 @@ private constructor(
         @JsonProperty("hours") @ExcludeMissing hours: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("interval") @ExcludeMissing interval: JsonField<Long> = JsonMissing.of(),
         @JsonProperty("minutes") @ExcludeMissing minutes: JsonField<Long> = JsonMissing.of(),
-    ) : this(_typename, frequency, dayOfMonth, days, hours, interval, minutes, mutableMapOf())
-
-    /**
-     * The typename of the schema.
-     *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
-     *   missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun _typename(): String = _typename.getRequired("__typename")
+    ) : this(frequency, _typename, dayOfMonth, days, hours, interval, minutes, mutableMapOf())
 
     /**
      * The frequency of the schedule.
@@ -63,6 +55,14 @@ private constructor(
      *   missing or null (e.g. if the server responded with an unexpected value).
      */
     fun frequency(): Frequency = frequency.getRequired("frequency")
+
+    /**
+     * The typename of the schema.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun _typename(): Optional<String> = _typename.getOptional("__typename")
 
     /**
      * The day of the month to repeat the schedule.
@@ -105,18 +105,18 @@ private constructor(
     fun minutes(): Optional<Long> = minutes.getOptional("minutes")
 
     /**
-     * Returns the raw JSON value of [_typename].
-     *
-     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
-
-    /**
      * Returns the raw JSON value of [frequency].
      *
      * Unlike [frequency], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("frequency") @ExcludeMissing fun _frequency(): JsonField<Frequency> = frequency
+
+    /**
+     * Returns the raw JSON value of [_typename].
+     *
+     * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("__typename") @ExcludeMissing fun __typename(): JsonField<String> = _typename
 
     /**
      * Returns the raw JSON value of [dayOfMonth].
@@ -172,7 +172,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * ._typename()
          * .frequency()
          * ```
          */
@@ -182,8 +181,8 @@ private constructor(
     /** A builder for [ScheduleRepeatRule]. */
     class Builder internal constructor() {
 
-        private var _typename: JsonField<String>? = null
         private var frequency: JsonField<Frequency>? = null
+        private var _typename: JsonField<String> = JsonMissing.of()
         private var dayOfMonth: JsonField<Long> = JsonMissing.of()
         private var days: JsonField<MutableList<Day>>? = null
         private var hours: JsonField<Long> = JsonMissing.of()
@@ -193,8 +192,8 @@ private constructor(
 
         @JvmSynthetic
         internal fun from(scheduleRepeatRule: ScheduleRepeatRule) = apply {
-            _typename = scheduleRepeatRule._typename
             frequency = scheduleRepeatRule.frequency
+            _typename = scheduleRepeatRule._typename
             dayOfMonth = scheduleRepeatRule.dayOfMonth
             days = scheduleRepeatRule.days.map { it.toMutableList() }
             hours = scheduleRepeatRule.hours
@@ -202,18 +201,6 @@ private constructor(
             minutes = scheduleRepeatRule.minutes
             additionalProperties = scheduleRepeatRule.additionalProperties.toMutableMap()
         }
-
-        /** The typename of the schema. */
-        fun _typename(_typename: String) = _typename(JsonField.of(_typename))
-
-        /**
-         * Sets [Builder._typename] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder._typename] with a well-typed [String] value instead.
-         * This method is primarily for setting the field to an undocumented or not yet supported
-         * value.
-         */
-        fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         /** The frequency of the schedule. */
         fun frequency(frequency: Frequency) = frequency(JsonField.of(frequency))
@@ -226,6 +213,18 @@ private constructor(
          * value.
          */
         fun frequency(frequency: JsonField<Frequency>) = apply { this.frequency = frequency }
+
+        /** The typename of the schema. */
+        fun _typename(_typename: String) = _typename(JsonField.of(_typename))
+
+        /**
+         * Sets [Builder._typename] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder._typename] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
         /** The day of the month to repeat the schedule. */
         fun dayOfMonth(dayOfMonth: Long?) = dayOfMonth(JsonField.ofNullable(dayOfMonth))
@@ -350,7 +349,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * ._typename()
          * .frequency()
          * ```
          *
@@ -358,8 +356,8 @@ private constructor(
          */
         fun build(): ScheduleRepeatRule =
             ScheduleRepeatRule(
-                checkRequired("_typename", _typename),
                 checkRequired("frequency", frequency),
+                _typename,
                 dayOfMonth,
                 (days ?: JsonMissing.of()).map { it.toImmutable() },
                 hours,
@@ -376,8 +374,8 @@ private constructor(
             return@apply
         }
 
-        _typename()
         frequency().validate()
+        _typename()
         dayOfMonth()
         days().ifPresent { it.forEach { it.validate() } }
         hours()
@@ -401,8 +399,8 @@ private constructor(
      */
     @JvmSynthetic
     internal fun validity(): Int =
-        (if (_typename.asKnown().isPresent) 1 else 0) +
-            (frequency.asKnown().getOrNull()?.validity() ?: 0) +
+        (frequency.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (_typename.asKnown().isPresent) 1 else 0) +
             (if (dayOfMonth.asKnown().isPresent) 1 else 0) +
             (days.asKnown().getOrNull()?.sumOf { it.validity().toInt() } ?: 0) +
             (if (hours.asKnown().isPresent) 1 else 0) +
@@ -708,15 +706,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is ScheduleRepeatRule && _typename == other._typename && frequency == other.frequency && dayOfMonth == other.dayOfMonth && days == other.days && hours == other.hours && interval == other.interval && minutes == other.minutes && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is ScheduleRepeatRule && frequency == other.frequency && _typename == other._typename && dayOfMonth == other.dayOfMonth && days == other.days && hours == other.hours && interval == other.interval && minutes == other.minutes && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(_typename, frequency, dayOfMonth, days, hours, interval, minutes, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(frequency, _typename, dayOfMonth, days, hours, interval, minutes, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "ScheduleRepeatRule{_typename=$_typename, frequency=$frequency, dayOfMonth=$dayOfMonth, days=$days, hours=$hours, interval=$interval, minutes=$minutes, additionalProperties=$additionalProperties}"
+        "ScheduleRepeatRule{frequency=$frequency, _typename=$_typename, dayOfMonth=$dayOfMonth, days=$days, hours=$hours, interval=$interval, minutes=$minutes, additionalProperties=$additionalProperties}"
 }

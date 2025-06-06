@@ -14,8 +14,8 @@ internal class ScheduleRepeatRuleTest {
     fun create() {
         val scheduleRepeatRule =
             ScheduleRepeatRule.builder()
-                ._typename("ScheduleRepeat")
                 .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                ._typename("ScheduleRepeat")
                 .dayOfMonth(null)
                 .days(
                     listOf(
@@ -33,8 +33,8 @@ internal class ScheduleRepeatRuleTest {
                 .minutes(null)
                 .build()
 
-        assertThat(scheduleRepeatRule._typename()).isEqualTo("ScheduleRepeat")
         assertThat(scheduleRepeatRule.frequency()).isEqualTo(ScheduleRepeatRule.Frequency.DAILY)
+        assertThat(scheduleRepeatRule._typename()).contains("ScheduleRepeat")
         assertThat(scheduleRepeatRule.dayOfMonth()).isEmpty
         assertThat(scheduleRepeatRule.days().getOrNull())
             .containsExactly(
@@ -56,8 +56,8 @@ internal class ScheduleRepeatRuleTest {
         val jsonMapper = jsonMapper()
         val scheduleRepeatRule =
             ScheduleRepeatRule.builder()
-                ._typename("ScheduleRepeat")
                 .frequency(ScheduleRepeatRule.Frequency.DAILY)
+                ._typename("ScheduleRepeat")
                 .dayOfMonth(null)
                 .days(
                     listOf(
