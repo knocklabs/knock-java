@@ -499,6 +499,8 @@ private constructor(
 
         /**
          * Inline set preferences for a recipient, where the key is the preference set id.
+         * Preferences that are set inline will be merged into any existing preferences rather than
+         * replacing them.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -631,7 +633,11 @@ private constructor(
                 this.createdAt = createdAt
             }
 
-            /** Inline set preferences for a recipient, where the key is the preference set id. */
+            /**
+             * Inline set preferences for a recipient, where the key is the preference set id.
+             * Preferences that are set inline will be merged into any existing preferences rather
+             * than replacing them.
+             */
             fun preferences(preferences: InlinePreferenceSetRequest?) =
                 preferences(JsonField.ofNullable(preferences))
 
