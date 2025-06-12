@@ -54,6 +54,7 @@ class BulkOperationServiceAsyncImpl internal constructor(private val clientOptio
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "bulk_operations", params._pathParam(0))
                     .build()
                     .prepareAsync(clientOptions, params)

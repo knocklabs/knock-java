@@ -71,6 +71,7 @@ class AudienceServiceImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "audiences", params._pathParam(0), "members")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -94,6 +95,7 @@ class AudienceServiceImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "audiences", params._pathParam(0), "members")
                     .build()
                     .prepare(clientOptions, params)
@@ -123,6 +125,7 @@ class AudienceServiceImpl internal constructor(private val clientOptions: Client
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "audiences", params._pathParam(0), "members")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()

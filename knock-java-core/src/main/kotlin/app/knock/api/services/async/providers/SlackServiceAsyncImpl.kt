@@ -75,6 +75,7 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "providers", "slack", params._pathParam(0), "auth_check")
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -108,6 +109,7 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "providers", "slack", params._pathParam(0), "channels")
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -149,6 +151,7 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments(
                         "v1",
                         "providers",

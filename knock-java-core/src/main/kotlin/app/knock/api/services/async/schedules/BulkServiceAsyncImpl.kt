@@ -50,6 +50,7 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "schedules", "bulk", "create")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()

@@ -51,6 +51,7 @@ class HightouchServiceAsyncImpl internal constructor(private val clientOptions: 
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "integrations", "hightouch", "embedded-destination")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()

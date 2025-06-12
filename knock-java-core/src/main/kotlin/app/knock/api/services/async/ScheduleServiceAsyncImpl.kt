@@ -88,6 +88,7 @@ class ScheduleServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "schedules")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -118,6 +119,7 @@ class ScheduleServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "schedules")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -149,6 +151,7 @@ class ScheduleServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "schedules")
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -186,6 +189,7 @@ class ScheduleServiceAsyncImpl internal constructor(private val clientOptions: C
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.DELETE)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "schedules")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()

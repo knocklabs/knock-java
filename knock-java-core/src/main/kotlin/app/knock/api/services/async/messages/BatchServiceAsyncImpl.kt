@@ -107,6 +107,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "messages", "batch", "archived")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -138,6 +139,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "messages", "batch", "content")
                     .build()
                     .prepareAsync(clientOptions, params)
@@ -167,6 +169,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "messages", "batch", "interacted")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -197,6 +200,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "messages", "batch", "read")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -227,6 +231,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "messages", "batch", "seen")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -257,6 +262,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "messages", "batch", "unread")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -287,6 +293,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "messages", "batch", "unseen")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -317,6 +324,7 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "messages", "batch", "unarchived")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()

@@ -61,6 +61,7 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "users", "bulk", "delete")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -88,6 +89,7 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "users", "bulk", "identify")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
@@ -115,6 +117,7 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "users", "bulk", "preferences")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()

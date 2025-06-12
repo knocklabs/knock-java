@@ -50,6 +50,7 @@ class CensusServiceImpl internal constructor(private val clientOptions: ClientOp
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
+                    .baseUrl(clientOptions.baseUrl())
                     .addPathSegments("v1", "integrations", "census", "custom-destination")
                     .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
