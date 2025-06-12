@@ -23,8 +23,8 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Identifies multiple users in a single operation. Allows creating or updating up to 100 users in a
- * single batch with various properties, preferences, and channel data.
+ * Identifies multiple users in a single operation. Allows creating or updating up to 1,000 users in
+ * a single batch with various properties, preferences, and channel data.
  */
 class BulkIdentifyParams
 private constructor(

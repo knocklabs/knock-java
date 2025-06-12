@@ -23,8 +23,10 @@ import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Sets preferences for multiple users in a single operation. Supports either setting the same
- * preferences for multiple users or specific preferences for each user.
+ * Bulk sets the preferences for up to 1,000 users at a time. The preference set `:id` can be
+ * either `default` or a `tenant.id`. Learn more about [per-tenant
+ * preferences](/preferences/tenant-preferences). Note that this is a destructive operation and will
+ * replace any existing users' preferences with the preferences sent.
  */
 class BulkSetPreferencesParams
 private constructor(

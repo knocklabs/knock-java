@@ -21,10 +21,7 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/**
- * Deletes multiple users in a single operation. Accepts up to 100 user IDs to delete and returns a
- * bulk operation that can be queried for progress.
- */
+/** Permanently deletes up to 1,000 users at a time. */
 class BulkDeleteParams
 private constructor(
     private val body: Body,
