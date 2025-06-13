@@ -21,6 +21,7 @@ import app.knock.api.models.workflows.WorkflowCancelParams
 import app.knock.api.models.workflows.WorkflowTriggerParams
 import app.knock.api.models.workflows.WorkflowTriggerResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class WorkflowServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -31,6 +32,9 @@ class WorkflowServiceAsyncImpl internal constructor(private val clientOptions: C
     }
 
     override fun withRawResponse(): WorkflowServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): WorkflowServiceAsync =
+        WorkflowServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun cancel(
         params: WorkflowCancelParams,
@@ -50,6 +54,13 @@ class WorkflowServiceAsyncImpl internal constructor(private val clientOptions: C
         WorkflowServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): WorkflowServiceAsync.WithRawResponse =
+            WorkflowServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val cancelHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
 

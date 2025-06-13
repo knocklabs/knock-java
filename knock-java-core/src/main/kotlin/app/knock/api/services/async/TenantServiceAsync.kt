@@ -2,6 +2,7 @@
 
 package app.knock.api.services.async
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.tenants.Tenant
@@ -12,6 +13,7 @@ import app.knock.api.models.tenants.TenantListParams
 import app.knock.api.models.tenants.TenantSetParams
 import app.knock.api.services.async.tenants.BulkServiceAsync
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface TenantServiceAsync {
 
@@ -19,6 +21,13 @@ interface TenantServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantServiceAsync
 
     fun bulk(): BulkServiceAsync
 
@@ -135,6 +144,15 @@ interface TenantServiceAsync {
      * A view of [TenantServiceAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): TenantServiceAsync.WithRawResponse
 
         fun bulk(): BulkServiceAsync.WithRawResponse
 

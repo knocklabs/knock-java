@@ -24,6 +24,7 @@ import app.knock.api.models.schedules.ScheduleListParams
 import app.knock.api.models.schedules.ScheduleUpdateParams
 import app.knock.api.services.blocking.schedules.BulkService
 import app.knock.api.services.blocking.schedules.BulkServiceImpl
+import java.util.function.Consumer
 
 class ScheduleServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ScheduleService {
@@ -35,6 +36,9 @@ class ScheduleServiceImpl internal constructor(private val clientOptions: Client
     private val bulk: BulkService by lazy { BulkServiceImpl(clientOptions) }
 
     override fun withRawResponse(): ScheduleService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ScheduleService =
+        ScheduleServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun bulk(): BulkService = bulk
 
@@ -74,6 +78,13 @@ class ScheduleServiceImpl internal constructor(private val clientOptions: Client
         private val bulk: BulkService.WithRawResponse by lazy {
             BulkServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ScheduleService.WithRawResponse =
+            ScheduleServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun bulk(): BulkService.WithRawResponse = bulk
 

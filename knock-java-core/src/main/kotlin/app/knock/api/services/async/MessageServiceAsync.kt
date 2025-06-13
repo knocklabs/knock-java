@@ -2,6 +2,7 @@
 
 package app.knock.api.services.async
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.messages.Message
@@ -25,6 +26,7 @@ import app.knock.api.models.messages.MessageMarkAsUnseenParams
 import app.knock.api.models.messages.MessageUnarchiveParams
 import app.knock.api.services.async.messages.BatchServiceAsync
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface MessageServiceAsync {
 
@@ -32,6 +34,13 @@ interface MessageServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): MessageServiceAsync
 
     fun batch(): BatchServiceAsync
 
@@ -497,6 +506,15 @@ interface MessageServiceAsync {
      * A view of [MessageServiceAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): MessageServiceAsync.WithRawResponse
 
         fun batch(): BatchServiceAsync.WithRawResponse
 

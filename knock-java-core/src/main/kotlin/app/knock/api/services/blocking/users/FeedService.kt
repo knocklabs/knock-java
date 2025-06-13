@@ -2,6 +2,7 @@
 
 package app.knock.api.services.blocking.users
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.users.feeds.FeedGetSettingsParams
@@ -9,6 +10,7 @@ import app.knock.api.models.users.feeds.FeedGetSettingsResponse
 import app.knock.api.models.users.feeds.FeedListItemsPage
 import app.knock.api.models.users.feeds.FeedListItemsParams
 import com.google.errorprone.annotations.MustBeClosed
+import java.util.function.Consumer
 
 interface FeedService {
 
@@ -16,6 +18,13 @@ interface FeedService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): FeedService
 
     /** Returns the feed settings for a user. */
     fun getSettings(userId: String, id: String): FeedGetSettingsResponse =
@@ -91,6 +100,13 @@ interface FeedService {
 
     /** A view of [FeedService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): FeedService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /v1/users/{user_id}/feeds/{id}/settings`, but is

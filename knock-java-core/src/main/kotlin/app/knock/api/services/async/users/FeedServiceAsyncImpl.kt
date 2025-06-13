@@ -21,6 +21,7 @@ import app.knock.api.models.users.feeds.FeedListItemsPageAsync
 import app.knock.api.models.users.feeds.FeedListItemsPageResponse
 import app.knock.api.models.users.feeds.FeedListItemsParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class FeedServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -31,6 +32,9 @@ class FeedServiceAsyncImpl internal constructor(private val clientOptions: Clien
     }
 
     override fun withRawResponse(): FeedServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): FeedServiceAsync =
+        FeedServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun getSettings(
         params: FeedGetSettingsParams,
@@ -50,6 +54,13 @@ class FeedServiceAsyncImpl internal constructor(private val clientOptions: Clien
         FeedServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): FeedServiceAsync.WithRawResponse =
+            FeedServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val getSettingsHandler: Handler<FeedGetSettingsResponse> =
             jsonHandler<FeedGetSettingsResponse>(clientOptions.jsonMapper)

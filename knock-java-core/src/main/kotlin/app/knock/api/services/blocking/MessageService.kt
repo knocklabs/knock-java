@@ -2,6 +2,7 @@
 
 package app.knock.api.services.blocking
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.messages.Message
@@ -25,6 +26,7 @@ import app.knock.api.models.messages.MessageMarkAsUnseenParams
 import app.knock.api.models.messages.MessageUnarchiveParams
 import app.knock.api.services.blocking.messages.BatchService
 import com.google.errorprone.annotations.MustBeClosed
+import java.util.function.Consumer
 
 interface MessageService {
 
@@ -32,6 +34,13 @@ interface MessageService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): MessageService
 
     fun batch(): BatchService
 
@@ -457,6 +466,13 @@ interface MessageService {
 
     /** A view of [MessageService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): MessageService.WithRawResponse
 
         fun batch(): BatchService.WithRawResponse
 

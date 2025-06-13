@@ -7,6 +7,7 @@ import app.knock.api.services.blocking.providers.MsTeamService
 import app.knock.api.services.blocking.providers.MsTeamServiceImpl
 import app.knock.api.services.blocking.providers.SlackService
 import app.knock.api.services.blocking.providers.SlackServiceImpl
+import java.util.function.Consumer
 
 class ProviderServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ProviderService {
@@ -20,6 +21,9 @@ class ProviderServiceImpl internal constructor(private val clientOptions: Client
     private val msTeams: MsTeamService by lazy { MsTeamServiceImpl(clientOptions) }
 
     override fun withRawResponse(): ProviderService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ProviderService =
+        ProviderServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun slack(): SlackService = slack
 
@@ -35,6 +39,13 @@ class ProviderServiceImpl internal constructor(private val clientOptions: Client
         private val msTeams: MsTeamService.WithRawResponse by lazy {
             MsTeamServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ProviderService.WithRawResponse =
+            ProviderServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun slack(): SlackService.WithRawResponse = slack
 

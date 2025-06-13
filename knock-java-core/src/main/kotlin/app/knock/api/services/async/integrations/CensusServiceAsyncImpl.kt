@@ -18,6 +18,7 @@ import app.knock.api.core.prepareAsync
 import app.knock.api.models.integrations.census.CensusCustomDestinationParams
 import app.knock.api.models.integrations.census.CensusCustomDestinationResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 class CensusServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     CensusServiceAsync {
@@ -27,6 +28,9 @@ class CensusServiceAsyncImpl internal constructor(private val clientOptions: Cli
     }
 
     override fun withRawResponse(): CensusServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): CensusServiceAsync =
+        CensusServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun customDestination(
         params: CensusCustomDestinationParams,
@@ -39,6 +43,13 @@ class CensusServiceAsyncImpl internal constructor(private val clientOptions: Cli
         CensusServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): CensusServiceAsync.WithRawResponse =
+            CensusServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val customDestinationHandler: Handler<CensusCustomDestinationResponse> =
             jsonHandler<CensusCustomDestinationResponse>(clientOptions.jsonMapper)

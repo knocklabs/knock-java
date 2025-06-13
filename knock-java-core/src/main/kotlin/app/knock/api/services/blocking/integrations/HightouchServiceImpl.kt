@@ -17,6 +17,7 @@ import app.knock.api.core.http.parseable
 import app.knock.api.core.prepare
 import app.knock.api.models.integrations.hightouch.HightouchEmbeddedDestinationParams
 import app.knock.api.models.integrations.hightouch.HightouchEmbeddedDestinationResponse
+import java.util.function.Consumer
 
 class HightouchServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     HightouchService {
@@ -26,6 +27,9 @@ class HightouchServiceImpl internal constructor(private val clientOptions: Clien
     }
 
     override fun withRawResponse(): HightouchService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): HightouchService =
+        HightouchServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun embeddedDestination(
         params: HightouchEmbeddedDestinationParams,
@@ -38,6 +42,13 @@ class HightouchServiceImpl internal constructor(private val clientOptions: Clien
         HightouchService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): HightouchService.WithRawResponse =
+            HightouchServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val embeddedDestinationHandler: Handler<HightouchEmbeddedDestinationResponse> =
             jsonHandler<HightouchEmbeddedDestinationResponse>(clientOptions.jsonMapper)

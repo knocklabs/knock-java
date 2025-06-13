@@ -2,6 +2,7 @@
 
 package app.knock.api.services.async
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.schedules.Schedule
@@ -12,6 +13,7 @@ import app.knock.api.models.schedules.ScheduleListParams
 import app.knock.api.models.schedules.ScheduleUpdateParams
 import app.knock.api.services.async.schedules.BulkServiceAsync
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface ScheduleServiceAsync {
 
@@ -19,6 +21,13 @@ interface ScheduleServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): ScheduleServiceAsync
 
     fun bulk(): BulkServiceAsync
 
@@ -82,6 +91,15 @@ interface ScheduleServiceAsync {
      * A view of [ScheduleServiceAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ScheduleServiceAsync.WithRawResponse
 
         fun bulk(): BulkServiceAsync.WithRawResponse
 

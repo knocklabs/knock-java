@@ -7,6 +7,7 @@ import app.knock.api.services.blocking.integrations.CensusService
 import app.knock.api.services.blocking.integrations.CensusServiceImpl
 import app.knock.api.services.blocking.integrations.HightouchService
 import app.knock.api.services.blocking.integrations.HightouchServiceImpl
+import java.util.function.Consumer
 
 class IntegrationServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     IntegrationService {
@@ -20,6 +21,9 @@ class IntegrationServiceImpl internal constructor(private val clientOptions: Cli
     private val hightouch: HightouchService by lazy { HightouchServiceImpl(clientOptions) }
 
     override fun withRawResponse(): IntegrationService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): IntegrationService =
+        IntegrationServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun census(): CensusService = census
 
@@ -35,6 +39,13 @@ class IntegrationServiceImpl internal constructor(private val clientOptions: Cli
         private val hightouch: HightouchService.WithRawResponse by lazy {
             HightouchServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): IntegrationService.WithRawResponse =
+            IntegrationServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun census(): CensusService.WithRawResponse = census
 

@@ -24,6 +24,7 @@ import app.knock.api.models.users.guides.GuideMarkMessageAsInteractedParams
 import app.knock.api.models.users.guides.GuideMarkMessageAsInteractedResponse
 import app.knock.api.models.users.guides.GuideMarkMessageAsSeenParams
 import app.knock.api.models.users.guides.GuideMarkMessageAsSeenResponse
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class GuideServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -34,6 +35,9 @@ class GuideServiceImpl internal constructor(private val clientOptions: ClientOpt
     }
 
     override fun withRawResponse(): GuideService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): GuideService =
+        GuideServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun getChannel(
         params: GuideGetChannelParams,
@@ -67,6 +71,13 @@ class GuideServiceImpl internal constructor(private val clientOptions: ClientOpt
         GuideService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): GuideService.WithRawResponse =
+            GuideServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val getChannelHandler: Handler<GuideGetChannelResponse> =
             jsonHandler<GuideGetChannelResponse>(clientOptions.jsonMapper)

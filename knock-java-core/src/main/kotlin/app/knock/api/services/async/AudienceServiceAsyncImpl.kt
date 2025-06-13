@@ -22,6 +22,7 @@ import app.knock.api.models.audiences.AudienceListMembersParams
 import app.knock.api.models.audiences.AudienceListMembersResponse
 import app.knock.api.models.audiences.AudienceRemoveMembersParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class AudienceServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -32,6 +33,9 @@ class AudienceServiceAsyncImpl internal constructor(private val clientOptions: C
     }
 
     override fun withRawResponse(): AudienceServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): AudienceServiceAsync =
+        AudienceServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun addMembers(
         params: AudienceAddMembersParams,
@@ -58,6 +62,13 @@ class AudienceServiceAsyncImpl internal constructor(private val clientOptions: C
         AudienceServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): AudienceServiceAsync.WithRawResponse =
+            AudienceServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val addMembersHandler: Handler<String> =
             stringHandler().withErrorHandler(errorHandler)

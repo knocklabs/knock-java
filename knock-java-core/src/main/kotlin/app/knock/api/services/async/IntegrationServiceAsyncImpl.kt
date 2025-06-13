@@ -7,6 +7,7 @@ import app.knock.api.services.async.integrations.CensusServiceAsync
 import app.knock.api.services.async.integrations.CensusServiceAsyncImpl
 import app.knock.api.services.async.integrations.HightouchServiceAsync
 import app.knock.api.services.async.integrations.HightouchServiceAsyncImpl
+import java.util.function.Consumer
 
 class IntegrationServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     IntegrationServiceAsync {
@@ -23,6 +24,9 @@ class IntegrationServiceAsyncImpl internal constructor(private val clientOptions
 
     override fun withRawResponse(): IntegrationServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): IntegrationServiceAsync =
+        IntegrationServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun census(): CensusServiceAsync = census
 
     override fun hightouch(): HightouchServiceAsync = hightouch
@@ -37,6 +41,13 @@ class IntegrationServiceAsyncImpl internal constructor(private val clientOptions
         private val hightouch: HightouchServiceAsync.WithRawResponse by lazy {
             HightouchServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): IntegrationServiceAsync.WithRawResponse =
+            IntegrationServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun census(): CensusServiceAsync.WithRawResponse = census
 

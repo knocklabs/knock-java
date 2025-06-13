@@ -18,6 +18,7 @@ import app.knock.api.core.http.parseable
 import app.knock.api.core.prepare
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.channels.bulk.BulkUpdateMessageStatusParams
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class BulkServiceImpl internal constructor(private val clientOptions: ClientOptions) : BulkService {
@@ -27,6 +28,9 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
     }
 
     override fun withRawResponse(): BulkService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): BulkService =
+        BulkServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun updateMessageStatus(
         params: BulkUpdateMessageStatusParams,
@@ -39,6 +43,13 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
         BulkService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): BulkService.WithRawResponse =
+            BulkServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val updateMessageStatusHandler: Handler<BulkOperation> =
             jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

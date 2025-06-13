@@ -2,6 +2,7 @@
 
 package app.knock.api.services.async
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.audiences.AudienceAddMembersParams
@@ -9,6 +10,7 @@ import app.knock.api.models.audiences.AudienceListMembersParams
 import app.knock.api.models.audiences.AudienceListMembersResponse
 import app.knock.api.models.audiences.AudienceRemoveMembersParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface AudienceServiceAsync {
 
@@ -16,6 +18,13 @@ interface AudienceServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): AudienceServiceAsync
 
     /** Adds one or more members to the specified audience. */
     fun addMembers(key: String, params: AudienceAddMembersParams): CompletableFuture<String> =
@@ -101,6 +110,15 @@ interface AudienceServiceAsync {
      * A view of [AudienceServiceAsync] that provides access to raw HTTP responses for each method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): AudienceServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /v1/audiences/{key}/members`, but is otherwise the

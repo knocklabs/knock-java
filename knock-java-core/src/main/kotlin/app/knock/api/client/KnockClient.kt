@@ -2,6 +2,7 @@
 
 package app.knock.api.client
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.services.blocking.AudienceService
 import app.knock.api.services.blocking.BulkOperationService
 import app.knock.api.services.blocking.ChannelService
@@ -15,6 +16,7 @@ import app.knock.api.services.blocking.SharedService
 import app.knock.api.services.blocking.TenantService
 import app.knock.api.services.blocking.UserService
 import app.knock.api.services.blocking.WorkflowService
+import java.util.function.Consumer
 
 /**
  * A client for interacting with the Knock REST API synchronously. You can also switch to
@@ -44,6 +46,13 @@ interface KnockClient {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): KnockClient
 
     fun shared(): SharedService
 
@@ -86,6 +95,13 @@ interface KnockClient {
 
     /** A view of [KnockClient] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): KnockClient.WithRawResponse
 
         fun shared(): SharedService.WithRawResponse
 

@@ -17,6 +17,7 @@ import app.knock.api.core.http.parseable
 import app.knock.api.core.prepare
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.bulkoperations.BulkOperationGetParams
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class BulkOperationServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -27,6 +28,9 @@ class BulkOperationServiceImpl internal constructor(private val clientOptions: C
     }
 
     override fun withRawResponse(): BulkOperationService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): BulkOperationService =
+        BulkOperationServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun get(
         params: BulkOperationGetParams,
@@ -39,6 +43,13 @@ class BulkOperationServiceImpl internal constructor(private val clientOptions: C
         BulkOperationService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): BulkOperationService.WithRawResponse =
+            BulkOperationServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val getHandler: Handler<BulkOperation> =
             jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

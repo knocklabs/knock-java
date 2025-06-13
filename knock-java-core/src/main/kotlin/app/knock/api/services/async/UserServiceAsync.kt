@@ -2,6 +2,7 @@
 
 package app.knock.api.services.async
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.recipients.channeldata.ChannelData
@@ -29,6 +30,7 @@ import app.knock.api.services.async.users.BulkServiceAsync
 import app.knock.api.services.async.users.FeedServiceAsync
 import app.knock.api.services.async.users.GuideServiceAsync
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface UserServiceAsync {
 
@@ -36,6 +38,13 @@ interface UserServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): UserServiceAsync
 
     fun feeds(): FeedServiceAsync
 
@@ -504,6 +513,13 @@ interface UserServiceAsync {
 
     /** A view of [UserServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): UserServiceAsync.WithRawResponse
 
         fun feeds(): FeedServiceAsync.WithRawResponse
 

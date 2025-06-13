@@ -30,6 +30,7 @@ import app.knock.api.services.async.UserServiceAsync
 import app.knock.api.services.async.UserServiceAsyncImpl
 import app.knock.api.services.async.WorkflowServiceAsync
 import app.knock.api.services.async.WorkflowServiceAsyncImpl
+import java.util.function.Consumer
 
 class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClientAsync {
 
@@ -101,6 +102,9 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
     override fun sync(): KnockClient = sync
 
     override fun withRawResponse(): KnockClientAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): KnockClientAsync =
+        KnockClientAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun shared(): SharedServiceAsync = shared
 
@@ -184,6 +188,13 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
         private val audiences: AudienceServiceAsync.WithRawResponse by lazy {
             AudienceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): KnockClientAsync.WithRawResponse =
+            KnockClientAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun shared(): SharedServiceAsync.WithRawResponse = shared
 

@@ -2,6 +2,7 @@
 
 package app.knock.api.client
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.services.async.AudienceServiceAsync
 import app.knock.api.services.async.BulkOperationServiceAsync
 import app.knock.api.services.async.ChannelServiceAsync
@@ -15,6 +16,7 @@ import app.knock.api.services.async.SharedServiceAsync
 import app.knock.api.services.async.TenantServiceAsync
 import app.knock.api.services.async.UserServiceAsync
 import app.knock.api.services.async.WorkflowServiceAsync
+import java.util.function.Consumer
 
 /**
  * A client for interacting with the Knock REST API asynchronously. You can also switch to
@@ -44,6 +46,13 @@ interface KnockClientAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): KnockClientAsync
 
     fun shared(): SharedServiceAsync
 
@@ -86,6 +95,13 @@ interface KnockClientAsync {
 
     /** A view of [KnockClientAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): KnockClientAsync.WithRawResponse
 
         fun shared(): SharedServiceAsync.WithRawResponse
 

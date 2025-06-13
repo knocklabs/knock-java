@@ -25,6 +25,7 @@ import app.knock.api.models.providers.msteams.MsTeamListTeamsPageResponse
 import app.knock.api.models.providers.msteams.MsTeamListTeamsParams
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessParams
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessResponse
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class MsTeamServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -35,6 +36,9 @@ class MsTeamServiceImpl internal constructor(private val clientOptions: ClientOp
     }
 
     override fun withRawResponse(): MsTeamService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): MsTeamService =
+        MsTeamServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun checkAuth(
         params: MsTeamCheckAuthParams,
@@ -68,6 +72,13 @@ class MsTeamServiceImpl internal constructor(private val clientOptions: ClientOp
         MsTeamService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): MsTeamService.WithRawResponse =
+            MsTeamServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val checkAuthHandler: Handler<MsTeamCheckAuthResponse> =
             jsonHandler<MsTeamCheckAuthResponse>(clientOptions.jsonMapper)

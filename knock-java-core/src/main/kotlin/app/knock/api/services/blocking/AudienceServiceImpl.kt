@@ -21,6 +21,7 @@ import app.knock.api.models.audiences.AudienceAddMembersParams
 import app.knock.api.models.audiences.AudienceListMembersParams
 import app.knock.api.models.audiences.AudienceListMembersResponse
 import app.knock.api.models.audiences.AudienceRemoveMembersParams
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class AudienceServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -31,6 +32,9 @@ class AudienceServiceImpl internal constructor(private val clientOptions: Client
     }
 
     override fun withRawResponse(): AudienceService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): AudienceService =
+        AudienceServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun addMembers(
         params: AudienceAddMembersParams,
@@ -57,6 +61,13 @@ class AudienceServiceImpl internal constructor(private val clientOptions: Client
         AudienceService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): AudienceService.WithRawResponse =
+            AudienceServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val addMembersHandler: Handler<String> =
             stringHandler().withErrorHandler(errorHandler)

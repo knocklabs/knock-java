@@ -24,6 +24,7 @@ import app.knock.api.models.providers.slack.SlackListChannelsParams
 import app.knock.api.models.providers.slack.SlackRevokeAccessParams
 import app.knock.api.models.providers.slack.SlackRevokeAccessResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class SlackServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -34,6 +35,9 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
     }
 
     override fun withRawResponse(): SlackServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): SlackServiceAsync =
+        SlackServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun checkAuth(
         params: SlackCheckAuthParams,
@@ -60,6 +64,13 @@ class SlackServiceAsyncImpl internal constructor(private val clientOptions: Clie
         SlackServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): SlackServiceAsync.WithRawResponse =
+            SlackServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val checkAuthHandler: Handler<SlackCheckAuthResponse> =
             jsonHandler<SlackCheckAuthResponse>(clientOptions.jsonMapper)

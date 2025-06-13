@@ -46,6 +46,7 @@ import app.knock.api.models.recipients.preferences.PreferenceSet
 import app.knock.api.models.recipients.subscriptions.Subscription
 import app.knock.api.services.blocking.objects.BulkService
 import app.knock.api.services.blocking.objects.BulkServiceImpl
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class ObjectServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -58,6 +59,9 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
     private val bulk: BulkService by lazy { BulkServiceImpl(clientOptions) }
 
     override fun withRawResponse(): ObjectService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ObjectService =
+        ObjectServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun bulk(): BulkService = bulk
 
@@ -162,6 +166,13 @@ class ObjectServiceImpl internal constructor(private val clientOptions: ClientOp
         private val bulk: BulkService.WithRawResponse by lazy {
             BulkServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ObjectService.WithRawResponse =
+            ObjectServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun bulk(): BulkService.WithRawResponse = bulk
 

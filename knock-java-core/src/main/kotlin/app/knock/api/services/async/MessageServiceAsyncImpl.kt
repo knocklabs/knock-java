@@ -42,6 +42,7 @@ import app.knock.api.models.messages.MessageUnarchiveParams
 import app.knock.api.services.async.messages.BatchServiceAsync
 import app.knock.api.services.async.messages.BatchServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class MessageServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -54,6 +55,9 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
     private val batch: BatchServiceAsync by lazy { BatchServiceAsyncImpl(clientOptions) }
 
     override fun withRawResponse(): MessageServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): MessageServiceAsync =
+        MessageServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun batch(): BatchServiceAsync = batch
 
@@ -156,6 +160,13 @@ class MessageServiceAsyncImpl internal constructor(private val clientOptions: Cl
         private val batch: BatchServiceAsync.WithRawResponse by lazy {
             BatchServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): MessageServiceAsync.WithRawResponse =
+            MessageServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun batch(): BatchServiceAsync.WithRawResponse = batch
 

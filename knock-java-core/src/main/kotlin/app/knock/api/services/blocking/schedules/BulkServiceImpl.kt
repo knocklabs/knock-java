@@ -17,6 +17,7 @@ import app.knock.api.core.http.parseable
 import app.knock.api.core.prepare
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.schedules.bulk.BulkCreateParams
+import java.util.function.Consumer
 
 class BulkServiceImpl internal constructor(private val clientOptions: ClientOptions) : BulkService {
 
@@ -26,6 +27,9 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
 
     override fun withRawResponse(): BulkService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): BulkService =
+        BulkServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun create(params: BulkCreateParams, requestOptions: RequestOptions): BulkOperation =
         // post /v1/schedules/bulk/create
         withRawResponse().create(params, requestOptions).parse()
@@ -34,6 +38,13 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
         BulkService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): BulkService.WithRawResponse =
+            BulkServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<BulkOperation> =
             jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

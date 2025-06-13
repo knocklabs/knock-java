@@ -2,11 +2,13 @@
 
 package app.knock.api.services.blocking.channels
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.channels.bulk.BulkUpdateMessageStatusParams
 import com.google.errorprone.annotations.MustBeClosed
+import java.util.function.Consumer
 
 interface BulkService {
 
@@ -14,6 +16,13 @@ interface BulkService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): BulkService
 
     /**
      * Bulk update the status of messages for a specific channel. The channel is specified by the
@@ -64,6 +73,13 @@ interface BulkService {
 
     /** A view of [BulkService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): BulkService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /v1/channels/{channel_id}/messages/bulk/{action}`,

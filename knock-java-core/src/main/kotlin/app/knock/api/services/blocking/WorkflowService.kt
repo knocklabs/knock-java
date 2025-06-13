@@ -2,12 +2,14 @@
 
 package app.knock.api.services.blocking
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.workflows.WorkflowCancelParams
 import app.knock.api.models.workflows.WorkflowTriggerParams
 import app.knock.api.models.workflows.WorkflowTriggerResponse
 import com.google.errorprone.annotations.MustBeClosed
+import java.util.function.Consumer
 
 interface WorkflowService {
 
@@ -15,6 +17,13 @@ interface WorkflowService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): WorkflowService
 
     /**
      * When invoked for a workflow using a specific workflow key and cancellation key, will cancel
@@ -69,6 +78,13 @@ interface WorkflowService {
 
     /** A view of [WorkflowService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): WorkflowService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /v1/workflows/{key}/cancel`, but is otherwise the

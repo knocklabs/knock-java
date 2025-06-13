@@ -3,6 +3,7 @@
 package app.knock.api.services.blocking.recipients
 
 import app.knock.api.core.ClientOptions
+import java.util.function.Consumer
 
 class ChannelDataServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ChannelDataService {
@@ -13,6 +14,17 @@ class ChannelDataServiceImpl internal constructor(private val clientOptions: Cli
 
     override fun withRawResponse(): ChannelDataService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ChannelDataService =
+        ChannelDataServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        ChannelDataService.WithRawResponse
+        ChannelDataService.WithRawResponse {
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ChannelDataService.WithRawResponse =
+            ChannelDataServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
+    }
 }

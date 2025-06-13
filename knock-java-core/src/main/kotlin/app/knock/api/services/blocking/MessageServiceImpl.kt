@@ -41,6 +41,7 @@ import app.knock.api.models.messages.MessageMarkAsUnseenParams
 import app.knock.api.models.messages.MessageUnarchiveParams
 import app.knock.api.services.blocking.messages.BatchService
 import app.knock.api.services.blocking.messages.BatchServiceImpl
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class MessageServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -53,6 +54,9 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
     private val batch: BatchService by lazy { BatchServiceImpl(clientOptions) }
 
     override fun withRawResponse(): MessageService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): MessageService =
+        MessageServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun batch(): BatchService = batch
 
@@ -146,6 +150,13 @@ class MessageServiceImpl internal constructor(private val clientOptions: ClientO
         private val batch: BatchService.WithRawResponse by lazy {
             BatchServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): MessageService.WithRawResponse =
+            MessageServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun batch(): BatchService.WithRawResponse = batch
 

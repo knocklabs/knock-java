@@ -20,6 +20,7 @@ import app.knock.api.models.users.feeds.FeedGetSettingsResponse
 import app.knock.api.models.users.feeds.FeedListItemsPage
 import app.knock.api.models.users.feeds.FeedListItemsPageResponse
 import app.knock.api.models.users.feeds.FeedListItemsParams
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class FeedServiceImpl internal constructor(private val clientOptions: ClientOptions) : FeedService {
@@ -29,6 +30,9 @@ class FeedServiceImpl internal constructor(private val clientOptions: ClientOpti
     }
 
     override fun withRawResponse(): FeedService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): FeedService =
+        FeedServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun getSettings(
         params: FeedGetSettingsParams,
@@ -48,6 +52,13 @@ class FeedServiceImpl internal constructor(private val clientOptions: ClientOpti
         FeedService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): FeedService.WithRawResponse =
+            FeedServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val getSettingsHandler: Handler<FeedGetSettingsResponse> =
             jsonHandler<FeedGetSettingsResponse>(clientOptions.jsonMapper)

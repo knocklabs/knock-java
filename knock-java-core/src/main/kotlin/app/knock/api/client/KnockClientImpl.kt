@@ -30,6 +30,7 @@ import app.knock.api.services.blocking.UserService
 import app.knock.api.services.blocking.UserServiceImpl
 import app.knock.api.services.blocking.WorkflowService
 import app.knock.api.services.blocking.WorkflowServiceImpl
+import java.util.function.Consumer
 
 class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
 
@@ -91,6 +92,9 @@ class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
     override fun async(): KnockClientAsync = async
 
     override fun withRawResponse(): KnockClient.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): KnockClient =
+        KnockClientImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun shared(): SharedService = shared
 
@@ -174,6 +178,13 @@ class KnockClientImpl(private val clientOptions: ClientOptions) : KnockClient {
         private val audiences: AudienceService.WithRawResponse by lazy {
             AudienceServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): KnockClient.WithRawResponse =
+            KnockClientImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun shared(): SharedService.WithRawResponse = shared
 

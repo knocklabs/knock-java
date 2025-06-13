@@ -3,6 +3,7 @@
 package app.knock.api.services.async.recipients
 
 import app.knock.api.core.ClientOptions
+import java.util.function.Consumer
 
 class SubscriptionServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     SubscriptionServiceAsync {
@@ -13,6 +14,17 @@ class SubscriptionServiceAsyncImpl internal constructor(private val clientOption
 
     override fun withRawResponse(): SubscriptionServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): SubscriptionServiceAsync =
+        SubscriptionServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
-        SubscriptionServiceAsync.WithRawResponse
+        SubscriptionServiceAsync.WithRawResponse {
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): SubscriptionServiceAsync.WithRawResponse =
+            SubscriptionServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
+    }
 }

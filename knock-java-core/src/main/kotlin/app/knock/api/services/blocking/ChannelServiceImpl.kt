@@ -5,6 +5,7 @@ package app.knock.api.services.blocking
 import app.knock.api.core.ClientOptions
 import app.knock.api.services.blocking.channels.BulkService
 import app.knock.api.services.blocking.channels.BulkServiceImpl
+import java.util.function.Consumer
 
 class ChannelServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     ChannelService {
@@ -17,6 +18,9 @@ class ChannelServiceImpl internal constructor(private val clientOptions: ClientO
 
     override fun withRawResponse(): ChannelService.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ChannelService =
+        ChannelServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun bulk(): BulkService = bulk
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -25,6 +29,13 @@ class ChannelServiceImpl internal constructor(private val clientOptions: ClientO
         private val bulk: BulkService.WithRawResponse by lazy {
             BulkServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ChannelService.WithRawResponse =
+            ChannelServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun bulk(): BulkService.WithRawResponse = bulk
     }

@@ -20,6 +20,7 @@ import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.objects.bulk.BulkAddSubscriptionsParams
 import app.knock.api.models.objects.bulk.BulkDeleteParams
 import app.knock.api.models.objects.bulk.BulkSetParams
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class BulkServiceImpl internal constructor(private val clientOptions: ClientOptions) : BulkService {
@@ -29,6 +30,9 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
     }
 
     override fun withRawResponse(): BulkService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): BulkService =
+        BulkServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun delete(params: BulkDeleteParams, requestOptions: RequestOptions): BulkOperation =
         // post /v1/objects/{collection}/bulk/delete
@@ -49,6 +53,13 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
         BulkService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): BulkService.WithRawResponse =
+            BulkServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val deleteHandler: Handler<BulkOperation> =
             jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

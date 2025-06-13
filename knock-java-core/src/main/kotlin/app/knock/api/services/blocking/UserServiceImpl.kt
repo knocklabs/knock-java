@@ -48,6 +48,7 @@ import app.knock.api.services.blocking.users.FeedService
 import app.knock.api.services.blocking.users.FeedServiceImpl
 import app.knock.api.services.blocking.users.GuideService
 import app.knock.api.services.blocking.users.GuideServiceImpl
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class UserServiceImpl internal constructor(private val clientOptions: ClientOptions) : UserService {
@@ -63,6 +64,9 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
     private val bulk: BulkService by lazy { BulkServiceImpl(clientOptions) }
 
     override fun withRawResponse(): UserService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): UserService =
+        UserServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun feeds(): FeedService = feeds
 
@@ -169,6 +173,13 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
         private val bulk: BulkService.WithRawResponse by lazy {
             BulkServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): UserService.WithRawResponse =
+            UserServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun feeds(): FeedService.WithRawResponse = feeds
 

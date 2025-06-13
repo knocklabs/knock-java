@@ -2,6 +2,7 @@
 
 package app.knock.api.services.blocking.messages
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.messages.Message
@@ -15,6 +16,7 @@ import app.knock.api.models.messages.batch.BatchMarkAsUnreadParams
 import app.knock.api.models.messages.batch.BatchMarkAsUnseenParams
 import app.knock.api.models.messages.batch.BatchUnarchiveParams
 import com.google.errorprone.annotations.MustBeClosed
+import java.util.function.Consumer
 
 interface BatchService {
 
@@ -22,6 +24,13 @@ interface BatchService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): BatchService
 
     /**
      * Marks the given messages as archived. Archived messages are hidden from the default message
@@ -129,6 +138,13 @@ interface BatchService {
 
     /** A view of [BatchService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): BatchService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `post /v1/messages/batch/archived`, but is otherwise the

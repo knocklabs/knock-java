@@ -25,6 +25,7 @@ import app.knock.api.models.schedules.ScheduleUpdateParams
 import app.knock.api.services.async.schedules.BulkServiceAsync
 import app.knock.api.services.async.schedules.BulkServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 class ScheduleServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     ScheduleServiceAsync {
@@ -36,6 +37,9 @@ class ScheduleServiceAsyncImpl internal constructor(private val clientOptions: C
     private val bulk: BulkServiceAsync by lazy { BulkServiceAsyncImpl(clientOptions) }
 
     override fun withRawResponse(): ScheduleServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): ScheduleServiceAsync =
+        ScheduleServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun bulk(): BulkServiceAsync = bulk
 
@@ -75,6 +79,13 @@ class ScheduleServiceAsyncImpl internal constructor(private val clientOptions: C
         private val bulk: BulkServiceAsync.WithRawResponse by lazy {
             BulkServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): ScheduleServiceAsync.WithRawResponse =
+            ScheduleServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun bulk(): BulkServiceAsync.WithRawResponse = bulk
 

@@ -18,6 +18,7 @@ import app.knock.api.core.prepareAsync
 import app.knock.api.models.integrations.hightouch.HightouchEmbeddedDestinationParams
 import app.knock.api.models.integrations.hightouch.HightouchEmbeddedDestinationResponse
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 class HightouchServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     HightouchServiceAsync {
@@ -27,6 +28,9 @@ class HightouchServiceAsyncImpl internal constructor(private val clientOptions: 
     }
 
     override fun withRawResponse(): HightouchServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): HightouchServiceAsync =
+        HightouchServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun embeddedDestination(
         params: HightouchEmbeddedDestinationParams,
@@ -39,6 +43,13 @@ class HightouchServiceAsyncImpl internal constructor(private val clientOptions: 
         HightouchServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): HightouchServiceAsync.WithRawResponse =
+            HightouchServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val embeddedDestinationHandler: Handler<HightouchEmbeddedDestinationResponse> =
             jsonHandler<HightouchEmbeddedDestinationResponse>(clientOptions.jsonMapper)

@@ -18,6 +18,7 @@ import app.knock.api.core.prepareAsync
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.schedules.bulk.BulkCreateParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 class BulkServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     BulkServiceAsync {
@@ -27,6 +28,9 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
     }
 
     override fun withRawResponse(): BulkServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): BulkServiceAsync =
+        BulkServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun create(
         params: BulkCreateParams,
@@ -39,6 +43,13 @@ class BulkServiceAsyncImpl internal constructor(private val clientOptions: Clien
         BulkServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): BulkServiceAsync.WithRawResponse =
+            BulkServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val createHandler: Handler<BulkOperation> =
             jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

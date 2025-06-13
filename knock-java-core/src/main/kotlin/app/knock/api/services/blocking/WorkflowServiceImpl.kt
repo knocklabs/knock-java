@@ -20,6 +20,7 @@ import app.knock.api.core.prepare
 import app.knock.api.models.workflows.WorkflowCancelParams
 import app.knock.api.models.workflows.WorkflowTriggerParams
 import app.knock.api.models.workflows.WorkflowTriggerResponse
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class WorkflowServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -30,6 +31,9 @@ class WorkflowServiceImpl internal constructor(private val clientOptions: Client
     }
 
     override fun withRawResponse(): WorkflowService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): WorkflowService =
+        WorkflowServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun cancel(params: WorkflowCancelParams, requestOptions: RequestOptions): String =
         // post /v1/workflows/{key}/cancel
@@ -46,6 +50,13 @@ class WorkflowServiceImpl internal constructor(private val clientOptions: Client
         WorkflowService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): WorkflowService.WithRawResponse =
+            WorkflowServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val cancelHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
 

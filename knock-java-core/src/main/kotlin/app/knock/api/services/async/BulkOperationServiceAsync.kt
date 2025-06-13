@@ -2,11 +2,13 @@
 
 package app.knock.api.services.async
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.bulkoperations.BulkOperationGetParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 interface BulkOperationServiceAsync {
 
@@ -14,6 +16,13 @@ interface BulkOperationServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): BulkOperationServiceAsync
 
     /** Retrieves a bulk operation (if it exists) and displays the current state of it. */
     fun get(id: String): CompletableFuture<BulkOperation> = get(id, BulkOperationGetParams.none())
@@ -50,6 +59,15 @@ interface BulkOperationServiceAsync {
      * method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): BulkOperationServiceAsync.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /v1/bulk_operations/{id}`, but is otherwise the same

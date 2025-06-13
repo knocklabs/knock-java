@@ -2,6 +2,7 @@
 
 package app.knock.api.services.blocking.providers
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.providers.msteams.MsTeamCheckAuthParams
@@ -13,6 +14,7 @@ import app.knock.api.models.providers.msteams.MsTeamListTeamsParams
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessParams
 import app.knock.api.models.providers.msteams.MsTeamRevokeAccessResponse
 import com.google.errorprone.annotations.MustBeClosed
+import java.util.function.Consumer
 
 interface MsTeamService {
 
@@ -20,6 +22,13 @@ interface MsTeamService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): MsTeamService
 
     /**
      * Check if a connection to Microsoft Teams has been authorized for a given Microsoft Teams
@@ -124,6 +133,13 @@ interface MsTeamService {
 
     /** A view of [MsTeamService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): MsTeamService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /v1/providers/ms-teams/{channel_id}/auth_check`, but

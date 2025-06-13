@@ -9,6 +9,7 @@ import app.knock.api.services.async.recipients.PreferenceServiceAsync
 import app.knock.api.services.async.recipients.PreferenceServiceAsyncImpl
 import app.knock.api.services.async.recipients.SubscriptionServiceAsync
 import app.knock.api.services.async.recipients.SubscriptionServiceAsyncImpl
+import java.util.function.Consumer
 
 class RecipientServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     RecipientServiceAsync {
@@ -31,6 +32,9 @@ class RecipientServiceAsyncImpl internal constructor(private val clientOptions: 
 
     override fun withRawResponse(): RecipientServiceAsync.WithRawResponse = withRawResponse
 
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): RecipientServiceAsync =
+        RecipientServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
+
     override fun subscriptions(): SubscriptionServiceAsync = subscriptions
 
     override fun preferences(): PreferenceServiceAsync = preferences
@@ -51,6 +55,13 @@ class RecipientServiceAsyncImpl internal constructor(private val clientOptions: 
         private val channelData: ChannelDataServiceAsync.WithRawResponse by lazy {
             ChannelDataServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): RecipientServiceAsync.WithRawResponse =
+            RecipientServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun subscriptions(): SubscriptionServiceAsync.WithRawResponse = subscriptions
 

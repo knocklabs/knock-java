@@ -9,6 +9,7 @@ import app.knock.api.services.blocking.recipients.PreferenceService
 import app.knock.api.services.blocking.recipients.PreferenceServiceImpl
 import app.knock.api.services.blocking.recipients.SubscriptionService
 import app.knock.api.services.blocking.recipients.SubscriptionServiceImpl
+import java.util.function.Consumer
 
 class RecipientServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     RecipientService {
@@ -26,6 +27,9 @@ class RecipientServiceImpl internal constructor(private val clientOptions: Clien
     private val channelData: ChannelDataService by lazy { ChannelDataServiceImpl(clientOptions) }
 
     override fun withRawResponse(): RecipientService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): RecipientService =
+        RecipientServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun subscriptions(): SubscriptionService = subscriptions
 
@@ -47,6 +51,13 @@ class RecipientServiceImpl internal constructor(private val clientOptions: Clien
         private val channelData: ChannelDataService.WithRawResponse by lazy {
             ChannelDataServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): RecipientService.WithRawResponse =
+            RecipientServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun subscriptions(): SubscriptionService.WithRawResponse = subscriptions
 

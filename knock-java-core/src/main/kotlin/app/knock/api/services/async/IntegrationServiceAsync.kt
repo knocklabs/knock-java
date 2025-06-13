@@ -2,8 +2,10 @@
 
 package app.knock.api.services.async
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.services.async.integrations.CensusServiceAsync
 import app.knock.api.services.async.integrations.HightouchServiceAsync
+import java.util.function.Consumer
 
 interface IntegrationServiceAsync {
 
@@ -11,6 +13,13 @@ interface IntegrationServiceAsync {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): IntegrationServiceAsync
 
     fun census(): CensusServiceAsync
 
@@ -21,6 +30,15 @@ interface IntegrationServiceAsync {
      * method.
      */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): IntegrationServiceAsync.WithRawResponse
 
         fun census(): CensusServiceAsync.WithRawResponse
 

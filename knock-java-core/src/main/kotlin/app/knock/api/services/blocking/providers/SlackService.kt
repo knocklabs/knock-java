@@ -2,6 +2,7 @@
 
 package app.knock.api.services.blocking.providers
 
+import app.knock.api.core.ClientOptions
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.providers.slack.SlackCheckAuthParams
@@ -11,6 +12,7 @@ import app.knock.api.models.providers.slack.SlackListChannelsParams
 import app.knock.api.models.providers.slack.SlackRevokeAccessParams
 import app.knock.api.models.providers.slack.SlackRevokeAccessResponse
 import com.google.errorprone.annotations.MustBeClosed
+import java.util.function.Consumer
 
 interface SlackService {
 
@@ -18,6 +20,13 @@ interface SlackService {
      * Returns a view of this service that provides access to raw HTTP responses for each method.
      */
     fun withRawResponse(): WithRawResponse
+
+    /**
+     * Returns a view of this service with the given option modifications applied.
+     *
+     * The original service is not modified.
+     */
+    fun withOptions(modifier: Consumer<ClientOptions.Builder>): SlackService
 
     /** Check if a Slack channel is authenticated. */
     fun checkAuth(channelId: String, params: SlackCheckAuthParams): SlackCheckAuthResponse =
@@ -89,6 +98,13 @@ interface SlackService {
 
     /** A view of [SlackService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
+
+        /**
+         * Returns a view of this service with the given option modifications applied.
+         *
+         * The original service is not modified.
+         */
+        fun withOptions(modifier: Consumer<ClientOptions.Builder>): SlackService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /v1/providers/slack/{channel_id}/auth_check`, but is

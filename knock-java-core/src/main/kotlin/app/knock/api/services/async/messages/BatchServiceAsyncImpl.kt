@@ -26,6 +26,7 @@ import app.knock.api.models.messages.batch.BatchMarkAsUnreadParams
 import app.knock.api.models.messages.batch.BatchMarkAsUnseenParams
 import app.knock.api.models.messages.batch.BatchUnarchiveParams
 import java.util.concurrent.CompletableFuture
+import java.util.function.Consumer
 
 class BatchServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     BatchServiceAsync {
@@ -35,6 +36,9 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
     }
 
     override fun withRawResponse(): BatchServiceAsync.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): BatchServiceAsync =
+        BatchServiceAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun archive(
         params: BatchArchiveParams,
@@ -96,6 +100,13 @@ class BatchServiceAsyncImpl internal constructor(private val clientOptions: Clie
         BatchServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): BatchServiceAsync.WithRawResponse =
+            BatchServiceAsyncImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         private val archiveHandler: Handler<List<Message>> =
             jsonHandler<List<Message>>(clientOptions.jsonMapper).withErrorHandler(errorHandler)

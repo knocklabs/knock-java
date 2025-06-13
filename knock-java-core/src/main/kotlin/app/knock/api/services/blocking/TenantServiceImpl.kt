@@ -26,6 +26,7 @@ import app.knock.api.models.tenants.TenantListParams
 import app.knock.api.models.tenants.TenantSetParams
 import app.knock.api.services.blocking.tenants.BulkService
 import app.knock.api.services.blocking.tenants.BulkServiceImpl
+import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
 class TenantServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -38,6 +39,9 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
     private val bulk: BulkService by lazy { BulkServiceImpl(clientOptions) }
 
     override fun withRawResponse(): TenantService.WithRawResponse = withRawResponse
+
+    override fun withOptions(modifier: Consumer<ClientOptions.Builder>): TenantService =
+        TenantServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
     override fun bulk(): BulkService = bulk
 
@@ -65,6 +69,13 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
         private val bulk: BulkService.WithRawResponse by lazy {
             BulkServiceImpl.WithRawResponseImpl(clientOptions)
         }
+
+        override fun withOptions(
+            modifier: Consumer<ClientOptions.Builder>
+        ): TenantService.WithRawResponse =
+            TenantServiceImpl.WithRawResponseImpl(
+                clientOptions.toBuilder().apply(modifier::accept).build()
+            )
 
         override fun bulk(): BulkService.WithRawResponse = bulk
 
