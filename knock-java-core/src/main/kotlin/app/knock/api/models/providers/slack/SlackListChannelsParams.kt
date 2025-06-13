@@ -247,10 +247,13 @@ private constructor(
          */
         fun cursor(): Optional<String> = Optional.ofNullable(cursor)
 
-        /** Set to true to exclude archived channels from the list. */
+        /**
+         * Set to true to exclude archived channels from the list. Defaults to `true` when not
+         * explicitly provided.
+         */
         fun excludeArchived(): Optional<Boolean> = Optional.ofNullable(excludeArchived)
 
-        /** The maximum number of channels to return. */
+        /** The maximum number of channels to return. Defaults to 200. */
         fun limit(): Optional<Long> = Optional.ofNullable(limit)
 
         /** Encoded team ID (T1234) to list channels in, required if org token is used. */
@@ -258,7 +261,8 @@ private constructor(
 
         /**
          * Mix and match channel types by providing a comma-separated list of any combination of
-         * public_channel, private_channel, mpim, im.
+         * public_channel, private_channel, mpim, im. Defaults to
+         * `"public_channel,private_channel"`.
          */
         fun types(): Optional<String> = Optional.ofNullable(types)
 
@@ -302,7 +306,10 @@ private constructor(
             /** Alias for calling [Builder.cursor] with `cursor.orElse(null)`. */
             fun cursor(cursor: Optional<String>) = cursor(cursor.getOrNull())
 
-            /** Set to true to exclude archived channels from the list. */
+            /**
+             * Set to true to exclude archived channels from the list. Defaults to `true` when not
+             * explicitly provided.
+             */
             fun excludeArchived(excludeArchived: Boolean?) = apply {
                 this.excludeArchived = excludeArchived
             }
@@ -319,7 +326,7 @@ private constructor(
             fun excludeArchived(excludeArchived: Optional<Boolean>) =
                 excludeArchived(excludeArchived.getOrNull())
 
-            /** The maximum number of channels to return. */
+            /** The maximum number of channels to return. Defaults to 200. */
             fun limit(limit: Long?) = apply { this.limit = limit }
 
             /**
@@ -340,7 +347,8 @@ private constructor(
 
             /**
              * Mix and match channel types by providing a comma-separated list of any combination of
-             * public_channel, private_channel, mpim, im.
+             * public_channel, private_channel, mpim, im. Defaults to
+             * `"public_channel,private_channel"`.
              */
             fun types(types: String?) = apply { this.types = types }
 
