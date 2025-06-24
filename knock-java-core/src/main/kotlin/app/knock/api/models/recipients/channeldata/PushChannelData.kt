@@ -18,7 +18,7 @@ import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull
 
-/** The content of a push notification. */
+/** Push channel data. */
 class PushChannelData
 private constructor(
     private val tokens: JsonField<List<String>>,

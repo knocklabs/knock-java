@@ -34,7 +34,7 @@ private constructor(
     /** Associated resources to include in the response. */
     fun include(): Optional<List<Include>> = Optional.ofNullable(include)
 
-    /** The number of items per page. */
+    /** The number of items per page (defaults to 50). */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -98,7 +98,7 @@ private constructor(
             this.include = (this.include ?: mutableListOf()).apply { add(include) }
         }
 
-        /** The number of items per page. */
+        /** The number of items per page (defaults to 50). */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**

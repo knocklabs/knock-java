@@ -44,7 +44,7 @@ private constructor(
     fun _typename(): String = _typename.getRequired("__typename")
 
     /**
-     * The number of items per page.
+     * The number of items per page (defaults to 50).
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -151,7 +151,7 @@ private constructor(
          */
         fun _typename(_typename: JsonField<String>) = apply { this._typename = _typename }
 
-        /** The number of items per page. */
+        /** The number of items per page (defaults to 50). */
         fun pageSize(pageSize: Long) = pageSize(JsonField.of(pageSize))
 
         /**

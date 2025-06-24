@@ -232,9 +232,9 @@ interface UserServiceAsync {
         getPreferences(userId, id, UserGetPreferencesParams.none(), requestOptions)
 
     /**
-     * Returns a paginated list of messages for a specific user. Allows filtering by message status
-     * and provides various sorting options. Messages outside the account's retention window will
-     * not be included in the results.
+     * Returns a paginated list of messages for a specific user. Messages are sorted with the most
+     * recent ones appearing first. Messages outside the account's retention window will not be
+     * included in the results.
      */
     fun listMessages(userId: String): CompletableFuture<UserListMessagesPageAsync> =
         listMessages(userId, UserListMessagesParams.none())

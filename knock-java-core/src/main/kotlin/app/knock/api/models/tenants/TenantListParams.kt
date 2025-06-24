@@ -30,7 +30,7 @@ private constructor(
     /** Filter tenants by name. */
     fun name(): Optional<String> = Optional.ofNullable(name)
 
-    /** The number of items per page. */
+    /** The number of items per page (defaults to 50). */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
     /** Filter tenants by ID. */
@@ -90,7 +90,7 @@ private constructor(
         /** Alias for calling [Builder.name] with `name.orElse(null)`. */
         fun name(name: Optional<String>) = name(name.getOrNull())
 
-        /** The number of items per page. */
+        /** The number of items per page (defaults to 50). */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**

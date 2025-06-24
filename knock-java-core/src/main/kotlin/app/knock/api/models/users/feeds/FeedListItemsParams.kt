@@ -14,7 +14,21 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Returns a paginated list of feed items for a user, including metadata about the feed. */
+/**
+ * Returns a paginated list of feed items for a user in reverse chronological order, including
+ * metadata about the feed. If the user has not yet been identified within Knock, an empty feed will
+ * be returned.
+ *
+ * You can customize the response using
+ * [response filters](/integrations/in-app/knock#customizing-api-response-content) to exclude or
+ * only include specific properties on your resources.
+ *
+ * **Notes:**
+ * - When making this call from a client-side environment, use your publishable key along with a
+ *   user token.
+ * - This endpoint’s rate limit is always scoped per-user and per-environment. This is true even for
+ *   requests made without a signed user token.
+ */
 class FeedListItemsParams
 private constructor(
     private val userId: String?,
@@ -49,10 +63,10 @@ private constructor(
     /** Whether the feed items have a tenant. */
     fun hasTenant(): Optional<Boolean> = Optional.ofNullable(hasTenant)
 
-    /** The number of items per page. */
+    /** The number of items per page (defaults to 50). */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
-    /** The source of the feed items. */
+    /** The workflow key associated with the message in the feed. */
     fun source(): Optional<String> = Optional.ofNullable(source)
 
     /** The status of the feed items. */
@@ -158,7 +172,7 @@ private constructor(
         /** Alias for calling [Builder.hasTenant] with `hasTenant.orElse(null)`. */
         fun hasTenant(hasTenant: Optional<Boolean>) = hasTenant(hasTenant.getOrNull())
 
-        /** The number of items per page. */
+        /** The number of items per page (defaults to 50). */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**
@@ -171,7 +185,7 @@ private constructor(
         /** Alias for calling [Builder.pageSize] with `pageSize.orElse(null)`. */
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
-        /** The source of the feed items. */
+        /** The workflow key associated with the message in the feed. */
         fun source(source: String?) = apply { this.source = source }
 
         /** Alias for calling [Builder.source] with `source.orElse(null)`. */

@@ -30,7 +30,7 @@ private constructor(
     /** The cursor to fetch entries before. */
     fun before(): Optional<String> = Optional.ofNullable(before)
 
-    /** The number of items per page. */
+    /** The number of items per page (defaults to 50). */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
     /** The tenant ID to filter schedules for. */
@@ -94,7 +94,7 @@ private constructor(
         /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
-        /** The number of items per page. */
+        /** The number of items per page (defaults to 50). */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**

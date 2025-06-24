@@ -330,7 +330,7 @@ private constructor(
         fun messageSmsContent(): Optional<MessageSmsContent> =
             Optional.ofNullable(messageSmsContent)
 
-        /** The content of a push notification. */
+        /** Push channel data. */
         fun messagePushContent(): Optional<MessagePushContent> =
             Optional.ofNullable(messagePushContent)
 
@@ -360,7 +360,7 @@ private constructor(
         fun asMessageSmsContent(): MessageSmsContent =
             messageSmsContent.getOrThrow("messageSmsContent")
 
-        /** The content of a push notification. */
+        /** Push channel data. */
         fun asMessagePushContent(): MessagePushContent =
             messagePushContent.getOrThrow("messagePushContent")
 
@@ -495,7 +495,7 @@ private constructor(
             fun ofMessageSmsContent(messageSmsContent: MessageSmsContent) =
                 Data(messageSmsContent = messageSmsContent)
 
-            /** The content of a push notification. */
+            /** Push channel data. */
             @JvmStatic
             fun ofMessagePushContent(messagePushContent: MessagePushContent) =
                 Data(messagePushContent = messagePushContent)
@@ -520,7 +520,7 @@ private constructor(
             /** The content of an SMS message. */
             fun visitMessageSmsContent(messageSmsContent: MessageSmsContent): T
 
-            /** The content of a push notification. */
+            /** Push channel data. */
             fun visitMessagePushContent(messagePushContent: MessagePushContent): T
 
             /** The content of a chat message. */
@@ -1342,7 +1342,7 @@ private constructor(
                 "MessageSmsContent{_typename=$_typename, body=$body, to=$to, additionalProperties=$additionalProperties}"
         }
 
-        /** The content of a push notification. */
+        /** Push channel data. */
         class MessagePushContent
         private constructor(
             private val token: JsonField<String>,

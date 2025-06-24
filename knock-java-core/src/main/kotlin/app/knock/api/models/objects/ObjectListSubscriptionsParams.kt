@@ -57,7 +57,7 @@ private constructor(
     /** Objects to filter by (only used if mode is `recipient`). */
     fun objects(): Optional<List<Object>> = Optional.ofNullable(objects)
 
-    /** The number of items per page. */
+    /** The number of items per page (defaults to 50). */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
     /** Recipients to filter by (only used if mode is `object`). */
@@ -171,7 +171,7 @@ private constructor(
             objects = (objects ?: mutableListOf()).apply { add(object_) }
         }
 
-        /** The number of items per page. */
+        /** The number of items per page (defaults to 50). */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**

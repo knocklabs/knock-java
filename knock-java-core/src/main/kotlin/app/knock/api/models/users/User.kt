@@ -68,7 +68,7 @@ private constructor(
     )
 
     /**
-     * The ID for the user that you set when identifying them in Knock.
+     * The unique identifier of the user.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -92,7 +92,7 @@ private constructor(
     fun updatedAt(): OffsetDateTime = updatedAt.getRequired("updated_at")
 
     /**
-     * URL to the user's avatar image.
+     * A URL for the avatar of the user.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -266,7 +266,7 @@ private constructor(
             additionalProperties = user.additionalProperties.toMutableMap()
         }
 
-        /** The ID for the user that you set when identifying them in Knock. */
+        /** The unique identifier of the user. */
         fun id(id: String) = id(JsonField.of(id))
 
         /**
@@ -301,7 +301,7 @@ private constructor(
          */
         fun updatedAt(updatedAt: JsonField<OffsetDateTime>) = apply { this.updatedAt = updatedAt }
 
-        /** URL to the user's avatar image. */
+        /** A URL for the avatar of the user. */
         fun avatar(avatar: String?) = avatar(JsonField.ofNullable(avatar))
 
         /** Alias for calling [Builder.avatar] with `avatar.orElse(null)`. */

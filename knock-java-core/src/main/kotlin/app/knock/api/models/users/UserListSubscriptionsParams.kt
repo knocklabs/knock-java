@@ -42,7 +42,7 @@ private constructor(
     /** Only returns subscriptions for the specified object references. */
     fun objects(): Optional<List<RecipientReference>> = Optional.ofNullable(objects)
 
-    /** The number of items per page. */
+    /** The number of items per page (defaults to 50). */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -144,7 +144,7 @@ private constructor(
         fun addObject(objectReference: RecipientReference.ObjectReference) =
             addObject(RecipientReference.ofObjectReference(objectReference))
 
-        /** The number of items per page. */
+        /** The number of items per page (defaults to 50). */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**

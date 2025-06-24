@@ -68,7 +68,7 @@ private constructor(
     fun user(): User = user.getRequired("user")
 
     /**
-     * The ID for the user that you set when identifying them in Knock.
+     * The unique identifier of the user.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
      *   missing or null (e.g. if the server responded with an unexpected value).
@@ -205,7 +205,7 @@ private constructor(
          */
         fun user(user: JsonField<User>) = apply { this.user = user }
 
-        /** The ID for the user that you set when identifying them in Knock. */
+        /** The unique identifier of the user. */
         fun userId(userId: String) = userId(JsonField.of(userId))
 
         /**

@@ -193,17 +193,17 @@ private constructor(
         private val _json: JsonValue? = null,
     ) {
 
-        /** The content of a push notification. */
+        /** Push channel data. */
         fun pushChannel(): Optional<PushChannelData> = Optional.ofNullable(pushChannel)
 
         /** OneSignal channel data. */
         fun oneSignalChannel(): Optional<OneSignalChannelData> =
             Optional.ofNullable(oneSignalChannel)
 
-        /** Slack channel data */
+        /** Slack channel data. */
         fun slackChannel(): Optional<SlackChannelData> = Optional.ofNullable(slackChannel)
 
-        /** Microsoft Teams channel connection. */
+        /** Microsoft Teams channel data. */
         fun msTeamsChannel(): Optional<MsTeamsChannelData> = Optional.ofNullable(msTeamsChannel)
 
         /** Discord channel data. */
@@ -219,17 +219,17 @@ private constructor(
 
         fun isDiscordChannel(): Boolean = discordChannel != null
 
-        /** The content of a push notification. */
+        /** Push channel data. */
         fun asPushChannel(): PushChannelData = pushChannel.getOrThrow("pushChannel")
 
         /** OneSignal channel data. */
         fun asOneSignalChannel(): OneSignalChannelData =
             oneSignalChannel.getOrThrow("oneSignalChannel")
 
-        /** Slack channel data */
+        /** Slack channel data. */
         fun asSlackChannel(): SlackChannelData = slackChannel.getOrThrow("slackChannel")
 
-        /** Microsoft Teams channel connection. */
+        /** Microsoft Teams channel data. */
         fun asMsTeamsChannel(): MsTeamsChannelData = msTeamsChannel.getOrThrow("msTeamsChannel")
 
         /** Discord channel data. */
@@ -340,7 +340,7 @@ private constructor(
 
         companion object {
 
-            /** The content of a push notification. */
+            /** Push channel data. */
             @JvmStatic
             fun ofPushChannel(pushChannel: PushChannelData) = Data(pushChannel = pushChannel)
 
@@ -349,11 +349,11 @@ private constructor(
             fun ofOneSignalChannel(oneSignalChannel: OneSignalChannelData) =
                 Data(oneSignalChannel = oneSignalChannel)
 
-            /** Slack channel data */
+            /** Slack channel data. */
             @JvmStatic
             fun ofSlackChannel(slackChannel: SlackChannelData) = Data(slackChannel = slackChannel)
 
-            /** Microsoft Teams channel connection. */
+            /** Microsoft Teams channel data. */
             @JvmStatic
             fun ofMsTeamsChannel(msTeamsChannel: MsTeamsChannelData) =
                 Data(msTeamsChannel = msTeamsChannel)
@@ -367,16 +367,16 @@ private constructor(
         /** An interface that defines how to map each variant of [Data] to a value of type [T]. */
         interface Visitor<out T> {
 
-            /** The content of a push notification. */
+            /** Push channel data. */
             fun visitPushChannel(pushChannel: PushChannelData): T
 
             /** OneSignal channel data. */
             fun visitOneSignalChannel(oneSignalChannel: OneSignalChannelData): T
 
-            /** Slack channel data */
+            /** Slack channel data. */
             fun visitSlackChannel(slackChannel: SlackChannelData): T
 
-            /** Microsoft Teams channel connection. */
+            /** Microsoft Teams channel data. */
             fun visitMsTeamsChannel(msTeamsChannel: MsTeamsChannelData): T
 
             /** Discord channel data. */

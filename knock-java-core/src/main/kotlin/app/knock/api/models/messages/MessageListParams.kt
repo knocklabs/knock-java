@@ -55,7 +55,7 @@ private constructor(
      */
     fun messageIds(): Optional<List<String>> = Optional.ofNullable(messageIds)
 
-    /** The number of items per page. */
+    /** The number of items per page (defaults to 50). */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
     /** Limits the results to messages triggered by the given workflow key. */
@@ -202,7 +202,7 @@ private constructor(
             messageIds = (messageIds ?: mutableListOf()).apply { add(messageId) }
         }
 
-        /** The number of items per page. */
+        /** The number of items per page (defaults to 50). */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**

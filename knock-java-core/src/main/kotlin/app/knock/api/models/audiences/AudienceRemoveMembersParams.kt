@@ -634,7 +634,7 @@ private constructor(
             ) : this(id, mutableMapOf())
 
             /**
-             * The ID for the user that you set when identifying them in Knock.
+             * The unique identifier of the user.
              *
              * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
              *   the server responded with an unexpected value).
@@ -678,7 +678,7 @@ private constructor(
                     additionalProperties = user.additionalProperties.toMutableMap()
                 }
 
-                /** The ID for the user that you set when identifying them in Knock. */
+                /** The unique identifier of the user. */
                 fun id(id: String) = id(JsonField.of(id))
 
                 /**

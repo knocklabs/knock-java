@@ -15,9 +15,9 @@ import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 /**
- * Returns a paginated list of messages for a specific user. Allows filtering by message status and
- * provides various sorting options. Messages outside the account's retention window will not be
- * included in the results.
+ * Returns a paginated list of messages for a specific user. Messages are sorted with the most
+ * recent ones appearing first. Messages outside the account's retention window will not be included
+ * in the results.
  */
 class UserListMessagesParams
 private constructor(
@@ -62,7 +62,7 @@ private constructor(
      */
     fun messageIds(): Optional<List<String>> = Optional.ofNullable(messageIds)
 
-    /** The number of items per page. */
+    /** The number of items per page (defaults to 50). */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
     /** Limits the results to messages triggered by the given workflow key. */
@@ -216,7 +216,7 @@ private constructor(
             messageIds = (messageIds ?: mutableListOf()).apply { add(messageId) }
         }
 
-        /** The number of items per page. */
+        /** The number of items per page (defaults to 50). */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
 
         /**

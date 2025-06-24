@@ -30,7 +30,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Microsoft Teams channel connection. */
+/** Microsoft Teams channel data. */
 class MsTeamsChannelData
 private constructor(
     private val connections: JsonField<List<Connection>>,

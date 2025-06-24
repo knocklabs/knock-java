@@ -30,7 +30,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-/** Slack channel data */
+/** Slack channel data. */
 class SlackChannelData
 private constructor(
     private val connections: JsonField<List<Connection>>,

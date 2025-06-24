@@ -71,7 +71,7 @@ private constructor(
     )
 
     /**
-     * URL to the user's avatar image.
+     * A URL for the avatar of the user.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -263,7 +263,7 @@ private constructor(
             additionalProperties = identifyUserRequest.additionalProperties.toMutableMap()
         }
 
-        /** URL to the user's avatar image. */
+        /** A URL for the avatar of the user. */
         fun avatar(avatar: String?) = avatar(JsonField.ofNullable(avatar))
 
         /** Alias for calling [Builder.avatar] with `avatar.orElse(null)`. */
