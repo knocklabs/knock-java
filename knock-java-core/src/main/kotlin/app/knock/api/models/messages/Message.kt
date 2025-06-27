@@ -1390,6 +1390,7 @@ private constructor(
         private val categories: JsonField<List<String>>,
         private val key: JsonField<String>,
         private val versionId: JsonField<String>,
+        private val stepRef: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -1405,7 +1406,8 @@ private constructor(
             @JsonProperty("version_id")
             @ExcludeMissing
             versionId: JsonField<String> = JsonMissing.of(),
-        ) : this(_typename, categories, key, versionId, mutableMapOf())
+            @JsonProperty("step_ref") @ExcludeMissing stepRef: JsonField<String> = JsonMissing.of(),
+        ) : this(_typename, categories, key, versionId, stepRef, mutableMapOf())
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
@@ -1438,6 +1440,14 @@ private constructor(
         fun versionId(): String = versionId.getRequired("version_id")
 
         /**
+         * The step reference for the step in the workflow that generated the message
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun stepRef(): Optional<String> = stepRef.getOptional("step_ref")
+
+        /**
          * Returns the raw JSON value of [_typename].
          *
          * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
@@ -1466,6 +1476,13 @@ private constructor(
          * Unlike [versionId], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("version_id") @ExcludeMissing fun _versionId(): JsonField<String> = versionId
+
+        /**
+         * Returns the raw JSON value of [stepRef].
+         *
+         * Unlike [stepRef], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("step_ref") @ExcludeMissing fun _stepRef(): JsonField<String> = stepRef
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -1502,6 +1519,7 @@ private constructor(
             private var categories: JsonField<MutableList<String>>? = null
             private var key: JsonField<String>? = null
             private var versionId: JsonField<String>? = null
+            private var stepRef: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1510,6 +1528,7 @@ private constructor(
                 categories = source.categories.map { it.toMutableList() }
                 key = source.key
                 versionId = source.versionId
+                stepRef = source.stepRef
                 additionalProperties = source.additionalProperties.toMutableMap()
             }
 
@@ -1574,6 +1593,21 @@ private constructor(
              */
             fun versionId(versionId: JsonField<String>) = apply { this.versionId = versionId }
 
+            /** The step reference for the step in the workflow that generated the message */
+            fun stepRef(stepRef: String?) = stepRef(JsonField.ofNullable(stepRef))
+
+            /** Alias for calling [Builder.stepRef] with `stepRef.orElse(null)`. */
+            fun stepRef(stepRef: Optional<String>) = stepRef(stepRef.getOrNull())
+
+            /**
+             * Sets [Builder.stepRef] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.stepRef] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun stepRef(stepRef: JsonField<String>) = apply { this.stepRef = stepRef }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -1614,6 +1648,7 @@ private constructor(
                     checkRequired("categories", categories).map { it.toImmutable() },
                     checkRequired("key", key),
                     checkRequired("versionId", versionId),
+                    stepRef,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -1629,6 +1664,7 @@ private constructor(
             categories()
             key()
             versionId()
+            stepRef()
             validated = true
         }
 
@@ -1651,24 +1687,25 @@ private constructor(
             (if (_typename.asKnown().isPresent) 1 else 0) +
                 (categories.asKnown().getOrNull()?.size ?: 0) +
                 (if (key.asKnown().isPresent) 1 else 0) +
-                (if (versionId.asKnown().isPresent) 1 else 0)
+                (if (versionId.asKnown().isPresent) 1 else 0) +
+                (if (stepRef.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Source && _typename == other._typename && categories == other.categories && key == other.key && versionId == other.versionId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Source && _typename == other._typename && categories == other.categories && key == other.key && versionId == other.versionId && stepRef == other.stepRef && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(_typename, categories, key, versionId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(_typename, categories, key, versionId, stepRef, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Source{_typename=$_typename, categories=$categories, key=$key, versionId=$versionId, additionalProperties=$additionalProperties}"
+            "Source{_typename=$_typename, categories=$categories, key=$key, versionId=$versionId, stepRef=$stepRef, additionalProperties=$additionalProperties}"
     }
 
     /** The message delivery status. */
