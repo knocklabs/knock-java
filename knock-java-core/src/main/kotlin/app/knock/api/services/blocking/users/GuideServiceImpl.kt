@@ -16,14 +16,14 @@ import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
 import app.knock.api.core.http.parseable
 import app.knock.api.core.prepare
+import app.knock.api.models.users.guides.GuideActionResponse
 import app.knock.api.models.users.guides.GuideGetChannelParams
 import app.knock.api.models.users.guides.GuideGetChannelResponse
 import app.knock.api.models.users.guides.GuideMarkMessageAsArchivedParams
-import app.knock.api.models.users.guides.GuideMarkMessageAsArchivedResponse
 import app.knock.api.models.users.guides.GuideMarkMessageAsInteractedParams
-import app.knock.api.models.users.guides.GuideMarkMessageAsInteractedResponse
 import app.knock.api.models.users.guides.GuideMarkMessageAsSeenParams
-import app.knock.api.models.users.guides.GuideMarkMessageAsSeenResponse
+import app.knock.api.models.users.guides.GuideResetGuideEngagementsParams
+import app.knock.api.models.users.guides.GuideUnarchiveGuideMessageParams
 import kotlin.jvm.optionals.getOrNull
 
 class GuideServiceImpl internal constructor(private val clientOptions: ClientOptions) :
@@ -45,23 +45,37 @@ class GuideServiceImpl internal constructor(private val clientOptions: ClientOpt
     override fun markMessageAsArchived(
         params: GuideMarkMessageAsArchivedParams,
         requestOptions: RequestOptions,
-    ): GuideMarkMessageAsArchivedResponse =
-        // put /v1/users/{user_id}/guides/messages/{message_id}/archived
+    ): GuideActionResponse =
+        // put /v1/users/{user_id}/guides/messages/archived
         withRawResponse().markMessageAsArchived(params, requestOptions).parse()
 
     override fun markMessageAsInteracted(
         params: GuideMarkMessageAsInteractedParams,
         requestOptions: RequestOptions,
-    ): GuideMarkMessageAsInteractedResponse =
-        // put /v1/users/{user_id}/guides/messages/{message_id}/interacted
+    ): GuideActionResponse =
+        // put /v1/users/{user_id}/guides/messages/interacted
         withRawResponse().markMessageAsInteracted(params, requestOptions).parse()
 
     override fun markMessageAsSeen(
         params: GuideMarkMessageAsSeenParams,
         requestOptions: RequestOptions,
-    ): GuideMarkMessageAsSeenResponse =
-        // put /v1/users/{user_id}/guides/messages/{message_id}/seen
+    ): GuideActionResponse =
+        // put /v1/users/{user_id}/guides/messages/seen
         withRawResponse().markMessageAsSeen(params, requestOptions).parse()
+
+    override fun resetGuideEngagements(
+        params: GuideResetGuideEngagementsParams,
+        requestOptions: RequestOptions,
+    ): GuideActionResponse =
+        // put /v1/users/{user_id}/guides/engagements/reset
+        withRawResponse().resetGuideEngagements(params, requestOptions).parse()
+
+    override fun unarchiveGuideMessage(
+        params: GuideUnarchiveGuideMessageParams,
+        requestOptions: RequestOptions,
+    ): GuideActionResponse =
+        // delete /v1/users/{user_id}/guides/messages/archived
+        withRawResponse().unarchiveGuideMessage(params, requestOptions).parse()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         GuideService.WithRawResponse {
@@ -105,18 +119,17 @@ class GuideServiceImpl internal constructor(private val clientOptions: ClientOpt
             }
         }
 
-        private val markMessageAsArchivedHandler: Handler<GuideMarkMessageAsArchivedResponse> =
-            jsonHandler<GuideMarkMessageAsArchivedResponse>(clientOptions.jsonMapper)
+        private val markMessageAsArchivedHandler: Handler<GuideActionResponse> =
+            jsonHandler<GuideActionResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun markMessageAsArchived(
             params: GuideMarkMessageAsArchivedParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<GuideMarkMessageAsArchivedResponse> {
+        ): HttpResponseFor<GuideActionResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("userId", params.userId().getOrNull())
-            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -126,7 +139,6 @@ class GuideServiceImpl internal constructor(private val clientOptions: ClientOpt
                         params._pathParam(0),
                         "guides",
                         "messages",
-                        params._pathParam(1),
                         "archived",
                     )
                     .body(json(clientOptions.jsonMapper, params._body()))
@@ -145,18 +157,17 @@ class GuideServiceImpl internal constructor(private val clientOptions: ClientOpt
             }
         }
 
-        private val markMessageAsInteractedHandler: Handler<GuideMarkMessageAsInteractedResponse> =
-            jsonHandler<GuideMarkMessageAsInteractedResponse>(clientOptions.jsonMapper)
+        private val markMessageAsInteractedHandler: Handler<GuideActionResponse> =
+            jsonHandler<GuideActionResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun markMessageAsInteracted(
             params: GuideMarkMessageAsInteractedParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<GuideMarkMessageAsInteractedResponse> {
+        ): HttpResponseFor<GuideActionResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("userId", params.userId().getOrNull())
-            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -166,7 +177,6 @@ class GuideServiceImpl internal constructor(private val clientOptions: ClientOpt
                         params._pathParam(0),
                         "guides",
                         "messages",
-                        params._pathParam(1),
                         "interacted",
                     )
                     .body(json(clientOptions.jsonMapper, params._body()))
@@ -185,18 +195,17 @@ class GuideServiceImpl internal constructor(private val clientOptions: ClientOpt
             }
         }
 
-        private val markMessageAsSeenHandler: Handler<GuideMarkMessageAsSeenResponse> =
-            jsonHandler<GuideMarkMessageAsSeenResponse>(clientOptions.jsonMapper)
+        private val markMessageAsSeenHandler: Handler<GuideActionResponse> =
+            jsonHandler<GuideActionResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun markMessageAsSeen(
             params: GuideMarkMessageAsSeenParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<GuideMarkMessageAsSeenResponse> {
+        ): HttpResponseFor<GuideActionResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("userId", params.userId().getOrNull())
-            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -206,7 +215,6 @@ class GuideServiceImpl internal constructor(private val clientOptions: ClientOpt
                         params._pathParam(0),
                         "guides",
                         "messages",
-                        params._pathParam(1),
                         "seen",
                     )
                     .body(json(clientOptions.jsonMapper, params._body()))
@@ -217,6 +225,82 @@ class GuideServiceImpl internal constructor(private val clientOptions: ClientOpt
             return response.parseable {
                 response
                     .use { markMessageAsSeenHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val resetGuideEngagementsHandler: Handler<GuideActionResponse> =
+            jsonHandler<GuideActionResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun resetGuideEngagements(
+            params: GuideResetGuideEngagementsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<GuideActionResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments(
+                        "v1",
+                        "users",
+                        params._pathParam(0),
+                        "guides",
+                        "engagements",
+                        "reset",
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { resetGuideEngagementsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        private val unarchiveGuideMessageHandler: Handler<GuideActionResponse> =
+            jsonHandler<GuideActionResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun unarchiveGuideMessage(
+            params: GuideUnarchiveGuideMessageParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<GuideActionResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments(
+                        "v1",
+                        "users",
+                        params._pathParam(0),
+                        "guides",
+                        "messages",
+                        "archived",
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { unarchiveGuideMessageHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

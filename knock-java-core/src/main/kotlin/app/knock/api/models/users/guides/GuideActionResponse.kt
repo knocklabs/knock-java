@@ -16,7 +16,7 @@ import java.util.Collections
 import java.util.Objects
 
 /** A response for a guide action. */
-class GuideMarkMessageAsArchivedResponse
+class GuideActionResponse
 private constructor(
     private val status: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
@@ -57,8 +57,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of
-         * [GuideMarkMessageAsArchivedResponse].
+         * Returns a mutable builder for constructing an instance of [GuideActionResponse].
          *
          * The following fields are required:
          * ```java
@@ -68,19 +67,17 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [GuideMarkMessageAsArchivedResponse]. */
+    /** A builder for [GuideActionResponse]. */
     class Builder internal constructor() {
 
         private var status: JsonField<String>? = null
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(guideMarkMessageAsArchivedResponse: GuideMarkMessageAsArchivedResponse) =
-            apply {
-                status = guideMarkMessageAsArchivedResponse.status
-                additionalProperties =
-                    guideMarkMessageAsArchivedResponse.additionalProperties.toMutableMap()
-            }
+        internal fun from(guideActionResponse: GuideActionResponse) = apply {
+            status = guideActionResponse.status
+            additionalProperties = guideActionResponse.additionalProperties.toMutableMap()
+        }
 
         /** The status of a guide's action. */
         fun status(status: String) = status(JsonField.of(status))
@@ -113,7 +110,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [GuideMarkMessageAsArchivedResponse].
+         * Returns an immutable instance of [GuideActionResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -124,8 +121,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): GuideMarkMessageAsArchivedResponse =
-            GuideMarkMessageAsArchivedResponse(
+        fun build(): GuideActionResponse =
+            GuideActionResponse(
                 checkRequired("status", status),
                 additionalProperties.toMutableMap(),
             )
@@ -133,7 +130,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): GuideMarkMessageAsArchivedResponse = apply {
+    fun validate(): GuideActionResponse = apply {
         if (validated) {
             return@apply
         }
@@ -162,7 +159,7 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is GuideMarkMessageAsArchivedResponse && status == other.status && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is GuideActionResponse && status == other.status && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
@@ -172,5 +169,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "GuideMarkMessageAsArchivedResponse{status=$status, additionalProperties=$additionalProperties}"
+        "GuideActionResponse{status=$status, additionalProperties=$additionalProperties}"
 }
