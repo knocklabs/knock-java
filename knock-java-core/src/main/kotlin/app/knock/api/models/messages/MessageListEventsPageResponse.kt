@@ -130,9 +130,7 @@ private constructor(
          */
         fun addItem(item: MessageEvent) = apply {
             items =
-                (items ?: JsonField.of(mutableListOf())).also {
-                    checkKnown("items", it).add(item)
-                }
+                (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
         }
 
         /** Pagination information for a list of resources. */

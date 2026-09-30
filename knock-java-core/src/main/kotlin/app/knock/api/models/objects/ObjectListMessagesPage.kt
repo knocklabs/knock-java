@@ -25,8 +25,7 @@ private constructor(
      *
      * @see [ObjectListMessagesPageResponse.items]
      */
-    fun items(): List<Message> =
-        response._items().getOptional("items").getOrNull() ?: emptyList()
+    fun items(): List<Message> = response._items().getOptional("items").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [ObjectListMessagesPageResponse], but gracefully handles missing data.

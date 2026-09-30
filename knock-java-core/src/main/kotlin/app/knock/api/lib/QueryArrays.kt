@@ -4,8 +4,8 @@ import app.knock.api.core.http.QueryParams
 import app.knock.api.models.recipients.RecipientReference
 
 /**
- * An element of an array query parameter: either a scalar (e.g. a user ID) or a set of fields
- * (e.g. an object reference's `id` and `collection`).
+ * An element of an array query parameter: either a scalar (e.g. a user ID) or a set of fields (e.g.
+ * an object reference's `id` and `collection`).
  */
 internal sealed class QueryArrayElement {
 

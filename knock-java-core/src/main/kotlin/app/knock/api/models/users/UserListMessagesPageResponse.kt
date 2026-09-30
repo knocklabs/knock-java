@@ -30,9 +30,7 @@ private constructor(
 
     @JsonCreator
     private constructor(
-        @JsonProperty("items")
-        @ExcludeMissing
-        items: JsonField<List<Message>> = JsonMissing.of(),
+        @JsonProperty("items") @ExcludeMissing items: JsonField<List<Message>> = JsonMissing.of(),
         @JsonProperty("page_info") @ExcludeMissing pageInfo: JsonField<PageInfo> = JsonMissing.of(),
     ) : this(items, pageInfo, mutableMapOf())
 
@@ -112,9 +110,9 @@ private constructor(
         /**
          * Sets [Builder.items] to an arbitrary JSON value.
          *
-         * You should usually call [Builder.items] with a well-typed `List<Message>` value
-         * instead. This method is primarily for setting the field to an undocumented or not yet
-         * supported value.
+         * You should usually call [Builder.items] with a well-typed `List<Message>` value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
          */
         fun items(items: JsonField<List<Message>>) = apply {
             this.items = items.map { it.toMutableList() }
@@ -127,9 +125,7 @@ private constructor(
          */
         fun addItem(item: Message) = apply {
             items =
-                (items ?: JsonField.of(mutableListOf())).also {
-                    checkKnown("items", it).add(item)
-                }
+                (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
         }
 
         /** Pagination information for a list of resources. */

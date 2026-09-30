@@ -125,7 +125,8 @@ private constructor(
         }
 
         /** Alias for calling [Builder.recipients] with `recipients.orElse(null)`. */
-        fun recipients(recipients: Optional<List<RecipientReference>>) = recipients(recipients.getOrNull())
+        fun recipients(recipients: Optional<List<RecipientReference>>) =
+            recipients(recipients.getOrNull())
 
         /**
          * Adds a single [RecipientReference] to [recipients].

@@ -120,7 +120,9 @@ private constructor(
         }
 
         /** Only returns subscriptions for the specified object references. */
-        fun objects(objects: List<RecipientReference>?) = apply { this.objects = objects?.toMutableList() }
+        fun objects(objects: List<RecipientReference>?) = apply {
+            this.objects = objects?.toMutableList()
+        }
 
         /** Alias for calling [Builder.objects] with `objects.orElse(null)`. */
         fun objects(objects: Optional<List<RecipientReference>>) = objects(objects.getOrNull())

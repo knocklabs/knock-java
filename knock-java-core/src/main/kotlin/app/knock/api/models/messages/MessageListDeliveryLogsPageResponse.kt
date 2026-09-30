@@ -57,9 +57,7 @@ private constructor(
      *
      * Unlike [items], this method doesn't throw if the JSON field has an unexpected type.
      */
-    @JsonProperty("items")
-    @ExcludeMissing
-    fun _items(): JsonField<List<MessageDeliveryLog>> = items
+    @JsonProperty("items") @ExcludeMissing fun _items(): JsonField<List<MessageDeliveryLog>> = items
 
     /**
      * Returns the raw JSON value of [pageInfo].
@@ -136,9 +134,7 @@ private constructor(
          */
         fun addItem(item: MessageDeliveryLog) = apply {
             items =
-                (items ?: JsonField.of(mutableListOf())).also {
-                    checkKnown("items", it).add(item)
-                }
+                (items ?: JsonField.of(mutableListOf())).also { checkKnown("items", it).add(item) }
         }
 
         /** Pagination information for a list of resources. */
