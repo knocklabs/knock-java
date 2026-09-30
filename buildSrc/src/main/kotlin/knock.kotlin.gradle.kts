@@ -2,6 +2,7 @@ import com.diffplug.gradle.spotless.SpotlessExtension
 import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("knock.java")
@@ -26,6 +27,13 @@ kotlin {
         languageVersion.set(KotlinVersion.KOTLIN_2_2)
         apiVersion.set(KotlinVersion.KOTLIN_2_2)
         coreLibrariesVersion = "2.2.0"
+    }
+}
+
+tasks.named<KotlinCompile>("compileTestKotlin") {
+    compilerOptions {
+        freeCompilerArgs = freeCompilerArgs.get().map { if (it == "-Xjdk-release=1.8") "-Xjdk-release=17" else it }
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 

@@ -33,6 +33,11 @@ tasks.withType<JavaCompile>().configureEach {
     options.release.set(8)
 }
 
+// Test-only dependencies (JUnit 6, WireMock 3) require a newer JVM. Published artifacts still target Java 8.
+tasks.named<JavaCompile>("compileTestJava") {
+    options.release.set(17)
+}
+
 tasks.named<Jar>("jar") {
     manifest {
         attributes(mapOf(
