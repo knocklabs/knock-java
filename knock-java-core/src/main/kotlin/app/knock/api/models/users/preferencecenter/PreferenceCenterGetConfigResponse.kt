@@ -1354,6 +1354,12 @@ private constructor(
 
                     @JvmField val COMMERCIAL_SUBSCRIBED = of("commercial_subscribed")
 
+                    /** Not in the OpenAPI spec, but returned by the API in place of [WORKFLOW]. */
+                    @JvmField val WORKFLOWS = of("workflows")
+
+                    /** Not in the OpenAPI spec, but returned by the API in place of [CATEGORY]. */
+                    @JvmField val CATEGORIES = of("categories")
+
                     @JvmStatic fun of(value: String) = Type(JsonField.of(value))
                 }
 
@@ -1364,6 +1370,8 @@ private constructor(
                     CATEGORY,
                     CHANNEL_TYPES,
                     COMMERCIAL_SUBSCRIBED,
+                    WORKFLOWS,
+                    CATEGORIES,
                 }
 
                 /**
@@ -1381,6 +1389,8 @@ private constructor(
                     CATEGORY,
                     CHANNEL_TYPES,
                     COMMERCIAL_SUBSCRIBED,
+                    WORKFLOWS,
+                    CATEGORIES,
                     /**
                      * An enum member indicating that [Type] was instantiated with an unknown value.
                      */
@@ -1401,6 +1411,8 @@ private constructor(
                         CATEGORY -> Value.CATEGORY
                         CHANNEL_TYPES -> Value.CHANNEL_TYPES
                         COMMERCIAL_SUBSCRIBED -> Value.COMMERCIAL_SUBSCRIBED
+                        WORKFLOWS -> Value.WORKFLOWS
+                        CATEGORIES -> Value.CATEGORIES
                         else -> Value._UNKNOWN
                     }
 
@@ -1420,6 +1432,8 @@ private constructor(
                         CATEGORY -> Known.CATEGORY
                         CHANNEL_TYPES -> Known.CHANNEL_TYPES
                         COMMERCIAL_SUBSCRIBED -> Known.COMMERCIAL_SUBSCRIBED
+                        WORKFLOWS -> Known.WORKFLOWS
+                        CATEGORIES -> Known.CATEGORIES
                         else -> throw KnockInvalidDataException("Unknown Type: $value")
                     }
 
