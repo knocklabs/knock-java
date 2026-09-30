@@ -9,6 +9,9 @@ import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
 import app.knock.api.errors.KnockInvalidDataException
+import app.knock.api.lib.QueryArrayElement
+import app.knock.api.lib.putQueryArray
+import app.knock.api.lib.toQueryArrayElement
 import app.knock.api.models.recipients.RecipientReference
 import com.fasterxml.jackson.annotation.JsonCreator
 import java.util.Objects
@@ -347,36 +350,25 @@ private constructor(
                 before?.let { put("before", it) }
                 include?.forEach { put("include[]", it.toString()) }
                 mode?.let { put("mode", it.toString()) }
-                objects?.forEach {
-                    it.id().ifPresent { put("objects[][id]", it) }
-                    it.collection().ifPresent { put("objects[][collection]", it) }
-                    it._additionalProperties().keys().forEach { key ->
-                        it._additionalProperties().values(key).forEach { value ->
-                            put("objects[][$key]", value)
-                        }
-                    }
+                objects?.let { objects ->
+                    putQueryArray(
+                        "objects",
+                        objects.map { object_ ->
+                            val fields = mutableListOf<Pair<String, String>>()
+                            object_.id().ifPresent { fields.add("id" to it) }
+                            object_.collection().ifPresent { fields.add("collection" to it) }
+                            object_._additionalProperties().keys().forEach { key ->
+                                object_._additionalProperties().values(key).forEach { value ->
+                                    fields.add(key to value)
+                                }
+                            }
+                            QueryArrayElement.Fields(fields)
+                        },
+                    )
                 }
                 pageSize?.let { put("page_size", it.toString()) }
-                recipients?.forEach {
-                    it.accept(
-                        object : RecipientReference.Visitor<Unit> {
-                            override fun visitUser(user: String) {
-                                put("recipients[]", user)
-                            }
-
-                            override fun visitObjectReference(
-                                objectReference: RecipientReference.ObjectReference
-                            ) {
-                                objectReference.id().ifPresent { put("recipients[][id]", it) }
-                                objectReference.collection().ifPresent {
-                                    put("recipients[][collection]", it)
-                                }
-                                objectReference._additionalProperties().forEach { (key, value) ->
-                                    put("recipients[][$key]", value.toString())
-                                }
-                            }
-                        }
-                    )
+                recipients?.let { recipients ->
+                    putQueryArray("recipients", recipients.map { it.toQueryArrayElement() })
                 }
                 putAll(additionalQueryParams)
             }

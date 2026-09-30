@@ -7,6 +7,9 @@ import app.knock.api.core.checkRequired
 import app.knock.api.core.http.Headers
 import app.knock.api.core.http.QueryParams
 import app.knock.api.core.toImmutable
+import app.knock.api.lib.putQueryArray
+import app.knock.api.lib.toQueryArrayElement
+import app.knock.api.models.recipients.RecipientReference
 import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
@@ -21,7 +24,7 @@ private constructor(
     private val after: String?,
     private val before: String?,
     private val pageSize: Long?,
-    private val recipients: List<String>?,
+    private val recipients: List<RecipientReference>?,
     private val tenant: String?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
@@ -40,7 +43,7 @@ private constructor(
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
 
     /** Filter by recipient IDs. */
-    fun recipients(): Optional<List<String>> = Optional.ofNullable(recipients)
+    fun recipients(): Optional<List<RecipientReference>> = Optional.ofNullable(recipients)
 
     /** Filter by tenant ID. */
     fun tenant(): Optional<String> = Optional.ofNullable(tenant)
@@ -71,7 +74,7 @@ private constructor(
         private var after: String? = null
         private var before: String? = null
         private var pageSize: Long? = null
-        private var recipients: MutableList<String>? = null
+        private var recipients: MutableList<RecipientReference>? = null
         private var tenant: String? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -117,21 +120,31 @@ private constructor(
         fun pageSize(pageSize: Optional<Long>) = pageSize(pageSize.getOrNull())
 
         /** Filter by recipient IDs. */
-        fun recipients(recipients: List<String>?) = apply {
+        fun recipients(recipients: List<RecipientReference>?) = apply {
             this.recipients = recipients?.toMutableList()
         }
 
         /** Alias for calling [Builder.recipients] with `recipients.orElse(null)`. */
-        fun recipients(recipients: Optional<List<String>>) = recipients(recipients.getOrNull())
+        fun recipients(recipients: Optional<List<RecipientReference>>) = recipients(recipients.getOrNull())
 
         /**
-         * Adds a single [String] to [recipients].
+         * Adds a single [RecipientReference] to [recipients].
          *
          * @throws IllegalStateException if the field was previously set to a non-list.
          */
-        fun addRecipient(recipient: String) = apply {
+        fun addRecipient(recipient: RecipientReference) = apply {
             recipients = (recipients ?: mutableListOf()).apply { add(recipient) }
         }
+
+        /** Alias for calling [addRecipient] with `RecipientReference.ofUser(user)`. */
+        fun addRecipient(user: String) = addRecipient(RecipientReference.ofUser(user))
+
+        /**
+         * Alias for calling [addRecipient] with
+         * `RecipientReference.ofObjectReference(objectReference)`.
+         */
+        fun addRecipient(objectReference: RecipientReference.ObjectReference) =
+            addRecipient(RecipientReference.ofObjectReference(objectReference))
 
         /** Filter by tenant ID. */
         fun tenant(tenant: String?) = apply { this.tenant = tenant }
@@ -271,7 +284,9 @@ private constructor(
                 after?.let { put("after", it) }
                 before?.let { put("before", it) }
                 pageSize?.let { put("page_size", it.toString()) }
-                recipients?.forEach { put("recipients[]", it) }
+                recipients?.let { recipients ->
+                    putQueryArray("recipients", recipients.map { it.toQueryArrayElement() })
+                }
                 tenant?.let { put("tenant", it) }
                 putAll(additionalQueryParams)
             }
