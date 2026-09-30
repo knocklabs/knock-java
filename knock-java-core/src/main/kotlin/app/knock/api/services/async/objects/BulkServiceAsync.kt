@@ -7,6 +7,7 @@ import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.objects.bulk.BulkAddSubscriptionsParams
 import app.knock.api.models.objects.bulk.BulkDeleteParams
+import app.knock.api.models.objects.bulk.BulkDeleteSubscriptionsParams
 import app.knock.api.models.objects.bulk.BulkSetParams
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
@@ -67,6 +68,35 @@ interface BulkServiceAsync {
     /** @see [addSubscriptions] */
     fun addSubscriptions(
         params: BulkAddSubscriptionsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<BulkOperation>
+
+    /**
+     * Delete subscriptions for many objects in a single collection type. If a subscription for an
+     * object in the collection doesn't exist, it will be skipped.
+     */
+    fun deleteSubscriptions(
+        collection: String,
+        params: BulkDeleteSubscriptionsParams,
+    ): CompletableFuture<BulkOperation> =
+        deleteSubscriptions(collection, params, RequestOptions.none())
+
+    /** @see [deleteSubscriptions] */
+    fun deleteSubscriptions(
+        collection: String,
+        params: BulkDeleteSubscriptionsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<BulkOperation> =
+        deleteSubscriptions(params.toBuilder().collection(collection).build(), requestOptions)
+
+    /** @see [deleteSubscriptions] */
+    fun deleteSubscriptions(
+        params: BulkDeleteSubscriptionsParams
+    ): CompletableFuture<BulkOperation> = deleteSubscriptions(params, RequestOptions.none())
+
+    /** @see [deleteSubscriptions] */
+    fun deleteSubscriptions(
+        params: BulkDeleteSubscriptionsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): CompletableFuture<BulkOperation>
 
@@ -158,6 +188,41 @@ interface BulkServiceAsync {
         @MustBeClosed
         fun addSubscriptions(
             params: BulkAddSubscriptionsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BulkOperation>>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /v1/objects/{collection}/bulk/subscriptions/delete`, but is otherwise the same as
+         * [BulkServiceAsync.deleteSubscriptions].
+         */
+        @MustBeClosed
+        fun deleteSubscriptions(
+            collection: String,
+            params: BulkDeleteSubscriptionsParams,
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            deleteSubscriptions(collection, params, RequestOptions.none())
+
+        /** @see [deleteSubscriptions] */
+        @MustBeClosed
+        fun deleteSubscriptions(
+            collection: String,
+            params: BulkDeleteSubscriptionsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            deleteSubscriptions(params.toBuilder().collection(collection).build(), requestOptions)
+
+        /** @see [deleteSubscriptions] */
+        @MustBeClosed
+        fun deleteSubscriptions(
+            params: BulkDeleteSubscriptionsParams
+        ): CompletableFuture<HttpResponseFor<BulkOperation>> =
+            deleteSubscriptions(params, RequestOptions.none())
+
+        /** @see [deleteSubscriptions] */
+        @MustBeClosed
+        fun deleteSubscriptions(
+            params: BulkDeleteSubscriptionsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): CompletableFuture<HttpResponseFor<BulkOperation>>
 

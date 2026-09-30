@@ -7,6 +7,7 @@ import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.objects.bulk.BulkAddSubscriptionsParams
 import app.knock.api.models.objects.bulk.BulkDeleteParams
+import app.knock.api.models.objects.bulk.BulkDeleteSubscriptionsParams
 import app.knock.api.models.objects.bulk.BulkSetParams
 import com.google.errorprone.annotations.MustBeClosed
 
@@ -61,6 +62,33 @@ interface BulkService {
     /** @see [addSubscriptions] */
     fun addSubscriptions(
         params: BulkAddSubscriptionsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BulkOperation
+
+    /**
+     * Delete subscriptions for many objects in a single collection type. If a subscription for an
+     * object in the collection doesn't exist, it will be skipped.
+     */
+    fun deleteSubscriptions(
+        collection: String,
+        params: BulkDeleteSubscriptionsParams,
+    ): BulkOperation = deleteSubscriptions(collection, params, RequestOptions.none())
+
+    /** @see [deleteSubscriptions] */
+    fun deleteSubscriptions(
+        collection: String,
+        params: BulkDeleteSubscriptionsParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): BulkOperation =
+        deleteSubscriptions(params.toBuilder().collection(collection).build(), requestOptions)
+
+    /** @see [deleteSubscriptions] */
+    fun deleteSubscriptions(params: BulkDeleteSubscriptionsParams): BulkOperation =
+        deleteSubscriptions(params, RequestOptions.none())
+
+    /** @see [deleteSubscriptions] */
+    fun deleteSubscriptions(
+        params: BulkDeleteSubscriptionsParams,
         requestOptions: RequestOptions = RequestOptions.none(),
     ): BulkOperation
 
@@ -145,6 +173,40 @@ interface BulkService {
         @MustBeClosed
         fun addSubscriptions(
             params: BulkAddSubscriptionsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BulkOperation>
+
+        /**
+         * Returns a raw HTTP response for `post
+         * /v1/objects/{collection}/bulk/subscriptions/delete`, but is otherwise the same as
+         * [BulkService.deleteSubscriptions].
+         */
+        @MustBeClosed
+        fun deleteSubscriptions(
+            collection: String,
+            params: BulkDeleteSubscriptionsParams,
+        ): HttpResponseFor<BulkOperation> =
+            deleteSubscriptions(collection, params, RequestOptions.none())
+
+        /** @see [deleteSubscriptions] */
+        @MustBeClosed
+        fun deleteSubscriptions(
+            collection: String,
+            params: BulkDeleteSubscriptionsParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponseFor<BulkOperation> =
+            deleteSubscriptions(params.toBuilder().collection(collection).build(), requestOptions)
+
+        /** @see [deleteSubscriptions] */
+        @MustBeClosed
+        fun deleteSubscriptions(
+            params: BulkDeleteSubscriptionsParams
+        ): HttpResponseFor<BulkOperation> = deleteSubscriptions(params, RequestOptions.none())
+
+        /** @see [deleteSubscriptions] */
+        @MustBeClosed
+        fun deleteSubscriptions(
+            params: BulkDeleteSubscriptionsParams,
             requestOptions: RequestOptions = RequestOptions.none(),
         ): HttpResponseFor<BulkOperation>
 
