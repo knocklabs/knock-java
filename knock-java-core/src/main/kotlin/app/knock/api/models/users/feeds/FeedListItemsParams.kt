@@ -22,7 +22,11 @@ private constructor(
     private val after: String?,
     private val archived: Archived?,
     private val before: String?,
+    private val exclude: String?,
     private val hasTenant: Boolean?,
+    private val insertedAt: InsertedAt?,
+    private val locale: String?,
+    private val mode: Mode?,
     private val pageSize: Long?,
     private val source: String?,
     private val status: Status?,
@@ -46,8 +50,31 @@ private constructor(
     /** The cursor to fetch entries before. */
     fun before(): Optional<String> = Optional.ofNullable(before)
 
+    /**
+     * Comma-separated list of field paths to exclude from the response. Use dot notation for nested
+     * fields (e.g., `entries.archived_at`). Limited to 3 levels deep.
+     */
+    fun exclude(): Optional<String> = Optional.ofNullable(exclude)
+
     /** Whether the feed items have a tenant. */
     fun hasTenant(): Optional<Boolean> = Optional.ofNullable(hasTenant)
+
+    /** Filters feed items by the time they were inserted. */
+    fun insertedAt(): Optional<InsertedAt> = Optional.ofNullable(insertedAt)
+
+    /**
+     * The locale to render the feed items in. Must be in the IETF 5646 format (e.g. `en-US`). When
+     * not provided, will default to the locale that the feed items were rendered in. Only available
+     * for enterprise plan customers using custom translations.
+     */
+    fun locale(): Optional<String> = Optional.ofNullable(locale)
+
+    /**
+     * The mode to render the feed items in. Can be `compact` or `rich`. Defaults to `rich`. When
+     * `mode` is `compact`, feed items will not have `activities` and `total_activities` fields, and
+     * the `data` field will not include nested arrays and objects.
+     */
+    fun mode(): Optional<Mode> = Optional.ofNullable(mode)
 
     /** The number of items per page. */
     fun pageSize(): Optional<Long> = Optional.ofNullable(pageSize)
@@ -89,7 +116,11 @@ private constructor(
         private var after: String? = null
         private var archived: Archived? = null
         private var before: String? = null
+        private var exclude: String? = null
         private var hasTenant: Boolean? = null
+        private var insertedAt: InsertedAt? = null
+        private var locale: String? = null
+        private var mode: Mode? = null
         private var pageSize: Long? = null
         private var source: String? = null
         private var status: Status? = null
@@ -106,7 +137,11 @@ private constructor(
             after = feedListItemsParams.after
             archived = feedListItemsParams.archived
             before = feedListItemsParams.before
+            exclude = feedListItemsParams.exclude
             hasTenant = feedListItemsParams.hasTenant
+            insertedAt = feedListItemsParams.insertedAt
+            locale = feedListItemsParams.locale
+            mode = feedListItemsParams.mode
             pageSize = feedListItemsParams.pageSize
             source = feedListItemsParams.source
             status = feedListItemsParams.status
@@ -145,6 +180,15 @@ private constructor(
         /** Alias for calling [Builder.before] with `before.orElse(null)`. */
         fun before(before: Optional<String>) = before(before.getOrNull())
 
+        /**
+         * Comma-separated list of field paths to exclude from the response. Use dot notation for
+         * nested fields (e.g., `entries.archived_at`). Limited to 3 levels deep.
+         */
+        fun exclude(exclude: String?) = apply { this.exclude = exclude }
+
+        /** Alias for calling [Builder.exclude] with `exclude.orElse(null)`. */
+        fun exclude(exclude: Optional<String>) = exclude(exclude.getOrNull())
+
         /** Whether the feed items have a tenant. */
         fun hasTenant(hasTenant: Boolean?) = apply { this.hasTenant = hasTenant }
 
@@ -157,6 +201,32 @@ private constructor(
 
         /** Alias for calling [Builder.hasTenant] with `hasTenant.orElse(null)`. */
         fun hasTenant(hasTenant: Optional<Boolean>) = hasTenant(hasTenant.getOrNull())
+
+        /** Filters feed items by the time they were inserted. */
+        fun insertedAt(insertedAt: InsertedAt?) = apply { this.insertedAt = insertedAt }
+
+        /** Alias for calling [Builder.insertedAt] with `insertedAt.orElse(null)`. */
+        fun insertedAt(insertedAt: Optional<InsertedAt>) = insertedAt(insertedAt.getOrNull())
+
+        /**
+         * The locale to render the feed items in. Must be in the IETF 5646 format (e.g. `en-US`).
+         * When not provided, will default to the locale that the feed items were rendered in. Only
+         * available for enterprise plan customers using custom translations.
+         */
+        fun locale(locale: String?) = apply { this.locale = locale }
+
+        /** Alias for calling [Builder.locale] with `locale.orElse(null)`. */
+        fun locale(locale: Optional<String>) = locale(locale.getOrNull())
+
+        /**
+         * The mode to render the feed items in. Can be `compact` or `rich`. Defaults to `rich`.
+         * When `mode` is `compact`, feed items will not have `activities` and `total_activities`
+         * fields, and the `data` field will not include nested arrays and objects.
+         */
+        fun mode(mode: Mode?) = apply { this.mode = mode }
+
+        /** Alias for calling [Builder.mode] with `mode.orElse(null)`. */
+        fun mode(mode: Optional<Mode>) = mode(mode.getOrNull())
 
         /** The number of items per page. */
         fun pageSize(pageSize: Long?) = apply { this.pageSize = pageSize }
@@ -326,7 +396,11 @@ private constructor(
                 after,
                 archived,
                 before,
+                exclude,
                 hasTenant,
+                insertedAt,
+                locale,
+                mode,
                 pageSize,
                 source,
                 status,
@@ -353,7 +427,21 @@ private constructor(
                 after?.let { put("after", it) }
                 archived?.let { put("archived", it.toString()) }
                 before?.let { put("before", it) }
+                exclude?.let { put("exclude", it) }
                 hasTenant?.let { put("has_tenant", it.toString()) }
+                insertedAt?.let {
+                    it.gt().ifPresent { put("inserted_at.gt", it) }
+                    it.gte().ifPresent { put("inserted_at.gte", it) }
+                    it.lt().ifPresent { put("inserted_at.lt", it) }
+                    it.lte().ifPresent { put("inserted_at.lte", it) }
+                    it._additionalProperties().keys().forEach { key ->
+                        it._additionalProperties().values(key).forEach { value ->
+                            put("inserted_at.$key", value)
+                        }
+                    }
+                }
+                locale?.let { put("locale", it) }
+                mode?.let { put("mode", it.toString()) }
                 pageSize?.let { put("page_size", it.toString()) }
                 source?.let { put("source", it) }
                 status?.let { put("status", it.toString()) }
@@ -488,6 +576,135 @@ private constructor(
             }
 
             return /* spotless:off */ other is Archived && value == other.value /* spotless:on */
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
+    /**
+     * The mode to render the feed items in. Can be `compact` or `rich`. Defaults to `rich`. When
+     * `mode` is `compact`, feed items will not have `activities` and `total_activities` fields, and
+     * the `data` field will not include nested arrays and objects.
+     */
+    class Mode @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val COMPACT = of("compact")
+
+            @JvmField val RICH = of("rich")
+
+            @JvmStatic fun of(value: String) = Mode(JsonField.of(value))
+        }
+
+        /** An enum containing [Mode]'s known values. */
+        enum class Known {
+            COMPACT,
+            RICH,
+        }
+
+        /**
+         * An enum containing [Mode]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [Mode] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            COMPACT,
+            RICH,
+            /** An enum member indicating that [Mode] was instantiated with an unknown value. */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                COMPACT -> Value.COMPACT
+                RICH -> Value.RICH
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws KnockInvalidDataException if this class instance's value is a not a known member.
+         */
+        fun known(): Known =
+            when (this) {
+                COMPACT -> Known.COMPACT
+                RICH -> Known.RICH
+                else -> throw KnockInvalidDataException("Unknown Mode: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws KnockInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow { KnockInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        fun validate(): Mode = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Mode && value == other.value /* spotless:on */
         }
 
         override fun hashCode() = value.hashCode()
@@ -638,16 +855,161 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    /** Filters feed items by the time they were inserted. */
+    class InsertedAt
+    private constructor(
+        private val gt: String?,
+        private val gte: String?,
+        private val lt: String?,
+        private val lte: String?,
+        private val additionalProperties: QueryParams,
+    ) {
+
+        /** Limits the results to items inserted after the given date. */
+        fun gt(): Optional<String> = Optional.ofNullable(gt)
+
+        /** Limits the results to items inserted after or on the given date. */
+        fun gte(): Optional<String> = Optional.ofNullable(gte)
+
+        /** Limits the results to items inserted before the given date. */
+        fun lt(): Optional<String> = Optional.ofNullable(lt)
+
+        /** Limits the results to items inserted before or on the given date. */
+        fun lte(): Optional<String> = Optional.ofNullable(lte)
+
+        fun _additionalProperties(): QueryParams = additionalProperties
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [InsertedAt]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [InsertedAt]. */
+        class Builder internal constructor() {
+
+            private var gt: String? = null
+            private var gte: String? = null
+            private var lt: String? = null
+            private var lte: String? = null
+            private var additionalProperties: QueryParams.Builder = QueryParams.builder()
+
+            @JvmSynthetic
+            internal fun from(insertedAt: InsertedAt) = apply {
+                gt = insertedAt.gt
+                gte = insertedAt.gte
+                lt = insertedAt.lt
+                lte = insertedAt.lte
+                additionalProperties = insertedAt.additionalProperties.toBuilder()
+            }
+
+            /** Limits the results to items inserted after the given date. */
+            fun gt(gt: String?) = apply { this.gt = gt }
+
+            /** Alias for calling [Builder.gt] with `gt.orElse(null)`. */
+            fun gt(gt: Optional<String>) = gt(gt.getOrNull())
+
+            /** Limits the results to items inserted after or on the given date. */
+            fun gte(gte: String?) = apply { this.gte = gte }
+
+            /** Alias for calling [Builder.gte] with `gte.orElse(null)`. */
+            fun gte(gte: Optional<String>) = gte(gte.getOrNull())
+
+            /** Limits the results to items inserted before the given date. */
+            fun lt(lt: String?) = apply { this.lt = lt }
+
+            /** Alias for calling [Builder.lt] with `lt.orElse(null)`. */
+            fun lt(lt: Optional<String>) = lt(lt.getOrNull())
+
+            /** Limits the results to items inserted before or on the given date. */
+            fun lte(lte: String?) = apply { this.lte = lte }
+
+            /** Alias for calling [Builder.lte] with `lte.orElse(null)`. */
+            fun lte(lte: Optional<String>) = lte(lte.getOrNull())
+
+            fun additionalProperties(additionalProperties: QueryParams) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun additionalProperties(additionalProperties: Map<String, Iterable<String>>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: String) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAdditionalProperties(key: String, values: Iterable<String>) = apply {
+                additionalProperties.put(key, values)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: QueryParams) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, Iterable<String>>) =
+                apply {
+                    this.additionalProperties.putAll(additionalProperties)
+                }
+
+            fun replaceAdditionalProperties(key: String, value: String) = apply {
+                additionalProperties.replace(key, value)
+            }
+
+            fun replaceAdditionalProperties(key: String, values: Iterable<String>) = apply {
+                additionalProperties.replace(key, values)
+            }
+
+            fun replaceAllAdditionalProperties(additionalProperties: QueryParams) = apply {
+                this.additionalProperties.replaceAll(additionalProperties)
+            }
+
+            fun replaceAllAdditionalProperties(
+                additionalProperties: Map<String, Iterable<String>>
+            ) = apply { this.additionalProperties.replaceAll(additionalProperties) }
+
+            fun removeAdditionalProperties(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                additionalProperties.removeAll(keys)
+            }
+
+            /**
+             * Returns an immutable instance of [InsertedAt].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): InsertedAt = InsertedAt(gt, gte, lt, lte, additionalProperties.build())
+        }
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is InsertedAt && gt == other.gt && gte == other.gte && lt == other.lt && lte == other.lte && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        override fun hashCode(): Int = /* spotless:off */ Objects.hash(gt, gte, lt, lte, additionalProperties) /* spotless:on */
+
+        override fun toString() =
+            "InsertedAt{gt=$gt, gte=$gte, lt=$lt, lte=$lte, additionalProperties=$additionalProperties}"
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is FeedListItemsParams && userId == other.userId && id == other.id && after == other.after && archived == other.archived && before == other.before && hasTenant == other.hasTenant && pageSize == other.pageSize && source == other.source && status == other.status && tenant == other.tenant && triggerData == other.triggerData && workflowCategories == other.workflowCategories && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is FeedListItemsParams && userId == other.userId && id == other.id && after == other.after && archived == other.archived && before == other.before && exclude == other.exclude && hasTenant == other.hasTenant && insertedAt == other.insertedAt && locale == other.locale && mode == other.mode && pageSize == other.pageSize && source == other.source && status == other.status && tenant == other.tenant && triggerData == other.triggerData && workflowCategories == other.workflowCategories && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, id, after, archived, before, hasTenant, pageSize, source, status, tenant, triggerData, workflowCategories, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, id, after, archived, before, exclude, hasTenant, insertedAt, locale, mode, pageSize, source, status, tenant, triggerData, workflowCategories, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "FeedListItemsParams{userId=$userId, id=$id, after=$after, archived=$archived, before=$before, hasTenant=$hasTenant, pageSize=$pageSize, source=$source, status=$status, tenant=$tenant, triggerData=$triggerData, workflowCategories=$workflowCategories, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "FeedListItemsParams{userId=$userId, id=$id, after=$after, archived=$archived, before=$before, exclude=$exclude, hasTenant=$hasTenant, insertedAt=$insertedAt, locale=$locale, mode=$mode, pageSize=$pageSize, source=$source, status=$status, tenant=$tenant, triggerData=$triggerData, workflowCategories=$workflowCategories, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
