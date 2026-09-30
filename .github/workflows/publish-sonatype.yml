@@ -16,6 +16,17 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Check version matches release tag
+        if: github.event_name == 'release'
+        run: |-
+          version="$(sed -nE 's/.*version = "([^"]+)" \/\/ x-release-please-version.*/\1/p' build.gradle.kts)"
+          if [ "v$version" != "$RELEASE_TAG" ]; then
+            echo "::error::build.gradle.kts version ($version) doesn't match the release tag ($RELEASE_TAG). Merge the release PR that bumps the version, then create the release from that commit."
+            exit 1
+          fi
+        env:
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+
       - name: Set up Java
         uses: actions/setup-java@v6
         with:
