@@ -29,7 +29,7 @@ internal class ObjectMappersTest {
         assertThat(json).isEqualTo("{\"is_active\":true}")
     }
 
-    internal class Class(@get:JsonProperty("field") @JsonProperty("field") val field: String)
+    internal class Class(@get:JsonProperty("field") @param:JsonProperty("field") val field: String)
 
     enum class ShapeTestCase(val value: Any, val kClass: KClass<*>) {
         STRING("Hello World!", String::class),

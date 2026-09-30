@@ -1,4 +1,5 @@
 import com.diffplug.gradle.spotless.SpotlessExtension
+import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
 
@@ -14,15 +15,17 @@ kotlin {
 
     compilerOptions {
         freeCompilerArgs = listOf(
-            "-Xjvm-default=all",
             "-Xjdk-release=1.8",
             // Suppress deprecation warnings because we may still reference and test deprecated members.
-            "-Xsuppress-warning=DEPRECATION",
+            "-Xwarning-level=DEPRECATION:disabled",
+            // Generated `validity()` implementations call `toInt()` on values that are already `Int`.
+            "-Xwarning-level=REDUNDANT_CALL_OF_CONVERSION_METHOD:disabled",
         )
         jvmTarget.set(JvmTarget.JVM_1_8)
-        languageVersion.set(KotlinVersion.KOTLIN_2_0)
-        apiVersion.set(KotlinVersion.KOTLIN_2_0)
-        coreLibrariesVersion = "2.0.0"
+        jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
+        languageVersion.set(KotlinVersion.KOTLIN_2_2)
+        apiVersion.set(KotlinVersion.KOTLIN_2_2)
+        coreLibrariesVersion = "2.2.0"
     }
 }
 
