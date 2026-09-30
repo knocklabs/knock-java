@@ -15,10 +15,10 @@ jobs:
     runs-on: ${{ github.repository == 'stainless-sdks/knock-java' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: |
@@ -27,7 +27,7 @@ jobs:
           cache: gradle
 
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Run lints
         run: ./scripts/lint
@@ -36,10 +36,10 @@ jobs:
     name: test
     runs-on: ${{ github.repository == 'stainless-sdks/knock-java' && 'depot-ubuntu-24.04' || 'ubuntu-latest' }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
 
       - name: Set up Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: |
@@ -48,7 +48,7 @@ jobs:
           cache: gradle
 
       - name: Set up Gradle
-        uses: gradle/gradle-build-action@v2
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Run tests
         run: ./scripts/test
