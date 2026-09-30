@@ -26,12 +26,16 @@ import kotlin.jvm.optionals.getOrNull
 class AudienceAddMembersParams
 private constructor(
     private val key: String?,
+    private val createAudience: Boolean?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun key(): Optional<String> = Optional.ofNullable(key)
+
+    /** Create the audience if it does not exist. */
+    fun createAudience(): Optional<Boolean> = Optional.ofNullable(createAudience)
 
     /**
      * A list of audience members to add.
@@ -73,6 +77,7 @@ private constructor(
     class Builder internal constructor() {
 
         private var key: String? = null
+        private var createAudience: Boolean? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -80,6 +85,7 @@ private constructor(
         @JvmSynthetic
         internal fun from(audienceAddMembersParams: AudienceAddMembersParams) = apply {
             key = audienceAddMembersParams.key
+            createAudience = audienceAddMembersParams.createAudience
             body = audienceAddMembersParams.body.toBuilder()
             additionalHeaders = audienceAddMembersParams.additionalHeaders.toBuilder()
             additionalQueryParams = audienceAddMembersParams.additionalQueryParams.toBuilder()
@@ -89,6 +95,22 @@ private constructor(
 
         /** Alias for calling [Builder.key] with `key.orElse(null)`. */
         fun key(key: Optional<String>) = key(key.getOrNull())
+
+        /** Create the audience if it does not exist. */
+        fun createAudience(createAudience: Boolean?) = apply {
+            this.createAudience = createAudience
+        }
+
+        /**
+         * Alias for [Builder.createAudience].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun createAudience(createAudience: Boolean) = createAudience(createAudience as Boolean?)
+
+        /** Alias for calling [Builder.createAudience] with `createAudience.orElse(null)`. */
+        fun createAudience(createAudience: Optional<Boolean>) =
+            createAudience(createAudience.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -250,6 +272,7 @@ private constructor(
         fun build(): AudienceAddMembersParams =
             AudienceAddMembersParams(
                 key,
+                createAudience,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -266,7 +289,13 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                createAudience?.let { put("create_audience", it.toString()) }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     /** A request to add a list of audience members. */
     class Body
@@ -787,11 +816,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is AudienceAddMembersParams && key == other.key && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is AudienceAddMembersParams && key == other.key && createAudience == other.createAudience && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(key, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(key, createAudience, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "AudienceAddMembersParams{key=$key, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "AudienceAddMembersParams{key=$key, createAudience=$createAudience, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

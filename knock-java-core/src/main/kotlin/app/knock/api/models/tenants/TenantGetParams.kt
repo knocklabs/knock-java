@@ -13,11 +13,19 @@ import kotlin.jvm.optionals.getOrNull
 class TenantGetParams
 private constructor(
     private val id: String?,
+    private val resolveFullPreferenceSettings: Boolean?,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun id(): Optional<String> = Optional.ofNullable(id)
+
+    /**
+     * When true, merges environment-level default preferences into the tenant's
+     * `settings.preference_set` field before returning the response. Defaults to false.
+     */
+    fun resolveFullPreferenceSettings(): Optional<Boolean> =
+        Optional.ofNullable(resolveFullPreferenceSettings)
 
     fun _additionalHeaders(): Headers = additionalHeaders
 
@@ -37,12 +45,14 @@ private constructor(
     class Builder internal constructor() {
 
         private var id: String? = null
+        private var resolveFullPreferenceSettings: Boolean? = null
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(tenantGetParams: TenantGetParams) = apply {
             id = tenantGetParams.id
+            resolveFullPreferenceSettings = tenantGetParams.resolveFullPreferenceSettings
             additionalHeaders = tenantGetParams.additionalHeaders.toBuilder()
             additionalQueryParams = tenantGetParams.additionalQueryParams.toBuilder()
         }
@@ -51,6 +61,29 @@ private constructor(
 
         /** Alias for calling [Builder.id] with `id.orElse(null)`. */
         fun id(id: Optional<String>) = id(id.getOrNull())
+
+        /**
+         * When true, merges environment-level default preferences into the tenant's
+         * `settings.preference_set` field before returning the response. Defaults to false.
+         */
+        fun resolveFullPreferenceSettings(resolveFullPreferenceSettings: Boolean?) = apply {
+            this.resolveFullPreferenceSettings = resolveFullPreferenceSettings
+        }
+
+        /**
+         * Alias for [Builder.resolveFullPreferenceSettings].
+         *
+         * This unboxed primitive overload exists for backwards compatibility.
+         */
+        fun resolveFullPreferenceSettings(resolveFullPreferenceSettings: Boolean) =
+            resolveFullPreferenceSettings(resolveFullPreferenceSettings as Boolean?)
+
+        /**
+         * Alias for calling [Builder.resolveFullPreferenceSettings] with
+         * `resolveFullPreferenceSettings.orElse(null)`.
+         */
+        fun resolveFullPreferenceSettings(resolveFullPreferenceSettings: Optional<Boolean>) =
+            resolveFullPreferenceSettings(resolveFullPreferenceSettings.getOrNull())
 
         fun additionalHeaders(additionalHeaders: Headers) = apply {
             this.additionalHeaders.clear()
@@ -156,7 +189,12 @@ private constructor(
          * Further updates to this [Builder] will not mutate the returned instance.
          */
         fun build(): TenantGetParams =
-            TenantGetParams(id, additionalHeaders.build(), additionalQueryParams.build())
+            TenantGetParams(
+                id,
+                resolveFullPreferenceSettings,
+                additionalHeaders.build(),
+                additionalQueryParams.build(),
+            )
     }
 
     fun _pathParam(index: Int): String =
@@ -167,18 +205,26 @@ private constructor(
 
     override fun _headers(): Headers = additionalHeaders
 
-    override fun _queryParams(): QueryParams = additionalQueryParams
+    override fun _queryParams(): QueryParams =
+        QueryParams.builder()
+            .apply {
+                resolveFullPreferenceSettings?.let {
+                    put("resolve_full_preference_settings", it.toString())
+                }
+                putAll(additionalQueryParams)
+            }
+            .build()
 
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
-        return /* spotless:off */ other is TenantGetParams && id == other.id && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is TenantGetParams && id == other.id && resolveFullPreferenceSettings == other.resolveFullPreferenceSettings && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(id, resolveFullPreferenceSettings, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "TenantGetParams{id=$id, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "TenantGetParams{id=$id, resolveFullPreferenceSettings=$resolveFullPreferenceSettings, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }
