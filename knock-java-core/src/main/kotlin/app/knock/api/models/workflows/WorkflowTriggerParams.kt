@@ -91,6 +91,14 @@ private constructor(
     fun tenant(): Optional<InlineTenantRequest> = body.tenant()
 
     /**
+     * Optional settings that control how this workflow trigger is executed.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun settings(): Optional<Settings> = body.settings()
+
+    /**
      * Returns the raw JSON value of [recipients].
      *
      * Unlike [recipients], this method doesn't throw if the JSON field has an unexpected type.
@@ -124,6 +132,13 @@ private constructor(
      * Unlike [tenant], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _tenant(): JsonField<InlineTenantRequest> = body._tenant()
+
+    /**
+     * Returns the raw JSON value of [settings].
+     *
+     * Unlike [settings], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _settings(): JsonField<Settings> = body._settings()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -318,6 +333,21 @@ private constructor(
         /** Alias for calling [tenant] with `InlineTenantRequest.ofTenantRequest(tenantRequest)`. */
         fun tenant(tenantRequest: TenantRequest) = apply { body.tenant(tenantRequest) }
 
+        /** Optional settings that control how this workflow trigger is executed. */
+        fun settings(settings: Settings?) = apply { body.settings(settings) }
+
+        /** Alias for calling [Builder.settings] with `settings.orElse(null)`. */
+        fun settings(settings: Optional<Settings>) = settings(settings.getOrNull())
+
+        /**
+         * Sets [Builder.settings] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.settings] with a well-typed [Settings] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun settings(settings: JsonField<Settings>) = apply { body.settings(settings) }
+
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
         }
@@ -476,6 +506,7 @@ private constructor(
         private val cancellationKey: JsonField<String>,
         private val data: JsonField<Data>,
         private val tenant: JsonField<InlineTenantRequest>,
+        private val settings: JsonField<Settings>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -494,7 +525,10 @@ private constructor(
             @JsonProperty("tenant")
             @ExcludeMissing
             tenant: JsonField<InlineTenantRequest> = JsonMissing.of(),
-        ) : this(recipients, actor, cancellationKey, data, tenant, mutableMapOf())
+            @JsonProperty("settings")
+            @ExcludeMissing
+            settings: JsonField<Settings> = JsonMissing.of(),
+        ) : this(recipients, actor, cancellationKey, data, tenant, settings, mutableMapOf())
 
         /**
          * The recipients to trigger the workflow for. Can inline identify users, objects, or use a
@@ -543,6 +577,14 @@ private constructor(
         fun tenant(): Optional<InlineTenantRequest> = tenant.getOptional("tenant")
 
         /**
+         * Optional settings that control how this workflow trigger is executed.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun settings(): Optional<Settings> = settings.getOptional("settings")
+
+        /**
          * Returns the raw JSON value of [recipients].
          *
          * Unlike [recipients], this method doesn't throw if the JSON field has an unexpected type.
@@ -584,6 +626,13 @@ private constructor(
         @ExcludeMissing
         fun _tenant(): JsonField<InlineTenantRequest> = tenant
 
+        /**
+         * Returns the raw JSON value of [settings].
+         *
+         * Unlike [settings], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("settings") @ExcludeMissing fun _settings(): JsonField<Settings> = settings
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -617,6 +666,7 @@ private constructor(
             private var cancellationKey: JsonField<String> = JsonMissing.of()
             private var data: JsonField<Data> = JsonMissing.of()
             private var tenant: JsonField<InlineTenantRequest> = JsonMissing.of()
+            private var settings: JsonField<Settings> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -626,6 +676,7 @@ private constructor(
                 cancellationKey = body.cancellationKey
                 data = body.data
                 tenant = body.tenant
+                settings = body.settings
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -778,6 +829,21 @@ private constructor(
             fun tenant(tenantRequest: TenantRequest) =
                 tenant(InlineTenantRequest.ofTenantRequest(tenantRequest))
 
+            /** Optional settings that control how this workflow trigger is executed. */
+            fun settings(settings: Settings?) = settings(JsonField.ofNullable(settings))
+
+            /** Alias for calling [Builder.settings] with `settings.orElse(null)`. */
+            fun settings(settings: Optional<Settings>) = settings(settings.getOrNull())
+
+            /**
+             * Sets [Builder.settings] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.settings] with a well-typed [Settings] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun settings(settings: JsonField<Settings>) = apply { this.settings = settings }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -816,6 +882,7 @@ private constructor(
                     cancellationKey,
                     data,
                     tenant,
+                    settings,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -832,6 +899,7 @@ private constructor(
             cancellationKey()
             data().ifPresent { it.validate() }
             tenant().ifPresent { it.validate() }
+            settings().ifPresent { it.validate() }
             validated = true
         }
 
@@ -855,24 +923,25 @@ private constructor(
                 (actor.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (cancellationKey.asKnown().isPresent) 1 else 0) +
                 (data.asKnown().getOrNull()?.validity() ?: 0) +
-                (tenant.asKnown().getOrNull()?.validity() ?: 0)
+                (tenant.asKnown().getOrNull()?.validity() ?: 0) +
+                (settings.asKnown().getOrNull()?.validity() ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Body && recipients == other.recipients && actor == other.actor && cancellationKey == other.cancellationKey && data == other.data && tenant == other.tenant && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && recipients == other.recipients && actor == other.actor && cancellationKey == other.cancellationKey && data == other.data && tenant == other.tenant && settings == other.settings && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(recipients, actor, cancellationKey, data, tenant, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(recipients, actor, cancellationKey, data, tenant, settings, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{recipients=$recipients, actor=$actor, cancellationKey=$cancellationKey, data=$data, tenant=$tenant, additionalProperties=$additionalProperties}"
+            "Body{recipients=$recipients, actor=$actor, cancellationKey=$cancellationKey, data=$data, tenant=$tenant, settings=$settings, additionalProperties=$additionalProperties}"
     }
 
     /** An optional map of data to pass into the workflow execution. */
@@ -975,6 +1044,221 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() = "Data{additionalProperties=$additionalProperties}"
+    }
+
+    /** Optional settings that control how this workflow trigger is executed. */
+    class Settings
+    private constructor(
+        private val sandboxMode: JsonField<Boolean>,
+        private val skipDelay: JsonField<Boolean>,
+        private val additionalProperties: MutableMap<String, JsonValue>,
+    ) {
+
+        @JsonCreator
+        private constructor(
+            @JsonProperty("sandbox_mode")
+            @ExcludeMissing
+            sandboxMode: JsonField<Boolean> = JsonMissing.of(),
+            @JsonProperty("skip_delay")
+            @ExcludeMissing
+            skipDelay: JsonField<Boolean> = JsonMissing.of(),
+        ) : this(sandboxMode, skipDelay, mutableMapOf())
+
+        /**
+         * When set to true, overrides the sandbox mode for all channels in this workflow run,
+         * messages are not delivered to the underlying providers. If false or not set, the workflow
+         * delivers messages normally.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun sandboxMode(): Optional<Boolean> = sandboxMode.getOptional("sandbox_mode")
+
+        /**
+         * When set to true, skips all delay steps in the workflow for this trigger request. If
+         * false or not set, delay steps execute normally.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun skipDelay(): Optional<Boolean> = skipDelay.getOptional("skip_delay")
+
+        /**
+         * Returns the raw JSON value of [sandboxMode].
+         *
+         * Unlike [sandboxMode], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("sandbox_mode")
+        @ExcludeMissing
+        fun _sandboxMode(): JsonField<Boolean> = sandboxMode
+
+        /**
+         * Returns the raw JSON value of [skipDelay].
+         *
+         * Unlike [skipDelay], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("skip_delay") @ExcludeMissing fun _skipDelay(): JsonField<Boolean> = skipDelay
+
+        @JsonAnySetter
+        private fun putAdditionalProperty(key: String, value: JsonValue) {
+            additionalProperties.put(key, value)
+        }
+
+        @JsonAnyGetter
+        @ExcludeMissing
+        fun _additionalProperties(): Map<String, JsonValue> =
+            Collections.unmodifiableMap(additionalProperties)
+
+        fun toBuilder() = Builder().from(this)
+
+        companion object {
+
+            /** Returns a mutable builder for constructing an instance of [Settings]. */
+            @JvmStatic fun builder() = Builder()
+        }
+
+        /** A builder for [Settings]. */
+        class Builder internal constructor() {
+
+            private var sandboxMode: JsonField<Boolean> = JsonMissing.of()
+            private var skipDelay: JsonField<Boolean> = JsonMissing.of()
+            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
+
+            @JvmSynthetic
+            internal fun from(settings: Settings) = apply {
+                sandboxMode = settings.sandboxMode
+                skipDelay = settings.skipDelay
+                additionalProperties = settings.additionalProperties.toMutableMap()
+            }
+
+            /**
+             * When set to true, overrides the sandbox mode for all channels in this workflow run,
+             * messages are not delivered to the underlying providers. If false or not set, the
+             * workflow delivers messages normally.
+             */
+            fun sandboxMode(sandboxMode: Boolean?) = sandboxMode(JsonField.ofNullable(sandboxMode))
+
+            /**
+             * Alias for [Builder.sandboxMode].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun sandboxMode(sandboxMode: Boolean) = sandboxMode(sandboxMode as Boolean?)
+
+            /** Alias for calling [Builder.sandboxMode] with `sandboxMode.orElse(null)`. */
+            fun sandboxMode(sandboxMode: Optional<Boolean>) = sandboxMode(sandboxMode.getOrNull())
+
+            /**
+             * Sets [Builder.sandboxMode] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.sandboxMode] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun sandboxMode(sandboxMode: JsonField<Boolean>) = apply {
+                this.sandboxMode = sandboxMode
+            }
+
+            /**
+             * When set to true, skips all delay steps in the workflow for this trigger request. If
+             * false or not set, delay steps execute normally.
+             */
+            fun skipDelay(skipDelay: Boolean?) = skipDelay(JsonField.ofNullable(skipDelay))
+
+            /**
+             * Alias for [Builder.skipDelay].
+             *
+             * This unboxed primitive overload exists for backwards compatibility.
+             */
+            fun skipDelay(skipDelay: Boolean) = skipDelay(skipDelay as Boolean?)
+
+            /** Alias for calling [Builder.skipDelay] with `skipDelay.orElse(null)`. */
+            fun skipDelay(skipDelay: Optional<Boolean>) = skipDelay(skipDelay.getOrNull())
+
+            /**
+             * Sets [Builder.skipDelay] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.skipDelay] with a well-typed [Boolean] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun skipDelay(skipDelay: JsonField<Boolean>) = apply { this.skipDelay = skipDelay }
+
+            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.clear()
+                putAllAdditionalProperties(additionalProperties)
+            }
+
+            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
+                additionalProperties.put(key, value)
+            }
+
+            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
+                this.additionalProperties.putAll(additionalProperties)
+            }
+
+            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
+
+            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
+                keys.forEach(::removeAdditionalProperty)
+            }
+
+            /**
+             * Returns an immutable instance of [Settings].
+             *
+             * Further updates to this [Builder] will not mutate the returned instance.
+             */
+            fun build(): Settings =
+                Settings(sandboxMode, skipDelay, additionalProperties.toMutableMap())
+        }
+
+        private var validated: Boolean = false
+
+        fun validate(): Settings = apply {
+            if (validated) {
+                return@apply
+            }
+
+            sandboxMode()
+            skipDelay()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: KnockInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic
+        internal fun validity(): Int =
+            (if (sandboxMode.asKnown().isPresent) 1 else 0) +
+                (if (skipDelay.asKnown().isPresent) 1 else 0)
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return /* spotless:off */ other is Settings && sandboxMode == other.sandboxMode && skipDelay == other.skipDelay && additionalProperties == other.additionalProperties /* spotless:on */
+        }
+
+        /* spotless:off */
+        private val hashCode: Int by lazy { Objects.hash(sandboxMode, skipDelay, additionalProperties) }
+        /* spotless:on */
+
+        override fun hashCode(): Int = hashCode
+
+        override fun toString() =
+            "Settings{sandboxMode=$sandboxMode, skipDelay=$skipDelay, additionalProperties=$additionalProperties}"
     }
 
     override fun equals(other: Any?): Boolean {

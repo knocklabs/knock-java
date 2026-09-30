@@ -3,8 +3,10 @@
 package app.knock.api.models.workflows
 
 import app.knock.api.core.JsonValue
+import app.knock.api.core.jsonMapper
 import app.knock.api.models.recipients.RecipientRequest
 import app.knock.api.models.tenants.InlineTenantRequest
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -129,5 +131,46 @@ internal class WorkflowTriggerParamsTest {
                 RecipientRequest.ofUserRecipient("dr_sattler"),
                 RecipientRequest.ofUserRecipient("dr_malcolm"),
             )
+    }
+
+    @Test
+    fun bodySettings() {
+        val params =
+            WorkflowTriggerParams.builder()
+                .key("key")
+                .addRecipient("dr_grant")
+                .settings(
+                    WorkflowTriggerParams.Settings.builder()
+                        .sandboxMode(true)
+                        .skipDelay(false)
+                        .build()
+                )
+                .build()
+
+        val body = params._body()
+
+        assertThat(body.settings())
+            .contains(
+                WorkflowTriggerParams.Settings.builder().sandboxMode(true).skipDelay(false).build()
+            )
+        assertThat(jsonMapper().writeValueAsString(body))
+            .isEqualTo(
+                """{"recipients":["dr_grant"],"settings":{"sandbox_mode":true,"skip_delay":false}}"""
+            )
+    }
+
+    @Test
+    fun settingsRoundtrip() {
+        val jsonMapper = jsonMapper()
+        val settings = WorkflowTriggerParams.Settings.builder().sandboxMode(true).build()
+
+        val roundtrippedSettings =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(settings),
+                jacksonTypeRef<WorkflowTriggerParams.Settings>(),
+            )
+
+        assertThat(roundtrippedSettings).isEqualTo(settings)
+        assertThat(roundtrippedSettings.skipDelay()).isEmpty
     }
 }
