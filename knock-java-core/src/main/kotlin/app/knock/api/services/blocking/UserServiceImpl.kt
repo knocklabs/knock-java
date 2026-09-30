@@ -51,6 +51,8 @@ import app.knock.api.services.blocking.users.FeedService
 import app.knock.api.services.blocking.users.FeedServiceImpl
 import app.knock.api.services.blocking.users.GuideService
 import app.knock.api.services.blocking.users.GuideServiceImpl
+import app.knock.api.services.blocking.users.PreferenceCenterService
+import app.knock.api.services.blocking.users.PreferenceCenterServiceImpl
 import kotlin.jvm.optionals.getOrNull
 
 class UserServiceImpl internal constructor(private val clientOptions: ClientOptions) : UserService {
@@ -63,6 +65,10 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
 
     private val guides: GuideService by lazy { GuideServiceImpl(clientOptions) }
 
+    private val preferenceCenter: PreferenceCenterService by lazy {
+        PreferenceCenterServiceImpl(clientOptions)
+    }
+
     private val bulk: BulkService by lazy { BulkServiceImpl(clientOptions) }
 
     override fun withRawResponse(): UserService.WithRawResponse = withRawResponse
@@ -70,6 +76,8 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun feeds(): FeedService = feeds
 
     override fun guides(): GuideService = guides
+
+    override fun preferenceCenter(): PreferenceCenterService = preferenceCenter
 
     override fun bulk(): BulkService = bulk
 
@@ -177,6 +185,10 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             GuideServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val preferenceCenter: PreferenceCenterService.WithRawResponse by lazy {
+            PreferenceCenterServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val bulk: BulkService.WithRawResponse by lazy {
             BulkServiceImpl.WithRawResponseImpl(clientOptions)
         }
@@ -184,6 +196,8 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
         override fun feeds(): FeedService.WithRawResponse = feeds
 
         override fun guides(): GuideService.WithRawResponse = guides
+
+        override fun preferenceCenter(): PreferenceCenterService.WithRawResponse = preferenceCenter
 
         override fun bulk(): BulkService.WithRawResponse = bulk
 

@@ -30,6 +30,7 @@ import app.knock.api.models.users.UserUpdateParams
 import app.knock.api.services.async.users.BulkServiceAsync
 import app.knock.api.services.async.users.FeedServiceAsync
 import app.knock.api.services.async.users.GuideServiceAsync
+import app.knock.api.services.async.users.PreferenceCenterServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
@@ -43,6 +44,8 @@ interface UserServiceAsync {
     fun feeds(): FeedServiceAsync
 
     fun guides(): GuideServiceAsync
+
+    fun preferenceCenter(): PreferenceCenterServiceAsync
 
     fun bulk(): BulkServiceAsync
 
@@ -545,6 +548,8 @@ interface UserServiceAsync {
         fun feeds(): FeedServiceAsync.WithRawResponse
 
         fun guides(): GuideServiceAsync.WithRawResponse
+
+        fun preferenceCenter(): PreferenceCenterServiceAsync.WithRawResponse
 
         fun bulk(): BulkServiceAsync.WithRawResponse
 

@@ -30,6 +30,7 @@ import app.knock.api.models.users.UserUpdateParams
 import app.knock.api.services.blocking.users.BulkService
 import app.knock.api.services.blocking.users.FeedService
 import app.knock.api.services.blocking.users.GuideService
+import app.knock.api.services.blocking.users.PreferenceCenterService
 import com.google.errorprone.annotations.MustBeClosed
 
 interface UserService {
@@ -42,6 +43,8 @@ interface UserService {
     fun feeds(): FeedService
 
     fun guides(): GuideService
+
+    fun preferenceCenter(): PreferenceCenterService
 
     fun bulk(): BulkService
 
@@ -505,6 +508,8 @@ interface UserService {
         fun feeds(): FeedService.WithRawResponse
 
         fun guides(): GuideService.WithRawResponse
+
+        fun preferenceCenter(): PreferenceCenterService.WithRawResponse
 
         fun bulk(): BulkService.WithRawResponse
 

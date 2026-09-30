@@ -51,6 +51,8 @@ import app.knock.api.services.async.users.FeedServiceAsync
 import app.knock.api.services.async.users.FeedServiceAsyncImpl
 import app.knock.api.services.async.users.GuideServiceAsync
 import app.knock.api.services.async.users.GuideServiceAsyncImpl
+import app.knock.api.services.async.users.PreferenceCenterServiceAsync
+import app.knock.api.services.async.users.PreferenceCenterServiceAsyncImpl
 import java.util.concurrent.CompletableFuture
 import kotlin.jvm.optionals.getOrNull
 
@@ -65,6 +67,10 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
 
     private val guides: GuideServiceAsync by lazy { GuideServiceAsyncImpl(clientOptions) }
 
+    private val preferenceCenter: PreferenceCenterServiceAsync by lazy {
+        PreferenceCenterServiceAsyncImpl(clientOptions)
+    }
+
     private val bulk: BulkServiceAsync by lazy { BulkServiceAsyncImpl(clientOptions) }
 
     override fun withRawResponse(): UserServiceAsync.WithRawResponse = withRawResponse
@@ -72,6 +78,8 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun feeds(): FeedServiceAsync = feeds
 
     override fun guides(): GuideServiceAsync = guides
+
+    override fun preferenceCenter(): PreferenceCenterServiceAsync = preferenceCenter
 
     override fun bulk(): BulkServiceAsync = bulk
 
@@ -193,6 +201,10 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             GuideServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val preferenceCenter: PreferenceCenterServiceAsync.WithRawResponse by lazy {
+            PreferenceCenterServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val bulk: BulkServiceAsync.WithRawResponse by lazy {
             BulkServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
@@ -200,6 +212,9 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
         override fun feeds(): FeedServiceAsync.WithRawResponse = feeds
 
         override fun guides(): GuideServiceAsync.WithRawResponse = guides
+
+        override fun preferenceCenter(): PreferenceCenterServiceAsync.WithRawResponse =
+            preferenceCenter
 
         override fun bulk(): BulkServiceAsync.WithRawResponse = bulk
 
