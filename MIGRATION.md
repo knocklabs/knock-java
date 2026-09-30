@@ -102,6 +102,15 @@ BulkAddSubscriptionsParams.Subscription.builder()
 
 `ScheduleCreateParams.repeats()` returns `Optional<List<ScheduleRepeatRule>>`, because a schedule can be created with only `scheduled_at`.
 
+### Dependency updates
+
+The SDK still supports Java 8, but its dependencies have moved to their current major versions:
+
+- **OkHttp 5.** `knock-java-client-okhttp` (and so `knock-java`) now depends on OkHttp 5.5.0, via the `com.squareup.okhttp3:okhttp-jvm` artifact. OkHttp 5 is binary compatible with OkHttp 4 for most uses. If your build pins `com.squareup.okhttp3:okhttp` to 4.x, remove the pin or move it to 5.x. In Maven, depend on `okhttp-jvm` rather than `okhttp`, because the `okhttp` artifact is empty in OkHttp 5.
+- **Kotlin.** The SDK is compiled with language and API version 2.2 and depends on `kotlin-stdlib` 2.2 or later (OkHttp 5 already requires `kotlin-stdlib` 2.x). Java projects aren't affected beyond the newer transitive `kotlin-stdlib`. Kotlin projects need the Kotlin 2.1 compiler or later.
+- **Jackson.** The default Jackson version is 2.22.3. The minimum supported version is still 2.13.4.
+- **Apache HttpClient.** The transitive `httpclient5` and `httpcore5` versions are 5.6.4 and 5.4.4.
+
 ## New functionality
 
 - `workflowRecipientRuns()` with `list` and `get`
