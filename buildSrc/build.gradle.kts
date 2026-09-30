@@ -1,6 +1,5 @@
 plugins {
     `kotlin-dsl`
-    kotlin("jvm") version "1.9.20"
     id("com.vanniktech.maven.publish") version "0.28.0"
 }
 
@@ -11,6 +10,6 @@ repositories {
 
 dependencies {
     implementation("com.diffplug.spotless:spotless-plugin-gradle:7.0.2")
-    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:1.9.20")
+    implementation("org.jetbrains.kotlin:kotlin-gradle-plugin:2.4.20")
     implementation("com.vanniktech:gradle-maven-publish-plugin:0.28.0")
 }
