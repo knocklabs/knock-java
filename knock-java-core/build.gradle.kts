@@ -17,16 +17,16 @@ configurations.all {
 }
 
 dependencies {
-    api("com.fasterxml.jackson.core:jackson-core:2.18.2")
-    api("com.fasterxml.jackson.core:jackson-databind:2.18.2")
-    api("com.google.errorprone:error_prone_annotations:2.33.0")
+    api("com.fasterxml.jackson.core:jackson-core:2.22.3")
+    api("com.fasterxml.jackson.core:jackson-databind:2.22.3")
+    api("com.google.errorprone:error_prone_annotations:2.50.0")
 
-    implementation("com.fasterxml.jackson.core:jackson-annotations:2.18.2")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.18.2")
-    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.18.2")
-    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.18.2")
-    implementation("org.apache.httpcomponents.core5:httpcore5:5.2.4")
-    implementation("org.apache.httpcomponents.client5:httpclient5:5.3.1")
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.22")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jdk8:2.22.3")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.22.3")
+    implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.22.3")
+    implementation("org.apache.httpcomponents.core5:httpcore5:5.4.4")
+    implementation("org.apache.httpcomponents.client5:httpclient5:5.6.4")
 
     testImplementation(kotlin("test"))
     testImplementation(project(":knock-java-client-okhttp"))
