@@ -19,6 +19,7 @@ import app.knock.api.core.prepare
 import app.knock.api.models.bulkoperations.BulkOperation
 import app.knock.api.models.objects.bulk.BulkAddSubscriptionsParams
 import app.knock.api.models.objects.bulk.BulkDeleteParams
+import app.knock.api.models.objects.bulk.BulkDeleteSubscriptionsParams
 import app.knock.api.models.objects.bulk.BulkSetParams
 import kotlin.jvm.optionals.getOrNull
 
@@ -40,6 +41,13 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
     ): BulkOperation =
         // post /v1/objects/{collection}/bulk/subscriptions/add
         withRawResponse().addSubscriptions(params, requestOptions).parse()
+
+    override fun deleteSubscriptions(
+        params: BulkDeleteSubscriptionsParams,
+        requestOptions: RequestOptions,
+    ): BulkOperation =
+        // post /v1/objects/{collection}/bulk/subscriptions/delete
+        withRawResponse().deleteSubscriptions(params, requestOptions).parse()
 
     override fun set(params: BulkSetParams, requestOptions: RequestOptions): BulkOperation =
         // post /v1/objects/{collection}/bulk/set
@@ -83,6 +91,9 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
         private val addSubscriptionsHandler: Handler<BulkOperation> =
             jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
 
+        private val deleteSubscriptionsHandler: Handler<BulkOperation> =
+            jsonHandler<BulkOperation>(clientOptions.jsonMapper).withErrorHandler(errorHandler)
+
         override fun addSubscriptions(
             params: BulkAddSubscriptionsParams,
             requestOptions: RequestOptions,
@@ -109,6 +120,40 @@ class BulkServiceImpl internal constructor(private val clientOptions: ClientOpti
             return response.parseable {
                 response
                     .use { addSubscriptionsHandler.handle(it) }
+                    .also {
+                        if (requestOptions.responseValidation!!) {
+                            it.validate()
+                        }
+                    }
+            }
+        }
+
+        override fun deleteSubscriptions(
+            params: BulkDeleteSubscriptionsParams,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<BulkOperation> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.POST)
+                    .addPathSegments(
+                        "v1",
+                        "objects",
+                        params._pathParam(0),
+                        "bulk",
+                        "subscriptions",
+                        "delete",
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            return response.parseable {
+                response
+                    .use { deleteSubscriptionsHandler.handle(it) }
                     .also {
                         if (requestOptions.responseValidation!!) {
                             it.validate()

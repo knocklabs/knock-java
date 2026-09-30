@@ -459,4 +459,19 @@ internal class UserServiceTest {
 
         userService.unsetChannelData("user_id", "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
     }
+
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
+    @Test
+    fun unsetPreferences() {
+        val client =
+            KnockOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val userService = client.users()
+
+        userService.unsetPreferences("user_id", "default")
+    }
 }

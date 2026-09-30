@@ -287,4 +287,31 @@ internal class InlineIdentifyUserRequestTest {
 
         assertThat(roundtrippedInlineIdentifyUserRequest).isEqualTo(inlineIdentifyUserRequest)
     }
+
+    @Test
+    fun avatarLocaleAndPhoneNumber() {
+        val jsonMapper = jsonMapper()
+        val inlineIdentifyUserRequest =
+            InlineIdentifyUserRequest.builder()
+                .id("user_1")
+                .avatar("https://example.com/avatar.png")
+                .locale("en-US")
+                .phoneNumber("+15555555555")
+                .build()
+
+        assertThat(inlineIdentifyUserRequest.avatar()).contains("https://example.com/avatar.png")
+        assertThat(inlineIdentifyUserRequest.locale()).contains("en-US")
+        assertThat(inlineIdentifyUserRequest.phoneNumber()).contains("+15555555555")
+        assertThat(jsonMapper.writeValueAsString(inlineIdentifyUserRequest))
+            .isEqualTo(
+                """{"id":"user_1","avatar":"https://example.com/avatar.png","locale":"en-US","phone_number":"+15555555555"}"""
+            )
+        assertThat(
+                jsonMapper.readValue(
+                    jsonMapper.writeValueAsString(inlineIdentifyUserRequest),
+                    jacksonTypeRef<InlineIdentifyUserRequest>(),
+                )
+            )
+            .isEqualTo(inlineIdentifyUserRequest)
+    }
 }

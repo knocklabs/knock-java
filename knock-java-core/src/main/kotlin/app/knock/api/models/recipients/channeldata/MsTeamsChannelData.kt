@@ -449,6 +449,7 @@ private constructor(
             private val msTeamsTeamId: JsonField<String>,
             private val msTeamsTenantId: JsonField<String>,
             private val msTeamsUserId: JsonField<String>,
+            private val knockTenantId: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -466,11 +467,15 @@ private constructor(
                 @JsonProperty("ms_teams_user_id")
                 @ExcludeMissing
                 msTeamsUserId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("knock_tenant_id")
+                @ExcludeMissing
+                knockTenantId: JsonField<String> = JsonMissing.of(),
             ) : this(
                 msTeamsChannelId,
                 msTeamsTeamId,
                 msTeamsTenantId,
                 msTeamsUserId,
+                knockTenantId,
                 mutableMapOf(),
             )
 
@@ -507,6 +512,16 @@ private constructor(
              *   the server responded with an unexpected value).
              */
             fun msTeamsUserId(): Optional<String> = msTeamsUserId.getOptional("ms_teams_user_id")
+
+            /**
+             * An optional Knock tenant ID (`knock_tenant_id`) that scopes this connection. Distinct
+             * from provider-specific tenant IDs. When a workflow is triggered with this tenant,
+             * Knock prefers this connection over untagged connections.
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun knockTenantId(): Optional<String> = knockTenantId.getOptional("knock_tenant_id")
 
             /**
              * Returns the raw JSON value of [msTeamsChannelId].
@@ -548,6 +563,16 @@ private constructor(
             @ExcludeMissing
             fun _msTeamsUserId(): JsonField<String> = msTeamsUserId
 
+            /**
+             * Returns the raw JSON value of [knockTenantId].
+             *
+             * Unlike [knockTenantId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("knock_tenant_id")
+            @ExcludeMissing
+            fun _knockTenantId(): JsonField<String> = knockTenantId
+
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -576,6 +601,7 @@ private constructor(
                 private var msTeamsTeamId: JsonField<String> = JsonMissing.of()
                 private var msTeamsTenantId: JsonField<String> = JsonMissing.of()
                 private var msTeamsUserId: JsonField<String> = JsonMissing.of()
+                private var knockTenantId: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -584,6 +610,7 @@ private constructor(
                     msTeamsTeamId = msTeamsTokenConnection.msTeamsTeamId
                     msTeamsTenantId = msTeamsTokenConnection.msTeamsTenantId
                     msTeamsUserId = msTeamsTokenConnection.msTeamsUserId
+                    knockTenantId = msTeamsTokenConnection.knockTenantId
                     additionalProperties =
                         msTeamsTokenConnection.additionalProperties.toMutableMap()
                 }
@@ -669,6 +696,29 @@ private constructor(
                     this.msTeamsUserId = msTeamsUserId
                 }
 
+                /**
+                 * An optional Knock tenant ID (`knock_tenant_id`) that scopes this connection.
+                 * Distinct from provider-specific tenant IDs. When a workflow is triggered with
+                 * this tenant, Knock prefers this connection over untagged connections.
+                 */
+                fun knockTenantId(knockTenantId: String?) =
+                    knockTenantId(JsonField.ofNullable(knockTenantId))
+
+                /** Alias for calling [Builder.knockTenantId] with `knockTenantId.orElse(null)`. */
+                fun knockTenantId(knockTenantId: Optional<String>) =
+                    knockTenantId(knockTenantId.getOrNull())
+
+                /**
+                 * Sets [Builder.knockTenantId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.knockTenantId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun knockTenantId(knockTenantId: JsonField<String>) = apply {
+                    this.knockTenantId = knockTenantId
+                }
+
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
                     putAllAdditionalProperties(additionalProperties)
@@ -702,6 +752,7 @@ private constructor(
                         msTeamsTeamId,
                         msTeamsTenantId,
                         msTeamsUserId,
+                        knockTenantId,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -717,6 +768,7 @@ private constructor(
                 msTeamsTeamId()
                 msTeamsTenantId()
                 msTeamsUserId()
+                knockTenantId()
                 validated = true
             }
 
@@ -739,30 +791,32 @@ private constructor(
                 (if (msTeamsChannelId.asKnown().isPresent) 1 else 0) +
                     (if (msTeamsTeamId.asKnown().isPresent) 1 else 0) +
                     (if (msTeamsTenantId.asKnown().isPresent) 1 else 0) +
-                    (if (msTeamsUserId.asKnown().isPresent) 1 else 0)
+                    (if (msTeamsUserId.asKnown().isPresent) 1 else 0) +
+                    (if (knockTenantId.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is MsTeamsTokenConnection && msTeamsChannelId == other.msTeamsChannelId && msTeamsTeamId == other.msTeamsTeamId && msTeamsTenantId == other.msTeamsTenantId && msTeamsUserId == other.msTeamsUserId && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is MsTeamsTokenConnection && msTeamsChannelId == other.msTeamsChannelId && msTeamsTeamId == other.msTeamsTeamId && msTeamsTenantId == other.msTeamsTenantId && msTeamsUserId == other.msTeamsUserId && knockTenantId == other.knockTenantId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(msTeamsChannelId, msTeamsTeamId, msTeamsTenantId, msTeamsUserId, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(msTeamsChannelId, msTeamsTeamId, msTeamsTenantId, msTeamsUserId, knockTenantId, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "MsTeamsTokenConnection{msTeamsChannelId=$msTeamsChannelId, msTeamsTeamId=$msTeamsTeamId, msTeamsTenantId=$msTeamsTenantId, msTeamsUserId=$msTeamsUserId, additionalProperties=$additionalProperties}"
+                "MsTeamsTokenConnection{msTeamsChannelId=$msTeamsChannelId, msTeamsTeamId=$msTeamsTeamId, msTeamsTenantId=$msTeamsTenantId, msTeamsUserId=$msTeamsUserId, knockTenantId=$knockTenantId, additionalProperties=$additionalProperties}"
         }
 
         /** Microsoft Teams incoming webhook connection. */
         class MsTeamsIncomingWebhookConnection
         private constructor(
             private val incomingWebhook: JsonField<IncomingWebhook>,
+            private val knockTenantId: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -770,8 +824,11 @@ private constructor(
             private constructor(
                 @JsonProperty("incoming_webhook")
                 @ExcludeMissing
-                incomingWebhook: JsonField<IncomingWebhook> = JsonMissing.of()
-            ) : this(incomingWebhook, mutableMapOf())
+                incomingWebhook: JsonField<IncomingWebhook> = JsonMissing.of(),
+                @JsonProperty("knock_tenant_id")
+                @ExcludeMissing
+                knockTenantId: JsonField<String> = JsonMissing.of(),
+            ) : this(incomingWebhook, knockTenantId, mutableMapOf())
 
             /**
              * Microsoft Teams incoming webhook.
@@ -783,6 +840,16 @@ private constructor(
             fun incomingWebhook(): IncomingWebhook = incomingWebhook.getRequired("incoming_webhook")
 
             /**
+             * An optional Knock tenant ID (`knock_tenant_id`) that scopes this connection. Distinct
+             * from provider-specific tenant IDs. When a workflow is triggered with this tenant,
+             * Knock prefers this connection over untagged connections.
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun knockTenantId(): Optional<String> = knockTenantId.getOptional("knock_tenant_id")
+
+            /**
              * Returns the raw JSON value of [incomingWebhook].
              *
              * Unlike [incomingWebhook], this method doesn't throw if the JSON field has an
@@ -791,6 +858,16 @@ private constructor(
             @JsonProperty("incoming_webhook")
             @ExcludeMissing
             fun _incomingWebhook(): JsonField<IncomingWebhook> = incomingWebhook
+
+            /**
+             * Returns the raw JSON value of [knockTenantId].
+             *
+             * Unlike [knockTenantId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("knock_tenant_id")
+            @ExcludeMissing
+            fun _knockTenantId(): JsonField<String> = knockTenantId
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -822,6 +899,7 @@ private constructor(
             class Builder internal constructor() {
 
                 private var incomingWebhook: JsonField<IncomingWebhook>? = null
+                private var knockTenantId: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -829,6 +907,7 @@ private constructor(
                     msTeamsIncomingWebhookConnection: MsTeamsIncomingWebhookConnection
                 ) = apply {
                     incomingWebhook = msTeamsIncomingWebhookConnection.incomingWebhook
+                    knockTenantId = msTeamsIncomingWebhookConnection.knockTenantId
                     additionalProperties =
                         msTeamsIncomingWebhookConnection.additionalProperties.toMutableMap()
                 }
@@ -846,6 +925,29 @@ private constructor(
                  */
                 fun incomingWebhook(incomingWebhook: JsonField<IncomingWebhook>) = apply {
                     this.incomingWebhook = incomingWebhook
+                }
+
+                /**
+                 * An optional Knock tenant ID (`knock_tenant_id`) that scopes this connection.
+                 * Distinct from provider-specific tenant IDs. When a workflow is triggered with
+                 * this tenant, Knock prefers this connection over untagged connections.
+                 */
+                fun knockTenantId(knockTenantId: String?) =
+                    knockTenantId(JsonField.ofNullable(knockTenantId))
+
+                /** Alias for calling [Builder.knockTenantId] with `knockTenantId.orElse(null)`. */
+                fun knockTenantId(knockTenantId: Optional<String>) =
+                    knockTenantId(knockTenantId.getOrNull())
+
+                /**
+                 * Sets [Builder.knockTenantId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.knockTenantId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun knockTenantId(knockTenantId: JsonField<String>) = apply {
+                    this.knockTenantId = knockTenantId
                 }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
@@ -885,6 +987,7 @@ private constructor(
                 fun build(): MsTeamsIncomingWebhookConnection =
                     MsTeamsIncomingWebhookConnection(
                         checkRequired("incomingWebhook", incomingWebhook),
+                        knockTenantId,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -897,6 +1000,7 @@ private constructor(
                 }
 
                 incomingWebhook().validate()
+                knockTenantId()
                 validated = true
             }
 
@@ -915,7 +1019,9 @@ private constructor(
              * Used for best match union deserialization.
              */
             @JvmSynthetic
-            internal fun validity(): Int = (incomingWebhook.asKnown().getOrNull()?.validity() ?: 0)
+            internal fun validity(): Int =
+                (incomingWebhook.asKnown().getOrNull()?.validity() ?: 0) +
+                    (if (knockTenantId.asKnown().isPresent) 1 else 0)
 
             /** Microsoft Teams incoming webhook. */
             class IncomingWebhook
@@ -1085,17 +1191,17 @@ private constructor(
                     return true
                 }
 
-                return /* spotless:off */ other is MsTeamsIncomingWebhookConnection && incomingWebhook == other.incomingWebhook && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is MsTeamsIncomingWebhookConnection && incomingWebhook == other.incomingWebhook && knockTenantId == other.knockTenantId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(incomingWebhook, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(incomingWebhook, knockTenantId, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "MsTeamsIncomingWebhookConnection{incomingWebhook=$incomingWebhook, additionalProperties=$additionalProperties}"
+                "MsTeamsIncomingWebhookConnection{incomingWebhook=$incomingWebhook, knockTenantId=$knockTenantId, additionalProperties=$additionalProperties}"
         }
     }
 

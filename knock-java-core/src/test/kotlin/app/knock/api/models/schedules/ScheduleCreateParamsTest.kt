@@ -5,6 +5,7 @@ package app.knock.api.models.schedules
 import app.knock.api.core.JsonValue
 import app.knock.api.models.recipients.RecipientRequest
 import app.knock.api.models.tenants.InlineTenantRequest
+import kotlin.jvm.optionals.getOrNull
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -36,6 +37,7 @@ internal class ScheduleCreateParamsTest {
                     .build()
             )
             .workflow("comment-created")
+            .actor("mr_dna")
             .data(
                 ScheduleCreateParams.Data.builder()
                     .putAdditionalProperty("key", JsonValue.from("bar"))
@@ -74,6 +76,7 @@ internal class ScheduleCreateParamsTest {
                         .build()
                 )
                 .workflow("comment-created")
+                .actor("mr_dna")
                 .data(
                     ScheduleCreateParams.Data.builder()
                         .putAdditionalProperty("key", JsonValue.from("bar"))
@@ -87,7 +90,7 @@ internal class ScheduleCreateParamsTest {
         val body = params._body()
 
         assertThat(body.recipients()).containsExactly(RecipientRequest.ofUserRecipient("user_123"))
-        assertThat(body.repeats())
+        assertThat(body.repeats().getOrNull())
             .containsExactly(
                 ScheduleRepeatRule.builder()
                     ._typename("ScheduleRepeat")
@@ -110,6 +113,7 @@ internal class ScheduleCreateParamsTest {
                     .build()
             )
         assertThat(body.workflow()).isEqualTo("comment-created")
+        assertThat(body.actor()).contains(RecipientRequest.ofUserRecipient("mr_dna"))
         assertThat(body.data())
             .contains(
                 ScheduleCreateParams.Data.builder()
@@ -126,25 +130,12 @@ internal class ScheduleCreateParamsTest {
         val params =
             ScheduleCreateParams.builder()
                 .addRecipient("user_123")
-                .addRepeat(
-                    ScheduleRepeatRule.builder()
-                        ._typename("ScheduleRepeat")
-                        .frequency(ScheduleRepeatRule.Frequency.DAILY)
-                        .build()
-                )
                 .workflow("comment-created")
                 .build()
 
         val body = params._body()
 
         assertThat(body.recipients()).containsExactly(RecipientRequest.ofUserRecipient("user_123"))
-        assertThat(body.repeats())
-            .containsExactly(
-                ScheduleRepeatRule.builder()
-                    ._typename("ScheduleRepeat")
-                    .frequency(ScheduleRepeatRule.Frequency.DAILY)
-                    .build()
-            )
         assertThat(body.workflow()).isEqualTo("comment-created")
     }
 }

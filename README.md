@@ -277,6 +277,34 @@ while (page != null) {
 }
 ```
 
+## User tokens
+
+When [enhanced security mode](https://docs.knock.app/in-app-ui/security-and-authentication) is enabled, client-side requests (for example, from an in-app feed or a Slack channel picker) must be authenticated with a user token signed by your Knock signing key. `UserTokens.signUserToken` produces the same RS256 JWT as the Node SDK:
+
+```java
+import app.knock.api.lib.Grant;
+import app.knock.api.lib.SignUserTokenOptions;
+import app.knock.api.lib.TokenEntity;
+import app.knock.api.lib.UserTokens;
+import java.util.Arrays;
+
+// Uses the `KNOCK_SIGNING_KEY` environment variable and expires in one hour
+String token = UserTokens.signUserToken("dnedry");
+
+// Or configure the key, expiry, and grants explicitly
+String scopedToken = UserTokens.signUserToken(
+    "dnedry",
+    SignUserTokenOptions.builder()
+        .signingKey(System.getenv("MY_SIGNING_KEY"))
+        .expiresInSeconds(600)
+        .addGrant(UserTokens.buildUserTokenGrant(
+            TokenEntity.ofTenant("jurassic-park"),
+            Arrays.asList(Grant.SLACK_CHANNELS_READ, Grant.CHANNEL_DATA_READ)))
+        .build());
+```
+
+The signing key can be a PEM or a base64-encoded PEM.
+
 ## Logging
 
 The SDK uses the standard [OkHttp logging interceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor).

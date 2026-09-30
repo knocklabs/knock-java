@@ -14,6 +14,7 @@ import app.knock.api.services.blocking.ScheduleService
 import app.knock.api.services.blocking.SharedService
 import app.knock.api.services.blocking.TenantService
 import app.knock.api.services.blocking.UserService
+import app.knock.api.services.blocking.WorkflowRecipientRunService
 import app.knock.api.services.blocking.WorkflowService
 
 /**
@@ -71,6 +72,8 @@ interface KnockClient {
 
     fun audiences(): AudienceService
 
+    fun workflowRecipientRuns(): WorkflowRecipientRunService
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -112,5 +115,7 @@ interface KnockClient {
         fun channels(): ChannelService.WithRawResponse
 
         fun audiences(): AudienceService.WithRawResponse
+
+        fun workflowRecipientRuns(): WorkflowRecipientRunService.WithRawResponse
     }
 }

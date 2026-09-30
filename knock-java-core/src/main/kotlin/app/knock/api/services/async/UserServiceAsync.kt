@@ -3,6 +3,7 @@
 package app.knock.api.services.async
 
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.recipients.channeldata.ChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSet
@@ -24,10 +25,12 @@ import app.knock.api.models.users.UserMergeParams
 import app.knock.api.models.users.UserSetChannelDataParams
 import app.knock.api.models.users.UserSetPreferencesParams
 import app.knock.api.models.users.UserUnsetChannelDataParams
+import app.knock.api.models.users.UserUnsetPreferencesParams
 import app.knock.api.models.users.UserUpdateParams
 import app.knock.api.services.async.users.BulkServiceAsync
 import app.knock.api.services.async.users.FeedServiceAsync
 import app.knock.api.services.async.users.GuideServiceAsync
+import app.knock.api.services.async.users.PreferenceCenterServiceAsync
 import com.google.errorprone.annotations.MustBeClosed
 import java.util.concurrent.CompletableFuture
 
@@ -41,6 +44,8 @@ interface UserServiceAsync {
     fun feeds(): FeedServiceAsync
 
     fun guides(): GuideServiceAsync
+
+    fun preferenceCenter(): PreferenceCenterServiceAsync
 
     fun bulk(): BulkServiceAsync
 
@@ -87,33 +92,33 @@ interface UserServiceAsync {
         list(UserListParams.none(), requestOptions)
 
     /** Permanently delete a user and all associated data. */
-    fun delete(userId: String): CompletableFuture<String> = delete(userId, UserDeleteParams.none())
+    fun delete(userId: String): CompletableFuture<Void?> = delete(userId, UserDeleteParams.none())
 
     /** @see [delete] */
     fun delete(
         userId: String,
         params: UserDeleteParams = UserDeleteParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String> = delete(params.toBuilder().userId(userId).build(), requestOptions)
+    ): CompletableFuture<Void?> = delete(params.toBuilder().userId(userId).build(), requestOptions)
 
     /** @see [delete] */
     fun delete(
         userId: String,
         params: UserDeleteParams = UserDeleteParams.none(),
-    ): CompletableFuture<String> = delete(userId, params, RequestOptions.none())
+    ): CompletableFuture<Void?> = delete(userId, params, RequestOptions.none())
 
     /** @see [delete] */
     fun delete(
         params: UserDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String>
+    ): CompletableFuture<Void?>
 
     /** @see [delete] */
-    fun delete(params: UserDeleteParams): CompletableFuture<String> =
+    fun delete(params: UserDeleteParams): CompletableFuture<Void?> =
         delete(params, RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(userId: String, requestOptions: RequestOptions): CompletableFuture<String> =
+    fun delete(userId: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         delete(userId, UserDeleteParams.none(), requestOptions)
 
     /** Retrieve a specific user by their ID. */
@@ -458,7 +463,7 @@ interface UserServiceAsync {
     ): CompletableFuture<PreferenceSet>
 
     /** Deletes channel data for a specific user and channel ID. */
-    fun unsetChannelData(userId: String, channelId: String): CompletableFuture<String> =
+    fun unsetChannelData(userId: String, channelId: String): CompletableFuture<Void?> =
         unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none())
 
     /** @see [unsetChannelData] */
@@ -467,7 +472,7 @@ interface UserServiceAsync {
         channelId: String,
         params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         unsetChannelData(
             params.toBuilder().userId(userId).channelId(channelId).build(),
             requestOptions,
@@ -478,17 +483,16 @@ interface UserServiceAsync {
         userId: String,
         channelId: String,
         params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
-    ): CompletableFuture<String> =
-        unsetChannelData(userId, channelId, params, RequestOptions.none())
+    ): CompletableFuture<Void?> = unsetChannelData(userId, channelId, params, RequestOptions.none())
 
     /** @see [unsetChannelData] */
     fun unsetChannelData(
         params: UserUnsetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String>
+    ): CompletableFuture<Void?>
 
     /** @see [unsetChannelData] */
-    fun unsetChannelData(params: UserUnsetChannelDataParams): CompletableFuture<String> =
+    fun unsetChannelData(params: UserUnsetChannelDataParams): CompletableFuture<Void?> =
         unsetChannelData(params, RequestOptions.none())
 
     /** @see [unsetChannelData] */
@@ -496,8 +500,46 @@ interface UserServiceAsync {
         userId: String,
         channelId: String,
         requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none(), requestOptions)
+
+    /** Deletes channel data for a specific user and channel ID. */
+    fun unsetPreferences(userId: String, id: String): CompletableFuture<Void?> =
+        unsetPreferences(userId, id, UserUnsetPreferencesParams.none())
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        userId: String,
+        id: String,
+        params: UserUnsetPreferencesParams = UserUnsetPreferencesParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Void?> =
+        unsetPreferences(params.toBuilder().userId(userId).id(id).build(), requestOptions)
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        userId: String,
+        id: String,
+        params: UserUnsetPreferencesParams = UserUnsetPreferencesParams.none(),
+    ): CompletableFuture<Void?> = unsetPreferences(userId, id, params, RequestOptions.none())
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        params: UserUnsetPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Void?>
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(params: UserUnsetPreferencesParams): CompletableFuture<Void?> =
+        unsetPreferences(params, RequestOptions.none())
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        userId: String,
+        id: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Void?> =
+        unsetPreferences(userId, id, UserUnsetPreferencesParams.none(), requestOptions)
 
     /** A view of [UserServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -505,6 +547,8 @@ interface UserServiceAsync {
         fun feeds(): FeedServiceAsync.WithRawResponse
 
         fun guides(): GuideServiceAsync.WithRawResponse
+
+        fun preferenceCenter(): PreferenceCenterServiceAsync.WithRawResponse
 
         fun bulk(): BulkServiceAsync.WithRawResponse
 
@@ -573,7 +617,7 @@ interface UserServiceAsync {
          * as [UserServiceAsync.delete].
          */
         @MustBeClosed
-        fun delete(userId: String): CompletableFuture<HttpResponseFor<String>> =
+        fun delete(userId: String): CompletableFuture<HttpResponse> =
             delete(userId, UserDeleteParams.none())
 
         /** @see [delete] */
@@ -582,7 +626,7 @@ interface UserServiceAsync {
             userId: String,
             params: UserDeleteParams = UserDeleteParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             delete(params.toBuilder().userId(userId).build(), requestOptions)
 
         /** @see [delete] */
@@ -590,19 +634,18 @@ interface UserServiceAsync {
         fun delete(
             userId: String,
             params: UserDeleteParams = UserDeleteParams.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
-            delete(userId, params, RequestOptions.none())
+        ): CompletableFuture<HttpResponse> = delete(userId, params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: UserDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>>
+        ): CompletableFuture<HttpResponse>
 
         /** @see [delete] */
         @MustBeClosed
-        fun delete(params: UserDeleteParams): CompletableFuture<HttpResponseFor<String>> =
+        fun delete(params: UserDeleteParams): CompletableFuture<HttpResponse> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
@@ -610,8 +653,7 @@ interface UserServiceAsync {
         fun delete(
             userId: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> =
-            delete(userId, UserDeleteParams.none(), requestOptions)
+        ): CompletableFuture<HttpResponse> = delete(userId, UserDeleteParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /v1/users/{user_id}`, but is otherwise the same as
@@ -1073,10 +1115,7 @@ interface UserServiceAsync {
          * but is otherwise the same as [UserServiceAsync.unsetChannelData].
          */
         @MustBeClosed
-        fun unsetChannelData(
-            userId: String,
-            channelId: String,
-        ): CompletableFuture<HttpResponseFor<String>> =
+        fun unsetChannelData(userId: String, channelId: String): CompletableFuture<HttpResponse> =
             unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none())
 
         /** @see [unsetChannelData] */
@@ -1086,7 +1125,7 @@ interface UserServiceAsync {
             channelId: String,
             params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             unsetChannelData(
                 params.toBuilder().userId(userId).channelId(channelId).build(),
                 requestOptions,
@@ -1098,7 +1137,7 @@ interface UserServiceAsync {
             userId: String,
             channelId: String,
             params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             unsetChannelData(userId, channelId, params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
@@ -1106,13 +1145,11 @@ interface UserServiceAsync {
         fun unsetChannelData(
             params: UserUnsetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>>
+        ): CompletableFuture<HttpResponse>
 
         /** @see [unsetChannelData] */
         @MustBeClosed
-        fun unsetChannelData(
-            params: UserUnsetChannelDataParams
-        ): CompletableFuture<HttpResponseFor<String>> =
+        fun unsetChannelData(params: UserUnsetChannelDataParams): CompletableFuture<HttpResponse> =
             unsetChannelData(params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
@@ -1121,7 +1158,55 @@ interface UserServiceAsync {
             userId: String,
             channelId: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `delete /v1/users/{user_id}/preferences/{id}`, but is
+         * otherwise the same as [UserServiceAsync.unsetPreferences].
+         */
+        @MustBeClosed
+        fun unsetPreferences(userId: String, id: String): CompletableFuture<HttpResponse> =
+            unsetPreferences(userId, id, UserUnsetPreferencesParams.none())
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            userId: String,
+            id: String,
+            params: UserUnsetPreferencesParams = UserUnsetPreferencesParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse> =
+            unsetPreferences(params.toBuilder().userId(userId).id(id).build(), requestOptions)
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            userId: String,
+            id: String,
+            params: UserUnsetPreferencesParams = UserUnsetPreferencesParams.none(),
+        ): CompletableFuture<HttpResponse> =
+            unsetPreferences(userId, id, params, RequestOptions.none())
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            params: UserUnsetPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse>
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(params: UserUnsetPreferencesParams): CompletableFuture<HttpResponse> =
+            unsetPreferences(params, RequestOptions.none())
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            userId: String,
+            id: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponse> =
+            unsetPreferences(userId, id, UserUnsetPreferencesParams.none(), requestOptions)
     }
 }

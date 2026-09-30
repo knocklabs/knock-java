@@ -6,12 +6,13 @@ import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.checkRequired
+import app.knock.api.core.handlers.emptyHandler
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
-import app.knock.api.core.handlers.stringHandler
 import app.knock.api.core.handlers.withErrorHandler
 import app.knock.api.core.http.HttpMethod
 import app.knock.api.core.http.HttpRequest
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponse.Handler
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
@@ -45,9 +46,10 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
         // get /v1/tenants
         withRawResponse().list(params, requestOptions).parse()
 
-    override fun delete(params: TenantDeleteParams, requestOptions: RequestOptions): String =
+    override fun delete(params: TenantDeleteParams, requestOptions: RequestOptions) {
         // delete /v1/tenants/{id}
-        withRawResponse().delete(params, requestOptions).parse()
+        withRawResponse().delete(params, requestOptions)
+    }
 
     override fun get(params: TenantGetParams, requestOptions: RequestOptions): Tenant =
         // get /v1/tenants/{id}
@@ -102,12 +104,12 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
             }
         }
 
-        private val deleteHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
+        private val deleteHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
 
         override fun delete(
             params: TenantDeleteParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<String> {
+        ): HttpResponse {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())
@@ -120,7 +122,8 @@ class TenantServiceImpl internal constructor(private val clientOptions: ClientOp
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable { response.use { deleteHandler.handle(it) } }
+            response.use { deleteHandler.handle(it) }
+            return response
         }
 
         private val getHandler: Handler<Tenant> =

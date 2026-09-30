@@ -6,12 +6,13 @@ import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.checkRequired
+import app.knock.api.core.handlers.emptyHandler
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
-import app.knock.api.core.handlers.stringHandler
 import app.knock.api.core.handlers.withErrorHandler
 import app.knock.api.core.http.HttpMethod
 import app.knock.api.core.http.HttpRequest
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponse.Handler
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
@@ -32,12 +33,10 @@ class AudienceServiceImpl internal constructor(private val clientOptions: Client
 
     override fun withRawResponse(): AudienceService.WithRawResponse = withRawResponse
 
-    override fun addMembers(
-        params: AudienceAddMembersParams,
-        requestOptions: RequestOptions,
-    ): String =
+    override fun addMembers(params: AudienceAddMembersParams, requestOptions: RequestOptions) {
         // post /v1/audiences/{key}/members
-        withRawResponse().addMembers(params, requestOptions).parse()
+        withRawResponse().addMembers(params, requestOptions)
+    }
 
     override fun listMembers(
         params: AudienceListMembersParams,
@@ -49,22 +48,23 @@ class AudienceServiceImpl internal constructor(private val clientOptions: Client
     override fun removeMembers(
         params: AudienceRemoveMembersParams,
         requestOptions: RequestOptions,
-    ): String =
+    ) {
         // delete /v1/audiences/{key}/members
-        withRawResponse().removeMembers(params, requestOptions).parse()
+        withRawResponse().removeMembers(params, requestOptions)
+    }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         AudienceService.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
-        private val addMembersHandler: Handler<String> =
-            stringHandler().withErrorHandler(errorHandler)
+        private val addMembersHandler: Handler<Void?> =
+            emptyHandler().withErrorHandler(errorHandler)
 
         override fun addMembers(
             params: AudienceAddMembersParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<String> {
+        ): HttpResponse {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("key", params.key().getOrNull())
@@ -77,7 +77,8 @@ class AudienceServiceImpl internal constructor(private val clientOptions: Client
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable { response.use { addMembersHandler.handle(it) } }
+            response.use { addMembersHandler.handle(it) }
+            return response
         }
 
         private val listMembersHandler: Handler<AudienceListMembersResponse> =
@@ -110,13 +111,13 @@ class AudienceServiceImpl internal constructor(private val clientOptions: Client
             }
         }
 
-        private val removeMembersHandler: Handler<String> =
-            stringHandler().withErrorHandler(errorHandler)
+        private val removeMembersHandler: Handler<Void?> =
+            emptyHandler().withErrorHandler(errorHandler)
 
         override fun removeMembers(
             params: AudienceRemoveMembersParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<String> {
+        ): HttpResponse {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("key", params.key().getOrNull())
@@ -129,7 +130,8 @@ class AudienceServiceImpl internal constructor(private val clientOptions: Client
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable { response.use { removeMembersHandler.handle(it) } }
+            response.use { removeMembersHandler.handle(it) }
+            return response
         }
     }
 }

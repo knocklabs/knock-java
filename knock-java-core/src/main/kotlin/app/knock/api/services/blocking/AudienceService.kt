@@ -3,6 +3,7 @@
 package app.knock.api.services.blocking
 
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.audiences.AudienceAddMembersParams
 import app.knock.api.models.audiences.AudienceListMembersParams
@@ -18,7 +19,7 @@ interface AudienceService {
     fun withRawResponse(): WithRawResponse
 
     /** Adds one or more members to the specified audience. */
-    fun addMembers(key: String, params: AudienceAddMembersParams): String =
+    fun addMembers(key: String, params: AudienceAddMembersParams) =
         addMembers(key, params, RequestOptions.none())
 
     /** @see [addMembers] */
@@ -26,17 +27,16 @@ interface AudienceService {
         key: String,
         params: AudienceAddMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): String = addMembers(params.toBuilder().key(key).build(), requestOptions)
+    ) = addMembers(params.toBuilder().key(key).build(), requestOptions)
 
     /** @see [addMembers] */
-    fun addMembers(params: AudienceAddMembersParams): String =
-        addMembers(params, RequestOptions.none())
+    fun addMembers(params: AudienceAddMembersParams) = addMembers(params, RequestOptions.none())
 
     /** @see [addMembers] */
     fun addMembers(
         params: AudienceAddMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): String
+    )
 
     /** Returns a paginated list of members for the specified audience. */
     fun listMembers(key: String): AudienceListMembersResponse =
@@ -71,7 +71,7 @@ interface AudienceService {
         listMembers(key, AudienceListMembersParams.none(), requestOptions)
 
     /** Removes one or more members from the specified audience. */
-    fun removeMembers(key: String, params: AudienceRemoveMembersParams): String =
+    fun removeMembers(key: String, params: AudienceRemoveMembersParams) =
         removeMembers(key, params, RequestOptions.none())
 
     /** @see [removeMembers] */
@@ -79,17 +79,17 @@ interface AudienceService {
         key: String,
         params: AudienceRemoveMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): String = removeMembers(params.toBuilder().key(key).build(), requestOptions)
+    ) = removeMembers(params.toBuilder().key(key).build(), requestOptions)
 
     /** @see [removeMembers] */
-    fun removeMembers(params: AudienceRemoveMembersParams): String =
+    fun removeMembers(params: AudienceRemoveMembersParams) =
         removeMembers(params, RequestOptions.none())
 
     /** @see [removeMembers] */
     fun removeMembers(
         params: AudienceRemoveMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): String
+    )
 
     /** A view of [AudienceService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -99,7 +99,7 @@ interface AudienceService {
          * same as [AudienceService.addMembers].
          */
         @MustBeClosed
-        fun addMembers(key: String, params: AudienceAddMembersParams): HttpResponseFor<String> =
+        fun addMembers(key: String, params: AudienceAddMembersParams): HttpResponse =
             addMembers(key, params, RequestOptions.none())
 
         /** @see [addMembers] */
@@ -108,11 +108,11 @@ interface AudienceService {
             key: String,
             params: AudienceAddMembersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String> = addMembers(params.toBuilder().key(key).build(), requestOptions)
+        ): HttpResponse = addMembers(params.toBuilder().key(key).build(), requestOptions)
 
         /** @see [addMembers] */
         @MustBeClosed
-        fun addMembers(params: AudienceAddMembersParams): HttpResponseFor<String> =
+        fun addMembers(params: AudienceAddMembersParams): HttpResponse =
             addMembers(params, RequestOptions.none())
 
         /** @see [addMembers] */
@@ -120,7 +120,7 @@ interface AudienceService {
         fun addMembers(
             params: AudienceAddMembersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String>
+        ): HttpResponse
 
         /**
          * Returns a raw HTTP response for `get /v1/audiences/{key}/members`, but is otherwise the
@@ -173,10 +173,8 @@ interface AudienceService {
          * the same as [AudienceService.removeMembers].
          */
         @MustBeClosed
-        fun removeMembers(
-            key: String,
-            params: AudienceRemoveMembersParams,
-        ): HttpResponseFor<String> = removeMembers(key, params, RequestOptions.none())
+        fun removeMembers(key: String, params: AudienceRemoveMembersParams): HttpResponse =
+            removeMembers(key, params, RequestOptions.none())
 
         /** @see [removeMembers] */
         @MustBeClosed
@@ -184,12 +182,11 @@ interface AudienceService {
             key: String,
             params: AudienceRemoveMembersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String> =
-            removeMembers(params.toBuilder().key(key).build(), requestOptions)
+        ): HttpResponse = removeMembers(params.toBuilder().key(key).build(), requestOptions)
 
         /** @see [removeMembers] */
         @MustBeClosed
-        fun removeMembers(params: AudienceRemoveMembersParams): HttpResponseFor<String> =
+        fun removeMembers(params: AudienceRemoveMembersParams): HttpResponse =
             removeMembers(params, RequestOptions.none())
 
         /** @see [removeMembers] */
@@ -197,6 +194,6 @@ interface AudienceService {
         fun removeMembers(
             params: AudienceRemoveMembersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String>
+        ): HttpResponse
     }
 }

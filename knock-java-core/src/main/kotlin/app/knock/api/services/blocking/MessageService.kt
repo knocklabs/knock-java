@@ -23,7 +23,6 @@ import app.knock.api.models.messages.MessageMarkAsSeenParams
 import app.knock.api.models.messages.MessageMarkAsUnreadParams
 import app.knock.api.models.messages.MessageMarkAsUnseenParams
 import app.knock.api.models.messages.MessageUnarchiveParams
-import app.knock.api.services.blocking.messages.ActivityService
 import app.knock.api.services.blocking.messages.BatchService
 import com.google.errorprone.annotations.MustBeClosed
 
@@ -35,8 +34,6 @@ interface MessageService {
     fun withRawResponse(): WithRawResponse
 
     fun batch(): BatchService
-
-    fun activities(): ActivityService
 
     /** Returns a paginated list of messages for the current environment. */
     fun list(): MessageListPage = list(MessageListParams.none())
@@ -462,8 +459,6 @@ interface MessageService {
     interface WithRawResponse {
 
         fun batch(): BatchService.WithRawResponse
-
-        fun activities(): ActivityService.WithRawResponse
 
         /**
          * Returns a raw HTTP response for `get /v1/messages`, but is otherwise the same as

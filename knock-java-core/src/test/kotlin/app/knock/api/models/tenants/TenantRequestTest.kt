@@ -529,4 +529,21 @@ internal class TenantRequestTest {
 
         assertThat(roundtrippedTenantRequest).isEqualTo(tenantRequest)
     }
+
+    @Test
+    fun name() {
+        val jsonMapper = jsonMapper()
+        val tenantRequest = TenantRequest.builder().id("id").name("Jurassic Park").build()
+
+        assertThat(tenantRequest.name()).contains("Jurassic Park")
+        assertThat(jsonMapper.writeValueAsString(tenantRequest))
+            .isEqualTo("""{"id":"id","name":"Jurassic Park"}""")
+        assertThat(
+                jsonMapper.readValue(
+                    jsonMapper.writeValueAsString(tenantRequest),
+                    jacksonTypeRef<TenantRequest>(),
+                )
+            )
+            .isEqualTo(tenantRequest)
+    }
 }

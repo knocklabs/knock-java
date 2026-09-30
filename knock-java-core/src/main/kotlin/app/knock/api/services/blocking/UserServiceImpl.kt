@@ -6,12 +6,13 @@ import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.checkRequired
+import app.knock.api.core.handlers.emptyHandler
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
-import app.knock.api.core.handlers.stringHandler
 import app.knock.api.core.handlers.withErrorHandler
 import app.knock.api.core.http.HttpMethod
 import app.knock.api.core.http.HttpRequest
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponse.Handler
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
@@ -41,6 +42,7 @@ import app.knock.api.models.users.UserMergeParams
 import app.knock.api.models.users.UserSetChannelDataParams
 import app.knock.api.models.users.UserSetPreferencesParams
 import app.knock.api.models.users.UserUnsetChannelDataParams
+import app.knock.api.models.users.UserUnsetPreferencesParams
 import app.knock.api.models.users.UserUpdateParams
 import app.knock.api.services.blocking.users.BulkService
 import app.knock.api.services.blocking.users.BulkServiceImpl
@@ -48,6 +50,8 @@ import app.knock.api.services.blocking.users.FeedService
 import app.knock.api.services.blocking.users.FeedServiceImpl
 import app.knock.api.services.blocking.users.GuideService
 import app.knock.api.services.blocking.users.GuideServiceImpl
+import app.knock.api.services.blocking.users.PreferenceCenterService
+import app.knock.api.services.blocking.users.PreferenceCenterServiceImpl
 import kotlin.jvm.optionals.getOrNull
 
 class UserServiceImpl internal constructor(private val clientOptions: ClientOptions) : UserService {
@@ -60,6 +64,10 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
 
     private val guides: GuideService by lazy { GuideServiceImpl(clientOptions) }
 
+    private val preferenceCenter: PreferenceCenterService by lazy {
+        PreferenceCenterServiceImpl(clientOptions)
+    }
+
     private val bulk: BulkService by lazy { BulkServiceImpl(clientOptions) }
 
     override fun withRawResponse(): UserService.WithRawResponse = withRawResponse
@@ -67,6 +75,8 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun feeds(): FeedService = feeds
 
     override fun guides(): GuideService = guides
+
+    override fun preferenceCenter(): PreferenceCenterService = preferenceCenter
 
     override fun bulk(): BulkService = bulk
 
@@ -78,9 +88,10 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
         // get /v1/users
         withRawResponse().list(params, requestOptions).parse()
 
-    override fun delete(params: UserDeleteParams, requestOptions: RequestOptions): String =
+    override fun delete(params: UserDeleteParams, requestOptions: RequestOptions) {
         // delete /v1/users/{user_id}
-        withRawResponse().delete(params, requestOptions).parse()
+        withRawResponse().delete(params, requestOptions)
+    }
 
     override fun get(params: UserGetParams, requestOptions: RequestOptions): User =
         // get /v1/users/{user_id}
@@ -149,9 +160,18 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
     override fun unsetChannelData(
         params: UserUnsetChannelDataParams,
         requestOptions: RequestOptions,
-    ): String =
+    ) {
         // delete /v1/users/{user_id}/channel_data/{channel_id}
-        withRawResponse().unsetChannelData(params, requestOptions).parse()
+        withRawResponse().unsetChannelData(params, requestOptions)
+    }
+
+    override fun unsetPreferences(
+        params: UserUnsetPreferencesParams,
+        requestOptions: RequestOptions,
+    ) {
+        // delete /v1/users/{user_id}/preferences/{id}
+        withRawResponse().unsetPreferences(params, requestOptions)
+    }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         UserService.WithRawResponse {
@@ -166,6 +186,10 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             GuideServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val preferenceCenter: PreferenceCenterService.WithRawResponse by lazy {
+            PreferenceCenterServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         private val bulk: BulkService.WithRawResponse by lazy {
             BulkServiceImpl.WithRawResponseImpl(clientOptions)
         }
@@ -173,6 +197,8 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
         override fun feeds(): FeedService.WithRawResponse = feeds
 
         override fun guides(): GuideService.WithRawResponse = guides
+
+        override fun preferenceCenter(): PreferenceCenterService.WithRawResponse = preferenceCenter
 
         override fun bulk(): BulkService.WithRawResponse = bulk
 
@@ -240,12 +266,12 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val deleteHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
+        private val deleteHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
 
         override fun delete(
             params: UserDeleteParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<String> {
+        ): HttpResponse {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("userId", params.userId().getOrNull())
@@ -258,7 +284,8 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable { response.use { deleteHandler.handle(it) } }
+            response.use { deleteHandler.handle(it) }
+            return response
         }
 
         private val getHandler: Handler<User> =
@@ -607,13 +634,16 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
             }
         }
 
-        private val unsetChannelDataHandler: Handler<String> =
-            stringHandler().withErrorHandler(errorHandler)
+        private val unsetChannelDataHandler: Handler<Void?> =
+            emptyHandler().withErrorHandler(errorHandler)
+
+        private val unsetPreferencesHandler: Handler<Void?> =
+            emptyHandler().withErrorHandler(errorHandler)
 
         override fun unsetChannelData(
             params: UserUnsetChannelDataParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<String> {
+        ): HttpResponse {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("userId", params.userId().getOrNull())
@@ -633,7 +663,35 @@ class UserServiceImpl internal constructor(private val clientOptions: ClientOpti
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable { response.use { unsetChannelDataHandler.handle(it) } }
+            response.use { unsetChannelDataHandler.handle(it) }
+            return response
+        }
+
+        override fun unsetPreferences(
+            params: UserUnsetPreferencesParams,
+            requestOptions: RequestOptions,
+        ): HttpResponse {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            checkRequired("id", params.id().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments(
+                        "v1",
+                        "users",
+                        params._pathParam(0),
+                        "preferences",
+                        params._pathParam(1),
+                    )
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepare(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            val response = clientOptions.httpClient.execute(request, requestOptions)
+            response.use { unsetPreferencesHandler.handle(it) }
+            return response
         }
     }
 }

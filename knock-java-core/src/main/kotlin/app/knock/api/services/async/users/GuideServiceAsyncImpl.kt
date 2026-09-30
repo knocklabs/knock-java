@@ -16,14 +16,14 @@ import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
 import app.knock.api.core.http.parseable
 import app.knock.api.core.prepareAsync
+import app.knock.api.models.users.guides.GuideActionResponse
 import app.knock.api.models.users.guides.GuideGetChannelParams
 import app.knock.api.models.users.guides.GuideGetChannelResponse
 import app.knock.api.models.users.guides.GuideMarkMessageAsArchivedParams
-import app.knock.api.models.users.guides.GuideMarkMessageAsArchivedResponse
 import app.knock.api.models.users.guides.GuideMarkMessageAsInteractedParams
-import app.knock.api.models.users.guides.GuideMarkMessageAsInteractedResponse
 import app.knock.api.models.users.guides.GuideMarkMessageAsSeenParams
-import app.knock.api.models.users.guides.GuideMarkMessageAsSeenResponse
+import app.knock.api.models.users.guides.GuideResetGuideEngagementsParams
+import app.knock.api.models.users.guides.GuideUnarchiveGuideMessageParams
 import java.util.concurrent.CompletableFuture
 import kotlin.jvm.optionals.getOrNull
 
@@ -46,23 +46,37 @@ class GuideServiceAsyncImpl internal constructor(private val clientOptions: Clie
     override fun markMessageAsArchived(
         params: GuideMarkMessageAsArchivedParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<GuideMarkMessageAsArchivedResponse> =
-        // put /v1/users/{user_id}/guides/messages/{message_id}/archived
+    ): CompletableFuture<GuideActionResponse> =
+        // put /v1/users/{user_id}/guides/messages/archived
         withRawResponse().markMessageAsArchived(params, requestOptions).thenApply { it.parse() }
 
     override fun markMessageAsInteracted(
         params: GuideMarkMessageAsInteractedParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<GuideMarkMessageAsInteractedResponse> =
-        // put /v1/users/{user_id}/guides/messages/{message_id}/interacted
+    ): CompletableFuture<GuideActionResponse> =
+        // put /v1/users/{user_id}/guides/messages/interacted
         withRawResponse().markMessageAsInteracted(params, requestOptions).thenApply { it.parse() }
 
     override fun markMessageAsSeen(
         params: GuideMarkMessageAsSeenParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<GuideMarkMessageAsSeenResponse> =
-        // put /v1/users/{user_id}/guides/messages/{message_id}/seen
+    ): CompletableFuture<GuideActionResponse> =
+        // put /v1/users/{user_id}/guides/messages/seen
         withRawResponse().markMessageAsSeen(params, requestOptions).thenApply { it.parse() }
+
+    override fun resetGuideEngagements(
+        params: GuideResetGuideEngagementsParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<GuideActionResponse> =
+        // put /v1/users/{user_id}/guides/engagements/reset
+        withRawResponse().resetGuideEngagements(params, requestOptions).thenApply { it.parse() }
+
+    override fun unarchiveGuideMessage(
+        params: GuideUnarchiveGuideMessageParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<GuideActionResponse> =
+        // delete /v1/users/{user_id}/guides/messages/archived
+        withRawResponse().unarchiveGuideMessage(params, requestOptions).thenApply { it.parse() }
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         GuideServiceAsync.WithRawResponse {
@@ -109,18 +123,17 @@ class GuideServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val markMessageAsArchivedHandler: Handler<GuideMarkMessageAsArchivedResponse> =
-            jsonHandler<GuideMarkMessageAsArchivedResponse>(clientOptions.jsonMapper)
+        private val markMessageAsArchivedHandler: Handler<GuideActionResponse> =
+            jsonHandler<GuideActionResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun markMessageAsArchived(
             params: GuideMarkMessageAsArchivedParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<GuideMarkMessageAsArchivedResponse>> {
+        ): CompletableFuture<HttpResponseFor<GuideActionResponse>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("userId", params.userId().getOrNull())
-            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -130,7 +143,6 @@ class GuideServiceAsyncImpl internal constructor(private val clientOptions: Clie
                         params._pathParam(0),
                         "guides",
                         "messages",
-                        params._pathParam(1),
                         "archived",
                     )
                     .body(json(clientOptions.jsonMapper, params._body()))
@@ -152,18 +164,17 @@ class GuideServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val markMessageAsInteractedHandler: Handler<GuideMarkMessageAsInteractedResponse> =
-            jsonHandler<GuideMarkMessageAsInteractedResponse>(clientOptions.jsonMapper)
+        private val markMessageAsInteractedHandler: Handler<GuideActionResponse> =
+            jsonHandler<GuideActionResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun markMessageAsInteracted(
             params: GuideMarkMessageAsInteractedParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<GuideMarkMessageAsInteractedResponse>> {
+        ): CompletableFuture<HttpResponseFor<GuideActionResponse>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("userId", params.userId().getOrNull())
-            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -173,7 +184,6 @@ class GuideServiceAsyncImpl internal constructor(private val clientOptions: Clie
                         params._pathParam(0),
                         "guides",
                         "messages",
-                        params._pathParam(1),
                         "interacted",
                     )
                     .body(json(clientOptions.jsonMapper, params._body()))
@@ -195,18 +205,17 @@ class GuideServiceAsyncImpl internal constructor(private val clientOptions: Clie
                 }
         }
 
-        private val markMessageAsSeenHandler: Handler<GuideMarkMessageAsSeenResponse> =
-            jsonHandler<GuideMarkMessageAsSeenResponse>(clientOptions.jsonMapper)
+        private val markMessageAsSeenHandler: Handler<GuideActionResponse> =
+            jsonHandler<GuideActionResponse>(clientOptions.jsonMapper)
                 .withErrorHandler(errorHandler)
 
         override fun markMessageAsSeen(
             params: GuideMarkMessageAsSeenParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<GuideMarkMessageAsSeenResponse>> {
+        ): CompletableFuture<HttpResponseFor<GuideActionResponse>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("userId", params.userId().getOrNull())
-            checkRequired("messageId", params.messageId().getOrNull())
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.PUT)
@@ -216,7 +225,6 @@ class GuideServiceAsyncImpl internal constructor(private val clientOptions: Clie
                         params._pathParam(0),
                         "guides",
                         "messages",
-                        params._pathParam(1),
                         "seen",
                     )
                     .body(json(clientOptions.jsonMapper, params._body()))
@@ -229,6 +237,88 @@ class GuideServiceAsyncImpl internal constructor(private val clientOptions: Clie
                     response.parseable {
                         response
                             .use { markMessageAsSeenHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val resetGuideEngagementsHandler: Handler<GuideActionResponse> =
+            jsonHandler<GuideActionResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun resetGuideEngagements(
+            params: GuideResetGuideEngagementsParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<GuideActionResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.PUT)
+                    .addPathSegments(
+                        "v1",
+                        "users",
+                        params._pathParam(0),
+                        "guides",
+                        "engagements",
+                        "reset",
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { resetGuideEngagementsHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val unarchiveGuideMessageHandler: Handler<GuideActionResponse> =
+            jsonHandler<GuideActionResponse>(clientOptions.jsonMapper)
+                .withErrorHandler(errorHandler)
+
+        override fun unarchiveGuideMessage(
+            params: GuideUnarchiveGuideMessageParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<GuideActionResponse>> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("userId", params.userId().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments(
+                        "v1",
+                        "users",
+                        params._pathParam(0),
+                        "guides",
+                        "messages",
+                        "archived",
+                    )
+                    .body(json(clientOptions.jsonMapper, params._body()))
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.parseable {
+                        response
+                            .use { unarchiveGuideMessageHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()

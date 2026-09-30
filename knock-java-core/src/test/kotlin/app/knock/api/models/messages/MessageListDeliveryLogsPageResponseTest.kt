@@ -15,7 +15,7 @@ internal class MessageListDeliveryLogsPageResponseTest {
     fun create() {
         val messageListDeliveryLogsPageResponse =
             MessageListDeliveryLogsPageResponse.builder()
-                .addEntry(
+                .addItem(
                     MessageDeliveryLog.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                         ._typename("MessageDeliveryLog")
@@ -76,7 +76,7 @@ internal class MessageListDeliveryLogsPageResponseTest {
                 )
                 .build()
 
-        assertThat(messageListDeliveryLogsPageResponse.entries())
+        assertThat(messageListDeliveryLogsPageResponse.items())
             .containsExactly(
                 MessageDeliveryLog.builder()
                     .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
@@ -135,7 +135,7 @@ internal class MessageListDeliveryLogsPageResponseTest {
         val jsonMapper = jsonMapper()
         val messageListDeliveryLogsPageResponse =
             MessageListDeliveryLogsPageResponse.builder()
-                .addEntry(
+                .addItem(
                     MessageDeliveryLog.builder()
                         .id("2FVHPWxRqNuXQ9krvNP5A6Z4qXe")
                         ._typename("MessageDeliveryLog")

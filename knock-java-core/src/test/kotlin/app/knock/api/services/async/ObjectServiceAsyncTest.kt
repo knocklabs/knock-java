@@ -53,9 +53,9 @@ internal class ObjectServiceAsyncTest {
                 .build()
         val objectServiceAsync = client.objects()
 
-        val objectFuture = objectServiceAsync.delete("collection", "id")
+        val responseFuture = objectServiceAsync.delete("collection", "id")
 
-        val object_ = objectFuture.get()
+        val response = responseFuture.get()
     }
 
     @Disabled(
@@ -495,6 +495,24 @@ internal class ObjectServiceAsyncTest {
                 "object_id",
                 "182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e",
             )
+
+        val response = responseFuture.get()
+    }
+
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
+    @Test
+    fun unsetPreferences() {
+        val client =
+            KnockOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val objectServiceAsync = client.objects()
+
+        val responseFuture =
+            objectServiceAsync.unsetPreferences("collection", "object_id", "default")
 
         val response = responseFuture.get()
     }

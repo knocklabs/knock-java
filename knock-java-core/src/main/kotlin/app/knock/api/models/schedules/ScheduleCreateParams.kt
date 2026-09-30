@@ -53,10 +53,10 @@ private constructor(
     /**
      * The repeat rule for the schedule.
      *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type or is unexpectedly
-     *   missing or null (e.g. if the server responded with an unexpected value).
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
      */
-    fun repeats(): List<ScheduleRepeatRule> = body.repeats()
+    fun repeats(): Optional<List<ScheduleRepeatRule>> = body.repeats()
 
     /**
      * The key of the workflow.
@@ -97,6 +97,16 @@ private constructor(
      *   server responded with an unexpected value).
      */
     fun tenant(): Optional<InlineTenantRequest> = body.tenant()
+
+    /**
+     * Specifies a recipient in a request. This can either be a user identifier (string), an inline
+     * user request (object), or an inline object request, which is determined by the presence of a
+     * `collection` property.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun actor(): Optional<RecipientRequest> = body.actor()
 
     /**
      * Returns the raw JSON value of [recipients].
@@ -147,6 +157,13 @@ private constructor(
      */
     fun _tenant(): JsonField<InlineTenantRequest> = body._tenant()
 
+    /**
+     * Returns the raw JSON value of [actor].
+     *
+     * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _actor(): JsonField<RecipientRequest> = body._actor()
+
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
     fun _additionalHeaders(): Headers = additionalHeaders
@@ -163,7 +180,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .recipients()
-         * .repeats()
          * .workflow()
          * ```
          */
@@ -340,6 +356,39 @@ private constructor(
         /** Alias for calling [tenant] with `InlineTenantRequest.ofTenantRequest(tenantRequest)`. */
         fun tenant(tenantRequest: TenantRequest) = apply { body.tenant(tenantRequest) }
 
+        /**
+         * Specifies a recipient in a request. This can either be a user identifier (string), an
+         * inline user request (object), or an inline object request, which is determined by the
+         * presence of a `collection` property.
+         */
+        fun actor(actor: RecipientRequest?) = apply { body.actor(actor) }
+
+        /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
+        fun actor(actor: Optional<RecipientRequest>) = actor(actor.getOrNull())
+
+        /**
+         * Sets [Builder.actor] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.actor] with a well-typed [RecipientRequest] value
+         * instead. This method is primarily for setting the field to an undocumented or not yet
+         * supported value.
+         */
+        fun actor(actor: JsonField<RecipientRequest>) = apply { body.actor(actor) }
+
+        /** Alias for calling [actor] with `RecipientRequest.ofUserRecipient(userRecipient)`. */
+        fun actor(userRecipient: String) = apply { body.actor(userRecipient) }
+
+        /**
+         * Alias for calling [actor] with
+         * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
+         */
+        fun actor(inlineIdentifyUser: InlineIdentifyUserRequest) = apply {
+            body.actor(inlineIdentifyUser)
+        }
+
+        /** Alias for calling [actor] with `RecipientRequest.ofInlineObject(inlineObject)`. */
+        fun actor(inlineObject: InlineObjectRequest) = apply { body.actor(inlineObject) }
+
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
         }
@@ -465,7 +514,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .recipients()
-         * .repeats()
          * .workflow()
          * ```
          *
@@ -495,6 +543,7 @@ private constructor(
         private val endingAt: JsonField<OffsetDateTime>,
         private val scheduledAt: JsonField<OffsetDateTime>,
         private val tenant: JsonField<InlineTenantRequest>,
+        private val actor: JsonField<RecipientRequest>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -519,7 +568,20 @@ private constructor(
             @JsonProperty("tenant")
             @ExcludeMissing
             tenant: JsonField<InlineTenantRequest> = JsonMissing.of(),
-        ) : this(recipients, repeats, workflow, data, endingAt, scheduledAt, tenant, mutableMapOf())
+            @JsonProperty("actor")
+            @ExcludeMissing
+            actor: JsonField<RecipientRequest> = JsonMissing.of(),
+        ) : this(
+            recipients,
+            repeats,
+            workflow,
+            data,
+            endingAt,
+            scheduledAt,
+            tenant,
+            actor,
+            mutableMapOf(),
+        )
 
         /**
          * The recipients to trigger the workflow for. Can inline identify users, objects, or use a
@@ -533,10 +595,10 @@ private constructor(
         /**
          * The repeat rule for the schedule.
          *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
          */
-        fun repeats(): List<ScheduleRepeatRule> = repeats.getRequired("repeats")
+        fun repeats(): Optional<List<ScheduleRepeatRule>> = repeats.getOptional("repeats")
 
         /**
          * The key of the workflow.
@@ -577,6 +639,16 @@ private constructor(
          *   server responded with an unexpected value).
          */
         fun tenant(): Optional<InlineTenantRequest> = tenant.getOptional("tenant")
+
+        /**
+         * Specifies a recipient in a request. This can either be a user identifier (string), an
+         * inline user request (object), or an inline object request, which is determined by the
+         * presence of a `collection` property.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun actor(): Optional<RecipientRequest> = actor.getOptional("actor")
 
         /**
          * Returns the raw JSON value of [recipients].
@@ -637,6 +709,13 @@ private constructor(
         @ExcludeMissing
         fun _tenant(): JsonField<InlineTenantRequest> = tenant
 
+        /**
+         * Returns the raw JSON value of [actor].
+         *
+         * Unlike [actor], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("actor") @ExcludeMissing fun _actor(): JsonField<RecipientRequest> = actor
+
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
             additionalProperties.put(key, value)
@@ -657,7 +736,6 @@ private constructor(
              * The following fields are required:
              * ```java
              * .recipients()
-             * .repeats()
              * .workflow()
              * ```
              */
@@ -674,6 +752,7 @@ private constructor(
             private var endingAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var scheduledAt: JsonField<OffsetDateTime> = JsonMissing.of()
             private var tenant: JsonField<InlineTenantRequest> = JsonMissing.of()
+            private var actor: JsonField<RecipientRequest> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -685,6 +764,7 @@ private constructor(
                 endingAt = body.endingAt
                 scheduledAt = body.scheduledAt
                 tenant = body.tenant
+                actor = body.actor
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -850,6 +930,40 @@ private constructor(
             fun tenant(tenantRequest: TenantRequest) =
                 tenant(InlineTenantRequest.ofTenantRequest(tenantRequest))
 
+            /**
+             * Specifies a recipient in a request. This can either be a user identifier (string), an
+             * inline user request (object), or an inline object request, which is determined by the
+             * presence of a `collection` property.
+             */
+            fun actor(actor: RecipientRequest?) = actor(JsonField.ofNullable(actor))
+
+            /** Alias for calling [Builder.actor] with `actor.orElse(null)`. */
+            fun actor(actor: Optional<RecipientRequest>) = actor(actor.getOrNull())
+
+            /**
+             * Sets [Builder.actor] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.actor] with a well-typed [RecipientRequest] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun actor(actor: JsonField<RecipientRequest>) = apply { this.actor = actor }
+
+            /** Alias for calling [actor] with `RecipientRequest.ofUserRecipient(userRecipient)`. */
+            fun actor(userRecipient: String) =
+                actor(RecipientRequest.ofUserRecipient(userRecipient))
+
+            /**
+             * Alias for calling [actor] with
+             * `RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser)`.
+             */
+            fun actor(inlineIdentifyUser: InlineIdentifyUserRequest) =
+                actor(RecipientRequest.ofInlineIdentifyUser(inlineIdentifyUser))
+
+            /** Alias for calling [actor] with `RecipientRequest.ofInlineObject(inlineObject)`. */
+            fun actor(inlineObject: InlineObjectRequest) =
+                actor(RecipientRequest.ofInlineObject(inlineObject))
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -877,7 +991,6 @@ private constructor(
              * The following fields are required:
              * ```java
              * .recipients()
-             * .repeats()
              * .workflow()
              * ```
              *
@@ -886,12 +999,13 @@ private constructor(
             fun build(): Body =
                 Body(
                     checkRequired("recipients", recipients).map { it.toImmutable() },
-                    checkRequired("repeats", repeats).map { it.toImmutable() },
+                    (repeats ?: JsonMissing.of()).map { it.toImmutable() },
                     checkRequired("workflow", workflow),
                     data,
                     endingAt,
                     scheduledAt,
                     tenant,
+                    actor,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -904,12 +1018,13 @@ private constructor(
             }
 
             recipients().forEach { it.validate() }
-            repeats().forEach { it.validate() }
+            repeats().ifPresent { it.forEach { it.validate() } }
             workflow()
             data().ifPresent { it.validate() }
             endingAt()
             scheduledAt()
             tenant().ifPresent { it.validate() }
+            actor().ifPresent { it.validate() }
             validated = true
         }
 
@@ -935,24 +1050,25 @@ private constructor(
                 (data.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (endingAt.asKnown().isPresent) 1 else 0) +
                 (if (scheduledAt.asKnown().isPresent) 1 else 0) +
-                (tenant.asKnown().getOrNull()?.validity() ?: 0)
+                (tenant.asKnown().getOrNull()?.validity() ?: 0) +
+                (actor.asKnown().getOrNull()?.validity() ?: 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Body && recipients == other.recipients && repeats == other.repeats && workflow == other.workflow && data == other.data && endingAt == other.endingAt && scheduledAt == other.scheduledAt && tenant == other.tenant && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && recipients == other.recipients && repeats == other.repeats && workflow == other.workflow && data == other.data && endingAt == other.endingAt && scheduledAt == other.scheduledAt && tenant == other.tenant && actor == other.actor && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(recipients, repeats, workflow, data, endingAt, scheduledAt, tenant, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(recipients, repeats, workflow, data, endingAt, scheduledAt, tenant, actor, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{recipients=$recipients, repeats=$repeats, workflow=$workflow, data=$data, endingAt=$endingAt, scheduledAt=$scheduledAt, tenant=$tenant, additionalProperties=$additionalProperties}"
+            "Body{recipients=$recipients, repeats=$repeats, workflow=$workflow, data=$data, endingAt=$endingAt, scheduledAt=$scheduledAt, tenant=$tenant, actor=$actor, additionalProperties=$additionalProperties}"
     }
 
     /** An optional map of data to pass into the workflow execution. */

@@ -25,15 +25,12 @@ import kotlin.jvm.optionals.getOrNull
 class GuideMarkMessageAsInteractedParams
 private constructor(
     private val userId: String?,
-    private val messageId: String?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
     fun userId(): Optional<String> = Optional.ofNullable(userId)
-
-    fun messageId(): Optional<String> = Optional.ofNullable(messageId)
 
     /**
      * The unique identifier for the channel.
@@ -68,31 +65,7 @@ private constructor(
     fun guideStepRef(): String = body.guideStepRef()
 
     /**
-     * The content of the guide.
-     *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun content(): Optional<Content> = body.content()
-
-    /**
-     * The data of the guide.
-     *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun data(): Optional<Data> = body.data()
-
-    /**
-     * Whether the guide is final.
-     *
-     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-     *   server responded with an unexpected value).
-     */
-    fun isFinal(): Optional<Boolean> = body.isFinal()
-
-    /**
-     * The metadata of the guide.
+     * Metadata about the interaction.
      *
      * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
@@ -134,27 +107,6 @@ private constructor(
      * Unlike [guideStepRef], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _guideStepRef(): JsonField<String> = body._guideStepRef()
-
-    /**
-     * Returns the raw JSON value of [content].
-     *
-     * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _content(): JsonField<Content> = body._content()
-
-    /**
-     * Returns the raw JSON value of [data].
-     *
-     * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _data(): JsonField<Data> = body._data()
-
-    /**
-     * Returns the raw JSON value of [isFinal].
-     *
-     * Unlike [isFinal], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _isFinal(): JsonField<Boolean> = body._isFinal()
 
     /**
      * Returns the raw JSON value of [metadata].
@@ -199,7 +151,6 @@ private constructor(
     class Builder internal constructor() {
 
         private var userId: String? = null
-        private var messageId: String? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
@@ -208,7 +159,6 @@ private constructor(
         internal fun from(guideMarkMessageAsInteractedParams: GuideMarkMessageAsInteractedParams) =
             apply {
                 userId = guideMarkMessageAsInteractedParams.userId
-                messageId = guideMarkMessageAsInteractedParams.messageId
                 body = guideMarkMessageAsInteractedParams.body.toBuilder()
                 additionalHeaders = guideMarkMessageAsInteractedParams.additionalHeaders.toBuilder()
                 additionalQueryParams =
@@ -220,11 +170,6 @@ private constructor(
         /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
         fun userId(userId: Optional<String>) = userId(userId.getOrNull())
 
-        fun messageId(messageId: String?) = apply { this.messageId = messageId }
-
-        /** Alias for calling [Builder.messageId] with `messageId.orElse(null)`. */
-        fun messageId(messageId: Optional<String>) = messageId(messageId.getOrNull())
-
         /**
          * Sets the entire request body.
          *
@@ -234,7 +179,7 @@ private constructor(
          * - [guideId]
          * - [guideKey]
          * - [guideStepRef]
-         * - [content]
+         * - [metadata]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -287,40 +232,7 @@ private constructor(
             body.guideStepRef(guideStepRef)
         }
 
-        /** The content of the guide. */
-        fun content(content: Content) = apply { body.content(content) }
-
-        /**
-         * Sets [Builder.content] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.content] with a well-typed [Content] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun content(content: JsonField<Content>) = apply { body.content(content) }
-
-        /** The data of the guide. */
-        fun data(data: Data) = apply { body.data(data) }
-
-        /**
-         * Sets [Builder.data] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.data] with a well-typed [Data] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun data(data: JsonField<Data>) = apply { body.data(data) }
-
-        /** Whether the guide is final. */
-        fun isFinal(isFinal: Boolean) = apply { body.isFinal(isFinal) }
-
-        /**
-         * Sets [Builder.isFinal] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.isFinal] with a well-typed [Boolean] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun isFinal(isFinal: JsonField<Boolean>) = apply { body.isFinal(isFinal) }
-
-        /** The metadata of the guide. */
+        /** Metadata about the interaction. */
         fun metadata(metadata: Metadata) = apply { body.metadata(metadata) }
 
         /**
@@ -333,10 +245,7 @@ private constructor(
         fun metadata(metadata: JsonField<Metadata>) = apply { body.metadata(metadata) }
 
         /** The tenant ID of the guide. */
-        fun tenant(tenant: String?) = apply { body.tenant(tenant) }
-
-        /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
-        fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
+        fun tenant(tenant: String) = apply { body.tenant(tenant) }
 
         /**
          * Sets [Builder.tenant] to an arbitrary JSON value.
@@ -481,7 +390,6 @@ private constructor(
         fun build(): GuideMarkMessageAsInteractedParams =
             GuideMarkMessageAsInteractedParams(
                 userId,
-                messageId,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -493,7 +401,6 @@ private constructor(
     fun _pathParam(index: Int): String =
         when (index) {
             0 -> userId ?: ""
-            1 -> messageId ?: ""
             else -> ""
         }
 
@@ -501,16 +408,13 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
-    /** A request to trigger a guide action. */
+    /** A request to mark a guide as interacted with. */
     class Body
     private constructor(
         private val channelId: JsonField<String>,
         private val guideId: JsonField<String>,
         private val guideKey: JsonField<String>,
         private val guideStepRef: JsonField<String>,
-        private val content: JsonField<Content>,
-        private val data: JsonField<Data>,
-        private val isFinal: JsonField<Boolean>,
         private val metadata: JsonField<Metadata>,
         private val tenant: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
@@ -528,27 +432,11 @@ private constructor(
             @JsonProperty("guide_step_ref")
             @ExcludeMissing
             guideStepRef: JsonField<String> = JsonMissing.of(),
-            @JsonProperty("content") @ExcludeMissing content: JsonField<Content> = JsonMissing.of(),
-            @JsonProperty("data") @ExcludeMissing data: JsonField<Data> = JsonMissing.of(),
-            @JsonProperty("is_final")
-            @ExcludeMissing
-            isFinal: JsonField<Boolean> = JsonMissing.of(),
             @JsonProperty("metadata")
             @ExcludeMissing
             metadata: JsonField<Metadata> = JsonMissing.of(),
             @JsonProperty("tenant") @ExcludeMissing tenant: JsonField<String> = JsonMissing.of(),
-        ) : this(
-            channelId,
-            guideId,
-            guideKey,
-            guideStepRef,
-            content,
-            data,
-            isFinal,
-            metadata,
-            tenant,
-            mutableMapOf(),
-        )
+        ) : this(channelId, guideId, guideKey, guideStepRef, metadata, tenant, mutableMapOf())
 
         /**
          * The unique identifier for the channel.
@@ -583,31 +471,7 @@ private constructor(
         fun guideStepRef(): String = guideStepRef.getRequired("guide_step_ref")
 
         /**
-         * The content of the guide.
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun content(): Optional<Content> = content.getOptional("content")
-
-        /**
-         * The data of the guide.
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun data(): Optional<Data> = data.getOptional("data")
-
-        /**
-         * Whether the guide is final.
-         *
-         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
-         *   server responded with an unexpected value).
-         */
-        fun isFinal(): Optional<Boolean> = isFinal.getOptional("is_final")
-
-        /**
-         * The metadata of the guide.
+         * Metadata about the interaction.
          *
          * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
@@ -652,27 +516,6 @@ private constructor(
         @JsonProperty("guide_step_ref")
         @ExcludeMissing
         fun _guideStepRef(): JsonField<String> = guideStepRef
-
-        /**
-         * Returns the raw JSON value of [content].
-         *
-         * Unlike [content], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("content") @ExcludeMissing fun _content(): JsonField<Content> = content
-
-        /**
-         * Returns the raw JSON value of [data].
-         *
-         * Unlike [data], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("data") @ExcludeMissing fun _data(): JsonField<Data> = data
-
-        /**
-         * Returns the raw JSON value of [isFinal].
-         *
-         * Unlike [isFinal], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("is_final") @ExcludeMissing fun _isFinal(): JsonField<Boolean> = isFinal
 
         /**
          * Returns the raw JSON value of [metadata].
@@ -723,9 +566,6 @@ private constructor(
             private var guideId: JsonField<String>? = null
             private var guideKey: JsonField<String>? = null
             private var guideStepRef: JsonField<String>? = null
-            private var content: JsonField<Content> = JsonMissing.of()
-            private var data: JsonField<Data> = JsonMissing.of()
-            private var isFinal: JsonField<Boolean> = JsonMissing.of()
             private var metadata: JsonField<Metadata> = JsonMissing.of()
             private var tenant: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
@@ -736,9 +576,6 @@ private constructor(
                 guideId = body.guideId
                 guideKey = body.guideKey
                 guideStepRef = body.guideStepRef
-                content = body.content
-                data = body.data
-                isFinal = body.isFinal
                 metadata = body.metadata
                 tenant = body.tenant
                 additionalProperties = body.additionalProperties.toMutableMap()
@@ -794,43 +631,7 @@ private constructor(
                 this.guideStepRef = guideStepRef
             }
 
-            /** The content of the guide. */
-            fun content(content: Content) = content(JsonField.of(content))
-
-            /**
-             * Sets [Builder.content] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.content] with a well-typed [Content] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun content(content: JsonField<Content>) = apply { this.content = content }
-
-            /** The data of the guide. */
-            fun data(data: Data) = data(JsonField.of(data))
-
-            /**
-             * Sets [Builder.data] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.data] with a well-typed [Data] value instead. This
-             * method is primarily for setting the field to an undocumented or not yet supported
-             * value.
-             */
-            fun data(data: JsonField<Data>) = apply { this.data = data }
-
-            /** Whether the guide is final. */
-            fun isFinal(isFinal: Boolean) = isFinal(JsonField.of(isFinal))
-
-            /**
-             * Sets [Builder.isFinal] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.isFinal] with a well-typed [Boolean] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun isFinal(isFinal: JsonField<Boolean>) = apply { this.isFinal = isFinal }
-
-            /** The metadata of the guide. */
+            /** Metadata about the interaction. */
             fun metadata(metadata: Metadata) = metadata(JsonField.of(metadata))
 
             /**
@@ -843,10 +644,7 @@ private constructor(
             fun metadata(metadata: JsonField<Metadata>) = apply { this.metadata = metadata }
 
             /** The tenant ID of the guide. */
-            fun tenant(tenant: String?) = tenant(JsonField.ofNullable(tenant))
-
-            /** Alias for calling [Builder.tenant] with `tenant.orElse(null)`. */
-            fun tenant(tenant: Optional<String>) = tenant(tenant.getOrNull())
+            fun tenant(tenant: String) = tenant(JsonField.of(tenant))
 
             /**
              * Sets [Builder.tenant] to an arbitrary JSON value.
@@ -893,13 +691,10 @@ private constructor(
              */
             fun build(): Body =
                 Body(
-                    checkRequired("channelId", channelId),
-                    checkRequired("guideId", guideId),
-                    checkRequired("guideKey", guideKey),
-                    checkRequired("guideStepRef", guideStepRef),
-                    content,
-                    data,
-                    isFinal,
+                    checkRequired("channel_id", channelId),
+                    checkRequired("guide_id", guideId),
+                    checkRequired("guide_key", guideKey),
+                    checkRequired("guide_step_ref", guideStepRef),
                     metadata,
                     tenant,
                     additionalProperties.toMutableMap(),
@@ -917,9 +712,6 @@ private constructor(
             guideId()
             guideKey()
             guideStepRef()
-            content().ifPresent { it.validate() }
-            data().ifPresent { it.validate() }
-            isFinal()
             metadata().ifPresent { it.validate() }
             tenant()
             validated = true
@@ -945,9 +737,6 @@ private constructor(
                 (if (guideId.asKnown().isPresent) 1 else 0) +
                 (if (guideKey.asKnown().isPresent) 1 else 0) +
                 (if (guideStepRef.asKnown().isPresent) 1 else 0) +
-                (content.asKnown().getOrNull()?.validity() ?: 0) +
-                (data.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (isFinal.asKnown().isPresent) 1 else 0) +
                 (metadata.asKnown().getOrNull()?.validity() ?: 0) +
                 (if (tenant.asKnown().isPresent) 1 else 0)
 
@@ -956,224 +745,20 @@ private constructor(
                 return true
             }
 
-            return /* spotless:off */ other is Body && channelId == other.channelId && guideId == other.guideId && guideKey == other.guideKey && guideStepRef == other.guideStepRef && content == other.content && data == other.data && isFinal == other.isFinal && metadata == other.metadata && tenant == other.tenant && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Body && channelId == other.channelId && guideId == other.guideId && guideKey == other.guideKey && guideStepRef == other.guideStepRef && metadata == other.metadata && tenant == other.tenant && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(channelId, guideId, guideKey, guideStepRef, content, data, isFinal, metadata, tenant, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(channelId, guideId, guideKey, guideStepRef, metadata, tenant, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{channelId=$channelId, guideId=$guideId, guideKey=$guideKey, guideStepRef=$guideStepRef, content=$content, data=$data, isFinal=$isFinal, metadata=$metadata, tenant=$tenant, additionalProperties=$additionalProperties}"
+            "Body{channelId=$channelId, guideId=$guideId, guideKey=$guideKey, guideStepRef=$guideStepRef, metadata=$metadata, tenant=$tenant, additionalProperties=$additionalProperties}"
     }
 
-    /** The content of the guide. */
-    class Content
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Content]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Content]. */
-        class Builder internal constructor() {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(content: Content) = apply {
-                additionalProperties = content.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Content].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Content = Content(additionalProperties.toImmutable())
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Content = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: KnockInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Content && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "Content{additionalProperties=$additionalProperties}"
-    }
-
-    /** The data of the guide. */
-    class Data
-    @JsonCreator
-    private constructor(
-        @com.fasterxml.jackson.annotation.JsonValue
-        private val additionalProperties: Map<String, JsonValue>
-    ) {
-
-        @JsonAnyGetter
-        @ExcludeMissing
-        fun _additionalProperties(): Map<String, JsonValue> = additionalProperties
-
-        fun toBuilder() = Builder().from(this)
-
-        companion object {
-
-            /** Returns a mutable builder for constructing an instance of [Data]. */
-            @JvmStatic fun builder() = Builder()
-        }
-
-        /** A builder for [Data]. */
-        class Builder internal constructor() {
-
-            private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
-
-            @JvmSynthetic
-            internal fun from(data: Data) = apply {
-                additionalProperties = data.additionalProperties.toMutableMap()
-            }
-
-            fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.clear()
-                putAllAdditionalProperties(additionalProperties)
-            }
-
-            fun putAdditionalProperty(key: String, value: JsonValue) = apply {
-                additionalProperties.put(key, value)
-            }
-
-            fun putAllAdditionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
-                this.additionalProperties.putAll(additionalProperties)
-            }
-
-            fun removeAdditionalProperty(key: String) = apply { additionalProperties.remove(key) }
-
-            fun removeAllAdditionalProperties(keys: Set<String>) = apply {
-                keys.forEach(::removeAdditionalProperty)
-            }
-
-            /**
-             * Returns an immutable instance of [Data].
-             *
-             * Further updates to this [Builder] will not mutate the returned instance.
-             */
-            fun build(): Data = Data(additionalProperties.toImmutable())
-        }
-
-        private var validated: Boolean = false
-
-        fun validate(): Data = apply {
-            if (validated) {
-                return@apply
-            }
-
-            validated = true
-        }
-
-        fun isValid(): Boolean =
-            try {
-                validate()
-                true
-            } catch (e: KnockInvalidDataException) {
-                false
-            }
-
-        /**
-         * Returns a score indicating how many valid values are contained in this object
-         * recursively.
-         *
-         * Used for best match union deserialization.
-         */
-        @JvmSynthetic
-        internal fun validity(): Int =
-            additionalProperties.count { (_, value) -> !value.isNull() && !value.isMissing() }
-
-        override fun equals(other: Any?): Boolean {
-            if (this === other) {
-                return true
-            }
-
-            return /* spotless:off */ other is Data && additionalProperties == other.additionalProperties /* spotless:on */
-        }
-
-        /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(additionalProperties) }
-        /* spotless:on */
-
-        override fun hashCode(): Int = hashCode
-
-        override fun toString() = "Data{additionalProperties=$additionalProperties}"
-    }
-
-    /** The metadata of the guide. */
+    /** Metadata about the interaction. */
     class Metadata
     @JsonCreator
     private constructor(
@@ -1280,11 +865,11 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is GuideMarkMessageAsInteractedParams && userId == other.userId && messageId == other.messageId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
+        return /* spotless:off */ other is GuideMarkMessageAsInteractedParams && userId == other.userId && body == other.body && additionalHeaders == other.additionalHeaders && additionalQueryParams == other.additionalQueryParams /* spotless:on */
     }
 
-    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, messageId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
+    override fun hashCode(): Int = /* spotless:off */ Objects.hash(userId, body, additionalHeaders, additionalQueryParams) /* spotless:on */
 
     override fun toString() =
-        "GuideMarkMessageAsInteractedParams{userId=$userId, messageId=$messageId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "GuideMarkMessageAsInteractedParams{userId=$userId, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

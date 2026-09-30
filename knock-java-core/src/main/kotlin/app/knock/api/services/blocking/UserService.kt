@@ -3,6 +3,7 @@
 package app.knock.api.services.blocking
 
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.recipients.channeldata.ChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSet
@@ -24,10 +25,12 @@ import app.knock.api.models.users.UserMergeParams
 import app.knock.api.models.users.UserSetChannelDataParams
 import app.knock.api.models.users.UserSetPreferencesParams
 import app.knock.api.models.users.UserUnsetChannelDataParams
+import app.knock.api.models.users.UserUnsetPreferencesParams
 import app.knock.api.models.users.UserUpdateParams
 import app.knock.api.services.blocking.users.BulkService
 import app.knock.api.services.blocking.users.FeedService
 import app.knock.api.services.blocking.users.GuideService
+import app.knock.api.services.blocking.users.PreferenceCenterService
 import com.google.errorprone.annotations.MustBeClosed
 
 interface UserService {
@@ -40,6 +43,8 @@ interface UserService {
     fun feeds(): FeedService
 
     fun guides(): GuideService
+
+    fun preferenceCenter(): PreferenceCenterService
 
     fun bulk(): BulkService
 
@@ -85,30 +90,27 @@ interface UserService {
         list(UserListParams.none(), requestOptions)
 
     /** Permanently delete a user and all associated data. */
-    fun delete(userId: String): String = delete(userId, UserDeleteParams.none())
+    fun delete(userId: String) = delete(userId, UserDeleteParams.none())
 
     /** @see [delete] */
     fun delete(
         userId: String,
         params: UserDeleteParams = UserDeleteParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): String = delete(params.toBuilder().userId(userId).build(), requestOptions)
+    ) = delete(params.toBuilder().userId(userId).build(), requestOptions)
 
     /** @see [delete] */
-    fun delete(userId: String, params: UserDeleteParams = UserDeleteParams.none()): String =
+    fun delete(userId: String, params: UserDeleteParams = UserDeleteParams.none()) =
         delete(userId, params, RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(
-        params: UserDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): String
+    fun delete(params: UserDeleteParams, requestOptions: RequestOptions = RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(params: UserDeleteParams): String = delete(params, RequestOptions.none())
+    fun delete(params: UserDeleteParams) = delete(params, RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(userId: String, requestOptions: RequestOptions): String =
+    fun delete(userId: String, requestOptions: RequestOptions) =
         delete(userId, UserDeleteParams.none(), requestOptions)
 
     /** Retrieve a specific user by their ID. */
@@ -424,7 +426,7 @@ interface UserService {
     ): PreferenceSet
 
     /** Deletes channel data for a specific user and channel ID. */
-    fun unsetChannelData(userId: String, channelId: String): String =
+    fun unsetChannelData(userId: String, channelId: String) =
         unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none())
 
     /** @see [unsetChannelData] */
@@ -433,7 +435,7 @@ interface UserService {
         channelId: String,
         params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): String =
+    ) =
         unsetChannelData(
             params.toBuilder().userId(userId).channelId(channelId).build(),
             requestOptions,
@@ -444,25 +446,54 @@ interface UserService {
         userId: String,
         channelId: String,
         params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
-    ): String = unsetChannelData(userId, channelId, params, RequestOptions.none())
+    ) = unsetChannelData(userId, channelId, params, RequestOptions.none())
 
     /** @see [unsetChannelData] */
     fun unsetChannelData(
         params: UserUnsetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): String
+    )
 
     /** @see [unsetChannelData] */
-    fun unsetChannelData(params: UserUnsetChannelDataParams): String =
+    fun unsetChannelData(params: UserUnsetChannelDataParams) =
         unsetChannelData(params, RequestOptions.none())
 
     /** @see [unsetChannelData] */
-    fun unsetChannelData(
-        userId: String,
-        channelId: String,
-        requestOptions: RequestOptions,
-    ): String =
+    fun unsetChannelData(userId: String, channelId: String, requestOptions: RequestOptions) =
         unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none(), requestOptions)
+
+    /** Deletes channel data for a specific user and channel ID. */
+    fun unsetPreferences(userId: String, id: String) =
+        unsetPreferences(userId, id, UserUnsetPreferencesParams.none())
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        userId: String,
+        id: String,
+        params: UserUnsetPreferencesParams = UserUnsetPreferencesParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ) = unsetPreferences(params.toBuilder().userId(userId).id(id).build(), requestOptions)
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        userId: String,
+        id: String,
+        params: UserUnsetPreferencesParams = UserUnsetPreferencesParams.none(),
+    ) = unsetPreferences(userId, id, params, RequestOptions.none())
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        params: UserUnsetPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    )
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(params: UserUnsetPreferencesParams) =
+        unsetPreferences(params, RequestOptions.none())
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(userId: String, id: String, requestOptions: RequestOptions) =
+        unsetPreferences(userId, id, UserUnsetPreferencesParams.none(), requestOptions)
 
     /** A view of [UserService] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -470,6 +501,8 @@ interface UserService {
         fun feeds(): FeedService.WithRawResponse
 
         fun guides(): GuideService.WithRawResponse
+
+        fun preferenceCenter(): PreferenceCenterService.WithRawResponse
 
         fun bulk(): BulkService.WithRawResponse
 
@@ -529,8 +562,7 @@ interface UserService {
          * as [UserService.delete].
          */
         @MustBeClosed
-        fun delete(userId: String): HttpResponseFor<String> =
-            delete(userId, UserDeleteParams.none())
+        fun delete(userId: String): HttpResponse = delete(userId, UserDeleteParams.none())
 
         /** @see [delete] */
         @MustBeClosed
@@ -538,31 +570,29 @@ interface UserService {
             userId: String,
             params: UserDeleteParams = UserDeleteParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String> =
-            delete(params.toBuilder().userId(userId).build(), requestOptions)
+        ): HttpResponse = delete(params.toBuilder().userId(userId).build(), requestOptions)
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
             userId: String,
             params: UserDeleteParams = UserDeleteParams.none(),
-        ): HttpResponseFor<String> = delete(userId, params, RequestOptions.none())
+        ): HttpResponse = delete(userId, params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: UserDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String>
+        ): HttpResponse
 
         /** @see [delete] */
         @MustBeClosed
-        fun delete(params: UserDeleteParams): HttpResponseFor<String> =
-            delete(params, RequestOptions.none())
+        fun delete(params: UserDeleteParams): HttpResponse = delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
-        fun delete(userId: String, requestOptions: RequestOptions): HttpResponseFor<String> =
+        fun delete(userId: String, requestOptions: RequestOptions): HttpResponse =
             delete(userId, UserDeleteParams.none(), requestOptions)
 
         /**
@@ -989,7 +1019,7 @@ interface UserService {
          * but is otherwise the same as [UserService.unsetChannelData].
          */
         @MustBeClosed
-        fun unsetChannelData(userId: String, channelId: String): HttpResponseFor<String> =
+        fun unsetChannelData(userId: String, channelId: String): HttpResponse =
             unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none())
 
         /** @see [unsetChannelData] */
@@ -999,7 +1029,7 @@ interface UserService {
             channelId: String,
             params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String> =
+        ): HttpResponse =
             unsetChannelData(
                 params.toBuilder().userId(userId).channelId(channelId).build(),
                 requestOptions,
@@ -1011,19 +1041,18 @@ interface UserService {
             userId: String,
             channelId: String,
             params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
-        ): HttpResponseFor<String> =
-            unsetChannelData(userId, channelId, params, RequestOptions.none())
+        ): HttpResponse = unsetChannelData(userId, channelId, params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
         @MustBeClosed
         fun unsetChannelData(
             params: UserUnsetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String>
+        ): HttpResponse
 
         /** @see [unsetChannelData] */
         @MustBeClosed
-        fun unsetChannelData(params: UserUnsetChannelDataParams): HttpResponseFor<String> =
+        fun unsetChannelData(params: UserUnsetChannelDataParams): HttpResponse =
             unsetChannelData(params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
@@ -1032,7 +1061,54 @@ interface UserService {
             userId: String,
             channelId: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<String> =
+        ): HttpResponse =
             unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `delete /v1/users/{user_id}/preferences/{id}`, but is
+         * otherwise the same as [UserService.unsetPreferences].
+         */
+        @MustBeClosed
+        fun unsetPreferences(userId: String, id: String): HttpResponse =
+            unsetPreferences(userId, id, UserUnsetPreferencesParams.none())
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            userId: String,
+            id: String,
+            params: UserUnsetPreferencesParams = UserUnsetPreferencesParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse =
+            unsetPreferences(params.toBuilder().userId(userId).id(id).build(), requestOptions)
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            userId: String,
+            id: String,
+            params: UserUnsetPreferencesParams = UserUnsetPreferencesParams.none(),
+        ): HttpResponse = unsetPreferences(userId, id, params, RequestOptions.none())
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            params: UserUnsetPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): HttpResponse
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(params: UserUnsetPreferencesParams): HttpResponse =
+            unsetPreferences(params, RequestOptions.none())
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            userId: String,
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponse =
+            unsetPreferences(userId, id, UserUnsetPreferencesParams.none(), requestOptions)
     }
 }

@@ -8,6 +8,7 @@ import app.knock.api.core.JsonValue
 import app.knock.api.models.objects.InlineObjectRequest
 import app.knock.api.models.objects.bulk.BulkAddSubscriptionsParams
 import app.knock.api.models.objects.bulk.BulkDeleteParams
+import app.knock.api.models.objects.bulk.BulkDeleteSubscriptionsParams
 import app.knock.api.models.objects.bulk.BulkSetParams
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
@@ -61,6 +62,7 @@ internal class BulkServiceTest {
                     .collection("projects")
                     .addSubscription(
                         BulkAddSubscriptionsParams.Subscription.builder()
+                            .id("project-1")
                             .addRecipient(
                                 InlineIdentifyUserRequest.builder()
                                     .id("user_1")
@@ -165,6 +167,34 @@ internal class BulkServiceTest {
                                     .putAdditionalProperty("foo", JsonValue.from("bar"))
                                     .build()
                             )
+                            .build()
+                    )
+                    .build()
+            )
+
+        bulkOperation.validate()
+    }
+
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
+    @Test
+    fun deleteSubscriptions() {
+        val client =
+            KnockOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val bulkService = client.objects().bulk()
+
+        val bulkOperation =
+            bulkService.deleteSubscriptions(
+                BulkDeleteSubscriptionsParams.builder()
+                    .collection("projects")
+                    .addSubscription(
+                        BulkDeleteSubscriptionsParams.Subscription.builder()
+                            .id("project-1")
+                            .addRecipient("user_1")
                             .build()
                     )
                     .build()

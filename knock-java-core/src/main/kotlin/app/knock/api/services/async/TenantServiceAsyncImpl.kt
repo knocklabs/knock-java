@@ -6,12 +6,13 @@ import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.checkRequired
+import app.knock.api.core.handlers.emptyHandler
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
-import app.knock.api.core.handlers.stringHandler
 import app.knock.api.core.handlers.withErrorHandler
 import app.knock.api.core.http.HttpMethod
 import app.knock.api.core.http.HttpRequest
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponse.Handler
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
@@ -52,9 +53,9 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
     override fun delete(
         params: TenantDeleteParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         // delete /v1/tenants/{id}
-        withRawResponse().delete(params, requestOptions).thenApply { it.parse() }
+        withRawResponse().delete(params, requestOptions).thenAccept {}
 
     override fun get(
         params: TenantGetParams,
@@ -118,12 +119,12 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 }
         }
 
-        private val deleteHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
+        private val deleteHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
 
         override fun delete(
             params: TenantDeleteParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> {
+        ): CompletableFuture<HttpResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())
@@ -138,7 +139,8 @@ class TenantServiceAsyncImpl internal constructor(private val clientOptions: Cli
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable { response.use { deleteHandler.handle(it) } }
+                    response.use { deleteHandler.handle(it) }
+                    response
                 }
         }
 

@@ -2,7 +2,6 @@
 
 package app.knock.api.models.users.guides
 
-import app.knock.api.core.JsonValue
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -12,33 +11,13 @@ internal class GuideMarkMessageAsArchivedParamsTest {
     fun create() {
         GuideMarkMessageAsArchivedParams.builder()
             .userId("user_id")
-            .messageId("message_id")
             .channelId("123e4567-e89b-12d3-a456-426614174000")
             .guideId("7e9dc78c-b3b1-4127-a54e-71f1899b831a")
             .guideKey("tour_notification")
             .guideStepRef("lab_tours")
-            .content(
-                GuideMarkMessageAsArchivedParams.Content.builder()
-                    .putAdditionalProperty("body", JsonValue.from("bar"))
-                    .putAdditionalProperty("title", JsonValue.from("bar"))
-                    .build()
-            )
-            .data(
-                GuideMarkMessageAsArchivedParams.Data.builder()
-                    .putAdditionalProperty("next_time", JsonValue.from("bar"))
-                    .putAdditionalProperty("spots_left", JsonValue.from("bar"))
-                    .putAdditionalProperty("tour_id", JsonValue.from("bar"))
-                    .build()
-            )
             .isFinal(false)
-            .metadata(
-                GuideMarkMessageAsArchivedParams.Metadata.builder()
-                    .putAdditionalProperty("cta", JsonValue.from("bar"))
-                    .putAdditionalProperty("theme", JsonValue.from("bar"))
-                    .putAdditionalProperty("type", JsonValue.from("bar"))
-                    .build()
-            )
             .tenant("ingen_isla_nublar")
+            .unthrottled(false)
             .build()
     }
 
@@ -47,7 +26,6 @@ internal class GuideMarkMessageAsArchivedParamsTest {
         val params =
             GuideMarkMessageAsArchivedParams.builder()
                 .userId("user_id")
-                .messageId("message_id")
                 .channelId("123e4567-e89b-12d3-a456-426614174000")
                 .guideId("7e9dc78c-b3b1-4127-a54e-71f1899b831a")
                 .guideKey("tour_notification")
@@ -55,9 +33,8 @@ internal class GuideMarkMessageAsArchivedParamsTest {
                 .build()
 
         assertThat(params._pathParam(0)).isEqualTo("user_id")
-        assertThat(params._pathParam(1)).isEqualTo("message_id")
         // out-of-bound path param
-        assertThat(params._pathParam(2)).isEqualTo("")
+        assertThat(params._pathParam(1)).isEqualTo("")
     }
 
     @Test
@@ -65,33 +42,13 @@ internal class GuideMarkMessageAsArchivedParamsTest {
         val params =
             GuideMarkMessageAsArchivedParams.builder()
                 .userId("user_id")
-                .messageId("message_id")
                 .channelId("123e4567-e89b-12d3-a456-426614174000")
                 .guideId("7e9dc78c-b3b1-4127-a54e-71f1899b831a")
                 .guideKey("tour_notification")
                 .guideStepRef("lab_tours")
-                .content(
-                    GuideMarkMessageAsArchivedParams.Content.builder()
-                        .putAdditionalProperty("body", JsonValue.from("bar"))
-                        .putAdditionalProperty("title", JsonValue.from("bar"))
-                        .build()
-                )
-                .data(
-                    GuideMarkMessageAsArchivedParams.Data.builder()
-                        .putAdditionalProperty("next_time", JsonValue.from("bar"))
-                        .putAdditionalProperty("spots_left", JsonValue.from("bar"))
-                        .putAdditionalProperty("tour_id", JsonValue.from("bar"))
-                        .build()
-                )
                 .isFinal(false)
-                .metadata(
-                    GuideMarkMessageAsArchivedParams.Metadata.builder()
-                        .putAdditionalProperty("cta", JsonValue.from("bar"))
-                        .putAdditionalProperty("theme", JsonValue.from("bar"))
-                        .putAdditionalProperty("type", JsonValue.from("bar"))
-                        .build()
-                )
                 .tenant("ingen_isla_nublar")
+                .unthrottled(false)
                 .build()
 
         val body = params._body()
@@ -100,31 +57,9 @@ internal class GuideMarkMessageAsArchivedParamsTest {
         assertThat(body.guideId()).isEqualTo("7e9dc78c-b3b1-4127-a54e-71f1899b831a")
         assertThat(body.guideKey()).isEqualTo("tour_notification")
         assertThat(body.guideStepRef()).isEqualTo("lab_tours")
-        assertThat(body.content())
-            .contains(
-                GuideMarkMessageAsArchivedParams.Content.builder()
-                    .putAdditionalProperty("body", JsonValue.from("bar"))
-                    .putAdditionalProperty("title", JsonValue.from("bar"))
-                    .build()
-            )
-        assertThat(body.data())
-            .contains(
-                GuideMarkMessageAsArchivedParams.Data.builder()
-                    .putAdditionalProperty("next_time", JsonValue.from("bar"))
-                    .putAdditionalProperty("spots_left", JsonValue.from("bar"))
-                    .putAdditionalProperty("tour_id", JsonValue.from("bar"))
-                    .build()
-            )
         assertThat(body.isFinal()).contains(false)
-        assertThat(body.metadata())
-            .contains(
-                GuideMarkMessageAsArchivedParams.Metadata.builder()
-                    .putAdditionalProperty("cta", JsonValue.from("bar"))
-                    .putAdditionalProperty("theme", JsonValue.from("bar"))
-                    .putAdditionalProperty("type", JsonValue.from("bar"))
-                    .build()
-            )
         assertThat(body.tenant()).contains("ingen_isla_nublar")
+        assertThat(body.unthrottled()).contains(false)
     }
 
     @Test
@@ -132,7 +67,6 @@ internal class GuideMarkMessageAsArchivedParamsTest {
         val params =
             GuideMarkMessageAsArchivedParams.builder()
                 .userId("user_id")
-                .messageId("message_id")
                 .channelId("123e4567-e89b-12d3-a456-426614174000")
                 .guideId("7e9dc78c-b3b1-4127-a54e-71f1899b831a")
                 .guideKey("tour_notification")

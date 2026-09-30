@@ -3,6 +3,7 @@
 package app.knock.api.models.tenants
 
 import app.knock.api.core.JsonValue
+import app.knock.api.core.http.QueryParams
 import app.knock.api.models.recipients.channeldata.InlineChannelDataRequest
 import app.knock.api.models.recipients.preferences.InlinePreferenceSetRequest
 import app.knock.api.models.recipients.preferences.PreferenceSetChannelTypes
@@ -527,5 +528,33 @@ internal class TenantSetParamsTest {
         val params = TenantSetParams.builder().id("id").build()
 
         val body = params._body()
+    }
+
+    @Test
+    fun queryParams() {
+        val params =
+            TenantSetParams.builder()
+                .id("id")
+                .resolveFullPreferenceSettings(true)
+                .name("Jurassic Park")
+                .build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams)
+            .isEqualTo(
+                QueryParams.builder().put("resolve_full_preference_settings", "true").build()
+            )
+        assertThat(params._body().name()).contains("Jurassic Park")
+    }
+
+    @Test
+    fun queryParamsWithoutOptionalFields() {
+        val params = TenantSetParams.builder().id("id").build()
+
+        val queryParams = params._queryParams()
+
+        assertThat(queryParams).isEqualTo(QueryParams.builder().build())
+        assertThat(params._body().name()).isEmpty
     }
 }

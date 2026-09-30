@@ -18,6 +18,7 @@ internal class BulkAddSubscriptionsParamsTest {
             .collection("projects")
             .addSubscription(
                 BulkAddSubscriptionsParams.Subscription.builder()
+                    .id("project-1")
                     .addRecipient(
                         InlineIdentifyUserRequest.builder()
                             .id("user_1")
@@ -130,6 +131,7 @@ internal class BulkAddSubscriptionsParamsTest {
                 .collection("projects")
                 .addSubscription(
                     BulkAddSubscriptionsParams.Subscription.builder()
+                        .id("project-1")
                         .addRecipient(InlineIdentifyUserRequest.builder().id("user_1").build())
                         .build()
                 )
@@ -147,6 +149,7 @@ internal class BulkAddSubscriptionsParamsTest {
                 .collection("projects")
                 .addSubscription(
                     BulkAddSubscriptionsParams.Subscription.builder()
+                        .id("project-1")
                         .addRecipient(
                             InlineIdentifyUserRequest.builder()
                                 .id("user_1")
@@ -256,6 +259,7 @@ internal class BulkAddSubscriptionsParamsTest {
         assertThat(body.subscriptions())
             .containsExactly(
                 BulkAddSubscriptionsParams.Subscription.builder()
+                    .id("project-1")
                     .addRecipient(
                         InlineIdentifyUserRequest.builder()
                             .id("user_1")
@@ -367,6 +371,7 @@ internal class BulkAddSubscriptionsParamsTest {
                 .collection("projects")
                 .addSubscription(
                     BulkAddSubscriptionsParams.Subscription.builder()
+                        .id("project-1")
                         .addRecipient(InlineIdentifyUserRequest.builder().id("user_1").build())
                         .build()
                 )
@@ -377,6 +382,7 @@ internal class BulkAddSubscriptionsParamsTest {
         assertThat(body.subscriptions())
             .containsExactly(
                 BulkAddSubscriptionsParams.Subscription.builder()
+                    .id("project-1")
                     .addRecipient(InlineIdentifyUserRequest.builder().id("user_1").build())
                     .build()
             )

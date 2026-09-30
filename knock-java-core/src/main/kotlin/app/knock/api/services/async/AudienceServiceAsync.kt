@@ -3,6 +3,7 @@
 package app.knock.api.services.async
 
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.audiences.AudienceAddMembersParams
 import app.knock.api.models.audiences.AudienceListMembersParams
@@ -19,7 +20,7 @@ interface AudienceServiceAsync {
     fun withRawResponse(): WithRawResponse
 
     /** Adds one or more members to the specified audience. */
-    fun addMembers(key: String, params: AudienceAddMembersParams): CompletableFuture<String> =
+    fun addMembers(key: String, params: AudienceAddMembersParams): CompletableFuture<Void?> =
         addMembers(key, params, RequestOptions.none())
 
     /** @see [addMembers] */
@@ -27,17 +28,17 @@ interface AudienceServiceAsync {
         key: String,
         params: AudienceAddMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String> = addMembers(params.toBuilder().key(key).build(), requestOptions)
+    ): CompletableFuture<Void?> = addMembers(params.toBuilder().key(key).build(), requestOptions)
 
     /** @see [addMembers] */
-    fun addMembers(params: AudienceAddMembersParams): CompletableFuture<String> =
+    fun addMembers(params: AudienceAddMembersParams): CompletableFuture<Void?> =
         addMembers(params, RequestOptions.none())
 
     /** @see [addMembers] */
     fun addMembers(
         params: AudienceAddMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String>
+    ): CompletableFuture<Void?>
 
     /** Returns a paginated list of members for the specified audience. */
     fun listMembers(key: String): CompletableFuture<AudienceListMembersResponse> =
@@ -77,7 +78,7 @@ interface AudienceServiceAsync {
         listMembers(key, AudienceListMembersParams.none(), requestOptions)
 
     /** Removes one or more members from the specified audience. */
-    fun removeMembers(key: String, params: AudienceRemoveMembersParams): CompletableFuture<String> =
+    fun removeMembers(key: String, params: AudienceRemoveMembersParams): CompletableFuture<Void?> =
         removeMembers(key, params, RequestOptions.none())
 
     /** @see [removeMembers] */
@@ -85,18 +86,17 @@ interface AudienceServiceAsync {
         key: String,
         params: AudienceRemoveMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String> =
-        removeMembers(params.toBuilder().key(key).build(), requestOptions)
+    ): CompletableFuture<Void?> = removeMembers(params.toBuilder().key(key).build(), requestOptions)
 
     /** @see [removeMembers] */
-    fun removeMembers(params: AudienceRemoveMembersParams): CompletableFuture<String> =
+    fun removeMembers(params: AudienceRemoveMembersParams): CompletableFuture<Void?> =
         removeMembers(params, RequestOptions.none())
 
     /** @see [removeMembers] */
     fun removeMembers(
         params: AudienceRemoveMembersParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String>
+    ): CompletableFuture<Void?>
 
     /**
      * A view of [AudienceServiceAsync] that provides access to raw HTTP responses for each method.
@@ -111,8 +111,7 @@ interface AudienceServiceAsync {
         fun addMembers(
             key: String,
             params: AudienceAddMembersParams,
-        ): CompletableFuture<HttpResponseFor<String>> =
-            addMembers(key, params, RequestOptions.none())
+        ): CompletableFuture<HttpResponse> = addMembers(key, params, RequestOptions.none())
 
         /** @see [addMembers] */
         @MustBeClosed
@@ -120,21 +119,20 @@ interface AudienceServiceAsync {
             key: String,
             params: AudienceAddMembersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             addMembers(params.toBuilder().key(key).build(), requestOptions)
 
         /** @see [addMembers] */
         @MustBeClosed
-        fun addMembers(
-            params: AudienceAddMembersParams
-        ): CompletableFuture<HttpResponseFor<String>> = addMembers(params, RequestOptions.none())
+        fun addMembers(params: AudienceAddMembersParams): CompletableFuture<HttpResponse> =
+            addMembers(params, RequestOptions.none())
 
         /** @see [addMembers] */
         @MustBeClosed
         fun addMembers(
             params: AudienceAddMembersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>>
+        ): CompletableFuture<HttpResponse>
 
         /**
          * Returns a raw HTTP response for `get /v1/audiences/{key}/members`, but is otherwise the
@@ -193,8 +191,7 @@ interface AudienceServiceAsync {
         fun removeMembers(
             key: String,
             params: AudienceRemoveMembersParams,
-        ): CompletableFuture<HttpResponseFor<String>> =
-            removeMembers(key, params, RequestOptions.none())
+        ): CompletableFuture<HttpResponse> = removeMembers(key, params, RequestOptions.none())
 
         /** @see [removeMembers] */
         @MustBeClosed
@@ -202,20 +199,19 @@ interface AudienceServiceAsync {
             key: String,
             params: AudienceRemoveMembersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             removeMembers(params.toBuilder().key(key).build(), requestOptions)
 
         /** @see [removeMembers] */
         @MustBeClosed
-        fun removeMembers(
-            params: AudienceRemoveMembersParams
-        ): CompletableFuture<HttpResponseFor<String>> = removeMembers(params, RequestOptions.none())
+        fun removeMembers(params: AudienceRemoveMembersParams): CompletableFuture<HttpResponse> =
+            removeMembers(params, RequestOptions.none())
 
         /** @see [removeMembers] */
         @MustBeClosed
         fun removeMembers(
             params: AudienceRemoveMembersParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>>
+        ): CompletableFuture<HttpResponse>
     }
 }

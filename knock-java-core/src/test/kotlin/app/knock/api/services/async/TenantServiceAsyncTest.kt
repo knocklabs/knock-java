@@ -47,9 +47,9 @@ internal class TenantServiceAsyncTest {
                 .build()
         val tenantServiceAsync = client.tenants()
 
-        val tenantFuture = tenantServiceAsync.delete("id")
+        val responseFuture = tenantServiceAsync.delete("id")
 
-        val tenant = tenantFuture.get()
+        val response = responseFuture.get()
     }
 
     @Disabled(

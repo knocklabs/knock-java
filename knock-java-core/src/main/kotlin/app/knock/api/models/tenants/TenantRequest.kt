@@ -29,6 +29,7 @@ private constructor(
     private val channelData: JsonField<InlineChannelDataRequest>,
     private val preferences: JsonField<InlinePreferenceSetRequest>,
     private val settings: JsonField<Settings>,
+    private val name: JsonField<String>,
     private val additionalProperties: MutableMap<String, JsonValue>,
 ) {
 
@@ -42,7 +43,8 @@ private constructor(
         @ExcludeMissing
         preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of(),
         @JsonProperty("settings") @ExcludeMissing settings: JsonField<Settings> = JsonMissing.of(),
-    ) : this(id, channelData, preferences, settings, mutableMapOf())
+        @JsonProperty("name") @ExcludeMissing name: JsonField<String> = JsonMissing.of(),
+    ) : this(id, channelData, preferences, settings, name, mutableMapOf())
 
     /**
      * The unique identifier for the tenant.
@@ -77,6 +79,14 @@ private constructor(
     fun settings(): Optional<Settings> = settings.getOptional("settings")
 
     /**
+     * An optional name for the tenant.
+     *
+     * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun name(): Optional<String> = name.getOptional("name")
+
+    /**
      * Returns the raw JSON value of [id].
      *
      * Unlike [id], this method doesn't throw if the JSON field has an unexpected type.
@@ -107,6 +117,13 @@ private constructor(
      * Unlike [settings], this method doesn't throw if the JSON field has an unexpected type.
      */
     @JsonProperty("settings") @ExcludeMissing fun _settings(): JsonField<Settings> = settings
+
+    /**
+     * Returns the raw JSON value of [name].
+     *
+     * Unlike [name], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    @JsonProperty("name") @ExcludeMissing fun _name(): JsonField<String> = name
 
     @JsonAnySetter
     private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -140,6 +157,7 @@ private constructor(
         private var channelData: JsonField<InlineChannelDataRequest> = JsonMissing.of()
         private var preferences: JsonField<InlinePreferenceSetRequest> = JsonMissing.of()
         private var settings: JsonField<Settings> = JsonMissing.of()
+        private var name: JsonField<String> = JsonMissing.of()
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
@@ -148,6 +166,7 @@ private constructor(
             channelData = tenantRequest.channelData
             preferences = tenantRequest.preferences
             settings = tenantRequest.settings
+            name = tenantRequest.name
             additionalProperties = tenantRequest.additionalProperties.toMutableMap()
         }
 
@@ -212,6 +231,20 @@ private constructor(
          */
         fun settings(settings: JsonField<Settings>) = apply { this.settings = settings }
 
+        /** An optional name for the tenant. */
+        fun name(name: String?) = name(JsonField.ofNullable(name))
+
+        /** Alias for calling [Builder.name] with `name.orElse(null)`. */
+        fun name(name: Optional<String>) = name(name.getOrNull())
+
+        /**
+         * Sets [Builder.name] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.name] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun name(name: JsonField<String>) = apply { this.name = name }
+
         fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
             this.additionalProperties.clear()
             putAllAdditionalProperties(additionalProperties)
@@ -249,6 +282,7 @@ private constructor(
                 channelData,
                 preferences,
                 settings,
+                name,
                 additionalProperties.toMutableMap(),
             )
     }
@@ -264,6 +298,7 @@ private constructor(
         channelData().ifPresent { it.validate() }
         preferences().ifPresent { it.validate() }
         settings().ifPresent { it.validate() }
+        name()
         validated = true
     }
 
@@ -285,7 +320,8 @@ private constructor(
         (if (id.asKnown().isPresent) 1 else 0) +
             (channelData.asKnown().getOrNull()?.validity() ?: 0) +
             (preferences.asKnown().getOrNull()?.validity() ?: 0) +
-            (settings.asKnown().getOrNull()?.validity() ?: 0)
+            (settings.asKnown().getOrNull()?.validity() ?: 0) +
+            (if (name.asKnown().isPresent) 1 else 0)
 
     /** The settings for the tenant. Includes branding and preference set. */
     class Settings
@@ -778,15 +814,15 @@ private constructor(
             return true
         }
 
-        return /* spotless:off */ other is TenantRequest && id == other.id && channelData == other.channelData && preferences == other.preferences && settings == other.settings && additionalProperties == other.additionalProperties /* spotless:on */
+        return /* spotless:off */ other is TenantRequest && id == other.id && channelData == other.channelData && preferences == other.preferences && settings == other.settings && name == other.name && additionalProperties == other.additionalProperties /* spotless:on */
     }
 
     /* spotless:off */
-    private val hashCode: Int by lazy { Objects.hash(id, channelData, preferences, settings, additionalProperties) }
+    private val hashCode: Int by lazy { Objects.hash(id, channelData, preferences, settings, name, additionalProperties) }
     /* spotless:on */
 
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "TenantRequest{id=$id, channelData=$channelData, preferences=$preferences, settings=$settings, additionalProperties=$additionalProperties}"
+        "TenantRequest{id=$id, channelData=$channelData, preferences=$preferences, settings=$settings, name=$name, additionalProperties=$additionalProperties}"
 }
