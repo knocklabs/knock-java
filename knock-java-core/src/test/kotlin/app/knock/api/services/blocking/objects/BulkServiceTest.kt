@@ -61,6 +61,7 @@ internal class BulkServiceTest {
                     .collection("projects")
                     .addSubscription(
                         BulkAddSubscriptionsParams.Subscription.builder()
+                            .id("project-1")
                             .addRecipient(
                                 InlineIdentifyUserRequest.builder()
                                     .id("user_1")
