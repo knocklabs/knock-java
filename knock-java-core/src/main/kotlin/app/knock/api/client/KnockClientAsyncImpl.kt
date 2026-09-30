@@ -28,6 +28,8 @@ import app.knock.api.services.async.TenantServiceAsync
 import app.knock.api.services.async.TenantServiceAsyncImpl
 import app.knock.api.services.async.UserServiceAsync
 import app.knock.api.services.async.UserServiceAsyncImpl
+import app.knock.api.services.async.WorkflowRecipientRunServiceAsync
+import app.knock.api.services.async.WorkflowRecipientRunServiceAsyncImpl
 import app.knock.api.services.async.WorkflowServiceAsync
 import app.knock.api.services.async.WorkflowServiceAsyncImpl
 
@@ -98,6 +100,10 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
         AudienceServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
+    private val workflowRecipientRuns: WorkflowRecipientRunServiceAsync by lazy {
+        WorkflowRecipientRunServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
+
     override fun sync(): KnockClient = sync
 
     override fun withRawResponse(): KnockClientAsync.WithRawResponse = withRawResponse
@@ -127,6 +133,8 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
     override fun channels(): ChannelServiceAsync = channels
 
     override fun audiences(): AudienceServiceAsync = audiences
+
+    override fun workflowRecipientRuns(): WorkflowRecipientRunServiceAsync = workflowRecipientRuns
 
     override fun close() = clientOptions.httpClient.close()
 
@@ -185,6 +193,11 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
             AudienceServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val workflowRecipientRuns:
+            WorkflowRecipientRunServiceAsync.WithRawResponse by lazy {
+            WorkflowRecipientRunServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun shared(): SharedServiceAsync.WithRawResponse = shared
 
         override fun recipients(): RecipientServiceAsync.WithRawResponse = recipients
@@ -210,5 +223,8 @@ class KnockClientAsyncImpl(private val clientOptions: ClientOptions) : KnockClie
         override fun channels(): ChannelServiceAsync.WithRawResponse = channels
 
         override fun audiences(): AudienceServiceAsync.WithRawResponse = audiences
+
+        override fun workflowRecipientRuns(): WorkflowRecipientRunServiceAsync.WithRawResponse =
+            workflowRecipientRuns
     }
 }
