@@ -476,4 +476,21 @@ internal class UserServiceAsyncTest {
 
         val response = responseFuture.get()
     }
+
+    @Disabled(
+        "skipped: currently no good way to test endpoints defining callbacks, Prism mock server will fail trying to reach the provided callback url"
+    )
+    @Test
+    fun unsetPreferences() {
+        val client =
+            KnockOkHttpClientAsync.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val userServiceAsync = client.users()
+
+        val responseFuture = userServiceAsync.unsetPreferences("user_id", "default")
+
+        val response = responseFuture.get()
+    }
 }

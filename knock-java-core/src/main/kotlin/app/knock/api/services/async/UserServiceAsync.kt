@@ -3,6 +3,7 @@
 package app.knock.api.services.async
 
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.recipients.channeldata.ChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSet
@@ -24,6 +25,7 @@ import app.knock.api.models.users.UserMergeParams
 import app.knock.api.models.users.UserSetChannelDataParams
 import app.knock.api.models.users.UserSetPreferencesParams
 import app.knock.api.models.users.UserUnsetChannelDataParams
+import app.knock.api.models.users.UserUnsetPreferencesParams
 import app.knock.api.models.users.UserUpdateParams
 import app.knock.api.services.async.users.BulkServiceAsync
 import app.knock.api.services.async.users.FeedServiceAsync
@@ -498,6 +500,44 @@ interface UserServiceAsync {
         requestOptions: RequestOptions,
     ): CompletableFuture<String> =
         unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none(), requestOptions)
+
+    /** Deletes channel data for a specific user and channel ID. */
+    fun unsetPreferences(userId: String, id: String): CompletableFuture<Void?> =
+        unsetPreferences(userId, id, UserUnsetPreferencesParams.none())
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        userId: String,
+        id: String,
+        params: UserUnsetPreferencesParams = UserUnsetPreferencesParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Void?> =
+        unsetPreferences(params.toBuilder().userId(userId).id(id).build(), requestOptions)
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        userId: String,
+        id: String,
+        params: UserUnsetPreferencesParams = UserUnsetPreferencesParams.none(),
+    ): CompletableFuture<Void?> = unsetPreferences(userId, id, params, RequestOptions.none())
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        params: UserUnsetPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Void?>
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(params: UserUnsetPreferencesParams): CompletableFuture<Void?> =
+        unsetPreferences(params, RequestOptions.none())
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        userId: String,
+        id: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Void?> =
+        unsetPreferences(userId, id, UserUnsetPreferencesParams.none(), requestOptions)
 
     /** A view of [UserServiceAsync] that provides access to raw HTTP responses for each method. */
     interface WithRawResponse {
@@ -1123,5 +1163,53 @@ interface UserServiceAsync {
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<String>> =
             unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `delete /v1/users/{user_id}/preferences/{id}`, but is
+         * otherwise the same as [UserServiceAsync.unsetPreferences].
+         */
+        @MustBeClosed
+        fun unsetPreferences(userId: String, id: String): CompletableFuture<HttpResponse> =
+            unsetPreferences(userId, id, UserUnsetPreferencesParams.none())
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            userId: String,
+            id: String,
+            params: UserUnsetPreferencesParams = UserUnsetPreferencesParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse> =
+            unsetPreferences(params.toBuilder().userId(userId).id(id).build(), requestOptions)
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            userId: String,
+            id: String,
+            params: UserUnsetPreferencesParams = UserUnsetPreferencesParams.none(),
+        ): CompletableFuture<HttpResponse> =
+            unsetPreferences(userId, id, params, RequestOptions.none())
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            params: UserUnsetPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse>
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(params: UserUnsetPreferencesParams): CompletableFuture<HttpResponse> =
+            unsetPreferences(params, RequestOptions.none())
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            userId: String,
+            id: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponse> =
+            unsetPreferences(userId, id, UserUnsetPreferencesParams.none(), requestOptions)
     }
 }

@@ -3,6 +3,7 @@
 package app.knock.api.services.async
 
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.objects.Object
 import app.knock.api.models.objects.ObjectAddSubscriptionsParams
@@ -24,6 +25,7 @@ import app.knock.api.models.objects.ObjectSetChannelDataParams
 import app.knock.api.models.objects.ObjectSetParams
 import app.knock.api.models.objects.ObjectSetPreferencesParams
 import app.knock.api.models.objects.ObjectUnsetChannelDataParams
+import app.knock.api.models.objects.ObjectUnsetPreferencesParams
 import app.knock.api.models.recipients.channeldata.ChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSet
 import app.knock.api.models.recipients.subscriptions.Subscription
@@ -703,6 +705,61 @@ interface ObjectServiceAsync {
             objectId,
             channelId,
             ObjectUnsetChannelDataParams.none(),
+            requestOptions,
+        )
+
+    /** Unsets the channel data for the specified object and channel. */
+    fun unsetPreferences(
+        collection: String,
+        objectId: String,
+        id: String,
+    ): CompletableFuture<Void?> =
+        unsetPreferences(collection, objectId, id, ObjectUnsetPreferencesParams.none())
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        collection: String,
+        objectId: String,
+        id: String,
+        params: ObjectUnsetPreferencesParams = ObjectUnsetPreferencesParams.none(),
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Void?> =
+        unsetPreferences(
+            params.toBuilder().collection(collection).objectId(objectId).id(id).build(),
+            requestOptions,
+        )
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        collection: String,
+        objectId: String,
+        id: String,
+        params: ObjectUnsetPreferencesParams = ObjectUnsetPreferencesParams.none(),
+    ): CompletableFuture<Void?> =
+        unsetPreferences(collection, objectId, id, params, RequestOptions.none())
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        params: ObjectUnsetPreferencesParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<Void?>
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(params: ObjectUnsetPreferencesParams): CompletableFuture<Void?> =
+        unsetPreferences(params, RequestOptions.none())
+
+    /** @see [unsetPreferences] */
+    fun unsetPreferences(
+        collection: String,
+        objectId: String,
+        id: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Void?> =
+        unsetPreferences(
+            collection,
+            objectId,
+            id,
+            ObjectUnsetPreferencesParams.none(),
             requestOptions,
         )
 
@@ -1509,6 +1566,72 @@ interface ObjectServiceAsync {
                 objectId,
                 channelId,
                 ObjectUnsetChannelDataParams.none(),
+                requestOptions,
+            )
+
+        /**
+         * Returns a raw HTTP response for `delete
+         * /v1/objects/{collection}/{object_id}/preferences/{id}`, but is otherwise the same as
+         * [ObjectServiceAsync.unsetPreferences].
+         */
+        @MustBeClosed
+        fun unsetPreferences(
+            collection: String,
+            objectId: String,
+            id: String,
+        ): CompletableFuture<HttpResponse> =
+            unsetPreferences(collection, objectId, id, ObjectUnsetPreferencesParams.none())
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            collection: String,
+            objectId: String,
+            id: String,
+            params: ObjectUnsetPreferencesParams = ObjectUnsetPreferencesParams.none(),
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse> =
+            unsetPreferences(
+                params.toBuilder().collection(collection).objectId(objectId).id(id).build(),
+                requestOptions,
+            )
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            collection: String,
+            objectId: String,
+            id: String,
+            params: ObjectUnsetPreferencesParams = ObjectUnsetPreferencesParams.none(),
+        ): CompletableFuture<HttpResponse> =
+            unsetPreferences(collection, objectId, id, params, RequestOptions.none())
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            params: ObjectUnsetPreferencesParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponse>
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            params: ObjectUnsetPreferencesParams
+        ): CompletableFuture<HttpResponse> = unsetPreferences(params, RequestOptions.none())
+
+        /** @see [unsetPreferences] */
+        @MustBeClosed
+        fun unsetPreferences(
+            collection: String,
+            objectId: String,
+            id: String,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponse> =
+            unsetPreferences(
+                collection,
+                objectId,
+                id,
+                ObjectUnsetPreferencesParams.none(),
                 requestOptions,
             )
     }

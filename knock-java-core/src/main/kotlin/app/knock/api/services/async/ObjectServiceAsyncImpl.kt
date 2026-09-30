@@ -6,12 +6,14 @@ import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.checkRequired
+import app.knock.api.core.handlers.emptyHandler
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
 import app.knock.api.core.handlers.stringHandler
 import app.knock.api.core.handlers.withErrorHandler
 import app.knock.api.core.http.HttpMethod
 import app.knock.api.core.http.HttpRequest
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponse.Handler
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
@@ -41,6 +43,7 @@ import app.knock.api.models.objects.ObjectSetChannelDataParams
 import app.knock.api.models.objects.ObjectSetParams
 import app.knock.api.models.objects.ObjectSetPreferencesParams
 import app.knock.api.models.objects.ObjectUnsetChannelDataParams
+import app.knock.api.models.objects.ObjectUnsetPreferencesParams
 import app.knock.api.models.recipients.channeldata.ChannelData
 import app.knock.api.models.recipients.preferences.PreferenceSet
 import app.knock.api.models.recipients.subscriptions.Subscription
@@ -166,6 +169,13 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
     ): CompletableFuture<String> =
         // delete /v1/objects/{collection}/{object_id}/channel_data/{channel_id}
         withRawResponse().unsetChannelData(params, requestOptions).thenApply { it.parse() }
+
+    override fun unsetPreferences(
+        params: ObjectUnsetPreferencesParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<Void?> =
+        // delete /v1/objects/{collection}/{object_id}/preferences/{id}
+        withRawResponse().unsetPreferences(params, requestOptions).thenAccept {}
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         ObjectServiceAsync.WithRawResponse {
@@ -740,6 +750,9 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
         private val unsetChannelDataHandler: Handler<String> =
             stringHandler().withErrorHandler(errorHandler)
 
+        private val unsetPreferencesHandler: Handler<Void?> =
+            emptyHandler().withErrorHandler(errorHandler)
+
         override fun unsetChannelData(
             params: ObjectUnsetChannelDataParams,
             requestOptions: RequestOptions,
@@ -768,6 +781,38 @@ class ObjectServiceAsyncImpl internal constructor(private val clientOptions: Cli
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
                     response.parseable { response.use { unsetChannelDataHandler.handle(it) } }
+                }
+        }
+
+        override fun unsetPreferences(
+            params: ObjectUnsetPreferencesParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponse> {
+            // We check here instead of in the params builder because this can be specified
+            // positionally or in the params class.
+            checkRequired("collection", params.collection().getOrNull())
+            checkRequired("objectId", params.objectId().getOrNull())
+            checkRequired("id", params.id().getOrNull())
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.DELETE)
+                    .addPathSegments(
+                        "v1",
+                        "objects",
+                        params._pathParam(0),
+                        params._pathParam(1),
+                        "preferences",
+                        params._pathParam(2),
+                    )
+                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    response.use { unsetPreferencesHandler.handle(it) }
+                    response
                 }
         }
     }
