@@ -1,5 +1,22 @@
 # Changelog
 
+## 2.0.0 (2026-09-30)
+
+Full Changelog: [v1.0.0...v2.0.0](https://github.com/knocklabs/knock-java/compare/v1.0.0...v2.0.0)
+
+### BREAKING CHANGES
+
+* 204 endpoints return nothing, message lists read `items`, guide message actions use the path-less endpoints, `messages().activities()` is removed, and recipient filters accept object references. The SDK now depends on OkHttp 5 and Kotlin stdlib 2.2+. See [MIGRATION.md](MIGRATION.md).
+
+### Features
+
+* modernize SDK against current OpenAPI spec (knock-node parity) ([#40](https://github.com/knocklabs/knock-java/issues/40)) ([d3d321d](https://github.com/knocklabs/knock-java/commit/d3d321db71a178495801bce18af90ea34f120404))
+
+
+### Build System
+
+* **deps:** bring build, runtime, and test dependencies up to date for 2.0.0 ([#41](https://github.com/knocklabs/knock-java/issues/41)) ([1925443](https://github.com/knocklabs/knock-java/commit/19254433621d0920f0a6d753019954d57753d74d))
+
 ## 1.0.0 (2025-05-09)
 
 Full Changelog: [v0.2.10...v1.0.0](https://github.com/knocklabs/knock-java/compare/v0.2.10...v1.0.0)
