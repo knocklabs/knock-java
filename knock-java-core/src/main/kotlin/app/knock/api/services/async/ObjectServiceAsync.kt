@@ -83,7 +83,7 @@ interface ObjectServiceAsync {
     /**
      * Permanently removes an object from the specified collection. This operation cannot be undone.
      */
-    fun delete(collection: String, id: String): CompletableFuture<String> =
+    fun delete(collection: String, id: String): CompletableFuture<Void?> =
         delete(collection, id, ObjectDeleteParams.none())
 
     /** @see [delete] */
@@ -92,7 +92,7 @@ interface ObjectServiceAsync {
         id: String,
         params: ObjectDeleteParams = ObjectDeleteParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         delete(params.toBuilder().collection(collection).id(id).build(), requestOptions)
 
     /** @see [delete] */
@@ -100,16 +100,16 @@ interface ObjectServiceAsync {
         collection: String,
         id: String,
         params: ObjectDeleteParams = ObjectDeleteParams.none(),
-    ): CompletableFuture<String> = delete(collection, id, params, RequestOptions.none())
+    ): CompletableFuture<Void?> = delete(collection, id, params, RequestOptions.none())
 
     /** @see [delete] */
     fun delete(
         params: ObjectDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String>
+    ): CompletableFuture<Void?>
 
     /** @see [delete] */
-    fun delete(params: ObjectDeleteParams): CompletableFuture<String> =
+    fun delete(params: ObjectDeleteParams): CompletableFuture<Void?> =
         delete(params, RequestOptions.none())
 
     /** @see [delete] */
@@ -117,7 +117,7 @@ interface ObjectServiceAsync {
         collection: String,
         id: String,
         requestOptions: RequestOptions,
-    ): CompletableFuture<String> = delete(collection, id, ObjectDeleteParams.none(), requestOptions)
+    ): CompletableFuture<Void?> = delete(collection, id, ObjectDeleteParams.none(), requestOptions)
 
     /**
      * Add subscriptions for an object. If a subscription already exists, it will be updated. This
@@ -653,7 +653,7 @@ interface ObjectServiceAsync {
         collection: String,
         objectId: String,
         channelId: String,
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         unsetChannelData(collection, objectId, channelId, ObjectUnsetChannelDataParams.none())
 
     /** @see [unsetChannelData] */
@@ -663,7 +663,7 @@ interface ObjectServiceAsync {
         channelId: String,
         params: ObjectUnsetChannelDataParams = ObjectUnsetChannelDataParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         unsetChannelData(
             params
                 .toBuilder()
@@ -680,17 +680,17 @@ interface ObjectServiceAsync {
         objectId: String,
         channelId: String,
         params: ObjectUnsetChannelDataParams = ObjectUnsetChannelDataParams.none(),
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         unsetChannelData(collection, objectId, channelId, params, RequestOptions.none())
 
     /** @see [unsetChannelData] */
     fun unsetChannelData(
         params: ObjectUnsetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String>
+    ): CompletableFuture<Void?>
 
     /** @see [unsetChannelData] */
-    fun unsetChannelData(params: ObjectUnsetChannelDataParams): CompletableFuture<String> =
+    fun unsetChannelData(params: ObjectUnsetChannelDataParams): CompletableFuture<Void?> =
         unsetChannelData(params, RequestOptions.none())
 
     /** @see [unsetChannelData] */
@@ -699,7 +699,7 @@ interface ObjectServiceAsync {
         objectId: String,
         channelId: String,
         requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         unsetChannelData(
             collection,
             objectId,
@@ -822,7 +822,7 @@ interface ObjectServiceAsync {
          * the same as [ObjectServiceAsync.delete].
          */
         @MustBeClosed
-        fun delete(collection: String, id: String): CompletableFuture<HttpResponseFor<String>> =
+        fun delete(collection: String, id: String): CompletableFuture<HttpResponse> =
             delete(collection, id, ObjectDeleteParams.none())
 
         /** @see [delete] */
@@ -832,7 +832,7 @@ interface ObjectServiceAsync {
             id: String,
             params: ObjectDeleteParams = ObjectDeleteParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             delete(params.toBuilder().collection(collection).id(id).build(), requestOptions)
 
         /** @see [delete] */
@@ -841,19 +841,18 @@ interface ObjectServiceAsync {
             collection: String,
             id: String,
             params: ObjectDeleteParams = ObjectDeleteParams.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
-            delete(collection, id, params, RequestOptions.none())
+        ): CompletableFuture<HttpResponse> = delete(collection, id, params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: ObjectDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>>
+        ): CompletableFuture<HttpResponse>
 
         /** @see [delete] */
         @MustBeClosed
-        fun delete(params: ObjectDeleteParams): CompletableFuture<HttpResponseFor<String>> =
+        fun delete(params: ObjectDeleteParams): CompletableFuture<HttpResponse> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
@@ -862,7 +861,7 @@ interface ObjectServiceAsync {
             collection: String,
             id: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             delete(collection, id, ObjectDeleteParams.none(), requestOptions)
 
         /**
@@ -1507,7 +1506,7 @@ interface ObjectServiceAsync {
             collection: String,
             objectId: String,
             channelId: String,
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             unsetChannelData(collection, objectId, channelId, ObjectUnsetChannelDataParams.none())
 
         /** @see [unsetChannelData] */
@@ -1518,7 +1517,7 @@ interface ObjectServiceAsync {
             channelId: String,
             params: ObjectUnsetChannelDataParams = ObjectUnsetChannelDataParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             unsetChannelData(
                 params
                     .toBuilder()
@@ -1536,7 +1535,7 @@ interface ObjectServiceAsync {
             objectId: String,
             channelId: String,
             params: ObjectUnsetChannelDataParams = ObjectUnsetChannelDataParams.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             unsetChannelData(collection, objectId, channelId, params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
@@ -1544,14 +1543,13 @@ interface ObjectServiceAsync {
         fun unsetChannelData(
             params: ObjectUnsetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>>
+        ): CompletableFuture<HttpResponse>
 
         /** @see [unsetChannelData] */
         @MustBeClosed
         fun unsetChannelData(
             params: ObjectUnsetChannelDataParams
-        ): CompletableFuture<HttpResponseFor<String>> =
-            unsetChannelData(params, RequestOptions.none())
+        ): CompletableFuture<HttpResponse> = unsetChannelData(params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
         @MustBeClosed
@@ -1560,7 +1558,7 @@ interface ObjectServiceAsync {
             objectId: String,
             channelId: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             unsetChannelData(
                 collection,
                 objectId,

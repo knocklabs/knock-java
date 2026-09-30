@@ -175,9 +175,9 @@ internal class UserServiceAsyncTest {
                 .build()
         val userServiceAsync = client.users()
 
-        val userFuture = userServiceAsync.delete("user_id")
+        val responseFuture = userServiceAsync.delete("user_id")
 
-        val user = userFuture.get()
+        val response = responseFuture.get()
     }
 
     @Disabled(

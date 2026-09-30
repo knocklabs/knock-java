@@ -6,12 +6,13 @@ import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.checkRequired
+import app.knock.api.core.handlers.emptyHandler
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
-import app.knock.api.core.handlers.stringHandler
 import app.knock.api.core.handlers.withErrorHandler
 import app.knock.api.core.http.HttpMethod
 import app.knock.api.core.http.HttpRequest
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponse.Handler
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
@@ -36,9 +37,9 @@ class AudienceServiceAsyncImpl internal constructor(private val clientOptions: C
     override fun addMembers(
         params: AudienceAddMembersParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         // post /v1/audiences/{key}/members
-        withRawResponse().addMembers(params, requestOptions).thenApply { it.parse() }
+        withRawResponse().addMembers(params, requestOptions).thenAccept {}
 
     override fun listMembers(
         params: AudienceListMembersParams,
@@ -50,22 +51,22 @@ class AudienceServiceAsyncImpl internal constructor(private val clientOptions: C
     override fun removeMembers(
         params: AudienceRemoveMembersParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         // delete /v1/audiences/{key}/members
-        withRawResponse().removeMembers(params, requestOptions).thenApply { it.parse() }
+        withRawResponse().removeMembers(params, requestOptions).thenAccept {}
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         AudienceServiceAsync.WithRawResponse {
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
-        private val addMembersHandler: Handler<String> =
-            stringHandler().withErrorHandler(errorHandler)
+        private val addMembersHandler: Handler<Void?> =
+            emptyHandler().withErrorHandler(errorHandler)
 
         override fun addMembers(
             params: AudienceAddMembersParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> {
+        ): CompletableFuture<HttpResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("key", params.key().getOrNull())
@@ -80,7 +81,8 @@ class AudienceServiceAsyncImpl internal constructor(private val clientOptions: C
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable { response.use { addMembersHandler.handle(it) } }
+                    response.use { addMembersHandler.handle(it) }
+                    response
                 }
         }
 
@@ -117,13 +119,13 @@ class AudienceServiceAsyncImpl internal constructor(private val clientOptions: C
                 }
         }
 
-        private val removeMembersHandler: Handler<String> =
-            stringHandler().withErrorHandler(errorHandler)
+        private val removeMembersHandler: Handler<Void?> =
+            emptyHandler().withErrorHandler(errorHandler)
 
         override fun removeMembers(
             params: AudienceRemoveMembersParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> {
+        ): CompletableFuture<HttpResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("key", params.key().getOrNull())
@@ -138,7 +140,8 @@ class AudienceServiceAsyncImpl internal constructor(private val clientOptions: C
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable { response.use { removeMembersHandler.handle(it) } }
+                    response.use { removeMembersHandler.handle(it) }
+                    response
                 }
         }
     }

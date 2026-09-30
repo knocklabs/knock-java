@@ -6,12 +6,13 @@ import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.checkRequired
+import app.knock.api.core.handlers.emptyHandler
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
-import app.knock.api.core.handlers.stringHandler
 import app.knock.api.core.handlers.withErrorHandler
 import app.knock.api.core.http.HttpMethod
 import app.knock.api.core.http.HttpRequest
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponse.Handler
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
@@ -35,9 +36,9 @@ class WorkflowServiceAsyncImpl internal constructor(private val clientOptions: C
     override fun cancel(
         params: WorkflowCancelParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         // post /v1/workflows/{key}/cancel
-        withRawResponse().cancel(params, requestOptions).thenApply { it.parse() }
+        withRawResponse().cancel(params, requestOptions).thenAccept {}
 
     override fun trigger(
         params: WorkflowTriggerParams,
@@ -51,12 +52,12 @@ class WorkflowServiceAsyncImpl internal constructor(private val clientOptions: C
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
-        private val cancelHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
+        private val cancelHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
 
         override fun cancel(
             params: WorkflowCancelParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> {
+        ): CompletableFuture<HttpResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("key", params.key().getOrNull())
@@ -71,7 +72,8 @@ class WorkflowServiceAsyncImpl internal constructor(private val clientOptions: C
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable { response.use { cancelHandler.handle(it) } }
+                    response.use { cancelHandler.handle(it) }
+                    response
                 }
         }
 

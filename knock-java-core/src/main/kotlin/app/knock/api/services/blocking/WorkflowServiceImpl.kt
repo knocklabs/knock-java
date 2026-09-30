@@ -6,12 +6,13 @@ import app.knock.api.core.ClientOptions
 import app.knock.api.core.JsonValue
 import app.knock.api.core.RequestOptions
 import app.knock.api.core.checkRequired
+import app.knock.api.core.handlers.emptyHandler
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
-import app.knock.api.core.handlers.stringHandler
 import app.knock.api.core.handlers.withErrorHandler
 import app.knock.api.core.http.HttpMethod
 import app.knock.api.core.http.HttpRequest
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponse.Handler
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.core.http.json
@@ -31,9 +32,10 @@ class WorkflowServiceImpl internal constructor(private val clientOptions: Client
 
     override fun withRawResponse(): WorkflowService.WithRawResponse = withRawResponse
 
-    override fun cancel(params: WorkflowCancelParams, requestOptions: RequestOptions): String =
+    override fun cancel(params: WorkflowCancelParams, requestOptions: RequestOptions) {
         // post /v1/workflows/{key}/cancel
-        withRawResponse().cancel(params, requestOptions).parse()
+        withRawResponse().cancel(params, requestOptions)
+    }
 
     override fun trigger(
         params: WorkflowTriggerParams,
@@ -47,12 +49,12 @@ class WorkflowServiceImpl internal constructor(private val clientOptions: Client
 
         private val errorHandler: Handler<JsonValue> = errorHandler(clientOptions.jsonMapper)
 
-        private val cancelHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
+        private val cancelHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
 
         override fun cancel(
             params: WorkflowCancelParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<String> {
+        ): HttpResponse {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("key", params.key().getOrNull())
@@ -65,7 +67,8 @@ class WorkflowServiceImpl internal constructor(private val clientOptions: Client
                     .prepare(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
             val response = clientOptions.httpClient.execute(request, requestOptions)
-            return response.parseable { response.use { cancelHandler.handle(it) } }
+            response.use { cancelHandler.handle(it) }
+            return response
         }
 
         private val triggerHandler: Handler<WorkflowTriggerResponse> =

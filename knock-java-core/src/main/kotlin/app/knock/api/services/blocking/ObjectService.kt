@@ -76,8 +76,7 @@ interface ObjectService {
     /**
      * Permanently removes an object from the specified collection. This operation cannot be undone.
      */
-    fun delete(collection: String, id: String): String =
-        delete(collection, id, ObjectDeleteParams.none())
+    fun delete(collection: String, id: String) = delete(collection, id, ObjectDeleteParams.none())
 
     /** @see [delete] */
     fun delete(
@@ -85,26 +84,23 @@ interface ObjectService {
         id: String,
         params: ObjectDeleteParams = ObjectDeleteParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): String = delete(params.toBuilder().collection(collection).id(id).build(), requestOptions)
+    ) = delete(params.toBuilder().collection(collection).id(id).build(), requestOptions)
 
     /** @see [delete] */
     fun delete(
         collection: String,
         id: String,
         params: ObjectDeleteParams = ObjectDeleteParams.none(),
-    ): String = delete(collection, id, params, RequestOptions.none())
+    ) = delete(collection, id, params, RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(
-        params: ObjectDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): String
+    fun delete(params: ObjectDeleteParams, requestOptions: RequestOptions = RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(params: ObjectDeleteParams): String = delete(params, RequestOptions.none())
+    fun delete(params: ObjectDeleteParams) = delete(params, RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(collection: String, id: String, requestOptions: RequestOptions): String =
+    fun delete(collection: String, id: String, requestOptions: RequestOptions) =
         delete(collection, id, ObjectDeleteParams.none(), requestOptions)
 
     /**
@@ -584,7 +580,7 @@ interface ObjectService {
     ): PreferenceSet
 
     /** Unsets the channel data for the specified object and channel. */
-    fun unsetChannelData(collection: String, objectId: String, channelId: String): String =
+    fun unsetChannelData(collection: String, objectId: String, channelId: String) =
         unsetChannelData(collection, objectId, channelId, ObjectUnsetChannelDataParams.none())
 
     /** @see [unsetChannelData] */
@@ -594,7 +590,7 @@ interface ObjectService {
         channelId: String,
         params: ObjectUnsetChannelDataParams = ObjectUnsetChannelDataParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): String =
+    ) =
         unsetChannelData(
             params
                 .toBuilder()
@@ -611,16 +607,16 @@ interface ObjectService {
         objectId: String,
         channelId: String,
         params: ObjectUnsetChannelDataParams = ObjectUnsetChannelDataParams.none(),
-    ): String = unsetChannelData(collection, objectId, channelId, params, RequestOptions.none())
+    ) = unsetChannelData(collection, objectId, channelId, params, RequestOptions.none())
 
     /** @see [unsetChannelData] */
     fun unsetChannelData(
         params: ObjectUnsetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): String
+    )
 
     /** @see [unsetChannelData] */
-    fun unsetChannelData(params: ObjectUnsetChannelDataParams): String =
+    fun unsetChannelData(params: ObjectUnsetChannelDataParams) =
         unsetChannelData(params, RequestOptions.none())
 
     /** @see [unsetChannelData] */
@@ -629,7 +625,7 @@ interface ObjectService {
         objectId: String,
         channelId: String,
         requestOptions: RequestOptions,
-    ): String =
+    ) =
         unsetChannelData(
             collection,
             objectId,
@@ -742,7 +738,7 @@ interface ObjectService {
          * the same as [ObjectService.delete].
          */
         @MustBeClosed
-        fun delete(collection: String, id: String): HttpResponseFor<String> =
+        fun delete(collection: String, id: String): HttpResponse =
             delete(collection, id, ObjectDeleteParams.none())
 
         /** @see [delete] */
@@ -752,7 +748,7 @@ interface ObjectService {
             id: String,
             params: ObjectDeleteParams = ObjectDeleteParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String> =
+        ): HttpResponse =
             delete(params.toBuilder().collection(collection).id(id).build(), requestOptions)
 
         /** @see [delete] */
@@ -761,27 +757,22 @@ interface ObjectService {
             collection: String,
             id: String,
             params: ObjectDeleteParams = ObjectDeleteParams.none(),
-        ): HttpResponseFor<String> = delete(collection, id, params, RequestOptions.none())
+        ): HttpResponse = delete(collection, id, params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: ObjectDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String>
+        ): HttpResponse
 
         /** @see [delete] */
         @MustBeClosed
-        fun delete(params: ObjectDeleteParams): HttpResponseFor<String> =
-            delete(params, RequestOptions.none())
+        fun delete(params: ObjectDeleteParams): HttpResponse = delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
-        fun delete(
-            collection: String,
-            id: String,
-            requestOptions: RequestOptions,
-        ): HttpResponseFor<String> =
+        fun delete(collection: String, id: String, requestOptions: RequestOptions): HttpResponse =
             delete(collection, id, ObjectDeleteParams.none(), requestOptions)
 
         /**
@@ -1406,7 +1397,7 @@ interface ObjectService {
             collection: String,
             objectId: String,
             channelId: String,
-        ): HttpResponseFor<String> =
+        ): HttpResponse =
             unsetChannelData(collection, objectId, channelId, ObjectUnsetChannelDataParams.none())
 
         /** @see [unsetChannelData] */
@@ -1417,7 +1408,7 @@ interface ObjectService {
             channelId: String,
             params: ObjectUnsetChannelDataParams = ObjectUnsetChannelDataParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String> =
+        ): HttpResponse =
             unsetChannelData(
                 params
                     .toBuilder()
@@ -1435,7 +1426,7 @@ interface ObjectService {
             objectId: String,
             channelId: String,
             params: ObjectUnsetChannelDataParams = ObjectUnsetChannelDataParams.none(),
-        ): HttpResponseFor<String> =
+        ): HttpResponse =
             unsetChannelData(collection, objectId, channelId, params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
@@ -1443,11 +1434,11 @@ interface ObjectService {
         fun unsetChannelData(
             params: ObjectUnsetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String>
+        ): HttpResponse
 
         /** @see [unsetChannelData] */
         @MustBeClosed
-        fun unsetChannelData(params: ObjectUnsetChannelDataParams): HttpResponseFor<String> =
+        fun unsetChannelData(params: ObjectUnsetChannelDataParams): HttpResponse =
             unsetChannelData(params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
@@ -1457,7 +1448,7 @@ interface ObjectService {
             objectId: String,
             channelId: String,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<String> =
+        ): HttpResponse =
             unsetChannelData(
                 collection,
                 objectId,

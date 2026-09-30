@@ -92,33 +92,33 @@ interface UserServiceAsync {
         list(UserListParams.none(), requestOptions)
 
     /** Permanently delete a user and all associated data. */
-    fun delete(userId: String): CompletableFuture<String> = delete(userId, UserDeleteParams.none())
+    fun delete(userId: String): CompletableFuture<Void?> = delete(userId, UserDeleteParams.none())
 
     /** @see [delete] */
     fun delete(
         userId: String,
         params: UserDeleteParams = UserDeleteParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String> = delete(params.toBuilder().userId(userId).build(), requestOptions)
+    ): CompletableFuture<Void?> = delete(params.toBuilder().userId(userId).build(), requestOptions)
 
     /** @see [delete] */
     fun delete(
         userId: String,
         params: UserDeleteParams = UserDeleteParams.none(),
-    ): CompletableFuture<String> = delete(userId, params, RequestOptions.none())
+    ): CompletableFuture<Void?> = delete(userId, params, RequestOptions.none())
 
     /** @see [delete] */
     fun delete(
         params: UserDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String>
+    ): CompletableFuture<Void?>
 
     /** @see [delete] */
-    fun delete(params: UserDeleteParams): CompletableFuture<String> =
+    fun delete(params: UserDeleteParams): CompletableFuture<Void?> =
         delete(params, RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(userId: String, requestOptions: RequestOptions): CompletableFuture<String> =
+    fun delete(userId: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         delete(userId, UserDeleteParams.none(), requestOptions)
 
     /** Retrieve a specific user by their ID. */
@@ -463,7 +463,7 @@ interface UserServiceAsync {
     ): CompletableFuture<PreferenceSet>
 
     /** Deletes channel data for a specific user and channel ID. */
-    fun unsetChannelData(userId: String, channelId: String): CompletableFuture<String> =
+    fun unsetChannelData(userId: String, channelId: String): CompletableFuture<Void?> =
         unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none())
 
     /** @see [unsetChannelData] */
@@ -472,7 +472,7 @@ interface UserServiceAsync {
         channelId: String,
         params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         unsetChannelData(
             params.toBuilder().userId(userId).channelId(channelId).build(),
             requestOptions,
@@ -483,17 +483,16 @@ interface UserServiceAsync {
         userId: String,
         channelId: String,
         params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
-    ): CompletableFuture<String> =
-        unsetChannelData(userId, channelId, params, RequestOptions.none())
+    ): CompletableFuture<Void?> = unsetChannelData(userId, channelId, params, RequestOptions.none())
 
     /** @see [unsetChannelData] */
     fun unsetChannelData(
         params: UserUnsetChannelDataParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String>
+    ): CompletableFuture<Void?>
 
     /** @see [unsetChannelData] */
-    fun unsetChannelData(params: UserUnsetChannelDataParams): CompletableFuture<String> =
+    fun unsetChannelData(params: UserUnsetChannelDataParams): CompletableFuture<Void?> =
         unsetChannelData(params, RequestOptions.none())
 
     /** @see [unsetChannelData] */
@@ -501,7 +500,7 @@ interface UserServiceAsync {
         userId: String,
         channelId: String,
         requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none(), requestOptions)
 
     /** Deletes channel data for a specific user and channel ID. */
@@ -618,7 +617,7 @@ interface UserServiceAsync {
          * as [UserServiceAsync.delete].
          */
         @MustBeClosed
-        fun delete(userId: String): CompletableFuture<HttpResponseFor<String>> =
+        fun delete(userId: String): CompletableFuture<HttpResponse> =
             delete(userId, UserDeleteParams.none())
 
         /** @see [delete] */
@@ -627,7 +626,7 @@ interface UserServiceAsync {
             userId: String,
             params: UserDeleteParams = UserDeleteParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             delete(params.toBuilder().userId(userId).build(), requestOptions)
 
         /** @see [delete] */
@@ -635,19 +634,18 @@ interface UserServiceAsync {
         fun delete(
             userId: String,
             params: UserDeleteParams = UserDeleteParams.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
-            delete(userId, params, RequestOptions.none())
+        ): CompletableFuture<HttpResponse> = delete(userId, params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: UserDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>>
+        ): CompletableFuture<HttpResponse>
 
         /** @see [delete] */
         @MustBeClosed
-        fun delete(params: UserDeleteParams): CompletableFuture<HttpResponseFor<String>> =
+        fun delete(params: UserDeleteParams): CompletableFuture<HttpResponse> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
@@ -655,8 +653,7 @@ interface UserServiceAsync {
         fun delete(
             userId: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> =
-            delete(userId, UserDeleteParams.none(), requestOptions)
+        ): CompletableFuture<HttpResponse> = delete(userId, UserDeleteParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /v1/users/{user_id}`, but is otherwise the same as
@@ -1118,10 +1115,7 @@ interface UserServiceAsync {
          * but is otherwise the same as [UserServiceAsync.unsetChannelData].
          */
         @MustBeClosed
-        fun unsetChannelData(
-            userId: String,
-            channelId: String,
-        ): CompletableFuture<HttpResponseFor<String>> =
+        fun unsetChannelData(userId: String, channelId: String): CompletableFuture<HttpResponse> =
             unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none())
 
         /** @see [unsetChannelData] */
@@ -1131,7 +1125,7 @@ interface UserServiceAsync {
             channelId: String,
             params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             unsetChannelData(
                 params.toBuilder().userId(userId).channelId(channelId).build(),
                 requestOptions,
@@ -1143,7 +1137,7 @@ interface UserServiceAsync {
             userId: String,
             channelId: String,
             params: UserUnsetChannelDataParams = UserUnsetChannelDataParams.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             unsetChannelData(userId, channelId, params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
@@ -1151,13 +1145,11 @@ interface UserServiceAsync {
         fun unsetChannelData(
             params: UserUnsetChannelDataParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>>
+        ): CompletableFuture<HttpResponse>
 
         /** @see [unsetChannelData] */
         @MustBeClosed
-        fun unsetChannelData(
-            params: UserUnsetChannelDataParams
-        ): CompletableFuture<HttpResponseFor<String>> =
+        fun unsetChannelData(params: UserUnsetChannelDataParams): CompletableFuture<HttpResponse> =
             unsetChannelData(params, RequestOptions.none())
 
         /** @see [unsetChannelData] */
@@ -1166,7 +1158,7 @@ interface UserServiceAsync {
             userId: String,
             channelId: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             unsetChannelData(userId, channelId, UserUnsetChannelDataParams.none(), requestOptions)
 
         /**

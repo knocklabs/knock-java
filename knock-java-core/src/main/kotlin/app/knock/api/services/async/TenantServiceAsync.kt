@@ -3,6 +3,7 @@
 package app.knock.api.services.async
 
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.tenants.Tenant
 import app.knock.api.models.tenants.TenantDeleteParams
@@ -42,33 +43,33 @@ interface TenantServiceAsync {
         list(TenantListParams.none(), requestOptions)
 
     /** Delete a tenant and all associated data. This operation cannot be undone. */
-    fun delete(id: String): CompletableFuture<String> = delete(id, TenantDeleteParams.none())
+    fun delete(id: String): CompletableFuture<Void?> = delete(id, TenantDeleteParams.none())
 
     /** @see [delete] */
     fun delete(
         id: String,
         params: TenantDeleteParams = TenantDeleteParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String> = delete(params.toBuilder().id(id).build(), requestOptions)
+    ): CompletableFuture<Void?> = delete(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see [delete] */
     fun delete(
         id: String,
         params: TenantDeleteParams = TenantDeleteParams.none(),
-    ): CompletableFuture<String> = delete(id, params, RequestOptions.none())
+    ): CompletableFuture<Void?> = delete(id, params, RequestOptions.none())
 
     /** @see [delete] */
     fun delete(
         params: TenantDeleteParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<String>
+    ): CompletableFuture<Void?>
 
     /** @see [delete] */
-    fun delete(params: TenantDeleteParams): CompletableFuture<String> =
+    fun delete(params: TenantDeleteParams): CompletableFuture<Void?> =
         delete(params, RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(id: String, requestOptions: RequestOptions): CompletableFuture<String> =
+    fun delete(id: String, requestOptions: RequestOptions): CompletableFuture<Void?> =
         delete(id, TenantDeleteParams.none(), requestOptions)
 
     /** Get a tenant by ID. */
@@ -173,7 +174,7 @@ interface TenantServiceAsync {
          * [TenantServiceAsync.delete].
          */
         @MustBeClosed
-        fun delete(id: String): CompletableFuture<HttpResponseFor<String>> =
+        fun delete(id: String): CompletableFuture<HttpResponse> =
             delete(id, TenantDeleteParams.none())
 
         /** @see [delete] */
@@ -182,7 +183,7 @@ interface TenantServiceAsync {
             id: String,
             params: TenantDeleteParams = TenantDeleteParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>> =
+        ): CompletableFuture<HttpResponse> =
             delete(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see [delete] */
@@ -190,26 +191,23 @@ interface TenantServiceAsync {
         fun delete(
             id: String,
             params: TenantDeleteParams = TenantDeleteParams.none(),
-        ): CompletableFuture<HttpResponseFor<String>> = delete(id, params, RequestOptions.none())
+        ): CompletableFuture<HttpResponse> = delete(id, params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: TenantDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<String>>
+        ): CompletableFuture<HttpResponse>
 
         /** @see [delete] */
         @MustBeClosed
-        fun delete(params: TenantDeleteParams): CompletableFuture<HttpResponseFor<String>> =
+        fun delete(params: TenantDeleteParams): CompletableFuture<HttpResponse> =
             delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
-        fun delete(
-            id: String,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> =
+        fun delete(id: String, requestOptions: RequestOptions): CompletableFuture<HttpResponse> =
             delete(id, TenantDeleteParams.none(), requestOptions)
 
         /**

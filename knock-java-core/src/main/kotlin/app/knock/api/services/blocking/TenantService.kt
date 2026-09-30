@@ -3,6 +3,7 @@
 package app.knock.api.services.blocking
 
 import app.knock.api.core.RequestOptions
+import app.knock.api.core.http.HttpResponse
 import app.knock.api.core.http.HttpResponseFor
 import app.knock.api.models.tenants.Tenant
 import app.knock.api.models.tenants.TenantDeleteParams
@@ -40,30 +41,27 @@ interface TenantService {
         list(TenantListParams.none(), requestOptions)
 
     /** Delete a tenant and all associated data. This operation cannot be undone. */
-    fun delete(id: String): String = delete(id, TenantDeleteParams.none())
+    fun delete(id: String) = delete(id, TenantDeleteParams.none())
 
     /** @see [delete] */
     fun delete(
         id: String,
         params: TenantDeleteParams = TenantDeleteParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): String = delete(params.toBuilder().id(id).build(), requestOptions)
+    ) = delete(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see [delete] */
-    fun delete(id: String, params: TenantDeleteParams = TenantDeleteParams.none()): String =
+    fun delete(id: String, params: TenantDeleteParams = TenantDeleteParams.none()) =
         delete(id, params, RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(
-        params: TenantDeleteParams,
-        requestOptions: RequestOptions = RequestOptions.none(),
-    ): String
+    fun delete(params: TenantDeleteParams, requestOptions: RequestOptions = RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(params: TenantDeleteParams): String = delete(params, RequestOptions.none())
+    fun delete(params: TenantDeleteParams) = delete(params, RequestOptions.none())
 
     /** @see [delete] */
-    fun delete(id: String, requestOptions: RequestOptions): String =
+    fun delete(id: String, requestOptions: RequestOptions) =
         delete(id, TenantDeleteParams.none(), requestOptions)
 
     /** Get a tenant by ID. */
@@ -150,8 +148,7 @@ interface TenantService {
          * Returns a raw HTTP response for `delete /v1/tenants/{id}`, but is otherwise the same as
          * [TenantService.delete].
          */
-        @MustBeClosed
-        fun delete(id: String): HttpResponseFor<String> = delete(id, TenantDeleteParams.none())
+        @MustBeClosed fun delete(id: String): HttpResponse = delete(id, TenantDeleteParams.none())
 
         /** @see [delete] */
         @MustBeClosed
@@ -159,30 +156,29 @@ interface TenantService {
             id: String,
             params: TenantDeleteParams = TenantDeleteParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String> = delete(params.toBuilder().id(id).build(), requestOptions)
+        ): HttpResponse = delete(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
             id: String,
             params: TenantDeleteParams = TenantDeleteParams.none(),
-        ): HttpResponseFor<String> = delete(id, params, RequestOptions.none())
+        ): HttpResponse = delete(id, params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
         fun delete(
             params: TenantDeleteParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<String>
+        ): HttpResponse
 
         /** @see [delete] */
         @MustBeClosed
-        fun delete(params: TenantDeleteParams): HttpResponseFor<String> =
-            delete(params, RequestOptions.none())
+        fun delete(params: TenantDeleteParams): HttpResponse = delete(params, RequestOptions.none())
 
         /** @see [delete] */
         @MustBeClosed
-        fun delete(id: String, requestOptions: RequestOptions): HttpResponseFor<String> =
+        fun delete(id: String, requestOptions: RequestOptions): HttpResponse =
             delete(id, TenantDeleteParams.none(), requestOptions)
 
         /**

@@ -9,7 +9,6 @@ import app.knock.api.core.checkRequired
 import app.knock.api.core.handlers.emptyHandler
 import app.knock.api.core.handlers.errorHandler
 import app.knock.api.core.handlers.jsonHandler
-import app.knock.api.core.handlers.stringHandler
 import app.knock.api.core.handlers.withErrorHandler
 import app.knock.api.core.http.HttpMethod
 import app.knock.api.core.http.HttpRequest
@@ -100,9 +99,9 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun delete(
         params: UserDeleteParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         // delete /v1/users/{user_id}
-        withRawResponse().delete(params, requestOptions).thenApply { it.parse() }
+        withRawResponse().delete(params, requestOptions).thenAccept {}
 
     override fun get(
         params: UserGetParams,
@@ -177,9 +176,9 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun unsetChannelData(
         params: UserUnsetChannelDataParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
+    ): CompletableFuture<Void?> =
         // delete /v1/users/{user_id}/channel_data/{channel_id}
-        withRawResponse().unsetChannelData(params, requestOptions).thenApply { it.parse() }
+        withRawResponse().unsetChannelData(params, requestOptions).thenAccept {}
 
     override fun unsetPreferences(
         params: UserUnsetPreferencesParams,
@@ -288,12 +287,12 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 }
         }
 
-        private val deleteHandler: Handler<String> = stringHandler().withErrorHandler(errorHandler)
+        private val deleteHandler: Handler<Void?> = emptyHandler().withErrorHandler(errorHandler)
 
         override fun delete(
             params: UserDeleteParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> {
+        ): CompletableFuture<HttpResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("userId", params.userId().getOrNull())
@@ -308,7 +307,8 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable { response.use { deleteHandler.handle(it) } }
+                    response.use { deleteHandler.handle(it) }
+                    response
                 }
         }
 
@@ -688,8 +688,8 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 }
         }
 
-        private val unsetChannelDataHandler: Handler<String> =
-            stringHandler().withErrorHandler(errorHandler)
+        private val unsetChannelDataHandler: Handler<Void?> =
+            emptyHandler().withErrorHandler(errorHandler)
 
         private val unsetPreferencesHandler: Handler<Void?> =
             emptyHandler().withErrorHandler(errorHandler)
@@ -697,7 +697,7 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
         override fun unsetChannelData(
             params: UserUnsetChannelDataParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> {
+        ): CompletableFuture<HttpResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("userId", params.userId().getOrNull())
@@ -719,7 +719,8 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
             return request
                 .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
                 .thenApply { response ->
-                    response.parseable { response.use { unsetChannelDataHandler.handle(it) } }
+                    response.use { unsetChannelDataHandler.handle(it) }
+                    response
                 }
         }
 

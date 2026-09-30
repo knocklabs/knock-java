@@ -53,9 +53,9 @@ internal class ObjectServiceAsyncTest {
                 .build()
         val objectServiceAsync = client.objects()
 
-        val objectFuture = objectServiceAsync.delete("collection", "id")
+        val responseFuture = objectServiceAsync.delete("collection", "id")
 
-        val object_ = objectFuture.get()
+        val response = responseFuture.get()
     }
 
     @Disabled(
