@@ -39,7 +39,8 @@ tasks.named<KotlinCompile>("compileTestKotlin") {
 
 configure<SpotlessExtension> {
     kotlin {
-        ktfmt().kotlinlangStyle()
+        // Match the ktfmt version used to format generated code to avoid formatting churn.
+        ktfmt("0.61").kotlinlangStyle()
         toggleOffOn()
     }
 }
