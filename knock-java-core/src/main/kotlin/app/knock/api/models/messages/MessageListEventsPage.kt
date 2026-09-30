@@ -22,10 +22,10 @@ private constructor(
     /**
      * Delegates to [MessageListEventsPageResponse], but gracefully handles missing data.
      *
-     * @see [MessageListEventsPageResponse.entries]
+     * @see [MessageListEventsPageResponse.items]
      */
-    fun entries(): List<MessageEvent> =
-        response._entries().getOptional("entries").getOrNull() ?: emptyList()
+    fun items(): List<MessageEvent> =
+        response._items().getOptional("items").getOrNull() ?: emptyList()
 
     /**
      * Delegates to [MessageListEventsPageResponse], but gracefully handles missing data.
@@ -35,7 +35,7 @@ private constructor(
     fun pageInfo(): Optional<PageInfo> = response._pageInfo().getOptional("page_info")
 
     fun hasNextPage(): Boolean =
-        entries().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
+        items().isNotEmpty() && pageInfo().flatMap { it._after().getOptional("after") }.isPresent
 
     fun getNextPageParams(): Optional<MessageListEventsParams> {
         if (!hasNextPage()) {
@@ -130,8 +130,8 @@ private constructor(
             var page = firstPage
             var index = 0
             while (true) {
-                while (index < page.entries().size) {
-                    yield(page.entries()[index++])
+                while (index < page.items().size) {
+                    yield(page.items()[index++])
                 }
                 page = page.getNextPage().getOrNull() ?: break
                 index = 0
