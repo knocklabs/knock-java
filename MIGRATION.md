@@ -1,6 +1,6 @@
 # Migration guide
 
-## Unreleased: OpenAPI modernization
+## 2.0.0: OpenAPI modernization
 
 This release brings the SDK in line with the current [Knock OpenAPI spec](https://api.knock.app/v1/openapi) and with the [Node SDK](https://github.com/knocklabs/knock-node). Most changes are additive. The breaking changes are listed below.
 
