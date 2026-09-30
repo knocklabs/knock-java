@@ -9,7 +9,7 @@ import org.junit.jupiter.api.extension.ExtensionContext
 
 class TestServerExtension : BeforeAllCallback, ExecutionCondition {
 
-    override fun beforeAll(context: ExtensionContext?) {
+    override fun beforeAll(context: ExtensionContext) {
         try {
             URL(BASE_URL).openConnection().connect()
         } catch (e: Exception) {

@@ -1,6 +1,8 @@
 import com.diffplug.gradle.spotless.SpotlessExtension
+import org.jetbrains.kotlin.gradle.dsl.JvmDefaultMode
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.dsl.KotlinVersion
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     id("knock.java")
@@ -14,22 +16,31 @@ kotlin {
 
     compilerOptions {
         freeCompilerArgs = listOf(
-            "-Xjvm-default=all",
             "-Xjdk-release=1.8",
             // Suppress deprecation warnings because we may still reference and test deprecated members.
-            // TODO: Replace with `-Xsuppress-warning=DEPRECATION` once we use Kotlin compiler 2.1.0+.
-            "-nowarn",
+            "-Xwarning-level=DEPRECATION:disabled",
+            // Generated `validity()` implementations call `toInt()` on values that are already `Int`.
+            "-Xwarning-level=REDUNDANT_CALL_OF_CONVERSION_METHOD:disabled",
         )
         jvmTarget.set(JvmTarget.JVM_1_8)
-        languageVersion.set(KotlinVersion.KOTLIN_1_8)
-        apiVersion.set(KotlinVersion.KOTLIN_1_8)
-        coreLibrariesVersion = "1.8.0"
+        jvmDefault.set(JvmDefaultMode.NO_COMPATIBILITY)
+        languageVersion.set(KotlinVersion.KOTLIN_2_2)
+        apiVersion.set(KotlinVersion.KOTLIN_2_2)
+        coreLibrariesVersion = "2.2.0"
+    }
+}
+
+tasks.named<KotlinCompile>("compileTestKotlin") {
+    compilerOptions {
+        freeCompilerArgs = freeCompilerArgs.get().map { if (it == "-Xjdk-release=1.8") "-Xjdk-release=17" else it }
+        jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 
 configure<SpotlessExtension> {
     kotlin {
-        ktfmt().kotlinlangStyle()
+        // Match the ktfmt version used to format generated code to avoid formatting churn.
+        ktfmt("0.61").kotlinlangStyle()
         toggleOffOn()
     }
 }
