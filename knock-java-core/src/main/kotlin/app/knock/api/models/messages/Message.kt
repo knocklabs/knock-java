@@ -1390,6 +1390,10 @@ private constructor(
         private val categories: JsonField<List<String>>,
         private val key: JsonField<String>,
         private val versionId: JsonField<String>,
+        private val stepRef: JsonField<String>,
+        private val type: JsonField<Type>,
+        private val workflowRecipientRunId: JsonField<String>,
+        private val workflowRunId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -1405,7 +1409,25 @@ private constructor(
             @JsonProperty("version_id")
             @ExcludeMissing
             versionId: JsonField<String> = JsonMissing.of(),
-        ) : this(_typename, categories, key, versionId, mutableMapOf())
+            @JsonProperty("step_ref") @ExcludeMissing stepRef: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("type") @ExcludeMissing type: JsonField<Type> = JsonMissing.of(),
+            @JsonProperty("workflow_recipient_run_id")
+            @ExcludeMissing
+            workflowRecipientRunId: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("workflow_run_id")
+            @ExcludeMissing
+            workflowRunId: JsonField<String> = JsonMissing.of(),
+        ) : this(
+            _typename,
+            categories,
+            key,
+            versionId,
+            stepRef,
+            type,
+            workflowRecipientRunId,
+            workflowRunId,
+            mutableMapOf(),
+        )
 
         /**
          * @throws KnockInvalidDataException if the JSON field has an unexpected type or is
@@ -1438,6 +1460,41 @@ private constructor(
         fun versionId(): String = versionId.getRequired("version_id")
 
         /**
+         * The step reference for the step in the workflow that generated the message.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun stepRef(): Optional<String> = stepRef.getOptional("step_ref")
+
+        /**
+         * Whether this message was generated from a workflow, broadcast, or guide.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun type(): Optional<Type> = type.getOptional("type")
+
+        /**
+         * The unique identifier for the workflow recipient run that generated this message. Only
+         * present for workflow/broadcast messages.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun workflowRecipientRunId(): Optional<String> =
+            workflowRecipientRunId.getOptional("workflow_recipient_run_id")
+
+        /**
+         * The unique identifier for the workflow run that generated this message. Only present for
+         * workflow/broadcast messages.
+         *
+         * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun workflowRunId(): Optional<String> = workflowRunId.getOptional("workflow_run_id")
+
+        /**
          * Returns the raw JSON value of [_typename].
          *
          * Unlike [_typename], this method doesn't throw if the JSON field has an unexpected type.
@@ -1466,6 +1523,40 @@ private constructor(
          * Unlike [versionId], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("version_id") @ExcludeMissing fun _versionId(): JsonField<String> = versionId
+
+        /**
+         * Returns the raw JSON value of [stepRef].
+         *
+         * Unlike [stepRef], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("step_ref") @ExcludeMissing fun _stepRef(): JsonField<String> = stepRef
+
+        /**
+         * Returns the raw JSON value of [type].
+         *
+         * Unlike [type], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("type") @ExcludeMissing fun _type(): JsonField<Type> = type
+
+        /**
+         * Returns the raw JSON value of [workflowRecipientRunId].
+         *
+         * Unlike [workflowRecipientRunId], this method doesn't throw if the JSON field has an
+         * unexpected type.
+         */
+        @JsonProperty("workflow_recipient_run_id")
+        @ExcludeMissing
+        fun _workflowRecipientRunId(): JsonField<String> = workflowRecipientRunId
+
+        /**
+         * Returns the raw JSON value of [workflowRunId].
+         *
+         * Unlike [workflowRunId], this method doesn't throw if the JSON field has an unexpected
+         * type.
+         */
+        @JsonProperty("workflow_run_id")
+        @ExcludeMissing
+        fun _workflowRunId(): JsonField<String> = workflowRunId
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -1502,6 +1593,10 @@ private constructor(
             private var categories: JsonField<MutableList<String>>? = null
             private var key: JsonField<String>? = null
             private var versionId: JsonField<String>? = null
+            private var stepRef: JsonField<String> = JsonMissing.of()
+            private var type: JsonField<Type> = JsonMissing.of()
+            private var workflowRecipientRunId: JsonField<String> = JsonMissing.of()
+            private var workflowRunId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
@@ -1510,6 +1605,10 @@ private constructor(
                 categories = source.categories.map { it.toMutableList() }
                 key = source.key
                 versionId = source.versionId
+                stepRef = source.stepRef
+                type = source.type
+                workflowRecipientRunId = source.workflowRecipientRunId
+                workflowRunId = source.workflowRunId
                 additionalProperties = source.additionalProperties.toMutableMap()
             }
 
@@ -1574,6 +1673,80 @@ private constructor(
              */
             fun versionId(versionId: JsonField<String>) = apply { this.versionId = versionId }
 
+            /** The step reference for the step in the workflow that generated the message. */
+            fun stepRef(stepRef: String?) = stepRef(JsonField.ofNullable(stepRef))
+
+            /** Alias for calling [Builder.stepRef] with `stepRef.orElse(null)`. */
+            fun stepRef(stepRef: Optional<String>) = stepRef(stepRef.getOrNull())
+
+            /**
+             * Sets [Builder.stepRef] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.stepRef] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun stepRef(stepRef: JsonField<String>) = apply { this.stepRef = stepRef }
+
+            /** Whether this message was generated from a workflow, broadcast, or guide. */
+            fun type(type: Type) = type(JsonField.of(type))
+
+            /**
+             * Sets [Builder.type] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.type] with a well-typed [Type] value instead. This
+             * method is primarily for setting the field to an undocumented or not yet supported
+             * value.
+             */
+            fun type(type: JsonField<Type>) = apply { this.type = type }
+
+            /**
+             * The unique identifier for the workflow recipient run that generated this message.
+             * Only present for workflow/broadcast messages.
+             */
+            fun workflowRecipientRunId(workflowRecipientRunId: String?) =
+                workflowRecipientRunId(JsonField.ofNullable(workflowRecipientRunId))
+
+            /**
+             * Alias for calling [Builder.workflowRecipientRunId] with
+             * `workflowRecipientRunId.orElse(null)`.
+             */
+            fun workflowRecipientRunId(workflowRecipientRunId: Optional<String>) =
+                workflowRecipientRunId(workflowRecipientRunId.getOrNull())
+
+            /**
+             * Sets [Builder.workflowRecipientRunId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.workflowRecipientRunId] with a well-typed [String]
+             * value instead. This method is primarily for setting the field to an undocumented or
+             * not yet supported value.
+             */
+            fun workflowRecipientRunId(workflowRecipientRunId: JsonField<String>) = apply {
+                this.workflowRecipientRunId = workflowRecipientRunId
+            }
+
+            /**
+             * The unique identifier for the workflow run that generated this message. Only present
+             * for workflow/broadcast messages.
+             */
+            fun workflowRunId(workflowRunId: String?) =
+                workflowRunId(JsonField.ofNullable(workflowRunId))
+
+            /** Alias for calling [Builder.workflowRunId] with `workflowRunId.orElse(null)`. */
+            fun workflowRunId(workflowRunId: Optional<String>) =
+                workflowRunId(workflowRunId.getOrNull())
+
+            /**
+             * Sets [Builder.workflowRunId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.workflowRunId] with a well-typed [String] value
+             * instead. This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun workflowRunId(workflowRunId: JsonField<String>) = apply {
+                this.workflowRunId = workflowRunId
+            }
+
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
                 putAllAdditionalProperties(additionalProperties)
@@ -1614,6 +1787,10 @@ private constructor(
                     checkRequired("categories", categories).map { it.toImmutable() },
                     checkRequired("key", key),
                     checkRequired("versionId", versionId),
+                    stepRef,
+                    type,
+                    workflowRecipientRunId,
+                    workflowRunId,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -1629,6 +1806,10 @@ private constructor(
             categories()
             key()
             versionId()
+            stepRef()
+            type().ifPresent { it.validate() }
+            workflowRecipientRunId()
+            workflowRunId()
             validated = true
         }
 
@@ -1651,24 +1832,162 @@ private constructor(
             (if (_typename.asKnown().isPresent) 1 else 0) +
                 (categories.asKnown().getOrNull()?.size ?: 0) +
                 (if (key.asKnown().isPresent) 1 else 0) +
-                (if (versionId.asKnown().isPresent) 1 else 0)
+                (if (versionId.asKnown().isPresent) 1 else 0) +
+                (if (stepRef.asKnown().isPresent) 1 else 0) +
+                (type.asKnown().getOrNull()?.validity() ?: 0) +
+                (if (workflowRecipientRunId.asKnown().isPresent) 1 else 0) +
+                (if (workflowRunId.asKnown().isPresent) 1 else 0)
+
+        /** Whether this message was generated from a workflow, broadcast, or guide. */
+        class Type @JsonCreator private constructor(private val value: JsonField<String>) : Enum {
+
+            /**
+             * Returns this class instance's raw value.
+             *
+             * This is usually only useful if this instance was deserialized from data that doesn't
+             * match any known member, and you want to know that value. For example, if the SDK is
+             * on an older version than the API, then the API may respond with new members that the
+             * SDK is unaware of.
+             */
+            @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+            companion object {
+
+                @JvmField val BROADCAST = of("broadcast")
+
+                @JvmField val WORKFLOW = of("workflow")
+
+                @JvmField val GUIDE = of("guide")
+
+                @JvmStatic fun of(value: String) = Type(JsonField.of(value))
+            }
+
+            /** An enum containing [Type]'s known values. */
+            enum class Known {
+                BROADCAST,
+                WORKFLOW,
+                GUIDE,
+            }
+
+            /**
+             * An enum containing [Type]'s known values, as well as an [_UNKNOWN] member.
+             *
+             * An instance of [Type] can contain an unknown value in a couple of cases:
+             * - It was deserialized from data that doesn't match any known member. For example, if
+             *   the SDK is on an older version than the API, then the API may respond with new
+             *   members that the SDK is unaware of.
+             * - It was constructed with an arbitrary value using the [of] method.
+             */
+            enum class Value {
+                BROADCAST,
+                WORKFLOW,
+                GUIDE,
+                /** An enum member indicating that [Type] was instantiated with an unknown value. */
+                _UNKNOWN,
+            }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value, or
+             * [Value._UNKNOWN] if the class was instantiated with an unknown value.
+             *
+             * Use the [known] method instead if you're certain the value is always known or if you
+             * want to throw for the unknown case.
+             */
+            fun value(): Value =
+                when (this) {
+                    BROADCAST -> Value.BROADCAST
+                    WORKFLOW -> Value.WORKFLOW
+                    GUIDE -> Value.GUIDE
+                    else -> Value._UNKNOWN
+                }
+
+            /**
+             * Returns an enum member corresponding to this class instance's value.
+             *
+             * Use the [value] method instead if you're uncertain the value is always known and
+             * don't want to throw for the unknown case.
+             *
+             * @throws KnockInvalidDataException if this class instance's value is a not a known
+             *   member.
+             */
+            fun known(): Known =
+                when (this) {
+                    BROADCAST -> Known.BROADCAST
+                    WORKFLOW -> Known.WORKFLOW
+                    GUIDE -> Known.GUIDE
+                    else -> throw KnockInvalidDataException("Unknown Type: $value")
+                }
+
+            /**
+             * Returns this class instance's primitive wire representation.
+             *
+             * This differs from the [toString] method because that method is primarily for
+             * debugging and generally doesn't throw.
+             *
+             * @throws KnockInvalidDataException if this class instance's value does not have the
+             *   expected primitive type.
+             */
+            fun asString(): String =
+                _value().asString().orElseThrow {
+                    KnockInvalidDataException("Value is not a String")
+                }
+
+            private var validated: Boolean = false
+
+            fun validate(): Type = apply {
+                if (validated) {
+                    return@apply
+                }
+
+                known()
+                validated = true
+            }
+
+            fun isValid(): Boolean =
+                try {
+                    validate()
+                    true
+                } catch (e: KnockInvalidDataException) {
+                    false
+                }
+
+            /**
+             * Returns a score indicating how many valid values are contained in this object
+             * recursively.
+             *
+             * Used for best match union deserialization.
+             */
+            @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+            override fun equals(other: Any?): Boolean {
+                if (this === other) {
+                    return true
+                }
+
+                return /* spotless:off */ other is Type && value == other.value /* spotless:on */
+            }
+
+            override fun hashCode() = value.hashCode()
+
+            override fun toString() = value.toString()
+        }
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
                 return true
             }
 
-            return /* spotless:off */ other is Source && _typename == other._typename && categories == other.categories && key == other.key && versionId == other.versionId && additionalProperties == other.additionalProperties /* spotless:on */
+            return /* spotless:off */ other is Source && _typename == other._typename && categories == other.categories && key == other.key && versionId == other.versionId && stepRef == other.stepRef && type == other.type && workflowRecipientRunId == other.workflowRecipientRunId && workflowRunId == other.workflowRunId && additionalProperties == other.additionalProperties /* spotless:on */
         }
 
         /* spotless:off */
-        private val hashCode: Int by lazy { Objects.hash(_typename, categories, key, versionId, additionalProperties) }
+        private val hashCode: Int by lazy { Objects.hash(_typename, categories, key, versionId, stepRef, type, workflowRecipientRunId, workflowRunId, additionalProperties) }
         /* spotless:on */
 
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Source{_typename=$_typename, categories=$categories, key=$key, versionId=$versionId, additionalProperties=$additionalProperties}"
+            "Source{_typename=$_typename, categories=$categories, key=$key, versionId=$versionId, stepRef=$stepRef, type=$type, workflowRecipientRunId=$workflowRecipientRunId, workflowRunId=$workflowRunId, additionalProperties=$additionalProperties}"
     }
 
     /** The message delivery status. */

@@ -436,6 +436,8 @@ private constructor(
             private val accessToken: JsonField<String>,
             private val channelId: JsonField<String>,
             private val userId: JsonField<String>,
+            private val knockTenantId: JsonField<String>,
+            private val channelName: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
@@ -450,7 +452,13 @@ private constructor(
                 @JsonProperty("user_id")
                 @ExcludeMissing
                 userId: JsonField<String> = JsonMissing.of(),
-            ) : this(accessToken, channelId, userId, mutableMapOf())
+                @JsonProperty("knock_tenant_id")
+                @ExcludeMissing
+                knockTenantId: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("channel_name")
+                @ExcludeMissing
+                channelName: JsonField<String> = JsonMissing.of(),
+            ) : this(accessToken, channelId, userId, knockTenantId, channelName, mutableMapOf())
 
             /**
              * A Slack access token.
@@ -475,6 +483,24 @@ private constructor(
              *   the server responded with an unexpected value).
              */
             fun userId(): Optional<String> = userId.getOptional("user_id")
+
+            /**
+             * An optional Knock tenant ID (`knock_tenant_id`) that scopes this connection. Distinct
+             * from provider-specific tenant IDs. When a workflow is triggered with this tenant,
+             * Knock prefers this connection over untagged connections.
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun knockTenantId(): Optional<String> = knockTenantId.getOptional("knock_tenant_id")
+
+            /**
+             * A Slack channel name.
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun channelName(): Optional<String> = channelName.getOptional("channel_name")
 
             /**
              * Returns the raw JSON value of [accessToken].
@@ -503,6 +529,26 @@ private constructor(
              */
             @JsonProperty("user_id") @ExcludeMissing fun _userId(): JsonField<String> = userId
 
+            /**
+             * Returns the raw JSON value of [knockTenantId].
+             *
+             * Unlike [knockTenantId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("knock_tenant_id")
+            @ExcludeMissing
+            fun _knockTenantId(): JsonField<String> = knockTenantId
+
+            /**
+             * Returns the raw JSON value of [channelName].
+             *
+             * Unlike [channelName], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("channel_name")
+            @ExcludeMissing
+            fun _channelName(): JsonField<String> = channelName
+
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
                 additionalProperties.put(key, value)
@@ -529,6 +575,8 @@ private constructor(
                 private var accessToken: JsonField<String> = JsonMissing.of()
                 private var channelId: JsonField<String> = JsonMissing.of()
                 private var userId: JsonField<String> = JsonMissing.of()
+                private var knockTenantId: JsonField<String> = JsonMissing.of()
+                private var channelName: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
@@ -536,6 +584,8 @@ private constructor(
                     accessToken = slackTokenConnection.accessToken
                     channelId = slackTokenConnection.channelId
                     userId = slackTokenConnection.userId
+                    knockTenantId = slackTokenConnection.knockTenantId
+                    channelName = slackTokenConnection.channelName
                     additionalProperties = slackTokenConnection.additionalProperties.toMutableMap()
                 }
 
@@ -588,6 +638,48 @@ private constructor(
                  */
                 fun userId(userId: JsonField<String>) = apply { this.userId = userId }
 
+                /**
+                 * An optional Knock tenant ID (`knock_tenant_id`) that scopes this connection.
+                 * Distinct from provider-specific tenant IDs. When a workflow is triggered with
+                 * this tenant, Knock prefers this connection over untagged connections.
+                 */
+                fun knockTenantId(knockTenantId: String?) =
+                    knockTenantId(JsonField.ofNullable(knockTenantId))
+
+                /** Alias for calling [Builder.knockTenantId] with `knockTenantId.orElse(null)`. */
+                fun knockTenantId(knockTenantId: Optional<String>) =
+                    knockTenantId(knockTenantId.getOrNull())
+
+                /**
+                 * Sets [Builder.knockTenantId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.knockTenantId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun knockTenantId(knockTenantId: JsonField<String>) = apply {
+                    this.knockTenantId = knockTenantId
+                }
+
+                /** A Slack channel name. */
+                fun channelName(channelName: String?) =
+                    channelName(JsonField.ofNullable(channelName))
+
+                /** Alias for calling [Builder.channelName] with `channelName.orElse(null)`. */
+                fun channelName(channelName: Optional<String>) =
+                    channelName(channelName.getOrNull())
+
+                /**
+                 * Sets [Builder.channelName] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.channelName] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun channelName(channelName: JsonField<String>) = apply {
+                    this.channelName = channelName
+                }
+
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
                     putAllAdditionalProperties(additionalProperties)
@@ -620,6 +712,8 @@ private constructor(
                         accessToken,
                         channelId,
                         userId,
+                        knockTenantId,
+                        channelName,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -634,6 +728,8 @@ private constructor(
                 accessToken()
                 channelId()
                 userId()
+                knockTenantId()
+                channelName()
                 validated = true
             }
 
@@ -655,37 +751,43 @@ private constructor(
             internal fun validity(): Int =
                 (if (accessToken.asKnown().isPresent) 1 else 0) +
                     (if (channelId.asKnown().isPresent) 1 else 0) +
-                    (if (userId.asKnown().isPresent) 1 else 0)
+                    (if (userId.asKnown().isPresent) 1 else 0) +
+                    (if (knockTenantId.asKnown().isPresent) 1 else 0) +
+                    (if (channelName.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is SlackTokenConnection && accessToken == other.accessToken && channelId == other.channelId && userId == other.userId && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is SlackTokenConnection && accessToken == other.accessToken && channelId == other.channelId && userId == other.userId && knockTenantId == other.knockTenantId && channelName == other.channelName && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(accessToken, channelId, userId, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(accessToken, channelId, userId, knockTenantId, channelName, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "SlackTokenConnection{accessToken=$accessToken, channelId=$channelId, userId=$userId, additionalProperties=$additionalProperties}"
+                "SlackTokenConnection{accessToken=$accessToken, channelId=$channelId, userId=$userId, knockTenantId=$knockTenantId, channelName=$channelName, additionalProperties=$additionalProperties}"
         }
 
         /** A Slack connection incoming webhook. */
         class SlackIncomingWebhookConnection
         private constructor(
             private val url: JsonField<String>,
+            private val knockTenantId: JsonField<String>,
             private val additionalProperties: MutableMap<String, JsonValue>,
         ) {
 
             @JsonCreator
             private constructor(
-                @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of()
-            ) : this(url, mutableMapOf())
+                @JsonProperty("url") @ExcludeMissing url: JsonField<String> = JsonMissing.of(),
+                @JsonProperty("knock_tenant_id")
+                @ExcludeMissing
+                knockTenantId: JsonField<String> = JsonMissing.of(),
+            ) : this(url, knockTenantId, mutableMapOf())
 
             /**
              * The URL of the incoming webhook for a Slack connection.
@@ -697,11 +799,31 @@ private constructor(
             fun url(): String = url.getRequired("url")
 
             /**
+             * An optional Knock tenant ID (`knock_tenant_id`) that scopes this connection. Distinct
+             * from provider-specific tenant IDs. When a workflow is triggered with this tenant,
+             * Knock prefers this connection over untagged connections.
+             *
+             * @throws KnockInvalidDataException if the JSON field has an unexpected type (e.g. if
+             *   the server responded with an unexpected value).
+             */
+            fun knockTenantId(): Optional<String> = knockTenantId.getOptional("knock_tenant_id")
+
+            /**
              * Returns the raw JSON value of [url].
              *
              * Unlike [url], this method doesn't throw if the JSON field has an unexpected type.
              */
             @JsonProperty("url") @ExcludeMissing fun _url(): JsonField<String> = url
+
+            /**
+             * Returns the raw JSON value of [knockTenantId].
+             *
+             * Unlike [knockTenantId], this method doesn't throw if the JSON field has an unexpected
+             * type.
+             */
+            @JsonProperty("knock_tenant_id")
+            @ExcludeMissing
+            fun _knockTenantId(): JsonField<String> = knockTenantId
 
             @JsonAnySetter
             private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -733,12 +855,14 @@ private constructor(
             class Builder internal constructor() {
 
                 private var url: JsonField<String>? = null
+                private var knockTenantId: JsonField<String> = JsonMissing.of()
                 private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
                 @JvmSynthetic
                 internal fun from(slackIncomingWebhookConnection: SlackIncomingWebhookConnection) =
                     apply {
                         url = slackIncomingWebhookConnection.url
+                        knockTenantId = slackIncomingWebhookConnection.knockTenantId
                         additionalProperties =
                             slackIncomingWebhookConnection.additionalProperties.toMutableMap()
                     }
@@ -754,6 +878,29 @@ private constructor(
                  * supported value.
                  */
                 fun url(url: JsonField<String>) = apply { this.url = url }
+
+                /**
+                 * An optional Knock tenant ID (`knock_tenant_id`) that scopes this connection.
+                 * Distinct from provider-specific tenant IDs. When a workflow is triggered with
+                 * this tenant, Knock prefers this connection over untagged connections.
+                 */
+                fun knockTenantId(knockTenantId: String?) =
+                    knockTenantId(JsonField.ofNullable(knockTenantId))
+
+                /** Alias for calling [Builder.knockTenantId] with `knockTenantId.orElse(null)`. */
+                fun knockTenantId(knockTenantId: Optional<String>) =
+                    knockTenantId(knockTenantId.getOrNull())
+
+                /**
+                 * Sets [Builder.knockTenantId] to an arbitrary JSON value.
+                 *
+                 * You should usually call [Builder.knockTenantId] with a well-typed [String] value
+                 * instead. This method is primarily for setting the field to an undocumented or not
+                 * yet supported value.
+                 */
+                fun knockTenantId(knockTenantId: JsonField<String>) = apply {
+                    this.knockTenantId = knockTenantId
+                }
 
                 fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                     this.additionalProperties.clear()
@@ -792,6 +939,7 @@ private constructor(
                 fun build(): SlackIncomingWebhookConnection =
                     SlackIncomingWebhookConnection(
                         checkRequired("url", url),
+                        knockTenantId,
                         additionalProperties.toMutableMap(),
                     )
             }
@@ -804,6 +952,7 @@ private constructor(
                 }
 
                 url()
+                knockTenantId()
                 validated = true
             }
 
@@ -821,24 +970,27 @@ private constructor(
              *
              * Used for best match union deserialization.
              */
-            @JvmSynthetic internal fun validity(): Int = (if (url.asKnown().isPresent) 1 else 0)
+            @JvmSynthetic
+            internal fun validity(): Int =
+                (if (url.asKnown().isPresent) 1 else 0) +
+                    (if (knockTenantId.asKnown().isPresent) 1 else 0)
 
             override fun equals(other: Any?): Boolean {
                 if (this === other) {
                     return true
                 }
 
-                return /* spotless:off */ other is SlackIncomingWebhookConnection && url == other.url && additionalProperties == other.additionalProperties /* spotless:on */
+                return /* spotless:off */ other is SlackIncomingWebhookConnection && url == other.url && knockTenantId == other.knockTenantId && additionalProperties == other.additionalProperties /* spotless:on */
             }
 
             /* spotless:off */
-            private val hashCode: Int by lazy { Objects.hash(url, additionalProperties) }
+            private val hashCode: Int by lazy { Objects.hash(url, knockTenantId, additionalProperties) }
             /* spotless:on */
 
             override fun hashCode(): Int = hashCode
 
             override fun toString() =
-                "SlackIncomingWebhookConnection{url=$url, additionalProperties=$additionalProperties}"
+                "SlackIncomingWebhookConnection{url=$url, knockTenantId=$knockTenantId, additionalProperties=$additionalProperties}"
         }
     }
 

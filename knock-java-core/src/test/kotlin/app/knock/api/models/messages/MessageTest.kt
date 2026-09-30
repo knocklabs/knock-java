@@ -177,4 +177,20 @@ internal class MessageTest {
 
         assertThat(roundtrippedMessage).isEqualTo(message)
     }
+
+    @Test
+    fun sourceRunFields() {
+        val source =
+            jsonMapper()
+                .readValue(
+                    """{"__typename":"NotificationSource","categories":[],"key":"comment-created","version_id":"v1","step_ref":"email_step_1","type":"workflow","workflow_run_id":"run_1","workflow_recipient_run_id":"wrr_1"}""",
+                    jacksonTypeRef<Message.Source>(),
+                )
+
+        assertThat(source.stepRef()).contains("email_step_1")
+        assertThat(source.type()).contains(Message.Source.Type.WORKFLOW)
+        assertThat(source.workflowRunId()).contains("run_1")
+        assertThat(source.workflowRecipientRunId()).contains("wrr_1")
+        assertThat(source.validate()).isEqualTo(source)
+    }
 }

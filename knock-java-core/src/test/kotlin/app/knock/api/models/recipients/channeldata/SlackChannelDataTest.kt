@@ -60,4 +60,27 @@ internal class SlackChannelDataTest {
 
         assertThat(roundtrippedSlackChannelData).isEqualTo(slackChannelData)
     }
+
+    @Test
+    fun connectionKnockTenantId() {
+        val connection =
+            SlackChannelData.Connection.SlackTokenConnection.builder()
+                .accessToken("xoxb")
+                .channelId("C123")
+                .channelName("general")
+                .knockTenantId("acme")
+                .build()
+
+        assertThat(jsonMapper().writeValueAsString(connection))
+            .contains("\"channel_name\":\"general\"")
+            .contains("\"knock_tenant_id\":\"acme\"")
+        val roundtripped =
+            jsonMapper()
+                .readValue(
+                    jsonMapper().writeValueAsString(connection),
+                    jacksonTypeRef<SlackChannelData.Connection.SlackTokenConnection>(),
+                )
+        assertThat(roundtripped).isEqualTo(connection)
+        assertThat(roundtripped.knockTenantId()).contains("acme")
+    }
 }
