@@ -8,7 +8,7 @@ repositories {
 
 allprojects {
     group = "app.knock.api"
-    version = "1.0.0" // x-release-please-version
+    version = "2.0.0" // x-release-please-version
 
     // Dokka's isolated build-tool classpaths otherwise resolve Jackson and jsoup versions with known
     // vulnerabilities. This doesn't affect the SDK's published or test dependencies.
